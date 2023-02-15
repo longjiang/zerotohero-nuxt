@@ -33,7 +33,7 @@
         }"
         style="margin: 3rem 0 3rem 0"
       >
-        <Loader :sticky="true" message="Loading categories ..." />
+        <Loader :sticky="true" message="Loading categories..." />
       </div>
       <div
         class="row mt-3"

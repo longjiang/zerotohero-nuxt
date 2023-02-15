@@ -143,11 +143,10 @@
       <Loader :sticky="true" message="Searching through video captions..." />
     </div>
     <div class="text-center p-3" v-if="!checking && hits.length === 0">
-      <p>Sorry, no hits found.</p>
+      <p>{{ $t('Sorry, no hits found.') }}</p>
       <p v-if="$store.state.settings.subsSearchLimit">
-        Try turning off ‘Limit “this word in TV Shows” search result (faster)’
-        in
-        <router-link :to="{ name: 'settings' }">Settings</router-link>
+        {{ $t('Try turning off ‘Limit “this word in TV Shows” search result (faster)’ in Settings.') }}
+        <router-link :to="{ name: 'settings' }">{{ $t('Go to settings') }} </router-link>
       </p>
       <b-button
         v-if="$adminMode"
@@ -156,12 +155,12 @@
         @click="checkHits"
       >
         <i class="fa fa-sync-alt"></i>
-        Refresh
+        {{ $t('Refresh') }}
       </b-button>
     </div>
     <template v-if="pro || hitIndex < NON_PRO_MAX_SUBS_SEARCH_HITS">
       <div v-if="reels && currentHit" class="video-title">
-        <b>VIDEO SOURCE:</b> <span>{{ currentHit.video.title }}</span>
+        <b>{{ $t('VIDEO SOURCE') }}:</b> <span>{{ currentHit.video.title }}</span>
       </div>
       <LazyYouTubeWithTranscript
         v-if="currentHit"
@@ -191,7 +190,7 @@
     <template v-if="!pro">
       <YouNeedPro
         v-if="hitIndex > NON_PRO_MAX_SUBS_SEARCH_HITS - 1"
-        :message="`See all ${hits.length} search results with a Pro account`"
+        :message="$t('See all {num} search results with a Pro account', {num: hits.length} )"
       />
     </template>
 
@@ -200,7 +199,7 @@
       size="lg"
       centered
       hide-footer
-      title="Video Caption Search Results"
+      :title="$t('Video Caption Search Results')"
       body-class="playlist-modal-wrapper"
       @show="onPlaylistModalShown"
     >
@@ -214,7 +213,7 @@
             }"
             @click.stop.prevent="sort = 'length'"
           >
-            Sort By Length
+            {{ $t('Sort By Length') }}
           </button>
           <button
             :class="{
@@ -224,7 +223,7 @@
             }"
             @click.stop.prevent="sort = 'left'"
           >
-            Sort Left
+            {{ $t('Sort Left') }}
           </button>
           <button
             :class="{
@@ -234,7 +233,7 @@
             }"
             @click.stop.prevent="sort = 'right'"
           >
-            Sort Right
+            {{ $t('Sort Right') }}
           </button>
         </div>
         <template v-for="c in get(`groupIndex${ucFirst(sort)}`)">

@@ -94,7 +94,7 @@
             ></animate>
           </rect>
         </svg>
-        <div v-html="messageData"></div>
+        <div v-html="$t(messageData)"></div>
       </div>
     </client-only>
   </div>

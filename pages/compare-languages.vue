@@ -30,7 +30,7 @@
             </router-link>
             <Loader
               :sticky="true"
-              message="Loading common phrases"
+              message="Loading common phrases..."
               v-if="updating"
             />
             <div v-if="updating">

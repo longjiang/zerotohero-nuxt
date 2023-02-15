@@ -96,17 +96,14 @@
                 <div
                   class="text-center"
                   v-if="filteredShows && filteredShows.length === 0"
-                >
-                  No
-                  {{ routeTitles[routeType] }}
-                  found.
+                >{{ $t('No {showType} found.', {showType: routeTitles[routeType]}) }}
                   <div>
                     <router-link
                       :to="{ name: routeType, params: {} }"
                       class="btn btn-success mt-3"
                     >
                       <i class="fa-solid fa-arrows-rotate"></i>
-                      Reset filters
+                      {{ $t('Reset filters') }}
                     </router-link>
                   </div>
                 </div>
@@ -155,7 +152,7 @@
             :to="{ name: routeType, params: { category: 'all', tag, level } }"
             class="link-unstyled"
           >
-            All Categories
+            {{ $t('All Categories') }}
           </router-link>
         </div>
         <div
@@ -167,7 +164,7 @@
             :to="{ name: routeType, params: { category: index, tag, level } }"
             class="link-unstyled"
           >
-            {{ category }}
+            {{ $t('category') }}
           </router-link>
         </div>
       </div>
@@ -187,21 +184,21 @@
           @click="sort = 'recommended'"
           style="cursor: pointer"
         >
-          Sort by Recommended
+          {{ $t('Sort by Recommended') }}
         </div>
         <div
           class="mb-1 col-12"
           @click="sort = 'views'"
           style="cursor: pointer"
         >
-          Sort by Views
+          {{ $t('Sort by Views') }}
         </div>
         <div
           class="mb-1 col-12"
           @click="sort = 'title'"
           style="cursor: pointer"
         >
-          Sort by Title
+          {{ $t('Sort by Title') }}
         </div>
         <!-- <div class="mb-1 col-12" @click="sort = 'date'">Sort by Date</div> -->
       </div>
@@ -224,7 +221,7 @@
             }"
             class="link-unstyled"
           >
-            All Levels
+            {{ $t('All Levels') }}
           </router-link>
         </div>
         <div
@@ -247,7 +244,7 @@
                 : level.name
             }}
             <span class="item-count">
-              ({{ showCountByLevel(level.numeric) }} shows)
+              ({{ $t('{num} shows', {num: showCountByLevel(level.numeric)})}})
             </span>
           </router-link>
         </div>

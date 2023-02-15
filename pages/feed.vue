@@ -53,7 +53,7 @@
               }"
               style="margin: 7rem 0 15rem 0"
             >
-              <Loader :sticky="true" message="Loading your feed..." />
+              <Loader :sticky="true" :message="$t('Loading your feed...')" />
             </div>
           </div>
         </div>

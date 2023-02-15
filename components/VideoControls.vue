@@ -213,7 +213,7 @@
       ref="settings-modal"
       centered
       hide-footer
-      title="Settings"
+      :title="$t('Settings')"
       body-class="settings-modal-wrapper"
       size="md"
     >
@@ -229,7 +229,7 @@
           <span class="settings-icon">
             <i class="fas fa-tachometer-alt"></i>
           </span>
-          <span>{{ speed }}x Speed</span>
+          <span>{{ $t('{speed}x Speed', { speed }) }}</span>
         </button>
       </div>
       <div class="mt-1">
@@ -242,7 +242,7 @@
           title="Toggle Auto-Pause"
         >
           <span class="settings-icon"><i class="fas fa-hand"></i></span>
-          <span>Auto-Pause</span>
+          <span>{{ $t('Auto-Pause') }}</span>
         </button>
       </div>
       <div class="mt-1">
@@ -255,7 +255,7 @@
           title="Toggle Smooth Scrolling"
         >
           <span class="settings-icon"><i class="fas fa-up-down"></i></span>
-          <span>Smooth Scrolling</span>
+          <span>{{ $t('Smooth Scrolling') }}</span>
         </button>
       </div>
       <hr />

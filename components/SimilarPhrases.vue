@@ -3,21 +3,14 @@
     <div class="similar-phrases">
       <div v-if="!autoLoad && showButton">
         <div>
-          How do you say
-          <b>
-            “
-            <span :class="{ transparent: hideDefinitions }">
-              {{ translation }}
-            </span>
-            ”
-          </b>
-          in other languages?
+          {{ $t("How do you say this word in other languages?") }}
+
           <u
             @click="getSimilarPhrases"
             style="font-weight: bold"
             class="text-success ml-2"
           >
-            Show Words
+            {{ $t("Show Words") }}
           </u>
         </div>
       </div>
@@ -41,7 +34,9 @@
             <em>{{ translation }}</em>
           </h5>
           <router-link
-            v-for="(phrase, index) of youInOtherLangs.filter(phrase => phrase.l2)"
+            v-for="(phrase, index) of youInOtherLangs.filter(
+              (phrase) => phrase.l2
+            )"
             :to="
               phrase.bookId === 'wiktionary'
                 ? `/en/${phrase.l2.code}/phrase/search/${encodeURIComponent(
@@ -97,7 +92,7 @@
           }"
         >
           <i class="fa fa-globe-asia mr-2"></i>
-          See them on a Map
+          {{ $t("See them on a Map") }}
         </router-link>
       </div>
       <Loader
@@ -117,7 +112,7 @@
           youInOtherLangs.length === 0
         "
       >
-        No similar phrases found in other languages.
+        {{ $t("No similar phrases found in other languages.") }}
       </div>
     </div>
   </container-query>
@@ -197,6 +192,13 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
   },
   mounted() {
     if (this.translation)
@@ -205,6 +207,11 @@ export default {
     if (this.autoLoad) this.getSimilarPhrases();
   },
   methods: {
+    translate(text, code) {
+      if (!code) code = this.browserLanguage;
+      if (this.$languages) return this.$languages.translate(text, code);
+      else return text;
+    },
     async getSimilarPhrases() {
       this.updating = true;
       this.showButton = false;
@@ -387,13 +394,15 @@ export default {
         this.youInOtherLangs = youInOtherLangs;
       }
       this.vousInOtherLangs = phrases.filter((p) => {
-        let phraseMatches = (p.normalizedPhrase || "") === (this.normalizedPhrase || "")
-        let noL2 = typeof this.$l2 === "undefined"
-        let notSameL2 = noL2 ? true : p.l2.code !== this.$l2?.code
-        let notSameTranslation = p.normalizedTranslation !== this.normalizedTranslation
-        let langBool = noL2 || notSameL2 || notSameTranslation
-        let includePhrase = phraseMatches && langBool
-        return includePhrase
+        let phraseMatches =
+          (p.normalizedPhrase || "") === (this.normalizedPhrase || "");
+        let noL2 = typeof this.$l2 === "undefined";
+        let notSameL2 = noL2 ? true : p.l2.code !== this.$l2?.code;
+        let notSameTranslation =
+          p.normalizedTranslation !== this.normalizedTranslation;
+        let langBool = noL2 || notSameL2 || notSameTranslation;
+        let includePhrase = phraseMatches && langBool;
+        return includePhrase;
       });
       this.$emit("youInOtherLangs", this.youInOtherLangs);
       this.$emit("vousInOtherLangs", this.vousInOtherLangs);

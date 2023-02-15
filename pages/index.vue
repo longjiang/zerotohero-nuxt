@@ -37,7 +37,7 @@
                   to="/go-pro"
                   v-if="$auth.loggedIn && !pro"
                 >
-                  {{ translate("Go Pro", browserLanguage) }}
+                  {{ translate("Go Pro") }}
                 </router-link>
                 <span
                   class="index-nav-item"
@@ -45,35 +45,35 @@
                   style="cursor: pointer"
                   v-else
                 >
-                  {{ translate("Features", browserLanguage) }}
+                  {{ translate("Features") }}
                 </span>
                 <router-link
                   class="index-nav-item link-unstyled"
                   to="/login"
                   v-if="!$auth.loggedIn"
                 >
-                  {{ translate("Login", browserLanguage) }}
+                  {{ translate("Login") }}
                 </router-link>
                 <router-link
                   class="index-nav-item btn btn-success"
                   to="/register"
                   v-if="!$auth.loggedIn"
                 >
-                  {{ translate("Sign Up", browserLanguage) }}
+                  {{ translate("Sign Up") }}
                 </router-link>
                 <router-link
                   class="index-nav-item link-unstyled"
                   to="/logout"
                   v-if="$auth.loggedIn"
                 >
-                  {{ translate("Logout", browserLanguage) }}
+                  {{ translate("Logout") }}
                 </router-link>
                 <router-link
                   class="index-nav-item btn btn-success"
                   to="/dashboard"
                   v-if="$auth.loggedIn"
                 >
-                  {{ translate("Dashboard", browserLanguage) }}
+                  {{ translate("Dashboard") }}
                 </router-link>
               </nav>
             </client-only>
@@ -130,28 +130,28 @@
               <client-only>
                 <template v-if="$auth.loggedIn">
                   <p class="text-white">
-                    {{ translate("Welcome back", browserLanguage) }}
+                    {{ translate("Welcome back") }}
                     {{ $auth.user.first_name }}.
                   </p>
                   <router-link class="btn btn-success" to="/dashboard">
-                    {{ translate("Go to Dashboard", browserLanguage) }}
+                    {{ translate("Go to Dashboard") }}
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
                   <router-link to="/logout" class="text-white ml-3">
-                    {{ translate("Or", browserLanguage) }}
-                    <u>{{ translate("Logout", browserLanguage) }}</u>
+                    {{ translate("Or") }}
+                    <u>{{ translate("Logout") }}</u>
                   </router-link>
                 </template>
                 <template v-else>
                   <router-link class="btn btn-success" to="/register">
-                    {{ translate("Create a Free Account", browserLanguage) }}
+                    {{ translate("Create a Free Account") }}
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
                   <span class="text-white ml-2">
-                    {{ translate("Or", browserLanguage) }}
+                    {{ translate("Or") }}
                     <router-link to="/login" class="text-white">
                       <u>
-                        {{ translate("Login", browserLanguage) }}
+                        {{ translate("Login") }}
                       </u>
                     </router-link>
                   </span>
@@ -171,9 +171,9 @@
           </div>
           <div class="col-md-6 mb-3 pl-4">
             <h3 class="text-white mb-2">
-              Learn on the go with our mobile apps.
+              {{ translate('Learn on the go with our mobile apps.') }}
             </h3>
-            <p class="text-white">Available on iOS and Android.</p>
+            <p class="text-white">{{ translate('Available on iOS and Android.') }}</p>
             <div class="row">
               <div class="col-12 col-md-6">
                 <div>
@@ -196,7 +196,7 @@
                     />
                     <p class="mt-3 text-white">
                       <small>
-                        Search for “Language Player 2” in the iOS App Store.
+                        {{ translate('Search for “Language Player 2” in the iOS App Store.') }}
                       </small>
                     </p>
                   </a>
@@ -225,13 +225,12 @@
                   <p class="mt-3 text-white">
                     <small>
                       <i class="fa-solid fa-down mr-1"></i>
-                      Or, download the Android app as an
+                      {{ translate('Or, download the Android app as an') }}
                       <a
                         href="https://server.chinesezerotohero.com/data/android/language-player-android-2.4.10.apk"
                       >
-                        Android Package (APK) - Version 2.4.10
+                        {{ translate('Android Package') }} (APK) - v2.4.10
                       </a>
-                      .
                     </small>
                   </p>
                 </div>
@@ -241,10 +240,9 @@
         </div>
         <div class="row index-section" id="index-features">
           <div class="col-md-4 mb-3">
-            <h3 class="text-white mb-2">Massive content library</h3>
+            <h3 class="text-white mb-2">{{ translate('Massive content library') }}</h3>
             <p class="text-white">
-              With 600,000 videos in over 200 languages, you will always find
-              something interesting to watch.
+              {{ translate('With 600,000 videos in over 200 languages, you will always find something interesting to watch.') }}
             </p>
           </div>
           <div class="col-md-8 mb-3">
@@ -267,20 +265,18 @@
           </div>
           <div class="col-md-4 mb-3">
             <h3 class="text-white mb-2">
-              Interactive transcripts with English translation
+              {{ translate('Interactive transcripts with English translation') }}
             </h3>
             <p class="text-white">
-              Tap any line in the transcript to play that line. Tap on any word
-              to look up.
+              {{ translate('Tap any line in the transcript to play that line. Tap on any word to look up.') }}
             </p>
           </div>
         </div>
         <div class="row index-section">
           <div class="col-md-4 mb-3">
-            <h3 class="text-white mb-2">See examples of words in videos</h3>
+            <h3 class="text-white mb-2">{{ translate('See examples of words in videos') }}</h3>
             <p class="text-white">
-              Learn words by watching hundreds of video clips that contain this
-              word.
+              {{ translate('Learn words by watching hundreds of video clips that contain this word.') }}
             </p>
           </div>
           <div class="col-md-8 mb-3">
@@ -294,9 +290,9 @@
         </div>
         <div class="row index-section">
           <div class="col-12 mb-3 text-center">
-            <h3 class="text-white mb-2">Pricing Options</h3>
+            <h3 class="text-white mb-2">{{ translate('Pricing Options') }}</h3>
             <p class="text-white">
-              Get unlimited access with a lifetime Pro account.
+              {{ translate('Get unlimited access with a lifetime Pro account.') }}
             </p>
           </div>
           <div class="col-12">
@@ -305,12 +301,7 @@
         </div>
         <div class="row index-section" id="index-testimonials">
           <div class="col-md-12 mb-3 text-center">
-            <h3 class="text-white mb-2">What our users say about us</h3>
-            <p class="text-white">
-              This is what our users wrote spontaneously in their emails to us,
-              <em>without solicitation</em>
-              !
-            </p>
+            <h3 class="text-white mb-2">{{ translate('What our users say about us') }}</h3>
           </div>
           <div class="col-md-4 mb-3">
             <div class="index-testimonial">
@@ -418,11 +409,9 @@
         </div>
         <div class="row index-section">
           <div class="col-md-12 mb-3 text-center">
-            <h3 class="text-white mb-2">We support 217 languages</h3>
+            <h3 class="text-white mb-2">{{ translate('We support 217 languages') }}</h3>
             <p class="text-white">
-              Including constructed languages (Esperanto, Klingon), sign
-              languages (ASL, KSL), ancient languages (Aramaic, Gothic,
-              Classical Chinese), and dialects (Hakka, Min Nan).
+              {{ translate('Including constructed languages (Esperanto, Klingon), sign languages (ASL, KSL), ancient languages (Aramaic, Gothic, Classical Chinese), and dialects (Hakka, Min Nan).') }}
             </p>
             <client-only>
               <div class="text-center text-white mt-4">
@@ -437,32 +426,30 @@
               />
             </div>
             <div class="mt-4 text-white">
-              See latest
               <router-link to="/stats" class="link-unstyled">
-                <u>stats</u>
+                <u>{{ translate('See latest stats.') }}</u>
               </router-link>
-              .
             </div>
           </div>
         </div>
         <div class="row index-section">
           <div class="col-md-12 mb-3 text-center">
-            <h3 class="text-white mb-2">Ready to give it a try?</h3>
+            <h3 class="text-white mb-2">{{ translate('Ready to give it a try?') }}</h3>
             <p class="text-white">
-              Start by creating a free account, and explore our content library.
+              {{ translate('Start by creating a free account, and explore our content library.') }}
             </p>
 
             <div class="mt-4">
               <client-only>
                 <template v-if="$auth.loggedIn">
                   <router-link class="btn btn-success" to="/dashboard">
-                    Go to Dashboard
+                    {{ translate('Go to Dashboard') }}
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
                   <div class="mt-3 text-white">
-                    Or
+                    {{ translate('Or') }}
                     <router-link to="/logout" class="text-white">
-                      <u>logout</u>
+                      <u>{{ translate('Logout') }}</u>
                     </router-link>
                   </div>
                 </template>
@@ -484,14 +471,12 @@
         </div>
         <div class="row index-section">
           <div class="col-md-12 mb-3 text-center">
-            <h3 class="text-white mb-4">Join our Discord* Server</h3>
+            <h3 class="text-white mb-4">{{ translate('Join our Discord* Server') }}</h3>
             <p class="text-white">
-              And connect with people passionate about learning languages, just
-              like you!
+              {{ translate('And connect with people passionate about learning languages, just like you!') }}
             </p>
             <p class="text-white small">
-              * Discord is a chat and streaming app that allows groups to create
-              separate chatrooms (channels) for different purposes.
+              * {{ translate('Discord is a chat and streaming app that allows groups to create separate chatrooms (channels) for different purposes.') }}
             </p>
             <a href="https://discord.gg/D7vKcuKXuA" target="_blank">
               <img
@@ -508,7 +493,7 @@
                 class="btn btn-success"
               >
                 <i class="fa-brands fa-discord"></i>
-                Language Player Discord Server
+                {{ translate('Language Player Discord Server' )}}
               </a>
             </div>
           </div>
@@ -516,7 +501,7 @@
         <div class="row index-section">
           <div class="col-md-12 mb-3 text-center">
             <h3 class="text-white mb-4">
-              Made with ❤️ by language lovers like you.
+              {{ translate('Made with ❤️ by language lovers like you.') }}
             </h3>
             <div class="text-left text-white"><LazyFooter /></div>
           </div>
@@ -619,6 +604,7 @@ export default {
   },
   methods: {
     translate(text, code) {
+      if (!code) code = this.browserLanguage
       if (this.$languages) return this.$languages.translate(text, code);
       else return text;
     },

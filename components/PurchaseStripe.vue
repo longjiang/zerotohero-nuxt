@@ -20,7 +20,7 @@
         <i class="fab fa-cc-apple-pay"></i>
         <i class="fab fa-google-pay mr-1"></i>
       </span>
-      Credit Card
+      {{ translate('Credit Card') }}
       <i class="fa-solid fa-chevron-right ml-1"></i>
     </b-button>
     <a
@@ -28,7 +28,7 @@
       class="btn btn-success btn-purchase"
     >
       <span class="icons"><i class="fab fa-weixin"></i></span>
-      WeChat Pay
+      {{ translate('WeChat Pay') }}
       <i class="fa-solid fa-chevron-right ml-1"></i>
     </a>
     <a
@@ -36,7 +36,7 @@
       class="btn btn-success btn-purchase"
     >
       <span class="icons"><i class="fab fa-alipay"></i></span>
-      Alipay
+      {{ translate('Alipay') }}
       <i class="fa-solid fa-chevron-right ml-1"></i>
     </a>
   </div>
@@ -58,7 +58,14 @@ export default {
     },
     price() {
       return this.sale ? this.salePriceID : this.regularPriceID
-    }
+    },
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
   },
   data() {
     this.stripePublishableKey = "pk_live_9lnc7wrGHtcFdPKIWZdy9p17";
@@ -76,6 +83,11 @@ export default {
     };
   },
   methods: {
+    translate(text, code) {
+      if (!code) code = this.browserLanguage;
+      if (this.$languages) return this.$languages.translate(text, code);
+      else return text;
+    },
     submitStripeUSD() {
       // You will be redirected to Stripe's secure checkout page
       this.$refs.stripeCheckoutUSDRef.redirectToCheckout();

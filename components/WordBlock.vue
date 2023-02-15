@@ -285,7 +285,7 @@
         <div v-if="loading === true">
           <Loader
             :sticky="true"
-            :message="`Looking up “${this.text}” in the dictionary...`"
+            message="Looking up the dictionary..."
           />
         </div>
         <div
@@ -303,7 +303,7 @@
             {{ text }}
           </div>
           <span style="color: #999">
-            Sorry, no definition found for “{{ text }}”.
+            {{ $t('Sorry, no definition found.') }}
           </span>
         </div>
       </div>

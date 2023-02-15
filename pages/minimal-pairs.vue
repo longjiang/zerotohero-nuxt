@@ -52,7 +52,7 @@
       <div class="row">
         <div class="col-sm-12 mt-5 mb-5">
           <div class="text-center mt-5 mb-5" v-if="crunching">
-            <Loader :sticky="true" message="Looking for minimal pairs . . ." />
+            <Loader :sticky="true" message="Looking for minimal pairs..." />
           </div>
           <p v-if="minimalPairs && minimalPairs.length > 0" class="text-center">
             <strong>{{ minimalPairs.length }} pairs found:</strong>

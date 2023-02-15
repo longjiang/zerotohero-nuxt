@@ -42,7 +42,7 @@
               }"
               style="flex: 1"
             >
-              <Loader :sticky="true" :message="`Loading videos...`" />
+              <Loader :sticky="true" message="Loading videos..." />
             </div>
             <!-- <Sale class="mb-4" v-if="$l2.code === 'zh'" /> -->
             <h3 v-if="show">

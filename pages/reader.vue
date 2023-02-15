@@ -57,7 +57,7 @@
             <h4 class="mt-3 mb-3" v-if="shared">{{ shared.title }}</h4>
           </client-only>
           <div v-if="loading" class="text-center pt-5 pb-5">
-            <Loader :sticky="true" message="Loading your text..." />
+            <Loader :sticky="true" :message="$t('Loading your text...')" />
           </div>
           <ReaderComp
             v-if="!loading"

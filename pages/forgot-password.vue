@@ -63,11 +63,10 @@
               <div class="alert alert-success">
                 <h5 class="mb-3">
                   <i class="fas fa-check mr-1"></i>
-                  Email being sent
+                  Password reset email on its way
                 </h5>
                 <p>
-                  We're sending a password reset email which can take up to a minute to arrive. Please check your
-                  spam inbox just to make sure.
+                  We're sending a password reset email which can take up to a minute to arrive. Please check your spam inbox just to make sure.
                 </p>
               </div>
             </div>

@@ -11,7 +11,7 @@
         <span class="annotation-setting-icon">
           <i class="fa fa-wrench"></i>
         </span>
-        Admin Mode
+        {{ $t('Admin Mode') }}
       </div>
       <button
         @click="autoPronounce = !autoPronounce"
@@ -23,8 +23,8 @@
           <i class="fa fa-volume-up" v-if="autoPronounce"></i>
           <i class="fas fa-volume-mute" v-else></i>
         </span>
-        <span v-if="autoPronounce">Auto pronounce words</span>
-        <span v-else>Do not auto pronounce words</span>
+        <span v-if="autoPronounce">{{ $t('Auto pronounce words') }}</span>
+        <span v-else>{{ $t('Do not auto pronounce words') }}</span>
       </button>
       <button
         @click="showPinyin = !showPinyin"
@@ -51,7 +51,7 @@
           </ruby>
           <span v-else>[pʰ]</span>
         </span>
-        {{ showPinyin ? "Phonetics on" : "Phonetics off" }}
+        {{ $t(showPinyin ? "Phonetics on" : "Phonetics off") }}
       </button>
       <button
         v-if="$l2.han"
@@ -65,7 +65,7 @@
           <span v-if="!useTraditional">简</span>
         </span>
         {{
-          useTraditional ? "Traditional characters" : "Simplified characters"
+          $t(useTraditional ? "Traditional characters" : "Simplified characters")
         }}
       </button>
       <button
@@ -77,7 +77,7 @@
         <span class="annotation-setting-icon">
           <i class="fas fa-language"></i>
         </span>
-        {{ showTranslation ? "Translation on" : "Translation off" }}
+        {{ $t(showTranslation ? "Translation on" : "Translation off") }}
       </button>
       <button
         v-if="$l2.code === 'ko'"
@@ -90,7 +90,7 @@
           자
           <small style="font-size: 0.5em">字</small>
         </span>
-        {{ showByeonggi ? "Hanja On" : "Hanja Off" }}
+        {{ $t(showByeonggi ? "Hanja On" : "Hanja Off") }}
       </button>
       <button
         v-if="$l2.code === 'vi'"
@@ -103,7 +103,7 @@
           Tự
           <small style="font-size: 0.5em">字</small>
         </span>
-        {{ showByeonggi ? "Han Tự On" : "Han Tự Off" }}
+        {{ $t(showByeonggi ? "Han Tự On" : "Han Tự Off") }}
       </button>
 
       <button
@@ -111,20 +111,20 @@
         @click="zoomLevel = Math.max(zoomLevel - 1, 0)"
       >
         <span class="annotation-setting-icon">ᴛ</span>
-        Smaller text
+        {{ $t('Smaller text') }}
       </button>
       <button
         class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
         @click="zoomLevel = Math.min(zoomLevel + 1, 4)"
       >
         <span class="annotation-setting-icon">T</span>
-        Bigger text
+        {{ $t('Bigger text') }}
       </button>
       <hr />
       <div :class="`annotation-setting-toggle`">
         <router-link :to="{ name: 'settings' }" class="text-success">
           <i class="fa-solid fa-gears annotation-setting-icon"></i>
-          More Settings
+          {{ $t('More Settings') }}
           <i class="fa-solid fa-chevron-right"></i>
         </router-link>
       </div>
@@ -137,34 +137,30 @@
           v-model="showByeonggi"
         >
           <span v-if="$l2.code === 'ko'">
-            Show hanja next to hanguel (
+            {{ $t('Show hanja next to hanguel (byeonggi)') }} (
             <a
               href="https://ko.wikipedia.org/wiki/%ED%95%9C%EA%B8%80%EC%A0%84%EC%9A%A9%EA%B3%BC_%EA%B5%AD%ED%95%9C%EB%AC%B8%ED%98%BC%EC%9A%A9#%ED%95%9C%EC%9E%90_%EB%B3%91%EA%B8%B0"
               target="_blank"
             >
-              병기, 倂記,
-              <em>byeonggi</em>
+              {{ $t('What is byeonggi (병기, 倂記)?') }}
             </a>
-            )
           </span>
           <span v-if="$l2.code === 'vi'">
-            Show
+            Show Hán tự next to Sino-Vietnamese words
             <a
               href="https://en.wikipedia.org/wiki/History_of_writing_in_Vietnam#Ch%E1%BB%AF_H%C3%A1n"
               target="_blank"
             >
-              Hán tự
+              
             </a>
-            (Chữ Hán, Chữ Nho) next to Sino-Vietnamese words
+            {{ $t('What is Hán tự?') }}
           </span>
         </b-form-checkbox>
         <template v-if="$hasFeature('transliteration')">
           <b-form-checkbox v-model="showPinyin" class="mb-2">
-            Show
-            <span v-if="['zh', 'lzh'].includes($l2.code)">pinyin</span>
-            <span v-else-if="$l2.code === 'ja'">furigana</span>
-            <span v-else>romanization</span>
-            above words
+            <span v-if="['zh', 'lzh'].includes($l2.code)">{{ $t('Display pinyin above words') }}</span>
+            <span v-else-if="$l2.code === 'ja'">{{ $t('Display furigana above words') }}</span>
+            <span v-else>{{ $t('Display romanization above words') }}</span>
           </b-form-checkbox>
 
           <b-form-checkbox
@@ -188,33 +184,33 @@
             "
             v-model="showDefinition"
           >
-            Show definition above words
+            {{ $t('Show definition above words') }}
           </b-form-checkbox>
         </template>
         <b-form-checkbox class="mb-2" v-model="showTranslation">
-          Show translation
+          {{ $t('Show translation') }}
         </b-form-checkbox>
         <b-form-checkbox class="mb-2" v-model="showQuiz">
-          Show pop quiz
+          {{ $t('Show pop quiz') }}
         </b-form-checkbox>
         <b-form-checkbox class="mb-2" v-model="autoPronounce">
-          Pronounce word when opening popup
+          {{ $t('Pronounce word when opening popup') }}
         </b-form-checkbox>
         <b-form-checkbox class="mb-2" v-model="disableAnnotation">
-          Disable popup dictionary
+          {{ $t('Disable popup dictionary') }}
         </b-form-checkbox>
         <b-button-group v-if="$l2.han" class="d-block mb-2">
           <b-button
             :variant="!useTraditional ? 'secondary' : 'outline-secondary'"
             @click="useTraditional = false"
           >
-            Use Simplified
+            {{ $t('Use Simplified') }}
           </b-button>
           <b-button
             :variant="useTraditional ? 'secondary' : 'outline-secondary'"
             @click="useTraditional = true"
           >
-            Use Traditional
+            {{ $t('Use Traditional') }}
           </b-button>
         </b-button-group>
         <b-button-group class="d-block">
@@ -222,14 +218,14 @@
             :variant="!useSerif ? 'secondary' : 'outline-secondary'"
             @click="useSerif = false"
           >
-            Use Sans-Serif
+            {{ $t('Use Sans-Serif') }}
           </b-button>
           <b-button
             :variant="useSerif ? 'secondary' : 'outline-secondary'"
             style="font-family: serif"
             @click="useSerif = true"
           >
-            Use Serif
+            {{ $t('Use Serif') }}
           </b-button>
         </b-button-group>
       </div>

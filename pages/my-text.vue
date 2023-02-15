@@ -63,7 +63,7 @@
             </b-button>
           </div>
           <div class="text-center mt-5 mb-5" v-else>
-            <Loader :sticky="true" message="Loading your text..." />
+            <Loader :sticky="true" :message="$t('Loading your text...')" />
           </div>
         </div>
       </div>

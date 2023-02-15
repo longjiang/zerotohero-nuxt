@@ -44,7 +44,7 @@
             :class="`top-bar-buttontop ml-2`"
             variant="unstyled"
             v-if="$route.params.l1 && $route.params.l2"
-            title="Quick Settings"
+            :title="translate('Quick Settings')"
             @click="showSettingsModal"
           >
             <i class="fas fa-cog"></i>
@@ -91,7 +91,7 @@
         <client-only>
           <div>
             <router-link to="/go-pro" v-if="!pro" class="mr-2">
-              🚀 Go Pro
+              🚀 {{ translate('Go Pro') }}
             </router-link>
             <span
               to="/profile"
@@ -100,10 +100,10 @@
                 $auth && $auth.loggedIn && $auth.user && $auth.user.first_name
               "
             >
-              <router-link to="/logout">Logout</router-link>
+              <router-link to="/logout">{{ translate('Logout') }}</router-link>
             </span>
             <span v-else>
-              <router-link to="/login">Login</router-link>
+              <router-link to="/login">{{ translate('Login') }}</router-link>
             </span>
           </div>
         </client-only>
@@ -113,7 +113,7 @@
         size="xl"
         centered
         hide-footer
-        title="Quick Settings"
+        :title="$t('Quick Settings')"
         modal-class="safe-padding-top mt-4"
         body-class="settings-modal-wrapper"
       >
@@ -126,7 +126,7 @@
         size="xl"
         centered
         hide-footer
-        title="Switch languages"
+        :title="translate('Switch languages')"
         modal-class="safe-padding-top mt-4"
         body-class="languages-modal-wrapper"
         @show="onLanguagesModalShown"
@@ -135,12 +135,12 @@
           <div class="mb-3">
             <router-link to="/dashboard" class="text-success">
               <i class="fas fa-chevron-left"></i>
-              Back to Dashboard
+              {{ translate('Back to Dashboard') }}
             </router-link>
           </div>
           <LazyDashboard class="mb-5" v-if="hasDashboard" />
           <div class="pb-5">
-            <h5 class="text-center mb-2">Learn another language</h5>
+            <h5 class="text-center mb-2">{{ translate('Learn another language') }}</h5>
             <Triage />
           </div>
         </div>
@@ -249,6 +249,7 @@ export default {
   },
   methods: {
     translate(text, code) {
+      if (!code) code = this.browserLanguage
       if (this.$languages) return this.$languages.translate(text, code);
       else return text;
     },

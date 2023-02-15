@@ -25,13 +25,10 @@
         />
       </div>
       <h4 class="mt-3 mb-5 text-center">
-        Search
-        {{ $l2.name }} Content
+        {{ $t('Search {l2} Content', {l2: $t($l2.name) }) }}
       </h4>
       <SimpleSearch
-        :placeholder="`Search ${
-          stats && stats[$l2.code] ? $n(stats[$l2.code].allVideos) : ''
-        } ${$l2.name} videos`"
+        :placeholder="$t('Search {stats} {l2} videos', {stats: stats && stats[$l2.code] ? stats[$l2.code].allVideos : '', l2: $t($l2.name) })"
         skin="dark"
         :action="
           (url) => {

@@ -18,14 +18,14 @@
       <div class="row">
         <div class="col-sm-12">
           <div>
-            <h5>General settings</h5>
+            <h5>{{ $t('General settings') }}</h5>
             <b-form-checkbox v-model="subsSearchLimit">
-              Limit "this word in TV Shows" search result (faster)
+              {{ $t('Limit "this word in TV Shows" search result (faster)') }}
             </b-form-checkbox>
             <hr />
           </div>
           <div>
-            <h5>Settings specific to {{ $l2.name }}:</h5>
+            <h5>{{ $t('Settings specific to {l2}', {l2: $t($l2.name)})}}:</h5>
             <AnnotationSettings />
             <client-only>
               <div class="text-right">
@@ -35,13 +35,13 @@
                   v-if="userIsAdmin"
                   class="mt-2 mb-4"
                 >
-                  Admin mode
+                  {{ $t('Admin Mode') }}
                 </b-form-checkbox>
               </div>
             </client-only>
           </div>
           <div class="mb-3">
-            <h5>Content Preferences</h5>
+            <h5>{{ $t('Content Preferences') }}</h5>
             <ContentPreferences />
           </div>
           <div>

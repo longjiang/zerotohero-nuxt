@@ -1,45 +1,56 @@
 <template>
   <div class="pricing-cards">
     <div class="mb-3 bg-white pricing-card pricing-card-free">
-      <h5 class="pb-3 pt-3">Free Account</h5>
+      <h5 class="pb-3 pt-3">{{ translate("Free Account") }}</h5>
       <hr />
       <ul class="list-unstyled">
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          Access 600,000+ videos across 207+ languages
+          {{ translate("Access 600,000+ videos across 207+ languages") }}
         </li>
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          See collocations, example sentences, verb inflections and Chinese
-          character decomposition in the dictionary
+          {{
+            translate(
+              "See collocations, example sentences, verb inflections and Chinese character decomposition in the dictionary"
+            )
+          }}
         </li>
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          Read books, web pages or your own text with a popup dictionary
+          {{
+            translate(
+              "Read books, web pages or your own text with a popup dictionary"
+            )
+          }}
         </li>
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          Watch live TV in the target language
+          {{ translate("Watch live TV in the target language") }}
         </li>
         <li>
           <i class="fa-solid fa-lock text-warning mr-1"></i>
-          See only first 10 lines of interactive transcripts with English
-          translation
+          {{
+            translate(
+              "See only first 10 lines of interactive transcripts with English translation"
+            )
+          }}
         </li>
         <li>
           <i class="fa-solid fa-lock text-warning mr-1"></i>
-          See only 2 examples of words in videos
+          {{ translate("See only 2 examples of words in videos") }}
         </li>
       </ul>
     </div>
     <div class="mb-3 bg-white pricing-card pricing-card-pro">
       <div class="badge-money-back text-center">
         <span>
-          <b style="font-size: 1.3em">14 day</b>
-          <br />money-back guarantee
+          <b style="font-size: 1.3em">{{ translate('14 day') }}</b>
+          <br />
+          {{ translate('money-back guarantee') }}
         </span>
       </div>
-      <h4>Pro Account 🚀</h4>
+      <h4>{{ translate("Pro Account") }} 🚀</h4>
       <div class="price">
         <client-only>
           <span v-if="sale">
@@ -50,7 +61,9 @@
             <span class="text-primary ml-2">
               <span style="position: relative; bottom: 1.2rem">US$</span>
               <b style="font-size: 2.68rem">44</b>
-              <b v-if="native" style="position: relative; bottom: 1.2rem">.99</b>
+              <b v-if="native" style="position: relative; bottom: 1.2rem">
+                .99
+              </b>
               <b v-else style="position: relative; bottom: 1.2rem">.50</b>
             </span>
           </span>
@@ -68,37 +81,53 @@
             margin-left: 0.3rem;
           "
         >
-          <span style="display: block; margin-bottom: 0; line-height: 0.2">/lifetime</span>
-          <small class="text-success">never expires</small>
+          <span style="display: block; margin-bottom: 0; line-height: 0.4">
+            {{ translate("lifetime") }}
+          </span>
+          <small class="text-success">{{ translate("never expires") }}</small>
         </span>
       </div>
       <hr />
       <ul class="list-unstyled">
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          Access 600,000+ videos across 207+ languages
+          {{ translate("Access 600,000+ videos across 207+ languages") }}
         </li>
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          See collocations, example sentences, verb inflections and Chinese
-          character decomposition in the dictionary
+          {{
+            translate(
+              "See collocations, example sentences, verb inflections and Chinese character decomposition in the dictionary"
+            )
+          }}
         </li>
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          Read books, web pages or your own text with a popup dictionary
+          {{
+            translate(
+              "Read books, web pages or your own text with a popup dictionary"
+            )
+          }}
         </li>
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          Watch live TV in the target language
+          {{ translate("Watch live TV in the target language") }}
         </li>
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          See complete interactive transcripts with English translation
+          {{
+            translate(
+              "See complete interactive transcripts with English translation"
+            )
+          }}
         </li>
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          See hundreds of examples of words in videos, or in particular TV
-          shows.
+          {{
+            translate(
+              "See hundreds of examples of words in videos, or in particular TV shows"
+            )
+          }}
         </li>
       </ul>
     </div>
@@ -110,14 +139,28 @@ import { Capacitor } from "@capacitor/core";
 export default {
   props: {
     sale: {
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     native() {
       return Capacitor.isNativePlatform();
     },
-  }
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
+  },
+  methods: {
+    translate(text, code) {
+      if (!code) code = this.browserLanguage;
+      if (this.$languages) return this.$languages.translate(text, code);
+      else return text;
+    },
+  },
 };
 </script>
 
@@ -137,9 +180,9 @@ export default {
 @media screen and (min-width: 720px) {
   .pricing-cards {
     position: relative;
-    height: 40rem;
     margin: 0 auto;
     width: 46rem;
+    margin-bottom: 10rem;
   }
 
   .pricing-card-free {

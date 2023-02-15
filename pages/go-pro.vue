@@ -22,7 +22,7 @@
       <div class="row">
         <div class="col-sm-12">
           <div v-if="sale" class="bg-primary text-white p-3 rounded text-center mb-5" style="max-width: 46rem; margin: 0 auto; font-size: 1.2em" >
-            <div><b>VALENTINES DAY SALE!</b> 50% off on lifetime Pro account upgrade</div>
+            <div><b>{{ translate('VALENTINES DAY SALE!') }}</b> {{ translate('50% off on lifetime Pro account upgrade') }}</div>
             <small style="text-small">{{ $t('Offer ends:')}} {{ $d(new Date(2023, 1, 14), 'short', browserLanguage) }}</small>
           </div>
           <client-only>
@@ -30,15 +30,15 @@
             <FeatureComparison :sale="sale" />
             <div v-if="$auth.loggedIn && $auth.user" class="text-center text-white">
               <div v-if="[1, 4].includes(Number($auth.user.role))">
-                <h5 class="mb-3">🎉 You are already Pro! 🚀 Enjoy!</h5>
+                <h5 class="mb-3">🎉 {{ translate('You are already Pro!') }} 🚀 {{ translate('Enjoy!') }}</h5>
                 <router-link class="btn btn-success mb-3" to="/">
-                  Start Using Pro
+                  {{ translate('Start Using Pro') }}
                 </router-link>
               </div>
               <div v-else class="mb-3 text-white">
                 <client-only>
                   <div class="mt-5 mb-4">
-                    <h5>Ready to upgrade to Pro?</h5>
+                    <h5>{{ translate('Ready to upgrade to Pro?') }}</h5>
                   </div>
                   <div v-if="native">
                     <div class="pt-4 pb-5">
@@ -47,7 +47,7 @@
                   </div>
                   <div v-else>
                     <div>
-                      <p>Please choose your method of payment.</p>
+                      <p>{{ translate('Please choose your method of payment.') }}</p>
                       <PurchaseStripe :sale="sale" />
                       <PurchasePayPal :sale="sale" />
                     </div>
@@ -57,14 +57,14 @@
             </div>
             <div v-else class="text-center text-white">
               <p style="font-size: 1.2em">
-                Before you get Pro, you need to create an account.
+                {{ translate('Before you get Pro, you need to create an account.') }}
               </p>
               <div>
                 <router-link
                   :to="{ path: '/register?redirect=/go-pro' }"
                   class="btn btn-success mb-3"
                 >
-                  Create an Account
+                  {{ translate('Create an Account') }}
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
                 <br />
@@ -72,17 +72,15 @@
                   :to="{ path: '/login?redirect=/go-pro' }"
                   class="text-white"
                 >
-                  Already have an account? Please
-                  <u>login</u>
-                  .
+                  {{ translate('Already have an account?') }} 
+                  <u>{{ translate('Please login') }}</u>
                 </router-link>
               </div>
             </div>
           </client-only>
           <div class="text-center text-white" v-if="!native">
-            If you have any questions or issues, please
-            <a href="mailto:jon.long@zerotohero.ca" class="text-white"><u>email us</u></a>
-            .
+            {{ translate('If you have any questions or issues, please contact us.') }}
+            <a href="mailto:jon.long@zerotohero.ca" class="text-white"><u>{{ translate('Send us an email') }}</u></a>
           </div>
         </div>
       </div>
@@ -119,7 +117,13 @@ export default {
       return "en";
     },
   },
-  methods: {},
+  methods: {
+    translate(text, code) {
+      if (!code) code = this.browserLanguage;
+      if (this.$languages) return this.$languages.translate(text, code);
+      else return text;
+    },
+  },
 };
 </script>
 <style scoped lang="scss">
