@@ -37,7 +37,7 @@
           title="List All Clips"
         >
           <i class="fa-solid fa-list mr-1"></i>
-          List
+          {{ $t('List') }}
         </b-button>
         <b-form-input
           v-if="!checking && (hits.length > 0 || regex) && showFilter"
@@ -65,7 +65,7 @@
           title="Open this video with full transcript"
         >
           <i class="fa-solid fa-arrows-maximize mr-1"></i>
-          Open Full
+          {{ $t('Open Full') }}
         </router-link>
         <b-button
           size="sm"

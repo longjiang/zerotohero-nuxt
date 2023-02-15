@@ -17,44 +17,44 @@
       ref="show-filter-modal"
       centered
       hide-footer
-      title="Search in ..."
+      :title="$t('Search in...')"
       body-class="show-filter-modal"
       @hide="onModalHide"
     >
       <b-form-checkbox v-model="allVideosChecked">
         <i class="fa fa-play"></i>
-        <b>All Videos</b>
+        <b>{{ $t('All Videos') }}</b>
       </b-form-checkbox>
       <template v-if="!allVideosChecked">
         <hr />
         <b-form-checkbox v-if="musicShow" v-model="musicChecked">
           <i class="fa fa-music"></i>
-          <b>Music</b>
+          <b>{{ $t('Music') }}</b>
         </b-form-checkbox>
         <b-form-checkbox v-if="moviesShow" v-model="moviesChecked">
           <i class="fa fa-film"></i>
-          <b>Movies</b>
+          <b>{{ $t('Movies') }}</b>
         </b-form-checkbox>
         <b-form-checkbox v-if="newsShow" v-model="newsChecked">
           <i class="fa fa-newspaper"></i>
-          <b>News</b>
+          <b>{{ $t('News') }}</b>
         </b-form-checkbox>
         <template v-if="tvShows">
           <hr />
           <b-form-checkbox v-model="allTVShowsChecked" :class="{ 'mb-2': !allTVShowsChecked }">
             <i class="fa fa-tv"></i>
-            <b>All TV Shows</b>
+            <b>{{ $t('All TV Shows') }}</b>
             <template v-if="!allTVShowsChecked">
               <a
                 class="ml-2 quick-link"
                 @click.stop.prevent="checkAll('tvShows')"
                 v-if="tvShowChecked.length < tvShowsFiltered.length"
-              >Check All</a>
+              >{{ $t('Check All') }}</a>
               <a
                 class="ml-2 quick-link"
                 v-if="tvShowChecked.length > 0"
                 @click.stop.prevent="uncheckAll('tvShows')"
-              >Uncheck All</a>
+              >{{ $t('Uncheck All') }}</a>
             </template>
           </b-form-checkbox>
           <template v-if="!allTVShowsChecked">
@@ -78,18 +78,18 @@
           <hr />
           <b-form-checkbox v-model="allTalksChecked" :class="{ 'mb-2': !allTalksChecked }">
             <i class="fas fa-graduation-cap"></i>
-            <b>All Talks</b>
+            <b>{{ $t('All YouTube Channels') }}</b>
             <template v-if="!allTalksChecked">
               <a
                 class="ml-2 quick-link"
                 @click.stop.prevent="checkAll('talks')"
                 v-if="talkChecked.length < talksFiltered.length"
-              >Check All</a>
+              >{{ $t('Check All') }}</a>
               <a
                 class="ml-2 quick-link"
                 v-if="talkChecked.length > 0"
                 @click.stop.prevent="uncheckAll('talks')"
-              >Uncheck All</a>
+              >{{ $t('Uncheck All') }}</a>
             </template>
           </b-form-checkbox>
           <template v-if="!allTalksChecked">
@@ -170,21 +170,21 @@ export default {
     },
     title() {
       let titles = [];
-      if (this.allVideosChecked) titles.push("All Videos");
+      if (this.allVideosChecked) titles.push(this.$t("All Videos"));
       else {
-        if (this.allTVShowsChecked) titles.push("All TV Shows");
+        if (this.allTVShowsChecked) titles.push(this.$t("All TV Shows"));
         else if (this.tvShowChecked && this.tvShowChecked.length > 0)
-          titles.push(`${this.tvShowChecked.length} TV Show(s)`);
-        if (this.musicChecked) titles.push("Music");
-        if (this.moviesChecked) titles.push("Movies");
-        if (this.newsChecked) titles.push("News");
-        if (this.allTalksChecked) titles.push("All Talks");
+          titles.push(this.$t('{num} TV Show(s)', {num: this.tvShowChecked.length}));
+        if (this.musicChecked) titles.push(this.$t("Music"));
+        if (this.moviesChecked) titles.push(this.$t("Movies"));
+        if (this.newsChecked) titles.push(this.$t("News"));
+        if (this.allTalksChecked) titles.push(this.$t("All YouTube Channels"));
         else if (this.talkChecked && this.talkChecked.length > 0)
-          titles.push(`${this.talkChecked.length} Talk(s)`);
+          titles.push(this.$t('{num} YouTube Channel(s)', {num: this.talkChecked.length}));
       }
-      if (titles.length > 1) return titles[0] + " & Other Videos";
+      if (titles.length > 1) return titles[0] + this.$t(" & Other Videos");
       if (titles.length === 1) return titles[0];
-      if (titles.length === 0) return "Videos";
+      if (titles.length === 0) return this.$t("Videos");
     }
   },
   mounted() {

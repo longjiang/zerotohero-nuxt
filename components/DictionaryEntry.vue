@@ -48,8 +48,8 @@
           v-if="entry && showSearchSubs && searchTerms"
         >
           <div class="widget-title">
-            “{{ searchTerms.join(", ") }}” in
-            <span v-if="tvShow">the TV Show “{{ tvShow.title }}”</span>
+            “{{ searchTerms.join(", ") }}” — {{ $t('Search in:') }}
+            <span v-if="tvShow">{{ $t('the TV Show “{title}”', { title: tvShow.title }) }}</span>
             <LazyShowFilter v-else @showFilter="reloadSearchSubs" />
           </div>
           <div class="widget-body">
