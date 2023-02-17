@@ -18,29 +18,33 @@
         />
       </div>
       <h4 class="mt-3 mb-5 text-center">
-        Import
-        {{ $l2.name }} Videos from YouTube
+        {{ $t("Import {l2} Videos from YouTube", { l2: $t($l2.name) }) }}
       </h4>
       <b-input-group class="flex-1">
         <b-form-input
           v-model="url"
           :lazy="true"
           @compositionend.prevent.stop="() => false"
-          :placeholder="'URL of a YouTube video or playlist...'"
+          :placeholder="$t('URL of a YouTube video or playlist...')"
         />
       </b-input-group>
       <div class="mt-4" style="color: #aaa">
         <p>
-          In the input field above, type in any YouTube video URL to open that
-          video in Language Player. Alternatively, type in a playlist URL to
-          browse that playlist in Language Player.
+          {{
+            $t(
+              "In the input field above, type in any YouTube video URL to open that video in Language Player. Alternatively, type in a playlist URL to browse that playlist in Language Player."
+            )
+          }}
         </p>
-        <p>
-          You can also do this with a bookmarklet: (1) drag this
-          <a :href="bookmarklet" class="btn btn-small btn-ghost-dark">Open in Language Player</a> bookmarklet to your
-          bookmarks bar; (2) navigate to a YouTube video page, and click on the
-          bookmarklet to directly import that video into Language Player.
-        </p>
+
+        <i18n
+          path="You can also do this with a bookmarklet: (1) drag this {0} bookmarklet to your bookmarks bar; (2) navigate to a YouTube video page, and click on the bookmarklet to directly import that video into Language Player."
+          tag="p"
+        >
+          <a :href="bookmarklet" class="btn btn-small btn-ghost-dark">
+            {{ $t("Open in Language Player") }}
+          </a>
+        </i18n>
       </div>
     </div>
   </div>

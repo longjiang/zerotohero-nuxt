@@ -1,17 +1,22 @@
 <template>
   <div class="widget widget-dark mb-5" style="max-width: 70vh; margin: 0 auto">
     <div class="widget-title">
-      <span style="font-weight: normal">
-        A Random {{ routeType === "tv-shows" ? "TV Show Episode" : "Video" }}
-        {{ randomShowRandomEpisodeL2 ? "in " : "" }}
-      </span>
-      <span style="font-weight: bold; color: white">
-        {{
-          randomShowRandomEpisodeL2
-            ? `${randomShowRandomEpisodeL2.name} (${randomShowRandomEpisodeL2.code})`
-            : ""
-        }}
-      </span>
+      <i18n
+        path="A Random {0} in {1}"
+        tag="span"
+        style="font-weight: normal"
+      >
+        <span>
+          {{ $t(routeType === "tv-shows" ? "TV Show Episode" : "Video") }}
+        </span>
+        <span style="font-weight: bold; color: white">
+          {{
+            randomShowRandomEpisodeL2
+              ? `${$t(randomShowRandomEpisodeL2.name)} (${randomShowRandomEpisodeL2.code})`
+              : ""
+          }}
+        </span>
+      </i18n>
     </div>
     <div class="text-center pt-5 pb-5" v-if="!randomShowRandomEpisode">
       <Loader :sticky="true" message="Getting shows..." />

@@ -1437,3 +1437,16 @@ Filter videos...,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,筛选视频……
 Filter {num} {l2} {type}...,,,,,,,,,,,,,,{l2}{type}{num}つを選別する...,{l2} {type} {num}개 선별...,,,,,,,,,,,,,,,,筛选{num}个{l2}{type}……
 Other countries,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,其他国家/地区
 Filter {num} channels...,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,筛选{num}个频道……
+TV Show Episode,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,电视节目集
+A Random {0} in {1},,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,一个随机的{1}{0}
+Open in Full Player,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,在播放器中打开完整视频
+Import {l2} Videos from YouTube,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,从YouTube导入{l2}视频
+URL of a YouTube video or playlist...,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,YouTube视频或播放列表的URL……
+"In the input field above, type in any YouTube video URL to open that video in Language Player. Alternatively, type in a playlist URL to browse that playlist in Language Player.",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,在上面的输入字段中，键入任何YouTube视频URL以在语言播放器中打开该视频。或者，键入播放列表URL以在语言播放器中浏览该播放列表。
+"You can also do this with a bookmarklet: (1) drag this {0} bookmarklet to your bookmarks bar; (2) navigate to a YouTube video page, and click on the bookmarklet to directly import that video into Language Player.",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,您也可以使用bookmarklet执行此操作：（1）将此{0} bookmarklet拖动到书签栏；（2） 导航到YouTube视频页面，然后单击书签将视频直接导入到Language Player。
+Open in Language Player,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,在Language Player中打开
+Watched on {date}:,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,{date}您观看了：
+Clear Watch History,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,清除观看历史记录
+Watched earlier:,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,更久之前您观看了：
+You haven't watched any {l2} videos yet.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,您尚未观看任何{l2}视频。
+Start Watching,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,开始观看

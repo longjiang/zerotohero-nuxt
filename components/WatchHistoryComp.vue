@@ -14,7 +14,7 @@
               @click.stop.prevent="$store.dispatch('history/removeAll')"
             >
               <i class="fas fa-times mr-1"></i>
-              Clear Watch History
+              {{ $t('Clear Watch History') }}
             </button>
           </div>
         </div>
@@ -22,17 +22,10 @@
           <template v-for="group in groups">
             <div class="col-sm-12" v-if="showDate" :key="`date-${group.date}`">
               <p v-if="group.date === '0'" class="mb-4 mt-4">
-                Watched earlier:
+                {{ $t('Watched earlier:') }}
               </p>
               <p class="mb-4 mt-4" v-else>
-                Watched on
-                {{
-                  new Date(group.date).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })
-                }}:
+                {{ $t('Watched on {date}:', {date: $d(new Date(group.date), 'short', $l1.code)})}}
               </p>
             </div>
             <div
@@ -49,7 +42,7 @@
               :set2="(itemL2 = $languages.getSmart(item.l2))"
             >
               <div class="history-item-language-badge" v-if="showLanguage && itemL1 && itemL2">
-                {{ itemL2.name }}
+                {{ $t(itemL2.name) }}
               </div>
               <LazyYouTubeVideoCard
                 v-if="itemL1 && itemL2 && item.type === 'video'"
@@ -94,12 +87,12 @@
               skin === 'dark' ? 'ghost-dark' : ''
             }`"
           >
-            You haven't watched any {{ l2 ? l2.name : "" }} videos yet.
+            {{ $t("You haven't watched any {l2} videos yet.", {l2: l2 ? $t(l2.name) : ""}) }}
             <br />
             <br />
             <router-link :to="{ name: 'explore-media' }" class="btn btn-success">
               <i class="fas fa-play mr-1"></i>
-              Start Watching
+              {{ $t('Start Watching') }}
             </router-link>
           </p>
         </div>
@@ -179,6 +172,19 @@ export default {
   },
   computed: {
     ...mapState("history", ["history"]),
+    $l1() {
+      if (typeof this.l1 !== "undefined") {
+        return this.l1;
+      } else if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+      else return this.$languages.getSmart("en");
+    },
+    $l2() {
+      if (typeof this.l2 !== "undefined") {
+        return this.l2;
+      } else if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
     groups() {
       let history = this.itemsFiltered
         .sort((a, b) => b.date.localeCompare(a.date))

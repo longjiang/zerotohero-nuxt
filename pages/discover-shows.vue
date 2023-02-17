@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 import Helper from "@/lib/helper";
 export default {
   props: {
