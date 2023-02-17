@@ -79,6 +79,8 @@ import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
+import axios from 'axios';
+import Papa from 'papaparse'
 
 export default {
   components: {

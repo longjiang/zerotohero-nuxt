@@ -51,9 +51,7 @@
               <b-form-input
                 v-model="keyword"
                 @compositionend.prevent.stop="() => false"
-                :placeholder="`Filter ${
-                  this.channels ? this.channels.length : ''
-                } channels...`"
+                :placeholder="$t('Filter {num} channels...', {num: this.channels ? this.channels.length : ''})"
                 class="input-ghost-dark"
               />
             </b-input-group>
@@ -89,7 +87,7 @@
                   featured = false;
                 "
               >
-                All
+                {{ $t('All') }}
               </button>
               <button
                 v-for="c in countries"
@@ -106,7 +104,7 @@
                   featured = false;
                 "
               >
-                {{ c ? countryNameFromCode(c) : "Other countries" }}
+                {{ $t(c ? countryNameFromCode(c) : "Other countries") }}
               </button>
               <button
                 v-for="cat in categories"

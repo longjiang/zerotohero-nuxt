@@ -25,9 +25,11 @@
               class="filter-dropdown mr-2"
             >
               {{
-                category && categoriesFiltered[category]
-                  ? categoriesFiltered[category]
-                  : "All Categories"
+                $t(
+                  category && categoriesFiltered[category]
+                    ? categoriesFiltered[category]
+                    : "All Categories"
+                )
               }}
               <i class="fa-solid fa-caret-down"></i>
             </span>
@@ -37,21 +39,25 @@
               class="filter-dropdown mr-2"
             >
               {{
-                level && levels.find((l) => l.numeric === level)
-                  ? levels.find((l) => l.numeric === level).name
-                  : "All Levels"
+                $t(
+                  level && levels.find((l) => l.numeric === level)
+                    ? levels.find((l) => l.numeric === level).name
+                    : "All Levels"
+                )
               }}
               <i class="fa-solid fa-caret-down"></i>
             </span>
             <span @click="showModal('sort')" class="filter-dropdown">
-              Sort by {{ sort }}
+              {{ $t(`Sort by ${ucFirst(sort)}`) }}
               <i class="fa-solid fa-caret-down"></i>
             </span>
-            <div
-              v-if="sort === 'recommended'"
+
+            <i18n
+              path="Recommendations based on your {0}."
+              tag="div"
               style="font-weight: normal; font-size: 0.8em; margin-top: 0.5rem"
+              v-if="sort === 'recommended'"
             >
-              Recommendations based on your
               <router-link
                 :to="{
                   name: LANGS_WITH_LEVELS.includes(this.$l2.code)
@@ -59,9 +65,9 @@
                     : 'set-content-preferences',
                 }"
               >
-                <u>content preferences</u>
+                <u>{{ $t("content preferences") }}</u>
               </router-link>
-            </div>
+            </i18n>
           </div>
         </div>
         <div class="row" v-if="showFilter">
@@ -70,9 +76,13 @@
               <b-form-input
                 v-model="keyword"
                 @compositionend.prevent.stop="() => false"
-                :placeholder="`Filter ${
-                  filteredShows ? filteredShows.length : ''
-                } ${$l2.name} ${routeTitles[routeType]}`"
+                :placeholder="
+                  $t('Filter {num} {l2} {type}...', {
+                    num: filteredShows ? filteredShows.length : '',
+                    l2: $t($l2.name),
+                    type: $t(routeTitles[routeType]),
+                  })
+                "
                 ref="filter"
                 class="input-ghost-dark"
               />
@@ -96,14 +106,19 @@
                 <div
                   class="text-center"
                   v-if="filteredShows && filteredShows.length === 0"
-                >{{ $t('No {showType} found.', {showType: routeTitles[routeType]}) }}
+                >
+                  {{
+                    $t("No {showType} found.", {
+                      showType: routeTitles[routeType],
+                    })
+                  }}
                   <div>
                     <router-link
                       :to="{ name: routeType, params: {} }"
                       class="btn btn-success mt-3"
                     >
                       <i class="fa-solid fa-arrows-rotate"></i>
-                      {{ $t('Reset filters') }}
+                      {{ $t("Reset filters") }}
                     </router-link>
                   </div>
                 </div>
@@ -144,7 +159,7 @@
       hide-footer
       modal-class="safe-padding-top mt-4"
       body-class="dropdown-menu-modal-wrapper"
-      title="Categories"
+      :title="$t('Categories')"
     >
       <div class="row">
         <div class="mb-1 col-6 col-lg-4">
@@ -152,7 +167,7 @@
             :to="{ name: routeType, params: { category: 'all', tag, level } }"
             class="link-unstyled"
           >
-            {{ $t('All Categories') }}
+            {{ $t("All Categories") }}
           </router-link>
         </div>
         <div
@@ -164,7 +179,7 @@
             :to="{ name: routeType, params: { category: index, tag, level } }"
             class="link-unstyled"
           >
-            {{ $t('category') }}
+            {{ $t(category) }}
           </router-link>
         </div>
       </div>
@@ -176,7 +191,7 @@
       hide-footer
       modal-class="safe-padding-top mt-4"
       body-class="dropdown-menu-modal-wrapper"
-      title="Sort"
+      :title="$t('Sort')"
     >
       <div class="row">
         <div
@@ -184,21 +199,21 @@
           @click="sort = 'recommended'"
           style="cursor: pointer"
         >
-          {{ $t('Sort by Recommended') }}
+          {{ $t("Sort by Recommended") }}
         </div>
         <div
           class="mb-1 col-12"
           @click="sort = 'views'"
           style="cursor: pointer"
         >
-          {{ $t('Sort by Views') }}
+          {{ $t("Sort by Views") }}
         </div>
         <div
           class="mb-1 col-12"
           @click="sort = 'title'"
           style="cursor: pointer"
         >
-          {{ $t('Sort by Title') }}
+          {{ $t("Sort by Title") }}
         </div>
         <!-- <div class="mb-1 col-12" @click="sort = 'date'">Sort by Date</div> -->
       </div>
@@ -210,7 +225,7 @@
       hide-footer
       modal-class="safe-padding-top mt-4"
       body-class="dropdown-menu-modal-wrapper"
-      title="Levels"
+      :title="$t('Levels')"
     >
       <div class="row">
         <div class="mb-1 col-6 col-lg-4">
@@ -221,7 +236,7 @@
             }"
             class="link-unstyled"
           >
-            {{ $t('All Levels') }}
+            {{ $t("All Levels") }}
           </router-link>
         </div>
         <div
@@ -244,7 +259,9 @@
                 : level.name
             }}
             <span class="item-count">
-              ({{ $t('{num} shows', {num: showCountByLevel(level.numeric)})}})
+              ({{
+                $t("{num} shows", { num: showCountByLevel(level.numeric) })
+              }})
             </span>
           </router-link>
         </div>
@@ -255,9 +272,13 @@
 
 <script>
 import { tify } from "chinese-conv";
-import { scrollToTargetAdjusted } from "@/lib/utils";
-import { unique } from "@/lib/utils";
-import { languageLevels, LANGS_WITH_LEVELS } from "@/lib/utils";
+import {
+  scrollToTargetAdjusted,
+  ucFirst,
+  unique,
+  languageLevels,
+  LANGS_WITH_LEVELS,
+} from "@/lib/utils";
 import { CATEGORIES } from "@/lib/youtube";
 import { mapState } from "vuex";
 
@@ -470,6 +491,9 @@ export default {
     },
   },
   methods: {
+    ucFirst(...args) {
+      return ucFirst(...args);
+    },
     showModal(name) {
       this.$refs[name + "Modal"]?.show();
     },

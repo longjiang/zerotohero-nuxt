@@ -53,7 +53,7 @@
             }"
             class="link-unstyled category-btn"
           >
-            {{ category }}
+            {{ $t(category) }}
           </router-link>
         </div>
       </div>
@@ -81,8 +81,8 @@
             }"
             class="link-unstyled category-btn"
           >
-            {{ level.category }} ({{
-              level.name.replace("CEFR ", "").replace("Pre", "Pre-")
+            {{ $t(level.category) }} ({{
+              $t(level.name.replace("CEFR ", "").replace("Pre", "Pre-"))
             }})
           </router-link>
         </div>
@@ -104,7 +104,7 @@
             :to="{ name: 'watch-history' }"
           >
             <i class="fa-regular fa-history mr-1"></i>
-            Watch History
+            {{ $t('Watch History') }}
           </router-link>
         </div>
         <div
@@ -116,7 +116,7 @@
             :to="{ name: 'talks' }"
           >
             <i class="fab fa-youtube mr-1"></i>
-            YouTube
+            {{ $t('YouTube Channels') }}
           </router-link>
         </div>
         <div
@@ -128,7 +128,7 @@
             :to="{ name: 'tv-shows' }"
           >
             <i class="fa-regular fa-tv mr-1"></i>
-            TV Shows
+            {{ $t('TV Shows') }}
           </router-link>
         </div>
         <div class="col-6 col-md-4 col-lg-3 category-btn-wrapper">
@@ -137,7 +137,7 @@
             :to="{ name: 'live-tv' }"
           >
             <i class="fa-regular fa-tv-retro mr-1"></i>
-            Live TV
+            {{ $t('Live TV') }}
           </router-link>
         </div>
         <div
@@ -152,7 +152,7 @@
             }"
           >
             <i class="fa-regular fa-film mr-1"></i>
-            Movies
+            {{ $t('Movies') }}
           </router-link>
         </div>
         <div
@@ -167,7 +167,7 @@
             }"
           >
             <i class="fa-solid fa-music mr-1"></i>
-            Music
+            {{ $t('Music') }}
           </router-link>
         </div>
         <div
@@ -182,7 +182,7 @@
             }"
           >
             <i class="fa-solid fa-newspaper mr-1"></i>
-            News
+            {{ $t('News') }}
           </router-link>
         </div>
         <div
@@ -196,7 +196,7 @@
             }"
           >
             <i class="fa-solid fa-book-open mr-1"></i>
-            Audiobooks
+            {{ $t('Audiobooks') }}
           </router-link>
         </div>
         <div
@@ -210,7 +210,7 @@
             }"
           >
             <i class="fa-solid fa-baby mr-1"></i>
-            Kids
+            {{ $t('Kids') }}
           </router-link>
         </div>
         <div
@@ -223,7 +223,7 @@
             }"
           >
             <i class="fa-solid fa-telescope mr-1"></i>
-            Explore
+            {{ $t('Recommended') }}
           </router-link>
         </div>
       </div>

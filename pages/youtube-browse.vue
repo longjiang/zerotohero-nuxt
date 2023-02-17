@@ -29,9 +29,11 @@
             class="filter-dropdown mr-2"
           >
             {{
-              category && categories[category]
-                ? categories[category]
-                : "All Categories"
+              $t(
+                category && categories[category]
+                  ? categories[category]
+                  : "All Categories"
+              )
             }}
             <i class="fa-solid fa-caret-down"></i>
           </span>
@@ -47,13 +49,21 @@
             {{
               level && levels.find((l) => l.numeric === level)
                 ? levels.find((l) => l.numeric === level).name
-                : "All Levels"
+                : $t("All Levels")
             }}
             <i class="fa-solid fa-caret-down"></i>
           </span>
         </div>
       </div>
-      <h5 v-if="$refs['tv-shows'] && $refs['tv-shows'].filteredShows && $refs['tv-shows'].filteredShows.length > 0">TV Shows</h5>
+      <h5
+        v-if="
+          $refs['tv-shows'] &&
+          $refs['tv-shows'].filteredShows &&
+          $refs['tv-shows'].filteredShows.length > 0
+        "
+      >
+        {{ $t('TV Shows') }}
+      </h5>
       <hr class="mb-4" />
       <Shows
         v-if="!(category === 'all' && level === 'all' && kidsOnly === false)"
@@ -64,11 +74,19 @@
           showFilter: false,
           showHero: false,
           routeType: 'tv-shows',
-          tag: 'all'
+          tag: 'all',
         }"
         ref="tv-shows"
       />
-      <h5 v-if="$refs['talks'] && $refs['talks'].filteredShows && $refs['talks'].filteredShows.length > 0">YouTube Channels</h5>
+      <h5
+        v-if="
+          $refs['talks'] &&
+          $refs['talks'].filteredShows &&
+          $refs['talks'].filteredShows.length > 0
+        "
+      >
+        {{ $t('YouTube Channels') }}
+      </h5>
       <hr class="mb-4" />
       <Shows
         v-if="!(category === 'all' && level === 'all' && kidsOnly === false)"
@@ -79,11 +97,19 @@
           showFilter: false,
           showHero: false,
           routeType: 'talks',
-          tag: 'all'
+          tag: 'all',
         }"
         ref="talks"
       />
-      <h5 v-if="$refs['videos'] && $refs['videos'].videos && $refs['videos'].videos.length > 0">Videos</h5>
+      <h5
+        v-if="
+          $refs['videos'] &&
+          $refs['videos'].videos &&
+          $refs['videos'].videos.length > 0
+        "
+      >
+        {{ $t('Videos') }}
+      </h5>
       <hr class="mb-4" />
       <MediaSearchResults
         v-bind="{
@@ -116,7 +142,7 @@
       hide-footer
       modal-class="safe-padding-top mt-4"
       body-class="dropdown-menu-modal-wrapper"
-      title="Categories"
+      :title="$t('Categories')"
     >
       <div class="row">
         <div class="mb-1 col-6 col-lg-4">
@@ -127,7 +153,7 @@
             }"
             class="link-unstyled"
           >
-            All Categories
+            {{ $t('All Categories') }}
           </router-link>
         </div>
         <div
@@ -142,7 +168,7 @@
             }"
             class="link-unstyled"
           >
-            {{ category }}
+            {{ $t(category) }}
           </router-link>
         </div>
       </div>
@@ -154,7 +180,7 @@
       hide-footer
       modal-class="safe-padding-top mt-4"
       body-class="dropdown-menu-modal-wrapper"
-      title="Levels"
+      :title="$t('Levels')"
     >
       <div class="row">
         <div class="mb-1 col-6 col-lg-4">
@@ -165,7 +191,7 @@
             }"
             class="link-unstyled"
           >
-            All Levels
+            {{ $t('All Levels') }}
           </router-link>
         </div>
         <div
@@ -213,8 +239,8 @@ export default {
       default: 0,
     },
     kidsOnly: {
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     ...mapState("shows", ["categories"]),

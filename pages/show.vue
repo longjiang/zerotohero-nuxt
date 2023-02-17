@@ -84,8 +84,8 @@
                         @compositionend.prevent.stop="() => false"
                         :placeholder="
                           episodeCount
-                            ? `Search inside this collection (${episodeCount} videos)`
-                            : 'Filter videos...'
+                            ? $t('Search inside this collection ({num} videos)', {num: episodeCount})
+                            : $t('Filter videos...')
                         "
                         class="input-ghost-dark"
                       />
