@@ -5,7 +5,7 @@
         <span class="show-type-icon">
           <i class="fas fa-satellite-dish"></i>
         </span>
-        <span class="show-type ml-1">Live TV</span>
+        <span class="show-type ml-1">{{ $t('Live TV') }}</span>
       </div>
       <router-link :to="to" class="text-white">
         <h5 class="show-title mt-1">

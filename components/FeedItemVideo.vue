@@ -5,7 +5,7 @@
         <span class="show-type-icon">
           <i :class="show.icon"></i>
         </span>
-        <span class="show-type ml-1">{{ show.type }}</span>
+        <span class="show-type ml-1">{{ $t(show.type) }}</span>
       </div>
       <router-link
         v-if="
@@ -57,7 +57,7 @@
         </router-link>
       </div>
       <div class="youtube-date mt-2" v-if="video.talk">
-        {{ formatDate(video.date) }}
+        {{ $d(new Date(video.date), 'short', $l1.code) }}
       </div>
     </div>
   </div>
