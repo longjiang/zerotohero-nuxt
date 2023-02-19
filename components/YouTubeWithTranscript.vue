@@ -547,13 +547,14 @@ export default {
             );
           }
           if (!subs_l1 || !subs_l1[0]) {
+            let useGenerated = !this.video.subs_l2 || this.video.subs_l2.length === 0
             subs_l1 = await YouTube.getTranslatedTranscript(
               video.youtube_id,
               video.l2Locale || this.$l2.code,
               video.l2Name,
               this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code, // tlang
               true, // forceRefresh
-              true // generated
+              useGenerated // get generated subs only if we don't have L2 subs (subs we uploaded)
             );
           }
         }
