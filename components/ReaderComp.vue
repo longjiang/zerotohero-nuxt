@@ -45,14 +45,14 @@
                 size="sm"
                 @click="showWords = true"
               >
-                Show Vocabulary List ({{ savedWordIdsInText.length }})
+                {{ $t('Show Vocabulary List ({num})', { num: savedWordIdsInText.length }) }}
               </b-button>
             </div>
             <div v-if="showWords">
               <hr class="mt-0 mb-4" />
               <div style="font-size: 1rem; line-height: 1" class="mb-3">
                 <div class="mt-1">
-                  <small>Here are your saved that appear in this text:</small>
+                  <small>{{ $t('Here are your saved that appear in this text:') }}</small>
                 </div>
               </div>
               <WordList :ids="savedWordIdsInText" />
@@ -85,7 +85,7 @@
               style="font-size: 0.9em"
             >
               <i class="fas fa-keyboard"></i>
-              Enter Translation
+              {{ $t('Enter Translation') }}
             </button>
           </div>
           <div class="d-flex">

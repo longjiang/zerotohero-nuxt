@@ -9,7 +9,7 @@
       variant="light text-secondary"
       @click="remove()"
     >
-      Delete
+      {{ $t('Delete') }}
     </b-button>
     </div>
   </div>

@@ -223,7 +223,7 @@ export default {
       for (let i = 1; i <= this.pageCount; i++) {
         options.push({
           value: i,
-          text: this.$t("Page") + ` ${i} / ${this.pageCount}`,
+          text: this.$t("Page {i} / {num}", {i, num: this.pageCount} ),
         });
       }
       return options;

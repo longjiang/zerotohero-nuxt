@@ -52,7 +52,7 @@
               :to="{ name: 'my-text' }"
             >
               <i class="fa fa-chevron-left"></i>
-              My Texts
+              {{ $t('My Texts') }}
             </router-link>
             <h4 class="mt-3 mb-3" v-if="shared">{{ shared.title }}</h4>
           </client-only>

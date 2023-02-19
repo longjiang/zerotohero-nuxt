@@ -38,13 +38,13 @@
                 v-if="!$auth.loggedIn"
                 class="text-center alert-success p-3 pb-4 rounded mt-4 w-100"
               >
-                <p>To create new texts, please login.</p>
+                <p>{{ $t('To create new texts, please login.') }}</p>
                 <router-link :to="{ name: 'login' }" class="btn btn-success">
-                  Login
+                  {{ $t('Login') }}
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
               </div>
-              <div v-else>You have not created any text yet.</div>
+              <div v-else>{{ $t('You have not created any text yet.') }}</div>
             </div>
             <b-button
               v-if="$auth.loggedIn"
@@ -54,11 +54,11 @@
             >
               <span v-if="!creating">
                 <i class="fas fa-plus mr-1"></i>
-                New Text
+                {{ $t('New Text') }}
               </span>
               <span v-else>
                 <i class="fas fa-sync-alt"></i>
-                Creating...
+                {{ $t('Creating...') }}
               </span>
             </b-button>
           </div>
