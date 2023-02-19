@@ -20,18 +20,20 @@
       </span>
       <div class="video-meta">
         <span v-if="video.channel">
-          <u><router-link
-            class="link-unstyled"
-            :to="{
-              name: 'youtube-channel',
-              params: {
-                channel_id: video.channel.id,
-                title: video.channel.title || undefined,
-              },
-            }"
-          >
-            {{ video.channel.title || $t("Channel") }}
-          </router-link></u>
+          <u>
+            <router-link
+              class="link-unstyled"
+              :to="{
+                name: 'youtube-channel',
+                params: {
+                  channel_id: video.channel.id,
+                  title: video.channel.title || undefined,
+                },
+              }"
+            >
+              {{ video.channel.title || $t("Channel") }}
+            </router-link>
+          </u>
         </span>
         <span v-if="video.date">{{ formatDate(video.date) }}</span>
         <span v-if="localeDescription">
@@ -51,7 +53,7 @@
             target="_blank"
             class="link-unstyled"
           >
-            <u>{{ $t('Transcript') }}</u>
+            <u>{{ $t("Transcript") }}</u>
           </a>
         </span>
       </div>
@@ -74,7 +76,7 @@
       <drop
         @drop="handleDrop"
         :class="{
-          'd-none': video.subs_l2 && video.subs_l2.length > 0,
+          'd-none': (video.subs_l2 && video.subs_l2.length > 0) || showSubsEditing,
           over: over,
           'subs-drop drop p-4 mt-3': true,
         }"
@@ -246,6 +248,24 @@
               Enable Translation Editing
             </b-form-checkbox>
           </div>
+          <div :class="{'d-none': !showSubsEditing}">
+            <u
+              class="mt-2 ml-2 d-inline-block text-danger"
+              style="cursor: pointer"
+              @click="clearSubs"
+            >
+              <i class="fas fa-times mr-1" />
+              Clear Subs
+            </u>
+            <u
+              class="mt-2 ml-2 d-inline-block text-danger"
+              style="cursor: pointer"
+              @click="clearTranslation"
+            >
+              <i class="fas fa-times mr-1" />
+              Clear Translation
+            </u>
+          </div>
         </div>
         <div
           :class="{
@@ -379,29 +399,29 @@ export default {
   },
   data() {
     return {
-      subsUpdated: false,
-      firstLineTime: 0,
-      over: false,
-      saving: false,
-      isNewVideo: false,
-      topics: Helper.topics,
-      transcriptKey: 0,
+      autoBreakTranslationLines: false,
+      country: undefined, // the country object as defined in the locale
       deleted: false,
       deleting: false,
-      updating: false,
-      showSubsEditing: false,
-      enableTranslationEditing: false,
-      translation: "",
-      notes: "",
-      mounted: false,
-      autoBreakTranslationLines: false,
       enableNormalizeNotes: false,
-      originalText: "",
-      punctuations: "。！？；：!?;:♪",
-      translationURL: undefined,
+      enableTranslationEditing: false,
+      firstLineTime: 0,
+      isNewVideo: false,
       language: undefined, // the language object as defined in the locale
-      country: undefined, // the country object as defined in the locale
       localeDescription: undefined, // a description string of the locale e.g. French (France)
+      mounted: false,
+      notes: "",
+      originalText: "",
+      over: false,
+      punctuations: "。！？；：!?;:♪",
+      saving: false,
+      showSubsEditing: false,
+      subsUpdated: false,
+      topics: Helper.topics,
+      transcriptKey: 0,
+      translation: "",
+      translationURL: undefined,
+      updating: false,
     };
   },
   computed: {
@@ -471,6 +491,14 @@ export default {
     },
   },
   methods: {
+    clearSubs() {
+      this.video.subs_l2 = undefined;
+      this.originalText = "";
+    },
+    clearTranslation() {
+      this.video.subs_l1 = undefined;
+      this.translation = "";
+    },
     async getLocaleDescription(locale) {
       let language, country;
       let [langCode, countryCode] = locale.split("-");
@@ -486,7 +514,7 @@ export default {
       return formatK(number, 2, this.$l1.code);
     },
     formatDate(date) {
-      return this.$d(new Date(date), 'short', this.$l1.code);
+      return this.$d(new Date(date), "short", this.$l1.code);
     },
     getTranslationURL() {
       if (typeof this.$l2 !== "undefined") {
@@ -603,22 +631,22 @@ export default {
           };
         });
 
-        let subs_l2 = []
-        let prevLine
+        let subs_l2 = [];
+        let prevLine;
         for (let line of parsed) {
           // In the rare case when two consecutive lines have the same starttime,
           // merge them and join them by "\n"
           if (prevLine && prevLine.starttime === line.starttime) {
-            prevLine.duration += line.duration
-            prevLine.line = prevLine.line + "\n" + line.line
+            prevLine.duration += line.duration;
+            prevLine.line = prevLine.line + "\n" + line.line;
           } else {
-            subs_l2.push(line)
-            prevLine = line
+            subs_l2.push(line);
+            prevLine = line;
           }
         }
         this.video.subs_l2 = Helper.uniqueByValue(subs_l2, "starttime");
         this.firstLineTime = this.video.subs_l2[0].starttime;
-        this.originalText = this.text // Update the text in the textarea
+        this.originalText = this.text; // Update the text in the textarea
         this.transcriptKey++;
         this.$emit("updateTranscript", true);
       };
@@ -693,7 +721,6 @@ export default {
   }
 }
 .main-dark {
-
   .video-edit-admin {
     background-color: #88888822;
   }
