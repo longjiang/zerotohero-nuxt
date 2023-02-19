@@ -365,7 +365,6 @@
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import Helper from "@/lib/helper";
-import DateHelper from "@/lib/date-helper";
 import { languageLevels, formatK } from "@/lib/utils";
 import Vue from "vue";
 import SmartQuotes from "smartquotes";
@@ -603,8 +602,23 @@ export default {
             line: cue.data.text,
           };
         });
-        this.video.subs_l2 = Helper.uniqueByValue(parsed, "starttime");
+
+        let subs_l2 = []
+        let prevLine
+        for (let line of parsed) {
+          // In the rare case when two consecutive lines have the same starttime,
+          // merge them and join them by "\n"
+          if (prevLine && prevLine.starttime === line.starttime) {
+            prevLine.duration += line.duration
+            prevLine.line = prevLine.line + "\n" + line.line
+          } else {
+            subs_l2.push(line)
+            prevLine = line
+          }
+        }
+        this.video.subs_l2 = Helper.uniqueByValue(subs_l2, "starttime");
         this.firstLineTime = this.video.subs_l2[0].starttime;
+        this.originalText = this.text // Update the text in the textarea
         this.transcriptKey++;
         this.$emit("updateTranscript", true);
       };
