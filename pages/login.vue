@@ -28,15 +28,13 @@
               <Logo skin="light" />
             </div>
             <b-form @submit.prevent="login">
-              <div v-if="message" class="alert alert-danger mt-2">
-                {{ message }}
-              </div>
+              <div v-if="message" class="alert alert-danger mt-2">{{ translate(message) }}</div>
               <b-form-group id="input-group-1" label-for="email">
                 <b-form-input
                   id="email"
                   v-model="form.email"
                   type="email"
-                  placeholder="Email"
+                  :placeholder="translate('Email')"
                   required
                 ></b-form-input>
               </b-form-group>
@@ -46,14 +44,14 @@
                   id="password"
                   type="password"
                   v-model="form.password"
-                  placeholder="Password"
+                  :placeholder="translate('Password')"
                   required
                 ></b-form-input>
               </b-form-group>
 
               <b-button class="d-block w-100" type="submit" variant="success">
                 <b-spinner small v-if="loading" />
-                <span v-else>Login</span>
+                <span v-else>{{ translate('Login') }}</span>
               </b-button>
               <div class="mt-3 text-center">
                 <router-link
@@ -61,18 +59,13 @@
                     name: 'register',
                     query: { redirect: $route.query.redirect },
                   }"
-                >
-                  Register
-                </router-link>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                >{{ translate('Register') }}</router-link>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <router-link
                   :to="{
                     name: 'forgot-password',
                     query: { redirect: $route.query.redirect },
                   }"
-                >
-                  Forgot Password?
-                </router-link>
+                >{{ translate('Forgot Password?') }}</router-link>
               </div>
             </b-form>
           </div>
@@ -87,16 +80,16 @@ import Helper from "@/lib/helper";
 
 export default {
   props: {
-    message: String,
+    message: String
   },
   data() {
     return {
       form: {
         email: "",
-        password: "",
+        password: ""
       },
       shaking: false,
-      loading: false,
+      loading: false
     };
   },
   computed: {
@@ -111,13 +104,25 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    }
   },
   mounted() {
     if (this.$auth.loggedIn) {
-      this.redirect()
+      this.redirect();
     }
   },
   methods: {
+    translate(text, code, data = {}) {
+      if (!code) code = this.browserLanguage
+      if (this.$languages) return this.$languages.translate(text, code, data);
+      else return text;
+    },
     redirect() {
       if (this.$route.query.redirect) {
         this.$router.push({ path: this.$route.query.redirect });
@@ -125,7 +130,7 @@ export default {
         if (this.$l1 && this.$l2)
           this.$router.push({
             name: "profile",
-            params: { l1: this.$l1.code, l2: this.$l2.code },
+            params: { l1: this.$l1.code, l2: this.$l2.code }
           });
         else this.$router.push("/dashboard");
       }
@@ -137,23 +142,31 @@ export default {
         if (res && res.data && res.data.data && res.data.data.user) {
           let user = res.data.data.user;
           this.$auth.setUser(user);
-          this.$toast.success(`Welcome back, ${this.$auth.user.first_name}!`, {
-            position: "top-center",
-            duration: 5000,
-          });
+          this.$toast.success(
+            this.translate("Welcome back, {name}!", this.browserLanguage, {
+              name: this.$auth.user.first_name
+            }),
+            {
+              position: "top-center",
+              duration: 5000
+            }
+          );
           this.redirect();
         }
       } catch (err) {
         if (err.response && err.response.data) {
           this.$toast.error(err.response.data.error.message, {
             position: "top-center",
-            duration: 5000,
+            duration: 5000
           });
         } else {
-          this.$toast.error("There has been an error.", {
-            position: "top-center",
-            duration: 5000,
-          });
+          this.$toast.error(
+            this.translate("There has been an error.", this.browserLanguage),
+            {
+              position: "top-center",
+              duration: 5000
+            }
+          );
         }
         this.loading = false;
         this.shake();
@@ -163,8 +176,8 @@ export default {
       this.shaking = true;
       await Helper.timeout(500);
       this.shaking = false;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

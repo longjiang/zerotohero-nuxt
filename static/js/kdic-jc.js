@@ -218,7 +218,7 @@ const Dictionary = {
     let results = []
     if (!this.isRoman(text)) {
       try {
-        let reg = new RegExp(text, 'gi')
+        let reg = new RegExp(text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi')
         results = this.words
           .filter(
             row => reg.test(row.kanji) || reg.test(row.kana)
