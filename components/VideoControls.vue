@@ -397,6 +397,9 @@ export default {
   watch: {
     initialTime() {
       this.currentTime = this.initialTime // so that the progress bar updates at the start
+    },
+    $route() {
+      this.hideInfoModal()
     }
   },
   methods: {
@@ -412,6 +415,9 @@ export default {
     },
     showInfoModal() {
       this.$refs["info-modal"].show();
+    },
+    hideInfoModal() {
+      this.$refs["info-modal"].hide();
     },
     showSettingsModal() {
       this.$refs["settings-modal"].show();
