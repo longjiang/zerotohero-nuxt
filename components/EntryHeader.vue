@@ -31,7 +31,7 @@
           }`"
         >
           <i class="fa fa-arrow-right mr-2" />
-          New HSK {{ entry.newHSK }}
+          {{ $t('New HSK {num}', {num: entry.newHSK})}}
           <span
             v-if="entry.newHSKMatches.length === 1"
             style="color: #999; font-weight: normal"
