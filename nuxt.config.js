@@ -1,3 +1,26 @@
+let defaultDateTimeFormat =  {
+  short: {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  },
+  long: {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true
+  }
+}
+
+let dateTimeFormats = {}
+
+for (let lang of 'af ar ca zh hr nl en fi fr de el hi hu id ga it ja ko la nan no pl pt ro ru sr es sw sv th tr vi'.split(' ')) {
+  dateTimeFormats[lang] = defaultDateTimeFormat
+}
+
 export default {
   env: {
     baseUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
@@ -105,55 +128,7 @@ export default {
     ['nuxt-i18n', {
       vueI18n: {
         fallbackLocale: 'en',
-        dateTimeFormats: {
-          'en': {
-            short: {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric'
-            },
-            long: {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              weekday: 'long',
-              hour: 'numeric',
-              minute: 'numeric'
-            }
-          },
-          'ja': {
-            short: {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric'
-            },
-            long: {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              weekday: 'long',
-              hour: 'numeric',
-              minute: 'numeric',
-              hour12: true
-            }
-          },
-          'zh': {
-            short: {
-              year: 'numeric',
-              month: 'short',
-              day: 'numeric'
-            },
-            long: {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              weekday: 'long',
-              hour: 'numeric',
-              minute: 'numeric',
-              hour12: true
-            }
-          }
-        },
+        dateTimeFormats
       }
     }],
     '@nuxtjs/google-fonts',
@@ -260,6 +235,10 @@ export default {
       } else {
         config.devtool = false
       }
+      config.module.rules.push({
+        test: /\.txt$/i,
+        use: 'raw-loader',
+      }) // for the 'raw-loader' module that allows us to load lib/translations.csv as raw text
     },
     transpile: [
       'iframe-translator'
