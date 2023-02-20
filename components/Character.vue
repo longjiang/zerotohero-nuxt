@@ -7,7 +7,7 @@
         <StrokeOrder :char="character.character" />
       </div>
       <div class="mb-4" style="overflow: hidden; position: relative;">
-        <h6>Character Definitions</h6>
+        <h6>{{ $t('Character Definitions') }}</h6>
         <DefinitionsList class="mt-2" :definitions="character.definition.split(';')"></DefinitionsList>
       </div>
     </div>
@@ -15,8 +15,8 @@
     <div>
       <Decomposition :char="character.character" class="mb-4 mr-4" style="float: left; clear: left"></Decomposition>
       <div class="character-parts" style="overflow: hidden; position: relative;">
-        <h6>Character Decomposition</h6>
-        <div class="part character-example" v-for="part in character.parts">
+        <h6>{{ $t('Character Decomposition') }}</h6>
+        <div class="part character-example" v-for="part in character.parts" :key="`character-part-${part.character}`">
           <span class="part-part mr-2" v-if="part && part.character !== '？'">
             <b>{{ part.character }}</b> =
           </span>
@@ -27,19 +27,24 @@
         </div>
         <div class="etymology" v-if="character.etymology">
           <span v-if="character.etymology.type">
-            <b>Origin:</b> A
-            <em v-if="character.etymology">{{ character.etymology.type }}</em>
-            character.
+            <b>{{ $t('Origin') }}:</b>
+            <i18n
+              path="A {0} character."
+              v-if="character.etymology"
+              tag="span"
+            >
+              <em >{{ $t(character.etymology.type) }}</em>
+            </i18n>
           </span>
           <span v-if="character.etymology.hint">
-            <b>Mnemonic:</b>
+            <b>{{ $t('Mnemonic') }}:</b>
             {{ character.etymology.hint }}.
           </span>
         </div>
       </div>
     </div>
     <hr style="clear: both" />
-    <h6 class="text-center">HSK Words with this Character</h6>
+    <h6 class="text-center">{{ $t('HSK Words with this Character') }}</h6>
     <WordList :words="examples" :highlight="character.character" collapse="4" />
   </div>
 </template>

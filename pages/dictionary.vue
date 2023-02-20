@@ -31,8 +31,7 @@
                   />
                 </div>
                 <h5 class="text-center pb-4" v-if="!args">
-                  Language Player
-                  {{ $l2.name }} Dictionary
+                  {{ $t('Language Player {l2} Dictionary', {l2: $t($l2.name) }) }}
                 </h5>
                 <SearchCompare
                   :searchEntry="entry"
@@ -53,23 +52,17 @@
                 <div style="max-width: 50rem; margin: 0 auto" class="mt-5">
                   <ul class="list-unstyled">
                     <li class="mt-2">
-                      🔍 You can do power search for patterns with
-                      <b>wild cards</b>
+                      🔍 <span v-html="$t('You can do power search for patterns with <b>wild cards</b>')" />
                       🃏
                     </li>
                     <li class="mt-2">
-                      ☝️ Use
-                      <code>_</code>
-                      underscore to match one character
+                      ☝️ <span v-html="$t('Use <code>_</code> underscore to match one character')" />
                     </li>
                     <li class="mt-2">
-                      ☝️ Use
-                      <code>*</code>
-                      asterisk to match one or more characters
+                      ☝️ <span v-html="$t('Use <code>*</code> asterisk to match one or more characters')" />
                     </li>
                     <li class="mt-2" v-if="dictionarySize">
-                      📖 This {{ $l2.name }} dictionary has
-                      <b>{{ dictionarySize }} words</b>
+                      📖 <span v-html="$t('This {l2} dictionary has <b>{num} words</b>', {l2: $t($l2.name), num: dictionarySize})" />
                     </li>
                   </ul>
                 </div>

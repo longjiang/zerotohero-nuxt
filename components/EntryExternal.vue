@@ -8,7 +8,8 @@
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://www.zdic.net') ? level : false"
       >
-        汉典
+        
+        {{ $t('汉典(ZDIC)') }}
       </a>
       <a
         @click.prevent="toggleIframe"
@@ -17,7 +18,7 @@
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://dictionary.cambridge.org') ? level : false"
       >
-        Cambridge
+        {{ $t('Cambridge Dictionary') }}
       </a>
       <a
         @click.prevent="toggleIframe"
@@ -25,7 +26,7 @@
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://en.m.wiktionary.org') ? level : false"
       >
-        Wiktionary
+        {{ $t('Wiktionary') }}
       </a>
       <a
         @click.prevent="toggleIframe"
@@ -34,7 +35,7 @@
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://www.etymonline.com') ? level : false"
       >
-        Etymology
+        {{ $t('Etymology') }}
       </a>
       <a
         @click.prevent="toggleIframe"
@@ -58,7 +59,7 @@
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://books.google.com/ngrams') ? level : false"
       >
-        Ngram
+        {{ $t('Usage Trends') }}
       </a>
       <a
         @click.prevent="toggleIframe"
@@ -67,7 +68,7 @@
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://www.moedict.tw') ? level : false"
       >
-        萌典
+        {{ $t('萌典(MOEDICT)') }}
       </a>
       <a
         @click.prevent="toggleIframe"
@@ -76,7 +77,7 @@
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://baike.baidu.com') ? level : false"
       >
-        百度百科
+        {{ $t('百度百科(Baidu Baike)') }}
       </a>
       <a
         @click.prevent="toggleIframe"
@@ -85,7 +86,7 @@
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://korean.dict.naver.com/ko') ? level : false"
       >
-        Naver
+        {{ $t('Naver Dictionary') }}
       </a>
       <a
         @click.prevent="toggleIframe"
@@ -94,7 +95,7 @@
         v-if="$l2.code === 'zh'"
         :data-bg-level="iframe && iframe.startsWith('https://resources.allsetlearning.com') ? level : false"
       >
-        Grammar Wiki
+        {{ $t('Grammar Wiki') }}
       </a>
       <a
         @click.prevent="toggleIframe"
@@ -102,7 +103,7 @@
         class="btn btn-small mb-1"
         :data-bg-level="iframe && iframe.startsWith(`https://${$l2.code}.m.wikipedia.org`) ? level : false"
       >
-        Wikipedia
+        {{ $t('Wikipedia') }}
       </a>
     </div>
     <div>

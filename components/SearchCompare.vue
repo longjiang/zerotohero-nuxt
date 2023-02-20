@@ -14,7 +14,7 @@
       :type="type"
       :entry="searchEntry"
       :term="term"
-      placeholder="Search"
+      :placeholder="$t('Search')"
       v-if="!loading"
     ></Search>
     <Search
@@ -37,7 +37,7 @@
       <span v-if="showCompare"><i class="fas fa-times"></i></span>
       <span v-if="!showCompare">
         <i class="fas fa-adjust"></i>
-        <span class="compare-btn-text ml-1">Compare</span>
+        <span class="compare-btn-text ml-1">{{ $t('Compare') }}</span>
       </span>
     </button>
   </div>

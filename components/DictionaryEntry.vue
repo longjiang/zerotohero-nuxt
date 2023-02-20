@@ -89,19 +89,22 @@
               @loaded="webImagesLoaded"
             />
             <p class="">
-              See more images of of “{{ entry.head }}” on
-              <a
-                :href="`https://www.google.com/search?q=${entry.head.replace(
-                  / /g,
-                  '+'
-                )}&tbm=isch&sout=1#spf=1567955197854`"
-              >
-                <img
-                  src="/img/logo-google-images.png"
-                  alt="Google Images"
-                  class="logo-small ml-2"
-                />
-              </a>
+              <i18n path="See more images of of “{0}” on {1}" tag="span">
+                <span>{{ entry.head }}</span>
+                <a
+                  :href="`https://www.google.com/search?q=${entry.head.replace(
+                    / /g,
+                    '+'
+                  )}&tbm=isch&sout=1#spf=1567955197854`"
+                >
+                  <img
+                    src="/img/logo-google-images.png"
+                    alt="Google Images"
+                    class="logo-small ml-2"
+                  />
+                </a>
+              </i18n>
+              
             </p>
           </div>
         </div>

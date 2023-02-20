@@ -5,7 +5,7 @@
       class="replay-btn btn-medium btn-gray mt-2 focus-exclude"
       @click="playSVG"
     >
-      <i class="fas fa-play mr-2" /> Stroke Order
+      <i class="fas fa-play mr-2" /> {{ $t('Stroke Order') }}
     </button>
   </div>
 </template>

@@ -7,7 +7,7 @@
         v-for="(character, index) in characters"
         :key="`entry-character-${index}`"
       >
-        <div class="widget-title">Character</div>
+        <div class="widget-title">{{ $t('Character') }}</div>
         <div class="widget-body jumbotron-fluid p-4">
           <Character
             :character="character"
