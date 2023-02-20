@@ -329,7 +329,7 @@ export default {
       }
     },
     parallellines() {
-      if (this.parallellines) this.matchParallelLines();
+      this.matchParallelLines();
     },
   },
   methods: {
@@ -449,6 +449,10 @@ export default {
      */
     matchParallelLines() {
       let matchedParallelLines = [];
+      if (!this.parallellines) {
+        this.matchedParallelLines = []
+        return
+      }
       for (let lineIndex in this.lines) {
         lineIndex = Number(lineIndex);
         let line = this.lines[lineIndex];

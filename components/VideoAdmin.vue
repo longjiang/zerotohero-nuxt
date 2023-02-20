@@ -248,7 +248,7 @@
               Enable Translation Editing
             </b-form-checkbox>
           </div>
-          <div :class="{'d-none': !showSubsEditing}">
+          <div :class="{'d-none': !showSubsEditing && !enableTranslationEditing}">
             <u
               class="mt-2 ml-2 d-inline-block text-danger"
               style="cursor: pointer"
@@ -498,6 +498,7 @@ export default {
     clearTranslation() {
       this.video.subs_l1 = undefined;
       this.translation = "";
+      Vue.set(this.video, "subs_l1", undefined);
     },
     async getLocaleDescription(locale) {
       let language, country;
