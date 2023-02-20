@@ -1,9 +1,9 @@
 <template>
   <div class="widget japanese">
-    <div class="widget-title">Japanese Kanji</div>
+    <div class="widget-title">{{ $t('Japanese Kanji') }}</div>
     <div class="widget-body jumbotron-fluid p-4">
       <div v-if="words">
-        <div v-for="word in words">
+        <div v-for="word in words" :key="`kanji-word-${word.id}`">
           <div>
             <router-link
               :to="`/en/ja/dictionary/edict/${word.id}`"
@@ -27,9 +27,7 @@
         </div>
       </div>
       <div v-if="!words || words.length === 0">
-        We could not find any Japanese words with the
-        <em>kanji</em>
-        “{{ shinjitai ? shinjitai : text }}.”
+        {{ $t('We could not find any Japanese words with the kanji “{text}.”', { text }) }}
       </div>
     </div>
   </div>

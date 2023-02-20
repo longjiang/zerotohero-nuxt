@@ -95,12 +95,12 @@
             (!sketch || !sketch.Gramrels || sketch.Gramrels.length === 0)
           "
         >
-          Sorry, we could not find any “{{ term }}” collocations in this corpus
-          (dataset). You can set a different corpus in
-          <router-link :to="`/${$l1.code}/${$l2.code}/settings`">
-            Settings
-          </router-link>
-          .
+          {{ $t('Sorry, we could not find any collocations with “{term}” in this corpus.', {term} ) }}
+          <i18n path="You can set a different corpus in {0}.">
+            <router-link :to="{name: 'settings'}">
+              {{ $t('Settings') }}
+            </router-link>
+          </i18n>
         </div>
         <div class="mt-2">
           {{ $t("Collocations provided by") }}
@@ -117,7 +117,7 @@
             />
           </a>
           <span v-if="corpname">
-            Corpus:
+            {{ $t('Corpus') }}:
             <code>{{ corpname.replace("preloaded/", "") }}</code>
           </span>
         </div>

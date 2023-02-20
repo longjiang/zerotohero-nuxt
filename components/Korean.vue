@@ -1,9 +1,9 @@
 <template>
   <div class="widget korean">
-    <div class="widget-title">Korean Hanja</div>
+    <div class="widget-title">{{ $t('Korean Hanja') }}</div>
     <div class="widget-body jumbotron-fluid p-4">
       <div v-if="words">
-        <div v-for="word in words">
+        <div v-for="word in words" :key="`hanja-word-${word.id}`">
           <div>
             <router-link
               :to="`/en/ko/dictionary/kengdic/${word.kid}`"
@@ -20,9 +20,7 @@
         </div>
       </div>
       <div v-if="words.length === 0">
-        We could not find any Korean words with the
-        <em>hanja</em>
-        “{{ text }}.”
+        {{ $t('We could not find any Korean words with the hanja “{text}.”', { text }) }}
       </div>
     </div>
   </div>

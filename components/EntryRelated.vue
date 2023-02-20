@@ -1,11 +1,13 @@
 <template>
   <div :key="'related-' + relatedKey" class="widget">
     <div class="widget-title">
-      Words related to “
-      <span v-if="!$l2.han || $l2.code === 'ja'">{{ entry.head }}</span>
-      <span class="traditional">{{ entry.traditional }}</span>
-      <span class="simplified">{{ entry.simplified }}</span>
-      ”
+      <i18n path="Words related to “{0}”" tag="span">
+        <span>
+          <span v-if="!$l2.han || $l2.code === 'ja'">{{ entry.head }}</span>
+          <span class="traditional">{{ entry.traditional }}</span>
+          <span class="simplified">{{ entry.simplified }}</span>
+        </span>
+      </i18n>
     </div>
     <div class="jumbotron-fluid widget-body p-4">
       <div
@@ -22,22 +24,24 @@
         collapse="10"
       />
       <div v-if="words && words.length === 0">
-        Sorry, we could not find words related to “{{ entry.head }}”. You can
-        set a different corpus in
-        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">
-          Settings
-        </router-link>
+        {{ $t('Sorry, we could not find any words related to “{term}” in this corpus.', { term: entry.head } ) }}
+        <i18n path="You can set a different corpus in {0}.">
+          <router-link :to="{name: 'settings'}">
+            {{ $t('Settings') }}
+          </router-link>
+        </i18n>
       </div>
       <hr v-if="words && words.length === 0" />
       <div class="mt-4">
-        {{ $t("Related words provided by") }}
-        <a href="https://www.sketchengine.eu/" target="_blank">
-          <img
-            src="/img/logo-sketch-engine.png"
-            alt="Sketch Engine"
-            class="ml-2 logo-small"
-          />
-        </a>
+        <i18n path="Related words provided by {0}" tag="span">
+          <a href="https://www.sketchengine.eu/" target="_blank">
+            <img
+              src="/img/logo-sketch-engine.png"
+              alt="Sketch Engine"
+              class="ml-2 logo-small"
+            />
+          </a>
+        </i18n>
       </div>
     </div>
   </div>

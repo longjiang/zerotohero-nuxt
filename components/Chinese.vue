@@ -1,9 +1,9 @@
 <template>
   <div class="widget chinese">
-    <div class="widget-title">Chinese Hànzì</div>
+    <div class="widget-title">{{ $t('Chinese Hànzì') }}</div>
     <div class="widget-body jumbotron-fluid bg-light p-4">
       <div v-if="words">
-        <div v-for="word in words">
+        <div v-for="word in words" :key="`hanzi-word-${word.id}`">
           <div>
             <router-link
               :to="`/en/zh/dictionary/hsk-cedict/${
@@ -23,8 +23,7 @@
         </div>
       </div>
       <div v-if="words.length === 0">
-        We could not find any Chinese words with traditional characters matching
-        “{{ text }}.”
+        {{ $t('We could not find any Chinese words with the (traditional) Chinese characters “{text}.”', { text }) }}
       </div>
     </div>
   </div>
