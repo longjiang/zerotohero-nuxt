@@ -33,7 +33,7 @@
           }"
           @click="goToSection(index)"
         >
-          {{ section.title }}
+          {{ $t(section.title) }}
         </div>
       </div>
     </div>
