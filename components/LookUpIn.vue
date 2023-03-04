@@ -1,7 +1,7 @@
 <template>
   <div class="look-up-in">
-    <div class="text-secondary small">
-      {{ $t('More info on:') }}
+    <div class="text-secondary">
+      {{ $t('Look up in:') }}
       <a
         :href="`https://www.zdic.net/hans/${term}`"
         target="_blank"

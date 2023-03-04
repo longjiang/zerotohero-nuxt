@@ -90,6 +90,9 @@
         >
           <i class="fa fa-times"></i>
         </button>
+        <div v-if="loading === true">
+          <Loader :sticky="true" message="Looking up the dictionary..." />
+        </div>
         <div
           v-for="word in words"
           :key="`word-block-word-${word.id}`"
@@ -212,15 +215,7 @@
             </span>
             <span
               v-if="word.supplementalLang"
-              class="
-                pl-1
-                pr-1
-                ml-1
-                rounded
-                d-inline-block
-                bg-warning
-                text-white
-              "
+              class="pl-1 pr-1 ml-1 rounded d-inline-block bg-warning text-white"
               style="font-size: 0.8em; position: relative; bottom: 0.1rem"
             >
               {{ $languages.getSmart(word.supplementalLang).name }}
@@ -274,7 +269,28 @@
           :sticky="false"
           class="mt-2"
         /> -->
-        <hr class="mb-0" />
+        <div
+          v-if="words && words.length === 0 && loading === false"
+          class="no-entry"
+        >
+          <span
+            style="color: #999"
+            v-if="$hasFeature('transliteration') && $l2.code !== 'ja'"
+          >
+            <span>{{ transliterate(text) }}</span>
+            <Speak :text="text" class="ml-1" ref="speak" />
+          </span>
+          <div style="font-size: 1.5rem; font-weight: bold">
+            <span data-level="outside">{{ text }}</span>
+            <span class="copy-button">
+              <i class="ml-1 fa-regular fa-copy" @click="copyClick"></i>
+            </span>
+          </div>
+          <span style="color: #999">
+            {{ $t("Sorry, no definition found.") }}
+          </span>
+        </div>
+        <hr class="mt-2 mb-0" />
         <TranslatorLinks v-bind="{ text }" class="mt-2" />
         <LookUpIn
           v-if="text || token"
@@ -282,30 +298,6 @@
           :sticky="false"
           class="mt-2"
         />
-        <div v-if="loading === true">
-          <Loader
-            :sticky="true"
-            message="Looking up the dictionary..."
-          />
-        </div>
-        <div
-          v-if="words && words.length === 0 && loading === false"
-          class="mt-3"
-        >
-          <span style="color: #999" v-if="$hasFeature('transliteration')">
-            {{ transliterate(text) }}
-            <Speak :text="text" class="ml-1" ref="speak" />
-          </span>
-          <div
-            data-level="outside"
-            style="font-size: 1.5rem; font-weight: bold"
-          >
-            {{ text }}
-          </div>
-          <span style="color: #999">
-            {{ $t('Sorry, no definition found.') }}
-          </span>
-        </div>
       </div>
     </template>
   </v-popover>
@@ -318,7 +310,7 @@ import {
   uniqueByValue,
   isMobile,
   ucFirst,
-  speak
+  speak,
 } from "@/lib/helper";
 import { imageProxy } from "@/lib/config";
 import WordPhotos from "@/lib/word-photos";
@@ -388,7 +380,7 @@ export default {
       let quickGloss = this.savedWord?.definitions?.[0]
         ?.replace(/\s*\(.*\)/, "")
         ?.split(/[,;]\s*/)[0];
-      if (quickGloss && quickGloss.length < 20) return quickGloss
+      if (quickGloss && quickGloss.length < 20) return quickGloss;
     },
     saved() {
       if (!this.checkSaved) return false;
@@ -419,10 +411,12 @@ export default {
     },
     savedTransliteration() {
       if (this.savedWord) {
-        return this.savedWord.jyutping ||
+        return (
+          this.savedWord.jyutping ||
           this.savedWord.pinyin ||
           this.savedWord.kana ||
-          (this.savedWord.pronunciation || '').split(', ')[0];
+          (this.savedWord.pronunciation || "").split(", ")[0]
+        );
       }
     },
     $l1() {
@@ -578,6 +572,20 @@ export default {
     },
   },
   methods: {
+    copyClick() {
+      let text = this.text;
+      let tempInput = document.createElement("input");
+      let popover = document.querySelector(".popover");
+      tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+      tempInput.value = text;
+      popover.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      popover.removeChild(tempInput);
+      this.$toast.success("Copied!", {
+        duration: 2000,
+      });
+    },
     async appendSavedWord(id, head) {
       let dictionary = await this.$getDictionary();
       let savedWord = await dictionary.get(id, head);
@@ -652,7 +660,7 @@ export default {
         let roman = await this.getFarsiRomanization(this.text);
         transliteration = roman.replace(/\^/g, "");
       } else if (this.token && this.token.candidates.length > 0) {
-        if (this.$l2.code !== 'ja' && this.token.candidates[0].pronunciation) {
+        if (this.$l2.code !== "ja" && this.token.candidates[0].pronunciation) {
           transliteration =
             this.token.candidates[0].pronunciation.split(",")[
               this.$l2.code === "vi" ? 1 : 0
@@ -809,7 +817,7 @@ export default {
       }
     },
     updateIPA() {
-      if (this.$l2.code === 'ja') return
+      if (this.$l2.code === "ja") return;
       if (!this.transliteration && this.words && this.words[0]) {
         // let search = this.stripAccents(this.text.toLowerCase());
         let word = this.words.find(
@@ -844,10 +852,14 @@ export default {
         this.open = true;
         await timeout(123);
         if (this.open && this.l2SettingsOfL2.autoPronounce) {
-          let speed = 0.75
-          let volume = 0.5
+          let speed = 0.75;
+          let volume = 0.5;
           // Only wiktionary has real human audio
-          if (this.$dictionaryName === 'wiktionary' && this.$refs.speak && this.$refs.speak[0]) {
+          if (
+            this.$dictionaryName === "wiktionary" &&
+            this.$refs.speak &&
+            this.$refs.speak[0]
+          ) {
             this.$refs.speak[0].speak(speed, volume);
           } else {
             speak(this.text, this.$l2, speed, volume);
@@ -1305,7 +1317,7 @@ export default {
     max-height: $height;
 
     .popover-inner-hover-area {
-      padding: .75rem;
+      padding: 0.75rem;
       position: relative;
     }
 
@@ -1349,6 +1361,17 @@ export default {
       }
       .btn-toggle-saved-word {
         font-size: 0.8em !important;
+      }
+    }
+
+    .copy-button {
+      font-size: 0.8em;
+      position: relative;
+      bottom: 0.1em;
+      color: #999;
+      cursor: pointer;
+      &:hover {
+        color: #28a745;
       }
     }
   }

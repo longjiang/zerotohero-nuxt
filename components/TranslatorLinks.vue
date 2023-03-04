@@ -1,19 +1,10 @@
 <template>
   <div>
+    <span v-if="translators && translators.length > 0" class="mr-2 text-secondary">
+      {{ $t("Translate with:") }}
+    </span>
     <span v-for="translator of translators" :key="`trans-${translator.id}`">
-      <a
-        :href="translator.url"
-        target="_blank"
-        style="
-          font-size: 0.9em;
-          white-space: nowrap;
-          display: inline-block;
-          color: black;
-        "
-        :class="{
-          'mr-3': true,
-        }"
-      >
+      <a :href="translator.url" target="_blank" class="mr-2 translator-link">
         {{ translator.name }}
         <i class="fas fa-angle-right"></i>
       </a>
@@ -57,4 +48,10 @@ export default {
 </script>
 
 <style>
+.translator-link {
+  font-size: 0.9em;
+  white-space: nowrap;
+  display: inline-block;
+  color: #28a745;
+}
 </style>
