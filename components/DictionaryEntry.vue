@@ -302,7 +302,7 @@ export default {
       concordanceReady: false,
       searchSubsReady: false,
       renderSearchSubs: true,
-      currentSection: 0,
+      currentSection: 0
     };
   },
   computed: {

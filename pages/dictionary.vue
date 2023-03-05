@@ -31,7 +31,9 @@
                   />
                 </div>
                 <h5 class="text-center pb-4" v-if="!args">
-                  {{ $t('Language Player {l2} Dictionary', {l2: $t($l2.name) }) }}
+                  {{
+                    $t("Language Player {l2} Dictionary", { l2: $t($l2.name) })
+                  }}
                 </h5>
                 <SearchCompare
                   :searchEntry="entry"
@@ -52,17 +54,46 @@
                 <div style="max-width: 50rem; margin: 0 auto" class="mt-5">
                   <ul class="list-unstyled">
                     <li class="mt-2">
-                      🔍 <span v-html="$t('You can do power search for patterns with <b>wild cards</b>')" />
+                      🔍
+                      <span
+                        v-html="
+                          $t(
+                            'You can do power search for patterns with <b>wild cards</b>'
+                          )
+                        "
+                      />
                       🃏
                     </li>
                     <li class="mt-2">
-                      ☝️ <span v-html="$t('Use <code>_</code> underscore to match one character')" />
+                      ☝️
+                      <span
+                        v-html="
+                          $t(
+                            'Use <code>_</code> underscore to match one character'
+                          )
+                        "
+                      />
                     </li>
                     <li class="mt-2">
-                      ☝️ <span v-html="$t('Use <code>*</code> asterisk to match one or more characters')" />
+                      ☝️
+                      <span
+                        v-html="
+                          $t(
+                            'Use <code>*</code> asterisk to match one or more characters'
+                          )
+                        "
+                      />
                     </li>
                     <li class="mt-2" v-if="dictionarySize">
-                      📖 <span v-html="$t('This {l2} dictionary has <b>{num} words</b>', {l2: $t($l2.name), num: dictionarySize})" />
+                      📖
+                      <span
+                        v-html="
+                          $t('This {l2} dictionary has <b>{num} words</b>', {
+                            l2: $t($l2.name),
+                            num: dictionarySize,
+                          })
+                        "
+                      />
                     </li>
                   </ul>
                 </div>
@@ -119,17 +150,23 @@
                   </b-dropdown-item>
                 </b-dropdown>
               </div>
-              <LazyEntryHeader
-                :entry="entry"
-                :hidePhonetics="hidePhonetics"
-                :hideWord="hideWord"
-              />
+              <div @click="toggleReveal">
+                <LazyEntryHeader
+                  :entry="entry"
+                  :hidePhonetics="hidePhonetics"
+                  :hideWord="hideWord"
+                  :reveal="reveal"
+                />
+              </div>
               <DefinitionsList
                 v-if="entry.definitions"
                 :entry="entry"
                 :key="`def-list-${entry.id}`"
                 :definitions="entry.definitions"
-                :class="{ 'pl-3 pr-3 mt-3': true, transparent: hideDefinitions }"
+                :class="{
+                  'pl-3 pr-3 mt-3': true,
+                  transparent: hideDefinitions && !reveal,
+                }"
               ></DefinitionsList>
               <EntryCourseAd
                 v-if="$l2.code === 'zh' && wide"
@@ -218,6 +255,7 @@ export default {
       dictionarySize: undefined,
       keysBound: false,
       params: {},
+      reveal: false,
       query: {
         wide: {
           minWidth: 768,
@@ -308,7 +346,8 @@ export default {
           let currentIndex = this.sW.findIndex(
             (item) => item.id === this.entry.id
           );
-          let nextSavedWord = this.sW[currentIndex + 1] || this.sW[currentIndex - 1] ;
+          let nextSavedWord =
+            this.sW[currentIndex + 1] || this.sW[currentIndex - 1];
           if (nextSavedWord) {
             this.$router.push({
               name: `dictionary`,
@@ -333,6 +372,10 @@ export default {
     this.unbindKeys();
   },
   methods: {
+    toggleReveal() {
+      console.log("REVIE");
+      this.reveal = !this.reveal;
+    },
     async getDictionarySize() {
       let dictionary = await this.$getDictionary();
       if (dictionary) {

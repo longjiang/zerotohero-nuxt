@@ -55,7 +55,7 @@
       <Annotate
         tag="div"
         v-if="entry.counters"
-        :class="{ 'mt-1 mb-2': true, 'hide-phonetics': hidePhonetics }"
+        :class="{ 'mt-1 mb-2': true, 'hide-phonetics': hidePhonetics && !reveal }"
       >
         <span>
           一{{
@@ -67,7 +67,7 @@
         <div class="mb-2">
           <div class="entry-pinyin">
             
-            <span :class="{ 'ml-2 mr-1': true, transparent: hidePhonetics }">
+            <span :class="{ 'ml-2 mr-1': true, transparent: hidePhonetics && !reveal }">
               <span v-if="$l2.code === 'tlh'">
                 {{ entry.head }} /{{ klingonIPA(entry.head) }}/
               </span>
@@ -108,7 +108,7 @@
             />
           </div>
         </div>
-        <span :class="{ transparent: hideWord }">
+        <span :class="{ transparent: hideWord && !reveal }">
           <router-link
             :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${entry.id}`"
           >
@@ -197,6 +197,9 @@ export default {
     hideWord: {
       default: false,
     },
+    reveal: {
+      default: false
+    }
   },
   data() {
     return {

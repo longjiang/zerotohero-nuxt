@@ -15,11 +15,8 @@
 <template>
   <div class="main pb-4" v-cloak>
     <div class="container">
-      <div class="row mt-4 text-center">
+      <div class="row text-center">
         <div class="col-sm-12">
-          <div class="text-center">
-            <Loader class="mt-4" @loaded="updateLoaded" />
-          </div>
 
           <div>
             <input
@@ -34,7 +31,7 @@
               @click="importButtonClick()"
             >
               <i class="fa fa-upload mr-1"></i>
-              Import
+              {{ $t("Import") }}
             </button>
             <a
               class="download-csv btn btn-sm text-secondary"
@@ -61,7 +58,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-12 pt-4">
+        <div class="col-sm-12">
           <div
             v-if="dictionaryLoaded && !$auth.loggedIn"
             class="text-center alert-success p-3 pb-4 rounded mb-4"
@@ -80,10 +77,15 @@
             <i class="far fa-star"></i>
             SAVE" button next to it.
           </p>
-          <div v-if="dictionaryLoaded && !sWLoaded" class="text-center">
+          <div class="text-center">
+            <Loader class="mt-4" @loaded="updateLoaded" />
+          </div>
+          <div v-if="dictionaryLoaded && !sWLoaded" class="text-center mt-4">
             <Loader
               :sticky="true"
-              message="Loading words saved in your browser..."
+              :message="
+                $t('Loading {n} saved words...', { n: savedWords.length })
+              "
             />
           </div>
           <div
@@ -101,15 +103,11 @@
             :key="`group-${index}`"
             style="color: #ccc"
           >
-            <div v-if="group.date === '0'" class="small mb-3 mt-3">Earlier</div>
+            <div v-if="group.date === '0'" class="small mb-3 mt-3">
+              {{ $t("Earlier") }}
+            </div>
             <div v-else class="small mt-3 mb-3">
-              {{
-                new Date(group.date).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })
-              }}
+              {{ $d(new Date(group.date), "short", $l1.code) }}
             </div>
             <hr class="mt-1" />
             <WordList
@@ -166,6 +164,16 @@ export default {
     };
   },
   computed: {
+    savedWords() {
+      if (
+        this.$store.state.savedWords.savedWords &&
+        this.$store.state.savedWords.savedWords[this.$l2.code]
+      ) {
+        return this.$store.state.savedWords.savedWords;
+      } else {
+        return []
+      }
+    },
     groups() {
       let savedWords = this.sW.map((savedWord) => {
         let r = Object.assign({}, savedWord);
@@ -267,10 +275,7 @@ export default {
     },
     async updateWords() {
       let sW = [];
-      if (
-        this.$store.state.savedWords.savedWords &&
-        this.$store.state.savedWords.savedWords[this.$l2.code]
-      ) {
+      if (this.savedWords) {
         for (let savedWord of this.$store.state.savedWords.savedWords[
           this.$l2.code
         ]) {
@@ -304,10 +309,6 @@ export default {
 .hide-defs {
   position: sticky;
   z-index: 2;
-  top: 0;
-}
-
-.hide-defs {
-  top: 3rem;
+  top: 5rem;
 }
 </style>
