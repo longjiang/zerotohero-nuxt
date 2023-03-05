@@ -28,7 +28,7 @@
             class="logo"
             data-not-lazy
           />
-          Language Player
+          <span>Language Player</span>
         </router-link>
       </span>
       <template v-if="$route.params.l1 && $route.params.l2">
@@ -41,13 +41,22 @@
             <i class="fas fa-search"></i>
           </router-link>
           <b-button
-            :class="`top-bar-buttontop ml-2`"
+            :class="`top-bar-buttontop ml-2 mr-1`"
             variant="unstyled"
             v-if="$route.params.l1 && $route.params.l2"
             :title="translate('Quick Settings')"
             @click="showSettingsModal"
           >
             <i class="fas fa-cog"></i>
+          </b-button>
+          <b-button
+            :class="`top-bar-buttontop ml-2`"
+            variant="unstyled"
+            :title="translate('Share')"
+            v-if="canShare"
+            @click="share"
+          >
+            <i class="fas fa-share"></i>
           </b-button>
           <div
             class="d-inline-block"
@@ -240,6 +249,9 @@ export default {
       }
       return "en";
     },
+    canShare() {
+      return typeof navigator !== "undefined" && navigator.share;
+    },
   },
   watch: {
     $route() {
@@ -283,14 +295,13 @@ export default {
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    canShare() {
-      return typeof navigator !== "undefined" && navigator.share;
-    },
     share() {
-      if (navigator.share) {
+      if (this.canShare) {
         navigator.share({
-          url: location.href,
-        });
+          title: document.title,
+          text: document.querySelector('meta[name="description"]').content,
+          url: document.location
+        })
       }
     },
     reload() {
@@ -387,6 +398,9 @@ export default {
     position: absolute;
     left: calc(50% - 4.5rem);
     top: calc(.25rem + env(safe-area-inset-top));
+  }
+  span {
+    font-size: 0.9rem !important;
   }
 }
 </style>
