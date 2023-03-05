@@ -20,7 +20,20 @@
         :description="`Learn ${$l2.name} with Videos`"
         :image="'/img/tv-shows.jpg'"
       />
-      <div class="row">
+      <div class="row" v-if="!progressLoaded || !settingsLoaded">
+        <div class="col-sm-12">
+          <div class="text-center mt-4 mb-4">
+            <Loader
+              :sticky="true"
+              :message="
+                $t('Loading your learning progress and content preferences...')
+              "
+              class="text-white"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="row" v-else>
         <div class="col-sm-12">
           <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
           <!-- <SimpleSearch placeholder="Search" ref="searchLibrary" skin="dark" class="mt-4 mb-5" style="flex: 1" :action="
@@ -293,12 +306,12 @@ export default {
     };
   },
   async mounted() {
-    if (LANGS_WITH_LEVELS.includes(this.$l2.code) && !this.languageLevel)
+    if (LANGS_WITH_LEVELS.includes(this.$l2.code) && this.progressLoaded && !this.languageLevel)
       this.$router.push({
         name: "set-language-level",
         params: { l1: this.$l1.code, l2: this.$l2.code },
       });
-    else if (this.preferredCategories.length === 0)
+    else if (this.settingsLoaded && this.preferredCategories.length === 0)
       this.$router.push({
         name: "set-content-preferences",
         params: { l1: this.$l1.code, l2: this.$l2.code },
@@ -328,8 +341,8 @@ export default {
   computed: {
     ...mapState("stats", ["stats"]),
     ...mapState("shows", ["categories"]),
-    ...mapState("settings", ["preferredCategories"]),
-    ...mapState("progress", ["progress"]),
+    ...mapState("settings", ["preferredCategories", "settingsLoaded"]),
+    ...mapState("progress", ["progress", "progressLoaded"]),
     languageLevel() {
       if (
         this.progress &&

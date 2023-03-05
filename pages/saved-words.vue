@@ -84,7 +84,7 @@
             <Loader
               :sticky="true"
               :message="
-                $t('Loading {n} saved words...', { n: savedWords.length })
+                $t('Loading saved words...')
               "
             />
           </div>

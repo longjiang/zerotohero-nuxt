@@ -27,12 +27,19 @@
         style="overflow: hidden; position: relative;"
       >
         <div class="container pb-5">
+          <div v-if="!progressLoaded" class="text-center mt-4">
+            <Loader
+              :sticky="true"
+              :message="translate('Loading your learning progress...')"
+              class="text-white"
+            />
+          </div>
           <div :class="{ 'row mb-5': true }" v-if="hasDashboard">
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
                 <h5 class="text-center mt-2 mb-1">
                   {{ $auth.user.first_name
-                  }}{{ translate("’s Language Dashboard", browserLanguage) }}
+                  }}{{ translate("’s Language Dashboard") }}
                 </h5>
                 <LazyDashboard ref="dashboard" />
               </div>
@@ -42,10 +49,10 @@
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
                 <h5 class="text-center mb-2" v-if="hasDashboard">
-                  {{ translate('Learn another language', browserLanguage) }}
+                  {{ translate('Learn another language') }}
                 </h5>
                 <h5 class="text-center mb-2" v-else-if="$auth.user">
-                  Welcome, {{ $auth.user.first_name }}.
+                  {{ translate('Welcome back, {name}!', browserLanguage, {name: $auth.user.first_name}) }}
                 </h5>
                 <Triage />
               </div>
@@ -55,11 +62,11 @@
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
                 <h5 class="text-center mb-3">
-                  {{ translate('Tools for linguists', browserLanguage) }}
+                  {{ translate('Tools for linguists') }}
                 </h5>
                 <div class="row pl-3 pr-3">
                   <div class="col-sm-12 col-md-4 mt-1 mb-1" v-for="link in linguisticsTools" :key="`linguistics-tools-link-${link.name}`">
-                    <router-link :to="link" class="text-dark"><i :class="link.icon" style="width: 2em; text-align: center"></i> {{ translate(link.title, browserLanguage) }}</router-link>
+                    <router-link :to="link" class="text-dark"><i :class="link.icon" style="width: 2em; text-align: center"></i> {{ translate(link.title) }}</router-link>
                   </div>
                 </div>
               </div>
@@ -114,6 +121,7 @@ export default {
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
+    ...mapState("progress", ['progressLoaded']),
     background() {
       return background()
     },
@@ -154,8 +162,9 @@ export default {
     },
   },
   methods: {
-    translate(text, code) {
-      if (this.$languages) return this.$languages.translate(text, code);
+    translate(text, code, data = {}) {
+      if (!code) code = this.browserLanguage
+      if (this.$languages) return this.$languages.translate(text, code, data);
       else return text;
     },
   },
