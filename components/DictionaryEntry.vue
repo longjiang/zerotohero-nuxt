@@ -314,7 +314,7 @@ export default {
         },
         {
           title: "Phrases",
-          visible: this.entry?.phrases,
+          visible: this.entry?.phrases?.length > 0,
         },
         {
           title: "Collocations",
