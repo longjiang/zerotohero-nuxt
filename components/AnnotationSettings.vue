@@ -1,18 +1,6 @@
 <template>
   <div :class="`annotation-settings annotation-settings-${variant}`">
     <div v-if="variant === 'toolbar'">
-      <div
-        v-if="onceAdmin"
-        @click="adminMode = !adminMode"
-        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
-          adminMode ? 'annotation-setting-toggle-active' : ''
-        }`"
-      >
-        <span class="annotation-setting-icon">
-          <i class="fa fa-wrench"></i>
-        </span>
-        {{ $t('Admin Mode') }}
-      </div>
       <button
         @click="autoPronounce = !autoPronounce"
         :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
@@ -119,6 +107,18 @@
       >
         <span class="annotation-setting-icon">T</span>
         {{ $t('Bigger text') }}
+      </button>
+      <button
+        v-if="userIsAdmin"
+        @click="adminMode = !adminMode"
+        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
+          adminMode ? 'annotation-setting-toggle-active' : ''
+        }`"
+      >
+        <span class="annotation-setting-icon">
+          <i class="fa fa-wrench"></i>
+        </span>
+        <span>{{ $t('Admin Mode') }}</span>
       </button>
       <hr />
       <div :class="`annotation-setting-toggle`">
@@ -401,6 +401,9 @@ export default {
   },
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
+    userIsAdmin() {
+      return this.$auth.user && this.$auth.user.role == 1;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -435,6 +438,11 @@ export default {
   },
   watch: {
     // set up in setupWatchers()
+    adminMode() {
+      this.$store.dispatch("settings/setGeneralSettings", {
+        adminMode: this.adminMode,
+      });
+    },
   },
 };
 </script>
@@ -460,13 +468,6 @@ export default {
 
 .annotation-setting-toggle-active {
   color: #28a745;
-}
-
-.annotation-settings-toolbar {
-  display: inline-block;
-  border-radius: 0.2rem;
-  position: relative;
-  bottom: -0.1rem;
 }
 
 .annotation-setting-icon {

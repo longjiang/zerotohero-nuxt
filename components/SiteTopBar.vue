@@ -119,7 +119,7 @@
       </template>
       <b-modal
         ref="settings-modal"
-        size="xl"
+        size="sm"
         centered
         hide-footer
         :title="$t('Quick Settings')"
