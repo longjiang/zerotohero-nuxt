@@ -50,11 +50,6 @@
                   currentParent === item &&
                   item.name !== 'index'
                 "
-                :badge="
-                  item.icon === 'fas fa-user'
-                    ? savedWordsCount + savedPhrasesCount
-                    : undefined
-                "
               />
             </template>
           </div>
@@ -111,13 +106,6 @@
                 :level="2"
                 :showIcon="variant === 'side-bar'"
                 :active="isExactActive"
-                :badge="
-                  child.name === 'saved-words' && savedWordsCount > 0
-                    ? savedWordsCount
-                    : child.name === 'saved-phrases' && savedPhrasesCount > 0
-                    ? savedPhrasesCount
-                    : undefined
-                "
                 :href="child.href"
               />
             </router-link>
@@ -152,14 +140,6 @@ feature-card-name-${child.name}`"
                     :to="last(child) || child"
                     :item="child"
                     variant="page"
-                    :badge="
-                      child.name === 'saved-words' && savedWordsCount > 0
-                        ? savedWordsCount
-                        : child.name === 'saved-phrases' &&
-                          savedPhrasesCount > 0
-                        ? savedPhrasesCount
-                        : undefined
-                    "
                   ></NavItem>
                 </div>
               </template>
@@ -176,6 +156,7 @@ import { Capacitor } from "@capacitor/core";
 import { mapState } from "vuex";
 import { languageLevels, background, LANGS_WITH_LEVELS } from "@/lib/utils";
 import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
+import savedWordsVue from '~/pages/saved-words.vue';
 
 export default {
   props: {
@@ -616,23 +597,26 @@ export default {
               show: this.hasFeature("levels"),
             },
             {
+              name: "saved-words",
+              icon: "fas fa-star",
+              title: "My Words",
+              badge: this.savedWordsCount,
+              show: true,
+            },
+            {
               icon: "fas fa-ellipsis-h",
               title: `More`,
               // count: this.stats ? this.stats.allVideos : undefined,
               name: "saved-phrases",
+              badge: this.savedPhrasesCount,
               show: true,
               children: [
-                {
-                  name: "saved-words",
-                  icon: "fas fa-star",
-                  title: "My Words",
-                  show: true,
-                },
                 {
                   name: "saved-phrases",
                   icon: "fas fa-bookmark",
                   title: "My Phrases",
                   show: true,
+                  badge: this.savedPhrasesCount
                 },
                 {
                   name: "phrase",
@@ -865,6 +849,7 @@ export default {
                   name: "language-icons",
                   title: "Face of the Language",
                   icon: "fas fa-user",
+                  badge: this.savedWordsCount + this.savedPhrasesCount,
                   show: true,
                 },
                 {

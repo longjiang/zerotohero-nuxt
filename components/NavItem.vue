@@ -40,8 +40,8 @@
         }}
         <i class="fas fa-pro" v-if="item.title === 'Me' && pro"></i>
         <span class="nav-item-count" v-cloak v-if="item.count">{{ $n(item.count) }}</span>
-        <span class="saved-words-count" v-cloak v-if="badge">
-          {{ badge }}
+        <span class="saved-words-count" v-cloak v-if="item.badge">
+          {{ item.badge }}
         </span>
         <i class="fa-solid fa-caret-down" v-if="isDropdown"></i>
       </span>
@@ -72,6 +72,9 @@
           >
             <i :class="`nav-item-icon ${child.icon} mr-1`"></i>
             {{ $t(child.title) }} <span v-if="child.count" class="nav-item-count">({{ child.count }})</span>
+            <span class="saved-words-count" v-cloak v-if="child.badge">
+              {{ child.badge }}
+            </span>
           </router-link>
         </div>
       </div>
@@ -93,9 +96,6 @@ export default {
     },
     item: {
       type: Object,
-    },
-    badge: {
-      type: Number,
     },
     count: {
       type: [Number, String], // How many of this item there are (e.g. how many tv shows)
