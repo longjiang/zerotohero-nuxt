@@ -1,6 +1,6 @@
 <template>
   <div class="video-edit">
-    <div class="video-details">
+    <div class="video-details" v-if="showVideoDetails">
       <span v-if="$adminMode && video.subs_l2 && video.subs_l2.length > 0">
         <a
           :href="originalTextHref"
@@ -247,24 +247,24 @@
             >
               Enable Translation Editing
             </b-form-checkbox>
-          </div>
-          <div :class="{'d-none': !showSubsEditing && !enableTranslationEditing}">
-            <u
-              class="mt-2 ml-2 d-inline-block text-danger"
-              style="cursor: pointer"
-              @click="clearSubs"
-            >
-              <i class="fas fa-times mr-1" />
-              Clear Subs
-            </u>
-            <u
-              class="mt-2 ml-2 d-inline-block text-danger"
-              style="cursor: pointer"
-              @click="clearTranslation"
-            >
-              <i class="fas fa-times mr-1" />
-              Clear Translation
-            </u>
+            <span :class="{'d-none': !showSubsEditing && !enableTranslationEditing}">
+              <u
+                class="mt-2 ml-2 d-inline-block text-danger"
+                style="cursor: pointer"
+                @click="clearSubs"
+              >
+                <i class="fas fa-times mr-1" />
+                Clear Subs
+              </u>
+              <u
+                class="mt-2 ml-2 d-inline-block text-danger"
+                style="cursor: pointer"
+                @click="clearTranslation"
+              >
+                <i class="fas fa-times mr-1" />
+                Clear Translation
+              </u>
+            </span>
           </div>
         </div>
         <div
@@ -296,6 +296,7 @@
           class="mt-2"
           max-rows="6"
           @blur="updateOriginalText"
+          v-if="showTextEditing"
         ></b-form-textarea>
         <b-form-textarea
           :class="{
@@ -307,6 +308,7 @@
           rows="3"
           class="mt-2"
           max-rows="6"
+          v-if="showTextEditing"
         ></b-form-textarea>
         <client-only>
           <div :class="{ 'd-none': !enableTranslationEditing }">
@@ -396,6 +398,12 @@ export default {
   },
   props: {
     video: Object,
+    showVideoDetails: {
+      default: true
+    },
+    showTextEditing: {
+      default: true
+    }
   },
   data() {
     return {

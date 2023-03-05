@@ -73,6 +73,18 @@
           "
           class="pl-3 pt-4"
         >
+          <VideoAdmin
+            v-if="$adminMode"
+            :showVideoDetails="false"
+            :showTextEditing="false"
+            :video="video"
+            ref="videoAdmin3"
+            @showSubsEditing="toggleShowSubsEditing"
+            @updateTranslation="updateTranslation"
+            @updateOriginalText="updateOriginalText"
+            @enableTranslationEditing="toggleEnableTranslationEditing"
+            @updateTranscript="updateTranscript"
+          />
           <YouTubeVideoList
             :videos="related.slice(0, 6)"
             :showDate="true"
