@@ -284,7 +284,7 @@ export default {
           }
         }
       }
-      this.sW = sW;
+      this.sW = sW.sort((a, b) => b.date - a.date);
       this.sWLoaded = true;
     },
     removeAllClick() {
