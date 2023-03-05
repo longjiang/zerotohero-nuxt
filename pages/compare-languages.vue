@@ -14,6 +14,7 @@
       description="See on a map how people say words like 'yes', 'no', 'thanks' on a map!"
       image="/img/thumbnail-compare-languages.jpg"
     />
+    <SiteTopBar class="safe-padding-top" />
     <div class="container-fluid">
       <div
         class="row bg-dark text-white pt-2 pb-2 text-left"
@@ -24,26 +25,10 @@
             class="d-flex align-items-center"
             style="width: 100%; justify-content: space-between"
           >
-            <router-link to="/" class="link-unstyled">
-              <i class="fa fa-chevron-left mr-2"></i>
-              <span class="home-text">Home</span>
-            </router-link>
-            <Loader
-              :sticky="true"
-              message="Loading common phrases..."
-              v-if="updating"
-            />
-            <div v-if="updating">
-              &nbsp;
-              <!-- spacer dummy -->
-            </div>
             <div
-              style="flex: 1; margin-left: 1rem; position: relative"
+              style="flex: 1; position: relative"
               v-if="!updating"
             >
-              <span class="title-languages" v-if="langs">
-                {{ langs.length }} languages
-              </span>
               <b-input-group class="input-group-ghost-dark">
                 <b-form-input
                   v-model="enData"
