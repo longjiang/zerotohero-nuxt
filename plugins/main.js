@@ -105,8 +105,10 @@ export default async ({ app, store, route }, inject) => {
   })
   
   inject('getGrammar', async () => {
-    let grammar = ModuleLoader.load('grammar')
-    return grammar
+    if (store.state.settings.l1 && store.state.settings.l1 && store.state.settings.dictionaryName) {
+      let grammar = ModuleLoader.load('grammar', { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] || store.state.settings.l2["glottologId"] })
+      return grammar
+    }
   })
   inject('getHanzi', async () => {
     let hanzi = ModuleLoader.load('hanzi')

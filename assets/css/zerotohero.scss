@@ -360,43 +360,50 @@ h6,
 
 .bg-levelPreA1,
 [data-bg-level="PreA1"],
-[data-bg-level="Pre-A1"] {
+[data-bg-level="Pre-A1"],
+[data-bg-level="1"] {
   background-color: #b51700 !important;
   color: white !important;
 }
 
 .bg-levelA1,
-[data-bg-level="A1"] {
+[data-bg-level="A1"],
+[data-bg-level="2"] {
   background-color: #0076ba !important;
   color: white !important;
 }
 
 .bg-levelA2,
-[data-bg-level="A2"] {
+[data-bg-level="A2"],
+[data-bg-level="3"] {
   background-color: #00882b !important;
   color: white !important;
 }
 
 .bg-levelB1,
-[data-bg-level="B1"] {
+[data-bg-level="B1"],
+[data-bg-level="4"] {
   background-color: #6a348a !important;
   color: white !important;
 }
 
 .bg-levelB2,
-[data-bg-level="B2"] {
+[data-bg-level="B2"],
+[data-bg-level="5"] {
   background-color: #5b0516 !important;
   color: white !important;
 }
 
 .bg-levelC1,
-[data-bg-level="C1"] {
+[data-bg-level="C1"],
+[data-bg-level="6"] {
   background-color: #011b3c !important;
   color: white !important;
 }
 
 .bg-levelC2,
-[data-bg-level="C2"] {
+[data-bg-level="C2"],
+[data-bg-level="7"] {
   background-color: #005f58 !important;
   color: white !important;
 }

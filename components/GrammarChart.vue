@@ -2,7 +2,7 @@
   <div>
     <SocialHead
       v-if="grammar"
-      :title="`HSK 1-9 Chinese Grammar Cheatsheet | Language Player`"
+      :title="`${$l2.name} Grammar Cheatsheet | Language Player`"
       :description="`${grammar
         .slice(0, 10)
         .map((g) => g.structure + ' (' + g.english + ')')
@@ -29,26 +29,24 @@
         </div>
       </div>
       <a
-        href="https://server.chinesezerotohero.com/data/zh-grammar/zh-grammar.csv.txt"
+        :href="csvSource"
         class="ml-2 btn btn-primary"
-        download="Chinese Zero to Hero Grammar Chart.csv"
+        :download="`Language Player ${$l2.name} Grammar Chart.csv`"
       >
         <i class="fa fa-download mr-1" />
         Download CSV
       </a>
     </div>
     <div class="tabs text-center">
+      <span class="mr-2">{{ l2LevelKey.toUpperCase() }}</span>
       <button
-        v-for="n in 6"
+        v-for="(l, n) in filteredLevels"
         class="tab text-dark"
         :data-bg-level="n"
         @click="level = n"
         :key="`grammar-tab-level-${n}`"
       >
-        HSK {{ n }}
-      </button>
-      <button class="tab text-dark" data-bg-level="7-9" @click="level = '7-9'">
-        新 HSK 7-9
+        {{ l[l2LevelKey] }}
       </button>
       <button @click="level = undefined" class="tab text-light bg-dark">
         All
@@ -74,16 +72,10 @@
       </thead>
       <tbody>
         <tr
-          v-for="row in grammar"
+          v-for="row in grammarFiltered"
           :key="`grammar-row-${row.id}`"
           :class="{
             'grammar-table-row': true,
-            hidden: !(
-              (!search ||
-                row.structure.includes(search) ||
-                row.english.includes(search)) &&
-              (level === undefined || row.book === String(level))
-            ),
           }"
           @click="grammarRowClick(row)"
         >
@@ -129,17 +121,23 @@
 
 <script>
 import Helper from "@/lib/helper";
+import { unique } from "@/lib/utils/array";
+import { LEVELS } from "@/lib/utils/language-levels";
 export default {
   data() {
     return {
       search: "",
-      level: 1,
+      level: undefined,
       grammar: [],
+      csvSource: undefined,
+      LEVELS,
     };
   },
   async fetch() {
     let grammar = await this.$getGrammar();
     this.grammar = grammar._grammarData;
+    this.csvSource = await grammar.getCSVSource(this.$l2["iso639-3"]);
+    this.level = this.availableLevels[0];
   },
   computed: {
     $l1() {
@@ -149,6 +147,45 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    availableLevels() {
+      return unique(this.grammar.map((r) => r.level));
+    },
+    l2LevelKey() {
+      if (this.$l2.code === "ja") return "jlpt";
+      if (this.$l2.code === "ko") return "topik";
+      if (this.$l2.han) return "hsk";
+      else return "cefr";
+    },
+    grammarFiltered() {
+      return this.grammar.filter((row) => {
+        if (this.search) {
+          if (
+            !row.structure.includes(this.search) &&
+            !row.english.includes(this.search)
+          ) {
+            return false;
+          }
+        }
+        if (this.level) {
+          if (row.level !== String(this.level)) return false;
+        }
+        return true;
+      });
+    },
+    filteredLevels() {
+      let levels = Object.assign({}, LEVELS);
+      for (let level in LEVELS) {
+        if (!this.availableLevels.includes(level)) {
+          delete levels[level];
+        }
+      }
+      return levels;
+    },
+  },
+  watch: {
+    search() {
+      if (this.search) this.level = undefined;
     },
   },
   methods: {
