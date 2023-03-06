@@ -1,6 +1,5 @@
 <template>
   <container-query :query="query" v-model="params">
-    
     <div
       :class="`site-top-bar site-top-bar-${
         wide ? 'wide' : 'not-wide'
@@ -16,9 +15,20 @@
           {{ translate("Back", browserLanguage) }}
         </b-button>
       </div>
-      <span :class="`logo ${!params.xs ? 'logo-absolute-centered' : ''} flex-1 text-center`" v-if="!wide && $route.path !== '/' ">
+      <span
+        :class="`logo ${
+          !params.xs ? 'logo-absolute-centered' : ''
+        } flex-1 text-center`"
+        v-if="!wide && $route.path !== '/'"
+      >
         <router-link
-          :to="$auth.loggedIn ? $route.path === '/dashboard' ? '/' : '/dashboard' : '/'"
+          :to="
+            $auth.loggedIn
+              ? $route.path === '/dashboard'
+                ? '/'
+                : '/dashboard'
+              : '/'
+          "
           class="btn btn-unstyled"
           title="Dashboard"
         >
@@ -82,11 +92,7 @@
                 :language="$l2"
                 class="ml-2"
               />
-              <span
-                :class="`${
-                  !$route.params.l2 ? 'd-none' : ''
-                } ml-1`"
-              >
+              <span :class="`${!$route.params.l2 ? 'd-none' : ''} ml-1`">
                 <i
                   class="fas fa-sort-down"
                   style="position: relative; bottom: 0.2rem; opacity: 0.7"
@@ -100,7 +106,7 @@
         <client-only>
           <div>
             <router-link to="/go-pro" v-if="!pro" class="mr-2">
-              🚀 {{ translate('Go Pro') }}
+              🚀 {{ translate("Go Pro") }}
             </router-link>
             <span
               to="/profile"
@@ -109,10 +115,10 @@
                 $auth && $auth.loggedIn && $auth.user && $auth.user.first_name
               "
             >
-              <router-link to="/logout">{{ translate('Logout') }}</router-link>
+              <router-link to="/logout">{{ translate("Logout") }}</router-link>
             </span>
             <span v-else>
-              <router-link to="/login">{{ translate('Login') }}</router-link>
+              <router-link to="/login">{{ translate("Login") }}</router-link>
             </span>
           </div>
         </client-only>
@@ -144,12 +150,14 @@
           <div class="mb-3">
             <router-link to="/dashboard" class="text-success">
               <i class="fas fa-chevron-left"></i>
-              {{ translate('Back to Dashboard') }}
+              {{ translate("Back to Dashboard") }}
             </router-link>
           </div>
           <LazyDashboard class="mb-5" v-if="hasDashboard" />
           <div class="pb-5">
-            <h5 class="text-center mb-2">{{ translate('Learn another language') }}</h5>
+            <h5 class="text-center mb-2">
+              {{ translate("Learn another language") }}
+            </h5>
             <Triage />
           </div>
         </div>
@@ -161,6 +169,8 @@
 import AnnotationSettings from "./AnnotationSettings.vue";
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
+import { Capacitor } from "@capacitor/core";
+import { Share } from "@capacitor/share";
 
 export default {
   components: { AnnotationSettings, ContainerQuery },
@@ -252,6 +262,9 @@ export default {
     canShare() {
       return typeof navigator !== "undefined" && navigator.share;
     },
+    native() {
+      return Capacitor.isNativePlatform();
+    },
   },
   watch: {
     $route() {
@@ -261,7 +274,7 @@ export default {
   },
   methods: {
     translate(text, code) {
-      if (!code) code = this.browserLanguage
+      if (!code) code = this.browserLanguage;
       if (this.$languages) return this.$languages.translate(text, code);
       else return text;
     },
@@ -295,13 +308,26 @@ export default {
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    share() {
-      if (this.canShare) {
-        navigator.share({
-          title: document.title,
-          text: document.querySelector('meta[name="description"]').content,
-          url: document.location
-        })
+    async share() {
+      if (document && document.location) {
+        let canonicalURL = (document.location + "").replace(
+          document.location.origin,
+          "https://languageplayer.io"
+        );
+        if (this.native) {
+          await Share.share({
+            title: document.title,
+            text: document.querySelector('meta[name="description"]').content,
+            url: canonicalURL,
+            dialogTitle: this.translate("Share"),
+          });
+        } else if (this.canShare) {
+          navigator.share({
+            title: document.title,
+            text: document.querySelector('meta[name="description"]').content,
+            url: canonicalURL,
+          });
+        }
       }
     },
     reload() {
@@ -397,7 +423,7 @@ export default {
   &.logo-absolute-centered {
     position: absolute;
     left: calc(50% - 4.5rem);
-    top: calc(.25rem + env(safe-area-inset-top));
+    top: calc(0.25rem + env(safe-area-inset-top));
   }
   span {
     font-size: 0.9rem !important;
