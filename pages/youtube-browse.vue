@@ -53,6 +53,10 @@
             }}
             <i class="fa-solid fa-caret-down"></i>
           </span>
+          <span @click="showModal('sort')" class="filter-dropdown">
+            {{ $t(`${sortText[sort]}`) }}
+            <i class="fa-solid fa-caret-down"></i>
+          </span>
         </div>
       </div>
       <h5
@@ -118,6 +122,7 @@
           keyword,
           start,
           kidsOnly,
+          sort,
           showLatestIfKeywordMissing: true,
           showNoVideosMessage: true,
           showSearchBar: false,
@@ -170,6 +175,27 @@
           >
             {{ $t(category) }}
           </router-link>
+        </div>
+      </div>
+    </b-modal>
+    <b-modal
+      ref="sortModal"
+      size="sm"
+      centered
+      hide-footer
+      modal-class="safe-padding-top mt-4"
+      body-class="dropdown-menu-modal-wrapper"
+      :title="$t('Sort')"
+    >
+      <div class="row">
+        <div
+          v-for="(text, opt) in sortText"
+          @click="sort = opt"
+          class="mb-1 col-12"
+          style="cursor: pointer"
+          :key="`sort-opt-${opt}`"
+        >
+          {{ $t(text) }}
         </div>
       </div>
     </b-modal>
@@ -269,7 +295,19 @@ export default {
     return {
       videos: [],
       LANGS_WITH_LEVELS,
+      sort: this.keyword ? 'views' : 'id', // or 'title', 'date',
+      sortText: {
+        id: 'Sort by Date Added',
+        date: 'Sort by Date Uploaded',
+        views: 'Sort by Views',
+        title: 'Sort by Title',
+      }
     };
+  },
+  watch: {
+    sort() {
+      this.$refs["sortModal"]?.hide();
+    }
   },
   methods: {
     showModal(name) {
@@ -281,13 +319,12 @@ export default {
         this.videos = this.videos.filter(
           (v) => v.youtube_id !== this.heroVideo.youtube_id
         );
-        this.loadHeroVideo();
       }
     },
     onVideosLoaded(videos) {
       this.videos = videos || [];
     },
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>

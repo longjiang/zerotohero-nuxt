@@ -35,13 +35,6 @@
                 Category
               </b-form-select>
             </div>
-            <b-form-checkbox
-              v-model="includeShows"
-              v-if="$adminMode"
-              class="d-inline-block"
-            >
-              Include videos in TV shows and talks
-            </b-form-checkbox>
             <router-link
               :to="{
                 name: 'youtube-browse',
@@ -133,6 +126,9 @@ export default {
     start: {
       default: 0,
     },
+    includeShows: {
+      default: true
+    },
     kidsOnly: {
       type: Boolean,
       default: false,
@@ -146,6 +142,9 @@ export default {
     showSearchBar: {
       default: false,
     },
+    sort: {
+      default: 'views' // or 'date', 'title'
+    }
   },
   data() {
     let topics = [
@@ -161,7 +160,6 @@ export default {
       topics: Helper.topics,
       moreVideos: 0,
       perPage: 96,
-      includeShows: true,
       topicData: this.topic,
       topics,
       loading: false,
@@ -183,13 +181,14 @@ export default {
     },
   },
   async mounted() {
-    if (!this.keyword || this.keyword.includes("channel:"))
-      this.includeShows = false;
     this.videos = await this.getVideos(this.start);
     this.$emit("videosLoaded", this.videos);
   },
   watch: {
     async includeShows() {
+      this.videos = await this.getVideos(this.start);
+    },
+    async sort() {
       this.videos = await this.getVideos(this.start);
     },
     topicData() {
@@ -268,7 +267,13 @@ export default {
       let timestamp = `timestamp=${this.$adminMode ? Date.now() : 0}`;
       let offset = `offset=${start}`;
       let limitStr = `limit=${limit}`;
-      let sort = `sort=-views`
+      let sortOpts = {
+        id: '-id',
+        date: '-date',
+        views: '-views',
+        title: 'title'
+      }
+      let sort = `sort=${sortOpts[this.sort]}`
       let query = [filters, limitStr, fields, offset, sort, timestamp]
         .filter((f) => f !== "")
         .join("&");
