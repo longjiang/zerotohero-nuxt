@@ -113,6 +113,7 @@
         centered
         hide-footer
         title="Which one?"
+        modal-class="safe-padding-top mt-4"
       >
         <div class="phrase-picker-modal">
           <template v-for="(phrase, index) of modalPhrases">

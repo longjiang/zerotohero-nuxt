@@ -188,10 +188,10 @@
       centered
       hide-footer
       :title="video.title || 'Video Info'"
-      body-class="video-info-modal-wrapper"
+      modal-class="safe-padding-top mt-4"
       size="md"
     >
-      <div class="video-info-modal">
+      <div class="video-info-inner">
         <VideoAdmin :video="video" ref="videoAdmin1" />
         <EpisodeNav
           skin="light"
@@ -215,6 +215,7 @@
       hide-footer
       :title="$t('Settings')"
       body-class="settings-modal-wrapper"
+      modal-class="safe-padding-top mt-4"
       size="md"
     >
       <div>
@@ -595,4 +596,5 @@ export default {
   text-align: center;
   display: inline-block;
 }
+
 </style>

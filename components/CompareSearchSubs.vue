@@ -82,6 +82,7 @@
         hide-footer
         title="Video Caption Search Results"
         body-class="playlist-modal-wrapper"
+        modal-class="safe-padding-top mt-4"
         size="xl"
       >
         <div class="playlist-modal">

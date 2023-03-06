@@ -19,6 +19,7 @@
       hide-footer
       :title="$t('Search in...')"
       body-class="show-filter-modal"
+      modal-class="safe-padding-top mt-4"
       @hide="onModalHide"
     >
       <b-form-checkbox v-model="allVideosChecked">

@@ -201,6 +201,7 @@
       hide-footer
       :title="$t('Video Caption Search Results')"
       body-class="playlist-modal-wrapper"
+      modal-class="safe-padding-top mt-4"
       @show="onPlaylistModalShown"
     >
       <div class="playlist-modal">

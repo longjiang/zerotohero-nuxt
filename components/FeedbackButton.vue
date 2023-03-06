@@ -10,6 +10,7 @@
       hide-footer
       title="Feedback"
       body-class="feedback-modal"
+      modal-class="safe-padding-top mt-4"
     >
       <div>
         <h6>Your feedback on Language Player:</h6>
