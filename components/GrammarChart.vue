@@ -73,7 +73,7 @@
       <tbody>
         <tr
           v-for="(row, index) in grammarFiltered"
-          :key="`grammar-${$l2.code}-row-${index}`"
+          :key="`grammar-${$l2.code}-row-${row.id}`"
           :class="{
             'grammar-table-row': true,
           }"
