@@ -106,6 +106,7 @@ export default async ({ app, store, route }, inject) => {
   
   inject('getGrammar', async () => {
     if (store.state.settings.l1 && store.state.settings.l1 && store.state.settings.dictionaryName) {
+      console.log({ l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] || store.state.settings.l2["glottologId"] })
       let grammar = ModuleLoader.load('grammar', { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] || store.state.settings.l2["glottologId"] })
       return grammar
     }

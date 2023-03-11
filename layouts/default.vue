@@ -442,6 +442,7 @@ export default {
       }
       if (this.l1) this.updatei18n();
       let dictionary = await this.$getDictionary();
+      let grammar = await this.$getGrammar();
       if (dictionary) {
         this.dictionaryCredit = await dictionary.credit();
       }
