@@ -1,5 +1,5 @@
 <template>
-  <v-popover :open="popup && open" :open-group="`id${_uid}`" placement="top">
+  <v-popover :open="popup && open" :open-group="`id${_uid}`" placement="top" ref="popover">
     <span
       :class="{
         'word-block': true,
@@ -289,6 +289,16 @@
           <span style="color: #999">
             {{ $t("Sorry, no definition found.") }}
           </span>
+          <Saved
+            :item="phraseItem(text)"
+            store="savedPhrases"
+            icon="bookmark"
+            class="annotator-button focus-exclude"
+            title="Save Phrase"
+            ref="savePhrase"
+            :saveText="$t('Save as Phrase')"
+            :removeText="$t('Saved')"
+          />
         </div>
         <hr class="mt-2 mb-0" />
         <TranslatorLinks v-bind="{ text }" class="mt-2" />
@@ -572,6 +582,17 @@ export default {
     },
   },
   methods: {
+    phraseItem(phrase, translation = undefined) {
+      if (typeof phrase !== "undefined") {
+        let phraseItem = {
+          l2: this.$l2.code,
+          phrase,
+          translations: {},
+        };
+        if (translation) phraseItem.translations[this.$l1.code] = translation;
+        return phraseItem;
+      }
+    },
     copyClick() {
       let text = this.text;
       let tempInput = document.createElement("input");

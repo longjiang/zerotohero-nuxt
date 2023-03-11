@@ -6,7 +6,7 @@
       @click.stop.prevent="remove"
       title="Remove"
     >
-      <i :class="`fas fa-${icon}`"></i>
+      <i :class="`fas fa-${icon}`"></i> {{ removeText }}
     </button>
     <button
       class="btn-saved btn-saved-not-saved add-hit"
@@ -14,7 +14,7 @@
       @click.stop.prevent="save"
       title="Add"
     >
-      <i :class="`far fa-${icon}`"></i>
+      <i :class="`far fa-${icon}`"></i> {{ saveText }}
     </button>
   </div>
 </template>
@@ -30,6 +30,12 @@ export default {
     },
     icon: {
       default: 'star'
+    },
+    saveText: {
+      type: String
+    },
+    removeText: {
+      type: String
     }
   },
   data() {
