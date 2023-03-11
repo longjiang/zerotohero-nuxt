@@ -331,6 +331,11 @@ export default {
   },
   computed: {
     ...mapState("settings", ["l2Settings"]),
+    level() {
+      return this.$store.state.progress.progressLoaded
+        ? Number(this.$store.getters["progress/level"](this.$l2))
+        : 0;
+    },
     phraseSaved() {
       return this.$refs["savePhrase"] && this.$refs["savePhrase"].saved;
     },
@@ -591,7 +596,7 @@ export default {
     },
     async getGrammar() {
       let grammar = await this.$getGrammar();
-      this.matchedGrammar = grammar.findInText(this.text);
+      this.matchedGrammar = grammar.findInText(this.text, this.level);
     },
     async annotateInputBlur(e) {
       let newText = e.target.value;
