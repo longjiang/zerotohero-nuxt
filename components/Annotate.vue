@@ -11,7 +11,11 @@
       }"
     >
       <div class="text-center" v-if="showLoading && !annotated">
-        <beat-loader class="d-inline-block" color="#28a745" size="5px"></beat-loader>
+        <beat-loader
+          class="d-inline-block"
+          color="#28a745"
+          size="5px"
+        ></beat-loader>
       </div>
       <component
         :is="tag"
@@ -27,53 +31,67 @@
         }"
       >
         <div class="annotator-buttons" v-if="!empty() && buttons">
-          <b-button class="annotator-menu-toggle" variant="unstyled" @click="showMenuModal">
+          <b-button
+            class="annotator-menu-toggle"
+            variant="unstyled"
+            @click="showMenuModal"
+          >
             <i class="fas fa-ellipsis-v"></i>
           </b-button>
         </div>
-        <div :class="{ 'annotate-slot': true }" v-if="!annotated">
-          <slot></slot>
+        <div class="annotate-except-buttons" style="width: 100%">
+          <div :class="{ 'annotate-slot': true }" v-if="!annotated">
+            <slot></slot>
+          </div>
+          <div v-if="textMode && annotated">
+            <input
+              :class="{
+                'annotate-input': true,
+              }"
+              @select="select"
+              @blur="annotateInputBlur"
+              @click.stop="dummyFunction"
+              :value="text"
+              style="width: calc(100% - 2rem)"
+            />
+          </div>
+          <template v-if="annotated && !textMode">
+            <v-runtime-template
+              v-for="(template, index) of annotatedSlots"
+              :key="`annotate-template-${index}`"
+              :template="template"
+              class="annotate-template"
+              ref="run-time-template"
+            />
+          </template>
+          <div v-if="matchedGrammar.length > 0" class="annotate-grammar">
+            <span class="annotate-grammar-header">{{ $t("Grammar Notes") }}:</span>
+            <span
+              v-for="row in matchedGrammar"
+              @click="showGrammarModal(row)"
+              class="annotate-grammar-button"
+              :key="`annotate-grammar-${row.id}`"
+            >
+              {{ row.structure }}
+              <i class="fa fa-chevron-right" />
+            </span>
+          </div>
         </div>
-        <div v-if="textMode && annotated" style="width: 100%">
-          <input
-            :class="{
-              'annotate-input': true,
-            }"
-            @select="select"
-            @blur="annotateInputBlur"
-            @click.stop="dummyFunction"
-            :value="text"
-            style="width: calc(100% - 2rem)"
-          />
-        </div>
-        <template v-if="annotated && !textMode">
-          <v-runtime-template
-            v-for="(template, index) of annotatedSlots"
-            :key="`annotate-template-${index}`"
-            :template="template"
-            class="annotate-template"
-            ref="run-time-template"
-          />
-        </template>
       </component>
-      <div v-if="matchedGrammar.length > 0" class="annotate-grammar">
-        <span class="annotate-grammar-header">{{ $t('Grammar Notes')}}:</span>
-        <span
-          v-for="row in matchedGrammar"
-          @click="showGrammarModal(row)"
-          class="annotate-grammar-button"
-          :key="`annotate-grammar-${row.id}`"
-        >
-          {{ row.structure }}
-          <i class="fa fa-chevron-right" />
-        </span>
-      </div>
       <div
         class="annotate-translation"
         v-if="showTranslation && (translationLoading || translationData)"
       >
-        <beat-loader class="d-inline-block" v-if="translationLoading" color="#28a745" size="5px"></beat-loader>
-        <div v-else v-html="translationHtml(translationData ? translationData : '')" />
+        <beat-loader
+          class="d-inline-block"
+          v-if="translationLoading"
+          color="#28a745"
+          size="5px"
+        ></beat-loader>
+        <div
+          v-else
+          v-html="translationHtml(translationData ? translationData : '')"
+        />
       </div>
     </div>
     <b-modal
@@ -121,12 +139,17 @@
             ref="savePhrase"
           />
           <span @click.stop.prevent="saveAsPhraseClick">
-            {{$t( phraseSaved ? "Remove Phrase" : "Save as Phrase") }}
+            {{ $t(phraseSaved ? "Remove Phrase" : "Save as Phrase") }}
           </span>
         </div>
         <div class="annotate-menu-modal-item">
-          <Speak :text="text" class="annotator-button" title="Speak" ref="speak" />
-          <span @click="readAloud">{{ $t('Read Aloud') }}</span>
+          <Speak
+            :text="text"
+            class="annotator-button"
+            title="Speak"
+            ref="speak"
+          />
+          <span @click="readAloud">{{ $t("Read Aloud") }}</span>
         </div>
 
         <div class="annotate-menu-modal-item">
@@ -138,7 +161,7 @@
           >
             <i class="fas fa-language"></i>
           </span>
-          <span @click="translateClick">{{ $t('Get Translation') }}</span>
+          <span @click="translateClick">{{ $t("Get Translation") }}</span>
         </div>
         <!-- <div class="annotate-menu-modal-item">
           <span
@@ -164,7 +187,7 @@
           >
             <i class="fas fa-edit"></i>
           </span>
-          <span @click="editClick">{{ $t('Edit Text') }}</span>
+          <span @click="editClick">{{ $t("Edit Text") }}</span>
         </div>
         <div class="annotate-menu-modal-item">
           <span
@@ -174,7 +197,7 @@
           >
             <i class="fas fa-copy"></i>
           </span>
-          <span @click="copyClick">{{ $t('Copy Text') }}</span>
+          <span @click="copyClick">{{ $t("Copy Text") }}</span>
         </div>
         <TranslatorLinks class="mt-2 pl-1" :text="text" />
         <hr />
@@ -203,63 +226,63 @@ export default {
     popupnote, // Must be lower case for runtime template to work
     readerlink, // Must be lower case for runtime template to work
     VRuntimeTemplate,
-    BeatLoader
+    BeatLoader,
   },
   props: {
     animationDuration: {
-      default: undefined // number of seconds to animate (highlight in sequence) each word block
+      default: undefined, // number of seconds to animate (highlight in sequence) each word block
     },
     emitSentenceTextAsAttr: {
-      default: false
+      default: false,
     },
     phonetics: {
-      default: true
+      default: true,
     },
     delay: {
-      default: 123
+      default: 123,
     },
     sticky: {
-      default: false // whether or not to show each word's level color by default (without hovering)
+      default: false, // whether or not to show each word's level color by default (without hovering)
     },
     speak: {
-      default: false
+      default: false,
     },
     checkSaved: {
-      default: true
+      default: true,
     },
     popup: {
-      default: true
+      default: true,
     },
     tag: {
-      default: "span"
+      default: "span",
     },
     buttons: {
-      default: false
+      default: false,
     },
     fullscreen: {
-      default: false
+      default: false,
     },
     foreign: {
-      default: true
+      default: true,
     },
     explore: {
-      default: false
+      default: false,
     },
     showGrammar: {
-      default: false
+      default: false,
     },
     showTranslation: {
-      default: false
+      default: false,
     },
     showLoading: {
-      default: true // Whether to show a loading animation before annotation is complete
+      default: true, // Whether to show a loading animation before annotation is complete
     },
     animationSpeed: {
-      default: 1
+      default: 1,
     },
     translation: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
@@ -281,7 +304,7 @@ export default {
       text: undefined,
       wordblocks: [],
       matchedGrammar: [],
-      grammarPointObj: undefined // the current grammar point shown in the modal
+      grammarPointObj: undefined, // the current grammar point shown in the modal
     };
   },
   mounted() {
@@ -337,7 +360,7 @@ export default {
     },
     disableAnnotation() {
       return this.l2SettingsOfL2.disableAnnotation;
-    }
+    },
   },
   watch: {
     $route() {
@@ -352,7 +375,7 @@ export default {
         await Helper.timeout(30);
         element.focus();
       }
-    }
+    },
   },
   methods: {
     showMenuModal() {
@@ -465,7 +488,7 @@ export default {
           );
           let aggregateText = "";
           spans.forEach(
-            span => (aggregateText = aggregateText + span.textContent.trim())
+            (span) => (aggregateText = aggregateText + span.textContent.trim())
           );
           for (let block of blocks) {
             let span = block.classList.contains("word-block")
@@ -488,7 +511,7 @@ export default {
             }
           }
           await Helper.timeout(2000);
-          blocks.forEach(b => b.classList.remove("animate"));
+          blocks.forEach((b) => b.classList.remove("animate"));
         }
       }
     },
@@ -500,7 +523,7 @@ export default {
         let phraseItem = {
           l2: this.$l2.code,
           phrase,
-          translations: {}
+          translations: {},
         };
         if (translation) phraseItem.translations[this.$l1.code] = translation;
         return phraseItem;
@@ -632,7 +655,7 @@ export default {
         for (let template of this.$refs["run-time-template"]) {
           let wordblocks = template.$children?.[0]?.$children;
           savedWords = savedWords.concat(
-            wordblocks.filter(wb => wb.saved).map(wb => wb.saved)
+            wordblocks.filter((wb) => wb.saved).map((wb) => wb.saved)
           );
         }
         return savedWords;
@@ -728,9 +751,9 @@ export default {
     },
     async tokenizeContinua(text, batchId) {
       let html = "";
-      this.tokenized[batchId] = await (await this.$getDictionary()).tokenize(
-        text
-      );
+      this.tokenized[batchId] = await (
+        await this.$getDictionary()
+      ).tokenize(text);
       for (let index in this.tokenized[batchId]) {
         let token = this.tokenized[batchId][index];
         if (typeof token === "object") {
@@ -752,7 +775,7 @@ export default {
         popup: this.popup,
         phonetics: this.phonetics,
         sticky: this.sticky,
-        explore: this.explore
+        explore: this.explore,
       };
       return attrs;
     },
@@ -764,9 +787,9 @@ export default {
     },
     async tokenizeAgglutenative(text, batchId) {
       let html = "";
-      this.tokenized[batchId] = await (await this.$getDictionary()).tokenize(
-        text
-      );
+      this.tokenized[batchId] = await (
+        await this.$getDictionary()
+      ).tokenize(text);
       for (let index in this.tokenized[batchId]) {
         let token = this.tokenized[batchId][index];
         if (typeof token === "object") {
@@ -839,12 +862,12 @@ export default {
     onSentenceClick(e) {
       let sentenceEl = e.currentTarget;
       let sentences = this.getSentences();
-      let index = sentences.findIndex(el => el === sentenceEl);
+      let index = sentences.findIndex((el) => el === sentenceEl);
       let current = Math.max(index, 0); // cannot set this as a data property because reactivity makes it impossible for the parent
       this.highlightTranslation(current);
       this.$emit("sentenceClick", sentenceEl);
-    }
-  }
+    },
+  },
 };
 </script>
 
