@@ -27,21 +27,20 @@
         style="overflow: hidden; position: relative;"
       >
         <div class="container pb-5">
-          <div v-if="!progressLoaded" class="text-center mt-4">
-            <Loader
-              :sticky="true"
-              :message="translate('Loading your learning progress...')"
-              class="text-white"
-            />
-          </div>
-          <div :class="{ 'row mb-5': true }" v-if="hasDashboard">
+          <div :class="{ 'row mb-5': true }" >
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4 bg-white">
-                <h5 class="text-center mt-2 mb-1">
+                <h5 class="text-center mt-2 mb-1" v-if="$auth.user?.first_name">
                   {{ $auth.user.first_name
                   }}{{ translate("’s Language Dashboard") }}
                 </h5>
-                <LazyDashboard ref="dashboard" />
+                <div v-if="!progressLoaded" class="text-center mt-4">
+                  <Loader
+                    :sticky="true"
+                    :message="translate('Loading your learning progress...')"
+                  />
+                </div>
+                <LazyDashboard ref="dashboard" v-if="hasDashboard" />
               </div>
             </div>
           </div>
@@ -50,9 +49,6 @@
               <div class="home-card p-2 pt-4 pb-4 bg-white">
                 <h5 class="text-center mb-2" v-if="hasDashboard">
                   {{ translate('Learn another language') }}
-                </h5>
-                <h5 class="text-center mb-2" v-else-if="$auth.user">
-                  {{ translate('Welcome back, {name}!', browserLanguage, {name: $auth.user.first_name}) }}
                 </h5>
                 <Triage />
               </div>
