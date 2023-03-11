@@ -46,7 +46,7 @@
         @click="level = n"
         :key="`grammar-tab-level-${n}`"
       >
-        {{ l[l2LevelKey] }}
+        {{ l[l2LevelKey] || l.cefr }}
       </button>
       <button @click="level = undefined" class="tab text-light bg-dark">
         All
@@ -122,7 +122,7 @@
 <script>
 import Helper from "@/lib/helper";
 import { unique } from "@/lib/utils/array";
-import { LEVELS } from "@/lib/utils/language-levels";
+import { LEVELS, l2LevelKey } from "@/lib/utils/language-levels";
 export default {
   data() {
     return {
@@ -152,10 +152,7 @@ export default {
       return unique(this.grammar.map((r) => r.level));
     },
     l2LevelKey() {
-      if (this.$l2.code === "ja") return "jlpt";
-      if (this.$l2.code === "ko") return "topik";
-      if (this.$l2.han) return "hsk";
-      else return "cefr";
+      return l2LevelKey(this.$l2.code)
     },
     grammarFiltered() {
       return this.grammar.filter((row) => {

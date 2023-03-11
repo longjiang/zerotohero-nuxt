@@ -68,7 +68,7 @@
           v-for="(level, index) in levels"
           :key="`learning-path-level-${index}`"
           class="level"
-          :data-learning-path-level="$l2.code === 'zh' ? level.hsk : level.cefr"
+          :data-learning-path-level="level.number"
         >
           <h4 class="level-title">
             <router-link
@@ -78,11 +78,7 @@
               {{
                 $t("{cat} ({num}*) level", {
                   cat: $t(level.category),
-                  num: $t(
-                    $l2.code === "zh" && level.number < 7
-                      ? `HSK ${level.number}`
-                      : level.cefr
-                  ),
+                  num: $t(level[l2LevelKey] || level.cefr),
                 })
               }}
               <i class="fa-solid fa-chevron-right"></i>
@@ -269,12 +265,16 @@
           <div v-if="level.number === '7'">
             <h4 class="mb-4">
               <b :data-level="level.cefr">
-                {{ $t("Total time from zero to {l2} mastery", {l2: $t($l2.name)}) }}:
+                {{
+                  $t("Total time from zero to {l2} mastery", {
+                    l2: $t($l2.name),
+                  })
+                }}:
               </b>
               <b>
                 {{
                   $t("{num} hours", {
-                    num: (($l2.hours || 1100) * 4),
+                    num: ($l2.hours || 1100) * 4,
                   })
                 }}
               </b>
@@ -290,7 +290,8 @@
                   target="_blank"
                 >
                   汉语水平考试
-                </a> (hànyǔ shuǐpíng kǎoshì)
+                </a>
+                (hànyǔ shuǐpíng kǎoshì)
               </i18n>
             </span>
             <span>
@@ -300,11 +301,15 @@
                 tag="b"
               >
                 <a
-                href="https://en.wikipedia.org/wiki/Common_European_Framework_of_Reference_for_Languages"
-                target="_blank"
-              >
-                {{$t('Common European Framework of Reference for Languages (CEFR)')}}
-              </a>
+                  href="https://en.wikipedia.org/wiki/Common_European_Framework_of_Reference_for_Languages"
+                  target="_blank"
+                >
+                  {{
+                    $t(
+                      "Common European Framework of Reference for Languages (CEFR)"
+                    )
+                  }}
+                </a>
               </i18n>
             </span>
           </div>
@@ -317,8 +322,8 @@
 <script>
 import Resource from "@/components/Resource";
 import { background, backgroundKeyword } from "@/lib/utils/background";
+import { LEVELS, LANGS_WITH_LEVELS, l2LevelKey } from "@/lib/utils";
 import Helper from "@/lib/helper";
-import { LEVELS, LANGS_WITH_LEVELS } from "@/lib/utils";
 
 export default {
   components: {
@@ -341,6 +346,9 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    l2LevelKey() {
+      return l2LevelKey(this.$l2.code);
     },
     levels() {
       let levels = Object.keys(LEVELS).map((key) => {
@@ -476,6 +484,54 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.l2-zh {
+  .learning-path {
+    .level {
+      &[data-learning-path-level="1"] {
+        border-left-color: #f8b51e;
+        &::before {
+          border-color: #f8b51e;
+        }
+      }
+
+      &[data-learning-path-level="2"] {
+        border-left-color: #267f94;
+        &::before {
+          border-color: #267f94;
+        }
+      }
+
+      &[data-learning-path-level="3"] {
+        border-left-color: #fd4f1c;
+        &::before {
+          border-color: #fd4f1c;
+        }
+      }
+
+      &[data-learning-path-level="4"] {
+        border-left-color: #bb1718;
+        &::before {
+          border-color: #bb1718;
+        }
+      }
+
+      &[data-learning-path-level="5"] {
+        border-left-color: #1b3e76;
+        &::before {
+          border-color: #1b3e76;
+        }
+      }
+
+      &[data-learning-path-level="6"] {
+        border-left-color: #6a3669;
+        &::before {
+          border-color: #6a3669;
+        }
+      }
+    }
+  }
+}
+
 .learning-path {
   .level {
     padding-bottom: 1.5rem;
@@ -496,50 +552,49 @@ export default {
       border: 0.5rem solid #ccc;
     }
 
-    &[data-learning-path-level="PreA1"] {
+    &[data-learning-path-level="1"] {
       border-left-color: #b51700;
       &::before {
         border-color: #b51700;
       }
     }
 
-    &[data-learning-path-level="A1"] {
+    &[data-learning-path-level="2"] {
       border-left-color: #0076ba;
       &::before {
         border-color: #0076ba;
       }
     }
 
-    &[data-learning-path-level="A2"] {
+    &[data-learning-path-level="3"] {
       border-left-color: #00882b;
       &::before {
         border-color: #00882b;
       }
     }
 
-    &[data-learning-path-level="B1"] {
+    &[data-learning-path-level="4"] {
       border-left-color: #6a348a;
       &::before {
         border-color: #6a348a;
       }
     }
 
-    &[data-learning-path-level="B2"] {
+    &[data-learning-path-level="5"] {
       border-left-color: #5b0516;
       &::before {
         border-color: #5b0516;
       }
     }
 
-    &[data-learning-path-level="C1"] {
+    &[data-learning-path-level="6"] {
       border-left-color: #011b3c;
       &::before {
         border-color: #011b3c;
       }
     }
 
-    &[data-learning-path-level="C2"],
-    &[data-learning-path-level="7-9"] {
+    &[data-learning-path-level="7"] {
       border-left-color: #0f575c;
       &::before {
         border-color: #0f575c;
@@ -555,48 +610,6 @@ export default {
         bottom: -2rem;
         height: 0;
         width: 0;
-      }
-    }
-
-    &[data-learning-path-level="1"] {
-      border-left-color: #f8b51e;
-      &::before {
-        border-color: #f8b51e;
-      }
-    }
-
-    &[data-learning-path-level="2"] {
-      border-left-color: #267f94;
-      &::before {
-        border-color: #267f94;
-      }
-    }
-
-    &[data-learning-path-level="3"] {
-      border-left-color: #fd4f1c;
-      &::before {
-        border-color: #fd4f1c;
-      }
-    }
-
-    &[data-learning-path-level="4"] {
-      border-left-color: #bb1718;
-      &::before {
-        border-color: #bb1718;
-      }
-    }
-
-    &[data-learning-path-level="5"] {
-      border-left-color: #1b3e76;
-      &::before {
-        border-color: #1b3e76;
-      }
-    }
-
-    &[data-learning-path-level="6"] {
-      border-left-color: #6a3669;
-      &::before {
-        border-color: #6a3669;
       }
     }
 
