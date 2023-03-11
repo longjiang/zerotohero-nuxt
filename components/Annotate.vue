@@ -63,19 +63,17 @@
               class="annotate-template"
               ref="run-time-template"
             />
-          </template>
-          <div v-if="matchedGrammar.length > 0" class="annotate-grammar">
-            <span class="annotate-grammar-header">{{ $t("Grammar Notes") }}:</span>
-            <span
-              v-for="row in matchedGrammar"
-              @click="showGrammarModal(row)"
-              class="annotate-grammar-button"
-              :key="`annotate-grammar-${row.id}`"
-            >
-              {{ row.structure }}
-              <i class="fa fa-chevron-right" />
+            <span v-if="matchedGrammar.length > 0" class="annotate-grammar">
+              <span
+                v-for="(row, index) in matchedGrammar"
+                @click="showGrammarModal(row)"
+                class="annotate-grammar-button"
+                :key="`annotate-grammar-${row.id}`"
+              >
+                {{ $t('G') }}
+              </span>
             </span>
-          </div>
+          </template>
         </div>
       </component>
       <div
@@ -99,7 +97,12 @@
       size="md"
       centered
       hide-footer
-      :title="$t('Grammar {level} {code}', { level: $t(l2LevelName), code: grammarPointObj ? grammarPointObj.code : '' })"
+      :title="
+        $t('Grammar {level} {code}', {
+          level: $t(l2LevelName),
+          code: grammarPointObj ? grammarPointObj.code : '',
+        })
+      "
       modal-class="safe-padding-top mt-4"
       body-class="grammar-modal-wrapper"
     >
@@ -114,7 +117,7 @@
           v-if="grammarPointObj"
           :to="{ name: 'grammar-view', params: { id: grammarPointObj.id } }"
         >
-          {{ $t('Learn More') }}
+          {{ $t("Learn More") }}
           <i class="fas fa-chevron-right ml-1" />
         </router-link>
       </div>
@@ -1032,14 +1035,20 @@ export default {
 }
 
 .annotate-grammar {
-  font-size: 66.67%;
-  margin-top: 0.25rem;
-  .annotate-grammar-header {
-    opacity: 0.7;
-  }
   .annotate-grammar-button {
-    color: #28a745;
+    font-size: 0.8rem;
+    background: #28a745;
+    color: white;
+    border-radius: 100%;
+    width: 1.3rem;
+    height: 1.3rem;
+    display: inline-block;
     cursor: pointer;
+    text-align: center;
+    line-height: 1.3rem;
+    position: relative;
+    bottom: 0.1rem;
+    margin-right: 0.1rem;
   }
 }
 </style>
