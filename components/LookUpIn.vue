@@ -68,14 +68,14 @@ export default {
         url: `http://dict.youdao.com/w/ko/${this.term}`
       },
       {
-        title: 'Weblio',
-        available: this.$l2.code === 'ja',
-        url: `https://ejje.weblio.jp/content/${this.term}`
-      },
-      {
         title: 'Jisho',
         available: this.$l2.code === 'ja',
         url: `https://jisho.org/search/${this.term}`
+      },
+      {
+        title: 'Weblio',
+        available: this.$l2.code === 'ja',
+        url: `https://ejje.weblio.jp/content/${this.term}`
       },
       {
         title: 'JapanDict',

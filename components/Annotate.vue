@@ -96,7 +96,7 @@
     </div>
     <b-modal
       ref="grammar-modal"
-      size="xl"
+      size="md"
       centered
       hide-footer
       :title="$t('Grammar Note')"
@@ -114,7 +114,7 @@
           v-if="grammarPointObj"
           :to="{ name: 'grammar-view', params: { id: grammarPointObj.id } }"
         >
-          Learn More
+          {{ $t('Learn More') }}
           <i class="fas fa-chevron-right ml-1" />
         </router-link>
       </div>
