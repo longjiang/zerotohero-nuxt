@@ -19,12 +19,14 @@
             <button class="btn btn-small mr-1" v-if="id > 1" @click="prevClick">
               <i class="fa fa-caret-left" />
             </button>
-            {{
-              $t("Grammar {level} {code}", {
-                level: $t(l2LevelName),
-                code: grammar.code,
-              })
-            }}
+            <router-link :to="{ name: 'grammar' }">
+              {{
+                $t("Grammar {level} {code}", {
+                  level: $t(l2LevelName),
+                  code: grammar.code,
+                })
+              }}
+            </router-link>
             <button class="btn btn-small" @click="nextClick">
               <i class="fa fa-caret-right" />
             </button>
@@ -58,7 +60,7 @@
 
           <div class="text-left mt-5" v-if="drills && drills.length > 0">
             <hr />
-            <h4 class="text-center">{{ $t('Practice Drills') }}</h4>
+            <h4 class="text-center">{{ $t("Practice Drills") }}</h4>
             <LazyDrill
               v-for="drill in drills"
               :drill="drill"
