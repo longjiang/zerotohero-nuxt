@@ -99,7 +99,7 @@
       size="md"
       centered
       hide-footer
-      :title="$t('Grammar Note')"
+      :title="$t('Grammar {level} {code}', { level: $t(l2LevelName), code: grammarPointObj ? grammarPointObj.code : '' })"
       modal-class="safe-padding-top mt-4"
       body-class="grammar-modal-wrapper"
     >
@@ -213,6 +213,7 @@ import popupnote from "@/components/PopupNote";
 import readerlink from "@/components/ReaderLink";
 import VRuntimeTemplate from "v-runtime-template";
 import Helper from "@/lib/helper";
+import { l2LevelName } from "@/lib/utils/language-levels";
 import { breakSentences } from "@/lib/utils/string";
 import { transliterate as tr } from "transliteration";
 import { mapState } from "vuex";
@@ -365,6 +366,9 @@ export default {
     },
     disableAnnotation() {
       return this.l2SettingsOfL2.disableAnnotation;
+    },
+    l2LevelName() {
+      return l2LevelName(this.$l2.code);
     },
   },
   watch: {
