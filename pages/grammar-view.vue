@@ -19,7 +19,12 @@
             <button class="btn btn-small mr-1" v-if="id > 1" @click="prevClick">
               <i class="fa fa-caret-left" />
             </button>
-            Grammar HSK{{ grammar.code }}
+            {{
+              $t("Grammar {level} {code}", {
+                level: $t(l2LevelName),
+                code: grammar.code,
+              })
+            }}
             <button class="btn btn-small" @click="nextClick">
               <i class="fa fa-caret-right" />
             </button>
@@ -36,8 +41,10 @@
             "
             :key="`subs-search-${grammar.pattern}`"
           >
-            <div class="widget-title">“{{ grammar.pattern }}” in 
-              <LazyShowFilter @showFilter="reloadSearchSubs" /></div>
+            <div class="widget-title">
+              “{{ grammar.pattern }}” in
+              <LazyShowFilter @showFilter="reloadSearchSubs" />
+            </div>
             <div class="widget-body">
               <LazySearchSubsComp
                 v-if="grammar.pattern && renderSearchSubs"
@@ -51,7 +58,7 @@
 
           <div class="text-left mt-5" v-if="drills && drills.length > 0">
             <hr />
-            <h4 class="text-center">Practice Drills</h4>
+            <h4 class="text-center">{{ $t('Practice Drills') }}</h4>
             <LazyDrill
               v-for="drill in drills"
               :drill="drill"
@@ -81,10 +88,9 @@
 
 <script>
 import Grammar from "@/lib/grammar";
-import Config from "@/lib/config";
 import Helper from "@/lib/helper";
+import { l2LevelName } from "@/lib/utils/language-levels";
 import WordPhotos from "@/lib/word-photos";
-import axios from "axios";
 
 export default {
   props: {
@@ -98,7 +104,7 @@ export default {
       drills: [],
       entry: false,
       images: [],
-      renderSearchSubs: true
+      renderSearchSubs: true,
     };
   },
   computed: {
@@ -109,6 +115,9 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    l2LevelName() {
+      return l2LevelName(this.$l2.code);
     },
     term() {
       return this.grammar
@@ -150,7 +159,7 @@ export default {
     async getDrill(grammarID) {
       try {
         let response = await this.$directus.get(
-          `items/drills?filter[grammar_id][eq]=${grammarID}&fields=*,file.*`
+          `items/drills?filter[grammar_id][eq]=${grammarID}&filter[l2][eq]=${this.$l2.id}&fields=*,file.*`
         );
         response = response.data;
         if (response && response.data && response.data[0]) {
