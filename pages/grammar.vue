@@ -10,7 +10,7 @@
         <div class="col-sm-12">
           <div class="focus text-center">
             <!-- <Sale class="mb-4" /> -->
-            <h3 class="mb-5">Ultimate {{ $l2.name }} Grammar Cheatsheet</h3>
+            <h3 class="mb-5">{{ $t('Ultimate {l2} Grammar Cheatsheet', {l2: $t($l2.name)}) }}</h3>
             <div v-if="$l2.code === 'zh'">
               <p>
                 Here is a list of all grammar notes from HSK 1 to 6 included in

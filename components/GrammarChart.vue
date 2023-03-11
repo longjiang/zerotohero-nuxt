@@ -19,10 +19,10 @@
           v-model="search"
           type="text"
           class="form-control lookup"
-          placeholder="Filter by keywords"
+          :placeholder="$t('Filter by keywords')"
         />
         <div class="input-group-append">
-          <button class="btn btn-danger lookup-button" type="button">
+          <button class="btn btn-success lookup-button" type="button">
             <i class="glyphicon glyphicon-filter"></i>
             {{ $t('Filter') }}
           </button>
@@ -30,11 +30,11 @@
       </div>
       <a
         :href="csvSource"
-        class="ml-2 btn btn-primary"
+        class="ml-2 btn btn-success"
         :download="`Language Player ${$l2.name} Grammar Chart.csv`"
       >
         <i class="fa fa-download mr-1" />
-        Download CSV
+        {{ $t('Download CSV') }}
       </a>
     </div>
     <div class="tabs text-center">
@@ -49,7 +49,7 @@
         {{ l[l2LevelKey] || l.cefr }}
       </button>
       <button @click="level = undefined" class="tab text-light bg-dark">
-        All
+        {{ $t('All') }}
       </button>
       <div
         style="height: 0.5rem"
@@ -63,11 +63,11 @@
     >
       <thead>
         <tr>
-          <th class="text-center">Lesson</th>
-          <th>Structure</th>
-          <th>English</th>
-          <th style="min-width: 20rem">Example</th>
-          <th>Example Translation</th>
+          <th class="text-center">{{ $t('Grammar') }}</th>
+          <th>{{ $t('Structure') }}</th>
+          <th>{{ $t('Translation') }}</th>
+          <th style="min-width: 20rem">{{ $t('Example') }}</th>
+          <th>{{ $t('Example Translation') }}</th>
         </tr>
       </thead>
       <tbody>
