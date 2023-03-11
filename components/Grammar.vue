@@ -1,7 +1,7 @@
 <template>
   <div :key="'grammar-' + grammarKey">
     <div class="text-center" v-if="grammarPoints && grammarPoints.length > 0">
-      <div class="widget-title mb-2">Grammar notes</div>
+      <div class="widget-title mb-2">{{ $t('Grammar Notes') }}</div>
       <div class="grammar-notes" id="grammar">
         <GrammarPoint
           v-for="(grammar, index) in grammarPoints"

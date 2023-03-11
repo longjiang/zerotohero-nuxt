@@ -57,7 +57,7 @@
         </template>
       </component>
       <div v-if="matchedGrammar.length > 0" class="annotate-grammar">
-        <span class="annotate-grammar-header">Grammar Notes:</span>
+        <span class="annotate-grammar-header">{{ $t('Grammar Notes')}}:</span>
         <span
           v-for="row in matchedGrammar"
           @click="showGrammarModal(row)"
@@ -81,7 +81,7 @@
       size="xl"
       centered
       hide-footer
-      title="Grammar Note"
+      :title="$t('Grammar Note')"
       modal-class="safe-padding-top mt-4"
       body-class="grammar-modal-wrapper"
     >
@@ -1000,7 +1000,7 @@ export default {
 }
 
 .annotate-grammar {
-  font-size: 0.8em;
+  font-size: 66.67%;
   margin-top: 0.25rem;
   .annotate-grammar-header {
     opacity: 0.7;
