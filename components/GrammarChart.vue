@@ -24,7 +24,7 @@
         <div class="input-group-append">
           <button class="btn btn-danger lookup-button" type="button">
             <i class="glyphicon glyphicon-filter"></i>
-            Filter
+            {{ $t('Filter') }}
           </button>
         </div>
       </div>

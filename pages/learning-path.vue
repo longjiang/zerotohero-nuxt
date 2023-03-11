@@ -54,7 +54,7 @@
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} hours`"
       />
 
-      <h3 class="mt-3">{{ $l2.name }} Learning Path</h3>
+      <h3 class="mt-3">{{ $t("{l2} Learning Path", { l2: $t($l2.name) }) }}</h3>
       <div class="learning-path">
         <div class="level">
           <LazyLanguageInfoBox
@@ -71,42 +71,60 @@
           :data-learning-path-level="$l2.code === 'zh' ? level.hsk : level.cefr"
         >
           <h4 class="level-title">
-            <router-link :to="mediaUrlByLevel(level.number)"  :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
-              {{ level.category }} ({{
-                $l2.code === "zh" && level.number < 7
-                  ? `HSK ${level.number}`
-                  : level.cefr
-              }}*) level <i class="fa-solid fa-chevron-right"></i>
+            <router-link
+              :to="mediaUrlByLevel(level.number)"
+              :data-level="$l2.code === 'zh' ? level.hsk : level.cefr"
+            >
+              {{
+                $t("{cat} ({num}*) level", {
+                  cat: $t(level.category),
+                  num: $t(
+                    $l2.code === "zh" && level.number < 7
+                      ? `HSK ${level.number}`
+                      : level.cefr
+                  ),
+                })
+              }}
+              <i class="fa-solid fa-chevron-right"></i>
             </router-link>
           </h4>
           <p>
             <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
               <i class="fas fa-clock"></i>
-              Time investment:
+              {{ $t("Time investment") }}:
             </b>
-            <b>{{ levelHours(level) }} hours</b>
+            <b>{{ $t("{num} hours", { num: levelHours(level) }) }}</b>
           </p>
           <template>
             <div class="level-activity">
               <div v-if="courses[level.cefr] || hasPhrasebooks">
                 <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
                   <i class="fa-solid fa-spell-check"></i>
-                  Vocabulary &amp; Syntax:
+                  {{ $t("Vocabulary & Syntax") }}:
                 </b>
-                {{ levelVocabularyAndSyntaxHours(level) }} hours
+                {{
+                  $t("{num} hours", {
+                    num: levelVocabularyAndSyntaxHours(level),
+                  })
+                }}
               </div>
               <div class="pl-3">
                 <Resource
                   class="mt-3"
                   v-if="level.number < 3 && hasPhrasebooks"
                   :resource="{
-                    title: `Learn most common phrases in ${$l2.name}`,
+                    title: $t('Learn most common phrases in {l2}', {
+                      l2: $t($l2.name),
+                    }),
                     url: `/${$l1.code}/${$l2.code}/phrasebooks`,
                     thumbnail: '/img/banner-phrasebook.jpg',
-                    description: `by watching video clips containing the most common ${$l2.name} expressions.`,
+                    description: $t(
+                      'by watching video clips containing the most common {l2} expressions.',
+                      { l2: $t($l2.name) }
+                    ),
                   }"
                   :level="$l2.code === 'zh' ? level.hsk : level.cefr"
-                  buttonText="Learn Phrases"
+                  :buttonText="$t('Learn Phrases')"
                   :internal="true"
                 />
                 <Resource
@@ -118,7 +136,7 @@
                     url: course.url,
                     thumbnail: course.thumbnail.data.full_url,
                   }"
-                  buttonText="Open Course"
+                  :buttonText="$t('Open Course')"
                   :showThumbnail="false"
                 />
               </div>
@@ -128,20 +146,23 @@
             <p>
               <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
                 <i class="fa-solid fa-headphones"></i>
-                Input by Audio & Text:
+                {{ $t("Input by Audio & Text") }}:
               </b>
-              {{ levelInputHours(level) }} hours
+              <b>{{ $t("{num} hours", { num: levelInputHours(level) }) }}</b>
             </p>
             <div class="pl-3">
               <Resource
                 :resource="{
-                  title: `Watch videos in ${$l2.name}`,
+                  title: $t('Watch videos in {l2}', { l2: $t($l2.name) }),
                   url: mediaUrlByLevel(level.number),
                   thumbnail: '/img/banner-media.jpg',
-                  description: `and study transcripts of ${$l2.name} videos with a popup dictionary.`,
+                  description: $t(
+                    'and study transcripts of {l2} videos with a popup dictionary.',
+                    { l2: $t($l2.name) }
+                  ),
                 }"
                 :level="$l2.code === 'zh' ? level.hsk : level.cefr"
-                buttonText="Browse Videos"
+                :buttonText="$t('Browse Videos')"
                 :internal="true"
               />
               <Resource
@@ -149,12 +170,17 @@
                 v-if="level.number > 3 && $hasFeature('dictionary')"
                 :level="$l2.code === 'zh' ? level.hsk : level.cefr"
                 :resource="{
-                  title: `${$l2.name} reading with popup dictionary`,
+                  title: $t('{l2} reading with popup dictionary', {
+                    l2: $t($l2.name),
+                  }),
                   url: `/${$l1.code}/${$l2.code}/books`,
                   thumbnail: '/img/banner-library.jpg',
-                  description: `Read books and text in ${$l2.name} with the help of our popup dictionary.`,
+                  description: $t(
+                    'Read books and text in {l2} with the help of our popup dictionary.',
+                    { l2: $t($l2.name) }
+                  ),
                 }"
-                buttonText="Browse Books"
+                :buttonText="$t('Browse Books')"
                 :internal="true"
               />
             </div>
@@ -163,20 +189,24 @@
             <p>
               <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
                 <i class="fa-solid fa-comment-alt"></i>
-                Conversation Practice:
+                {{ $t("Conversation Practice") }}:
               </b>
-              {{ levelConverstionHours(level) }} hours
+              <b>
+                {{ $t("{num} hours", { num: levelConverstionHours(level) }) }}
+              </b>
             </p>
             <div class="pl-3">
               <Resource
                 :resource="{
-                  title: 'iTalki Lessons',
+                  title: $t('iTalki Lessons'),
                   url: 'https://www.italki.com/affshare?ref=zerotohero',
                   thumbnail: '/img/banner-italki.jpg',
-                  description:
-                    'Take one-on-one online conversation practice sessions at iTalki. New sign-ups get $10 off.',
+                  description: $t(
+                    'Take one-on-one online {l2} conversation practice sessions at iTalki.',
+                    { l2: $t($l2.name) }
+                  ),
                 }"
-                buttonText="Open iTalki"
+                :buttonText="$t('Open iTalki')"
                 :showThumbnail="false"
               />
             </div>
@@ -186,10 +216,13 @@
           >
             <div class="level-activity">
               <p>
-                <b :data-level="level.cefr">Resources:</b>
-                At the
-                {{ level.cefr }} level, we recommend using the following
-                resources, products, or services:
+                <b :data-level="level.cefr">{{ $t("Resources") }}:</b>
+                {{
+                  $t(
+                    "At the {level} level, we recommend using the following resources, products, or services",
+                    { level: $t(level.cefr) }
+                  )
+                }}:
               </p>
               <div
                 v-for="(resource, index) in resources[level.cefr]"
@@ -220,56 +253,59 @@
                 ></div>
                 <b :data-level="$l2.code === 'zh' ? level.hsk : level.cefr">
                   <i class="fa-solid fa-trophy"></i>
-                  Milestone:
+                  {{ $t("Milestone") }}:
                 </b>
-                <b>
-                  Pass the
+                <i18n path="Pass the {0} exam" tag="b">
                   <a :href="exam.url" target="_blank">
-                    {{ exam.title }}
-                    <span v-if="exam.level === 'all'">({{ level.cefr }})</span>
+                    {{ $t(exam.title) }}
+                    <span v-if="exam.level === 'all'">
+                      ({{ $t("level.cefr") }})
+                    </span>
                   </a>
-                  exam
-                </b>
+                </i18n>
               </div>
             </template>
           </template>
           <div v-if="level.number === '7'">
             <h4 class="mb-4">
-              <b :data-level="level.cefr">Total time from zero to mastery:</b>
+              <b :data-level="level.cefr">
+                {{ $t("Total time from zero to {l2} mastery", {l2: $t($l2.name)}) }}:
+              </b>
               <b>
                 {{
-                  (($l2.hours || 1100) * 4)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  $t("{num} hours", {
+                    num: (($l2.hours || 1100) * 4),
+                  })
                 }}
-                hours
               </b>
             </h4>
             <span v-if="$l2.code === 'zh'">
-              * HSK stands for
-              <Annotate>
-                <span>
-                  <a
-                    href="http://www.chinesetest.cn/gosign.do?id=1&lid=0#"
-                    target="_blank"
-                  >
-                    汉语水平考试
-                  </a>
-                </span>
-              </Annotate>
-              (Chinese Proficiency Test). HSK 1, 2, 3 ... 6 refer to the levels
-              of the test, level 6 being the highest.
+              *
+              <i18n
+                path="HSK stands for {0} (Chinese Proficiency Test). HSK 1, 2, 3 ... 6 refer to the levels of the test, level 6 being the highest."
+                tag="b"
+              >
+                <a
+                  href="http://www.chinesetest.cn/gosign.do?id=1&lid=0#"
+                  target="_blank"
+                >
+                  汉语水平考试
+                </a> (hànyǔ shuǐpíng kǎoshì)
+              </i18n>
             </span>
             <span>
-              * A1, A2, B1 ... C2 refer to language proficiency levels according
-              to the
-              <a
+              *
+              <i18n
+                path="A1, A2, B1 ... C2 refer to language proficiency levels according to the {0}."
+                tag="b"
+              >
+                <a
                 href="https://en.wikipedia.org/wiki/Common_European_Framework_of_Reference_for_Languages"
                 target="_blank"
               >
-                Common European Framework of Reference for Languages (CEFR)
+                {{$t('Common European Framework of Reference for Languages (CEFR)')}}
               </a>
-              .
+              </i18n>
             </span>
           </div>
         </div>
@@ -336,7 +372,7 @@ export default {
       if (mutation.type.startsWith("phrasebooks")) {
         this.checkPhrasebooks();
       }
-    })
+    });
   },
   methods: {
     checkPhrasebooks() {
