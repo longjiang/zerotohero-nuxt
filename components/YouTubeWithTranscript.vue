@@ -693,6 +693,9 @@ export default {
     pause() {
       this.$refs.youtube.pause();
     },
+    togglePaused() {
+      this.$refs.youtube.togglePaused();
+    },
     async play() {
       if (this.audioMode) {
         if (this.speaking) {
