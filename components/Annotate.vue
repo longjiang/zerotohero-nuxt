@@ -101,7 +101,7 @@
       <table class="table table-responsive grammar-table w-100 mb-0" style="font-size: 0.9em">
         <tbody>
           <tr v-for="row in matchedGrammar" :key="`annotate-grammar-${row.id}`" class="grammar-table-row" @click="$router.push({ name: 'grammar-view', params: { id: row.id } })">
-            <td class="align-left align-middle" style="min-width: 6rem">
+            <td class="align-left align-middle" style="min-width: 7rem">
               {{ $t(l2LevelName) }} {{ row.code }}
             </td>
             <td class="align-left align-middle font-weight-bold" style="min-width: 6rem" :data-level="row.level">
