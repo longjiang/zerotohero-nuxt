@@ -96,23 +96,24 @@
       hide-footer
       :title="$t('Grammar Notes')"
       modal-class="safe-padding-top mt-4"
-      body-class="grammar-modal-wrapper"
+      :body-class="`grammar-modal-wrapper l2-${$l2.code}`"
     >
-      <table class="table table-responsive grammar-table w-100" style="font-size: 0.9em">
+      <table class="table table-responsive grammar-table w-100 mb-0" style="font-size: 0.9em">
         <tbody>
           <tr v-for="row in matchedGrammar" :key="`annotate-grammar-${row.id}`" class="grammar-table-row" @click="$router.push({ name: 'grammar-view', params: { id: row.id } })">
-            <td class="align-left">
+            <td class="align-left align-middle" style="min-width: 6rem">
               {{ $t(l2LevelName) }} {{ row.code }}
             </td>
-            <td class="align-left font-weight-bold" :data-level="row.level">
-              <Annotate>
-                <span>{{ row.structure }}</span>
-              </Annotate>
+            <td class="align-left align-middle font-weight-bold" style="min-width: 6rem" :data-level="row.level">
+              <!-- <Annotate>
+                
+              </Annotate> -->
+              <span v-html="highlightMultiple(row.structure, row.words, row.book)" />
             </td>
-            <td class="align-left">
+            <td class="align-left align-middle w-100" style="min-width: 6rem">
               <span>{{ row.english }}</span>
             </td>
-            <td>
+            <td class="align-right align-middle text-right">
               <router-link
                 class="text-success"
                 v-if="row"
@@ -392,8 +393,8 @@ export default {
     },
   },
   methods: {
-    highlightMultiple(a, b) {
-      return Helper.highlightMultiple(a, b);
+    highlightMultiple(...args) {
+      return Helper.highlightMultiple(...args);
     },
     showMenuModal() {
       this.$refs["annotate-menu-modal"].show();
@@ -1054,8 +1055,13 @@ export default {
   margin-right: 0.1rem;
 }
 
-.grammar-table-row:hover {
-  background-color: #efefef;
-  cursor: pointer;
+.grammar-table-row {
+  td {
+    border: none;
+  }
+  &:hover {
+    background-color: #efefef;
+    cursor: pointer;
+  }
 }
 </style>
