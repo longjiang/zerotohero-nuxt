@@ -18,6 +18,7 @@
             <TranscriptLine
               v-bind="{
                 line,
+                video,
                 showSubsEditing,
                 showAnimation,
                 speed,
@@ -181,6 +182,9 @@ export default {
     useSmoothScroll: {
       default: false,
     },
+    video: {
+      type: Object
+    }
   },
   data() {
     return {

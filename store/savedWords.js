@@ -36,7 +36,7 @@ const parseSavedWordsCSV = (csv) => {
 }
 
 export const mutations = {
-  ADD_SAVED_WORD(state, { l2, word, wordForms }) {
+  ADD_SAVED_WORD(state, { l2, word, wordForms, context }) {
     if (typeof localStorage !== 'undefined') {
       if (!state.savedWords[l2]) {
         state.savedWords[l2] = []
@@ -45,11 +45,13 @@ export const mutations = {
         !state.savedWords[l2].find(item => item.id === word.id)
       ) {
         let savedWords = Object.assign({}, state.savedWords)
-        savedWords[l2].push({
+        let savedWord = {
           id: word.id,
           forms: [...wordForms],
-          date: Date.now()
-        })
+          date: Date.now(),
+          context // { form, text, starttime = undefined, youtube_id = undefined }
+        }
+        savedWords[l2].push(savedWord)
         localStorage.setItem('zthSavedWords', JSON.stringify(savedWords))
 
         this._vm.$set(state, 'savedWords', savedWords)
@@ -142,8 +144,8 @@ export const actions = {
       commit('IMPORT_WORDS_FROM_JSON', json)
     }
   },
-  add({ dispatch, commit }, { l2, word, wordForms }) {
-    commit('ADD_SAVED_WORD', { l2, word, wordForms })
+  add({ dispatch, commit }, { l2, word, wordForms, context }) {
+    commit('ADD_SAVED_WORD', { l2, word, wordForms, context })
     dispatch('push')
   },
   importWords({ commit, dispatch }, csv) {

@@ -52,6 +52,16 @@ export default {
     label: {
       type: Boolean,
       default: true
+    },
+    context: {
+      type: Object,
+      default() {
+        return {
+          text: undefined,
+          youtube_id: undefined,
+          starttime: undefined
+        }
+      },
     }
   },
   data() {
@@ -120,10 +130,13 @@ export default {
       let wordForms = this.word
         ? await this.allForms()
         : [this.text.toLowerCase()];
+
+      let context = Object.assign({form: this.text || wordForms[0]}, this.context) // { form, text, starttime = undefined, youtube_id = undefined }
       this.$store.dispatch("savedWords/add", {
         word: this.word,
         wordForms: wordForms,
         l2: this.$l2.code,
+        context
       });
       this.word.saved = true;
     },

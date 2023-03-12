@@ -127,6 +127,7 @@
               <Star
                 :word="word"
                 :text="text"
+                :context="context"
                 class="ml-1"
                 style="font-size: 0.8rem"
               ></Star>
@@ -351,6 +352,16 @@ export default {
     transliterationprop: {
       type: String,
     },
+    context: {
+      type: Object,
+      default() {
+        return {
+          text: undefined,
+          youtube_id: undefined,
+          starttime: undefined
+        }
+      },
+    }
   },
   data() {
     return {

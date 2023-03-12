@@ -166,6 +166,7 @@
           forcePro,
           autoPause,
           useSmoothScroll,
+          video
         }"
         @seek="seekYouTube"
         @pause="pause"

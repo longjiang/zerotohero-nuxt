@@ -45,7 +45,11 @@
               delay: single ? false : 123,
               showTranslation: false,
               showLoading: false,
-              showGrammar: true
+              showGrammar: true,
+              context: {
+                youtube_id: this.video.youtube_id,
+                starttime: this.line.starttime
+              }
             }"
             :class="{
               'transcript-line-l2': true,
@@ -161,6 +165,9 @@ export default {
     textSize: {
       default: 1,
     },
+    video: {
+      type: Object
+    }
   },
   data() {
     return {

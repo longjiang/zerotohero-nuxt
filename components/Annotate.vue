@@ -98,17 +98,33 @@
       modal-class="safe-padding-top mt-4"
       :body-class="`grammar-modal-wrapper l2-${$l2.code}`"
     >
-      <table class="table table-responsive grammar-table w-100 mb-0" style="font-size: 0.9em">
+      <table
+        class="table table-responsive grammar-table w-100 mb-0"
+        style="font-size: 0.9em"
+      >
         <tbody>
-          <tr v-for="row in matchedGrammar" :key="`annotate-grammar-${row.id}`" class="grammar-table-row" @click="$router.push({ name: 'grammar-view', params: { id: row.id } })">
+          <tr
+            v-for="row in matchedGrammar"
+            :key="`annotate-grammar-${row.id}`"
+            class="grammar-table-row"
+            @click="
+              $router.push({ name: 'grammar-view', params: { id: row.id } })
+            "
+          >
             <td class="align-left align-middle" style="min-width: 7rem">
               {{ $t(l2LevelName) }} {{ row.code }}
             </td>
-            <td class="align-left align-middle font-weight-bold" style="min-width: 6rem" :data-level="row.level">
+            <td
+              class="align-left align-middle font-weight-bold"
+              style="min-width: 6rem"
+              :data-level="row.level"
+            >
               <!-- <Annotate>
                 
               </Annotate> -->
-              <span v-html="highlightMultiple(row.structure, row.words, row.book)" />
+              <span
+                v-html="highlightMultiple(row.structure, row.words, row.book)"
+              />
             </td>
             <td class="align-left align-middle w-100" style="min-width: 6rem">
               <span>{{ row.english }}</span>
@@ -290,6 +306,15 @@ export default {
     },
     translation: {
       type: String,
+    },
+    context: {
+      type: Object,
+      default() {
+        return {
+          youtube_id: undefined,
+          starttime: undefined,
+        }
+      },
     },
   },
   data() {
@@ -786,6 +811,7 @@ export default {
       return html;
     },
     wordBlockIntegralAttrs(p1) {
+      let context = Object.assign({ text: this.text }, this.context); // { text, starttime = undefined, youtube_id = undefined}
       let attrs = {
         transliterationprop: tr(p1).replace(/"/g, ""),
         ref: "word-block",
@@ -793,6 +819,7 @@ export default {
         phonetics: this.phonetics,
         sticky: this.sticky,
         explore: this.explore,
+        context,
       };
       return attrs;
     },
