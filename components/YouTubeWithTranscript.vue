@@ -147,8 +147,8 @@
         :class="{ 'd-none': layout === 'mini' }"
         :key="'transcript-' + video.youtube_id + '-' + transcriptKey"
         v-bind="{
-          lines: video.subs_l2,
-          parallellines: video.subs_l1,
+          lines: video.subs_l2 || [],
+          parallellines: video.subs_l1 || [],
           starttime: startTimeOrLineIndex,
           single: ['vertical', 'mini'].includes(layout),
           showAnimation,

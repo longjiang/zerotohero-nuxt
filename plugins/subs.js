@@ -61,7 +61,8 @@ export default ({ app }, inject) => {
       talkFilter = "all",
       exact = false,
       apostrophe = false,
-      convertToSimplified = false
+      convertToSimplified = false,
+      mustIncludeYouTubeId = undefined
     } = {}) {
       let tv_show = tvShowFilter === "all" ? "nnull" : tvShowFilter.join(",")
       let talk = talkFilter === "all" ? "nnull" : talkFilter.join(",")
@@ -78,6 +79,15 @@ export default ({ app }, inject) => {
         timestamp
       }
       let videos = await app.$directus.searchCaptions(params)
+      if (mustIncludeYouTubeId) {
+        let matchedVideo = videos.find(v => v.youtube_id === mustIncludeYouTubeId)
+        if (!matchedVideo) {
+          let matchedVideos = await app.$directus.getVideos({ l2Id: langId, query: `filter[youtube_id][eq]=${mustIncludeYouTubeId}` })
+          if (matchedVideos?.length > 0) {
+            videos = [matchedVideos[0], ...videos]
+          }
+        }
+      }
       if (
         videos?.length > 0
       ) {
@@ -114,7 +124,8 @@ export default ({ app }, inject) => {
       limit = 20,
       exact = false,
       apostrophe = false,
-      convertToSimplified = false
+      convertToSimplified = false,
+      mustIncludeYouTubeId = undefined
     } = {}) {
       let hits = [];
       if (tvShowFilter !== []) {
@@ -130,7 +141,8 @@ export default ({ app }, inject) => {
             limit,
             exact,
             apostrophe,
-            convertToSimplified
+            convertToSimplified,
+            mustIncludeYouTubeId
           })
         );
       }

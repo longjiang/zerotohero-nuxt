@@ -150,7 +150,7 @@
         v-if="$adminMode"
         size="sm"
         variant="primary"
-        @click="checkHits"
+        @click="searchSubsAndProcessHits"
       >
         <i class="fa fa-sync-alt"></i>
         {{ $t("Refresh") }}
@@ -317,6 +317,7 @@
 import Helper from "@/lib/helper";
 import { NON_PRO_MAX_SUBS_SEARCH_HITS } from "@/lib/config";
 import { mapState } from "vuex";
+import { unique } from "@/lib/utils/array";
 
 export default {
   props: {
@@ -458,7 +459,8 @@ export default {
         this.loadSettings();
       }
     });
-    this.checkHits();
+    this.excludeTerms = await this.getExcludeTerms();
+    await this.searchSubsAndProcessHits();
   },
   activated() {
     setTimeout(() => {
@@ -573,8 +575,7 @@ export default {
         }
       }
     },
-    async checkHits() {
-      this.checking = true;
+    async getExcludeTerms() {
       let excludeTerms = [];
       let dictionary = await this.$getDictionary();
       if (dictionary && this.terms.length > 0) {
@@ -583,9 +584,9 @@ export default {
           t = this.simplifyExcludeTerms(t);
           excludeTerms = excludeTerms.concat(t);
         }
-        excludeTerms = Helper.unique(excludeTerms);
+        excludeTerms = unique(excludeTerms);
       }
-      this.excludeTerms = excludeTerms.filter(
+      return excludeTerms.filter(
         (s) =>
           s !== "" &&
           !this.terms
@@ -593,8 +594,16 @@ export default {
             .map((t) => t.toLowerCase())
             .includes(s.toLowerCase())
       );
+    },
+    async searchSubsAndProcessHits() {
+      this.checking = true;
+      let terms = this.terms;
+      if (this.context?.form) {
+        terms = unique([this.context.form, ...terms]);
+      }
+      let mustIncludeYouTubeId = this.context?.youtube_id;
       let hits = await this.$subs.searchSubs({
-        terms: this.terms,
+        terms,
         excludeTerms: this.excludeTerms,
         langId: this.$l2.id,
         adminMode: false,
@@ -605,6 +614,7 @@ export default {
         exact: this.exact,
         apostrophe: true,
         convertToSimplified: this.$l2.han,
+        mustIncludeYouTubeId,
       });
 
       hits = this.updateSaved(hits);
@@ -655,10 +665,10 @@ export default {
         contextLeft.push(hit.leftContext);
         contextRight.push(hit.rightContext);
       }
-      this.contextLeft = Helper.unique(contextLeft).sort((a, b) =>
+      this.contextLeft = unique(contextLeft).sort((a, b) =>
         a.localeCompare(b, this.$l2.locales[0])
       );
-      this.contextRight = Helper.unique(contextRight).sort((a, b) =>
+      this.contextRight = unique(contextRight).sort((a, b) =>
         a.localeCompare(b, this.$l2.locales[0])
       );
       this.groupsLeft = this.groupContext(this.contextLeft, hits, "left");
@@ -680,7 +690,7 @@ export default {
       let lengths = hits.map(
         (hit) => hit.video.subs_l2[hit.lineIndex].line.length
       );
-      lengths = Helper.unique(lengths);
+      lengths = unique(lengths);
       for (let length of lengths) {
         if (!hitGroups[length]) hitGroups[length] = {};
         hitGroups[length] = unsavedHits.filter(
@@ -688,6 +698,13 @@ export default {
         );
       }
       hitGroups = Object.assign({ zthSaved: savedHits }, hitGroups);
+      let matchedHits = []
+      if (this.context?.youtube_id) {
+        matchedHits = hits.filter(
+          (h) => h.video.youtube_id === this.context.youtube_id
+        );
+      }
+      hitGroups = Object.assign({ contextMatched: matchedHits }, hitGroups);
       for (let key in hitGroups) {
         hitGroups[key] = hitGroups[key].sort(
           (a, b) => a.leftContext.length - b.leftContext.length
@@ -711,6 +728,13 @@ export default {
         );
       }
       hitGroups = Object.assign({ zthSaved: savedHits }, hitGroups);
+      let matchedHits = []
+      if (this.context?.youtube_id) {
+        matchedHits = hits.filter(
+          (h) => h.video.youtube_id === this.context.youtube_id
+        );
+      }
+      hitGroups = Object.assign({ contextMatched: matchedHits }, hitGroups);
       for (let key in hitGroups) {
         hitGroups[key] = hitGroups[key].sort((a, b) =>
           a.leftContext.localeCompare(
@@ -729,7 +753,8 @@ export default {
       if (sort) index = index.sort((a, b) => b.length - a.length);
       index = index.map((i) => i.c);
       index.splice(index.indexOf("zthSaved"), 1);
-      return ["zthSaved"].concat(index);
+      index.splice(index.indexOf("contextMatched"), 1);
+      return ["contextMatched", "zthSaved"].concat(index);
     },
     updateSaved(hits) {
       for (let hit of hits) {
