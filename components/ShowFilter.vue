@@ -138,7 +138,8 @@ export default {
       tvShowChecked: [],
       talkChecked: [],
       allTVShows: [],
-      allTalks: []
+      allTalks: [],
+      watchersActivated: false
     };
   },
   computed: {
@@ -188,7 +189,7 @@ export default {
       if (titles.length === 0) return this.$t("Videos");
     }
   },
-  mounted() {
+  async mounted() {
     if (typeof this.$store.state.settings !== "undefined") {
       this.loadSettings();
     }
@@ -203,6 +204,8 @@ export default {
         this.loadShows();
       }
     });
+    await Helper.timeout(1000)
+    this.watchersActivated = true  // Do not activate watchers until after a second to avoid constanting updating settings and pushing to the server
   },
   beforeDestroy() {
     this.unsubscribeSettings();
@@ -210,28 +213,28 @@ export default {
   },
   watch: {
     allVideosChecked() {
-      this.updateSettings();
+      if (this.watchersActivated) this.updateSettings();
     },
     allTVShowsChecked() {
-      this.updateSettings();
+      if (this.watchersActivated) this.updateSettings();
     },
     allTalksChecked() {
-      this.updateSettings();
+      if (this.watchersActivated) this.updateSettings();
     },
     newsChecked() {
-      this.updateSettings();
+      if (this.watchersActivated) this.updateSettings();
     },
     moviesChecked() {
-      this.updateSettings();
+      if (this.watchersActivated) this.updateSettings();
     },
     musicChecked() {
-      this.updateSettings();
+      if (this.watchersActivated) this.updateSettings();
     },
     talkChecked() {
-      this.updateSettings();
+      if (this.watchersActivated) this.updateSettings();
     },
     tvShowChecked() {
-      this.updateSettings();
+      if (this.watchersActivated) this.updateSettings();
     }
   },
   methods: {

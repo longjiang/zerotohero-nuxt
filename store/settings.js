@@ -189,7 +189,6 @@ export const actions = {
   },
   resetShowFilters({ dispatch, commit }, value) {
     commit("RESET_SHOW_FILTERS")
-    dispatch('push')
   },
   async importFromJSON({ commit }, json) {
     commit('IMPORT_FROM_JSON', json)
