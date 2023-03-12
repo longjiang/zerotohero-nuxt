@@ -7,6 +7,7 @@
 <template>
   <container-query :query="query" v-model="params">
     <div :class="{ 'bg-white pt-4': !wide }">
+      <SocialHead :title="`${$l2.name} Word List | Language Player`" />
       <div :class="{ container: !wide }" v-cloak>
         <div :class="{ row: !wide, 'content-panes': wide }">
           <div
@@ -179,8 +180,8 @@ export default {
           let dictionary = await this.$getDictionary()
           let words = []
           for (let word of this.args) {
-            let ws = await dictionary.lookupMultiple(word)
-            words = words.concat(ws);
+            let r = await dictionary.lookup(word)
+            if (r) words.push(r);
           }
           this.words = words
         }
