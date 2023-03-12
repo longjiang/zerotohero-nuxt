@@ -1,9 +1,7 @@
 <template>
   <div
     :class="{
-      'search-subs pb-3': true,
-      'search-subs-light': skin === 'dark',
-      'search-subs-dark': skin === 'dark',
+      'search-subs search-subs-dark pb-3': true,
       fullscreen,
       reels: fullscreen && reels,
     }"
@@ -12,7 +10,7 @@
       <span v-if="hits.length > 0">
         <b-button
           size="sm"
-          :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
+          variant="ghost-dark-no-bg"
           :disabled="hitIndex === 0"
           @click="goToPrevHit"
           title="Previous Clip"
@@ -21,7 +19,7 @@
           <i class="fas fa-step-backward" />
         </b-button>
         <b-button
-          :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
+          variant="ghost-dark-no-bg"
           size="sm"
           v-if="!showFilter"
           title="Filter Clips by Keywords"
@@ -31,13 +29,13 @@
         </b-button>
         <b-button
           size="sm"
-          :variant="skin === 'dark' ? 'ghost-dark-no-bg' : 'gray'"
+          variant="ghost-dark-no-bg"
           class="playlist-toggle"
           @click="showPlaylistModal"
           title="List All Clips"
         >
           <i class="fa-solid fa-list mr-1"></i>
-          {{ $t('List') }}
+          {{ $t("List") }}
         </b-button>
         <b-form-input
           v-if="!checking && (hits.length > 0 || regex) && showFilter"
@@ -46,9 +44,9 @@
           size="sm"
           v-model="regex"
           placeholder="Filter..."
+          style="width: 6em"
           :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
           :lazy="true"
-          :style="`width: 6em`"
           @blur="showFilter = false"
         />
         <span class="search-subs-hit-index ml-2 mr-2 d-inline-block">
@@ -56,25 +54,26 @@
         </span>
         <router-link
           v-if="currentHit"
-          :to="`/${$l1.code}/${$l2.code}/youtube/view/${
-            currentHit.video.youtube_id
-          }/?t=${currentHit.video.subs_l2[currentHit.lineIndex].starttime}`"
-          :class="`btn btn-${
-            skin === 'light' ? 'gray' : 'ghost-dark-no-bg'
-          } btn-sm `"
+          :to="{
+            path: 'youtube-view',
+            params: { youtube_id: currentHit.video.youtube_id },
+            query: {
+              t: currentHit.video.subs_l2[currentHit.lineIndex].starttime,
+            },
+          }"
+          class="btn btn-ghost-dark-no-bg btn-sm"
           title="Open this video with full transcript"
         >
           <i class="fa-solid fa-arrows-maximize mr-1"></i>
-          {{ $t('Open Full') }}
+          {{ $t("Open Full") }}
         </router-link>
         <b-button
           size="sm"
           :disabled="hitIndex >= hits.length - 1"
-          :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
+          variant="ghost-dark-no-bg"
           @click="goToNextHit"
           title="Next Clip"
           :class="{
-            '': true,
             disabled: hitIndex >= hits.length - 1,
           }"
         >
@@ -82,27 +81,20 @@
         </b-button>
         <div class="float-right mr-1" v-if="$adminMode">
           <SmallStar
+            class="small-star ml-0 mr-0"
             :item="currentHit"
             :saved="(hit) => hit.saved"
             :save="saveHit"
             :remove="removeSavedHit"
-            class="ml-0 mr-0"
-            style="position: relative; bottom: -0.07em"
           />
           <span
-            class="ml-1 mr-0"
-            style="
-              background: none;
-              position: relative;
-              bottom: -0.07em;
-              opacity: 0.7;
-            "
+            class="num-saved ml-1 mr-0"
             v-if="groupsRight['zthSaved'].length > 0"
           >
             {{ groupsRight["zthSaved"].length }}
           </span>
           <b-button
-            :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
+            variant="ghost-dark-no-bg"
             class="search-subs-fullscreen"
             size="sm"
             @click="toggleFullscreen"
@@ -116,20 +108,20 @@
             <i class="fas fa-expand"></i>
           </b-button>
           <b-button
-            :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
+            variant="ghost-dark-no-bg"
             size="sm"
             class="btn search-subs-close"
-            @click="toggleFullscreen"
             v-if="!checking && fullscreen && fullscreenToggle"
+            @click="toggleFullscreen"
           >
             <i class="fas fa-times" />
           </b-button>
           <b-button
-            :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
-            :class="{ active: reels }"
+            variant="ghost-dark-no-bg"
             size="sm"
-            @click="reels = !reels"
             v-if="fullscreen"
+            @click="reels = !reels"
+            :class="{ active: reels }"
           >
             <i class="fa-brands fa-instagram"></i>
           </b-button>
@@ -143,10 +135,16 @@
       <Loader :sticky="true" message="Searching through video captions..." />
     </div>
     <div class="text-center p-3" v-if="!checking && hits.length === 0">
-      <p>{{ $t('Sorry, no hits found.') }}</p>
+      <p>{{ $t("Sorry, no hits found.") }}</p>
       <p v-if="$store.state.settings.subsSearchLimit">
-        {{ $t('Try turning off ‘Limit “this word in TV Shows” search result (faster)’ in Settings.') }}
-        <router-link :to="{ name: 'settings' }">{{ $t('Go to settings') }} </router-link>
+        {{
+          $t(
+            "Try turning off ‘Limit “this word in TV Shows” search result (faster)’ in Settings."
+          )
+        }}
+        <router-link :to="{ name: 'settings' }">
+          {{ $t("Go to settings") }}
+        </router-link>
       </p>
       <b-button
         v-if="$adminMode"
@@ -155,12 +153,13 @@
         @click="checkHits"
       >
         <i class="fa fa-sync-alt"></i>
-        {{ $t('Refresh') }}
+        {{ $t("Refresh") }}
       </b-button>
     </div>
     <template v-if="pro || hitIndex < NON_PRO_MAX_SUBS_SEARCH_HITS">
       <div v-if="reels && currentHit" class="video-title">
-        <b>{{ $t('VIDEO SOURCE') }}:</b> <span>{{ currentHit.video.title }}</span>
+        <b>{{ $t("VIDEO SOURCE") }}:</b>
+        <span>{{ currentHit.video.title }}</span>
       </div>
       <LazyYouTubeWithTranscript
         v-if="currentHit"
@@ -190,7 +189,11 @@
     <template v-if="!pro">
       <YouNeedPro
         v-if="hitIndex > NON_PRO_MAX_SUBS_SEARCH_HITS - 1"
-        :message="$t('See all {num} search results with a Pro account', {num: hits.length} )"
+        :message="
+          $t('See all {num} search results with a Pro account', {
+            num: hits.length,
+          })
+        "
       />
     </template>
 
@@ -214,7 +217,7 @@
             }"
             @click.stop.prevent="sort = 'length'"
           >
-            {{ $t('Sort By Length') }}
+            {{ $t("Sort By Length") }}
           </button>
           <button
             :class="{
@@ -224,7 +227,7 @@
             }"
             @click.stop.prevent="sort = 'left'"
           >
-            {{ $t('Sort Left') }}
+            {{ $t("Sort Left") }}
           </button>
           <button
             :class="{
@@ -234,7 +237,7 @@
             }"
             @click.stop.prevent="sort = 'right'"
           >
-            {{ $t('Sort Right') }}
+            {{ $t("Sort Right") }}
           </button>
         </div>
         <template v-for="c in get(`groupIndex${ucFirst(sort)}`)">
@@ -312,7 +315,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import { NON_PRO_MAX_SUBS_SEARCH_HITS, POPULAR_LANGS } from "@/lib/config";
+import { NON_PRO_MAX_SUBS_SEARCH_HITS } from "@/lib/config";
 import { mapState } from "vuex";
 
 export default {
@@ -339,8 +342,8 @@ export default {
       default: "light",
     },
     context: {
-      type: Object  // { form, text, starttime = undefined, youtube_id = undefined }
-    }
+      type: Object, // { form, text, starttime = undefined, youtube_id = undefined }
+    },
   },
   data() {
     return {
@@ -585,7 +588,10 @@ export default {
       this.excludeTerms = excludeTerms.filter(
         (s) =>
           s !== "" &&
-          !this.terms.filter(t => t).map((t) => t.toLowerCase()).includes(s.toLowerCase())
+          !this.terms
+            .filter((t) => t)
+            .map((t) => t.toLowerCase())
+            .includes(s.toLowerCase())
       );
       let hits = await this.$subs.searchSubs({
         terms: this.terms,
@@ -602,14 +608,14 @@ export default {
       });
 
       hits = this.updateSaved(hits);
-      hits = this.setShows(hits)
+      hits = this.setShows(hits);
       this.collectContext(hits);
       this.$emit("loaded", hits);
       this.checking = false;
     },
     setShows(hits) {
       for (let hit of hits) {
-        let show, showType
+        let show, showType;
         if (hit.video) {
           if (hit.video.tv_show) {
             show = this.$store.getters["shows/tvShow"]({
@@ -624,11 +630,11 @@ export default {
             });
             showType = "talk";
           }
-          hit.show = show
-          hit.showType = showType
+          hit.show = show;
+          hit.showType = showType;
         }
       }
-      return hits
+      return hits;
     },
     get(name) {
       return this[name];
@@ -1041,6 +1047,18 @@ export default {
     font-size: 0.8rem;
     border-radius: 0.25rem;
     backdrop-filter: blur(10px);
+  }
+
+  .small-star {
+    position: relative;
+    bottom: -0.07em;
+  }
+
+  .num-saved {
+    background: none;
+    position: relative;
+    bottom: -0.07em;
+    opacity: 0.7;
   }
 }
 </style>
