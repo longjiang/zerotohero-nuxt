@@ -63,15 +63,12 @@
               class="annotate-template"
               ref="run-time-template"
             />
-            <span v-if="matchedGrammar.length > 0" class="annotate-grammar">
-              <span
-                v-for="(row, index) in matchedGrammar"
-                @click="showGrammarModal(row)"
-                class="annotate-grammar-button"
-                :key="`annotate-grammar-${row.id}`"
-              >
-                {{ $t('G') }}
-              </span>
+            <span
+              v-if="matchedGrammar.length > 0"
+              @click="showGrammarModal"
+              class="annotate-grammar-button"
+            >
+              {{ $t("G") }}
             </span>
           </template>
         </div>
@@ -97,30 +94,36 @@
       size="md"
       centered
       hide-footer
-      :title="
-        $t('Grammar {level} {code}', {
-          level: $t(l2LevelName),
-          code: grammarPointObj ? grammarPointObj.code : '',
-        })
-      "
+      :title="$t('Grammar Notes')"
       modal-class="safe-padding-top mt-4"
       body-class="grammar-modal-wrapper"
     >
-      <LazyGrammarPoint
-        v-if="grammarPointObj"
-        :grammar="grammarPointObj"
-        :key="`annotate-grammar-modal-${grammarPointObj.id}`"
-      />
-      <div class="text-center mt-3">
-        <router-link
-          class="btn btn-success"
-          v-if="grammarPointObj"
-          :to="{ name: 'grammar-view', params: { id: grammarPointObj.id } }"
-        >
-          {{ $t("Learn More") }}
-          <i class="fas fa-chevron-right ml-1" />
-        </router-link>
-      </div>
+      <table class="table table-responsive grammar-table w-100" style="font-size: 0.9em">
+        <tbody>
+          <tr v-for="row in matchedGrammar" :key="`annotate-grammar-${row.id}`" class="grammar-table-row" @click="$router.push({ name: 'grammar-view', params: { id: row.id } })">
+            <td class="align-left">
+              {{ $t(l2LevelName) }} {{ row.code }}
+            </td>
+            <td class="align-left font-weight-bold" :data-level="row.level">
+              <Annotate>
+                <span>{{ row.structure }}</span>
+              </Annotate>
+            </td>
+            <td class="align-left">
+              <span>{{ row.english }}</span>
+            </td>
+            <td>
+              <router-link
+                class="text-success"
+                v-if="row"
+                :to="{ name: 'grammar-view', params: { id: row.id } }"
+              >
+                <i class="fas fa-chevron-right ml-1" />
+              </router-link>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </b-modal>
     <b-modal
       ref="annotate-menu-modal"
@@ -308,7 +311,6 @@ export default {
       text: undefined,
       wordblocks: [],
       matchedGrammar: [],
-      grammarPointObj: undefined, // the current grammar point shown in the modal
     };
   },
   mounted() {
@@ -390,14 +392,16 @@ export default {
     },
   },
   methods: {
+    highlightMultiple(a, b) {
+      return Helper.highlightMultiple(a, b);
+    },
     showMenuModal() {
       this.$refs["annotate-menu-modal"].show();
     },
     hideMenuModal() {
       this.$refs["annotate-menu-modal"].hide();
     },
-    showGrammarModal(grammarPointObj) {
-      this.grammarPointObj = grammarPointObj;
+    showGrammarModal() {
       this.$refs["grammar-modal"].show();
     },
     hideGrammarModal() {
@@ -1034,21 +1038,24 @@ export default {
   margin-top: 1rem !important;
 }
 
-.annotate-grammar {
-  .annotate-grammar-button {
-    font-size: 0.8rem;
-    background: #28a745;
-    color: white;
-    border-radius: 100%;
-    width: 1.3rem;
-    height: 1.3rem;
-    display: inline-block;
-    cursor: pointer;
-    text-align: center;
-    line-height: 1.3rem;
-    position: relative;
-    bottom: 0.1rem;
-    margin-right: 0.1rem;
-  }
+.annotate-grammar-button {
+  font-size: 0.8rem;
+  background: #28a745;
+  color: white;
+  border-radius: 100%;
+  width: 1.3rem;
+  height: 1.3rem;
+  display: inline-block;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1.3rem;
+  position: relative;
+  bottom: 0.1rem;
+  margin-right: 0.1rem;
+}
+
+.grammar-table-row:hover {
+  background-color: #efefef;
+  cursor: pointer;
 }
 </style>
