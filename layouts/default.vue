@@ -66,6 +66,7 @@
 </template>
 
 <script lang="javascript">
+import Vue from 'vue'
 import Config from "@/lib/config";
 import smoothscroll from "smoothscroll-polyfill";
 import Helper from "@/lib/helper";
@@ -450,7 +451,7 @@ export default {
       let l2SettingsOfL2 = {};
       if (this.l2 && this.l2Settings && this.l2Settings[this.l2.code])
         l2SettingsOfL2 = this.l2Settings[this.l2.code];
-      this.l2SettingsOfL2 = l2SettingsOfL2;
+      Vue.set(this, 'l2SettingsOfL2', l2SettingsOfL2);
     },
     loadLanguageSpecificSettings() {
       if (this.settingsLoaded === this.l2.code) return;
