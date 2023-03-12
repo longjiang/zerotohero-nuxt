@@ -79,7 +79,7 @@ export default {
   },
   data() {
     return {
-      youtubeIframeID: "youtube-" + this.youtube,
+      youtubeIframeID: "youtube-" + this.youtube + '-' + this._uid,
       time: 0,
       neverPlayed: true,
       player: undefined,

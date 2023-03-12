@@ -55,7 +55,7 @@
         <router-link
           v-if="currentHit"
           :to="{
-            path: 'youtube-view',
+            name: 'youtube-view',
             params: { youtube_id: currentHit.video.youtube_id },
             query: {
               t: currentHit.video.subs_l2[currentHit.lineIndex].starttime,
