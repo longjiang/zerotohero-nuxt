@@ -64,6 +64,7 @@
               :terms="searchTerms"
               :tvShow="tvShow"
               :exact="exact"
+              :context="entry?.saved?.context"
             />
           </div>
         </div>

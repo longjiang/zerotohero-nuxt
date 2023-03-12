@@ -338,6 +338,9 @@ export default {
     skin: {
       default: "light",
     },
+    context: {
+      type: Object  // { form, text, starttime = undefined, youtube_id = undefined }
+    }
   },
   data() {
     return {
@@ -367,23 +370,6 @@ export default {
       tvShowFilter: this.tvShow ? [this.tvShow.id] : "all",
       talkFilter: "all",
       NON_PRO_MAX_SUBS_SEARCH_HITS,
-      youglishLang: {
-        zh: "chinese",
-        en: "english",
-        ar: "arabic",
-        nl: "dutch",
-        fr: "french",
-        de: "german",
-        he: "hebrew",
-        it: "italian",
-        ja: "japanese",
-        ko: "korean",
-        pl: "polish",
-        pt: "portuguese",
-        ru: "russian",
-        es: "spanish",
-        tr: "turkish",
-      },
     };
   },
   computed: {
@@ -510,9 +496,6 @@ export default {
     },
     showPlaylistModal() {
       this.$refs["playlist-modal"].show();
-      // let element = document.querySelector('.playlist-modal-item.current')
-      // console.log(element)
-      // if (element) element.scrollIntoView()
     },
     async onPlaylistModalShown() {
       await Helper.timeout(500);
