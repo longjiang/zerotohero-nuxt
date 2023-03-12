@@ -19,10 +19,19 @@
               :to="{ name: 'levels' }"
               :data-level="args[0]"
               class="mb-4 d-block text-center"
+              v-if="method === 'hsk'"
             >
-              HSK Standard Course
+              {{ $t('HSK Standard Course') }}
               <i class="fa fa-chevron-right"></i>
             </router-link>
+            <h3
+              :to="{ name: 'levels' }"
+              :data-level="args[0]"
+              class="mb-4 d-block text-center"
+              v-else
+            >
+              {{ $t('Word List') }}
+            </h3>
             <router-link
               :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`"
               class="link-unstyled"
@@ -66,6 +75,9 @@
                 style="margin-bottom: 0"
               />
             </div>
+            <p class="text-center mb-4">
+              {{ $t('Tap on any word to view details and page through them.') }}
+            </p>
           </div>
           <div
             :class="{
@@ -74,14 +86,11 @@
             }"
           >
             <div v-if="!index && words.length > 0" :class="{ 'p-4': wide }">
-              <p class="text-center mb-4">
-                Tap on any of the words below, and page through the words.
-              </p>
               <WordList :words="words" :url="url"></WordList>
               <div class="mt-4">
                 <router-link
                   v-if="words.length > 0"
-                  :data-bg-level="args[0]"
+                  :data-bg-level="method === 'hsk' ? args[0] : 'outside'"
                   class="btn btn-md m-1"
                   :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}/0`"
                 >
@@ -164,6 +173,16 @@ export default {
             await this.$getDictionary()
           ).getByBookLessonDialog(this.args[0], this.args[1], this.args[2]);
           return;
+        }
+        if (this.method === "adhoc" && this.argsProp) {
+          this.args = this.$route.params.argsProp.split(",");
+          let dictionary = await this.$getDictionary()
+          let words = []
+          for (let word of this.args) {
+            let ws = await dictionary.lookupMultiple(word)
+            words = words.concat(ws);
+          }
+          this.words = words
         }
       }
     },
