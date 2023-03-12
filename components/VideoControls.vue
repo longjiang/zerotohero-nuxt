@@ -6,9 +6,15 @@
       </div>
       <input
         type="range"
-        @change="onSeek"
-        :value="currentPercentage"
         class="d-block w-100 flex-1"
+        step="0.1"
+        @change="onSeek"
+        @focus="pause"
+        @mousedown="pause"
+        @mouseup="play"
+        @touchstart="pause"
+        @touchend="play"
+        :value="currentPercentage"
       />
       <div class="video-controls-time ml-2 mr-2">
         {{ duration ? toHHMMSS(duration) : "--:--" }}
@@ -65,10 +71,7 @@
         <i class="fas fa-step-backward"></i>
       </button>
       <button
-        class="
-          btn-video-controls btn-video-controls-previous-line
-          text-center
-        "
+        class="btn-video-controls btn-video-controls-previous-line text-center"
         @click="$emit('goToPreviousLine')"
         :title="$t('Previous Line')"
       >
@@ -79,11 +82,11 @@
         :class="{
           'btn-video-controls btn-video-controls-play play-pause text-center': true,
         }"
-        @click="togglePaused"
+        @click="paused ? play() : pause()"
         :title="paused ? $t('Play') : $t('Pause')"
       >
-        <i v-if="paused && !speaking" class="fas fa-play"></i>
-        <i v-if="!paused || speaking" class="fas fa-pause"></i>
+        <i v-if="paused" class="fas fa-play"></i>
+        <i v-else class="fas fa-pause"></i>
       </button>
       <button
         class="btn-video-controls btn-video-controls-next-line text-center"
@@ -230,7 +233,7 @@
           <span class="settings-icon">
             <i class="fas fa-tachometer-alt"></i>
           </span>
-          <span>{{ $t('{speed}x Speed', { speed }) }}</span>
+          <span>{{ $t("{speed}x Speed", { speed }) }}</span>
         </button>
       </div>
       <div class="mt-1">
@@ -243,7 +246,7 @@
           title="Toggle Auto-Pause"
         >
           <span class="settings-icon"><i class="fas fa-hand"></i></span>
-          <span>{{ $t('Auto-Pause') }}</span>
+          <span>{{ $t("Auto-Pause") }}</span>
         </button>
       </div>
       <div class="mt-1">
@@ -256,7 +259,7 @@
           title="Toggle Smooth Scrolling"
         >
           <span class="settings-icon"><i class="fas fa-up-down"></i></span>
-          <span>{{ $t('Smooth Scrolling') }}</span>
+          <span>{{ $t("Smooth Scrolling") }}</span>
         </button>
       </div>
       <hr />
@@ -362,20 +365,28 @@ export default {
       return this.duration ? (this.currentTime / this.duration) * 100 : 0;
     },
     related() {
-      let related = []
+      let related = [];
       if (this.episodes && this.episodes.length > 0 && this.episodeIndex >= 0) {
-        let watchedYouTubeIds = this.$store.state.history.history.map(h => h.video?.youtube_id)
-        let popularEpisodes = this.episodes.slice().filter(e => !watchedYouTubeIds.includes(e.youtube_id)).sort((a, b) => b.views - a.views)
+        let watchedYouTubeIds = this.$store.state.history.history.map(
+          (h) => h.video?.youtube_id
+        );
+        let popularEpisodes = this.episodes
+          .slice()
+          .filter((e) => !watchedYouTubeIds.includes(e.youtube_id))
+          .sort((a, b) => b.views - a.views);
         related = [
           ...shuffle([
-            ...this.episodes.slice(this.episodeIndex + 2, this.episodeIndex + 16),
+            ...this.episodes.slice(
+              this.episodeIndex + 2,
+              this.episodeIndex + 16
+            ),
             ...shuffle(popularEpisodes.slice(0, 16)),
           ]),
         ];
         let nextEpisode = this.episodes[this.episodeIndex + 1];
-        if (nextEpisode) related = [nextEpisode, ...related]
+        if (nextEpisode) related = [nextEpisode, ...related];
       }
-      return uniqueByValue(related, 'youtube_id');
+      return uniqueByValue(related, "youtube_id");
     },
   },
   mounted() {
@@ -397,11 +408,11 @@ export default {
   },
   watch: {
     initialTime() {
-      this.currentTime = this.initialTime // so that the progress bar updates at the start
+      this.currentTime = this.initialTime; // so that the progress bar updates at the start
     },
     $route() {
-      this.hideInfoModal()
-    }
+      this.hideInfoModal();
+    },
   },
   methods: {
     toHHMMSS(duration) {
@@ -411,8 +422,11 @@ export default {
       let percentage = event.target.value;
       this.$emit("seek", percentage * 0.01);
     },
-    togglePaused() {
-      this.$emit("togglePaused");
+    pause() {
+      this.$emit("pause");
+    },
+    play() {
+      this.$emit("play");
     },
     showInfoModal() {
       this.$refs["info-modal"].show();
@@ -431,7 +445,9 @@ export default {
         if (index === speeds.length) index = 0;
       }
       this.speed = speeds[index];
-      this.$store.dispatch("settings/setGeneralSettings", { speed: this.speed });
+      this.$store.dispatch("settings/setGeneralSettings", {
+        speed: this.speed,
+      });
       this.$emit("updateSpeed", this.speed);
     },
     toggleRepeatMode() {
@@ -440,18 +456,23 @@ export default {
     },
     toggleAutoPause() {
       this.autoPause = !this.autoPause;
-      this.$store.dispatch("settings/setGeneralSettings", { autoPause: this.autoPause });
+      this.$store.dispatch("settings/setGeneralSettings", {
+        autoPause: this.autoPause,
+      });
       this.$emit("updateAutoPause", this.autoPause);
     },
     toggleSmoothScrolling() {
       this.useSmoothScroll = !this.useSmoothScroll;
-      this.$store.dispatch("settings/setGeneralSettings", { useSmoothScroll: this.useSmoothScroll });
+      this.$store.dispatch("settings/setGeneralSettings", {
+        useSmoothScroll: this.useSmoothScroll,
+      });
       this.$emit("updateSmoothScroll", this.useSmoothScroll);
-
     },
     toggleSmoothScroll() {
       this.useSmoothScroll = !this.useSmoothScroll;
-      this.$store.dispatch("settings/setGeneralSettings", { useSmoothScroll: this.useSmoothScroll });
+      this.$store.dispatch("settings/setGeneralSettings", {
+        useSmoothScroll: this.useSmoothScroll,
+      });
       this.$emit("updateUseSmoothScroll", this.useSmoothScroll);
     },
     toggleAudioMode() {
@@ -506,7 +527,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 :deep(.youtube-videos) > * {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -596,5 +616,4 @@ export default {
   text-align: center;
   display: inline-block;
 }
-
 </style>

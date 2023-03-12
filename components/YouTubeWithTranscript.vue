@@ -54,7 +54,8 @@
           @previous="$emit('previous')"
           @next="$emit('next')"
           @goToLine="goToLine"
-          @togglePaused="togglePaused"
+          @play="play"
+          @pause="pause"
           @rewind="rewind"
           @updateCollapsed="(c) => (this.collapsed = c)"
           @updateAudioMode="(a) => (this.audioMode = a)"
@@ -727,10 +728,6 @@ export default {
     },
     seekYouTube(starttime) {
       this.$refs.youtube.seek(starttime);
-    },
-    togglePaused() {
-      if (this.paused) this.play();
-      else this.pause();
     },
     toggleFullscreenMode() {
       this.layout = this.layout === "horizontal" ? "vertical" : "horizontal";
