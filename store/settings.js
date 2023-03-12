@@ -219,7 +219,7 @@ export const actions = {
       if (settings && settings !== 'undefined') { // For some reason sometimes settings is 'undefined', never push that to the server
         let payload = { settings }
         let path = `items/user_data/${dataId}?fields=id`
-        console.log('⚙️ Saving settings to the server...', { payload })
+        console.log('⚙️ Saving settings to the server...')
         await this.$directus.patch(path, payload)
           .catch(async (err) => {
             logError(err, 'settings.js: push()')

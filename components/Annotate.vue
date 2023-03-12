@@ -633,7 +633,7 @@ export default {
     },
     async getGrammar() {
       let grammar = await this.$getGrammar();
-      this.matchedGrammar = grammar.findInText(this.text, this.level);
+      if (grammar) this.matchedGrammar = grammar.findInText(this.text, this.level);
     },
     async annotateInputBlur(e) {
       let newText = e.target.value;

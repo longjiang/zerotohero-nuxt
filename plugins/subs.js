@@ -107,7 +107,8 @@ export default ({ app }, inject) => {
             continua,
             convertToSimplified,
             exact,
-            apostrophe
+            apostrophe,
+            mustIncludeYouTubeId
           )
         );
       }
@@ -158,7 +159,8 @@ export default ({ app }, inject) => {
       continua = true,
       convertToSimplified = false,
       exact = false,
-      apostrophe = false
+      apostrophe = false,
+      mustIncludeYouTubeId
     ) {
       let seenYouTubeIds = [];
       let hits = [];
@@ -202,13 +204,11 @@ export default ({ app }, inject) => {
                 if (test) passed = true;
               }
             } else {
-              let notExcluded =
-                excludeTerms.length === 0 ||
-                !new RegExp(
-                  excludeTerms.map(t => Helper.escapeRegExp(t)).join("|"),
-                  "i"
-                ).test(line);
-              passed = regex.test(line) && notExcluded;
+              let excludeRegex = new RegExp(excludeTerms.map(t => Helper.escapeRegExp(t)).join("|"), "i")
+              let notExcluded = excludeTerms.length === 0 || !excludeRegex.test(line);
+              if (mustIncludeYouTubeId === video.youtube_id) notExcluded = true // Do not use exclude terms on "must include" videos
+              passed = regex.test(line)
+              passed = passed && notExcluded;
             }
             if (passed) {
               hits.push({
