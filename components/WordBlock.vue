@@ -1,5 +1,10 @@
 <template>
-  <v-popover :open="popup && open" :open-group="`id${_uid}`" placement="top" ref="popover">
+  <v-popover
+    :open="popup && open"
+    :open-group="`id${_uid}`"
+    placement="top"
+    ref="popover"
+  >
     <span
       :class="{
         'word-block': true,
@@ -8,7 +13,7 @@
         sticky,
         common,
         seen,
-        saved: savedWord
+        saved: savedWord,
       }"
       v-bind="attributes"
       v-on="popup ? { click: wordBlockClick } : {}"
@@ -358,10 +363,10 @@ export default {
         return {
           text: undefined,
           youtube_id: undefined,
-          starttime: undefined
-        }
+          starttime: undefined,
+        };
       },
-    }
+    },
   },
   data() {
     return {
@@ -546,7 +551,7 @@ export default {
         this.update();
       }
     });
-    this.checkSavedFunc()
+    this.checkSavedFunc();
   },
   beforeDestroy() {
     this.words = [];
@@ -724,8 +729,8 @@ export default {
       }
       // if (this.$l2.code === "ru" && text.length > 9) text = this.segment(text);
       if (this.$l2.code === "ru" && this.savedWord) {
-        let accentText = this.getRussianAccentText()
-        if (accentText) return accentText
+        let accentText = this.getRussianAccentText();
+        if (accentText) return accentText;
       }
       if (this.$l2.code === "tlh" && text.trim() !== "") {
         text = Klingon.latinToConScript(text);
@@ -736,16 +741,23 @@ export default {
       return text;
     },
     getRussianAccentText() {
-      let forms = this.savedWord.forms.map(f => f.form)
-      let accentLessForms = forms.map(f => f.replace("'", ""))
-      let search = this.text.toLowerCase()
-      let matchedIndex = accentLessForms.findIndex(f => search === f)
+      let forms = this.savedWord.forms.map((f) => f.form);
+      let accentLessForms = forms.map((f) => f.replace("'", ""));
+      let search = this.text.toLowerCase();
+      let matchedIndex = accentLessForms.findIndex((f) => search === f);
       if (matchedIndex) {
-        let matchedForm = forms[matchedIndex]
-        let accentIndex = matchedForm.indexOf("'")
-        let accentText = this.text.substring(0, accentIndex) + "'" + this.text.substring(accentIndex) 
-        accentText = accentText.replace(/'/g, '́')
-        return accentText
+        let matchedForm = forms[matchedIndex];
+        if (matchedForm) {
+          let accentIndex = matchedForm.indexOf("'");
+          if (accentIndex >= 0) {
+            let accentText =
+              this.text.substring(0, accentIndex) +
+              "'" +
+              this.text.substring(accentIndex);
+            accentText = accentText.replace(/'/g, "́");
+            return accentText;
+          }
+        }
       }
     },
     wordBlockMouseEnter(event) {
@@ -829,7 +841,7 @@ export default {
       if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true;
       if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
       if (this.$l2.han) this.classes["l2-zh"] = true;
-      this.checkSavedFunc()
+      this.checkSavedFunc();
     },
     matchCase(text) {
       if (this.text.match(/^[\wА-ЯЁ]/)) {
