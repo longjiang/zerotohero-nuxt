@@ -364,7 +364,7 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     hasForms() {
-      return ["wiktionary", "kengdic", "edict", "openrussian"].includes(
+      return ["wiktionary", "kengdic", "edict", "openrussian", "kdic-jc"].includes(
         this.$dictionaryName
       );
     },
