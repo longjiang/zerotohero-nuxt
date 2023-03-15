@@ -8,7 +8,7 @@
         sticky,
         common,
         seen,
-        saved,
+        saved: savedWord
       }"
       v-bind="attributes"
       v-on="popup ? { click: wordBlockClick } : {}"
@@ -403,33 +403,6 @@ export default {
         ?.split(/[,;]\s*/)[0];
       if (quickGloss && quickGloss.length < 20) return quickGloss;
     },
-    saved() {
-      if (!this.checkSaved) return false;
-      let saved;
-      let firstWord = this.words[0] || this.tokens?.[0];
-      let text = this.text;
-      if (firstWord) {
-        saved = this.$store.getters["savedWords/has"]({
-          id: firstWord.id,
-          l2: this.$l2.code,
-        });
-        if (saved) {
-          saved = Object.assign({ firstWord }, saved);
-        }
-      }
-      if (!saved && text) {
-        saved = this.$store.getters["savedWords/has"]({
-          text: text.toLowerCase(),
-          l2: this.$l2.code,
-        });
-      }
-      if (saved) {
-        this.appendSavedWord(saved.id, saved.forms[0]);
-      } else {
-        this.savedWord = undefined;
-      }
-      return saved;
-    },
     savedTransliteration() {
       if (this.savedWord) {
         return (
@@ -573,6 +546,7 @@ export default {
         this.update();
       }
     });
+    this.checkSavedFunc()
   },
   beforeDestroy() {
     this.words = [];
@@ -593,6 +567,33 @@ export default {
     },
   },
   methods: {
+    checkSavedFunc() {
+      if (!this.checkSaved) return false;
+      let saved;
+      let firstWord = this.words[0] || this.tokens?.[0];
+      let text = this.text;
+      if (firstWord) {
+        saved = this.$store.getters["savedWords/has"]({
+          id: firstWord.id,
+          l2: this.$l2.code,
+        });
+        if (saved) {
+          saved = Object.assign({ firstWord }, saved);
+        }
+      }
+      if (!saved && text) {
+        saved = this.$store.getters["savedWords/has"]({
+          text: text.toLowerCase(),
+          l2: this.$l2.code,
+        });
+      }
+      if (saved) {
+        this.appendSavedWord(saved.id, saved.forms[0]);
+      } else {
+        this.savedWord = undefined;
+      }
+      return saved;
+    },
     phraseItem(phrase, translation = undefined) {
       if (typeof phrase !== "undefined") {
         let phraseItem = {
@@ -722,6 +723,10 @@ export default {
         text = "";
       }
       // if (this.$l2.code === "ru" && text.length > 9) text = this.segment(text);
+      if (this.$l2.code === "ru" && this.savedWord) {
+        let accentText = this.getRussianAccentText()
+        if (accentText) return accentText
+      }
       if (this.$l2.code === "tlh" && text.trim() !== "") {
         text = Klingon.latinToConScript(text);
       }
@@ -729,6 +734,19 @@ export default {
         text = text.replace(/ /gi, "");
       }
       return text;
+    },
+    getRussianAccentText() {
+      let forms = this.savedWord.forms.map(f => f.form)
+      let accentLessForms = forms.map(f => f.replace("'", ""))
+      let search = this.text.toLowerCase()
+      let matchedIndex = accentLessForms.findIndex(f => search === f)
+      if (matchedIndex) {
+        let matchedForm = forms[matchedIndex]
+        let accentIndex = matchedForm.indexOf("'")
+        let accentText = this.text.substring(0, accentIndex) + "'" + this.text.substring(accentIndex) 
+        accentText = accentText.replace(/'/g, '́')
+        return accentText
+      }
     },
     wordBlockMouseEnter(event) {
       this.wordblockHover = true;
@@ -811,6 +829,7 @@ export default {
       if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true;
       if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
       if (this.$l2.han) this.classes["l2-zh"] = true;
+      this.checkSavedFunc()
     },
     matchCase(text) {
       if (this.text.match(/^[\wА-ЯЁ]/)) {
