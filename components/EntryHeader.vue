@@ -2,14 +2,6 @@
   <!-- ANCHOR img/anchors/entry.png  -->
   <div class="entry-head-wrapper" v-if="entry">
     <div>
-      <!-- <div class="text-center">
-        <router-link v-if="prevPath" class="btn btn-small" :to="prevPath">
-          <i class="fa fa-caret-left" />
-        </router-link>
-        <router-link v-if="nextPath" class="btn btn-small" :to="nextPath">
-          <i class="fa fa-caret-right" />
-        </router-link>
-      </div> -->
       <div>
         <span
           v-if="
@@ -141,7 +133,7 @@
                 >
                   {{ { n: "das", m: "der", f: "die" }[entry.gender] }}
                 </span>
-                <span v-html="transform(entry.head)" :class="{klingon: $l2.code === 'tlh'}"></span>
+                <span v-html="transform(entry.accented || entry.head)" :class="{klingon: $l2.code === 'tlh'}"></span>
               </span>
             </template>
           </router-link>

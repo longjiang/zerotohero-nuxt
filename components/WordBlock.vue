@@ -147,7 +147,7 @@
                 <span v-if="$l2.code === 'de' && word.gender">
                   {{ { n: "das", m: "der", f: "die" }[word.gender] }}
                 </span>
-                <span>{{ transform(word.head) }}</span>
+                <span>{{ transform(word.accented || word.head) }}</span>
               </b>
             </router-link>
             <i class="fas fa-chevron-right text-success"></i>
@@ -721,7 +721,7 @@ export default {
       if (typeof text === "undefined") {
         text = "";
       }
-      if (this.$l2.code === "ru" && text.length > 9) text = this.segment(text);
+      // if (this.$l2.code === "ru" && text.length > 9) text = this.segment(text);
       if (this.$l2.code === "tlh" && text.trim() !== "") {
         text = Klingon.latinToConScript(text);
       }
