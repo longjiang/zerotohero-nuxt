@@ -44,7 +44,7 @@
             <span v-if="$l2.code === 'de' && word.gender">
               {{ { n: "das", m: "der", f: "die" }[word.gender] }}
             </span>
-            {{ word.head }}
+            {{ word.accented || word.head }}
           </span>
 
           <span :class="{ transparent: hidePhonetics }">
