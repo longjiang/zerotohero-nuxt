@@ -4,14 +4,13 @@
       <div class="col-sm-12" v-if="phrasebook">
         <h4 class="text-center">{{ phrasebook.title }}</h4>
         <div class="mt-2 text-center">
-          ({{ phrasebook.phrases.length }} phrases)
+          {{ $t('{num} phrases', {num: phrasebook.phrases.length}) }}
         </div>
-        <div v-html="phrasebook.description" class="mt-1 text-center" />
         <div class="text-center mt-3">
-          <b-input-group prepend="Start from #">
+          <b-input-group :prepend="$t('Start from')">
             <b-form-input v-model.lazy="startRow" type="number"></b-form-input>
             <b-input-group-append>
-              <b-button variant="primary">OK</b-button>
+              <b-button variant="primary">{{ $t('OK') }}</b-button>
             </b-input-group-append>
             <a
               :href="csvHref"
@@ -24,11 +23,11 @@
             </a>
           </b-input-group>
         </div>
+        <div class="mt-3 phrasebook-description"><small v-html="phrasebook.description" class="mt-1 text-center" /></div>
       </div>
     </div>
     <div
-      class="pt-3 pb-3 mb-3 bg-white"
-      style="position: sticky; top: 0; z-index: 2"
+      class="pt-3 pb-3 mb-3 bg-white hide-defs"
     >
       <LazyHideDefs
         @hideWord="hideWord = arguments[0]"
@@ -105,9 +104,9 @@
 
           <div
             :class="{ 'mb-0': true, transparent: hideDefinitions }"
-            v-if="phraseObj && phraseObj[$l1.code]"
+            v-if="phraseObj && (phraseObj[$l1.code] || phraseObj.en)"
           >
-            {{ phraseObj[$l1.code] }}
+            {{ phraseObj[$l1.code] || phraseObj.en }}
           </div>
         </div>
       </router-link>
@@ -193,7 +192,9 @@ export default {
           translations: {},
         };
         if (phrase[this.$l1.code])
-          phraseItem.translations[this.$l1.code] = phrase[this.$l1.code];
+          phraseItem.translations[this.$l1.code] = phrase[this.$l1.code]
+        else if (phrase.en) 
+          phraseItem.translations.en = phrase.en
         return phraseItem;
       }
     },
@@ -241,5 +242,17 @@ export default {
 
 .btn-remove:hover {
   color: #666;
+}
+
+:deep(.phrasebook-description) a {
+  color: #777;
+  text-decoration: underline;
+}
+
+.hide-defs {
+  position: sticky;
+  z-index: 2;
+  top: calc(env(safe-area-inset-top) + 5rem);
+  text-align: center;
 }
 </style>
