@@ -811,7 +811,7 @@ export default {
       return html;
     },
     wordBlockIntegralAttrs(p1) {
-      let context = Object.assign({ text: this.text }, this.context); // { text, starttime = undefined, youtube_id = undefined}
+      let context = { text: this.text, youtube_id: this.youtube_id, starttime: this.starttime }; // { text, starttime = undefined, youtube_id = undefined}
       let attrs = {
         transliterationprop: tr(p1).replace(/"/g, ""),
         ref: "word-block",

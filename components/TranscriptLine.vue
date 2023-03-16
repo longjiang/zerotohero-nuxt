@@ -46,10 +46,8 @@
               showTranslation: false,
               showLoading: false,
               showGrammar: true,
-              context: {
-                youtube_id: this.video.youtube_id,
-                starttime: this.line.starttime
-              }
+              youtube_id: this.video.youtube_id,
+              starttime: this.line.starttime
             }"
             :class="{
               'transcript-line-l2': true,
