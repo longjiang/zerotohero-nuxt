@@ -68,6 +68,17 @@
         {{ $t(showTranslation ? "Translation on" : "Translation off") }}
       </button>
       <button
+        @click="showQuickGloss = !showQuickGloss"
+        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
+          showQuickGloss ? 'text-success' : ''
+        }`"
+      >
+        <span class="annotation-setting-icon">
+          <i class="fas fa-text-size"></i>
+        </span>
+        {{ $t(showQuickGloss ? "Quick gloss on" : "Quick gloss off") }}
+      </button>
+      <button
         v-if="$l2.code === 'ko'"
         @click="showByeonggi = !showByeonggi"
         :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
@@ -189,6 +200,9 @@
         </template>
         <b-form-checkbox class="mb-2" v-model="showTranslation">
           {{ $t('Show translation') }}
+        </b-form-checkbox>
+        <b-form-checkbox class="mb-2" v-model="showQuickGloss">
+          {{ $t('Show quick gloss') }}
         </b-form-checkbox>
         <b-form-checkbox class="mb-2" v-model="showQuiz">
           {{ $t('Show pop quiz') }}
@@ -374,6 +388,7 @@ const defaultSettings = {
   onceAdmin: false,
   showDefinition: undefined,
   showTranslation: undefined,
+  showQuickGloss: undefined,
   showPinyin: undefined,
   useTraditional: undefined,
   showQuiz: undefined,

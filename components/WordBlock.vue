@@ -61,7 +61,7 @@
             class="word-block-text-byeonggi d-inline-block"
             v-html="hanja"
           />
-          <span v-if="quickGloss" class="quick-gloss">
+          <span v-if="quickGloss" class="word-block-text-quick-gloss">
             {{ quickGloss }}
           </span>
         </span>
@@ -1096,9 +1096,8 @@ export default {
   background-color: #00000066;
 }
 
-.quick-gloss {
+.word-block-text-quick-gloss {
   font-size: 0.8rem;
-  display: inline;
   opacity: 0.8;
   font-weight: normal;
 }
@@ -1142,11 +1141,15 @@ export default {
     .word-block-pinyin,
     .word-block-simplified,
     .word-block-traditional,
-    .word-block-definition,
-    .word-block-text-byeonggi {
+    .word-block-definition {
       display: none;
     }
   }
+}
+
+.word-block-text-byeonggi,
+.word-block-text-quick-gloss {
+  display: none;
 }
 
 .tooltip-inner {
@@ -1172,6 +1175,10 @@ export default {
 }
 
 .show-byeonggi .word-block .word-block-text-byeonggi {
+  display: inline;
+}
+
+.show-quick-gloss .word-block .word-block-text-quick-gloss {
   display: inline;
 }
 

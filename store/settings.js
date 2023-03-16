@@ -10,6 +10,7 @@ export const defaultL2Settings = {
   showPinyin: true,
   useTraditional: false,
   showTranslation: true,
+  showQuickGloss: true,
   useSerif: false,
   showQuiz: true,
   showByeonggi: true,

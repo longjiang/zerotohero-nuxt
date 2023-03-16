@@ -171,6 +171,7 @@ export default {
             "show-traditional": this.l2SettingsOfL2.useTraditional,
             "show-definition": this.l2SettingsOfL2.showDefinition,
             "show-translation": this.l2SettingsOfL2.showTranslation,
+            "show-quick-gloss": this.l2SettingsOfL2.showQuickGloss,
             "show-byeonggi": this.l2SettingsOfL2.showByeonggi,
             "use-serif": this.l2SettingsOfL2.useSerif,
           });
