@@ -45,23 +45,24 @@
         <div
           :class="{ 'widget widget-dark': true }"
           id="search-subs"
-          v-if="entry && showSearchSubs && searchTerms"
+          v-if="entry && showSearchSubs && selectedSearchTerms"
         >
           <div class="widget-title">
-            “{{ searchTerms.join(", ") }}” — {{ $t('Search in:') }}
+            <ChooseSearchTerms v-model="selectedSearchTerms" :initialSelectedTerms="selectedSearchTerms" :allSearchTerms="allSearchTerms" />
+             — {{ $t('Search in:') }}
             <span v-if="tvShow">{{ $t('the TV Show “{title}”', { title: tvShow.title }) }}</span>
             <LazyShowFilter v-else @showFilter="reloadSearchSubs" />
           </div>
           <div class="widget-body">
             <LazySearchSubsComp
-              v-if="searchTerms && renderSearchSubs"
+              v-if="selectedSearchTerms && renderSearchSubs"
               ref="searchSubs"
               skin="dark"
               :level="
                 entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk
               "
               :key="`subs-search-${entry.id}`"
-              :terms="searchTerms"
+              :terms="selectedSearchTerms"
               :tvShow="tvShow"
               :exact="exact"
               :context="entry?.saved?.context"
@@ -290,7 +291,8 @@ export default {
   data() {
     return {
       characters: [],
-      searchTerms: undefined,
+      selectedSearchTerms: undefined,
+      allSearchTerms: undefined,
       character: {},
       unsplashSrcs: [],
       unsplashSearchTerm: "",
@@ -303,7 +305,8 @@ export default {
       concordanceReady: false,
       searchSubsReady: false,
       renderSearchSubs: true,
-      currentSection: 0
+      currentSection: 0,
+      searchTermsWatcherActivated: false
     };
   },
   computed: {
@@ -311,7 +314,7 @@ export default {
       return [
         {
           title: "Media",
-          visible: this.entry && this.showSearchSubs && this.searchTerms,
+          visible: this.entry && this.showSearchSubs && this.selectedSearchTerms,
         },
         {
           title: "Phrases",
@@ -370,7 +373,14 @@ export default {
     },
   },
   async mounted() {
-    this.searchTerms = await this.getSearchTerms();
+    this.allSearchTerms = await this.getSearchTerms();
+    this.selectedSearchTerms = this.allSearchTerms.slice(0, 3)
+    this.searchTermsWatcherActivated = true
+  },
+  watch: {
+    selectedSearchTerms() {
+      if (this.searchTermsWatcherActivated) this.reloadSearchSubs()
+    }
   },
   methods: {
     reloadSearchSubs() {
@@ -395,32 +405,29 @@ export default {
         terms = [this.entry.head];
         terms.push(this.entry.kana);
         terms = Helper.unique(terms);
-      } else {
-        let forms =
-          (await (await this.$getDictionary()).wordForms(this.entry)) || [];
-        let entryIsLemma = !forms.find((f) => f.table === "lemma");
-        if (!entryIsLemma) {
-          forms = [forms[0]];
-        }
-        terms = forms
-          .map((form) => form.form)
-          .filter((s) => typeof s !== "undefined" && s.length > 1);
-
-        if (this.$dictionaryName === "openrussian") {
-          terms = terms.map((t) => t.replace(/'/gi, ""));
-        }
-        terms = [this.entry.head].concat(terms);
-        terms = Helper.unique(terms);
-        let optimalLength = this.entry.head.length - 1;
-        terms = terms
-          .sort(
-            (a, b) =>
-              Math.abs(a.length - optimalLength) -
-              Math.abs(b.length - optimalLength)
-          )
-          .slice(0, 6);
-        terms = terms.slice(0, 3);
       }
+      let forms =
+        (await (await this.$getDictionary()).wordForms(this.entry)) || [];
+      let entryIsLemma = !forms.find((f) => f.table === "lemma");
+      if (!entryIsLemma) {
+        forms = [forms[0]];
+      }
+      terms = forms
+        .map((form) => form.form)
+        .filter((s) => typeof s !== "undefined" && s.length > 1);
+
+      if (this.$dictionaryName === "openrussian") {
+        terms = terms.map((t) => t.replace(/'/gi, ""));
+      }
+      terms = [this.entry.head].concat(terms);
+      terms = Helper.unique(terms);
+      let optimalLength = this.entry.head.length - 1;
+      terms = terms
+        .sort(
+          (a, b) =>
+            Math.abs(a.length - optimalLength) -
+            Math.abs(b.length - optimalLength)
+        )
       return terms;
     },
     searchSubsLoaded(hits) {
