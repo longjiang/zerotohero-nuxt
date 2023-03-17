@@ -33,19 +33,13 @@
               <i class="fa fa-upload mr-1"></i>
               {{ $t("Import") }}
             </button>
-            <a
-              class="download-csv btn btn-sm text-secondary"
-              :href="csvHref"
-              :download="`${$l2.name
-                .toLowerCase()
-                .replace(/ /g, '-')}-saved-words.csv`"
-              variant="primary"
-              size="sm"
-              v-if="sW.length > 0"
+            <button
+              class="btn btn-sm text-secondary"
+              @click="exportButtonClick()"
             >
               <i class="fa fa-download mr-1"></i>
               {{ $t("Export") }}
-            </a>
+            </button>
             <button
               class="remove-all text-danger btn btn-sm"
               v-on:click="removeAllClick"
@@ -143,6 +137,28 @@
         </div>
       </div>
     </div>
+    <b-modal
+      ref="export-modal"
+      centered
+      hide-footer
+      :title="$t('Export')"
+      body-class="export-modal-modal"
+      modal-class="safe-padding-top mt-4"
+    >
+      <a
+        class="download-csv btn btn-sm text-secondary"
+        :href="csvHref"
+        :download="`${$l2.name
+          .toLowerCase()
+          .replace(/ /g, '-')}-saved-words.csv`"
+        variant="primary"
+        size="sm"
+        v-if="sW.length > 0"
+      >
+        <i class="fa fa-file mr-1"></i>
+        {{ $t("Export to CSV") }}
+      </a>
+    </b-modal>
   </div>
 </template>
 
@@ -249,6 +265,9 @@ export default {
     this.unsubscribe();
   },
   methods: {
+    exportButtonClick() {
+      this.$refs['export-modal'].show()
+    },
     importButtonClick() {
       this.$refs["upload"].click();
     },
