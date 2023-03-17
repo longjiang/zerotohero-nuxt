@@ -1115,13 +1115,16 @@ export default {
   }
 }
 
-[dir="ltr"] .word-block.saved.with-quick-gloss {
-  text-align: left;
+.show-quick-gloss {
+  [dir="ltr"] .word-block.saved.with-quick-gloss {
+    text-align: left;
+  }
+
+  [dir="rtl"] .word-block.saved.with-quick-gloss {
+    text-align: right;
+  }
 }
 
-[dir="rtl"] .word-block.saved.with-quick-gloss {
-  text-align: right;
-}
 .add-pinyin {
   .word-block {
     display: inline-block;
