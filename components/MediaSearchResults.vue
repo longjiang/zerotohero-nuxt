@@ -268,7 +268,7 @@ export default {
         filters.push('filter[made_for_kids][eq]=1')
       }
       let limit = this.perPage;
-      filters = filters.join(filters.join("&"));
+      filters = filters.join("&");
       let fields = "fields=id,l2,title,youtube_id,tv_show.*,talk.*,date";
       if (LANGS_WITH_CONTENT.includes(this.$l2.code))
         fields =
@@ -289,6 +289,7 @@ export default {
         .filter((f) => f !== "")
         .join("&");
       let videos = await this.$directus.getVideos({ l2Id: this.$l2.id, query });
+      console.log({videos, query})
       if (this.sort === 'recommended' && this.preferredCategories?.length > 0) {
         let recommendedVideos = await this.$directus.getVideos({ l2Id: this.$l2.id, query: query + `&filter[category][in]=${this.preferredCategories.join(',')}` });
         videos = videos.concat(recommendedVideos)
