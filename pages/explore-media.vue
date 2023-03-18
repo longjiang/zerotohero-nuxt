@@ -57,7 +57,7 @@
               @hasWatchHistory="onHasWatchHistory"
             />
           </div>
-          
+
           <div
             :class="{
               'loader text-center': true,
@@ -74,18 +74,7 @@
                 {{ $t('More') }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
-              <p
-                style="
-                  font-weight: normal;
-                  font-size: 0.75rem;
-                  margin-top: 0.5rem;
-                "
-              >
-                {{ $t('Recommendation based on your') }}
-                <router-link :to="{ name: 'set-language-level' }">
-                  <u>{{ $t('content preferences') }}</u>
-                </router-link>
-              </p>
+              <RecommendedMessage class="mt-2" />
             </h3>
             <ShowList
               :shows="
@@ -98,7 +87,7 @@
             />
           </div>
 
-          <div v-if="videos && videos.length > 0" class="media-section">
+          <div class="media-section">
             <h3 class="media-seaction-heading">
               {{ $t('YouTube') }}
               <router-link :to="{ name: 'youtube-browse' }" class="show-all">
@@ -107,11 +96,19 @@
               </router-link>
               <RecommendedMessage class="mt-2" />
             </h3>
-            <LazyYouTubeVideoList
-              :videos="videos.slice(0, 12)"
-              :showAdminToolsInAdminMode="false"
-              :showDate="true"
-              skin="dark"
+            
+            <MediaSearchResults
+              v-bind="{
+                sort: 'recommended',
+                perPage: 24,
+                showLatestIfKeywordMissing: true,
+                includeTVShows: false,
+                showNoVideosMessage: true,
+                showSearchBar: false,
+                infiniteScroll: false
+              }"
+              @videosLoaded="onVideosLoaded"
+              ref="videos"
             />
           </div>
 
@@ -293,15 +290,15 @@ export default {
         this.loadShows();
       }
     });
-    if (!this.videos || this.videos.length === 0) {
-      let videos = await this.getVideos({
-        limit: 200,
-        sort: "-likes",
-      });
-      if (this.musicShow?.id) videos = videos.filter(v => v.tv_show !== this.musicShow.id)
-      videos = shuffle(videos)
-      this.videos = videos
-    }
+    // if (!this.videos || this.videos.length === 0) {
+    //   let videos = await this.getVideos({
+    //     limit: 200,
+    //     sort: "-likes",
+    //   });
+    //   if (this.musicShow?.id) videos = videos.filter(v => v.tv_show !== this.musicShow.id)
+    //   videos = shuffle(videos)
+    //   this.videos = videos
+    // }
     await Helper.timeout(5000);
     this.loading = false; // Incase resources fail to load, at least show them
   },
@@ -356,6 +353,9 @@ export default {
     },
   },
   methods: {
+    onVideosLoaded(videos) {
+      this.videos = videos
+    },
     onHasWatchHistory() {
       this.hasWatchHistory = true;
     },

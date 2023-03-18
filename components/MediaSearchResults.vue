@@ -76,21 +76,6 @@
           <Loader :sticky="true" message="Loading videos in our library..." />
         </div>
         <div v-observe-visibility="visibilityChanged"></div>
-        <!-- <div
-          :class="{
-            'no-videos-message': true,
-          }"
-          v-if="showNoVideosMessage && videos && videos.length === 0"
-        >
-          <h5 v-if="!keyword && videos && videos.length === 0">
-            Oh no, we don't have any new {{ $l2.name }} videos. We need your
-            help to expand our library!
-          </h5>
-          <h5 v-else-if="keyword && videos && videos.length === 0">
-            No search results matching your keywords. Help us add some!
-          </h5>
-          <h5 v-else>Help us expand our library!</h5>
-          <LazyHowToContribute /> -->
         </div>
       </div>
     </div>
@@ -148,6 +133,12 @@ export default {
     },
     sort: {
       default: 'views' // or 'recommended', 'date', 'title'
+    },
+    perPage: {
+      default: 96
+    },
+    infiniteScroll: {
+      default: true
     }
   },
   data() {
@@ -163,7 +154,6 @@ export default {
       noMoreVideos: false,
       topics: Helper.topics,
       moreVideos: 0,
-      perPage: 96,
       topicData: this.topic,
       topics,
       loading: false,
@@ -223,6 +213,7 @@ export default {
   },
   methods: {
     async visibilityChanged(isVisible) {
+      if (!this.infiniteScroll) return
       if (this.videos && !this.noMoreVideos && isVisible) {
         this.moreVideos = this.moreVideos + this.perPage;
         this.loading = true;
@@ -289,7 +280,6 @@ export default {
         .filter((f) => f !== "")
         .join("&");
       let videos = await this.$directus.getVideos({ l2Id: this.$l2.id, query });
-      console.log({videos, query})
       if (this.sort === 'recommended' && this.preferredCategories?.length > 0) {
         let recommendedVideos = await this.$directus.getVideos({ l2Id: this.$l2.id, query: query + `&filter[category][in]=${this.preferredCategories.join(',')}` });
         videos = videos.concat(recommendedVideos)
