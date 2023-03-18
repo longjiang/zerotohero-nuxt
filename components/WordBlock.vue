@@ -985,16 +985,23 @@ export default {
               return asaved === bsaved ? 0 : asaved ? -1 : 1;
             })
           : [];
-        if (this.$dictionaryName === "hsk-cedict") {
+        if (dictionary.getLemmas) {
           let allLemmas = [];
-          for (let index in words) {
-            words[index] = await dictionary.addNewHSK(words[index]);
-            let word = words[index];
-            word.phrases = await dictionary.findPhrases(word);
+          for (let word of words) {
             let lemmas = await dictionary.getLemmas(word.traditional);
             if (lemmas) allLemmas = allLemmas.concat(lemmas);
           }
           if (allLemmas.length > 0) words = words.concat(allLemmas);
+        }
+        if (dictionary.findPhrases) {
+          for (let word of words) {
+            word.phrases = await dictionary.findPhrases(word);
+          }
+        }
+        if (dictionary.addNewHSK) {
+          for (let word of words) {
+            word = await dictionary.addNewHSK(word);
+          }
         }
       }
 

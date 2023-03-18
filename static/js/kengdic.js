@@ -117,6 +117,20 @@ const Dictionary = {
       });
     return words;
   },
+  findPhrases(word) {
+    if (word) {
+      if (!word.phrases || word.phrases.length === 0) {
+        let phrases = []
+        for (let w of this.words) {
+          if (w.head.length > word.head.length && w.head.includes(word.head)) phrases.push(w)
+        }
+        word.phrases = phrases.sort((a, b) => a.head.length - b.head.length).sort((a, b) => b.weight - a.weight)
+        return word.phrases
+      } else {
+        return word.phrases
+      }
+    }
+  },
   lemmaFromDefinition(definition) {
     definition = definition.replace(/\(.*\)/g, "").trim();
     let m = definition.match(/(.* of )([^\s\.]+)$/);
