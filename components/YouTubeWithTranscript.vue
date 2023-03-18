@@ -516,15 +516,16 @@ export default {
       if (this.$l2.code === this.$l1.code) return;
       let video = Object.assign({}, this.video);
       if (!video) return;
-      let missingSubsL1 = !this.video.subs_l1;
+      let missingSubsL1 = !this.video.subs_l1 || this.video.subs_l1.length === 0;
       if (missingSubsL1) {
         console.log(
-          `YouTube with Transcript: Getting available transcripts...`
+          `YouTube with Transcript: Getting available L1 transcripts...`
         );
         video = await YouTube.getYouTubeSubsListAndAddLocale(
           video,
           this.$l1,
-          this.$l2
+          this.$l2,
+          this.$adminMode ? 0 : -1 // cacheLife
         );
         console.log(
           `YouTube with Transcript: Getting ${this.$l1.name} transcript`
