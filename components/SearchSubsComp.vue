@@ -680,31 +680,40 @@ export default {
       this.Length = this.sortGroupIndex(this.groupsRight);
       this.currentHit = this.hits[0];
     },
+    /**
+     * Matched hits are hits from the video context the word is saved from.
+     */
+    getSavedAndMatchedHits(hits) {
+      let savedHits = [];
+      let matchedHits = []
+      let remainingHits = hits.filter((hit) => {
+        let pass = true
+        if (hit.saved) {
+          savedHits.push(hit);
+          pass = false
+        }
+        if (this.context?.youtube_id && hit.video.youtube_id === this.context.youtube_id) {
+          matchedHits.push(hit)
+          pass = false
+        }
+        return pass
+      });
+      return {savedHits, matchedHits, remainingHits}
+    },
     groupByLength(hits) {
       let hitGroups = {};
-      let savedHits = [];
-      let unsavedHits = hits.filter((hit) => {
-        if (hit.saved) savedHits.push(hit);
-        return !hit.saved;
-      });
+      let {savedHits, matchedHits, remainingHits} = this.getSavedAndMatchedHits(hits)
       let lengths = hits.map(
         (hit) => hit.video.subs_l2[hit.lineIndex].line.length
       );
       lengths = unique(lengths);
       for (let length of lengths) {
         if (!hitGroups[length]) hitGroups[length] = {};
-        hitGroups[length] = unsavedHits.filter(
+        hitGroups[length] = remainingHits.filter(
           (hit) => hit.video.subs_l2[hit.lineIndex].line.length === length
         );
       }
-      hitGroups = Object.assign({ zthSaved: savedHits }, hitGroups);
-      let matchedHits = []
-      if (this.context?.youtube_id) {
-        matchedHits = hits.filter(
-          (h) => h.video.youtube_id === this.context.youtube_id
-        );
-      }
-      hitGroups = Object.assign({ contextMatched: matchedHits }, hitGroups);
+      hitGroups = Object.assign({ zthSaved: savedHits, contextMatched: matchedHits }, hitGroups);
       for (let key in hitGroups) {
         hitGroups[key] = hitGroups[key].sort(
           (a, b) => a.leftContext.length - b.leftContext.length
@@ -714,27 +723,16 @@ export default {
     },
     groupContext(context, hits, leftOrRight) {
       let hitGroups = {};
-      let savedHits = [];
-      let unsavedHits = hits.filter((hit) => {
-        if (hit.saved) savedHits.push(hit);
-        return !hit.saved;
-      });
+      let {savedHits, matchedHits, remainingHits} = this.getSavedAndMatchedHits(hits)
       for (let c of context.map((s) => s.charAt(0))) {
         if (!hitGroups[c.charAt(0)]) hitGroups[c.charAt(0)] = {};
-        hitGroups[c.charAt(0)] = unsavedHits.filter((hit) =>
+        hitGroups[c.charAt(0)] = remainingHits.filter((hit) =>
           c.length > 0
             ? hit[`${leftOrRight}Context`].startsWith(c)
             : hit[`${leftOrRight}Context`] === ""
         );
       }
-      hitGroups = Object.assign({ zthSaved: savedHits }, hitGroups);
-      let matchedHits = []
-      if (this.context?.youtube_id) {
-        matchedHits = hits.filter(
-          (h) => h.video.youtube_id === this.context.youtube_id
-        );
-      }
-      hitGroups = Object.assign({ contextMatched: matchedHits }, hitGroups);
+      hitGroups = Object.assign({ zthSaved: savedHits, contextMatched: matchedHits }, hitGroups);
       for (let key in hitGroups) {
         hitGroups[key] = hitGroups[key].sort((a, b) =>
           a.leftContext.localeCompare(

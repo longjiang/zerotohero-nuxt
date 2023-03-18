@@ -307,14 +307,11 @@ export default {
     translation: {
       type: String,
     },
-    context: {
-      type: Object,
-      default() {
-        return {
-          youtube_id: undefined,
-          starttime: undefined,
-        }
-      },
+    youtube_id: {
+      type: String,
+    },
+    starttime: {
+      type: Number,
     },
   },
   data() {
