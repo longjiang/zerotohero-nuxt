@@ -14,12 +14,7 @@
         class="mt-3"
         :definitions="entry.definitions"
       ></DefinitionsList>
-      <EntryExample
-        v-if="showExample"
-        :entry="entry"
-        class=""
-        :key="`${entry.id}-example`"
-      ></EntryExample>
+      <EntryExample v-if="showExample" :entry="entry" class :key="`${entry.id}-example`"></EntryExample>
     </div>
     <div class="section-nav-wrapper">
       <div class="section-nav">
@@ -32,25 +27,26 @@
             'd-none': !section.visible,
           }"
           @click="goToSection(index)"
-        >
-          {{ $t(section.title) }}
-        </div>
+        >{{ $t(section.title) }}</div>
       </div>
     </div>
     <div class="dictionary-entry-sections">
-      <div
-        class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'Media'"
-      >
+      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Media'">
         <div
           :class="{ 'widget widget-dark': true }"
           id="search-subs"
           v-if="entry && showSearchSubs && selectedSearchTerms"
         >
           <div class="widget-title">
-            <ChooseSearchTerms v-model="selectedSearchTerms" :initialSelectedTerms="selectedSearchTerms" :allSearchTerms="allSearchTerms" />
-             — {{ $t('Search in:') }}
-            <span v-if="tvShow">{{ $t('the TV Show “{title}”', { title: tvShow.title }) }}</span>
+            <ChooseSearchTerms
+              v-model="selectedSearchTerms"
+              :initialSelectedTerms="selectedSearchTerms"
+              :allSearchTerms="allSearchTerms"
+            />
+            — {{ $t('Search in:') }}
+            <span
+              v-if="tvShow"
+            >{{ $t('the TV Show “{title}”', { title: tvShow.title }) }}</span>
             <LazyShowFilter v-else @showFilter="reloadSearchSubs" />
           </div>
           <div class="widget-body">
@@ -76,11 +72,9 @@
           :level="entry.level"
           class="mt-4 mb-4 text-center"
         />
-        <EntryYouTube :text="entry.head" v-if="$adminMode" class="" />
+        <EntryYouTube :text="entry.head" v-if="$adminMode" class />
         <div class="web-images widget" v-if="showImages">
-          <div class="widget-title">
-            {{ $t("Images of “{text}” on the Web", { text: entry.head }) }}
-          </div>
+          <div class="widget-title">{{ $t("Images of “{text}” on the Web", { text: entry.head }) }}</div>
           <div class="widget-body jumbotron-fluid p-4">
             <WebImages
               :text="entry.head"
@@ -90,7 +84,7 @@
               :preloaded="images"
               @loaded="webImagesLoaded"
             />
-            <p class="">
+            <p class>
               <i18n path="See more images of of “{0}” on {1}" tag="span">
                 <span>{{ entry.head }}</span>
                 <a
@@ -106,17 +100,13 @@
                   />
                 </a>
               </i18n>
-              
             </p>
           </div>
         </div>
       </div>
 
-      <div
-        class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'Inflections'"
-      >
-        <EntryForms v-if="hasForms" class="" :word="entry" />
+      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Inflections'">
+        <EntryForms v-if="hasForms" class :word="entry" />
       </div>
       <div
         class="dictionary-entry-section"
@@ -128,19 +118,13 @@
           :level="entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.level"
         />
       </div>
-      <div
-        class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'Phrases'"
-      >
+      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Phrases'">
         <div class="phrases mt-2" v-if="entry.phrases">
           <WordList :words="entry.phrases" />
         </div>
       </div>
 
-      <div
-        class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'Examples'"
-      >
+      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Examples'">
         <Concordance
           @concordanceReady="concordanceReady = true"
           :word="entry"
@@ -148,10 +132,7 @@
         />
       </div>
 
-      <div
-        class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'Mistakes'"
-      >
+      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Mistakes'">
         <Mistakes
           :class="{ '': true, hidden: !mistakesReady }"
           @mistakesReady="mistakesReady = true"
@@ -172,7 +153,7 @@
           <EntryCharacters
             v-if="entry.cjk && entry.cjk.canonical"
             :key="`${entry.id}-characters`"
-            class=""
+            class
             :text="entry.cjk.canonical"
             :pinyin="entry.cjk.phonetics ? entry.cjk.phonetics : undefined"
           ></EntryCharacters>
@@ -192,15 +173,9 @@
           ></EntryCharacters>
         </div>
       </div>
-      <div
-        class="dictionary-entry-section"
-        v-if="sections[currentSection].title === 'Related'"
-      >
+      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Related'">
         <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
-        <EntryDisambiguation
-          v-if="['zh', 'yue'].includes($l2.code)"
-          :entry="entry"
-        ></EntryDisambiguation>
+        <EntryDisambiguation v-if="['zh', 'yue'].includes($l2.code)" :entry="entry"></EntryDisambiguation>
         <EntryRelated
           @relatedReady="relatedReady = true"
           :entry="entry"
@@ -214,7 +189,7 @@
                 entry.cjk.canonical &&
                 entry.cjk.canonical !== 'NULL'
               "
-              class=""
+              class
               :text="entry.cjk.canonical"
               :key="`${entry.id}-chinese`"
             />
@@ -226,7 +201,7 @@
                 entry.cjk.canonical &&
                 entry.cjk.canonical !== 'NULL'
               "
-              class=""
+              class
               :text="entry.cjk.canonical"
               :key="`${entry.id}-japanese`"
             />
@@ -238,7 +213,7 @@
                 entry.cjk.canonical &&
                 entry.cjk.canonical !== 'NULL'
               "
-              class=""
+              class
               :text="entry.cjk.canonical"
               :key="`${entry.id}-korean`"
             />
@@ -249,44 +224,45 @@
   </div>
 </template>
 <script>
+import Vue from 'vue'
 import Helper from "@/lib/helper";
 
 export default {
   props: {
     entry: {
-      type: Object,
+      type: Object
     },
     showHeader: {
-      default: true,
+      default: true
     },
     showDefinitions: {
-      default: true,
+      default: true
     },
     showExternal: {
-      default: true,
+      default: true
     },
     showExample: {
-      default: true,
+      default: true
     },
     showImages: {
-      default: true,
+      default: true
     },
     images: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     showSearchSubs: {
-      default: true,
+      default: true
     },
     tvShow: {
-      default: undefined,
+      default: undefined
     },
     exact: {
-      default: false,
+      default: false
     },
     exactPhrase: {
-      type: String,
-    },
+      type: String
+    }
   },
   data() {
     return {
@@ -314,36 +290,36 @@ export default {
       return [
         {
           title: "Media",
-          visible: this.entry && this.showSearchSubs && this.selectedSearchTerms,
+          visible: this.entry && this.showSearchSubs && this.selectedSearchTerms
         },
         {
           title: "Phrases",
-          visible: this.entry?.phrases?.length > 0,
+          visible: this.entry?.phrases?.length > 0
         },
         {
           title: "Collocations",
-          visible: true,
+          visible: true
         },
         {
           title: "Examples",
-          visible: true,
+          visible: true
         },
         {
           title: "Mistakes",
-          visible: this.$l2.code === "zh",
+          visible: this.$l2.code === "zh"
         },
         {
           title: "Inflections",
-          visible: this.hasForms,
+          visible: this.hasForms
         },
         {
           title: "Related",
-          visible: true,
+          visible: true
         },
         {
           title: "Characters",
-          visible: this.entry.cjk && this.entry.cjk.canonical,
-        },
+          visible: this.entry.cjk && this.entry.cjk.canonical
+        }
       ];
     },
     $l1() {
@@ -367,19 +343,29 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     hasForms() {
-      return ["wiktionary", "kengdic", "edict", "openrussian", "kdic-jc"].includes(
-        this.$dictionaryName
-      );
-    },
+      return [
+        "wiktionary",
+        "kengdic",
+        "edict",
+        "openrussian",
+        "kdic-jc"
+      ].includes(this.$dictionaryName);
+    }
   },
   async mounted() {
     this.allSearchTerms = await this.getSearchTerms();
-    this.selectedSearchTerms = this.allSearchTerms.slice(0, 3)
-    this.searchTermsWatcherActivated = true
+    this.selectedSearchTerms = this.allSearchTerms.slice(0, 3);
+    this.searchTermsWatcherActivated = true;
+    let dictionary = await this.$getDictionary();
+    if (dictionary.findPhrases) {
+      let phrases = await dictionary.findPhrases(this.entry);
+      console.log({ phrases });
+      Vue.set(this.entry, 'phrases', phrases)
+    }
   },
   watch: {
     selectedSearchTerms() {
-      if (this.searchTermsWatcherActivated) this.reloadSearchSubs()
+      if (this.searchTermsWatcherActivated) this.reloadSearchSubs();
     }
   },
   methods: {
@@ -408,26 +394,25 @@ export default {
       }
       let forms =
         (await (await this.$getDictionary()).wordForms(this.entry)) || [];
-      let entryIsLemma = !forms.find((f) => f.table === "lemma");
+      let entryIsLemma = !forms.find(f => f.table === "lemma");
       if (!entryIsLemma) {
         forms = [forms[0]];
       }
       terms = forms
-        .map((form) => form.form)
-        .filter((s) => typeof s !== "undefined" && s.length > 1);
+        .map(form => form.form)
+        .filter(s => typeof s !== "undefined" && s.length > 1);
 
       if (this.$dictionaryName === "openrussian") {
-        terms = terms.map((t) => t.replace(/'/gi, ""));
+        terms = terms.map(t => t.replace(/'/gi, ""));
       }
       terms = [this.entry.head].concat(terms);
       terms = Helper.unique(terms);
       let optimalLength = this.entry.head.length - 1;
-      terms = terms
-        .sort(
-          (a, b) =>
-            Math.abs(a.length - optimalLength) -
-            Math.abs(b.length - optimalLength)
-        )
+      terms = terms.sort(
+        (a, b) =>
+          Math.abs(a.length - optimalLength) -
+          Math.abs(b.length - optimalLength)
+      );
       return terms;
     },
     searchSubsLoaded(hits) {
@@ -444,8 +429,8 @@ export default {
       if (images.length > 0) {
         this.webImage = images[0].src;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
