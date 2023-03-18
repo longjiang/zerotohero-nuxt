@@ -203,7 +203,6 @@ const Dictionary = {
     return candidates
   },
   findPhrases(word) {
-    console.log('finding phrases')
     if (word) {
       if (!word.phrases || word.phrases.length === 0) {
         let phrases = []
@@ -211,7 +210,6 @@ const Dictionary = {
           if (w.kanji.length > word.kanji.length && w.kanji.includes(word.kanji)) phrases.push(w)
         }
         word.phrases = phrases.sort((a, b) => a.kanji.length - b.kanji.length).sort((a, b) => b.weight - a.weight)
-        console.log(word.phrases)
         return word.phrases
       } else {
         return word.phrases
