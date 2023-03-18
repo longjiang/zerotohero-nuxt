@@ -21,16 +21,6 @@
       </div>
     </div>
     <div class="video-controls-buttons">
-      <!-- <button
-      v-if="showLineList"
-      :class="{
-        'btn-video-controls   text-center': true,
-        'btn-video-controls-active': showList,
-      }"
-      @click="showList = !showList"
-    >
-      <i class="fas fa-align-left"></i>
-    </button> -->
       <button
         v-if="showInfoButton"
         :class="{
@@ -105,25 +95,6 @@
       >
         <i class="fas fa-step-forward"></i>
       </button>
-      <!-- <button
-      :class="{
-        'btn-video-controls   text-center': true,
-        'btn-video-controls-active': repeatMode,
-      }"
-      @click="toggleRepeatMode"
-    >
-      <i class="fas fa-sync-alt"></i>
-    </button>
-    <button
-      :class="{
-        'btn-video-controls   text-center': true,
-        'btn-video-controls-active': audioMode,
-      }"
-      @click="toggleAudioMode"
-    >
-      <i class="fas fa-headphones"></i>
-    </button> -->
-
       <button
         v-if="showFullscreenToggle"
         :class="{
@@ -190,23 +161,20 @@
       ref="info-modal"
       centered
       hide-footer
-      :title="video.title || 'Video Info'"
       modal-class="safe-padding-top mt-4"
       size="md"
+      :title="$t('About this video')"
     >
       <div class="video-info-inner">
+        <h6>{{ video.title }}</h6>
         <VideoAdmin :video="video" ref="videoAdmin1" />
-        <EpisodeNav
-          skin="light"
-          :video="video"
-          :episodes="episodes"
-          :showType="showType"
-          :show="show"
-          :largeEpisodeCount="largeEpisodeCount"
-          class="mt-3"
-        />
+        <div class="mt-3 text-center">
+          <hr />
+          <h6 v-if="episodes">{{ $t('More Episodes') }}</h6>
+          <h6 v-else>{{ $t('Related') }}</h6>
+        </div>
         <YouTubeVideoList
-          :videos="related.slice(0, 24)"
+          :videos="episodes ? episodes : related.slice(0, 24)"
           :showDate="true"
           class="p-2"
         />
