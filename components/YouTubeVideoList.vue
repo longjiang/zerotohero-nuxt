@@ -195,7 +195,7 @@
 
 <script>
 import Vue from "vue";
-import Helper from "@/lib/helper";
+import Helper, { uniqueByValue } from "@/lib/helper";
 import { Drag, Drop } from "vue-drag-drop";
 import { ContainerQuery } from "vue-container-query";
 
@@ -324,6 +324,7 @@ export default {
           return false;
         return true;
       });
+      if (!this.$adminMode) filteredVideos = uniqueByValue(filteredVideos, 'youtube_id')
       return filteredVideos;
     },
     shownVideos() {

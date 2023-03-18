@@ -337,11 +337,11 @@ export default {
               show: this.tvShowsCount,
             },
             {
-              name: "talks",
+              name: "youtube-browse",
               title: `YouTube`,
-              count: this.talksCount,
-              icon: "fab fa-youtube",
-              show: this.talksCount,
+              count: this.stats ? this.stats.allVideos : undefined,
+              icon: "fa-solid fa-films",
+              show: true,
             },
             {
               name: "live-tv",
@@ -368,6 +368,13 @@ export default {
               name: "youtube-browse",
               show: true,
               children: [
+                {
+                  name: "talks",
+                  title: `Channels`,
+                  count: this.talksCount,
+                  icon: "fab fa-youtube",
+                  show: this.talksCount,
+                },
                 {
                   name: "all-media",
                   icon: "fas fa-folder",
@@ -436,13 +443,6 @@ export default {
                 //     icon: "fa-solid fa-films",
                 //   };
                 // }),
-                {
-                  name: "youtube-browse",
-                  title: `New Videos`,
-                  count: this.stats ? this.stats.allVideos : undefined,
-                  icon: "fa-solid fa-films",
-                  show: true,
-                },
                 {
                   name: "feed",
                   icon: "fas fa-stream",

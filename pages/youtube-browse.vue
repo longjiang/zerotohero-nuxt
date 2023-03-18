@@ -295,7 +295,7 @@ export default {
     return {
       videos: [],
       LANGS_WITH_LEVELS,
-      sort: this.keyword ? 'views' : 'id', // or 'title', 'date',
+      sort: 'views',
       sortText: {
         id: 'Sort by Date Added',
         date: 'Sort by Date Uploaded',
