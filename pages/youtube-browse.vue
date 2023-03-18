@@ -82,7 +82,7 @@
         }"
         ref="tv-shows"
       />
-      <h5
+      <!-- <h5
         v-if="
           $refs['talks'] &&
           $refs['talks'].filteredShows &&
@@ -113,7 +113,7 @@
         "
       >
         {{ $t('Videos') }}
-      </h5>
+      </h5> -->
       <hr class="mb-4" />
       <MediaSearchResults
         v-bind="{
@@ -124,6 +124,7 @@
           kidsOnly,
           sort,
           showLatestIfKeywordMissing: true,
+          includeTVShows: false,
           showNoVideosMessage: true,
           showSearchBar: false,
         }"

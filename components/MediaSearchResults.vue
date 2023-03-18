@@ -126,7 +126,10 @@ export default {
     start: {
       default: 0,
     },
-    includeShows: {
+    includeTVShows: {
+      default: true
+    },
+    includeTalks: {
       default: true
     },
     kidsOnly: {
@@ -185,7 +188,10 @@ export default {
     this.$emit("videosLoaded", this.videos);
   },
   watch: {
-    async includeShows() {
+    async includeTVShows() {
+      this.videos = await this.getVideos(this.start);
+    },
+    async includeTalks() {
       this.videos = await this.getVideos(this.start);
     },
     async sort() {
@@ -230,8 +236,10 @@ export default {
       if (!this.keyword && !this.showLatestIfKeywordMissing) return [];
       this.noMoreVideos = false;
       let filters = [];
-      if (!this.includeShows) {
+      if (!this.includeTVShows) {
         filters.push("filter[tv_show][null]=1");
+      }
+      if (!this.includeTalks) {
         filters.push("filter[talk][null]=1");
       }
       if (this.topic !== "all") {

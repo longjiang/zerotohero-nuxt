@@ -344,10 +344,11 @@ export default {
               show: true,
             },
             {
-              name: "live-tv",
-              icon: "fa fa-tv-retro",
-              title: "Live TV",
-              show: this.hasLiveTV,
+              path: this.musicPath,
+              icon: "fa fa-music",
+              title: `Music`,
+              count: this.stats ? this.stats.music : undefined,
+              show: this.musicPath,
             },
             {
               name: "set-content-preferences",
@@ -369,8 +370,14 @@ export default {
               show: true,
               children: [
                 {
+                  name: "live-tv",
+                  icon: "fa fa-tv-retro",
+                  title: "Live TV",
+                  show: this.hasLiveTV,
+                },
+                {
                   name: "talks",
-                  title: `Channels`,
+                  title: `YouTube Channels`,
                   count: this.talksCount,
                   icon: "fab fa-youtube",
                   show: this.talksCount,
@@ -387,13 +394,6 @@ export default {
                   title: `Movies`,
                   count: this.stats ? this.stats.movies : undefined,
                   show: this.moviesPath,
-                },
-                {
-                  path: this.musicPath,
-                  icon: "fa fa-music",
-                  title: `Music`,
-                  count: this.stats ? this.stats.music : undefined,
-                  show: this.musicPath,
                 },
                 {
                   name: "audiobooks",
