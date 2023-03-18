@@ -29,7 +29,8 @@
         @click="showInfoModal"
         :title="$t('More Info')"
       >
-        <i class="fa-solid fa-circle-info"></i>
+        <i class="fa-regular fa-rectangle-history" v-if="show"></i>
+        <i class="fa-solid fa-circle-info" v-else></i>
       </button>
       <button
         v-if="showCollapse"
@@ -163,20 +164,47 @@
       hide-footer
       modal-class="safe-padding-top mt-4"
       size="md"
-      :title="$t('About this video')"
+      :title="show ? show.title : $t('About this video')"
     >
       <div class="video-info-inner">
         <h6>{{ video.title }}</h6>
-        <VideoAdmin :video="video" ref="videoAdmin1" />
-        <div class="mt-3 text-center">
-          <hr />
-          <h6 v-if="episodes">{{ $t('More Episodes') }}</h6>
-          <h6 v-else>{{ $t('Related') }}</h6>
+        <VideoAdmin :video="video" ref="videoAdmin1" style="font-size: 0.8em; line-height: 2em"/>
+        <div class="mt-3">
+          <h6 v-if="show">
+            <hr />
+            {{ $t("More Episodes") }}
+            <router-link
+              :to="{
+                name: 'show',
+                params: {
+                  type: showType === 'tv_show' ? 'tv-show' : 'talk',
+                  id: show.id,
+                },
+              }"
+              class="show-all"
+            >
+              {{ $t("All") }} {{ largeEpisodeCount > episodes.length ? largeEpisodeCount : episodes.length }}
+              <i class="fas fa-chevron-right"></i>
+            </router-link>
+          </h6>
+          <h6 v-else-if="related.length > 0">
+            <hr />
+            {{ $t("Related") }}
+          </h6>
         </div>
         <YouTubeVideoList
-          :videos="episodes ? episodes : related.slice(0, 24)"
+          :videos="show ? episodes : related.slice(0, 24)"
           :showDate="true"
           class="p-2"
+        />
+        <EpisodeNav
+          skin="light"
+          :video="video"
+          :episodes="episodes"
+          :showType="showType"
+          :show="show"
+          :largeEpisodeCount="largeEpisodeCount"
+          class="mt-3"
         />
       </div>
     </b-modal>
@@ -583,5 +611,12 @@ export default {
   width: 2rem;
   text-align: center;
   display: inline-block;
+}
+
+.show-all {
+  font-size: 1rem;
+  margin-left: 0.5rem;
+  display: inline-block;
+  color: #28a745;
 }
 </style>
