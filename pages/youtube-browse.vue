@@ -22,7 +22,7 @@
         } subtitles.`"
       />
       <div class="row mb-2" v-if="!kidsOnly">
-        <div class="col-sm-12 text-center mb-4">
+        <div class="col-sm-12 text-center">
           <span
             v-if="Object.keys(categories).length > 0"
             @click="showModal('categories')"
@@ -59,6 +59,22 @@
           </span>
         </div>
       </div>
+      <i18n
+        path="Recommendations based on your {0}."
+        tag="div"
+        style="font-weight: normal; font-size: 0.8em; text-align: center;"
+        v-if="sort === 'recommended'"
+      >
+        <router-link
+          :to="{
+            name: LANGS_WITH_LEVELS.includes(this.$l2.code)
+              ? 'set-language-level'
+              : 'set-content-preferences',
+          }"
+        >
+          <u>{{ $t("content preferences") }}</u>
+        </router-link>
+      </i18n>
       <h5
         v-if="
           $refs['tv-shows'] &&
@@ -296,8 +312,9 @@ export default {
     return {
       videos: [],
       LANGS_WITH_LEVELS,
-      sort: 'views',
+      sort: 'recommended',
       sortText: {
+        recommended: 'Sort by Recommended',
         id: 'Sort by Date Added',
         date: 'Sort by Date Uploaded',
         views: 'Sort by Views',

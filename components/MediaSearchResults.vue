@@ -103,6 +103,7 @@ import YouTubeChannelCard from "@/components/YouTubeChannelCard";
 import SimpleSearch from "@/components/SimpleSearch";
 import Helper from "@/lib/helper";
 import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -146,7 +147,7 @@ export default {
       default: false,
     },
     sort: {
-      default: 'views' // or 'date', 'title'
+      default: 'views' // or 'recommended', 'date', 'title'
     }
   },
   data() {
@@ -170,6 +171,7 @@ export default {
     };
   },
   computed: {
+    ...mapState("settings", ["preferredCategories"]),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -279,13 +281,18 @@ export default {
         id: '-id',
         date: '-date',
         views: '-views',
-        title: 'title'
+        title: 'title',
+        recommended: '-views'
       }
       let sort = `sort=${sortOpts[this.sort]}`
       let query = [filters, limitStr, fields, offset, sort, timestamp]
         .filter((f) => f !== "")
         .join("&");
       let videos = await this.$directus.getVideos({ l2Id: this.$l2.id, query });
+      if (this.sort === 'recommended' && this.preferredCategories?.length > 0) {
+        let recommendedVideos = await this.$directus.getVideos({ l2Id: this.$l2.id, query: query + `&filter[category][in]=${this.preferredCategories.join(',')}` });
+        videos = videos.concat(recommendedVideos)
+      }
       if (videos && this.$adminMode) {
         videos = await this.$directus.checkShows(videos, this.$l2.id);
         for (let video of videos) {
@@ -295,6 +302,12 @@ export default {
           } catch (err) {}
         }
       }
+      videos = videos
+          .sort((x, y) => {
+            x = this.preferredCategories.includes(String(x.category));
+            y = this.preferredCategories.includes(String(y.category));
+            return x === y ? 0 : x ? -1 : 1;
+          });
       return videos;
     },
     async getChannels() {
