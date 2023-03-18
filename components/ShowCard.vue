@@ -163,9 +163,7 @@ export default {
       }
     },
     path(show) {
-      return `/${this.$l1.code}/${this.$l2.code}/show/${
-        this.slug
-      }/${encodeURIComponent(show.id)}`;
+      return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${show.youtube_id}`;
     },
     async toggle(show, property) {
       let toggled = !show[property]; // If true, make it false, and vice versa
