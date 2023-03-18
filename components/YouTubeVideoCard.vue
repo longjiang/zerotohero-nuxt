@@ -69,13 +69,16 @@
         <div class="youtube-title">
           <span
             contenteditable="true"
-            :class="{ 'd-none': !$adminMode || view === 'list' }"
+            :class="{
+              'd-none': !$adminMode || view === 'list',
+            }"
             @blur="saveTitle"
           >
             {{ video.title }}
           </span>
           <router-link
             :class="{
+              'youtube-title-text': true,
               'link-unstyled': true,
               'd-none': $adminMode && view !== 'list',
             }"
@@ -94,7 +97,7 @@
             style="color: #aaa"
             v-if="video.date && (showDate || $adminMode)"
           >
-            {{ $d(new Date(video.date), 'short', $l1.code) }}
+            {{ $d(new Date(video.date), "short", $l1.code) }}
           </span>
         </div>
         <client-only>
@@ -493,8 +496,12 @@ export default {
       let s = this.video[type];
       if (!s || s.id !== show.id) {
         this.showSaved = false;
-        this.$store.commit('shows/MODIFY_VIDEO', {video: this.video, key: type, value: show}) // So we don't get a 'do not mutate outside vuex' erro=
-        
+        this.$store.commit("shows/MODIFY_VIDEO", {
+          video: this.video,
+          key: type,
+          value: show,
+        }); // So we don't get a 'do not mutate outside vuex' erro=
+
         if (this.video.id) {
           let payload = {};
           payload[type] = show.id;
@@ -808,7 +815,13 @@ export default {
     color: #666;
     text-decoration: none;
     .youtube-title {
-      font-weight: bold;
+      .youtube-title-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        font-weight: bold;
+        overflow: hidden;
+      }
     }
     .youtube-video-card-progress {
       height: 0.3rem;
@@ -870,7 +883,7 @@ export default {
 }
 
 .statistics-item + .statistics-item::before {
-  content: '·';
+  content: "·";
   margin-left: 0.15rem;
 }
 </style>
