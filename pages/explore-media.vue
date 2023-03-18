@@ -35,17 +35,6 @@
       </div>
       <div class="row" v-else>
         <div class="col-sm-12">
-          <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
-          <!-- <SimpleSearch placeholder="Search" ref="searchLibrary" skin="dark" class="mt-4 mb-5" style="flex: 1" :action="
-            (url) => {
-              this.$router.push({
-                path: `/${$l1.code}/${$l2.code
-                  }/youtube/search/${encodeURIComponent(
-                    url
-                  )}`,
-              });
-            }
-          " /> -->
           <div :class="{ 'media-section': true, 'd-none': !hasWatchHistory }">
             <h3 class="media-seaction-heading">
               {{ $t('Continue Watching') }}
@@ -68,14 +57,55 @@
               @hasWatchHistory="onHasWatchHistory"
             />
           </div>
+          
+          <div
+            :class="{
+              'loader text-center': true,
+              'd-none': showsLoaded,
+            }"
+            style="margin: 7rem 0 15rem 0"
+          >
+            <Loader :sticky="true" message="Loading videos in our library..." />
+          </div>
+          <div v-if="tvShows && tvShows.length > 0" class="media-section">
+            <h3 class="media-seaction-heading">
+              {{ $t('TV Shows') }}
+              <router-link :to="{ name: 'tv-shows' }" class="show-all">
+                {{ $t('More') }}
+                <i class="fas fa-chevron-right"></i>
+              </router-link>
+              <p
+                style="
+                  font-weight: normal;
+                  font-size: 0.75rem;
+                  margin-top: 0.5rem;
+                "
+              >
+                {{ $t('Recommendation based on your') }}
+                <router-link :to="{ name: 'set-language-level' }">
+                  <u>{{ $t('content preferences') }}</u>
+                </router-link>
+              </p>
+            </h3>
+            <ShowList
+              :shows="
+                tvShows
+                  .filter((s) => !['Movies', 'Music'].includes(s.title))
+                  .slice(0, 12)
+              "
+              type="tvShows"
+              :key="`tv-shows`"
+            />
+          </div>
 
           <div v-if="videos && videos.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              {{ $t('What’s Popular') }}
+              {{ $t('YouTube') }}
               <router-link :to="{ name: 'youtube-browse' }" class="show-all">
                 {{ $t('More') }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
+              <RecommendedMessage class="mt-2" />
             </h3>
             <LazyYouTubeVideoList
               :videos="videos.slice(0, 12)"
@@ -131,48 +161,6 @@
             </div>
           </div>
 
-
-
-          <div
-            :class="{
-              'loader text-center': true,
-              'd-none': showsLoaded,
-            }"
-            style="margin: 7rem 0 15rem 0"
-          >
-            <Loader :sticky="true" message="Loading videos in our library..." />
-          </div>
-          <div v-if="tvShows && tvShows.length > 0" class="media-section">
-            <h3 class="media-seaction-heading">
-              {{ $t('TV Shows') }}
-              <router-link :to="{ name: 'tv-shows' }" class="show-all">
-                {{ $t('More') }}
-                <i class="fas fa-chevron-right"></i>
-              </router-link>
-              <p
-                style="
-                  font-weight: normal;
-                  font-size: 0.75rem;
-                  margin-top: 0.5rem;
-                "
-              >
-                {{ $t('Recommendation based on your') }}
-                <router-link :to="{ name: 'set-language-level' }">
-                  <u>{{ $t('content preferences') }}</u>
-                </router-link>
-              </p>
-            </h3>
-            <ShowList
-              :shows="
-                tvShows
-                  .filter((s) => !['Movies', 'Music'].includes(s.title))
-                  .slice(0, 12)
-              "
-              type="tvShows"
-              :key="`tv-shows`"
-            />
-          </div>
-
           <div v-if="talks && talks.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
               {{ $t('YouTube Channels') }}
@@ -180,24 +168,7 @@
                 {{ $t('More') }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
-              <p
-                style="
-                  font-weight: normal;
-                  font-size: 0.75rem;
-                  margin-top: 0.5rem;
-                "
-              >
-                {{ $t('Recommendation based on your') }}
-                <router-link
-                  :to="{
-                    name: LANGS_WITH_LEVELS.includes(this.$l2.code)
-                      ? 'set-language-level'
-                      : 'set-content-preferences',
-                  }"
-                >
-                  <u>{{ $t('content preferences') }}</u>
-                </router-link>
-              </p>
+              <RecommendedMessage class="mt-2" />
             </h3>
             <ShowList
               :shows="
