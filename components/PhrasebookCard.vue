@@ -13,10 +13,12 @@
     </router-link>
     <div class="media-body" style="position: relative">
       <router-link class="link-unstyled" :to="to">
-        <h5 class="phrasebook-title">{{ phrasebook.title.replace(/(.*) Phrases/, 'Top Phrases in $1') }}</h5>
+        <h5 class="phrasebook-title">
+          {{ transformPhrasebookTitle(phrasebook.title) }}
+        </h5>
       </router-link>
       <div style="color: #999" v-if="phrasebook.phrases">
-        ({{ phrasebook.phrases.length }} phrases)
+        ({{ $t("{num} phrases", { num: phrasebook.phrases.length }) }})
       </div>
       <client-only>
         <b-progress
@@ -118,6 +120,15 @@ export default {
     },
   },
   methods: {
+    transformPhrasebookTitle(title) {
+      if (title.match(/(.*) Phrases$/))
+        return this.$t("Top Phrases in {type}", {
+          type: this.$t(title.replace(/(.*) Phrases/, "$1")),
+        });
+      else {
+        return title.replace(this.$l2.name, this.$t(this.$l2.name))
+      }
+    },
     async remove(phrasebook) {
       this.$store.dispatch("phrasebooks/remove", {
         l2: this.$l2,

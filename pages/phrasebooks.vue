@@ -21,18 +21,18 @@
                 }"
                 style="flex: 1"
               >
-                <Loader :sticky="true" message="Loading phrasebooks..." />
+                <Loader :sticky="true" message="Loading word books..." />
               </div>
               <div
                 class="text-center"
                 v-if="phrasebooks && phrasebooks.length === 0"
               >
-                Sorry, we could not find any phrasebooks for {{ $l2.name }} 😭.
+                {{ $t('Sorry, we could not find any phrasebooks for {l2}.', {l2: $t($l2.name)})}} 😭
               </div>
             </div>
           </div>
         </div>
-        <h6 v-if="featuredPhrasebooks && featuredPhrasebooks.length > 0">Featured Word Lists</h6>
+        <h6 v-if="featuredPhrasebooks && featuredPhrasebooks.length > 0">{{ $t('Featured Word Lists') }}</h6>
         <hr v-if="featuredPhrasebooks && featuredPhrasebooks.length > 0" />
         <div
           class="row"
@@ -53,7 +53,7 @@
           </div>
         </div>
         <div class="mt-4"></div>
-        <h6 v-if="notFeaturedPhrasebooks && notFeaturedPhrasebooks.length > 0">All Word Lists</h6>
+        <h6 v-if="notFeaturedPhrasebooks && notFeaturedPhrasebooks.length > 0">{{ $t('All Word Lists') }}</h6>
         <hr v-if="notFeaturedPhrasebooks && notFeaturedPhrasebooks.length > 0"/>
         <div class="row" v-if="notFeaturedPhrasebooks && notFeaturedPhrasebooks.length > 0">
           <div
