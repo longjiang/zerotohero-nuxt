@@ -15,7 +15,11 @@
       </h5>
     </div>
     <div v-if="showManuallySetHours" class="mt-2 mb-3">
-      {{ translate("Mannually set your total time on {l2} to", { l2: translate($l2.name) }) }}
+      {{
+        translate("Mannually set your total time on {l2} to", {
+          l2: translate($l2.name),
+        })
+      }}
       <b-form-input
         v-model="manuallySetHours"
         type="number"
@@ -47,13 +51,12 @@
     </div>
     <div class="bottom-labels">
       <div class="bottom-label-left" style="color: #999">
-        <i18n path="{hours} to {goal}" tag="span">
-          <template #hours>
-            {{ Math.round((hours / hoursNeeded) * 100) }}
-            <b>%</b>
-          </template>
-          <template #goal>{{ translate(goalText) }}</template>
-        </i18n>
+        {{
+          translate("{hours} to {goal}", {
+            hours: Math.round((hours / hoursNeeded) * 100),
+            goal: translate(goalText),
+          })
+        }}
       </div>
     </div>
     <div v-if="description" class="description">
@@ -272,7 +275,7 @@ export default {
   },
   methods: {
     translate(text, data = {}) {
-      let code = this.browserLanguage
+      let code = this.browserLanguage;
       if (this.$languages) return this.$languages.translate(text, code, data);
       else return text;
     },
@@ -286,11 +289,12 @@ export default {
       var minutes = Math.floor((sec_num - hours * 3600) / 60);
       var seconds = sec_num - hours * 3600 - minutes * 60;
       let formatted = this.translate("{hours}{minutes}{seconds}", {
-        hours: hours ? this.translate('{num} hr', {num: hours}) : '',
-        minutes: minutes ? this.translate('{num} min', {num: minutes}) : '',
-        seconds: seconds ? this.translate('{num} sec', {num: seconds}) : '',
+        hours: hours ? this.translate("{num} hr", { num: hours }) : "",
+        minutes: minutes ? this.translate("{num} min", { num: minutes }) : "",
+        seconds: seconds ? this.translate("{num} sec", { num: seconds }) : "",
       });
-      formatted = formatted.trim() === "" ? this.translate("Just started") : formatted;
+      formatted =
+        formatted.trim() === "" ? this.translate("Just started") : formatted;
       return formatted;
     },
   },

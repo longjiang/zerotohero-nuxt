@@ -4,12 +4,7 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="mb-2">
-            {{
-              translate(
-                "Which language would you like to learn?",
-                browserLanguage
-              )
-            }}
+            {{ translate("Which language would you like to learn?") }}
           </div>
           <b-form-select :options="l2Options" v-model="l2"></b-form-select>
         </div>
@@ -18,10 +13,7 @@
         <div class="col-sm-12">
           <div class="mb-2">
             {{
-              translate(
-                "What is your mother tongue (first/native language)?",
-                browserLanguage
-              )
+              translate("What is your mother tongue (first/native language)?")
             }}
           </div>
           <b-form-select :options="l1Options" v-model="l1"></b-form-select>
@@ -36,12 +28,7 @@
               params: { l1: l1.code, l2: l2.code === 'cmn' ? 'zh' : l2.code },
             }"
           >
-            {{
-            translate(
-              "Start Learning",
-              browserLanguage
-            )
-            }}
+            {{ translate("Start Learning") }}
             <i class="fa-solid fa-chevron-right"></i>
           </router-link>
         </div>
@@ -50,12 +37,7 @@
         <u>
           <router-link to="/language-map" class="link-unstyled text-secondary">
             <i class="fa-solid fa-earth-asia mr-2"></i>
-            {{
-            translate(
-              "See more languages on a map",
-              browserLanguage
-            )
-            }}
+            {{ translate("See more languages on a map") }}
             <i class="fa-solid fa-chevron-right ml-2"></i>
           </router-link>
         </u>
@@ -102,7 +84,17 @@ export default {
           };
         })
         .sort((a, b) => a.text.localeCompare(b.text));
-      return options;
+      let commonOptions = options
+        .filter((o) => 'zh en ja hi fr ko de es ur ru ta ar th it yue pt te bn fa ins hak nan lzh och wuu'.split(' ').includes(o.value.code))
+        .map((o) =>
+          Object.assign(Object.assign({}, o), { text: this.translate(o.text) })
+        );
+      return [
+        ...commonOptions,
+        { text: "------------------------" },
+        { text: this.translate("More Languages:") },
+        ...options,
+      ];
     },
     l1Options() {
       let l2 = this.l2;
@@ -114,7 +106,7 @@ export default {
       let options = supportedL1s.map((language) => {
         return {
           value: language,
-          text: language.name,
+          text: this.translate(language.name),
         };
       });
       if (options.length === 1) this.l1 = options[0].value;
@@ -124,8 +116,9 @@ export default {
     },
   },
   methods: {
-    translate(text, code) {
-      if (this.$languages) return this.$languages.translate(text, code);
+    translate(text, data = {}) {
+      let code = this.browserLanguage;
+      if (this.$languages) return this.$languages.translate(text, code, data);
       else return text;
     },
   },
