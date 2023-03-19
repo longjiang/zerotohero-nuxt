@@ -9,7 +9,7 @@
       <i class="fas fa-chevron-left"></i>
     </router-link>
     <b><component :is="home ? 'router-link' : 'span'"  class="link-unstyled" v-if="title" :to="home">{{ title }}</component ></b>
-    <component :is="home ? 'router-link' : 'span'" class="link-unstyled" v-if="home" :to="home">{{ currentIndex + 1 }} of {{ items.length }}</component>
+    <component :is="home ? 'router-link' : 'span'" class="link-unstyled" v-if="home" :to="home">{{ currentIndex + 1 }} / {{ items.length }}</component>
     <b><component :is="home ? 'router-link' : 'span'"  class="link-unstyled" v-if="append" :to="home">{{ append }}</component ></b>
     <router-link
       class="paginator-next ml-2 btn btn-small mb-1"
