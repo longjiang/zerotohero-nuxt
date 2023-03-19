@@ -101,7 +101,7 @@
           </div>
         </div>
         <span :class="{ transparent: hideWord && !reveal }">
-          <router-link
+          <component :is="disabled ? 'span' : 'router-link'"
             :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${entry.id}`"
           >
             <template
@@ -136,7 +136,7 @@
                 <span v-html="transform(entry.accented || entry.head)" :class="{klingon: $l2.code === 'tlh'}"></span>
               </span>
             </template>
-          </router-link>
+          </component>
         </span>
         <span
           v-if="
@@ -191,6 +191,9 @@ export default {
     },
     reveal: {
       default: false
+    },
+    disabled: {
+      default: false // Disabling the router-link to the dictionary entry
     }
   },
   data() {

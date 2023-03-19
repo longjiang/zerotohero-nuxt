@@ -151,7 +151,7 @@
                 <Flashcard>
                   <template v-slot:front>
                     <div>
-                      <LazyEntryHeader :entry="word" :hidePhonetics="true" />
+                      <LazyEntryHeader :entry="word" :hidePhonetics="true" :disabled="true"/>
                       <DefinitionsList
                         v-if="word.definitions"
                         :class="{ 'mt-3': true, transparent: true }"
@@ -161,7 +161,7 @@
                   </template>
                   <template v-slot:back>
                     <div>
-                      <LazyEntryHeader :entry="word" :hidePhonetics="false" />
+                      <LazyEntryHeader :entry="word" :hidePhonetics="false" :disabled="true" />
                       <DefinitionsList
                         v-if="word.definitions"
                         :class="{ 'mt-3': true, transparent: false }"
