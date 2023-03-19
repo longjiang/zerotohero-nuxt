@@ -92,10 +92,10 @@
               </template>
             </span>
             <Speak
-              class="ml-1 mr-2"
+              :class="{'ml-1 mr-2': true, 'transparent': hidePhonetics}"
+              ref="speak"
               :text="entry.head"
               :mp3="entry.audio"
-              ref="speak"
               :wiktionary="entry.wiktionary"
             />
           </div>

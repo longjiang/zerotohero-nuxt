@@ -359,7 +359,6 @@ export default {
     let dictionary = await this.$getDictionary();
     if (dictionary.findPhrases) {
       let phrases = await dictionary.findPhrases(this.entry);
-      console.log({ phrases });
       Vue.set(this.entry, 'phrases', phrases)
     }
   },

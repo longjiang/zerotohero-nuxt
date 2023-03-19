@@ -105,12 +105,6 @@
       <div :class="{ 'focus-exclude dictionary-main': true, container: !wide }">
         <div :class="{ row: !wide, 'content-panes': wide }" v-if="entry">
           <div :class="{ 'content-pane-left': wide, 'col-sm-12': !wide }">
-            <LazyHideDefs
-              class="mt-2 mb-3 text-center"
-              @hideWord="hideWord = arguments[0]"
-              @hideDefinitions="hideDefinitions = arguments[0]"
-              @hidePhonetics="hidePhonetics = arguments[0]"
-            />
             <client-only>
               <div class="text-center mb-3">
                 <Star :word="entry" class="ml-1 mr-1" />
@@ -150,24 +144,43 @@
                   </b-dropdown-item>
                 </b-dropdown>
               </div>
-              <div @click="toggleReveal">
-                <LazyEntryHeader
-                  :entry="entry"
-                  :hidePhonetics="hidePhonetics"
-                  :hideWord="hideWord"
-                  :reveal="reveal"
-                />
-              </div>
-              <DefinitionsList
-                v-if="entry.definitions"
-                :entry="entry"
-                :key="`def-list-${entry.id}`"
-                :definitions="entry.definitions"
+              <div
+                @click="toggleReveal"
                 :class="{
-                  'pl-3 pr-3 mt-3': true,
-                  transparent: hideDefinitions && !reveal,
+                  flashcard: showAsFlashCard,
+                  flipped: hidePhonetics,
                 }"
-              ></DefinitionsList>
+              >
+                <div class="front" v-if="showAsFlashCard">
+                  <div>
+                    <LazyEntryHeader :entry="entry" :hidePhonetics="true" />
+                    <DefinitionsList
+                      v-if="entry.definitions"
+                      :entry="entry"
+                      :key="`def-list-${entry.id}`"
+                      :definitions="entry.definitions"
+                      :class="{
+                        'pl-3 pr-3 mt-3': true,
+                        transparent: true,
+                      }"
+                    ></DefinitionsList>
+                  </div>
+                </div>
+                <div class="back">
+                  <div>
+                    <LazyEntryHeader :entry="entry" />
+                    <DefinitionsList
+                      v-if="entry.definitions"
+                      :entry="entry"
+                      :key="`def-list-${entry.id}`"
+                      :definitions="entry.definitions"
+                      :class="{
+                        'pl-3 pr-3 mt-3': true,
+                      }"
+                    ></DefinitionsList>
+                  </div>
+                </div>
+              </div>
               <EntryCourseAd
                 v-if="$l2.code === 'zh' && wide"
                 variant="compact"
@@ -228,6 +241,7 @@
 <script>
 import WordPhotos from "@/lib/word-photos";
 import { ContainerQuery } from "vue-container-query";
+import { timeout } from "@/lib/utils/timeout";
 
 export default {
   components: {
@@ -255,7 +269,6 @@ export default {
       dictionarySize: undefined,
       keysBound: false,
       params: {},
-      reveal: false,
       query: {
         wide: {
           minWidth: 768,
@@ -274,6 +287,9 @@ export default {
     },
     $dictionaryName() {
       return this.$store.state.settings.dictionaryName;
+    },
+    showAsFlashCard() {
+      return this.saved()
     },
     similarPhraseTranslation() {
       let en;
@@ -373,8 +389,10 @@ export default {
   },
   methods: {
     toggleReveal() {
-      console.log("REVIE");
-      this.reveal = !this.reveal;
+      if (this.entry.saved) {
+        this.hidePhonetics = !this.hidePhonetics;
+        this.hideDefinitions = !this.hideDefinitions;
+      }
     },
     async getDictionarySize() {
       let dictionary = await this.$getDictionary();
@@ -431,8 +449,7 @@ export default {
           }
         }
       }
-      this.sW = sW;
-      // .sort((a, b) => a.head.localeCompare(b.head));
+      this.sW = sW;      
     },
     dateStr(date) {
       return date ? new Date(Number(date)).toISOString().replace(/T.*/, "") : 0;
@@ -593,5 +610,52 @@ export default {
     white-space: normal;
     padding: 0.2rem 1rem;
   }
+}
+.flashcard {
+  position: relative;
+  width: 100%;
+}
+
+.flashcard .front,
+.flashcard .back {
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: transform 0.5s;
+  cursor: pointer;
+}
+
+.flashcard .front {
+  transform: rotateY(0);
+}
+
+.flashcard .back {
+  transform: rotateY(180deg);
+  opacity: 1;
+}
+
+.flashcard.flipped .front {
+  transform: rotateY(180deg);
+  opacity: 0;
+}
+
+.flashcard.flipped .back {
+  transform: rotateY(0);
+  opacity: 1;
+}
+
+.flashcard:not(.flipped) .back {
+  opacity: 0;
 }
 </style>
