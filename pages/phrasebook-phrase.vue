@@ -15,17 +15,9 @@
               'p-4 content-pane-left': wide,
               'col-sm-12': !wide,
             }"
+            v-if="phrasebook && phrasebook.phrases && phraseId && phraseObj"
           >
-            <LazyHideDefs
-              class="mb-3 text-center"
-              @hideWord="hideWord = arguments[0]"
-              @hideDefinitions="hideDefinitions = arguments[0]"
-              @hidePhonetics="hidePhonetics = arguments[0]"
-            />
-            <div
-              class="text-center"
-              v-if="phrasebook && phrasebook.phrases && phraseId && phraseObj"
-            >
+            <div class="text-center">
               <router-link class="link-unstyled mb-4 d-block" :to="homeRoute">
                 <h5 class="phrasebook-title">
                   <i class="fa fa-chevron-left mr-2"></i>
@@ -53,52 +45,76 @@
             </div>
             <div>
               <div v-if="!word">
-                <div class="text-center" v-if="phraseObj && phraseObj.phrase">
-                  <span
-                    v-if="phraseObj && phraseObj.pronunciation"
-                    class="mr-1"
-                  >
-                    {{ phraseObj.pronunciation }}
-                  </span>
-                  <Speak :text="phraseObj.phrase" />
-                </div>
-                <h2 class="text-center mb-0 font-weight-normal">
-                  <div class="d-inline-block">
-                    <Annotate
-                      v-if="phraseObj && phraseObj.phrase"
-                      @textChanged="textChanged"
-                      :phonetics="!phraseObj.pronunciation"
-                      :buttons="false"
-                      :class="{
-                        'hide-phonetics': hidePhonetics,
-                        'hide-word': hideWord,
-                      }"
-                    >
-                      <span>{{ phraseObj.phrase }}</span>
-                    </Annotate>
-                  </div>
-                </h2>
-                <p
-                  :class="{
-                    'text-center mt-1': true,
-                    transparent: hideDefinitions,
-                  }"
-                  v-if="phraseObj"
-                  :contenteditable="$adminMode"
-                  @blur="saveTranslation"
-                >
-                  {{ phraseObj[$l1.code] }}
-                </p>
-                <div class="text-center mb-3" v-if="$adminMode">
-                  <b-button
-                    variant="unstyled"
-                    size="md"
-                    class="remove-btn"
-                    @click="remove"
-                  >
-                    <i class="fa fa-trash ml-1"></i>
-                  </b-button>
-                </div>
+                <Flashcard>
+                  <template v-slot:front>
+                    <div>
+                      <div class="text-center phrase-pronunciation transparent">
+                        <span class="mr-1">
+                          {{ phraseObj.pronunciation }}
+                        </span>
+                        <Speak :text="phraseObj.phrase"/>
+                      </div>
+                      <Annotate
+                        :phonetics="!phraseObj.pronunciation"
+                        :buttons="false"
+                        tag="h1"
+                        :class="{
+                          'text-center mb-0 hide-phonetics text-success': true,
+                        }"
+                      >
+                        <span>{{ phraseObj.phrase }}</span>
+                      </Annotate>
+                      <div
+                        :class="{
+                          'text-center mt-1': true,
+                          transparent: true,
+                        }"
+                      >
+                        {{ phraseObj[$l1.code] || phraseObj.en }}
+                      </div>
+                    </div>
+                  </template>
+                  <template v-slot:back>
+                    <div>
+                      <div class="text-center phrase-pronunciation">
+                        <span class="mr-1">
+                          {{ phraseObj.pronunciation }}
+                        </span>
+                        <Speak :text="phraseObj.phrase" class="phrase-pronunciation" />
+                      </div>
+                      <Annotate
+                        @textChanged="textChanged"
+                        :phonetics="!phraseObj.pronunciation"
+                        :buttons="false"
+                        tag="h1"
+                        :class="{
+                          'text-center mb-0 hide-phonetics text-success': true,
+                        }"
+                      >
+                        <span>{{ phraseObj.phrase }}</span>
+                      </Annotate>
+                      <div
+                        :class="{
+                          'text-center mt-1': true,
+                        }"
+                        :contenteditable="$adminMode"
+                        @blur="saveTranslation"
+                      >
+                        {{ phraseObj[$l1.code] || phraseObj.en }}
+                      </div>
+                      <div class="text-center mb-3" v-if="$adminMode">
+                        <b-button
+                          variant="unstyled"
+                          size="md"
+                          class="remove-btn"
+                          @click="remove"
+                        >
+                          <i class="fa fa-trash ml-1"></i>
+                        </b-button>
+                      </div>
+                    </div>
+                  </template>
+                </Flashcard>
               </div>
               <div
                 class="text-center mt-3 mb-3"
@@ -132,16 +148,28 @@
                 class="text-center"
                 :key="`word-heading-${word.id}`"
               >
-                <LazyEntryHeader
-                  :entry="word"
-                  :hidePhonetics="hidePhonetics"
-                  :hideWord="hideWord"
-                />
-                <DefinitionsList
-                  v-if="word.definitions"
-                  :class="{ 'mt-3': true, transparent: hideDefinitions }"
-                  :definitions="word.definitions"
-                ></DefinitionsList>
+                <Flashcard>
+                  <template v-slot:front>
+                    <div>
+                      <LazyEntryHeader :entry="word" :hidePhonetics="true" />
+                      <DefinitionsList
+                        v-if="word.definitions"
+                        :class="{ 'mt-3': true, transparent: true }"
+                        :definitions="word.definitions"
+                      ></DefinitionsList>
+                    </div>
+                  </template>
+                  <template v-slot:back>
+                    <div>
+                      <LazyEntryHeader :entry="word" :hidePhonetics="false" />
+                      <DefinitionsList
+                        v-if="word.definitions"
+                        :class="{ 'mt-3': true, transparent: false }"
+                        :definitions="word.definitions"
+                      ></DefinitionsList>
+                    </div>
+                  </template>
+                </Flashcard>
                 <EntryExternal
                   :term="word.head"
                   :traditional="word.traditional"
@@ -237,9 +265,6 @@ export default {
       phraseObj: undefined,
       words: undefined,
       word: undefined,
-      hideWord: false,
-      hideDefinitions: false,
-      hidePhonetics: false,
       dictionaryMatchCompleted: false,
       images: [],
       params: {},
@@ -665,5 +690,9 @@ export default {
 
 :deep(.hide-word .word-block-text) {
   opacity: 0;
+}
+
+.phrase-pronunciation {
+  color: #779bb5;
 }
 </style>

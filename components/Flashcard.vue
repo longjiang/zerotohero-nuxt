@@ -18,7 +18,9 @@
 <script>
 export default {
   props: {
-    active: true
+    active: {
+      default: true
+    }
   },
   data() {
     return {
