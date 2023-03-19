@@ -104,7 +104,7 @@
       </client-only>
       <div :class="{ 'focus-exclude dictionary-main': true, container: !wide }">
         <div :class="{ row: !wide, 'content-panes': wide }" v-if="entry">
-          <div :class="{ 'content-pane-left': wide, 'col-sm-12': !wide }">
+          <div :class="{ 'content-pane-left': wide, 'col-sm-12 mt-3': !wide }">
             <client-only>
               <div class="text-center mb-3">
                 <Star :word="entry" class="ml-1 mr-1" />
@@ -289,7 +289,7 @@ export default {
       return this.$store.state.settings.dictionaryName;
     },
     showAsFlashCard() {
-      return this.saved()
+      return this.saved();
     },
     similarPhraseTranslation() {
       let en;
@@ -449,7 +449,7 @@ export default {
           }
         }
       }
-      this.sW = sW;      
+      this.sW = sW;
     },
     dateStr(date) {
       return date ? new Date(Number(date)).toISOString().replace(/T.*/, "") : 0;
@@ -614,22 +614,20 @@ export default {
 .flashcard {
   position: relative;
   width: 100%;
+  background-color: #ffffff;
+  border: 1px solid #e3e3e3;
+  border-radius: 5px;
+  box-shadow: 4px 6px 11px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem;
 }
 
 .flashcard .front,
 .flashcard .back {
-  background-color: #ffffff;
-  border: 1px solid #cccccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   height: auto;
   width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
   padding: 20px;
   box-sizing: border-box;
   transition: transform 0.5s;
@@ -648,6 +646,9 @@ export default {
 .flashcard.flipped .front {
   transform: rotateY(180deg);
   opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .flashcard.flipped .back {
@@ -657,5 +658,8 @@ export default {
 
 .flashcard:not(.flipped) .back {
   opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 </style>
