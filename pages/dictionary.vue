@@ -144,14 +144,8 @@
                   </b-dropdown-item>
                 </b-dropdown>
               </div>
-              <div
-                @click="toggleReveal"
-                :class="{
-                  flashcard: showAsFlashCard,
-                  flipped: hidePhonetics,
-                }"
-              >
-                <div class="front" v-if="showAsFlashCard">
+              <Flashcard :active="entry.saved">
+                <template v-slot:front>
                   <div>
                     <LazyEntryHeader :entry="entry" :hidePhonetics="true" />
                     <DefinitionsList
@@ -165,8 +159,8 @@
                       }"
                     ></DefinitionsList>
                   </div>
-                </div>
-                <div class="back">
+                </template>
+                <template v-slot:back>
                   <div>
                     <LazyEntryHeader :entry="entry" />
                     <DefinitionsList
@@ -179,8 +173,8 @@
                       }"
                     ></DefinitionsList>
                   </div>
-                </div>
-              </div>
+                </template>
+              </Flashcard>
               <EntryCourseAd
                 v-if="$l2.code === 'zh' && wide"
                 variant="compact"
@@ -388,12 +382,6 @@ export default {
     this.unbindKeys();
   },
   methods: {
-    toggleReveal() {
-      if (this.entry.saved) {
-        this.hidePhonetics = !this.hidePhonetics;
-        this.hideDefinitions = !this.hideDefinitions;
-      }
-    },
     async getDictionarySize() {
       let dictionary = await this.$getDictionary();
       if (dictionary) {
@@ -610,56 +598,5 @@ export default {
     white-space: normal;
     padding: 0.2rem 1rem;
   }
-}
-.flashcard {
-  position: relative;
-  width: 100%;
-  background-color: #ffffff;
-  border: 1px solid #e3e3e3;
-  border-radius: 5px;
-  box-shadow: 4px 6px 11px rgba(0, 0, 0, 0.2);
-  margin-bottom: 1rem;
-}
-
-.flashcard .front,
-.flashcard .back {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: auto;
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  transition: transform 0.5s;
-  cursor: pointer;
-}
-
-.flashcard .front {
-  transform: rotateY(0);
-}
-
-.flashcard .back {
-  transform: rotateY(180deg);
-  opacity: 1;
-}
-
-.flashcard.flipped .front {
-  transform: rotateY(180deg);
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.flashcard.flipped .back {
-  transform: rotateY(0);
-  opacity: 1;
-}
-
-.flashcard:not(.flipped) .back {
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 </style>
