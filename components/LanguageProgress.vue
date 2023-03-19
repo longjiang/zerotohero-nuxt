@@ -10,12 +10,12 @@
           class="btn-edit text-secondary ml-2"
         >
           <i class="fas fa-pencil-alt mr-1"></i>
-          Edit hours
+          {{ translate("Edit hours") }}
         </span>
       </h5>
     </div>
     <div v-if="showManuallySetHours" class="mt-2 mb-3">
-      Mannually set your total time on {{ $l2.name }} to
+      {{ translate("Mannually set your total time on {l2} to", { l2: translate($l2.name) }) }}
       <b-form-input
         v-model="manuallySetHours"
         type="number"
@@ -32,18 +32,6 @@
       />
     </div>
     <div class="progress-bar-wrapper">
-      <!-- <div class="notches" v-if="hoursNeeded / weeklyHours < 25">
-        <div
-          class="notch"
-          v-for="(item, index) in Array(Math.ceil(hoursNeeded / weeklyHours))"
-          :style="`width: ${
-            100 / Math.ceil(hoursNeeded / weeklyHours)
-          }%; height: ${progressBarHeight}`"
-          :key="`notch-${index}`"
-        >
-          &nbsp;
-        </div>
-      </div> -->
       <b-progress
         class="mt-2"
         :max="hoursNeeded"
@@ -59,39 +47,69 @@
     </div>
     <div class="bottom-labels">
       <div class="bottom-label-left" style="color: #999">
-        <b>{{ Math.round(hours/hoursNeeded * 100) }}%</b> to {{ goalText }}
+        <i18n path="{hours} to {goal}" tag="span">
+          <template #hours>
+            {{ Math.round((hours / hoursNeeded) * 100) }}
+            <b>%</b>
+          </template>
+          <template #goal>{{ translate(goalText) }}</template>
+        </i18n>
       </div>
     </div>
     <div v-if="description" class="description">
-      <b-button variant="unstyled p-0 text-success" @click="showDescriptionDetails = !showDescriptionDetails">
-        <i v-if="!showDescriptionDetails" class="fas fa-question-circle mr-1"></i><i class="fas fa-chevron-up mr-1" v-else></i> What do the numbers mean?
+      <b-button
+        variant="unstyled p-0 text-success"
+        @click="showDescriptionDetails = !showDescriptionDetails"
+      >
+        <i
+          v-if="!showDescriptionDetails"
+          class="fas fa-question-circle mr-1"
+        ></i>
+        <i class="fas fa-chevron-up mr-1" v-else></i>
+        {{ translate("What do the numbers mean?") }}
       </b-button>
       <div v-if="showDescriptionDetails" class="mt-2">
         <div v-if="$store.state.progress.progressLoaded">
-          You've spent
-          <b>
-            {{ formatDuration(time) }}
-          </b>
-          in this app learning
-          <b>{{ $l2.name }}</b>
-          .
+          <i18n
+            path="You've spent {time} in this app learning {l2}."
+            tag="span"
+          >
+            <template #time>
+              <b>{{ formatDuration(time) }}</b>
+            </template>
+            <template #l2>
+              <b>{{ $l2.name }}</b>
+            </template>
+          </i18n>
         </div>
         <div class="mt-3" v-if="hours < hoursNeeded">
-          Once you log
-          <b>{{ Math.round(hoursNeeded) }} hours</b>
-          , you'll most likely reach
-          <b>
-            <span v-if="level < 7">
-              {{ goalText }}
-            </span>
-            <span v-else>native-like mastery</span>
-          </b>
-          .
+          <i18n
+            path="Once you log {num} hours, you'll most likely reach {goal}."
+            tag="span"
+          >
+            <template #num>
+              <b>{{ Math.round(hoursNeeded) }} hours</b>
+            </template>
+            <template #goal>
+              <span v-if="level < 7">
+                {{ translate(goalText) }}
+              </span>
+              <span v-else>{{ translate("native-like mastery") }}</span>
+            </template>
+          </i18n>
         </div>
         <div class="mt-3" v-else>
-          Typically, {{ $l1.name }} speakers need
-          <b>{{ Math.round(hoursNeeded) }} hours</b>
-          {{ levelText }} from to {{ goalText }}.
+          {{
+            translate(
+              "Typically, {l1} speakers need {num} hours from {level} to {goal}.",
+              {
+                l1: translate($l1.name),
+                num: Math.round(hoursNeeded),
+                level: levelText,
+                goal: goalText,
+              }
+            )
+          }}
         </div>
         <div class="mt-3">
           Weekly goal: If you log
@@ -152,6 +170,13 @@ export default {
     },
   },
   computed: {
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
     time() {
       return this.$store.state.progress.progressLoaded
         ? this.$store.getters["progress/time"](this.$l2)
@@ -188,7 +213,7 @@ export default {
     goalText() {
       let goal = this.levelObj(this.level + 1);
       if (goal) return goal.exam.name + " " + goal.level;
-      else return "Mastery";
+      else return this.translate("Mastery");
     },
     weeklyHours() {
       return this.$store.state.progress.progressLoaded
@@ -199,7 +224,7 @@ export default {
       let options = [1, 2, 3, 7, 14, 21, 28, 35, 42, 49, 56, 63].map(
         (value) => {
           return {
-            text: value + " hours",
+            text: this.translate("{num} hours", { num: value }),
             value,
           };
         }
@@ -246,6 +271,11 @@ export default {
     });
   },
   methods: {
+    translate(text, data = {}) {
+      let code = this.browserLanguage
+      if (this.$languages) return this.$languages.translate(text, code, data);
+      else return text;
+    },
     levelObj(level) {
       return Helper.languageLevels(this.$l2)[level];
     },
@@ -255,11 +285,12 @@ export default {
       var hours = Math.floor(sec_num / 3600);
       var minutes = Math.floor((sec_num - hours * 3600) / 60);
       var seconds = sec_num - hours * 3600 - minutes * 60;
-
-      let formatted = `${hours ? hours + " hr" : ""} ${
-        minutes ? minutes + " min" : ""
-      } ${seconds ? seconds + " sec" : ""}`;
-      formatted = formatted.trim() === "" ? "Just started" : formatted;
+      let formatted = this.translate("{hours}{minutes}{seconds}", {
+        hours: hours ? this.translate('{num} hr', {num: hours}) : '',
+        minutes: minutes ? this.translate('{num} min', {num: minutes}) : '',
+        seconds: seconds ? this.translate('{num} sec', {num: seconds}) : '',
+      });
+      formatted = formatted.trim() === "" ? this.translate("Just started") : formatted;
       return formatted;
     },
   },
