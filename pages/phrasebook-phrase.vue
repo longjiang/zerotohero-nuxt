@@ -10,58 +10,112 @@
       <SocialHead :title="title" :description="description" />
       <div :class="{ container: !wide }">
         <div :class="{ row: !wide, 'content-panes': wide }">
-          <div :class="{
-            'p-4 content-pane-left': wide,
-            'col-sm-12 pt-4': !wide,
-          }">
-            <LazyHideDefs class="mb-3 text-center" @hideWord="hideWord = arguments[0]"
-              @hideDefinitions="hideDefinitions = arguments[0]" @hidePhonetics="hidePhonetics = arguments[0]" />
-            <div class="text-center" v-if="phrasebook && phrasebook.phrases && phraseId && phraseObj">
+          <div
+            :class="{
+              'p-4 content-pane-left': wide,
+              'col-sm-12': !wide,
+            }"
+          >
+            <LazyHideDefs
+              class="mb-3 text-center"
+              @hideWord="hideWord = arguments[0]"
+              @hideDefinitions="hideDefinitions = arguments[0]"
+              @hidePhonetics="hidePhonetics = arguments[0]"
+            />
+            <div
+              class="text-center"
+              v-if="phrasebook && phrasebook.phrases && phraseId && phraseObj"
+            >
               <router-link class="link-unstyled mb-4 d-block" :to="homeRoute">
                 <h5 class="phrasebook-title">
                   <i class="fa fa-chevron-left mr-2"></i>
                   {{ phrasebook.title }}
                 </h5>
               </router-link>
-              <Paginator class="mb-4" :items="phrasebook.phrases" :findCurrent="findCurrent" :url="url"
-                ref="paginator" />
+              <Star v-if="word" :word="word" class="ml-1 mr-1" />
+              <Saved
+                v-else
+                :item="phraseItem"
+                :saveText="$t('Save Phrase')"
+                :removeText="$t('Saved')"
+                store="savedPhrases"
+                icon="bookmark"
+                class="mr-2"
+              />
+              <Paginator
+                class="mb-4 d-inline-block"
+                ref="paginator"
+                :items="phrasebook.phrases"
+                :findCurrent="findCurrent"
+                :url="url"
+                :home="homeRoute"
+              />
             </div>
             <div>
-              <div class="text-center" v-if="phraseObj && phraseObj.phrase">
-                <Saved :item="phraseItem" store="savedPhrases" icon="bookmark" class="mr-2" />
-                <span v-if="phraseObj && phraseObj.pronunciation" class="mr-1">
-                  {{ phraseObj.pronunciation }}
-                </span>
-                <Speak :text="phraseObj.phrase" />
-              </div>
-              <h2 class="text-center mb-0 font-weight-normal">
-                <div class="d-inline-block">
-                  <Annotate v-if="phraseObj && phraseObj.phrase" @textChanged="textChanged"
-                    :phonetics="!phraseObj.pronunciation" :buttons="false" :class="{
-                      'hide-phonetics': hidePhonetics,
-                      'hide-word': hideWord,
-                    }">
-                    <span>{{ phraseObj.phrase }}</span>
-                  </Annotate>
+              <div v-if="!word">
+                <div class="text-center" v-if="phraseObj && phraseObj.phrase">
+                  <span
+                    v-if="phraseObj && phraseObj.pronunciation"
+                    class="mr-1"
+                  >
+                    {{ phraseObj.pronunciation }}
+                  </span>
+                  <Speak :text="phraseObj.phrase" />
                 </div>
-              </h2>
-              <p :class="{
-                'text-center mt-1': true,
-                transparent: hideDefinitions,
-              }" v-if="phraseObj" :contenteditable="$adminMode" @blur="saveTranslation">
-                {{ phraseObj[$l1.code] }}
-              </p>
-              <div class="text-center mb-3" v-if="$adminMode">
-                <b-button variant="unstyled" size="md" class="remove-btn" @click="remove">
-                  <i class="fa fa-trash ml-1"></i>
-                </b-button>
+                <h2 class="text-center mb-0 font-weight-normal">
+                  <div class="d-inline-block">
+                    <Annotate
+                      v-if="phraseObj && phraseObj.phrase"
+                      @textChanged="textChanged"
+                      :phonetics="!phraseObj.pronunciation"
+                      :buttons="false"
+                      :class="{
+                        'hide-phonetics': hidePhonetics,
+                        'hide-word': hideWord,
+                      }"
+                    >
+                      <span>{{ phraseObj.phrase }}</span>
+                    </Annotate>
+                  </div>
+                </h2>
+                <p
+                  :class="{
+                    'text-center mt-1': true,
+                    transparent: hideDefinitions,
+                  }"
+                  v-if="phraseObj"
+                  :contenteditable="$adminMode"
+                  @blur="saveTranslation"
+                >
+                  {{ phraseObj[$l1.code] }}
+                </p>
+                <div class="text-center mb-3" v-if="$adminMode">
+                  <b-button
+                    variant="unstyled"
+                    size="md"
+                    class="remove-btn"
+                    @click="remove"
+                  >
+                    <i class="fa fa-trash ml-1"></i>
+                  </b-button>
+                </div>
               </div>
-              <hr v-if="word" />
-              <div class="text-center mt-3 mb-3" v-if="words && words.length > 1">
-                <b-dropdown size="sm" :items="words" text="Disambiguation" menu-class="disambiguation-dropdown"
-                  variant="gray">
-                  <b-dropdown-item v-for="w in words" :key="`phrase-word-disambiguation-${w.id}`"
-                    @click="changeWordTo(w)">
+              <div
+                class="text-center mt-3 mb-3"
+                v-if="words && words.length > 1"
+              >
+                <b-dropdown
+                  size="sm"
+                  :items="words"
+                  text="Disambiguation"
+                  menu-class="disambiguation-dropdown"
+                  variant="gray"
+                >
+                  <b-dropdown-item
+                    v-for="w in words"
+                    :key="`phrase-word-disambiguation-${w.id}`"
+                    @click="changeWordTo(w)"
+                  >
                     <b>{{ w.head }}</b>
                     <b v-if="w.pronunciation || w.kana">
                       ({{ w.pronunciation || w.kana }})
@@ -73,35 +127,81 @@
               <div class="text-center">
                 <Loader class="pt-5 pb-5" />
               </div>
-              <div v-if="word" class="text-center" :key="`word-heading-${word.id}`">
-                <LazyEntryHeader :entry="word" :hidePhonetics="hidePhonetics" :hideWord="hideWord" />
-                <DefinitionsList v-if="word.definitions" :class="{ 'mt-3': true, transparent: hideDefinitions }"
-                  :definitions="word.definitions"></DefinitionsList>
-                <EntryExternal :term="word.head" :traditional="word.traditional" :level="word.level" :sticky="false"
-                  class="mt-4 mb-4 text-center" style="margin-bottom: 0" />
-                <EntryCourseAd v-if="$l2.code === 'zh'" variant="compact" class="focus-exclude mt-4 mb-5" :entry="word">
-                </EntryCourseAd>
+              <div
+                v-if="word"
+                class="text-center"
+                :key="`word-heading-${word.id}`"
+              >
+                <LazyEntryHeader
+                  :entry="word"
+                  :hidePhonetics="hidePhonetics"
+                  :hideWord="hideWord"
+                />
+                <DefinitionsList
+                  v-if="word.definitions"
+                  :class="{ 'mt-3': true, transparent: hideDefinitions }"
+                  :definitions="word.definitions"
+                ></DefinitionsList>
+                <EntryExternal
+                  :term="word.head"
+                  :traditional="word.traditional"
+                  :level="word.level"
+                  :sticky="false"
+                  class="mt-4 mb-4 text-center"
+                  style="margin-bottom: 0"
+                />
+                <EntryCourseAd
+                  v-if="$l2.code === 'zh'"
+                  variant="compact"
+                  class="focus-exclude mt-4 mb-5"
+                  :entry="word"
+                ></EntryCourseAd>
               </div>
             </div>
           </div>
-          <div :class="{
-            'content-pane-right pl-3 pr-3': wide,
-            'col-sm-12 pt-4': !wide,
-          }">
+          <div
+            :class="{
+              'content-pane-right pl-3 pr-3': wide,
+              'col-sm-12': !wide,
+            }"
+          >
             <div class="text-center">
               <Loader class="pt-5 pb-5" />
             </div>
             <div v-if="dictionaryMatchCompleted">
-              <LazyDictionaryEntry v-if="word && phrasebook" :entry="word" :tvShow="phrasebook.tv_show"
-                :exact="phraseObj.exact || phrasebook.exact" :exactPhrase="phraseObj.phrase" :showHeader="false"
-                :showDefinitions="false" :showExample="false" :showExternal="false" :key="`dictionary-entry-${word.id}`"
-                ref="dictionaryEntry" />
-              <LazyPhraseComp v-else-if="phraseObj && phraseObj.phrase && phrasebook"
-                :term="phraseObj.phrase.toLowerCase()" :tvShow="phrasebook.tv_show"
-                :exact="phraseObj.exact || phrasebook.exact" :showExternal="false" :showHeader="false"
-                :showImages="false" :showCollocations="false" :showExamples="false" class="mt-4" ref="phrase" />
-              <SimilarPhrases v-if="phraseObj && phraseObj.en" :phrase="phraseObj.phrase" :translation="phraseObj.en"
-                :wiktionary="false" class="text-center mb-5" />
+              <LazyDictionaryEntry
+                v-if="word && phrasebook"
+                :entry="word"
+                :tvShow="phrasebook.tv_show"
+                :exact="phraseObj.exact || phrasebook.exact"
+                :exactPhrase="phraseObj.phrase"
+                :showHeader="false"
+                :showDefinitions="false"
+                :showExample="false"
+                :showExternal="false"
+                :key="`dictionary-entry-${word.id}`"
+                ref="dictionaryEntry"
+              />
+              <LazyPhraseComp
+                v-else-if="phraseObj && phraseObj.phrase && phrasebook"
+                :term="phraseObj.phrase.toLowerCase()"
+                :tvShow="phrasebook.tv_show"
+                :exact="phraseObj.exact || phrasebook.exact"
+                :showExternal="false"
+                :showHeader="false"
+                :showImages="false"
+                :showCollocations="false"
+                :showExamples="false"
+                class="mt-4"
+                ref="phrase"
+              />
+              <SimilarPhrases
+                v-if="phraseObj && phraseObj.en"
+                :phrase="phraseObj.phrase"
+                :translation="phraseObj.en"
+                :wiktionary="false"
+                class="text-center mb-5"
+              />
             </div>
           </div>
         </div>
@@ -199,17 +299,21 @@ export default {
     },
     title() {
       if (this.phrase) {
-        return `Learn the ${this.$l2 ? this.$l2.name : ""} Phrase “${this.phrase
-          }” | Language Player Dictionary`;
+        return `Learn the ${this.$l2 ? this.$l2.name : ""} Phrase “${
+          this.phrase
+        }” | Language Player Dictionary`;
       }
-      return `Lookup ${this.$l2 ? this.$l2.name : ""} Phrases | Language Player`;
+      return `Lookup ${
+        this.$l2 ? this.$l2.name : ""
+      } Phrases | Language Player`;
     },
     description() {
       if (this.phrase) {
         return `See how “${this.phrase}” is used in TV shows, how it forms collocations, and other examples.`;
       }
-      return `Look up ${this.$l2 ? this.$l2.name : ""} phrases. See how ${this.$l2 ? this.$l2.name : ""
-        } words are used in TV shows, how they form collocations, and other examples.`;
+      return `Look up ${this.$l2 ? this.$l2.name : ""} phrases. See how ${
+        this.$l2 ? this.$l2.name : ""
+      } words are used in TV shows, how they form collocations, and other examples.`;
     },
     wide() {
       return this.params.wide && ["lg", "xl", "xxl"].includes(this.$mq);
@@ -444,10 +548,12 @@ export default {
       }
     },
     url(phraseObj) {
-      return `/${this.$l1.code}/${this.$l2.code}/phrasebook/${this.phrasebook.id
-        }/${phraseObj.id ||
+      return `/${this.$l1.code}/${this.$l2.code}/phrasebook/${
+        this.phrasebook.id
+      }/${
+        phraseObj.id ||
         this.phrasebook.phrases.findIndex((p) => p.phrase === phraseObj.phrase)
-        }/${encodeURIComponent(phraseObj.phrase)}`;
+      }/${encodeURIComponent(phraseObj.phrase)}`;
     },
     textChanged(newText) {
       this.phraseObj.phrase = newText;
