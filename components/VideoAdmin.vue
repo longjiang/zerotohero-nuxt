@@ -35,7 +35,7 @@
             </router-link>
           </u>
         </span>
-        <span v-if="video.date">{{ formatDate(video.date) }}</span>
+        <span v-if="video.date && !isNaN(Date.parse(video.date))">{{ formatDate(video.date) }}</span>
         <span v-if="localeDescription">
           <img
             v-if="country"
