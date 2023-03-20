@@ -1,6 +1,7 @@
 {
   "server": {
-    "iosScheme": "zerotohero"
+    "iosScheme": "zerotohero",
+    "url": "https://beta.languageplayer.io"
   },
   "plugins": {
     "SplashScreen": {
