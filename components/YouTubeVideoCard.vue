@@ -95,7 +95,7 @@
           <span
             class="statistics-item"
             style="color: #aaa"
-            v-if="video.date && (showDate || $adminMode)"
+            v-if="(showDate || $adminMode) && video.date && !isNaN(Date.parse(video.date))
           >
             {{ $d(new Date(video.date), "short", $l1.code) }}
           </span>
