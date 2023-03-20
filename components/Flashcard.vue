@@ -19,36 +19,36 @@
 export default {
   props: {
     active: {
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
-      flipped: false
-    }
+      flipped: false,
+    };
   },
   methods: {
     toggleReveal() {
       this.flipped = !this.flipped;
     },
-  }
+  },
 };
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
 .flashcard {
   position: relative;
   width: 100%;
-  background-color: #ffffff;
-  border: 1px solid #e3e3e3;
-  border-radius: 5px;
-  box-shadow: 4px 6px 11px rgba(0, 0, 0, 0.2);
   margin-bottom: 1rem;
+  filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.33));
 }
 
 .flashcard .front,
 .flashcard .back {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  /* box-shadow: 4px 6px 11px rgba(0, 0, 0, 0.2); */
   display: flex;
   align-items: center;
   justify-content: center;
