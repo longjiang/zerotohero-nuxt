@@ -333,6 +333,7 @@ import WordPhotos from "@/lib/word-photos";
 import Klingon from "@/lib/klingon";
 import { mapState } from "vuex";
 import Vue from "vue";
+import pinyin2ipa from '@/lib/pinyin2ipa/lib'
 
 export default {
   props: {
@@ -572,6 +573,9 @@ export default {
     },
   },
   methods: {
+    pinyin2ipa(...args) {
+      return pinyin2ipa(...args)
+    },
     checkSavedFunc() {
       if (!this.checkSaved) return false;
       let saved;
@@ -666,6 +670,8 @@ export default {
       let formattedPronunciation = pronunciation ? `[${pronunciation}]` : "";
       if (this.$l2.code === "tlh")
         formattedPronunciation = word.head + " " + formattedPronunciation;
+      if (this.$l2.code === 'zh')
+        formattedPronunciation = word.pronunciation + " [" + pinyin2ipa(word.pronunciation, {toneMarker: 'chaoletter'}) + "]"
       return formattedPronunciation;
     },
     test(arg) {

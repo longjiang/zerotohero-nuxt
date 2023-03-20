@@ -47,7 +47,7 @@
       <Annotate
         tag="div"
         v-if="entry.counters"
-        :class="{ 'mt-1 mb-2': true, 'hide-phonetics': hidePhonetics && !reveal }"
+        :class="{ 'mt-1 mb-2': true, 'transparent': hidePhonetics && !reveal }"
       >
         <span>
           一{{
@@ -75,16 +75,14 @@
                     ']'
                   "
                 />
-                <span v-else-if="entry.pronunciation && (!entry.cjk || $l2.code === 'ko')">
+                <template v-if="$l2.code === 'ja'">
+                  {{ entry.cjk.phonetics }} ({{ transliterate(entry.cjk.phonetics) }})
+                </template>
+                <template v-else-if="$l2.code === 'zh'">
+                  {{ entry.pronunciation }} [{{ pinyin2ipa(entry.pronunciation, {toneMarker: 'chaoletter'}) }}]
+                </template>
+                <span v-else-if="entry.pronunciation">
                   [{{ entry.pronunciation }}]
-                </span>
-                <span v-else-if="entry.cjk">
-                  <template v-if="$l2.code === 'ja'">
-                    {{ entry.cjk.phonetics }} ({{ transliterate(entry.cjk.phonetics) }})
-                  </template>
-                  <template v-else>
-                    {{ transliterate(entry.cjk.phonetics) }}
-                  </template>
                 </span>
                 <span v-else>
                   {{ transliterate(entry.head) }}
@@ -173,6 +171,7 @@
 <script>
 import Klingon from "@/lib/klingon";
 import { transliterate as tr } from "transliteration";
+import pinyin2ipa from '@/lib/pinyin2ipa/lib'
 
 export default {
   props: {
@@ -227,6 +226,9 @@ export default {
     }
   },
   methods: {
+    pinyin2ipa(...args) {
+      return pinyin2ipa(...args)
+    },
     transliterate(text) {
       let transliteration = tr(text);
       if (transliteration !== text) return tr(text);

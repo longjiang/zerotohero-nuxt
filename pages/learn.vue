@@ -44,23 +44,40 @@
               </h4>
             </router-link>
 
-            <Paginator
-              v-if="words && index && words[index]"
-              class="mb-4 text-center"
-              :items="words"
-              :findCurrent="findCurrent"
-              :url="url"
-              :home="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`"
-              :title="`Word`"
-            />
             <div v-if="words && index && words[index]" class="text-center">
-              <LazyEntryHeader :entry="words[index]" />
-              <DefinitionsList
-                :key="`def-list-${words[index].id}`"
-                v-if="words[index].definitions"
-                class="mt-3"
-                :definitions="words[index].definitions"
-              ></DefinitionsList>
+              <Star :word="words[index]" class="ml-1 mr-1" />
+              <Paginator
+                v-if="words && index && words[index]"
+                class="d-inline-block mb-4 text-center"
+                :items="words"
+                :findCurrent="findCurrent"
+                :url="url"
+                :home="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`"
+              />
+              <Flashcard>
+                <template v-slot:front>
+                  <div>
+                    <LazyEntryHeader :entry="words[index]" :hidePhonetics="true" :disabled="true" />
+                    <DefinitionsList
+                      :key="`def-list-${words[index].id}`"
+                      v-if="words[index].definitions"
+                      class="mt-3 transparent"
+                      :definitions="words[index].definitions"
+                    ></DefinitionsList>
+                  </div>
+                </template>
+                <template v-slot:back>
+                  <div>
+                    <LazyEntryHeader :entry="words[index]" :disabled="true" />
+                    <DefinitionsList
+                      :key="`def-list-${words[index].id}`"
+                      v-if="words[index].definitions"
+                      class="mt-3"
+                      :definitions="words[index].definitions"
+                    ></DefinitionsList>
+                  </div>
+                </template>
+              </Flashcard>
               <EntryCourseAd
                 v-if="$l2.code === 'zh'"
                 variant="compact"

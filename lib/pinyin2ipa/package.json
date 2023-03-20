@@ -1,0 +1,66 @@
+{
+  "name": "pinyin2ipa",
+  "version": "1.0.4",
+  "description": "Converts Mandarin Chinese pinyin notation to IPA (international phonetic alphabet) notation",
+  "main": "./lib/index.js",
+  "scripts": {
+    "clean": "rimraf lib",
+    "test": "npm run lint && npm run test:only",
+    "test:prod": "cross-env BABEL_ENV=production npm run test",
+    "test:only": "mocha --require babel-core/register --require babel-polyfill --recursive",
+    "test:watch": "npm test -- --watch",
+    "test:examples": "node examples/",
+    "lint": "eslint src test",
+    "build": "babel src --out-dir lib --copy-files && npm run dist",
+    "dist": "browserify -p [ browserify-banner --file build/dist-banner.txt ] lib/index.js > dist/pinyin2ipa.js --standalone pinyin2ipa && cross-env BABEL_ENV=production babel src --out-dir build/temp && browserify -p [ browserify-banner --file build/dist-banner.txt ] -g uglifyify build/temp/index.js > dist/pinyin2ipa.min.js --standalone pinyin2ipa && rimraf build/temp",
+    "prepublishOnly": "npm run clean && npm run lint && npm run test && npm run build"
+  },
+  "files": [
+    "lib",
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Connum/npm-pinyin2ipa.git"
+  },
+  "keywords": [
+    "chinese",
+    "mandarin",
+    "language",
+    "linguistics",
+    "ipa",
+    "pinyin",
+    "converter"
+  ],
+  "author": "Connum <connum@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Connum/npm-pinyin2ipa/issues"
+  },
+  "homepage": "https://github.com/Connum/npm-pinyin2ipa#readme",
+  "dependencies": {
+    "pinyin-separate": "^1.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^10.0.2",
+    "babel-plugin-add-module-exports": "^1.0.4",
+    "babel-plugin-inline-json-import": "^0.3.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-minify": "^0.5.2",
+    "browserify": "^17.0.0",
+    "browserify-banner": "^2.0.4",
+    "chai": "^4.3.6",
+    "cross-env": "^7.0.3",
+    "eslint": "^6.0.1",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.0",
+    "eslint-plugin-react": "^7.30.1",
+    "istanbul": "^1.1.0-alpha.1",
+    "mocha": "^10.0.0",
+    "rimraf": "^3.0.2",
+    "uglifyify": "^5.0.2"
+  }
+}
