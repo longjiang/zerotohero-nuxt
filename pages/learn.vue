@@ -22,8 +22,8 @@
               class="mb-4 d-block text-center"
               v-if="method === 'hsk'"
             >
+              <i class="fa fa-chevron-left"></i>
               {{ $t('HSK Standard Course') }}
-              <i class="fa fa-chevron-right"></i>
             </router-link>
             <h3
               :to="{ name: 'levels' }"
@@ -81,21 +81,10 @@
               <EntryCourseAd
                 v-if="$l2.code === 'zh'"
                 variant="compact"
-                class="focus-exclude mt-4 mb-5"
+                class="focus-exclude mt-4"
                 :entry="words[index]"
               ></EntryCourseAd>
-              <EntryExternal
-                :term="words[index].head"
-                :traditional="words[index].traditional"
-                :level="words[index].level"
-                :sticky="false"
-                class="mt-4 mb-4 text-center"
-                style="margin-bottom: 0"
-              />
             </div>
-            <p class="text-center mb-4">
-              {{ $t('Tap on any word to view details and page through them.') }}
-            </p>
           </div>
           <div
             :class="{
@@ -134,6 +123,11 @@
                 :showDefinitions="false"
                 :showExample="false"
                 :showExternal="false"
+              />
+              <LookUpIn
+                :term="words[index].head"
+                :sticky="false"
+                class="text-center"
               />
             </div>
           </div>

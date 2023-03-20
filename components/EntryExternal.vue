@@ -2,43 +2,43 @@
   <div>
     <div :class="{'ext-dictionary-buttons': true, 'bg-white sticky': sticky}">
       <a
-        @click.prevent="toggleIframe"
+        target="_blank"
         :href="`https://www.zdic.net/hans/${term}`"
         v-if="$l2.han"
-        class="btn btn-small mb-1"
+        class="text-success mr-2 mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://www.zdic.net') ? level : false"
       >
         
         {{ $t('汉典(ZDIC)') }}
       </a>
       <a
-        @click.prevent="toggleIframe"
+        target="_blank"
         :href="`https://dictionary.cambridge.org/dictionary/english-chinese-simplified/${term}`"
         v-if="$l2.code === 'en'"
-        class="btn btn-small mb-1"
+        class="text-success mr-2 mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://dictionary.cambridge.org') ? level : false"
       >
         {{ $t('Cambridge Dictionary') }}
       </a>
       <a
-        @click.prevent="toggleIframe"
+        target="_blank"
         :href="`https://en.m.wiktionary.org/w/index.php?search=${term}#${$l2.name}`"
-        class="btn btn-small mb-1"
+        class="text-success mr-2 mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://en.m.wiktionary.org') ? level : false"
       >
         {{ $t('Wiktionary') }}
       </a>
       <a
-        @click.prevent="toggleIframe"
+        target="_blank"
         :href="`https://www.etymonline.com/word/${term}`"
         v-if="$l2.code === 'en'"
-        class="btn btn-small mb-1"
+        class="text-success mr-2 mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://www.etymonline.com') ? level : false"
       >
         {{ $t('Etymology') }}
       </a>
       <a
-        @click.prevent="toggleIframe"
+        target="_blank"
         :href="`https://books.google.com/ngrams/graph?content=${
           term
         }&year_start=${$l2.code === 'zh' ? 1900 : 1800}&year_end=2019&corpus=${
@@ -56,51 +56,51 @@
         v-if="
           ['en', 'zh', 'fr', 'de', 'he', 'it', 'ru', 'es'].includes($l2.code)
         "
-        class="btn btn-small mb-1"
+        class="text-success mr-2 mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://books.google.com/ngrams') ? level : false"
       >
         {{ $t('Usage Trends') }}
       </a>
       <a
-        @click.prevent="toggleIframe"
+        target="_blank"
         :href="`https://www.moedict.tw/${traditional ? traditional : tify(term)}`"
         v-if="$l2.han"
-        class="btn btn-small mb-1"
+        class="text-success mr-2 mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://www.moedict.tw') ? level : false"
       >
         {{ $t('萌典(MOEDICT)') }}
       </a>
       <a
-        @click.prevent="toggleIframe"
+        target="_blank"
         :href="`https://baike.baidu.com/item/${term}`"
         v-if="$l2.han"
-        class="btn btn-small mb-1"
+        class="text-success mr-2 mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://baike.baidu.com') ? level : false"
       >
         {{ $t('百度百科(Baidu Baike)') }}
       </a>
       <a
-        @click.prevent="toggleIframe"
+        target="_blank"
         :href="`https://korean.dict.naver.com/ko${$l2.code === 'ko' ? $l1.code : $l2.code}dict/#/search?query=${term}`"
         v-if="['zh', 'ko', 'ja'].includes($l2.code)"
-        class="btn btn-small mb-1"
+        class="text-success mr-2 mb-1"
         :data-bg-level="iframe && iframe.startsWith('https://korean.dict.naver.com/ko') ? level : false"
       >
         {{ $t('Naver Dictionary') }}
       </a>
       <a
-        @click.prevent="toggleIframe"
+        target="_blank"
         :href="`https://resources.allsetlearning.com/gramwiki/?search=${term}`"
-        class="btn btn-small mb-1"
+        class="text-success mr-2 mb-1"
         v-if="$l2.code === 'zh'"
         :data-bg-level="iframe && iframe.startsWith('https://resources.allsetlearning.com') ? level : false"
       >
         {{ $t('Grammar Wiki') }}
       </a>
       <a
-        @click.prevent="toggleIframe"
+        target="_blank"
         :href="`https://${$l1.code}.m.wikipedia.org/w/index.php?search=${term}`"
-        class="btn btn-small mb-1"
+        class="text-success mr-2 mb-1"
         :data-bg-level="iframe && iframe.startsWith(`https://${$l2.code}.m.wikipedia.org`) ? level : false"
       >
         {{ $t('Wikipedia') }}

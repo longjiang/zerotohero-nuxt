@@ -269,12 +269,6 @@
             />
           </div>
         </div>
-        <!-- <EntryExternal
-          v-if="text || token"
-          :term="text ? text : token.candidates[0].head"
-          :sticky="false"
-          class="mt-2"
-        /> -->
         <div
           v-if="words && words.length === 0 && loading === false"
           class="no-entry"
