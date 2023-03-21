@@ -14,6 +14,7 @@
         common,
         seen,
         saved: savedWord,
+        transparent: savedWord && quizeMode
       }"
       v-bind="attributes"
       v-on="popup ? { click: wordBlockClick } : {}"
@@ -226,15 +227,6 @@
             >
               {{ $languages.getSmart(word.supplementalLang).name }}
             </span>
-            <!-- <ol class="word-translation" v-if="word.definitions">
-              <li
-                v-for="(def, index) in unique(word.definitions || [])"
-                :key="`wordblock-def-${index}`"
-                class="word-translation-item"
-              >
-                {{ def }}
-              </li>
-            </ol> -->
             <DefinitionsList
               v-if="word.definitions"
               class="word-translation"
@@ -351,6 +343,9 @@ export default {
     },
     transliterationprop: {
       type: String,
+    },
+    quizeMode: {
+      default: false
     },
     context: {
       type: Object,
@@ -507,20 +502,6 @@ export default {
           this.token.candidates.length > 0
         ) {
           if (this.token.candidates[0].head.length < 4) return false; // Only highlight chengyu
-          // if (
-          //   this.token.candidates[0].newHSK &&
-          //   this.token.candidates[0].newHSK === "7-9"
-          // ) {
-          //   return "7-9";
-          // } else if (
-          //   this.token.candidates[0].hsk === "outside" &&
-          //   !this.token.candidates[0].newHSK &&
-          //   this.token.candidates[0].weight < 750
-          // ) {
-          //   return "outside";
-          // } else {
-          //   return false;
-          // }
         } else if (
           this.$l2.code === "en" &&
           this.token &&

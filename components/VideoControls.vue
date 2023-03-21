@@ -427,6 +427,7 @@ export default {
   methods: {
     toggleQuizMode() {
       this.quizMode = !this.quizMode
+      this.$emit("updateQuizMode", this.quizMode);
     },
     toHHMMSS(duration) {
       return toHHMMSS(duration);

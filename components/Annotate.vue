@@ -186,19 +186,6 @@
           </span>
           <span @click="translateClick">{{ $t("Get Translation") }}</span>
         </div>
-        <!-- <div class="annotate-menu-modal-item">
-          <span
-            class="annotator-button annotator-external-translate focus-exclude"
-            title="Translate with External Translator"
-            @click="externalTranslateClick"
-          >
-            <i class="fas fa-globe"></i>
-          </span>
-          <span @click="externalTranslateClick">
-            Open Translator
-            <small><i class="fas fa-external-link-alt"></i></small>
-          </span>
-        </div>-->
         <div class="annotate-menu-modal-item">
           <span
             :class="{
@@ -313,6 +300,9 @@ export default {
     starttime: {
       type: Number,
     },
+    quizeMode: {
+      default: false
+    }
   },
   data() {
     return {
@@ -799,10 +789,6 @@ export default {
           html += `<WordBlock v-bind="wordBlockTokenAttrs(${batchId},${index})">${token.text}</WordBlock>`;
         } else {
           html += token;
-          // html += `<span class="word-block-unknown">${token.replace(
-          //   /\s+/,
-          //   "&nbsp;"
-          // )}</span>`;
         }
       }
       return html;
@@ -817,6 +803,7 @@ export default {
         sticky: this.sticky,
         explore: this.explore,
         context,
+        quizeMode: this.quizeMode
       };
       return attrs;
     },
