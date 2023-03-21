@@ -15,7 +15,7 @@
         common,
         seen,
         saved: savedWord,
-        transparent: savedWord && quizMode && !reveal
+        obscure: savedWord && quizMode && !open
       }"
       v-bind="attributes"
       v-on="popup ? { click: wordBlockClick } : {}"
@@ -381,8 +381,7 @@ export default {
       lastLookupWasQuick: false,
       loadingImages: false,
       t: 0,
-      imageProxy,
-      reveal: false
+      imageProxy
     };
   },
   computed: {
@@ -1020,6 +1019,10 @@ export default {
       animation-name: shinesaved;
     }
   }
+}
+
+.word-block.obscure {
+  opacity: 0;
 }
 
 @keyframes shine {
