@@ -1,77 +1,18 @@
 <template>
-  <v-popover
-    :open="open"
-    placement="top"
-    ref="popover"
-  >
-    <span
-      :class="{
-        'word-block': true,
-        'with-popup': popup,
-        'with-quick-gloss': quickGloss,
-        sticky,
-        common,
-        seen,
-        saved: savedWord,
-        obscure: savedWord && quizMode && !open
-      }"
-      v-bind="attributes"
+  <v-popover :open="open" placement="top" ref="popover">
+    <div
       v-on="popup ? { click: wordBlockClick } : {}"
       v-observe-visibility="visibilityChanged"
       @mouseenter="wordblockHover = true"
-      @mouseleave="wordblockHover = false;"
+      @mouseleave="wordblockHover = false"
     >
-      <template
-        v-if="token && token.candidates && token.candidates.length > 0"
-      ></template>
-      <template>
-        <span
-          class="word-block-definition"
-          v-if="
-            l2SettingsOfL2.showDefinition &&
-            words[0] &&
-            words[0].definitions &&
-            words[0].definitions[0]
-          "
-          v-html="words[0].definitions[0]"
-        ></span>
-        <span
-          class="word-block-pinyin"
-          v-if="l2SettingsOfL2.showPinyin && phonetics && transliteration"
-        >
-          {{ savedTransliteration || transliteration }}
-        </span>
-        <span class="word-block-text-byeonggi-wrapper" @click="wordBlockClick">
-          <span
-            :class="`word-block-text d-inline-block ${
-              $l2.code === 'tlh' ? 'klingon' : ''
-            } ${hard ? 'word-block-hard' : ''}  ${pos ? 'pos-' + pos : ''}`"
-          >
-            <template v-if="$l2.han && words[0]">
-              {{
-                l2SettingsOfL2.useTraditional
-                  ? words[0].traditional
-                  : words[0].simplified
-              }}
-            </template>
-            <template v-else>{{ transform(text, false) }}</template>
-          </span>
-          <span
-            v-if="l2SettingsOfL2.showByeonggi && hanja"
-            class="word-block-text-byeonggi d-inline-block"
-            v-html="hanja"
-          />
-          <span v-if="quickGloss" class="word-block-text-quick-gloss">
-            {{ quickGloss }}
-          </span>
-        </span>
-      </template>
-    </span>
+      <WordBlockWord v-bind="attributes" />
+    </div>
 
     <template slot="popover">
       <div
-        @mouseenter="tooltipHover = true;"
-        @mouseleave="tooltipHover = false;"
+        @mouseenter="tooltipHover = true"
+        @mouseleave="tooltipHover = false"
         v-if="open"
         class="popover-inner-hover-area"
       >
@@ -318,7 +259,7 @@ import WordPhotos from "@/lib/word-photos";
 import Klingon from "@/lib/klingon";
 import { mapState } from "vuex";
 import Vue from "vue";
-import pinyin2ipa from '@/lib/pinyin2ipa/lib'
+import pinyin2ipa from "@/lib/pinyin2ipa/lib";
 
 export default {
   props: {
@@ -344,7 +285,7 @@ export default {
       type: String,
     },
     quizMode: {
-      default: false
+      default: false,
     },
     context: {
       type: Object,
@@ -379,7 +320,7 @@ export default {
       lastLookupWasQuick: false,
       loadingImages: false,
       t: 0,
-      imageProxy
+      imageProxy,
     };
   },
   computed: {
@@ -481,7 +422,36 @@ export default {
       }
     },
     attributes() {
-      let attributes = {};
+      let word = this.savedWord || this.words[0];
+      let definition = this.l2SettingsOfL2.showDefinition
+        ? word?.definitions?.[0]
+        : undefined;
+      let phonetics =
+        this.l2SettingsOfL2.showPinyin && this.phonetics && this.transliteration
+          ? this.savedTransliteration || this.transliteration
+          : undefined;
+      let text = this.text;
+      if (this.$l2.han && word) {
+        text = this.l2SettingsOfL2.useTraditional
+          ? word.traditional
+          : word.simplified;
+      } else {
+        text = this.transform(text, false);
+      }
+      let hanja =
+        this.l2SettingsOfL2.showByeonggi && this.hanja ? this.hanja : undefined;
+      let attributes = {
+        popup: this.popup,
+        sticky: this.sticky,
+        common: this.common,
+        seen: this.seen,
+        saved: this.savedWord,
+        obscure: this.savedWord && this.quizMode && !this.open,
+        phonetics,
+        definition,
+        text,
+        hanja,
+      };
       if (this.words && this.words.length > 0) {
         if (this.popup) {
           attributes["data-hover-level"] = "outside";
@@ -534,6 +504,7 @@ export default {
   },
   watch: {
     async wordblockHover() {
+      console.log("hover");
       if (!this.loaded || this.lastLookupWasQuick) {
         this.lookup();
       }
@@ -627,8 +598,12 @@ export default {
       let formattedPronunciation = pronunciation ? `[${pronunciation}]` : "";
       if (this.$l2.code === "tlh")
         formattedPronunciation = word.head + " " + formattedPronunciation;
-      if (this.$l2.code === 'zh')
-        formattedPronunciation = word.pronunciation + " [" + pinyin2ipa(word.pronunciation, {toneMarker: 'chaoletter'}) + "]"
+      if (this.$l2.code === "zh")
+        formattedPronunciation =
+          word.pronunciation +
+          " [" +
+          pinyin2ipa(word.pronunciation, { toneMarker: "chaoletter" }) +
+          "]";
       return formattedPronunciation;
     },
     test(arg) {
@@ -767,7 +742,7 @@ export default {
       if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true;
       if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
       if (this.$l2.han) this.classes["l2-zh"] = true;
-      this.checkSavedWord()
+      this.checkSavedWord();
     },
     async loadImages() {
       this.loadingImages = true;
@@ -808,7 +783,7 @@ export default {
     async openPopup() {
       if (this.open) return;
       if (!this.popup) return;
-      let dictionary = await this.$getDictionary()
+      let dictionary = await this.$getDictionary();
       if (dictionary) {
         if (this.loading === true) {
           if (
@@ -922,8 +897,8 @@ export default {
 
       words = uniqueByValue(words, "id");
       words = uniqueByValue([...words, ...this.words], "id");
-      this.words = words
-      this.checkSavedWord()
+      this.words = words;
+      this.checkSavedWord();
 
       this.updateIPA();
       this.loading = false;
@@ -962,225 +937,12 @@ export default {
 .v-popover {
   display: inline-block;
 }
-.main-dark {
-  .word-block,
-  .word-block-unknown {
-    color: #ccc;
-    &.animate {
-      animation-name: shine;
-      animation-iteration-count: 1;
-      animation-duration: 2s;
-      animation-timing-function: ease-in-out;
-    }
-    &.saved.animate {
-      animation-name: shinesaved;
-    }
-  }
-}
-
-.word-block.obscure {
-  opacity: 0;
-}
-
-@keyframes shine {
-  0% {
-    color: #ccc;
-  }
-  10% {
-    color: #54ff7c;
-  }
-  100% {
-    color: #ccc;
-  }
-}
-
-@keyframes shinesaved {
-  0% {
-    color: #28a745;
-  }
-  10% {
-    color: #54ff7c;
-  }
-  100% {
-    color: #28a745;
-  }
-}
-
-.word-block.with-popup {
-  cursor: pointer;
-
-  &.saved {
-    font-weight: bold;
-  }
-
-  &:hover {
-    background-color: rgba(250, 248, 195, 0.5);
-    border-radius: 0.25rem;
-  }
-}
-
-.widget-dark .word-block.with-popup:hover,
-.main-dark .word-block.with-popup:hover {
-  background-color: #00000066;
-}
-
-.word-block-text-quick-gloss {
-  font-size: 0.8rem;
-  opacity: 0.8;
-  font-weight: normal;
-}
-
-.word-block-text-byeonggi-wrapper {
-  font-size: 0.1em;
-
-  .word-block-text {
-    font-size: 10em;
-  }
-
-  .word-block-text-byeonggi {
-    color: rgba(143, 158, 172, 0.8);
-    font-size: 6em;
-  }
-}
-
-.show-quick-gloss {
-  [dir="ltr"] .word-block.saved.with-quick-gloss {
-    text-align: left;
-  }
-
-  [dir="rtl"] .word-block.saved.with-quick-gloss {
-    text-align: right;
-  }
-}
-
-.add-pinyin {
-  .word-block {
-    display: inline-block;
-    text-align: center;
-    margin: 0;
-    position: relative;
-    text-indent: 0;
-
-    .word-block-pinyin,
-    .word-block-text-byeonggi-wrapper {
-      display: block;
-      line-height: 1.3;
-      text-indent: 0;
-    }
-
-    /* Hide by default */
-    .word-block-pinyin,
-    .word-block-simplified,
-    .word-block-traditional,
-    .word-block-definition {
-      display: none;
-    }
-  }
-}
-
-.word-block-text-byeonggi,
-.word-block-text-quick-gloss {
-  display: none;
-}
 
 .tooltip-inner {
   .word-block-pinyin,
   .word-block-simplified,
   .word-block-traditional {
     display: block !important;
-  }
-}
-
-/* Shown on demand */
-
-.show-pinyin .word-block .word-block-pinyin,
-.show-simplified .word-block .word-block-simplified,
-.show-traditional .word-block .word-block-traditional,
-.show-definition .word-block .word-block-definition {
-  display: block;
-}
-
-.show-pinyin .word-block .word-block-hard {
-  // text-decoration: underline;
-  background-color: rgba(255, 226, 129, 0.137);
-}
-
-.show-byeonggi .word-block .word-block-text-byeonggi {
-  display: inline;
-}
-
-.show-quick-gloss .word-block .word-block-text-quick-gloss {
-  display: inline;
-}
-
-.show-definition .word-block {
-  position: relative;
-}
-
-/* Line style */
-
-.word-block-pinyin {
-  font-size: 0.8rem;
-  margin: 0 0.2rem;
-  opacity: 0.7;
-}
-
-[dir="rtl"] .annotate-template {
-  font-size: 1.33em;
-  .word-block-pinyin {
-    font-size: 0.7em;
-  }
-}
-
-.word-block.saved {
-  .word-block-pinyin {
-    opacity: 1;
-    font-weight: normal;
-  }
-}
-
-.word-block-definition {
-  display: none;
-  color: #aaa;
-  font-size: 0.7em;
-  font-style: italic;
-  margin-top: 0.5em;
-  max-width: 6rem;
-  margin: 0 0.5em 0.2em 0.5em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.word-block-simplified,
-.word-block-traditional,
-.word-block-text {
-  &.pos-verb,
-  &.pos-Verb,
-  &.pos-動詞 {
-    border-bottom: 1px solid rgba(204, 204, 204, 0.5);
-  }
-}
-
-.show-pinyin-for-saved {
-  .word-block:hover:not(.saved) {
-    .word-block-pinyin {
-      display: inherit;
-      position: absolute;
-      top: -1.25em;
-      left: 50%;
-      margin-left: -5em;
-      width: 10em;
-    }
-  }
-
-  .word-block.saved {
-    margin-left: 0.1rem;
-    margin-right: 0.1rem;
-
-    .word-block-pinyin {
-      display: block;
-    }
   }
 }
 
