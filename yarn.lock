@@ -8383,6 +8383,7 @@ node-res@^5.0.1:
     vary "^1.1.2"
 
 "node-sass@npm:sass@^1.54.4", sass@^1.32.13:
+  name node-sass
   version "1.54.5"
   resolved "https://registry.npmjs.org/sass/-/sass-1.54.5.tgz"
   integrity sha512-p7DTOzxkUPa/63FU0R3KApkRHwcVZYC0PLnLm5iyZACyp15qSi32x7zVUhRdABAATmkALqgGrjCJAcWvobmhHw==
@@ -8978,6 +8979,11 @@ pify@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/pify/-/pify-5.0.0.tgz"
   integrity sha512-eW/gHNMlxdSP6dmG6uJip6FXN0EQBwm2clYYd8Wul42Cwu/DK8HEftzsapcNdYe2MfLiIwZqsDk2RDEsTE79hA==
+
+pinyin-separate@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/pinyin-separate/-/pinyin-separate-1.1.0.tgz#cbfed15d9da27fce7adbeeac701dc0bbc44bd8bd"
+  integrity sha512-+rvP7vf2fGQ/1uTWEEPBpa3Bm1dAQXRkR4U91PKXeUI+GYiBh5IX2FmqM+lYMfn2AmmruyMC0wwwotwalDcuCw==
 
 pinyin-tone@^2.1.2:
   version "2.1.2"

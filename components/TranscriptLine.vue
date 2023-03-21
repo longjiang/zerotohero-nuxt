@@ -7,30 +7,24 @@
         'transcript-line-current': current,
         'transcript-line-wide': !single && params.lg,
         'transcript-line-with-translation': showParallelLine,
-        transparent: hideWhileAnnotating && !annotated,
       }"
       ref="lines"
       :data-line-index="lineIndex"
       @click="$emit('click')"
       :style="textSize !== 1 ? `font-size: ${textSize}em` : ''"
     >
+      <Loader class="text-center w-100"/>
       <div v-if="!single && showSubsEditing" class="transcript-line-edit mr-3">
-        <div style="font-size: 0.7em; color: #ccc">
-          {{ Math.round(line.starttime * 100) / 100 }}
-        </div>
-        <b-button
-          class="btn btn-small bg-danger text-white"
-          @click="removeLineClick"
-        >
+        <div style="font-size: 0.7em; color: #ccc">{{ Math.round(line.starttime * 100) / 100 }}</div>
+        <b-button class="btn btn-small bg-danger text-white" @click="removeLineClick">
           <i class="fa fa-trash"></i>
         </b-button>
       </div>
       <div class="transcript-line-both">
-        <div class="transcript-line-l2-wrapper">
-          <div
-            class="dot-wrapper-ltr"
-            v-if="!single && $l2.direction !== 'rtl'"
-          >
+        <div
+          :class="{'transcript-line-l2-wrapper': true, transparent: hideWhileAnnotating && !annotated}"
+        >
+          <div class="dot-wrapper-ltr" v-if="!single && $l2.direction !== 'rtl'">
             <div class="dot" v-if="current"></div>
           </div>
           <Annotate
@@ -65,10 +59,7 @@
             <span v-html="lineHtml(line).trim()" />
           </Annotate>
           <div v-else v-html="lineHtml(line)" />
-          <div
-            class="dot-wrapper-rtl"
-            v-if="!single && $l2.direction === 'rtl'"
-          >
+          <div class="dot-wrapper-rtl" v-if="!single && $l2.direction === 'rtl'">
             <div class="dot" v-if="current"></div>
           </div>
         </div>
@@ -79,12 +70,7 @@
             'transcript-line-l1-single': single,
           }"
         >
-          <beat-loader
-            v-if="translationLoading"
-            class="d-inline-block"
-            color="#28a745"
-            size="5px"
-          ></beat-loader>
+          <beat-loader v-if="translationLoading" class="d-inline-block" color="#28a745" size="5px"></beat-loader>
           <span
             v-else-if="line.line.length > 0 && (parallelLine || translation)"
             :data-line-index="lineIndex"
@@ -107,61 +93,61 @@ import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 export default {
   components: {
     ContainerQuery,
-    BeatLoader,
+    BeatLoader
   },
   props: {
     line: {
-      type: Object,
+      type: Object
     },
     lineIndex: {
-      type: Number,
+      type: Number
     },
     abnormal: {
-      type: Boolean,
+      type: Boolean
     },
     current: {
-      type: Boolean,
+      type: Boolean
     },
     sticky: {
-      type: Boolean,
+      type: Boolean
     },
     single: {
-      type: Boolean,
+      type: Boolean
     },
     hsk: {
-      type: String,
+      type: String
     },
     notes: {
-      type: Array,
+      type: Array
     },
     duration: {
-      default: undefined,
+      default: undefined
     },
     parallelLine: {
-      type: String,
+      type: String
     },
     showParallelLine: {
-      default: false, // The user can hide the line via settings/css, but if the transcript has no parallel line we control how the component is rendered
+      default: false // The user can hide the line via settings/css, but if the transcript has no parallel line we control how the component is rendered
     },
     showSubsEditing: {
-      type: Boolean,
+      type: Boolean
     },
     showAnimation: {
-      default: true,
+      default: true
     },
     speed: {
-      default: 1,
+      default: 1
     },
     enableTranslationEditing: {
-      type: Boolean,
+      type: Boolean
     },
     hideWhileAnnotating: {
       // Whether to hide the line before annotation is complete (for reducing flickering in single-line mode)
       type: Boolean,
-      default: false,
+      default: false
     },
     textSize: {
-      default: 1,
+      default: 1
     },
     video: {
       type: Object
@@ -180,9 +166,9 @@ export default {
       params: {},
       query: {
         lg: {
-          minWidth: 600,
-        },
-      },
+          minWidth: 600
+        }
+      }
     };
   },
   computed: {
@@ -193,7 +179,7 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
-    },
+    }
   },
   mounted() {
     this.height = this.$el.clientHeight;
@@ -242,7 +228,7 @@ export default {
         html = html.replace(/\[(\d+)\]/g, (_, num) => {
           let note;
           if (this.notes) {
-            note = this.notes.find((note) => note.id === Number(num));
+            note = this.notes.find(note => note.id === Number(num));
           }
           return `<PopupNote :number="${num}" content="${
             note ? note.note : ""
@@ -254,8 +240,8 @@ export default {
     },
     highlightMultiple() {
       return Helper.highlightMultiple(...arguments);
-    },
-  },
+    }
+  }
 };
 </script>
 
