@@ -23,26 +23,51 @@
               v-if="method === 'hsk'"
             >
               <i class="fa fa-chevron-left"></i>
-              {{ $t('HSK Standard Course') }}
+              {{ $t("HSK Standard Course") }}
             </router-link>
-            <h3
-              :to="{ name: 'levels' }"
+            <component
+              class="h3 mb-4 d-block text-center text-secondary"
+              :is="index ? 'router-link' : 'span'"
               :data-level="args[0]"
-              class="mb-4 d-block text-center"
+              :to="{
+                path: `/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`,
+              }"
               v-else
             >
-              {{ $t('Word List') }}
-            </h3>
+              <i class="fa fa-chevron-left" v-if="index"></i>
+              {{ $t("Word List") }}
+            </component>
             <router-link
               :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`"
               class="link-unstyled"
             >
               <h4 class="page-title text-center mb-4" v-if="method === 'hsk'">
                 <b :data-level="args[0]" class="mr-1">HSK {{ args[0] }}</b>
-                <b>Lesson {{ args[1] }}</b>
-                (Part {{ args[2] }}) Vocabulary
+                <b>{{ $t("Lesson {num}", { num: args[1] }) }}</b>
+                ({{ $t("Part {num}", { num: args[2] }) }})
+                {{ $t("Vocabulary") }}
               </h4>
             </router-link>
+            <div class="text-center" v-if="!index">
+              <button
+                v-if="words.length > 0"
+                data-level="hsk1"
+                class="btn btn-sm mr-1 bg-warning text-white"
+                @click="saveAllClick"
+              >
+                <i class="far fa-star mr-1"></i>
+                {{ $t("Save All") }}
+              </button>
+              <router-link
+                v-if="words.length > 0"
+                class="btn btn-sm mr-1 text-white"
+                :data-bg-level="method === 'hsk' ? args[0] : 'outside'"
+                :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}/0`"
+              >
+                <i class="fa fa-cards-blank mr-1"></i>
+                {{ $t("Flashcards") }}
+              </router-link>
+            </div>
 
             <div v-if="words && index && words[index]" class="text-center">
               <Star :word="words[index]" class="ml-1 mr-1" />
@@ -57,7 +82,11 @@
               <Flashcard>
                 <template v-slot:front>
                   <div>
-                    <LazyEntryHeader :entry="words[index]" :hidePhonetics="true" :disabled="true" />
+                    <LazyEntryHeader
+                      :entry="words[index]"
+                      :hidePhonetics="true"
+                      :disabled="true"
+                    />
                     <DefinitionsList
                       :key="`def-list-${words[index].id}`"
                       v-if="words[index].definitions"
@@ -93,7 +122,7 @@
             }"
           >
             <div v-if="!index && words.length > 0" :class="{ 'p-4': wide }">
-              <WordList :words="words" :url="url"></WordList>
+              <WordList :words="words" :url="url" ref="wordList"></WordList>
               <div class="mt-4">
                 <router-link
                   v-if="words.length > 0"
@@ -101,15 +130,15 @@
                   class="btn btn-md m-1"
                   :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}/0`"
                 >
-                  <i class="fa fa-book mr-1"></i>
-                  Start from the first word
+                  <i class="fa fa-cards-blank mr-1"></i>
+                  {{ $t("Flashcards") }}
                 </router-link>
                 <router-link
                   v-if="words.length > 0"
                   class="btn btn-gray btn-sm m-1"
                   :to="`/${$l1.code}/${$l2.code}/learn-interactive/${method}/${argsProp}`"
                 >
-                  Learn interactively (Legacy)
+                  Learn (Legacy)
                 </router-link>
               </div>
             </div>
@@ -177,6 +206,13 @@ export default {
     this.route();
   },
   methods: {
+    saveAllClick() {
+      let wordList = this.$refs.wordList;
+      if (wordList) {
+        let buttons = wordList.$el.querySelectorAll(".not-saved");
+        buttons.forEach((b) => b.click());
+      }
+    },
     async route() {
       if (this.method) {
         if (this.method === "hsk" && this.argsProp) {
@@ -188,13 +224,13 @@ export default {
         }
         if (this.method === "adhoc" && this.argsProp) {
           this.args = this.$route.params.argsProp.split(",");
-          let dictionary = await this.$getDictionary()
-          let words = []
+          let dictionary = await this.$getDictionary();
+          let words = [];
           for (let word of this.args) {
-            let r = await dictionary.lookup(word)
+            let r = await dictionary.lookup(word);
             if (r) words.push(r);
           }
-          this.words = words
+          this.words = words;
         }
       }
     },
