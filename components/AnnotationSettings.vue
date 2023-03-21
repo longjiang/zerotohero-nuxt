@@ -76,7 +76,7 @@
         <span class="annotation-setting-icon">
           <i class="fas fa-text-size"></i>
         </span>
-        {{ $t(showQuickGloss ? "Quick gloss on" : "Quick gloss off") }}
+        {{ $t(showQuickGloss ? "Quick Gloss on" : "Quick Gloss off") }}
       </button>
       <button
         v-if="$l2.code === 'ko'"
