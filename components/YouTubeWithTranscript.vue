@@ -64,7 +64,7 @@
           @updateSmoothScroll="(r) => (this.useSmoothScroll = r)"
           @updateAutoPause="(r) => (this.autoPause = r)"
           @updateRepeatMode="(r) => (this.repeatMode = r)"
-          @updateQuizMode="(r) => (this.quizeMode = r)"
+          @updateQuizMode="(r) => (this.quizMode = r)"
           @goToPreviousLine="$refs.transcript.goToPreviousLine()"
           @goToNextLine="$refs.transcript.goToNextLine()"
           @seek="onSeek"
@@ -168,7 +168,7 @@
           autoPause,
           useSmoothScroll,
           video,
-          quizeMode
+          quizMode
         }"
         @seek="seekYouTube"
         @pause="pause"
@@ -354,7 +354,7 @@ export default {
       videoInfoKey: 0,
       viewportHeight: undefined,
       viewportWidth: undefined,
-      quizeMode: false
+      quizMode: false
     };
   },
   computed: {

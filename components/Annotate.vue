@@ -300,7 +300,7 @@ export default {
     starttime: {
       type: Number,
     },
-    quizeMode: {
+    quizMode: {
       default: false
     }
   },
@@ -803,7 +803,7 @@ export default {
         sticky: this.sticky,
         explore: this.explore,
         context,
-        quizeMode: this.quizeMode
+        quizMode: this.quizMode
       };
       return attrs;
     },

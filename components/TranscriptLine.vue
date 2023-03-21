@@ -42,7 +42,7 @@
               showGrammar: true,
               youtube_id: this.video.youtube_id,
               starttime: this.line.starttime,
-              quizeMode
+              quizMode
             }"
             :class="{
               'transcript-line-l2': true,
@@ -147,7 +147,7 @@ export default {
       type: Boolean,
       default: false
     },
-    quizeMode: {
+    quizMode: {
       default: false
     },
     textSize: {

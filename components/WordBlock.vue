@@ -4,6 +4,7 @@
     :open-group="`id${_uid}`"
     placement="top"
     ref="popover"
+      
   >
     <span
       :class="{
@@ -14,7 +15,7 @@
         common,
         seen,
         saved: savedWord,
-        transparent: savedWord && quizeMode
+        transparent: savedWord && quizMode && !reveal
       }"
       v-bind="attributes"
       v-on="popup ? { click: wordBlockClick } : {}"
@@ -42,7 +43,7 @@
         >
           {{ savedTransliteration || transliteration }}
         </span>
-        <span class="word-block-text-byeonggi-wrapper">
+        <span class="word-block-text-byeonggi-wrapper" @click="wordBlockClick">
           <span
             :class="`word-block-text d-inline-block ${
               $l2.code === 'tlh' ? 'klingon' : ''
@@ -344,7 +345,7 @@ export default {
     transliterationprop: {
       type: String,
     },
-    quizeMode: {
+    quizMode: {
       default: false
     },
     context: {
@@ -381,6 +382,7 @@ export default {
       loadingImages: false,
       t: 0,
       imageProxy,
+      reveal: false
     };
   },
   computed: {
