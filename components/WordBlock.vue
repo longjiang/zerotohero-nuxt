@@ -1164,6 +1164,7 @@ export default {
 
 .word-block-pinyin {
   font-size: 0.7em;
+  font-size: 0.8rem;
   margin: 0 0.2rem;
   opacity: 0.7;
 }
