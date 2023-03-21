@@ -1,10 +1,8 @@
 <template>
   <v-popover
-    :open="popup && open"
-    :open-group="`id${_uid}`"
+    :open="open"
     placement="top"
     ref="popover"
-      
   >
     <span
       :class="{
@@ -19,9 +17,9 @@
       }"
       v-bind="attributes"
       v-on="popup ? { click: wordBlockClick } : {}"
-      @mouseenter="wordBlockMouseEnter"
-      @mouseleave="wordBlockMouseLeave"
       v-observe-visibility="visibilityChanged"
+      @mouseenter="wordblockHover = true"
+      @mouseleave="wordblockHover = false;"
     >
       <template
         v-if="token && token.candidates && token.candidates.length > 0"
@@ -72,8 +70,8 @@
 
     <template slot="popover">
       <div
-        @mouseenter="tooltipMouseEnter"
-        @mouseleave="tooltipMouseLeave"
+        @mouseenter="tooltipHover = true;"
+        @mouseleave="tooltipHover = false;"
         v-if="open"
         class="popover-inner-hover-area"
       >
@@ -548,9 +546,6 @@ export default {
     },
   },
   methods: {
-    pinyin2ipa(...args) {
-      return pinyin2ipa(...args)
-    },
     checkSavedWord() {
       if (!this.checkSaved) return false;
       let saved;
@@ -608,19 +603,6 @@ export default {
       let savedWord = await dictionary.get(id, head);
       this.words = uniqueByValue([savedWord, ...this.words], "id");
       this.savedWord = savedWord;
-    },
-    togglePhrase(id) {
-      Vue.set(this.showPhrase, id, !this.showPhrase[id]);
-    },
-    stripAccents(str) {
-      str = str
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "") // Accents
-        .replace(/[\u0600-\u0620\u064b-\u0655]/g, "") // Arabic diacritics
-        .replace(/[\u0559-\u055F]/g, ""); // Armenian diacritics
-      if (["he", "hbo", "iw"].includes(this.l2))
-        str = this.stripHebrewVowels(str);
-      return str;
     },
     pronunciation(word) {
       let pronunciation = word.pronunciation;
@@ -741,18 +723,6 @@ export default {
         }
       }
     },
-    wordBlockMouseEnter(event) {
-      this.wordblockHover = true;
-    },
-    async wordBlockMouseLeave(event) {
-      this.wordblockHover = false;
-    },
-    tooltipMouseEnter(event) {
-      this.tooltipHover = true;
-    },
-    tooltipMouseLeave(event) {
-      this.tooltipHover = false;
-    },
     wordBlockClick(event) {
       if (event) {
         event.preventDefault();
@@ -775,7 +745,6 @@ export default {
       return this.transliterationprop && this.transliterationprop !== text
         ? this.transliterationprop
         : "";
-      // return tr(text);
     },
     segment(text) {
       return text
@@ -791,7 +760,6 @@ export default {
         .replace(/·([цкнгшщзхъфвпрлджчсмтб])·/gi, "·$1")
         .replace(/^(.)·/, "$1")
         .replace(/·(.)$/, "$1");
-      //([ёеуюйыаоэяи])
     },
     async update() {
       if (!this.transliteration || this.transliteration === "")
@@ -800,17 +768,6 @@ export default {
       if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
       if (this.$l2.han) this.classes["l2-zh"] = true;
       this.checkSavedWord()
-    },
-    matchCase(text) {
-      if (this.text.match(/^[\wА-ЯЁ]/)) {
-        if (this.text.match(/^.[\wА-ЯЁ]/)) {
-          return text.toUpperCase();
-        } else {
-          return ucFirst(text);
-        }
-      } else {
-        return text;
-      }
     },
     async loadImages() {
       this.loadingImages = true;
@@ -830,7 +787,6 @@ export default {
       }
     },
     updateOpen() {
-      // alert(`w: ${this.wordblockHover}, t: ${this.tooltipHover}`);
       if (this.wordblockHover || this.tooltipHover) {
         this.openPopup();
       } else {
@@ -840,7 +796,6 @@ export default {
     updateIPA() {
       if (this.$l2.code === "ja") return;
       if (!this.transliteration && this.words && this.words[0]) {
-        // let search = this.stripAccents(this.text.toLowerCase());
         let word = this.words.find(
           (w) => w.pronunciation && w.pronunciation !== ""
         );
@@ -852,7 +807,9 @@ export default {
     },
     async openPopup() {
       if (this.open) return;
-      if (this.popup && (await this.$getDictionary())) {
+      if (!this.popup) return;
+      let dictionary = await this.$getDictionary()
+      if (dictionary) {
         if (this.loading === true) {
           if (
             (this.words && this.words.length === 0) ||
@@ -1163,7 +1120,6 @@ export default {
 /* Line style */
 
 .word-block-pinyin {
-  font-size: 0.7em;
   font-size: 0.8rem;
   margin: 0 0.2rem;
   opacity: 0.7;
