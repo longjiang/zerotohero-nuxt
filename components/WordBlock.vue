@@ -546,7 +546,6 @@ export default {
         this.update();
       }
     });
-    this.checkSavedFunc();
   },
   beforeDestroy() {
     this.words = [];
@@ -570,7 +569,7 @@ export default {
     pinyin2ipa(...args) {
       return pinyin2ipa(...args)
     },
-    checkSavedFunc() {
+    checkSavedWord() {
       if (!this.checkSaved) return false;
       let saved;
       let firstWord = this.words[0] || this.tokens?.[0];
@@ -812,36 +811,12 @@ export default {
         .replace(/·(.)$/, "$1");
       //([ёеуюйыаоэяи])
     },
-    checkSavedWord() {
-      let savedWord, savedCandidate;
-      if (this.words.length > 0) {
-        for (let candidate of this.words) {
-          savedWord = this.$store.getters["savedWords/has"]({
-            l2: this.$l2.code,
-            id: candidate.id,
-          });
-          if (savedWord) {
-            savedCandidate = candidate;
-            break;
-          }
-        }
-      } else {
-        if (this.$slots?.default?.[0]?.text) {
-          savedWord = this.$store.getters["savedWords/has"]({
-            l2: this.$l2.code,
-            text: this.$slots.default[0].text,
-          });
-        }
-      }
-      return { savedWord, savedCandidate };
-    },
     async update() {
       if (!this.transliteration || this.transliteration === "")
         this.transliteration = await this.getTransliteration();
       if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true;
       if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
       if (this.$l2.han) this.classes["l2-zh"] = true;
-      this.checkSavedFunc();
     },
     matchCase(text) {
       if (this.text.match(/^[\wА-ЯЁ]/)) {
@@ -1006,7 +981,9 @@ export default {
       }
 
       words = uniqueByValue(words, "id");
-      this.words = uniqueByValue([...words, ...this.words], "id");
+      words = uniqueByValue([...words, ...this.words], "id");
+      this.words = words
+      this.checkSavedWord()
 
       this.updateIPA();
       this.loading = false;
