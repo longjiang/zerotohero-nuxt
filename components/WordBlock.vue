@@ -817,6 +817,7 @@ export default {
       if (this.$l1) this.classes[`l1-${this.$l1.code}`] = true;
       if (this.$l2) this.classes[`l2-${this.$l2.code}`] = true;
       if (this.$l2.han) this.classes["l2-zh"] = true;
+      this.checkSavedWord()
     },
     matchCase(text) {
       if (this.text.match(/^[\wА-ЯЁ]/)) {
