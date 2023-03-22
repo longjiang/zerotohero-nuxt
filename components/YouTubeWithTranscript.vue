@@ -65,8 +65,8 @@
           @updateAutoPause="(r) => (this.autoPause = r)"
           @updateRepeatMode="(r) => (this.repeatMode = r)"
           @updateQuizMode="(r) => (this.quizMode = r)"
-          @goToPreviousLine="$refs.transcript.goToPreviousLine()"
-          @goToNextLine="$refs.transcript.goToNextLine()"
+          @goToPreviousLine="$refs.transcript ? $refs.transcript.goToPreviousLine() : null"
+          @goToNextLine="$refs.transcript ? $refs.transcript.goToNextLine() : null"
           @seek="onSeek"
         />
         <div
@@ -710,9 +710,11 @@ export default {
         }
       } else {
         this.$refs.youtube.play();
-        this.$refs.transcript.preventCurrentTimeUpdate = true;
-        await timeout(500);
-        this.$refs.transcript.preventCurrentTimeUpdate = false;
+        if (this.$refs.transcript) {
+          this.$refs.transcript.preventCurrentTimeUpdate = true;
+          await timeout(500);
+          this.$refs.transcript.preventCurrentTimeUpdate = false;
+        }
       }
     },
     speechStart() {
