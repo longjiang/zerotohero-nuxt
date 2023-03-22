@@ -119,15 +119,23 @@ export default {
   computed: {
     ...mapState("stats", ["stats"]),
     ...mapState("fullHistory", ["fullHistory"]),
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
+    $adminMode() {
+      if (typeof this.$store.state.settings.adminMode !== "undefined")
+        return this.$store.state.settings.adminMode;
+    },
     fullHistoryPathsByL1L2() {
       return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
         l1: this.$l1,
         l2: this.$l2,
       });
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
     },
     landscape() {
       if (this.forcePortrait) return false;
@@ -163,14 +171,6 @@ export default {
     },
     layout() {
       return this.mini ? "mini" : this.initialLayout;
-    },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
     },
     currentTimeInSeconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
@@ -245,15 +245,6 @@ export default {
         if (this.layout !== "mini" && !Helper.wide()) {
           let el = this.$refs["youtube"];
           if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
-        }
-        if (video && video.subs_l2 && video.subs_l2[0]) {
-          if (!video.subs_l2[0].duration)
-            video = await this.patchDuration(video);
-          else
-            console.log(
-              "YouTube View: Video subs have duration! 🎉 First line duration is ",
-              video.subs_l2[0].duration
-            );
         }
         this.video = video;
         this.saveHistory();
@@ -559,54 +550,6 @@ export default {
       if (ended !== this.ended) {
         this.ended = ended;
       }
-      // if (this.ended) {
-      //   await Helper.timeout(5000);
-      //   if (
-      //     this.ended &&
-      //     this.$refs.youtube &&
-      //     !this.$refs.youtube.showSubsEditing &&
-      //     !this.$refs.youtube.enableTranslationEditing
-      //   ) {
-      //     if (this.nextEpisode)
-      //       this.$router.push({
-      //         name: "youtube-view",
-      //         params: {
-      //           youtube_id: this.nextEpisode.youtube_id,
-      //           lesson: this.nextEpisode.lesson,
-      //         },
-      //       });
-      //   }
-      // }
-    },
-    async patchChannelID(video, channelId) {
-      let data = await this.$directus.patchVideo({
-        l2Id: this.$l2.id,
-        id: video.id,
-        query: "fields=id,channel_id",
-        payload: { channel_id: channelId },
-      });
-      if (data) {
-        video.channel_id = channelId;
-      }
-    },
-    async patchDuration(video) {
-      if (!this.$adminMode) return video;
-      console.log(
-        "YouTube View: Saved subtitles does not have duration, getting duration..."
-      );
-      video = await this.checkSubsAndAddLocalesIfNeeded(video);
-      video = await this.getTranscript(video);
-      if (video.subs_l2 && video.subs_l2[0] && video.subs_l2[0].duration) {
-        let subs_l2 = this.$subs.unparseSubs(video.subs_l2);
-        let data = await this.$directus.patchVideo({
-          l2Id: this.$l2.id,
-          id: video.id,
-          query: "fields=id",
-          payload: { subs_l2 },
-        });
-        console.log("Missing duration information added.");
-      }
-      return video;
     },
     bindKeys() {
       window.onkeydown = (e) => {
