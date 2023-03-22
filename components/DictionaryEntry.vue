@@ -129,7 +129,7 @@
             <ChatGPT
               :initialMessage="
                 $t(
-                  'Please explain the {l2} word “{word}” ({pronunciation}), give its morphological breakdown, and some examples with {l1} translations.',
+                  'Please explain the {l2} word “{word}” ({pronunciation}), give its morphological breakdown, and some examples with {l1} translations, and a sample dialogue with {l1} translations.',
                   {
                     l2: $t($l2.name),
                     l1: $t($l1.name),

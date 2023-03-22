@@ -65,7 +65,7 @@ export default {
         const response = await this.openai.complete({
           engine: "text-davinci-003",
           prompt,
-          max_tokens: 500,
+          max_tokens: 600,
           n: 1,
           stop: undefined,
           temperature: 0.7,
