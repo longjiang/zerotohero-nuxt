@@ -13,7 +13,7 @@
             :key="`gpt-respnose-${index}`"
             class="mb-2"
           >
-            <Annotate :buttons="true"><span>{{ line }}</span></Annotate>
+            <Annotate :buttons="true" :showTranslation="true"><span>{{ line }}</span></Annotate>
           </div>
         </div>
       </div>

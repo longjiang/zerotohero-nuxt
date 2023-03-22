@@ -17,7 +17,6 @@
     <div class="container">
       <div class="row text-center">
         <div class="col-sm-12">
-
           <div>
             <input
               id="fileUpload"
@@ -57,9 +56,9 @@
             v-if="dictionaryLoaded && !$auth.loggedIn"
             class="text-center alert-success p-3 pb-4 rounded mb-4"
           >
-            <p>{{ $t('To sync words across devices, please login.') }}</p>
+            <p>{{ $t("To sync words across devices, please login.") }}</p>
             <router-link :to="{ name: 'login' }" class="btn btn-success">
-              {{ $('Login') }}
+              {{ $("Login") }}
               <i class="fas fa-chevron-right"></i>
             </router-link>
           </div>
@@ -67,18 +66,17 @@
             v-if="dictionaryLoaded && sWLoaded && sW.length <= 0"
             class="no-saved-words text-center p-5"
           >
-            {{ $t('You don’t have any words saved yet. Save words by tapping on the "⭐️ SAVE" button next to it.') }}
+            {{
+              $t(
+                'You don’t have any words saved yet. Save words by tapping on the "⭐️ SAVE" button next to it.'
+              )
+            }}
           </p>
           <div class="text-center">
             <Loader class="mt-4" @loaded="updateLoaded" />
           </div>
           <div v-if="dictionaryLoaded && !sWLoaded" class="text-center mt-4">
-            <Loader
-              :sticky="true"
-              :message="
-                $t('Loading saved words...')
-              "
-            />
+            <Loader :sticky="true" :message="$t('Loading saved words...')" />
           </div>
           <div
             class="hide-defs pb-3 pt-3 bg-white text-center"
@@ -89,6 +87,9 @@
               @hideDefinitions="hideDefinitions = arguments[0]"
               @hidePhonetics="hidePhonetics = arguments[0]"
             />
+          </div>
+          <div class="text-center" v-if="sWLoaded && sW.length > 0">
+            <MakeAStory :words="sW.map((s) => s.word.head).slice(0, 25)" />
           </div>
           <div
             v-for="(group, index) in groups"
@@ -116,7 +117,7 @@
               variant="unstyled p-0 text-success"
               @click="showLegacy = !showLegacy"
             >
-              {{ $t('Legacy Features') }}
+              {{ $t("Legacy Features") }}
               <span class="mr-1" />
               <i v-if="!showLegacy" class="fas fa-chevron-right"></i>
               <i class="fas fa-chevron-up" v-else></i>
@@ -128,7 +129,7 @@
                 :to="`/${$l1.code}/${$l2.code}/learn-interactive/saved`"
               >
                 <i class="fa fa-chalkboard"></i>
-                {{ $t('Learn (Legacy)') }}
+                {{ $t("Learn (Legacy)") }}
               </router-link>
             </div>
           </div>
@@ -185,7 +186,7 @@ export default {
       ) {
         return this.$store.state.savedWords.savedWords;
       } else {
-        return []
+        return [];
       }
     },
     groups() {
@@ -264,7 +265,7 @@ export default {
   },
   methods: {
     exportButtonClick() {
-      this.$refs['export-modal'].show()
+      this.$refs["export-modal"].show();
     },
     importButtonClick() {
       this.$refs["upload"].click();
@@ -293,16 +294,17 @@ export default {
     async updateWords() {
       let sW = [];
       if (this.savedWords) {
-        for (let savedWord of this.$store.state.savedWords.savedWords[
-          this.$l2.code
-        ]) {
-          let word = await (
-            await this.$getDictionary()
-          ).get(savedWord.id, savedWord.forms[0]);
-          if (word) {
-            let r = Object.assign({}, savedWord);
-            r.word = word;
-            sW.push(r);
+        let savedWords = this.$store.state.savedWords.savedWords[this.$l2.code];
+        if (savedWords && savedWords.length > 0) {
+          for (let savedWord of savedWords) {
+            let word = await (
+              await this.$getDictionary()
+            ).get(savedWord.id, savedWord.forms[0]);
+            if (word) {
+              let r = Object.assign({}, savedWord);
+              r.word = word;
+              sW.push(r);
+            }
           }
         }
       }
