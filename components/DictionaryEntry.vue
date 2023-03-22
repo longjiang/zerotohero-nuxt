@@ -14,7 +14,12 @@
         class="mt-3"
         :definitions="entry.definitions"
       ></DefinitionsList>
-      <EntryExample v-if="showExample" :entry="entry" class :key="`${entry.id}-example`"></EntryExample>
+      <EntryExample
+        v-if="showExample"
+        :entry="entry"
+        class
+        :key="`${entry.id}-example`"
+      ></EntryExample>
     </div>
     <div class="section-nav-wrapper">
       <div class="section-nav">
@@ -27,11 +32,16 @@
             'd-none': !section.visible,
           }"
           @click="goToSection(index)"
-        >{{ $t(section.title) }}</div>
+        >
+          {{ $t(section.title) }}
+        </div>
       </div>
     </div>
     <div class="dictionary-entry-sections">
-      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Media'">
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'Media'"
+      >
         <div
           :class="{ 'widget widget-dark': true }"
           id="search-subs"
@@ -43,10 +53,10 @@
               :initialSelectedTerms="selectedSearchTerms"
               :allSearchTerms="allSearchTerms"
             />
-            — {{ $t('Search in:') }}
-            <span
-              v-if="tvShow"
-            >{{ $t('the TV Show “{title}”', { title: tvShow.title }) }}</span>
+            — {{ $t("Search in:") }}
+            <span v-if="tvShow">
+              {{ $t("the TV Show “{title}”", { title: tvShow.title }) }}
+            </span>
             <LazyShowFilter v-else @showFilter="reloadSearchSubs" />
           </div>
           <div class="widget-body">
@@ -74,7 +84,9 @@
         />
         <EntryYouTube :text="entry.head" v-if="$adminMode" class />
         <div class="web-images widget" v-if="showImages">
-          <div class="widget-title">{{ $t("Images of “{text}” on the Web", { text: entry.head }) }}</div>
+          <div class="widget-title">
+            {{ $t("Images of “{text}” on the Web", { text: entry.head }) }}
+          </div>
           <div class="widget-body jumbotron-fluid p-4">
             <WebImages
               :text="entry.head"
@@ -105,7 +117,30 @@
         </div>
       </div>
 
-      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Inflections'">
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'ChatGPT'"
+      >
+        <ChatGPT
+          :initialMessage="
+            $t(
+              'Please explain the {l2} word “{word}” ({pronunciation}), give its morphological breakdown, and some examples with {l1} translations.',
+              {
+                l2: $t($l2.name),
+                l1: $t($l1.name),
+                word: entry.head,
+                pronunciation:
+                  entry.kana || entry.pinyin || entry.pronunciation,
+              }
+            )
+          "
+        />
+      </div>
+
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'Inflections'"
+      >
         <EntryForms v-if="hasForms" class :word="entry" />
       </div>
       <div
@@ -118,13 +153,19 @@
           :level="entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.level"
         />
       </div>
-      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Phrases'">
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'Phrases'"
+      >
         <div class="phrases mt-2" v-if="entry.phrases">
           <WordList :words="entry.phrases" />
         </div>
       </div>
 
-      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Examples'">
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'Examples'"
+      >
         <Concordance
           @concordanceReady="concordanceReady = true"
           :word="entry"
@@ -132,7 +173,10 @@
         />
       </div>
 
-      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Mistakes'">
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'Mistakes'"
+      >
         <Mistakes
           :class="{ '': true, hidden: !mistakesReady }"
           @mistakesReady="mistakesReady = true"
@@ -173,9 +217,15 @@
           ></EntryCharacters>
         </div>
       </div>
-      <div class="dictionary-entry-section" v-if="sections[currentSection].title === 'Related'">
+      <div
+        class="dictionary-entry-section"
+        v-if="sections[currentSection].title === 'Related'"
+      >
         <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
-        <EntryDisambiguation v-if="['zh', 'yue'].includes($l2.code)" :entry="entry"></EntryDisambiguation>
+        <EntryDisambiguation
+          v-if="['zh', 'yue'].includes($l2.code)"
+          :entry="entry"
+        ></EntryDisambiguation>
         <EntryRelated
           @relatedReady="relatedReady = true"
           :entry="entry"
@@ -224,45 +274,45 @@
   </div>
 </template>
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 import Helper from "@/lib/helper";
 
 export default {
   props: {
     entry: {
-      type: Object
+      type: Object,
     },
     showHeader: {
-      default: true
+      default: true,
     },
     showDefinitions: {
-      default: true
+      default: true,
     },
     showExternal: {
-      default: true
+      default: true,
     },
     showExample: {
-      default: true
+      default: true,
     },
     showImages: {
-      default: true
+      default: true,
     },
     images: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     showSearchSubs: {
-      default: true
+      default: true,
     },
     tvShow: {
-      default: undefined
+      default: undefined,
     },
     exact: {
-      default: false
+      default: false,
     },
     exactPhrase: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
@@ -282,7 +332,7 @@ export default {
       searchSubsReady: false,
       renderSearchSubs: true,
       currentSection: 0,
-      searchTermsWatcherActivated: false
+      searchTermsWatcherActivated: false,
     };
   },
   computed: {
@@ -290,36 +340,41 @@ export default {
       return [
         {
           title: "Media",
-          visible: this.entry && this.showSearchSubs && this.selectedSearchTerms
+          visible:
+            this.entry && this.showSearchSubs && this.selectedSearchTerms,
+        },
+        {
+          title: "ChatGPT",
+          visible: true,
         },
         {
           title: "Phrases",
-          visible: this.entry?.phrases?.length > 0
+          visible: this.entry?.phrases?.length > 0,
         },
         {
           title: "Collocations",
-          visible: true
+          visible: true,
         },
         {
           title: "Examples",
-          visible: true
+          visible: true,
         },
         {
           title: "Mistakes",
-          visible: this.$l2.code === "zh"
+          visible: this.$l2.code === "zh",
         },
         {
           title: "Inflections",
-          visible: this.hasForms
+          visible: this.hasForms,
         },
         {
           title: "Related",
-          visible: true
+          visible: true,
         },
         {
           title: "Characters",
-          visible: this.entry.cjk && this.entry.cjk.canonical
-        }
+          visible: this.entry.cjk && this.entry.cjk.canonical,
+        },
       ];
     },
     $l1() {
@@ -348,9 +403,9 @@ export default {
         "kengdic",
         "edict",
         "openrussian",
-        "kdic-jc"
+        "kdic-jc",
       ].includes(this.$dictionaryName);
-    }
+    },
   },
   async mounted() {
     this.allSearchTerms = await this.getSearchTerms();
@@ -359,13 +414,13 @@ export default {
     let dictionary = await this.$getDictionary();
     if (dictionary.findPhrases) {
       let phrases = await dictionary.findPhrases(this.entry);
-      Vue.set(this.entry, 'phrases', phrases)
+      Vue.set(this.entry, "phrases", phrases);
     }
   },
   watch: {
     selectedSearchTerms() {
       if (this.searchTermsWatcherActivated) this.reloadSearchSubs();
-    }
+    },
   },
   methods: {
     reloadSearchSubs() {
@@ -393,16 +448,16 @@ export default {
       }
       let forms =
         (await (await this.$getDictionary()).wordForms(this.entry)) || [];
-      let entryIsLemma = !forms.find(f => f.table === "lemma");
+      let entryIsLemma = !forms.find((f) => f.table === "lemma");
       if (!entryIsLemma) {
         forms = [forms[0]];
       }
       terms = forms
-        .map(form => form.form)
-        .filter(s => typeof s !== "undefined" && s.length > 1);
+        .map((form) => form.form)
+        .filter((s) => typeof s !== "undefined" && s.length > 1);
 
       if (this.$dictionaryName === "openrussian") {
-        terms = terms.map(t => t.replace(/'/gi, ""));
+        terms = terms.map((t) => t.replace(/'/gi, ""));
       }
       terms = [this.entry.head].concat(terms);
       terms = Helper.unique(terms);
@@ -428,8 +483,8 @@ export default {
       if (images.length > 0) {
         this.webImage = images[0].src;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
