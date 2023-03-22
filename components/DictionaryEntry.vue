@@ -121,20 +121,27 @@
         class="dictionary-entry-section"
         v-if="sections[currentSection].title === 'ChatGPT'"
       >
-        <ChatGPT
-          :initialMessage="
-            $t(
-              'Please explain the {l2} word “{word}” ({pronunciation}), give its morphological breakdown, and some examples with {l1} translations.',
-              {
-                l2: $t($l2.name),
-                l1: $t($l1.name),
-                word: entry.head,
-                pronunciation:
-                  entry.kana || entry.pinyin || entry.pronunciation,
-              }
-            )
-          "
-        />
+        <div class="widget">
+          <div class="widget-title">
+            {{ $t("Let ChatGPT explain “{text}”", { text: entry.head }) }}
+          </div>
+          <div class="widget-body jumbotron-fluid p-4">
+            <ChatGPT
+              :initialMessage="
+                $t(
+                  'Please explain the {l2} word “{word}” ({pronunciation}), give its morphological breakdown, and some examples with {l1} translations.',
+                  {
+                    l2: $t($l2.name),
+                    l1: $t($l1.name),
+                    word: entry.head,
+                    pronunciation:
+                      entry.kana || entry.pinyin || entry.pronunciation,
+                  }
+                )
+              "
+            />
+          </div>
+        </div>
       </div>
 
       <div
