@@ -9,6 +9,7 @@
     <client-only>
       <div class="transcript-wrapper">
         <client-only>
+          <Loader class="text-center w-100"/>
           <template
             v-for="(line, index) in filteredLines.slice(
               this.visibleMin,

@@ -13,7 +13,6 @@
       @click="$emit('click')"
       :style="textSize !== 1 ? `font-size: ${textSize}em` : ''"
     >
-      <Loader class="text-center w-100"/>
       <div v-if="!single && showSubsEditing" class="transcript-line-edit mr-3">
         <div style="font-size: 0.7em; color: #ccc">{{ Math.round(line.starttime * 100) / 100 }}</div>
         <b-button class="btn btn-small bg-danger text-white" @click="removeLineClick">
