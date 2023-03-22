@@ -499,17 +499,19 @@ export default {
         this.open = true;
         await timeout(123);
         if (this.open && this.l2SettingsOfL2.autoPronounce) {
-          let speed = 0.75;
-          let volume = 0.5;
-          // Only wiktionary has real human audio
-          if (
-            this.$dictionaryName === "wiktionary" &&
-            this.$refs.speak &&
-            this.$refs.speak[0]
-          ) {
-            this.$refs.speak[0].speak(speed, volume);
-          } else {
-            speak(this.text, this.$l2, speed, volume);
+          if (!this.quizMode || this.reveal)  {
+            let speed = 0.75;
+            let volume = 0.5;
+            // Only wiktionary has real human audio
+            if (
+              this.$dictionaryName === "wiktionary" &&
+              this.$refs.speak &&
+              this.$refs.speak[0]
+            ) {
+              this.$refs.speak[0].speak(speed, volume);
+            } else {
+              speak(this.text, this.$l2, speed, volume);
+            }
           }
         }
       }
