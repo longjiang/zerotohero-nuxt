@@ -201,7 +201,7 @@
         {{ $t("Sorry, no definition found.") }}
       </span>
       <Saved
-        :item="phraseItem(text)"
+        :item="phraseObj"
         store="savedPhrases"
         icon="bookmark"
         class="annotator-button focus-exclude"
@@ -232,6 +232,7 @@ export default {
     text: String,
     words: Array,
     transliterationprop: String,
+    phraseObj: Object,
     loading: {
       default: false
     },
@@ -339,17 +340,6 @@ export default {
           pinyin2ipa(word.pronunciation, { toneMarker: "chaoletter" }) +
           "]";
       return formattedPronunciation;
-    },
-    phraseItem(phrase, translation = undefined) {
-      if (typeof phrase !== "undefined") {
-        let phraseItem = {
-          l2: this.$l2.code,
-          phrase,
-          translations: {},
-        };
-        if (translation) phraseItem.translations[this.$l1.code] = translation;
-        return phraseItem;
-      }
     },
     copyClick() {
       let text = this.text;

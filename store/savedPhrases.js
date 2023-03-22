@@ -151,6 +151,17 @@ export const getters = {
       return savedphrase ? true : false
     }
   },
+  get: state => ({ l2, phrase, phrasebookId, pronunciation, exact, translations = {} } = {}) => {
+    let phraseToTest = {
+      phrase, phrasebookId, pronunciation, exact, translations
+    }
+    if (state.savedPhrases && state.savedPhrases[l2]) {
+      let savedphrase = state.savedPhrases[l2].find(
+        phrase => phrase.phrase === phraseToTest.phrase
+      )
+      return savedphrase
+    }
+  },
   count: state => ({ l2 }) => {
     if (state.savedPhrases && state.savedPhrases[l2]) {
       return state.savedPhrases[l2].length

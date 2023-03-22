@@ -5,14 +5,20 @@
       v-observe-visibility="visibilityChanged"
       @mouseenter="wordblockHover = true"
       @mouseleave="wordblockHover = false"
-    >{{ this.revea }}
-      <WordBlockQuiz v-if="this.savedWord && this.quizMode && !this.reveal" v-bind="attributes"/>
+    >
+      <WordBlockQuiz
+        v-if="this.savedWord && this.quizMode && !this.reveal"
+        v-bind="attributes"
+      />
       <WordBlockWord v-else v-bind="attributes" />
     </div>
 
     <template slot="popover">
-      <div v-if="this.savedWord && this.quizMode && !this.reveal" class="popover-inner-hover-area">
-        {{ $t('Tap to show answer.' )}}
+      <div
+        v-if="this.savedWord && this.quizMode && !this.reveal"
+        class="popover-inner-hover-area"
+      >
+        {{ $t("Tap to show answer.") }}
       </div>
       <div
         @mouseenter="tooltipHover = true"
@@ -21,7 +27,14 @@
         class="popover-inner-hover-area"
       >
         <WordBlockPopup
-          v-bind="{ text, words, loading, context, transliterationprop }"
+          v-bind="{
+            text,
+            words,
+            loading,
+            context,
+            transliterationprop,
+            phraseObj: phraseItem(text),
+          }"
           v-if="open"
         />
       </div>
@@ -82,6 +95,7 @@ export default {
       images: [],
       words: [],
       savedWord: undefined,
+      savedPhrase: undefined,
       checkSaved: true,
       wordblockHover: false,
       tooltipHover: false,
@@ -213,19 +227,18 @@ export default {
         sticky: this.sticky,
         common: this.common,
         seen: this.seen,
-        saved: this.savedWord,
+        saved: this.savedWord || this.savedPhrase,
         phonetics,
         definition,
         text,
         hanja,
       };
-      if (this.words && this.words.length > 0) {
-        if (this.popup) {
-          attributes["data-hover-level"] = "outside";
-        }
-        if (this.words[0].rank) attributes["data-rank"] = this.words[0].rank;
-        if (this.words[0].weight)
-          attributes["data-weight"] = this.words[0].weight;
+      if (this.popup) {
+        attributes["data-hover-level"] = "outside";
+      }
+      if (word) {
+        if (word.rank) attributes["data-rank"] = word.rank;
+        if (word.weight) attributes["data-weight"] = word.weight;
       }
       return attributes;
     },
@@ -263,6 +276,11 @@ export default {
         this.update();
       }
     });
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("savedPhrases")) {
+        this.update();
+      }
+    });
   },
   beforeDestroy() {
     this.words = [];
@@ -283,6 +301,17 @@ export default {
     },
   },
   methods: {
+    phraseItem(phrase, translation = undefined) {
+      if (typeof phrase !== "undefined") {
+        let phraseItem = {
+          l2: this.$l2.code,
+          phrase,
+          translations: {},
+        };
+        if (translation) phraseItem.translations[this.$l1.code] = translation;
+        return phraseItem;
+      }
+    },
     transform(text, removeSpacing = false) {
       if (typeof text === "undefined") {
         text = "";
@@ -325,6 +354,12 @@ export default {
         this.savedWord = undefined;
       }
       return saved;
+    },
+    checkSavedPhrase() {
+      let phrase = this.phraseItem(this.text);
+      this.savedPhrase = this.$store.getters["savedPhrases/get"](
+        Object.assign({}, phrase)
+      );
     },
     async appendSavedWord(id, head) {
       let dictionary = await this.$getDictionary();
@@ -409,8 +444,8 @@ export default {
     },
     wordBlockClick(event) {
       if (this.savedWord && this.quizMode) {
-        this.reveal = !this.reveal
-      } 
+        this.reveal = !this.reveal;
+      }
       if (event) {
         event.preventDefault();
         event.stopPropagation();
@@ -437,6 +472,7 @@ export default {
       if (!this.transliteration || this.transliteration === "")
         this.transliteration = await this.getTransliteration();
       this.checkSavedWord();
+      this.checkSavedPhrase();
     },
     async loadImages() {
       this.loadingImages = true;
@@ -499,7 +535,7 @@ export default {
         this.open = true;
         await timeout(123);
         if (this.open && this.l2SettingsOfL2.autoPronounce) {
-          if (!this.quizMode || this.reveal)  {
+          if (!this.quizMode || this.reveal) {
             let speed = 0.75;
             let volume = 0.5;
             // Only wiktionary has real human audio
@@ -595,6 +631,7 @@ export default {
       words = uniqueByValue([...words, ...this.words], "id");
       this.words = words;
       this.checkSavedWord();
+      this.checkSavedPhrase();
 
       this.updateIPA();
       this.loading = false;
