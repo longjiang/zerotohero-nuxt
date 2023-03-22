@@ -231,6 +231,7 @@ export default {
   props: {
     text: String,
     words: Array,
+    transliterationprop: String,
     loading: {
       default: false
     },
@@ -272,6 +273,11 @@ export default {
     if (this.$l2.han) this.entryClasses["l2-zh"] = true;
   },
   methods: {
+    transliterate(text) {
+      return this.transliterationprop && this.transliterationprop !== text
+        ? this.transliterationprop
+        : "";
+    },
     segment(text) {
       return text
         .replace(

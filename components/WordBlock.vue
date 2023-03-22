@@ -17,7 +17,7 @@
         class="popover-inner-hover-area"
       >
         <WordBlockPopup
-          v-bind="{ text, words, loading, context }"
+          v-bind="{ text, words, loading, context, transliterationprop }"
           v-if="open"
         />
       </div>
