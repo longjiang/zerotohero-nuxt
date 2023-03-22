@@ -349,7 +349,8 @@ export default {
         });
       }
       if (saved) {
-        this.appendSavedWord(saved.id, saved.forms[0]);
+        if (!this.words.find(w => w.id === saved.id)) this.appendSavedWord(saved.id, saved.forms[0]);
+        this.savedWord = saved
       } else {
         this.savedWord = undefined;
       }
