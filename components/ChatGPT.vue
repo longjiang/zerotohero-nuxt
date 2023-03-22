@@ -42,7 +42,7 @@ export default {
     return {
       messages: [],
       newMessage: "",
-      openai: new OpenAI("sk-DjpIb9mC1ole0T5sL" + "F2bT3BlbkFJ52GtmMNd3EcIXjwgrdhD"),
+      openai: new OpenAI(process.env.openAIToken),
       prompt: this.initialMessage,
       thinking: false,
     };

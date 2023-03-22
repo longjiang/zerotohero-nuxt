@@ -23,7 +23,8 @@ for (let lang of 'af ar ca zh hr nl en fi fr de el hi hu id ga it ja ko la nan n
 
 export default {
   env: {
-    baseUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
+    baseUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000',
+    openAIToken: process.env.OPEN_AI_TOKEN
   },
   // server: {
   //   host: '0.0.0.0' // default: 'localhost'
