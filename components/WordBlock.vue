@@ -7,7 +7,7 @@
       @mouseleave="wordblockHover = false"
     >
       <WordBlockQuiz
-        v-if="this.savedWord && this.quizMode && !this.reveal"
+        v-if="(this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal"
         v-bind="attributes"
       />
       <WordBlockWord v-else v-bind="attributes" />
@@ -15,7 +15,7 @@
 
     <template slot="popover">
       <div
-        v-if="this.savedWord && this.quizMode && !this.reveal"
+        v-if="(this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal"
         class="popover-inner-hover-area"
       >
         {{ $t("Tap to show answer.") }}
@@ -443,7 +443,7 @@ export default {
       }
     },
     wordBlockClick(event) {
-      if (this.savedWord && this.quizMode) {
+      if (this.quizMode) {
         this.reveal = !this.reveal;
       }
       if (event) {
