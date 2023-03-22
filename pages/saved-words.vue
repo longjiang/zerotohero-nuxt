@@ -57,9 +57,9 @@
             v-if="dictionaryLoaded && !$auth.loggedIn"
             class="text-center alert-success p-3 pb-4 rounded mb-4"
           >
-            <p>To sync words across devices, please login.</p>
+            <p>{{ $t('To sync words across devices, please login.') }}</p>
             <router-link :to="{ name: 'login' }" class="btn btn-success">
-              Login
+              {{ $('Login') }}
               <i class="fas fa-chevron-right"></i>
             </router-link>
           </div>
@@ -67,9 +67,7 @@
             v-if="dictionaryLoaded && sWLoaded && sW.length <= 0"
             class="no-saved-words text-center p-5"
           >
-            You don't have any words saved yet. Save words by tapping on the "
-            <i class="far fa-star"></i>
-            SAVE" button next to it.
+            {{ $t('You don’t have any words saved yet. Save words by tapping on the "⭐️ SAVE" button next to it.') }}
           </p>
           <div class="text-center">
             <Loader class="mt-4" @loaded="updateLoaded" />
@@ -118,7 +116,7 @@
               variant="unstyled p-0 text-success"
               @click="showLegacy = !showLegacy"
             >
-              Legacy Features
+              {{ $t('Legacy Features') }}
               <span class="mr-1" />
               <i v-if="!showLegacy" class="fas fa-chevron-right"></i>
               <i class="fas fa-chevron-up" v-else></i>
@@ -130,7 +128,7 @@
                 :to="`/${$l1.code}/${$l2.code}/learn-interactive/saved`"
               >
                 <i class="fa fa-chalkboard"></i>
-                Learn (Legacy)
+                {{ $t('Learn (Legacy)') }}
               </router-link>
             </div>
           </div>
