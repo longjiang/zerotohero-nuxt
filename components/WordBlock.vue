@@ -7,7 +7,9 @@
       @mouseleave="wordblockHover = false"
     >
       <WordBlockQuiz
-        v-if="(this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal"
+        v-if="
+          (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
+        "
         v-bind="attributes"
       />
       <WordBlockWord v-else v-bind="attributes" />
@@ -15,7 +17,9 @@
 
     <template slot="popover">
       <div
-        v-if="(this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal"
+        v-if="
+          (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
+        "
         class="popover-inner-hover-area"
       >
         {{ $t("Tap to show answer.") }}
@@ -349,8 +353,7 @@ export default {
         });
       }
       if (saved) {
-        if (!this.words.find(w => w.id === saved.id)) this.appendSavedWord(saved.id, saved.forms[0]);
-        this.savedWord = saved
+        this.appendSavedWord(saved.id, saved.forms[0]);
       } else {
         this.savedWord = undefined;
       }
@@ -363,8 +366,11 @@ export default {
       );
     },
     async appendSavedWord(id, head) {
-      let dictionary = await this.$getDictionary();
-      let savedWord = await dictionary.get(id, head);
+      let savedWord = this.words.find((w) => w.id === id);
+      if (!savedWord) {
+        let dictionary = await this.$getDictionary();
+        savedWord = await dictionary.get(id, head);
+      }
       this.words = uniqueByValue([savedWord, ...this.words], "id");
       this.savedWord = savedWord;
     },
