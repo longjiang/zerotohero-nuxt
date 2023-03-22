@@ -5,15 +5,19 @@
       v-observe-visibility="visibilityChanged"
       @mouseenter="wordblockHover = true"
       @mouseleave="wordblockHover = false"
-    >
-      <WordBlockWord v-bind="attributes" />
+    >{{ this.revea }}
+      <WordBlockQuiz v-if="this.savedWord && this.quizMode && !this.reveal" v-bind="attributes"/>
+      <WordBlockWord v-else v-bind="attributes" />
     </div>
 
     <template slot="popover">
+      <div v-if="this.savedWord && this.quizMode && !this.reveal" class="popover-inner-hover-area">
+        {{ $t('Tap to show answer.' )}}
+      </div>
       <div
         @mouseenter="tooltipHover = true"
         @mouseleave="tooltipHover = false"
-        v-if="open"
+        v-else-if="open"
         class="popover-inner-hover-area"
       >
         <WordBlockPopup
@@ -85,6 +89,7 @@ export default {
       transliteration: undefined,
       farsiRomanizations: {},
       lastLookupWasQuick: false,
+      reveal: false,
       t: 0,
     };
   },
@@ -209,7 +214,6 @@ export default {
         common: this.common,
         seen: this.seen,
         saved: this.savedWord,
-        obscure: this.savedWord && this.quizMode && !this.open,
         phonetics,
         definition,
         text,
@@ -404,6 +408,9 @@ export default {
       }
     },
     wordBlockClick(event) {
+      if (this.savedWord && this.quizMode) {
+        this.reveal = !this.reveal
+      } 
       if (event) {
         event.preventDefault();
         event.stopPropagation();
