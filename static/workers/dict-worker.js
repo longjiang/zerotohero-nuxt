@@ -19,8 +19,12 @@ onmessage = async function(e) {
   } else if (method === 'freedictMethods') {
     this.postMessage([id, 'freedictMethods', Object.keys(Dictionary)])
   } else {
-    let data = await Dictionary[method](...args)
-    this.postMessage([id, method, data])
+    if (typeof Dictionary[method] !== 'undefined') {
+      let data = await Dictionary[method](...args)
+      this.postMessage([id, method, data])
+    } else {
+      this.postMessage([id, method, undefined])
+    }
   }
 }
 
