@@ -148,10 +148,6 @@
             >
               <LazyDictionaryEntry
                 :entry="words[index]"
-                :showHeader="false"
-                :showDefinitions="false"
-                :showExample="false"
-                :showExternal="false"
               />
               <LookUpIn
                 :term="words[index].head"

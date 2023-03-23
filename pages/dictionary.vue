@@ -197,10 +197,6 @@
               :images="images"
               ref="dictionaryEntry"
               :key="`dictionary-entry-${entry.id}`"
-              :showHeader="false"
-              :showDefinitions="false"
-              :showExample="false"
-              :showExternal="false"
             />
             <EntryExternal
               :term="entry.head"

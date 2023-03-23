@@ -203,10 +203,6 @@
                 :tvShow="phrasebook.tv_show"
                 :exact="phraseObj.exact || phrasebook.exact"
                 :exactPhrase="phraseObj.phrase"
-                :showHeader="false"
-                :showDefinitions="false"
-                :showExample="false"
-                :showExternal="false"
                 :key="`dictionary-entry-${word.id}`"
                 ref="dictionaryEntry"
               />

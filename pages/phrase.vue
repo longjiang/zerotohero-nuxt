@@ -6,28 +6,42 @@
 </router>
 <template>
   <container-query :query="query" v-model="params">
-    <div :class="{
-      'phrase focus': true,
-      'bg-white': !wide,
-      'phrase-wide': wide,
-    }">
-      <SocialHead v-if="term === ''" :title="`Look up ${this.$l2 ? this.$l2.name : ''}
-      Phrases | Language Player`" :description="`Look up ${this.$l2 ? this.$l2.name : ''} phrases and see
-      how they are used in TV shows.`" />
+    <div
+      :class="{
+        'phrase focus': true,
+        'bg-white': !wide,
+        'phrase-wide': wide,
+      }"
+    >
+      <SocialHead
+        v-if="term === ''"
+        :title="`Look up ${this.$l2 ? this.$l2.name : ''}
+      Phrases | Language Player`"
+        :description="`Look up ${this.$l2 ? this.$l2.name : ''} phrases and see
+      how they are used in TV shows.`"
+      />
       <client-only>
         <div class="phrase-search-bar">
           <div class="container">
             <div class="row">
               <div class="col-sm-12">
                 <div class="search-compare-wrapper">
-                  <LazySearchCompare placeholder="Enter a word or phrase" type="dictionary" :term="term"
-                    :compareTerm="compareTerm" :random="false" :key="`${term}-${compareTerm}-search`"
-                    style="width: 100%" :urlFunc="
+                  <LazySearchCompare
+                    placeholder="Enter a word or phrase"
+                    type="dictionary"
+                    :term="term"
+                    :compareTerm="compareTerm"
+                    :random="false"
+                    :key="`${term}-${compareTerm}-search`"
+                    style="width: 100%"
+                    :urlFunc="
                       (text) => `/${$l1.code}/${$l2.code}/phrase/search/${text}`
-                    " :compareUrlFunc="
-  (text) =>
-    `/${$l1.code}/${$l2.code}/phrase/compare/${term}/${text}`
-" />
+                    "
+                    :compareUrlFunc="
+                      (text) =>
+                        `/${$l1.code}/${$l2.code}/phrase/compare/${term}/${text}`
+                    "
+                  />
                 </div>
               </div>
             </div>
@@ -48,23 +62,35 @@
           </div>
         </div>
       </div>
-      <div :class="{
-        'content-panes-wrapepr focus-exclude': true,
-        container: !wide,
-      }">
+      <div
+        :class="{
+          'content-panes-wrapepr focus-exclude': true,
+          container: !wide,
+        }"
+      >
         <div :class="{ row: !wide, 'content-panes': wide }" v-if="term">
-          <div :class="{
-            'content-pane-left': wide,
-            'col-sm-12': !wide,
-            'text-center mb-4': true,
-          }">
+          <div
+            :class="{
+              'content-pane-left': wide,
+              'col-sm-12': !wide,
+              'text-center mb-4': true,
+            }"
+          >
             <PhraseHeader v-if="term" :term="term" :class="{ 'mt-4': !wide }" />
             <hr v-if="word" />
             <div class="text-center mt-3 mb-3" v-if="words && words.length > 1">
-              <b-dropdown size="sm" :items="words" text="Disambiguation" menu-class="disambiguation-dropdown"
-                variant="gray">
-                <b-dropdown-item v-for="w in words" :key="`phrase-word-disambiguation-${w.id}`"
-                  @click="changeWordTo(w)">
+              <b-dropdown
+                size="sm"
+                :items="words"
+                text="Disambiguation"
+                menu-class="disambiguation-dropdown"
+                variant="gray"
+              >
+                <b-dropdown-item
+                  v-for="w in words"
+                  :key="`phrase-word-disambiguation-${w.id}`"
+                  @click="changeWordTo(w)"
+                >
                   <b>{{ w.head }}</b>
                   <b v-if="w.pronunciation || w.kana">
                     ({{ w.pronunciation || w.kana }})
@@ -76,26 +102,58 @@
             <div class="text-center">
               <Loader class="pt-5 pb-5" />
             </div>
-            <div v-if="word" class="text-center" :key="`word-heading-${word.id}`">
+            <div
+              v-if="word"
+              class="text-center"
+              :key="`word-heading-${word.id}`"
+            >
               <LazyEntryHeader :entry="word" />
-              <DefinitionsList v-if="word.definitions" class="mt-3" :definitions="word.definitions"></DefinitionsList>
-              <EntryExternal :term="word.head" :traditional="word.traditional" :level="word.level" :sticky="false"
-                class="mt-4 mb-4 text-center" style="margin-bottom: 0" />
-              <EntryCourseAd v-if="$l2.code === 'zh'" variant="compact" class="focus-exclude mt-4 mb-5" :entry="word">
-              </EntryCourseAd>
+              <DefinitionsList
+                v-if="word.definitions"
+                class="mt-3"
+                :definitions="word.definitions"
+              ></DefinitionsList>
+              <EntryExternal
+                :term="word.head"
+                :traditional="word.traditional"
+                :level="word.level"
+                :sticky="false"
+                class="mt-4 mb-4 text-center"
+                style="margin-bottom: 0"
+              />
+              <EntryCourseAd
+                v-if="$l2.code === 'zh'"
+                variant="compact"
+                class="focus-exclude mt-4 mb-5"
+                :entry="word"
+              ></EntryCourseAd>
             </div>
           </div>
-          <div :class="{
-            'col-sm-12': !wide,
-            'content-pane-right pl-3 pr-3': wide,
-          }">
+          <div
+            :class="{
+              'col-sm-12': !wide,
+              'content-pane-right pl-3 pr-3': wide,
+            }"
+          >
             <template v-if="dictionaryMatchCompleted">
-              <LazyDictionaryEntry v-if="word" :entry="word" :showHeader="false" :showDefinitions="false"
-                :showExample="false" :showExternal="false" :key="`dictionary-entry-${word.id}`" ref="dictionaryEntry" />
-              <LazyPhraseComp v-else-if="term" :term="term" :showHeader="false" />
+              <LazyDictionaryEntry
+                v-if="word"
+                :entry="word"
+                :key="`dictionary-entry-${word.id}`"
+                ref="dictionaryEntry"
+              />
+              <LazyPhraseComp
+                v-else-if="term"
+                :term="term"
+                :showHeader="false"
+              />
               <div class="mt-3" v-if="term && similarPhraseTranslation">
-                <SimilarPhrases :phrase="word ? word.head : term" :translation="similarPhraseTranslation"
-                  :wiktionary="true" class="text-center" />
+                <SimilarPhrases
+                  :phrase="word ? word.head : term"
+                  :translation="similarPhraseTranslation"
+                  :wiktionary="true"
+                  class="text-center"
+                />
               </div>
             </template>
           </div>

@@ -69,6 +69,25 @@
           </div>
           <div v-if="entry">
             <hr />
+            <div class="text-center">
+              <EntryHeader
+                class="p-4"
+                :entry="entry"
+                :key="`header-${entry.id}`"
+                ref="entryHeader"
+              ></EntryHeader>
+              <DefinitionsList
+                :key="`def-list-${entry.id}`"
+                v-if="entry.definitions"
+                class="mt-3"
+                :definitions="entry.definitions"
+              ></DefinitionsList>
+              <EntryExample
+                :entry="entry"
+                class
+                :key="`${entry.id}-example`"
+              ></EntryExample>
+            </div>
             <LazyDictionaryEntry
               :entry="entry"
               :showSearchSubs="

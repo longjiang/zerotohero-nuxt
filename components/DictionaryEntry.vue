@@ -1,26 +1,5 @@
 <template>
   <div class="dictionary-entry">
-    <div class="text-center">
-      <EntryHeader
-        v-if="showHeader"
-        class="p-4"
-        :entry="entry"
-        :key="`header-${entry.id}`"
-        ref="entryHeader"
-      ></EntryHeader>
-      <DefinitionsList
-        :key="`def-list-${entry.id}`"
-        v-if="entry.definitions && showDefinitions"
-        class="mt-3"
-        :definitions="entry.definitions"
-      ></DefinitionsList>
-      <EntryExample
-        v-if="showExample"
-        :entry="entry"
-        class
-        :key="`${entry.id}-example`"
-      ></EntryExample>
-    </div>
     <div class="section-nav-wrapper">
       <div class="section-nav">
         <div
@@ -75,13 +54,6 @@
             />
           </div>
         </div>
-        <EntryExternal
-          v-if="showExternal"
-          :term="entry.head"
-          :traditional="entry.traditional"
-          :level="entry.level"
-          class="mt-4 mb-4 text-center"
-        />
         <EntryYouTube :text="entry.head" v-if="$adminMode" class />
         <div class="web-images widget" v-if="showImages">
           <div class="widget-title">
@@ -288,18 +260,6 @@ export default {
   props: {
     entry: {
       type: Object,
-    },
-    showHeader: {
-      default: true,
-    },
-    showDefinitions: {
-      default: true,
-    },
-    showExternal: {
-      default: true,
-    },
-    showExample: {
-      default: true,
     },
     showImages: {
       default: true,
