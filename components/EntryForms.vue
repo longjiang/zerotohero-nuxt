@@ -1,7 +1,7 @@
 <template>
-  <div id="entry-morphology" class="widget">
-    <div class="widget-title">Word forms of “{{ word.head }}”</div>
-    <div class="widget-body jumbotron-fluid p-4">
+  <Widget id="entry-morphology">
+    <template #title>Word forms of “{{ word.head }}”</template>
+    <template #body>
       <div class="row">
         <div
           :class="{ 'loader text-center mt-4': true, 'd-none': !checking }"
@@ -23,9 +23,7 @@
           <h6 class="mt-2">
             {{
               tableName === "verbs"
-                ? ucFirst(
-                    table.find((field) => field.field === "aspect").form
-                  )
+                ? ucFirst(table.find((field) => field.field === "aspect").form)
                 : ""
             }}
             {{ ucFirst(tableName) }}
@@ -57,7 +55,10 @@
                     {{ row.field }}
                   </td>
                   <td class="pt-1 pb-1">
-                    <Annotate :buttons="false" :disableAnnotation="$l2.code === 'ko'">
+                    <Annotate
+                      :buttons="false"
+                      :disableAnnotation="$l2.code === 'ko'"
+                    >
                       <b :data-level="word.level || 'outside'">
                         {{ row.form || "n/a"
                         }}{{
@@ -74,8 +75,8 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </template>
+  </Widget>
 </template>
 
 <script>
@@ -113,10 +114,10 @@ export default {
   },
   methods: {
     isEmpty(...args) {
-      return Helper.isEmpty(...args)
+      return Helper.isEmpty(...args);
     },
     ucFirst(...args) {
-      return Helper.ucFirst(...args)
+      return Helper.ucFirst(...args);
     },
     async getTables() {
       // https://www.consolelog.io/group-by-in-javascript/

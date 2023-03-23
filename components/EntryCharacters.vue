@@ -1,35 +1,32 @@
 <template>
   <div class="entry-character" v-if="text" v-cloak>
     <div class="row character-row" v-if="characters">
-      <!-- ANCHOR img/anchors/character.png -->
-      <div
-        class="character-column widget"
+      <Widget
+        class="character-column"
         v-for="(character, index) in characters"
         :key="`entry-character-${index}`"
       >
-        <div class="widget-title">{{ $t('Character') }}</div>
-        <div class="widget-body jumbotron-fluid p-4">
+        <template #title>{{ $t("Character") }}</template>
+        <template #body>
           <Character
             :character="character"
             :pinyin="pinyinArr.length > 0 ? pinyinArr[index] : ''"
           />
-        </div>
-      </div>
+        </template>
+      </Widget>
     </div>
   </div>
 </template>
 
 <script>
-
-
 export default {
   props: {
     text: {
-      stype: String
+      stype: String,
     },
     pinyin: {
-      default: ''
-    }
+      default: "",
+    },
   },
   computed: {
     $l1() {
@@ -41,30 +38,32 @@ export default {
         return this.$store.state.settings.l2;
     },
     $dictionary() {
-      return this.$getDictionary()
+      return this.$getDictionary();
     },
     $dictionaryName() {
-      return this.$store.state.settings.dictionaryName
+      return this.$store.state.settings.dictionaryName;
     },
     $hanzi() {
-      return this.$getHanzi()
+      return this.$getHanzi();
     },
     pinyinArr() {
-      return this.$l2.code === 'zh' ? this.pinyin.split(' ') : this.pinyin.split('')
-    }
+      return this.$l2.code === "zh"
+        ? this.pinyin.split(" ")
+        : this.pinyin.split("");
+    },
   },
   data() {
     return {
-      characters: []
-    }
+      characters: [],
+    };
   },
   async mounted() {
     if (this.text) {
-      let hanzi = await this.$getHanzi()
-      this.characters = await hanzi.getCharactersInWord(this.text)
+      let hanzi = await this.$getHanzi();
+      this.characters = await hanzi.getCharactersInWord(this.text);
     }
-  }
-}
+  },
+};
 </script>
 <style>
 .character-row {
@@ -75,5 +74,4 @@ export default {
   margin: 1rem;
   min-width: 20rem;
 }
-  
 </style>

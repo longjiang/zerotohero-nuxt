@@ -1,7 +1,7 @@
 <template>
-  <div class="widget chinese">
-    <div class="widget-title">{{ $t('Chinese Hànzì') }}</div>
-    <div class="widget-body jumbotron-fluid bg-light p-4">
+  <Widget>
+    <template #title>{{ $t("Chinese Hànzì") }}</template>
+    <template #body>
       <div v-if="words">
         <div v-for="word in words" :key="`hanzi-word-${word.id}`">
           <div>
@@ -11,7 +11,9 @@
               },${word.pinyin.replace(/ /g, '_')},${word.index}`"
               class="link-unstyled"
             >
-              <b class="bigger" :data-level="'outside'">{{ word.simplified }}</b>
+              <b class="bigger" :data-level="'outside'">
+                {{ word.simplified }}
+              </b>
 
               [{{ word.traditional }}]
               <span>({{ word.pinyin }})</span>
@@ -23,10 +25,15 @@
         </div>
       </div>
       <div v-if="words.length === 0">
-        {{ $t('We could not find any Chinese words with the (traditional) Chinese characters “{text}.”', { text }) }}
+        {{
+          $t(
+            "We could not find any Chinese words with the (traditional) Chinese characters “{text}.”",
+            { text }
+          )
+        }}
       </div>
-    </div>
-  </div>
+    </template>
+  </Widget>
 </template>
 
 <script>
@@ -48,8 +55,8 @@ export default {
   },
   computed: {
     chinese() {
-      return this.$languages.getSmart('zh')
-    }
+      return this.$languages.getSmart("zh");
+    },
   },
   methods: {
     async loadVariants() {

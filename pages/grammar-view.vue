@@ -9,7 +9,10 @@
     <div class="container pt-4" id="main">
       <SocialHead
         v-if="grammar && images && images[0]"
-        :title="`${$t('Grammar {level} {code}', { level: $t(l2LevelName), code: grammar.code })} | Language Player`"
+        :title="`${$t('Grammar {level} {code}', {
+          level: $t(l2LevelName),
+          code: grammar.code,
+        })} | Language Player`"
         :description="`Example: ${grammar.example} ${grammar.exampleTranslation}`"
         :image="images[0].src"
       />
@@ -34,20 +37,22 @@
 
           <LazyGrammarPoint :grammar="grammar" :key="id" class="mb-5" />
 
-          <div
-            class="widget widget-dark mt-5 mb-5"
-            id="search-subs"
+          <Widget
+            :key="`subs-search-${grammar.pattern}`"
+            skin="dark"
+            class="mt-5 mb-5"
             v-if="
               grammar.pattern &&
               (!entry || grammar.pattern !== entry.simplified)
             "
-            :key="`subs-search-${grammar.pattern}`"
           >
-            <div class="widget-title">
+            <template
+              #title
+            >
               “{{ grammar.pattern }}” in
               <LazyShowFilter @showFilter="reloadSearchSubs" />
-            </div>
-            <div class="widget-body">
+            </template>
+            <template #body>
               <LazySearchSubsComp
                 v-if="grammar.pattern && renderSearchSubs"
                 ref="searchSubs"
@@ -55,8 +60,8 @@
                 :level="grammar.level"
                 :terms="[grammar.pattern]"
               />
-            </div>
-          </div>
+            </template>
+          </Widget>
 
           <div class="text-left mt-5" v-if="drills && drills.length > 0">
             <hr />

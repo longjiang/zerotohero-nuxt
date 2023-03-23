@@ -15,19 +15,18 @@
     <div :class="{ container: !portrait, 'container-fluid': portrait }">
       <div class="row">
         <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
-          <div
-            class="widget widget-dark"
+          <Widget
+            skin="dark"
             id="search-subs"
             v-if="term"
             :key="`subs-search-${term}`"
-            :style="portrait ? 'border-radius: 0' : ''"
           >
-            <div class="widget-title">
+            <template #title>
               “{{ term }}” in
               <span v-if="tvShow">the TV Show “{{ tvShow.title }}”</span>
               <LazyShowFilter v-else @showFilter="reloadSearchSubs" />
-            </div>
-            <div class="widget-body">
+            </template>
+            <template #body>
               <LazySearchSubsComp
                 v-if="term && renderSearchSubs"
                 ref="searchSubs"
@@ -38,8 +37,8 @@
                 :tvShow="tvShow"
                 :exact="exact"
               />
-            </div>
-          </div>
+            </template>
+          </Widget>
         </div>
       </div>
     </div>
@@ -134,7 +133,9 @@ export default {
           this.term
         }” | Language Player ${this.$l2 ? this.$l2.name : ""} Dictionary`;
       }
-      return `Lookup ${this.$l2 ? this.$l2.name : ""} Phrases | Language Player`;
+      return `Lookup ${
+        this.$l2 ? this.$l2.name : ""
+      } Phrases | Language Player`;
     },
     description() {
       if (this.term) {

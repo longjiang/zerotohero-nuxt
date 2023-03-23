@@ -40,14 +40,14 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <div
-            class="widget mt-5"
+          <Widget
+            class="mt-5"
             id="search-subs"
             v-if="term && compareTerm"
             :key="`compare-subs-search-${term}-${compareTerm}`"
           >
-            <div class="widget-title">“{{ term }}” in TV Shows</div>
-            <div class="widget-body">
+            <template #title>“{{ term }}” in TV Shows</template>
+            <template #body>
               <LazyCompareSearchSubs
                 ref="searchSubs"
                 level="outside"
@@ -55,8 +55,8 @@
                 :termsA="[term]"
                 :termsB="[compareTerm]"
               />
-            </div>
-          </div>
+            </template>
+          </Widget>
         </div>
       </div>
       <div class="row">
@@ -170,7 +170,9 @@ export default {
           this.$l2 ? this.$l2.name : ""
         } Phrases Compared | Language Player`;
       }
-      return `${this.$l2 ? this.$l2.name : ""} Phrases Compared | Language Player`;
+      return `${
+        this.$l2 ? this.$l2.name : ""
+      } Phrases Compared | Language Player`;
     },
     description() {
       if (this.a && this.b) {

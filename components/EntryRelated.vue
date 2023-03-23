@@ -1,6 +1,6 @@
 <template>
-  <div :key="'related-' + relatedKey" class="widget">
-    <div class="widget-title">
+  <Widget :key="'related-' + relatedKey">
+    <template #title>
       <i18n path="Words related to “{0}”" tag="span">
         <span>
           <span v-if="!$l2.han || $l2.code === 'ja'">{{ entry.head }}</span>
@@ -8,8 +8,8 @@
           <span class="simplified">{{ entry.simplified }}</span>
         </span>
       </i18n>
-    </div>
-    <div class="jumbotron-fluid widget-body p-4">
+    </template>
+    <template #body>
       <div
         :class="{ 'loader text-center pb-5 pt-3': true, 'd-none': !checking }"
         style="flex: 1"
@@ -24,10 +24,15 @@
         collapse="10"
       />
       <div v-if="words && words.length === 0">
-        {{ $t('Sorry, we could not find any words related to “{term}” in this corpus.', { term: entry.head } ) }}
+        {{
+          $t(
+            "Sorry, we could not find any words related to “{term}” in this corpus.",
+            { term: entry.head }
+          )
+        }}
         <i18n path="You can set a different corpus in {0}.">
-          <router-link :to="{name: 'settings'}">
-            {{ $t('Settings') }}
+          <router-link :to="{ name: 'settings' }">
+            {{ $t("Settings") }}
           </router-link>
         </i18n>
       </div>
@@ -43,8 +48,8 @@
           </a>
         </i18n>
       </div>
-    </div>
-  </div>
+    </template>
+  </Widget>
 </template>
 <script>
 import SketchEngine from "@/lib/sketch-engine";

@@ -1,12 +1,8 @@
 <template>
   <TabbedSections v-bind="{ sections }">
     <template #media>
-      <div
-        :class="{ 'widget widget-dark': true }"
-        id="search-subs"
-        v-if="entry && showSearchSubs && selectedSearchTerms"
-      >
-        <div class="widget-title">
+      <Widget skin="dark" :withPadding="false" v-if="entry && showSearchSubs && selectedSearchTerms">
+        <template #title>
           <ChooseSearchTerms
             v-model="selectedSearchTerms"
             :initialSelectedTerms="selectedSearchTerms"
@@ -17,8 +13,8 @@
             {{ $t("the TV Show “{title}”", { title: tvShow.title }) }}
           </span>
           <LazyShowFilter v-else @showFilter="reloadSearchSubs" />
-        </div>
-        <div class="widget-body">
+        </template>
+        <template #body>
           <LazySearchSubsComp
             v-if="selectedSearchTerms && renderSearchSubs"
             ref="searchSubs"
@@ -30,14 +26,14 @@
             :exact="exact"
             :context="entry?.saved?.context"
           />
-        </div>
-      </div>
+        </template>
+      </Widget>
       <EntryYouTube :text="entry.head" v-if="$adminMode" class />
-      <div class="web-images widget" v-if="showImages">
-        <div class="widget-title">
+      <Widget v-if="showImages">
+        <template #title>
           {{ $t("Images of “{text}” on the Web", { text: entry.head }) }}
-        </div>
-        <div class="widget-body jumbotron-fluid p-4">
+        </template>
+        <template #body>
           <WebImages
             :text="entry.head"
             :entry="entry"
@@ -46,33 +42,29 @@
             :preloaded="images"
             @loaded="webImagesLoaded"
           />
-          <p class>
-            <i18n path="See more images of of “{0}” on {1}" tag="span">
-              <span>{{ entry.head }}</span>
-              <a
-                :href="`https://www.google.com/search?q=${entry.head.replace(
-                  / /g,
-                  '+'
-                )}&tbm=isch&sout=1#spf=1567955197854`"
-              >
-                <img
-                  src="/img/logo-google-images.png"
-                  alt="Google Images"
-                  class="logo-small ml-2"
-                />
-              </a>
-            </i18n>
-          </p>
-        </div>
-      </div>
+          <i18n
+            path="See more images of of “{0}” on {1}"
+            tag="div"
+            class="mt-2"
+          >
+            <span>{{ entry.head }}</span>
+            <a
+              :href="`https://www.google.com/search?q=${entry.head}`"
+              class="text-secondary"
+            >
+              <u>Google</u>
+            </a>
+          </i18n>
+        </template>
+      </Widget>
     </template>
 
     <template #chatGPT>
-      <div class="widget">
-        <div class="widget-title">
+      <Widget>
+        <template #title>
           {{ $t("Let ChatGPT explain “{text}”", { text: entry.head }) }}
-        </div>
-        <div class="widget-body jumbotron-fluid p-4">
+        </template>
+        <template #body>
           <ChatGPT
             :initialMessage="
               $t(
@@ -87,8 +79,8 @@
               )
             "
           />
-        </div>
-      </div>
+        </template>
+      </Widget>
     </template>
 
     <template #inflections>
@@ -102,9 +94,10 @@
       />
     </template>
     <template #phrases>
-      <div class="phrases mt-2" v-if="entry.phrases">
-        <WordList :words="entry.phrases" />
-      </div>
+      <Widget class="phrases mt-2" v-if="entry.phrases">
+        <template #title>{{ $t('Phrases that include “{word}”', {word: entry.head }) }}</template>
+        <template #body><WordList :words="entry.phrases" /></template>
+      </Widget>
     </template>
 
     <template #examples>
@@ -151,7 +144,6 @@
       </div>
     </template>
     <template #related>
-      <!-- <EntryDifficulty :entry="entry" style="flex: 1" class="m-3" /> -->
       <EntryDisambiguation
         v-if="['zh', 'yue'].includes($l2.code)"
         :entry="entry"

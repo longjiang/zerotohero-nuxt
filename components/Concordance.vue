@@ -1,92 +1,99 @@
 <template>
-  <div :key="'concordance-' + concordanceKey" class="widget">
-    <div class="widget-title">
+  <Widget :key="'concordance-' + concordanceKey">
+    <template #title>
       {{ $t("Sentences with “{text}”", { text: term }) }}
-    </div>
-    <div class="widget-body jumbotron-fluid p-4">
-      <div class="text-center p-5" v-if="updating">
-        <Loader :sticky="true" message="Loading sentences..." />
-      </div>
-      <div v-if="examples && examples.length > 0">
-        <ul
-          v-if="examples"
-          class="collapsed list-unstyled"
-          data-collapse-target
-        >
-          <li
-            v-for="(example, index) in examples
-              .filter((example) => example.sentences.length > 0)
-              .sort((a, b) => a.sentences[0].length - b.sentences[0].length)"
-            :key="`example-item-${index}`"
+    </template>
+    <template #body>
+      <div class="widget-body jumbotron-fluid p-4">
+        <div class="text-center p-5" v-if="updating">
+          <Loader :sticky="true" message="Loading sentences..." />
+        </div>
+        <div v-if="examples && examples.length > 0">
+          <ul
+            v-if="examples"
+            class="collapsed list-unstyled"
+            data-collapse-target
           >
-            <Annotate
-              tag="div"
-              class="pt-2 pb-2"
-              :showTranslate="true"
-              :checkSaved="false"
-              :buttons="true"
+            <li
+              v-for="(example, index) in examples
+                .filter((example) => example.sentences.length > 0)
+                .sort((a, b) => a.sentences[0].length - b.sentences[0].length)"
+              :key="`example-item-${index}`"
             >
-              <span
-                v-html="
-                  highlightMultiple(
-                    example.sentences[0],
-                    words,
-                    level || 'outside'
-                  )
-                "
-              />
-            </Annotate>
-            <div v-if="example.l1">{{ example.l1 }}</div>
-            <div v-if="example.ref" class="concordance-ref">
-              {{ example.ref }}
-            </div>
-            <hr />
-          </li>
-        </ul>
-        <ShowMoreButton
-          :length="
-            examples.filter((example) => example.sentences.length > 0).length
-          "
-          :min="7"
-          :data-bg-level="level"
-        />
-      </div>
-      <div v-if="!updating && (!examples || examples.length === 0)">
-        {{ $t('Sorry, we could not find any sentences with “{term}” in this corpus.', {term} ) }}
-        <i18n path="You can set a different corpus in {0}.">
-          <router-link :to="{name: 'settings'}">
-            {{ $t('Settings') }}
-          </router-link>
-        </i18n>
-      </div>
-      <hr v-if="examples && examples.length === 0" />
-      <div class="mt-4">
-        {{ $t("Sentences provided by") }}
-        <a
-          :href="`https://app.sketchengine.eu/#concordance?corpname=${encodeURIComponent(
-            SketchEngine.corpname
-          )}&tab=basic&keyword=${term}&structs=s%2Cg&refs=%3Ddoc.website&showresults=1&operations=%5B%7B%22name%22%3A%22iquery%22%2C%22arg%22%3A%22${term}%22%2C%22active%22%3Atrue%2C%22query%22%3A%7B%22queryselector%22%3A%22iqueryrow%22%2C%22iquery%22%3A%22${term}%22%7D%2C%22id%22%3A3859%7D%5D`"
-          target="_blank"
-        >
-          <img
-            src="/img/logo-sketch-engine.png"
-            alt="Sketch Engine"
-            class="ml-2 logo-small"
+              <Annotate
+                tag="div"
+                class="pt-2 pb-2"
+                :showTranslate="true"
+                :checkSaved="false"
+                :buttons="true"
+              >
+                <span
+                  v-html="
+                    highlightMultiple(
+                      example.sentences[0],
+                      words,
+                      level || 'outside'
+                    )
+                  "
+                />
+              </Annotate>
+              <div v-if="example.l1">{{ example.l1 }}</div>
+              <div v-if="example.ref" class="concordance-ref">
+                {{ example.ref }}
+              </div>
+              <hr />
+            </li>
+          </ul>
+          <ShowMoreButton
+            :length="
+              examples.filter((example) => example.sentences.length > 0).length
+            "
+            :min="7"
+            :data-bg-level="level"
           />
-        </a>
+        </div>
+        <div v-if="!updating && (!examples || examples.length === 0)">
+          {{
+            $t(
+              "Sorry, we could not find any sentences with “{term}” in this corpus.",
+              { term }
+            )
+          }}
+          <i18n path="You can set a different corpus in {0}.">
+            <router-link :to="{ name: 'settings' }">
+              {{ $t("Settings") }}
+            </router-link>
+          </i18n>
+        </div>
+        <hr v-if="examples && examples.length === 0" />
+        <div class="mt-4">
+          {{ $t("Sentences provided by") }}
+          <a
+            :href="`https://app.sketchengine.eu/#concordance?corpname=${encodeURIComponent(
+              SketchEngine.corpname
+            )}&tab=basic&keyword=${term}&structs=s%2Cg&refs=%3Ddoc.website&showresults=1&operations=%5B%7B%22name%22%3A%22iquery%22%2C%22arg%22%3A%22${term}%22%2C%22active%22%3Atrue%2C%22query%22%3A%7B%22queryselector%22%3A%22iqueryrow%22%2C%22iquery%22%3A%22${term}%22%7D%2C%22id%22%3A3859%7D%5D`"
+            target="_blank"
+          >
+            <img
+              src="/img/logo-sketch-engine.png"
+              alt="Sketch Engine"
+              class="ml-2 logo-small"
+            />
+          </a>
+        </div>
+        <hr />
+        <div>
+          {{ $t("Search for more sentences at") }}
+          <a
+            :href="`https://tatoeba.org/eng/sentences/search?from=${$l2['iso639-3']}&to=${$l1['iso639-3']}&query=${term}`"
+            target="_blank"
+          >
+            Tatoeba
+          </a>
+        </div>
       </div>
-      <hr />
-      <div>
-        {{ $t("Search for more sentences at") }}
-        <a
-          :href="`https://tatoeba.org/eng/sentences/search?from=${$l2['iso639-3']}&to=${$l1['iso639-3']}&query=${term}`"
-          target="_blank"
-        >
-          Tatoeba
-        </a>
-      </div>
-    </div>
-  </div>
+    </template>
+  </Widget>
 </template>
 
 <script>
@@ -143,7 +150,7 @@ export default {
   },
   methods: {
     highlightMultiple(...args) {
-      return Helper.highlightMultiple(...args)
+      return Helper.highlightMultiple(...args);
     },
     async update() {
       this.updating = true;

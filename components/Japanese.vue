@@ -1,7 +1,7 @@
 <template>
-  <div class="widget japanese">
-    <div class="widget-title">{{ $t('Japanese Kanji') }}</div>
-    <div class="widget-body jumbotron-fluid p-4">
+  <Widget>
+    <template #title>{{ $t("Japanese Kanji") }}</template>
+    <template #body>
       <div v-if="words">
         <div v-for="word in words" :key="`kanji-word-${word.id}`">
           <div>
@@ -27,10 +27,14 @@
         </div>
       </div>
       <div v-if="!words || words.length === 0">
-        {{ $t('We could not find any Japanese words with the kanji “{text}.”', { text }) }}
+        {{
+          $t("We could not find any Japanese words with the kanji “{text}.”", {
+            text,
+          })
+        }}
       </div>
-    </div>
-  </div>
+    </template>
+  </Widget>
 </template>
 
 <script>

@@ -1,9 +1,11 @@
 <template>
-  <div class="widget mistakes">
-    <div class="widget-title widget-title-mistakes">
-      Student Mistakes with “{{ text }}”
-    </div>
-    <div class="widget-body jumbotron-fluid p-4">
+  <Widget>
+    <template #title>
+      <div class="widget-title-mistakes">
+        Student Mistakes with “{{ text }}”
+      </div>
+    </template>
+    <template #body>
       <div class="text-center p-5" v-if="updating">
         <Loader :sticky="true" message="Loading student mistakes..." />
       </div>
@@ -43,7 +45,9 @@
                 <span>{{ mistake.rightContext }}</span>
               </Annotate>
             </span>
-            <ShowMoreButton :length="1" class="mb-2 btn-small ml-2">Context</ShowMoreButton>
+            <ShowMoreButton :length="1" class="mb-2 btn-small ml-2">
+              Context
+            </ShowMoreButton>
             <div>
               <div class="mistake-description">
                 <span v-if="mistake.country">
@@ -114,8 +118,8 @@
           <code>guangwai</code>
         </small>
       </div>
-    </div>
-  </div>
+    </template>
+  </Widget>
 </template>
 
 <script>
@@ -128,7 +132,7 @@ export default {
     return {
       show: false,
       mistakes: undefined,
-      updating: true
+      updating: true,
     };
   },
   methods: {
@@ -136,14 +140,14 @@ export default {
       this.show = true;
     },
     ucFirst(...args) {
-      return Helper.ucFirst(...args)
-    }
+      return Helper.ucFirst(...args);
+    },
   },
   async created() {
     let results = await SketchEngine.mistakes({
       term: this.text,
     });
-    this.updating = false
+    this.updating = false;
     this.mistakes = results;
     if (this.mistakes && this.mistakes.length > 0) {
       this.$emit("mistakesReady");
