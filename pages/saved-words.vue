@@ -89,7 +89,7 @@
             />
           </div>
           <div class="text-center" v-if="sWLoaded && sW.length > 0">
-            <MakeAStory :words="sW.map((s) => s.word.head).slice(0, 25)" />
+            <MakeAStory :words="sW.map((s) => s.word.head).slice(0, 10)" />
           </div>
           <div
             v-for="(group, index) in groups"

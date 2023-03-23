@@ -34,6 +34,7 @@
           v-bind="{
             text,
             words,
+            images,
             loading,
             context,
             transliterationprop,
@@ -482,7 +483,6 @@ export default {
       this.checkSavedPhrase();
     },
     async loadImages() {
-      this.loadingImages = true;
       if (this.images.length === 0) {
         this.images = (
           await WordPhotos.getGoogleImages({
@@ -530,15 +530,15 @@ export default {
             this.lookup();
           }
         }
-        if (
-          this.words &&
-          this.words.find(
-            (w) =>
-              w.pos &&
-              ["proper noun", "noun", "Noun", "name", "n"].includes(w.pos)
-          )
-        )
-          this.loadImages();
+        let hasImageWorthyWords = false
+        if (this.words) {
+          hasImageWorthyWords = this.words.find((w) => {
+            if (this.$l2.code === 'ja') return true
+            else if (w.pos &&
+              ["proper noun", "noun", "Noun", "name", "n"].includes(w.pos)) return true
+          })
+        }    
+        if (hasImageWorthyWords) this.loadImages();
         this.open = true;
         await timeout(123);
         if (this.open && this.l2SettingsOfL2.autoPronounce) {

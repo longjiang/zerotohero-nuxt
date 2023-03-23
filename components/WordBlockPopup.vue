@@ -3,7 +3,7 @@
     <div
       class="tooltip-images"
       :key="`tooltip-images-${text}`"
-      v-if="loadingImages"
+      v-if="images && images.length > 0"
     >
       <img
         alt
@@ -231,6 +231,7 @@ export default {
   props: {
     text: String,
     words: Array,
+    images: Array,
     transliterationprop: String,
     phraseObj: Object,
     loading: {
@@ -249,9 +250,7 @@ export default {
   },
   data() {
     return {
-      images: [],
       imageProxy,
-      loadingImages: false,
       entryClasses: { "tooltip-entry": true }, // Other classes are added upon update
     };
   },
