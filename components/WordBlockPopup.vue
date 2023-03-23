@@ -192,7 +192,7 @@
         <Speak :text="text" class="ml-1" ref="speak" />
       </span>
       <div style="font-size: 1.5rem; font-weight: bold">
-        <span data-level="outside">{{ text }}</span>
+        <router-link data-level="outside" :to="{name: 'phrase', params: {term: text}}">{{ text }} <i class="fa fa-chevron-right"></i></router-link>
         <span class="copy-button">
           <i class="ml-1 fa-regular fa-copy" @click="copyClick"></i>
         </span>
