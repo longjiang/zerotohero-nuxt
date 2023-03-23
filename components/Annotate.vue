@@ -300,9 +300,6 @@ export default {
     starttime: {
       type: Number,
     },
-    quizMode: {
-      default: false
-    }
   },
   data() {
     return {
@@ -350,6 +347,9 @@ export default {
   },
   computed: {
     ...mapState("settings", ["l2Settings"]),
+    quizMode() {
+      return this.l2SettingsOfL2?.quizMode
+    },
     level() {
       return this.$store.state.progress.progressLoaded
         ? Number(this.$store.getters["progress/level"](this.$l2))

@@ -27,7 +27,6 @@
                 single,
                 hsk,
                 notes,
-                quizMode,
                 textSize: single ? textSize : 1,
                 parallelLine: getParallelLine(line, index),
                 showParallelLine: parallellines && parallellines.length > 0,
@@ -187,9 +186,6 @@ export default {
     video: {
       type: Object
     },
-    quizMode: {
-      default: false
-    }
   },
   data() {
     return {

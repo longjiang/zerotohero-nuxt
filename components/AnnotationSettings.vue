@@ -2,6 +2,20 @@
   <div :class="`annotation-settings annotation-settings-${variant}`">
     <div v-if="variant === 'toolbar'">
       <button
+        :class="{
+          'btn btn-unstyled d-block p-0 annotation-setting-toggle': true,
+          'annotation-setting-toggle-active text-success': quizMode,
+        }"
+        @click="quizMode = !quizMode"
+        title="Toggle Quiz Mode"
+      >
+        <span class="annotation-setting-icon">
+          <i class="far fa-rocket-launch"></i>
+        </span>
+        <span v-if="quizMode">{{ $t("Quiz Mode On") }}</span>
+        <span v-if="!quizMode">{{ $t("Quiz Mode Off") }}</span>
+      </button>
+      <button
         @click="autoPronounce = !autoPronounce"
         :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
           autoPronounce ? 'annotation-setting-toggle-active' : ''
@@ -11,8 +25,8 @@
           <i class="fa fa-volume-up" v-if="autoPronounce"></i>
           <i class="fas fa-volume-mute" v-else></i>
         </span>
-        <span v-if="autoPronounce">{{ $t('Auto pronounce words') }}</span>
-        <span v-else>{{ $t('Do not auto pronounce words') }}</span>
+        <span v-if="autoPronounce">{{ $t("Auto pronounce words") }}</span>
+        <span v-else>{{ $t("Do not auto pronounce words") }}</span>
       </button>
       <button
         @click="showPinyin = !showPinyin"
@@ -53,7 +67,9 @@
           <span v-if="!useTraditional">简</span>
         </span>
         {{
-          $t(useTraditional ? "Traditional characters" : "Simplified characters")
+          $t(
+            useTraditional ? "Traditional characters" : "Simplified characters"
+          )
         }}
       </button>
       <button
@@ -110,14 +126,14 @@
         @click="zoomLevel = Math.max(zoomLevel - 1, 0)"
       >
         <span class="annotation-setting-icon">ᴛ</span>
-        {{ $t('Smaller text') }}
+        {{ $t("Smaller text") }}
       </button>
       <button
         class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
         @click="zoomLevel = Math.min(zoomLevel + 1, 4)"
       >
         <span class="annotation-setting-icon">T</span>
-        {{ $t('Bigger text') }}
+        {{ $t("Bigger text") }}
       </button>
       <button
         v-if="userIsAdmin"
@@ -129,13 +145,13 @@
         <span class="annotation-setting-icon">
           <i class="fa fa-wrench"></i>
         </span>
-        <span>{{ $t('Admin Mode') }}</span>
+        <span>{{ $t("Admin Mode") }}</span>
       </button>
       <hr />
       <div :class="`annotation-setting-toggle`">
         <router-link :to="{ name: 'settings' }" class="text-success">
           <i class="fa-solid fa-gears annotation-setting-icon"></i>
-          {{ $t('More Settings') }}
+          {{ $t("More Settings") }}
           <i class="fa-solid fa-chevron-right"></i>
         </router-link>
       </div>
@@ -148,12 +164,12 @@
           v-model="showByeonggi"
         >
           <span v-if="$l2.code === 'ko'">
-            {{ $t('Show hanja next to hanguel (byeonggi)') }} (
+            {{ $t("Show hanja next to hanguel (byeonggi)") }} (
             <a
               href="https://ko.wikipedia.org/wiki/%ED%95%9C%EA%B8%80%EC%A0%84%EC%9A%A9%EA%B3%BC_%EA%B5%AD%ED%95%9C%EB%AC%B8%ED%98%BC%EC%9A%A9#%ED%95%9C%EC%9E%90_%EB%B3%91%EA%B8%B0"
               target="_blank"
             >
-              {{ $t('What is byeonggi (병기, 倂記)?') }}
+              {{ $t("What is byeonggi (병기, 倂記)?") }}
             </a>
           </span>
           <span v-if="$l2.code === 'vi'">
@@ -161,17 +177,19 @@
             <a
               href="https://en.wikipedia.org/wiki/History_of_writing_in_Vietnam#Ch%E1%BB%AF_H%C3%A1n"
               target="_blank"
-            >
-              
-            </a>
-            {{ $t('What is Hán tự?') }}
+            ></a>
+            {{ $t("What is Hán tự?") }}
           </span>
         </b-form-checkbox>
         <template v-if="$hasFeature('transliteration')">
           <b-form-checkbox v-model="showPinyin" class="mb-2">
-            <span v-if="['zh', 'lzh'].includes($l2.code)">{{ $t('Display pinyin above words') }}</span>
-            <span v-else-if="$l2.code === 'ja'">{{ $t('Display furigana above words') }}</span>
-            <span v-else>{{ $t('Display romanization above words') }}</span>
+            <span v-if="['zh', 'lzh'].includes($l2.code)">
+              {{ $t("Display pinyin above words") }}
+            </span>
+            <span v-else-if="$l2.code === 'ja'">
+              {{ $t("Display furigana above words") }}
+            </span>
+            <span v-else>{{ $t("Display romanization above words") }}</span>
           </b-form-checkbox>
 
           <b-form-checkbox
@@ -195,36 +213,36 @@
             "
             v-model="showDefinition"
           >
-            {{ $t('Show definition above words') }}
+            {{ $t("Show definition above words") }}
           </b-form-checkbox>
         </template>
         <b-form-checkbox class="mb-2" v-model="showTranslation">
-          {{ $t('Show translation') }}
+          {{ $t("Show translation") }}
         </b-form-checkbox>
         <b-form-checkbox class="mb-2" v-model="showQuickGloss">
-          {{ $t('Show Quick Gloss') }}
+          {{ $t("Show Quick Gloss") }}
         </b-form-checkbox>
         <b-form-checkbox class="mb-2" v-model="showQuiz">
-          {{ $t('Show pop quiz') }}
+          {{ $t("Show pop quiz") }}
         </b-form-checkbox>
         <b-form-checkbox class="mb-2" v-model="autoPronounce">
-          {{ $t('Pronounce word when opening popup') }}
+          {{ $t("Pronounce word when opening popup") }}
         </b-form-checkbox>
         <b-form-checkbox class="mb-2" v-model="disableAnnotation">
-          {{ $t('Disable popup dictionary') }}
+          {{ $t("Disable popup dictionary") }}
         </b-form-checkbox>
         <b-button-group v-if="$l2.han" class="d-block mb-2">
           <b-button
             :variant="!useTraditional ? 'secondary' : 'outline-secondary'"
             @click="useTraditional = false"
           >
-            {{ $t('Use Simplified') }}
+            {{ $t("Use Simplified") }}
           </b-button>
           <b-button
             :variant="useTraditional ? 'secondary' : 'outline-secondary'"
             @click="useTraditional = true"
           >
-            {{ $t('Use Traditional') }}
+            {{ $t("Use Traditional") }}
           </b-button>
         </b-button-group>
         <b-button-group class="d-block">
@@ -232,14 +250,14 @@
             :variant="!useSerif ? 'secondary' : 'outline-secondary'"
             @click="useSerif = false"
           >
-            {{ $t('Use Sans-Serif') }}
+            {{ $t("Use Sans-Serif") }}
           </b-button>
           <b-button
             :variant="useSerif ? 'secondary' : 'outline-secondary'"
             style="font-family: serif"
             @click="useSerif = true"
           >
-            {{ $t('Use Serif') }}
+            {{ $t("Use Serif") }}
           </b-button>
         </b-button-group>
       </div>
@@ -394,13 +412,14 @@ const defaultSettings = {
   showQuiz: undefined,
   useSerif: undefined,
   showByeonggi: undefined,
-  disableAnnotation: undefined
+  disableAnnotation: undefined,
+  quizMode: false,
 };
 export default {
   props: {
     variant: {
-      default: "page" // or 'toolbar'
-    }
+      default: "page", // or 'toolbar'
+    },
   },
   data() {
     return defaultSettings;
@@ -412,7 +431,7 @@ export default {
         this.loadSettings();
       }
     });
-    this.setupWatchers()
+    this.setupWatchers();
   },
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
@@ -429,7 +448,7 @@ export default {
     },
     l2SettingsOfL2() {
       if (this.l2Settings) return this.l2Settings[this.$l2.code];
-    }
+    },
   },
   methods: {
     loadSettings() {
@@ -444,12 +463,12 @@ export default {
     setupWatchers() {
       for (let property in defaultSettings) {
         this.$watch(property, (newValue, oldValue) => {
-          let payload = {}
-          payload[property] = newValue
+          let payload = {};
+          payload[property] = newValue;
           this.$store.dispatch("settings/setL2Settings", payload);
         });
       }
-    }
+    },
   },
   watch: {
     // set up in setupWatchers()

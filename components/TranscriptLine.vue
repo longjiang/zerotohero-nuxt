@@ -41,7 +41,6 @@
               showGrammar: true,
               youtube_id: this.video.youtube_id,
               starttime: this.line.starttime,
-              quizMode
             }"
             :class="{
               'transcript-line-l2': true,
@@ -144,9 +143,6 @@ export default {
     hideWhileAnnotating: {
       // Whether to hide the line before annotation is complete (for reducing flickering in single-line mode)
       type: Boolean,
-      default: false
-    },
-    quizMode: {
       default: false
     },
     textSize: {

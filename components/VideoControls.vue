@@ -258,19 +258,6 @@
           <span>{{ $t("Smooth Scrolling") }}</span>
         </button>
       </div>
-      <div class="mt-1">
-        <button
-          :class="{
-            'btn btn-unstyled text-center d-block p-0': true,
-            'text-success': quizMode,
-          }"
-          @click="toggleQuizMode"
-          title="Toggle Quiz Mode"
-        >
-          <span class="settings-icon"><i class="far fa-rocket-launch"></i></span>
-          <span>{{ $t("Quiz Mode") }}</span>
-        </button>
-      </div>
       <hr />
       <AnnotationSettings variant="toolbar" />
     </b-modal>
@@ -340,7 +327,6 @@ export default {
       collapsed: false,
       currentLine: undefined,
       currentTime: this.initialTime,
-      quizMode: false
     };
   },
   computed: {
@@ -425,10 +411,6 @@ export default {
     },
   },
   methods: {
-    toggleQuizMode() {
-      this.quizMode = !this.quizMode
-      this.$emit("updateQuizMode", this.quizMode);
-    },
     toHHMMSS(duration) {
       return toHHMMSS(duration);
     },
