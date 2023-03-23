@@ -48,20 +48,6 @@
           </div>
         </div>
       </client-only>
-      <div class="for-the-love-of-wrapper bg-white">
-        <div class="container" v-if="!term">
-          <div class="row">
-            <div class="col-sm-12 bg-white">
-              <div class="for-the-love-of">
-                <h3 class="text-center font-weight-normal">
-                  For the love of
-                  {{ $l2.name }} phrases.
-                </h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <div
         :class="{
           'content-panes-wrapepr focus-exclude': true,
@@ -145,7 +131,6 @@
               <LazyPhraseComp
                 v-else-if="term"
                 :term="term"
-                :showHeader="false"
               />
               <div class="mt-3" v-if="term && similarPhraseTranslation">
                 <SimilarPhrases

@@ -212,7 +212,7 @@
                 :tvShow="phrasebook.tv_show"
                 :exact="phraseObj.exact || phrasebook.exact"
                 :showExternal="false"
-                :showHeader="false"
+
                 :showImages="false"
                 :showCollocations="false"
                 :showExamples="false"

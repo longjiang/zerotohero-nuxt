@@ -4,7 +4,6 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <PhraseHeader v-if="term && showHeader" />
           <div class="text-center" v-if="term">
             <EntryExternal :term="term" v-if="showExternal" />
           </div>
@@ -12,66 +11,108 @@
       </div>
     </div>
 
-    <div :class="{ container: !portrait, 'container-fluid': portrait }">
-      <div class="row">
-        <div :class="{ 'col-sm-12': true, 'p-0': portrait }">
-          <Widget
-            skin="dark"
-            id="search-subs"
-            v-if="term"
-            :key="`subs-search-${term}`"
-          >
-            <template #title>
-              “{{ term }}” in
-              <span v-if="tvShow">the TV Show “{{ tvShow.title }}”</span>
-              <LazyShowFilter v-else @showFilter="reloadSearchSubs" />
-            </template>
-            <template #body>
-              <LazySearchSubsComp
-                v-if="term && renderSearchSubs"
-                ref="searchSubs"
-                level="outside"
-                skin="dark"
-                :key="`${term}-search-subs`"
-                :terms="[term]"
-                :tvShow="tvShow"
-                :exact="exact"
-              />
-            </template>
-          </Widget>
+    <TabbedSections v-bind="{ sections }">
+      <template #media>
+        <Widget
+          skin="dark"
+          id="search-subs"
+          v-if="term"
+          :key="`subs-search-${term}`"
+        >
+          <template #title>
+            “{{ term }}” in
+            <span v-if="tvShow">the TV Show “{{ tvShow.title }}”</span>
+            <LazyShowFilter v-else @showFilter="reloadSearchSubs" />
+          </template>
+          <template #body>
+            <LazySearchSubsComp
+              v-if="term && renderSearchSubs"
+              ref="searchSubs"
+              level="outside"
+              skin="dark"
+              :key="`${term}-search-subs`"
+              :terms="[term]"
+              :tvShow="tvShow"
+              :exact="exact"
+            />
+          </template>
+        </Widget>
+
+        <WebImages
+          v-if="showImages && term"
+          :text="term"
+          limit="10"
+          :key="`${term}-images`"
+        />
+        <client-only>
+          <EntryYouTube :text="term" v-if="$adminMode" />
+        </client-only>
+      </template>
+      <template #chatGPT>
+        <Widget>
+          <template #title>
+            {{ $t("Let ChatGPT explain “{text}”", { text: term }) }}
+          </template>
+          <template #body>
+            <ChatGPT
+              :initialMessage="
+                $t(
+                  'Please explain the {l2} word “{word}” ({pronunciation}), give its morphological breakdown, and some examples with {l1} translations, and a sample dialogue with {l1} translations.',
+                  {
+                    l2: $t($l2.name),
+                    l1: $t($l1.name),
+                    word: term,
+                    pronunciation: '',
+                  }
+                )
+              "
+            />
+          </template>
+        </Widget>
+      </template>
+      <template #phrases>
+        <Widget class="phrases mt-2" v-if="phrases.length > 0">
+          <template #title>
+            {{ $t("Phrases that include “{word}”", { word: term }) }}
+          </template>
+          <template #body><WordList :words="phrases.slice(0, 200)" /></template>
+        </Widget>
+      </template>
+      <template #collocations>
+        <Collocations
+          v-if="showCollocations && term"
+          :text="term"
+          :key="`${term}-col`"
+        />
+      </template>
+      <template #examples>
+        <Concordance
+          v-if="showExamples && term"
+          :text="term"
+          :key="`${term}-concordance`"
+        />
+      </template>
+      <template #mistakes>
+        <Mistakes
+          :class="{ '': true, hidden: !mistakesReady }"
+          @mistakesReady="mistakesReady = true"
+          v-if="$l2.code === 'zh'"
+          :text="term"
+          :key="`mistakes-${term}`"
+        ></Mistakes>
+      </template>
+      <template #related></template>
+      <template #characters>
+        <div v-if="$l2.code !== 'zh'">
+          <EntryCharacters
+            :key="`${term}-characters`"
+            :text="term"
+          ></EntryCharacters>
         </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="focus">
-            <WebImages
-              v-if="showImages && term"
-              :text="term"
-              limit="10"
-              :key="`${term}-images`"
-            />
-            <client-only>
-              <EntryYouTube :text="term" v-if="$adminMode" />
-            </client-only>
-            <Collocations
-              v-if="showCollocations && term"
-              :text="term"
-              :key="`${term}-col`"
-            />
-          </div>
-          <div :key="term" class="focus">
-            <Concordance
-              v-if="showExamples && term"
-              :text="term"
-              :key="`${term}-concordance`"
-            />
-          </div>
-          <!-- <Sale v-if="$l2.code === 'zh'" class="mb-5" /> -->
-        </div>
-      </div>
-    </div>
+      </template>
+    </TabbedSections>
+
+    <!-- <Sale v-if="$l2.code === 'zh'" class="mb-5" /> -->
   </article>
 </template>
 
@@ -99,14 +140,13 @@ export default {
     showExternal: {
       default: false,
     },
-    showHeader: {
-      default: true,
-    },
   },
   data() {
     return {
       images: [],
       renderSearchSubs: true,
+      mistakesReady: false,
+      phrases: []
     };
   },
   computed: {
@@ -121,6 +161,50 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    sections() {
+      return [
+        {
+          name: "media",
+          title: "Media",
+          visible: this.term,
+        },
+        {
+          name: "chatGPT",
+          title: "ChatGPT",
+          visible: true,
+        },
+        {
+          name: "phrases",
+          title: "Phrases",
+          visible: this.phrases.length > 0,
+        },
+        {
+          name: "collocations",
+          title: "Collocations",
+          visible: true,
+        },
+        {
+          name: "examples",
+          title: "Examples",
+          visible: true,
+        },
+        {
+          name: "mistakes",
+          title: "Mistakes",
+          visible: this.$l2.code === "zh",
+        },
+        {
+          name: "related",
+          title: "Related",
+          visible: true,
+        },
+        {
+          name: "characters",
+          title: "Characters",
+          visible: this.$l2.han || ["ja", "ko", "vi"].includes(this.$l2.code),
+        },
+      ];
     },
     portrait() {
       let landscape =
@@ -152,6 +236,13 @@ export default {
         return "/img/zth-share-image.jpg";
       }
     },
+  },
+  async mounted() {
+    let dictionary = await this.$getDictionary()
+    if (this.term && dictionary.lookupFuzzy) {
+      let phrases = await dictionary.lookupFuzzy(this.term);
+      this.phrases = phrases || []
+    }
   },
   methods: {
     reloadSearchSubs() {

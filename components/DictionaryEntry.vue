@@ -123,9 +123,7 @@
         <EntryCharacters
           v-if="entry.cjk && entry.cjk.canonical"
           :key="`${entry.id}-characters`"
-          class
           :text="entry.cjk.canonical"
-          :pinyin="entry.cjk.phonetics ? entry.cjk.phonetics : undefined"
         ></EntryCharacters>
       </div>
       <div v-else>
