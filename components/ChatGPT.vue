@@ -33,6 +33,9 @@
                 <span>{{ line }}</span>
               </Annotate>
             </div>
+            <div class="text-right">
+              <router-link :to="{name: 'reader', params: {method: 'md', arg: message.text}}" class="text-success"><i class="fa fa-book-open mr-1"></i> {{ $t('Open in Reader') }} <i class="fa fa-chevron-right ml-1"></i></router-link>
+            </div>
           </div>
         </div>
       </div>
