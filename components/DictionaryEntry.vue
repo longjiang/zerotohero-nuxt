@@ -1,7 +1,11 @@
 <template>
   <TabbedSections v-bind="{ sections }">
     <template #media>
-      <Widget skin="dark" :withPadding="false" v-if="entry && showSearchSubs && selectedSearchTerms">
+      <Widget
+        skin="dark"
+        :withPadding="false"
+        v-if="entry && showSearchSubs && selectedSearchTerms"
+      >
         <template #title>
           <ChooseSearchTerms
             v-model="selectedSearchTerms"
@@ -95,7 +99,9 @@
     </template>
     <template #phrases>
       <Widget class="phrases mt-2" v-if="entry.phrases">
-        <template #title>{{ $t('Phrases that include “{word}”', {word: entry.head }) }}</template>
+        <template #title>
+          {{ $t("Phrases that include “{word}”", { word: entry.head }) }}
+        </template>
         <template #body><WordList :words="entry.phrases" /></template>
       </Widget>
     </template>
@@ -121,7 +127,7 @@
     <template #characters>
       <div v-if="$l2.code !== 'zh'">
         <EntryCharacters
-          v-if="entry.cjk && entry.cjk.canonical"
+          v-if="characters"
           :key="`${entry.id}-characters`"
           :text="entry.cjk.canonical"
         ></EntryCharacters>
@@ -154,31 +160,25 @@
       <div class="row">
         <div class="col-sm-6" v-if="$l2.code !== 'zh'">
           <Chinese
-            v-if="
-              entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
-            "
+            v-if="characters !== 'NULL'"
             class
-            :text="entry.cjk.canonical"
+            :text="characters"
             :key="`${entry.id}-chinese`"
           />
         </div>
         <div class="col-sm-6" v-if="$l2.code !== 'ja'">
           <Japanese
-            v-if="
-              entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
-            "
+            v-if="characters"
             class
-            :text="entry.cjk.canonical"
+            :text="characters"
             :key="`${entry.id}-japanese`"
           />
         </div>
         <div class="col-sm-6" v-if="$l2.code !== 'ko'">
           <Korean
-            v-if="
-              entry.cjk && entry.cjk.canonical && entry.cjk.canonical !== 'NULL'
-            "
+            v-if="characters"
             class
-            :text="entry.cjk.canonical"
+            :text="characters"
             :key="`${entry.id}-korean`"
           />
         </div>
@@ -217,7 +217,6 @@ export default {
   },
   data() {
     return {
-      characters: [],
       selectedSearchTerms: undefined,
       allSearchTerms: undefined,
       character: {},
@@ -282,7 +281,7 @@ export default {
         {
           name: "characters",
           title: "Characters",
-          visible: this.entry.cjk && this.entry.cjk.canonical,
+          visible: this.characters,
         },
       ];
     },
@@ -293,6 +292,12 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    characters() {
+      let canonical = this.entry?.cjk?.canonical
+      let characters = ""
+      if (canonical) characters = canonical.replace(/[^\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B\u3400-\u4DB5\u4E00-\u9FEF\uF900-\uFA6D\uFA70-\uFAD9]+/gi, '')
+      return characters
     },
     portrait() {
       let landscape =

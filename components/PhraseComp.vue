@@ -101,7 +101,24 @@
           :key="`mistakes-${term}`"
         ></Mistakes>
       </template>
-      <template #related></template>
+      <template #related>
+        <EntryRelated
+          @relatedReady="relatedReady = true"
+          :entry="term"
+          :key="`related-${term}`"
+        />
+        <div class="row">
+          <div class="col-sm-6" v-if="$l2.code !== 'zh'">
+            <Chinese :text="characters" :key="`${term}-chinese`" />
+          </div>
+          <div class="col-sm-6" v-if="$l2.code !== 'ja'">
+            <Japanese :text="characters" :key="`${term}-japanese`" />
+          </div>
+          <div class="col-sm-6" v-if="$l2.code !== 'ko'">
+            <Korean :text="characters" :key="`${term}-korean`" />
+          </div>
+        </div>
+      </template>
       <template #characters>
         <div v-if="$l2.code !== 'zh'">
           <EntryCharacters
@@ -117,6 +134,7 @@
 </template>
 
 <script>
+
 export default {
   props: {
     term: {
@@ -146,7 +164,8 @@ export default {
       images: [],
       renderSearchSubs: true,
       mistakesReady: false,
-      phrases: []
+      relatedReady: false,
+      phrases: [],
     };
   },
   computed: {
@@ -161,6 +180,9 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    characters() {
+      return this.term.replace(/[^\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B\u3400-\u4DB5\u4E00-\u9FEF\uF900-\uFA6D\uFA70-\uFAD9]+/gi, '')
     },
     sections() {
       return [
@@ -202,7 +224,7 @@ export default {
         {
           name: "characters",
           title: "Characters",
-          visible: this.$l2.han || ["ja", "ko", "vi"].includes(this.$l2.code),
+          visible: this.$l2.han || ["ja", "ko", "vi"].includes(this.$l2.code) && this.characters,
         },
       ];
     },
@@ -238,10 +260,10 @@ export default {
     },
   },
   async mounted() {
-    let dictionary = await this.$getDictionary()
+    let dictionary = await this.$getDictionary();
     if (this.term && dictionary.lookupFuzzy) {
       let phrases = await dictionary.lookupFuzzy(this.term);
-      this.phrases = phrases || []
+      this.phrases = phrases || [];
     }
   },
   methods: {
