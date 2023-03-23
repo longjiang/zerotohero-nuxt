@@ -202,7 +202,7 @@
           {{ $t('Show translation') }}
         </b-form-checkbox>
         <b-form-checkbox class="mb-2" v-model="showQuickGloss">
-          {{ $t('Show quick gloss') }}
+          {{ $t('Show Quick Gloss') }}
         </b-form-checkbox>
         <b-form-checkbox class="mb-2" v-model="showQuiz">
           {{ $t('Show pop quiz') }}

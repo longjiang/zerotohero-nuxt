@@ -1,38 +1,58 @@
 <template>
   <div>
-    <div v-for="(message, index) in messages" :key="index" class="mb-2">
-      <div v-if="message.sender === 'user'" class="d-flex">
-        <b style="flex: 0 0 1.5rem">{{ $t("Q:") }}</b>
-        <b style="flex: 1">{{ message.text }}</b>
-      </div>
-      <div v-if="message.sender === 'bot'" class="d-flex">
-        <span style="flex: 0 0 1.5rem">{{ $t("A:") }}</span>
-        <div style="flex: 1">
-          <div
-            v-for="(line, index) in message.text.split('\n')"
-            :key="`gpt-respnose-${index}`"
-            class="mb-2"
-          >
-            <Annotate :buttons="true" :showTranslation="true"><span>{{ line }}</span></Annotate>
+    <div v-if="!openAIToken">
+      <h5>{{ $t("ChatGPT Settings") }}</h5>
+      <p>{{ $t("Enter your ChatGPT API token:") }}</p>
+      <b-form-input
+        type="password"
+        v-model="openAIToken"
+        :lazy="true"
+      ></b-form-input>
+      <i18n path="Get your ChatGPT API token {0}." class="mt-1 small" tag="p">
+        <a href="https://platform.openai.com/account/api-keys" target="_blank">
+          {{ $t("here") }}
+        </a>
+      </i18n>
+      <hr />
+    </div>
+    <div v-else>
+      <div v-for="(message, index) in messages" :key="index" class="mb-2">
+        <div v-if="message.sender === 'user'" class="d-flex">
+          <b style="flex: 0 0 1.5rem">{{ $t("Q:") }}</b>
+          <b style="flex: 1">{{ message.text }}</b>
+        </div>
+        <div v-if="message.sender === 'bot'" class="d-flex">
+          <span style="flex: 0 0 1.5rem">{{ $t("A:") }}</span>
+          <div style="flex: 1">
+            <div
+              v-for="(line, index) in message.text.split('\n')"
+              :key="`gpt-respnose-${index}`"
+              class="mb-2"
+            >
+              <Annotate :buttons="true" :showTranslation="true">
+                <span>{{ line }}</span>
+              </Annotate>
+            </div>
           </div>
         </div>
       </div>
+      <div class="mt-3 text-center" v-if="thinking">
+        <Loader :sticky="true" message="Getting response from ChatGPT..." />
+      </div>
+      <h6 v-if="!initialMessage">{{ $t("Ask ChatGPT:") }}</h6>
+      <input
+        type="text"
+        v-model="newMessage"
+        @keydown.enter="sendMessage(newMessage)"
+        v-if="!initialMessage"
+      />
     </div>
-    <div class="mt-3 text-center" v-if="thinking">
-      <Loader :sticky="true" message="Getting response from ChatGPT..." />
-    </div>
-    <h6 v-if="!initialMessage">{{ $t('Ask ChatGPT:') }}</h6>
-    <input
-      type="text"
-      v-model="newMessage"
-      @keydown.enter="sendMessage(newMessage)"
-      v-if="!initialMessage"
-    />
   </div>
 </template>
 
 <script>
 import OpenAI from "openai-api";
+import { timeout } from "@/lib/utils"
 
 export default {
   props: {
@@ -42,16 +62,46 @@ export default {
     return {
       messages: [],
       newMessage: "",
-      openai: new OpenAI(process.env.openAIToken),
+      openai: undefined,
       prompt: this.initialMessage,
       thinking: false,
+      openAIToken: undefined,
+      watcherActive: false
     };
   },
-  mounted() {
-    if (this.initialMessage) this.sendMessage(this.initialMessage);
+  async mounted() {
+    if (typeof this.$store.state.settings !== "undefined") {
+      this.openAIToken = this.$store.state.settings.openAIToken;
+    }
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "settings/LOAD_SETTINGS") {
+        this.openAIToken = this.$store.state.settings.openAIToken;
+      }
+    });
+    if (this.openAIToken) {
+      this.openai = new OpenAI(this.openAIToken)
+      if (this.initialMessage) this.sendMessage(this.initialMessage);
+    }
+    await timeout(2000)
+    this.watcherActive = true
+  },
+  watch: {
+    openAIToken() {
+      if (this.watcherActive) {
+        this.$store.dispatch("settings/setGeneralSettings", {
+          openAIToken: this.openAIToken,
+        });
+        this.$toast.success('Token saved!', {
+          duration: 2000,
+        })
+        this.openai = new OpenAI(this.openAIToken)
+        if (this.initialMessage) this.sendMessage(this.initialMessage);
+      }
+    }
   },
   methods: {
     async sendMessage(text) {
+      if (!this.openai) return
       this.thinking = true;
       const message = {
         text: text || this.newMessage,

@@ -45,6 +45,7 @@ export const state = () => {
     hidePhonetics: false, // as used in the <HideDefs> component
     hideDefinitions: false, // as used in the <HideDefs> component
     subsSearchLimit: true,
+    openAIToken: undefined,
     layout: 'vertical', // or 'horizontal'
     autoPause: false,
     speed: 1,
