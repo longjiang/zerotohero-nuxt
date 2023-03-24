@@ -44,7 +44,7 @@
               <router-link
                 :to="{
                   name: 'reader',
-                  params: { method: 'md', arg: message.text },
+                  params: { method: 'md', arg: message.text.replace('\n', '\n\n') },
                 }"
                 class="text-success"
               >

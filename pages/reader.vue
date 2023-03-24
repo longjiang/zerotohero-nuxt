@@ -250,7 +250,7 @@ export default {
         Helper.logError(err);
       }
     } else if (["md", "html", "txt"].includes(method)) {
-      text = arg.replace(/\n/g, "<br>");
+      text = arg.replace(/\n+/g, '\n\n')
     } else {
       let r = this.get(); // from localStorage
       text = r.text;
