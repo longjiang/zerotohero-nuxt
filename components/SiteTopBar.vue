@@ -316,15 +316,11 @@ export default {
         );
         if (this.native) {
           await Share.share({
-            title: document.title,
-            text: document.querySelector('meta[name="description"]').content,
             url: canonicalURL,
             dialogTitle: this.translate("Share"),
           });
         } else if (this.canShare) {
           navigator.share({
-            title: document.title,
-            text: document.querySelector('meta[name="description"]').content,
             url: canonicalURL,
           });
         }
