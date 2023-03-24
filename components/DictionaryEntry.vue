@@ -72,16 +72,32 @@
           <ChatGPT
             :initialMessages="[
               $t(
-                'Please explain the {l2} word “{word}” ({pronunciation}), give its morphological breakdown, and some examples with {l1} translations, and a sample dialogue with {l1} translations.',
+                'Please explain the {l2} word “{word}”{pronunciation}, give its morphological breakdown, and some examples with {l1} translations, and a sample dialogue with {l1} translations.',
                 {
                   l2: $t($l2.name),
                   l1: $t($l1.name),
                   word: entry.head,
-                  pronunciation:
-                    entry.kana || entry.pinyin || entry.pronunciation,
+                  pronunciation: pronunciation ? ` (${pronunciation})` : '',
                 }
               ),
-              'Please make a story with the word ' + entry.head]
+              $t(
+                'Please explain how the {l2} word “{word}”{pronunciation} differs from other similar words in {l2}.',
+                {
+                  l2: $t($l2.name),
+                  l1: $t($l1.name),
+                  word: entry.head,
+                  pronunciation: pronunciation ? ` (${pronunciation})` : '',
+                }
+              ),
+              $t(
+                'Please make a {l2} story that illustrates the use of the {l2} word “{word}”{pronunciation}, with a {l1} translation after each paragraph.',
+                {
+                  l2: $t($l2.name),
+                  l1: $t($l1.name),
+                  word: entry.head,
+                  pronunciation: pronunciation ? ` (${pronunciation})` : '',
+                }
+              )]
             "
           />
         </template>
@@ -320,6 +336,9 @@ export default {
         "openrussian",
         "kdic-jc",
       ].includes(this.$dictionaryName);
+    },
+    pronunciation() {
+      return this.entry.kana || this.entry.pinyin || this.entry.pronunciation
     },
   },
   async mounted() {
