@@ -16,12 +16,12 @@
       <hr />
     </div>
     <div v-else>
-      <div v-for="(message, index) in messages" :key="index" class="mb-2">
+      <div v-for="(message, index) in messages" :key="index" class="mt-4 mb-2">
         <div v-if="message.sender === 'user'" class="d-flex">
           <b style="flex: 0 0 1.5rem">{{ $t("Q:") }}</b>
           <b style="flex: 1">{{ message.text }}</b>
         </div>
-        <div v-if="message.sender === 'bot'" class="d-flex">
+        <div v-if="message.sender === 'bot' && message.text" class="d-flex">
           <span style="flex: 0 0 1.5rem">{{ $t("A:") }}</span>
           <div style="flex: 1">
             <div
@@ -34,7 +34,24 @@
               </Annotate>
             </div>
             <div class="text-right">
-              <router-link :to="{name: 'reader', params: {method: 'md', arg: message.text}}" class="text-success"><i class="fa fa-book-open mr-1"></i> {{ $t('Open in Reader') }} <i class="fa fa-chevron-right ml-1"></i></router-link>
+              <span
+                @click="resendMessage(messages[index - 1])"
+                class="btn btn-unstyled text-success mr-2"
+              >
+                <i class="fa fa-sync mr-1"></i>
+                {{ $t("Regenerate") }}
+              </span>
+              <router-link
+                :to="{
+                  name: 'reader',
+                  params: { method: 'md', arg: message.text },
+                }"
+                class="text-success"
+              >
+                <i class="fa fa-book-open mr-1"></i>
+                {{ $t("Open in Reader") }}
+                <i class="fa fa-chevron-right ml-1"></i>
+              </router-link>
             </div>
           </div>
         </div>
@@ -55,13 +72,14 @@
 
 <script>
 import OpenAI from "openai-api";
-import { timeout } from "@/lib/utils"
+import { timeout } from "@/lib/utils";
+import Vue from 'vue';
 
 export default {
   props: {
     initialMessages: {
       default: [], // of Strings
-    }
+    },
   },
   data() {
     return {
@@ -70,7 +88,7 @@ export default {
       openai: undefined,
       thinking: false,
       openAIToken: undefined,
-      watcherActive: false
+      watcherActive: false,
     };
   },
   async mounted() {
@@ -83,13 +101,13 @@ export default {
       }
     });
     if (this.openAIToken) {
-      this.openai = new OpenAI(this.openAIToken)
+      this.openai = new OpenAI(this.openAIToken);
       for (let message of this.initialMessages) {
         await this.sendMessage(message);
       }
     }
-    await timeout(2000)
-    this.watcherActive = true
+    await timeout(2000);
+    this.watcherActive = true;
   },
   watch: {
     async openAIToken() {
@@ -97,29 +115,20 @@ export default {
         this.$store.dispatch("settings/setGeneralSettings", {
           openAIToken: this.openAIToken,
         });
-        this.$toast.success('Token saved!', {
+        this.$toast.success("Token saved!", {
           duration: 2000,
-        })
-        this.openai = new OpenAI(this.openAIToken)
+        });
+        this.openai = new OpenAI(this.openAIToken);
         for (let message of this.initialMessages) {
           await this.sendMessage(message);
         }
       }
-    }
+    },
   },
   methods: {
-    async sendMessage(text) {
-      if (!this.openai) return
+    async getCompletion(prompt) {
       this.thinking = true;
-      const message = {
-        text: text || this.newMessage,
-        sender: "user",
-      };
-      this.messages.push(message);
-      this.newMessage = "";
-
       try {
-        const prompt = typeof message.text === "string" ? message.text : "";
         const response = await this.openai.complete({
           engine: "text-davinci-003",
           prompt,
@@ -128,15 +137,43 @@ export default {
           stop: undefined,
           temperature: 0.7,
         });
-        const botMessage = {
+        this.thinking = false;
+        return {
           text: response.data.choices[0].text.trim(),
           sender: "bot",
         };
-        this.messages.push(botMessage);
       } catch (error) {
-        console.error(error);
+        this.thinking = false;
+        return { text: error, sender: "bot" };
       }
-      this.thinking = false;
+    },
+    async resendMessage(message) {
+      if (!this.openai) return;
+
+      let messageIndex = this.messages.findIndex(
+        (m) => m.text === message.text
+      );
+
+      let botMessage = this.messages[messageIndex + 1];
+
+      if (botMessage) {
+        Vue.set(botMessage, 'text', '')
+        let newBotMessage = await this.getCompletion(message.text);
+        Vue.set(this.messages, messageIndex + 1, newBotMessage);
+      }
+    },
+    async sendMessage(text) {
+      if (!this.openai) return;
+
+      const message = {
+        text: text || this.newMessage,
+        sender: "user",
+      };
+      this.messages.push(message);
+      this.newMessage = "";
+
+      let botMessage = await this.getCompletion(message.text);
+      this.messages.push(botMessage);
     },
   },
 };
