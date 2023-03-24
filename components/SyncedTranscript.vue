@@ -665,13 +665,9 @@ export default {
       let smallScreenOffset;
       if (!this.landscape) {
         let controllerHeight = 52;
-        if (this.collapsed) {
-          smallScreenOffset = videoHeight;
-        } else {
-          let transcriptContainerWidth = this.$el.clientWidth;
-          let videoHeight = (transcriptContainerWidth * 9) / 16; // video height, hidden if collapsed
-          smallScreenOffset = videoHeight + controllerHeight;
-        }
+        let transcriptContainerWidth = this.$el.clientWidth;
+        let videoHeight = this.collapsed ? 0 : (transcriptContainerWidth * 9) / 16; // video height, hidden if collapsed
+        smallScreenOffset = videoHeight + controllerHeight;
       } else {
         smallScreenOffset = 0;
       }
