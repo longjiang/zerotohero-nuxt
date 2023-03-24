@@ -2,18 +2,43 @@
   <div class="paginator">
     <router-link
       class="paginator-previous mr-2 btn btn-small mb-1"
-      :to="previousPath"
+      :to="{ path: previousPath, query: $route.query }"
       title="Previous word"
       v-if="previous"
     >
       <i class="fas fa-chevron-left"></i>
     </router-link>
-    <b><component :is="home ? 'router-link' : 'span'"  class="link-unstyled" v-if="title" :to="home">{{ title }}</component ></b>
-    <component :is="home ? 'router-link' : 'span'" class="link-unstyled" v-if="home" :to="home">{{ currentIndex + 1 }} / {{ items.length }}</component>
-    <b><component :is="home ? 'router-link' : 'span'"  class="link-unstyled" v-if="append" :to="home">{{ append }}</component ></b>
+    <b>
+      <component
+        :is="home ? 'router-link' : 'span'"
+        class="link-unstyled"
+        v-if="title"
+        :to="home"
+      >
+        {{ title }}
+      </component>
+    </b>
+    <component
+      :is="home ? 'router-link' : 'span'"
+      class="link-unstyled"
+      v-if="home"
+      :to="home"
+    >
+      {{ currentIndex + 1 }} / {{ items.length }}
+    </component>
+    <b>
+      <component
+        :is="home ? 'router-link' : 'span'"
+        class="link-unstyled"
+        v-if="append"
+        :to="home"
+      >
+        {{ append }}
+      </component>
+    </b>
     <router-link
       class="paginator-next ml-2 btn btn-small mb-1"
-      :to="nextPath"
+      :to="{ path: nextPath, query: $route.query }"
       title="Next word"
       v-if="next"
     >
@@ -26,51 +51,51 @@
 export default {
   props: {
     title: {
-      default: undefined
+      default: undefined,
     },
     items: {
-      type: Array
+      type: Array,
     },
     findCurrent: {
-      type: Function
+      type: Function,
     },
     url: {
-      type: Function
+      type: Function,
     },
     home: {
-      type: [String, Object]
+      type: [String, Object],
     },
     append: {
-      type: String
-    }
+      type: String,
+    },
   },
   computed: {
     currentIndex() {
-      return this.items.findIndex(this.findCurrent)
+      return this.items.findIndex(this.findCurrent);
     },
     previous() {
       if (this.currentIndex - 1 >= 0) {
-        return this.items[this.currentIndex - 1]
+        return this.items[this.currentIndex - 1];
       } else {
-        return false
+        return false;
       }
     },
     next() {
       if (this.currentIndex + 1 < this.items.length) {
-        return this.items[this.currentIndex + 1]
+        return this.items[this.currentIndex + 1];
       } else {
-        return false
+        return false;
       }
     },
     previousPath() {
-      return this.url(this.previous, this.currentIndex - 1)
+      return this.url(this.previous, this.currentIndex - 1);
     },
     nextPath() {
-      return this.url(this.next, this.currentIndex + 1)
-    }
+      return this.url(this.next, this.currentIndex + 1);
+    },
   },
-  mounted() {}
-}
+  mounted() {},
+};
 </script>
 
 <style></style>

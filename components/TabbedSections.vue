@@ -7,7 +7,7 @@
           :key="`section-nav-item-${index}`"
           :class="{
             'section-nav-item': true,
-            'section-nav-item-current': currentSection === index,
+            'section-nav-item-current': currentSectionIndex === index,
             'd-none': !section.visible,
           }"
           @click="goToSection(index)"
@@ -18,7 +18,7 @@
     </div>
     <div class="dictionary-entry-sections">
       <div class="dictionary-entry-section">
-        <slot :name="sections[currentSection].name"></slot>
+        <slot :name="sections[currentSectionIndex].name"></slot>
       </div>
     </div>
   </div>
@@ -31,12 +31,20 @@ export default {
   },
   data() {
     return {
-      currentSection: 0,
+      currentSectionIndex: 0,
     };
+  },
+  mounted() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabName = urlParams.get('tab');
+    const matchedSectionIndex = this.sections.findIndex(section => section.name === tabName && section.visible)
+    if (matchedSectionIndex > 0) this.currentSectionIndex = matchedSectionIndex;
   },
   methods: {
     goToSection(index) {
-      this.currentSection = index;
+      this.currentSectionIndex = index;
+      const newQuery = Object.assign({}, this.$route.query, { tab: this.sections[this.currentSectionIndex].name });
+      this.$router.push({ query: newQuery });
     },
   },
 };
