@@ -42,12 +42,12 @@
       <div class="mt-3 text-center" v-if="thinking">
         <Loader :sticky="true" message="Getting response from ChatGPT..." />
       </div>
-      <h6 v-if="!initialMessage">{{ $t("Ask ChatGPT:") }}</h6>
+      <h6 v-if="!initialMessages[0]">{{ $t("Ask ChatGPT:") }}</h6>
       <input
         type="text"
         v-model="newMessage"
         @keydown.enter="sendMessage(newMessage)"
-        v-if="!initialMessage"
+        v-if="!initialMessages[0]"
       />
     </div>
   </div>
@@ -59,14 +59,15 @@ import { timeout } from "@/lib/utils"
 
 export default {
   props: {
-    initialMessage: String,
+    initialMessages: {
+      default: [], // of Strings
+    }
   },
   data() {
     return {
       messages: [],
       newMessage: "",
       openai: undefined,
-      prompt: this.initialMessage,
       thinking: false,
       openAIToken: undefined,
       watcherActive: false
@@ -83,13 +84,15 @@ export default {
     });
     if (this.openAIToken) {
       this.openai = new OpenAI(this.openAIToken)
-      if (this.initialMessage) this.sendMessage(this.initialMessage);
+      for (let message of this.initialMessages) {
+        await this.sendMessage(message);
+      }
     }
     await timeout(2000)
     this.watcherActive = true
   },
   watch: {
-    openAIToken() {
+    async openAIToken() {
       if (this.watcherActive) {
         this.$store.dispatch("settings/setGeneralSettings", {
           openAIToken: this.openAIToken,
@@ -98,7 +101,9 @@ export default {
           duration: 2000,
         })
         this.openai = new OpenAI(this.openAIToken)
-        if (this.initialMessage) this.sendMessage(this.initialMessage);
+        for (let message of this.initialMessages) {
+          await this.sendMessage(message);
+        }
       }
     }
   },

@@ -8,7 +8,7 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <ChatGPT initialMessage="Please explain the Japanese word 有り難い and give its morphological breakdown." />
+          <ChatGPT :initialMessages="['Please explain the Japanese word 有り難い and give its morphological breakdown.']" />
         </div>
       </div>
     </div>

@@ -10,20 +10,21 @@
     </button>
     <p v-else class="text-left">
       <ChatGPT
-        :initialMessage="
+        :initialMessages="[
           $t(
             'Please write an interesting {l2} story with the following {l2} word(s): {words}.',
             {
               l2: $t($l2.name),
               l1: $t($l1.name),
-              words: words.map(w => `${w.head}`).join(', '),
+              words: words.map((w) => `${w.head}`).join(', '),
             }
-          ) + ' ' +
-          $t('Please include a {l1} translation after every paragraph.', {
-            l1: $t($l1.name),
-            words: words.join(', '),
-          })
-        "
+          ) +
+            ' ' +
+            $t('Please include a {l1} translation after every paragraph.', {
+              l1: $t($l1.name),
+              words: words.join(', '),
+            }),
+        ]"
       />
     </p>
   </div>

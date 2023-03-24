@@ -70,7 +70,7 @@
         </template>
         <template #body>
           <ChatGPT
-            :initialMessage="
+            :initialMessages="[
               $t(
                 'Please explain the {l2} word “{word}” ({pronunciation}), give its morphological breakdown, and some examples with {l1} translations, and a sample dialogue with {l1} translations.',
                 {
@@ -80,7 +80,8 @@
                   pronunciation:
                     entry.kana || entry.pinyin || entry.pronunciation,
                 }
-              )
+              ),
+              'Please make a story with the word ' + entry.head]
             "
           />
         </template>
