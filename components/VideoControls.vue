@@ -24,7 +24,7 @@
       <button
         v-if="showInfoButton"
         :class="{
-          'btn-video-controls text-center': true,
+          'btn-video-controls btn-video-controls-info text-center': true,
         }"
         @click="showInfoModal"
         :title="$t('More Info')"

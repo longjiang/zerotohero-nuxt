@@ -765,9 +765,8 @@ export default {
       .btn-video-controls-previous-line,
       .btn-video-controls-next-line,
       .btn-video-controls-rewind,
-      // .btn-video-controls-previous,
+      .btn-video-controls-info,
       .btn-video-controls-speed,
-      // .btn-video-controls-next,
       .btn-video-controls-fullscreen {
         display: none !important;
       }
