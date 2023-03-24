@@ -44,7 +44,7 @@
               <h4 class="page-title text-center mb-4" v-if="method === 'hsk'">
                 <b :data-level="args[0]" class="mr-1">HSK {{ args[0] }}</b>
                 <b>{{ $t("Lesson {num}", { num: args[1] }) }}</b>
-                ({{ $t("Part {num}", { num: args[2] }) }})
+                <template v-if="args[2]">({{ $t("Part {num}", { num: args[2] }) }})</template>
                 {{ $t("Vocabulary") }}
               </h4>
             </router-link>
@@ -215,7 +215,7 @@ export default {
           this.args = this.$route.params.argsProp.split(",");
           this.words = await (
             await this.$getDictionary()
-          ).getByBookLessonDialog(this.args[0], this.args[1], this.args[2]);
+          ).getByBookLessonDialog(this.args[0], this.args[1], this.args[2]); // this.args[2] (i.e. the dialog or part) can be undefined, which will return the entire lesson rather than just that dialog or part
           return;
         }
         if (this.method === "adhoc" && this.argsProp) {

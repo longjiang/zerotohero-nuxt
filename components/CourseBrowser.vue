@@ -54,7 +54,8 @@
                 <div
                   :class="{
                     'dialog-title': true,
-                    collapsed: !dialogOpen[`${bookIndex}-${lessonIndex}-${dialogIndex}`],
+                    collapsed:
+                      !dialogOpen[`${bookIndex}-${lessonIndex}-${dialogIndex}`],
                   }"
                   @click="toggleDialog(bookIndex, lessonIndex, dialogIndex)"
                 >
@@ -67,7 +68,12 @@
                     :key="'dialog-tile-' + dialogIndex"
                   ></span>
                 </div>
-                <ul class="browse-words" v-if="dialogOpen[`${bookIndex}-${lessonIndex}-${dialogIndex}`]">
+                <ul
+                  class="browse-words"
+                  v-if="
+                    dialogOpen[`${bookIndex}-${lessonIndex}-${dialogIndex}`]
+                  "
+                >
                   <WordList
                     :words="dialog"
                     class="ml-2"
@@ -83,6 +89,16 @@
                   </router-link>
                 </ul>
               </li>
+
+              <router-link
+                class="btn btn-sm mt-2 mb-2 learn-all-button"
+                :data-bg-level="bookIndex"
+                :to="`/${$l1.code}/${$l2.code}/learn/hsk/${bookIndex},${lessonIndex}`"
+                style="margin-left: 2rem"
+              >
+                <i class="fas fa-chalkboard"></i>
+                Learn All Words in Lesson {{ lessonIndex }}
+              </router-link>
             </ul>
           </li>
         </ul>

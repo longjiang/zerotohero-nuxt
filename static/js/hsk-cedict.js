@@ -230,12 +230,13 @@ const Dictionary = {
     return this.addNewHSK(word)
   },
   getByBookLessonDialog(book, lesson, dialog) {
-    return this.words.filter(
+    let words = this.words.filter(
       row =>
         parseInt(row.book) === parseInt(book) &&
-        parseInt(row.lesson) === parseInt(lesson) &&
-        row.dialog.toString() === dialog.toString()
+        parseInt(row.lesson) === parseInt(lesson)
     )
+    if (dialog) words = words.filter(row => row.dialog.toString() === dialog.toString())
+    return words
   },
   // https://www.consolelog.io/group-by-in-javascript/
   groupArrayBy(array, prop) {
