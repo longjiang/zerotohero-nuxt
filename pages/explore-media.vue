@@ -37,7 +37,7 @@
         <div class="col-sm-12">
           <div :class="{ 'media-section': true, 'd-none': !hasWatchHistory }">
             <h3 class="media-seaction-heading">
-              {{ $t('Continue Watching') }}
+              {{ $t('Continue Studying') }}
               <router-link :to="{ name: 'watch-history' }" class="show-all">
                 {{ $t('More') }}
                 <i class="fas fa-chevron-right"></i>

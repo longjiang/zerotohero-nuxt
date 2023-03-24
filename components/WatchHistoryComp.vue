@@ -14,7 +14,7 @@
               @click.stop.prevent="$store.dispatch('history/removeAll')"
             >
               <i class="fas fa-times mr-1"></i>
-              {{ $t('Clear Watch History') }}
+              {{ $t('Clear History') }}
             </button>
           </div>
         </div>
@@ -22,10 +22,10 @@
           <template v-for="group in groups">
             <div class="col-sm-12" v-if="showDate" :key="`date-${group.date}`">
               <p v-if="group.date === '0'" class="mb-4 mt-4">
-                {{ $t('Watched earlier:') }}
+                {{ $t('Studied earlier:') }}
               </p>
               <p class="mb-4 mt-4" v-else>
-                {{ $t('Watched on {date}:', {date: $d(new Date(group.date), 'short', $l1.code)})}}
+                {{ $t('Studied on {date}:', {date: $d(new Date(group.date), 'short', $l1.code)})}}
               </p>
             </div>
             <div
@@ -48,7 +48,6 @@
                 v-if="itemL1 && itemL2 && item.type === 'video'"
                 :skin="skin === 'dark' ? 'dark' : 'card'"
                 :video="Object.assign({}, item.video)"
-                :l1="itemL1"
                 :l2="itemL2"
                 :showProgress="true"
                 :showPlayButton="showPlayButton"
@@ -58,7 +57,6 @@
                 v-if="itemL1 && itemL2 && item.type === 'phrasebook'"
                 skin="light"
                 size="lg"
-                :l1="itemL1"
                 :l2="itemL2"
                 :phrasebook="Object.assign({}, item.phrasebook)"
                 :showAdmin="false"
@@ -87,7 +85,7 @@
               skin === 'dark' ? 'ghost-dark' : ''
             }`"
           >
-            {{ $t("You haven't watched any {l2} videos yet.", {l2: l2 ? $t(l2.name) : ""}) }}
+            {{ $t("You haven't studied any {l2} videos yet.", {l2: l2 ? $t(l2.name) : ""}) }}
             <br />
             <br />
             <router-link :to="{ name: 'explore-media' }" class="btn btn-success">
@@ -166,9 +164,6 @@ export default {
   },
   mounted() {
     this.emitHasWatchHistory();
-    // if (!this.$store.state.history.historyLoaded) {
-    //   this.$store.dispatch("history/load");
-    // }
   },
   computed: {
     ...mapState("history", ["history"]),

@@ -64,24 +64,6 @@
             </span>
             <span v-else><i class="fa-solid fa-caret-right"></i></span>
           </b-button>
-          <!-- <div
-            v-if="level === 'main' && variant === 'side-bar' && !collapsed"
-            class="end-nav"
-          >
-            <div v-if="$l2.logo" class="icon-description">
-              <img
-                class="logo-circle"
-                :src="`/img/logo-square/${l2.code}.jpeg`"
-                :alt="$l2.logoDesc"
-              />
-              <span v-if="$l2.logoDesc">
-                {{ $l2.logoDesc.replace(/\s/g, " ") }},
-              </span>
-              a user of
-              <b>{{ $l2.name }} ({{ $l2.code }})</b>
-              .
-            </div>
-          </div> -->
         </nav>
         <nav
           v-else-if="
@@ -156,7 +138,6 @@ import { Capacitor } from "@capacitor/core";
 import { mapState } from "vuex";
 import { languageLevels, background, LANGS_WITH_LEVELS } from "@/lib/utils";
 import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
-import savedWordsVue from '~/pages/saved-words.vue';
 
 export default {
   props: {
@@ -417,32 +398,6 @@ export default {
                   params: { kidsOnly: true, category: "all", level: "all" },
                   show: true,
                 },
-                // {
-                //   name: "lesson-videos",
-                //   title: "Lesson Expansion",
-                //   icon: "fa fa-chalkboard-teacher",
-                //   show: this.l2.code === "zh",
-                // },
-                // ...Object.keys(this.categories).map((key) => {
-                //   let title = this.categories[key];
-                //   return {
-                //     name: "youtube-browse",
-                //     params: { category: key, level: "all" },
-                //     title,
-                //     show: true,
-                //     icon: "fa-solid fa-films",
-                //   };
-                // }),
-                // ...Object.keys(this.levels).map((key) => {
-                //   let title = this.levels[key].name;
-                //   return {
-                //     name: "youtube-browse",
-                //     params: { category: "all", level: key },
-                //     title,
-                //     show: true,
-                //     icon: "fa-solid fa-films",
-                //   };
-                // }),
                 {
                   name: "feed",
                   icon: "fas fa-stream",
@@ -505,7 +460,6 @@ export default {
               title: "Reader",
               icon: "fas fa-file-alt",
               show: true,
-              // shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
             },
             {
               name: "my-text",
@@ -528,12 +482,10 @@ export default {
               title: "Web Reader",
               icon: "fas fa-globe-asia",
               show: true,
-              // shortcut: (e) => e.code === "KeyR" && e.metaKey && e.shiftKey,
             },
             {
               icon: "fas fa-ellipsis-h",
               title: `More`,
-              // count: this.stats ? this.stats.allVideos : undefined,
               name: "library",
               show: true,
               children: [
@@ -734,12 +686,6 @@ export default {
               name: "grammar-view",
               show: false,
             },
-            // {
-            //   name: "courses",
-            //   title: "Courses",
-            //   icon: "fas fa-graduation-cap",
-            //   show: ["zh", "en"].includes(this.l2.code),
-            // },
             {
               name: "resources",
               title: "Resources",
@@ -756,46 +702,9 @@ export default {
             {
               icon: "fas fa-ellipsis-h",
               title: `More`,
-              // count: this.stats ? this.stats.allVideos : undefined,
               name: "tutoring",
               show: true,
               children: [
-                // {
-                //   name: "hall-of-heroes",
-                //   icon: "fa fa-trophy",
-                //   title: "Heroes",
-                //   show: this.l1.code === "en" && this.l2.code === "zh",
-                // },
-                // {
-                //   name: "textbooks-workbooks",
-                //   title: "Textbooks",
-                //   icon: "fas fa-book",
-                //   show: ["zh", "en"].includes(this.l2.code),
-                // },
-                // {
-                //   name: "video-count",
-                //   title: "Video Count",
-                //   icon: "fas fa-list-ol",
-                //   show: this.l2.code === "zh",
-                // },
-                // {
-                //   name: "pricing",
-                //   title: "Course Pricing",
-                //   icon: "fas fa-tag",
-                //   show: this.l2.code === "zh",
-                // },
-                // {
-                //   name: "course-release-schedule",
-                //   title: "Schedule",
-                //   icon: "fas fa-clock",
-                //   show: this.l2.code === "zh",
-                // },
-                // {
-                //   name: "affiliate-program",
-                //   icon: "fas fa-money-check-alt",
-                //   show: this.l2.code === "zh",
-                //   title: "Affiliate Program",
-                // },
                 {
                   name: "language-info",
                   title: `Language Info`,
@@ -879,13 +788,6 @@ export default {
           title: "JW",
           show: this.userIsAdmin && this.$adminMode,
           children: [
-            // {
-            //   name: "jw-video",
-            //   title: "Video",
-            //   params: { languageAgnosticNaturalKey: "pub-mwbv_202205_3_VIDEO" },
-            //   icon: "fas fa-book",
-            //   show: this.userIsAdmin,
-            // },
             {
               name: "jw-bible",
               title: "Bible",
@@ -971,12 +873,6 @@ export default {
           title: "About",
           show: true,
           children: [
-            // {
-            //   name: "discussions",
-            //   icon: "fas fa-comment",
-            //   show: true,
-            //   title: "Forum",
-            // },
             {
               name: "contact",
               icon: "fas fa-id-card",
@@ -1523,6 +1419,8 @@ export default {
     white-space: nowrap;
     width: 100%;
     overflow: auto;
+    display: flex;
+    justify-content: space-around;
   }
 }
 
