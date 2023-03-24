@@ -177,7 +177,7 @@ export default {
   },
   methods: {
     googleImagesURL(l2) {
-      return `https://www.google.com/searchbyimage?q=${l2.name}+language&image_url=https://www.zerotohero.ca/img/logo-square/${l2.code}.jpeg`;
+      return `https://www.google.com/searchbyimage?q=${l2.name}+language&image_url=https://languageplayer.io/img/logo-square/${l2.code}.jpeg`;
     },
     wikipedia(l2) {
       if (l2.logoDesc && l2.logoDesc.includes("(")) {

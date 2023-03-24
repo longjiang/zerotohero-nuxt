@@ -81,7 +81,7 @@ export default {
         {
           hid: "og:url",
           property: "og:url",
-          content: `https://www.zerotohero.ca/${this.$route.fullPath}`,
+          content: `https://languageplayer.io/${this.$route.fullPath}`,
         },
         {
           hid: "og:description",

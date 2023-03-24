@@ -11,7 +11,7 @@
         <div :class="{ 'col-sm-12 mb-5': true }">
           <h3 class="text-center">
             Language Content Audit for
-            <span class="text-primary">www.zerotohero.ca</span>
+            <span class="text-primary">Language Player</span>
           </h3>
 
           <b-input-group class="mt-5 mb-3 input-group-ghost-dark">
