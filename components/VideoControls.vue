@@ -217,7 +217,6 @@
     >
       <div>
         <button
-          v-if="showCollapse"
           :class="{
             'btn btn-unstyled text-center d-block p-0': true,
             'text-success': collapsed,
