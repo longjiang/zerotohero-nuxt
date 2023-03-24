@@ -104,7 +104,7 @@
       <template #related>
         <EntryRelated
           @relatedReady="relatedReady = true"
-          :entry="term"
+          :term="term"
           :key="`related-${term}`"
         />
         <div class="row">

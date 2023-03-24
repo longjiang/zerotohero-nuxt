@@ -3,9 +3,11 @@
     <template #title>
       <i18n path="Words related to “{0}”" tag="span">
         <span>
-          <span v-if="!$l2.han || $l2.code === 'ja'">{{ entry.head }}</span>
-          <span class="traditional">{{ entry.traditional }}</span>
-          <span class="simplified">{{ entry.simplified }}</span>
+          <span v-if="!$l2.han">{{ entry?.head || term }}</span>
+          <template v-else>
+            <span class="traditional">{{ entry?.traditional || term  }}</span>
+            <span class="simplified">{{ entry?.simplified || term  }}</span>
+          </template>
         </span>
       </i18n>
     </template>
@@ -27,7 +29,7 @@
         {{
           $t(
             "Sorry, we could not find any words related to “{term}” in this corpus.",
-            { term: entry.head }
+            { term: entry?.head || term  }
           )
         }}
         <i18n path="You can set a different corpus in {0}.">
@@ -55,7 +57,10 @@
 import SketchEngine from "@/lib/sketch-engine";
 
 export default {
-  props: ["entry"],
+  props: {
+    entry: Object,
+    term: String
+  },
   data() {
     return {
       words: undefined,
@@ -88,7 +93,7 @@ export default {
     try {
       response = await SketchEngine.thesaurus({
         l2: this.$l2,
-        term: this.entry.simplified || this.entry.head,
+        term: this.entry.simplified || this.entry.head || term ,
       });
     } catch (err) {}
     if (response && response.Words) {
