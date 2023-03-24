@@ -37,31 +37,13 @@
 
           <LazyGrammarPoint :grammar="grammar" :key="id" class="mb-5" />
 
-          <Widget
-            :key="`subs-search-${grammar.pattern}`"
-            skin="dark"
-            class="mt-5 mb-5"
+          <LazyPhraseComp
             v-if="
               grammar.pattern &&
               (!entry || grammar.pattern !== entry.simplified)
             "
-          >
-            <template
-              #title
-            >
-              “{{ grammar.pattern }}” in
-              <LazyShowFilter @showFilter="reloadSearchSubs" />
-            </template>
-            <template #body>
-              <LazySearchSubsComp
-                v-if="grammar.pattern && renderSearchSubs"
-                ref="searchSubs"
-                skin="dark"
-                :level="grammar.level"
-                :terms="[grammar.pattern]"
-              />
-            </template>
-          </Widget>
+            :term="grammar.pattern"
+          />
 
           <div class="text-left mt-5" v-if="drills && drills.length > 0">
             <hr />
