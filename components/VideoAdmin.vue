@@ -35,7 +35,9 @@
             </router-link>
           </u>
         </span>
-        <span v-if="video.date && !isNaN(Date.parse(video.date))">{{ formatDate(video.date) }}</span>
+        <span v-if="video.date && !isNaN(Date.parse(video.date))">
+          {{ formatDate(video.date) }}
+        </span>
         <span v-if="localeDescription">
           <img
             v-if="country"
@@ -71,12 +73,40 @@
           {{ formatK(video.comments) }}
         </span>
       </div>
+      <div>
+        <template
+          v-if="video.category === 10 || video.tv_show?.title === 'Music'"
+        >
+          <a
+            :href="`https://open.spotify.com/search/${encodeURIComponent(video.title)}/tracks`"
+            target="_blank"
+            class="text-secondary mr-2"
+          >
+            <i class="text-secondary fa-brands fa-spotify"></i> Spotify
+          </a>
+          <a
+            :href="`https://music.apple.com/us/search?term=${encodeURIComponent(video.title)}`"
+            target="_blank"
+            class="text-secondary mr-2"
+          >
+            <i class="text-secondary fa-brands fa-apple"></i> Apple Music
+          </a>
+          <a
+            :href="`https://y.qq.com/n/ryqq/search?w=${encodeURIComponent(video.title)}&t=song&remoteplace=txt.yqq.top`"
+            target="_blank"
+            class="text-secondary mr-2"
+          >
+            <i class="text-secondary fa-solid fa-music-note"></i> QQ Music
+          </a>
+        </template>
+      </div>
     </div>
     <client-only>
       <drop
         @drop="handleDrop"
         :class="{
-          'd-none': (video.subs_l2 && video.subs_l2.length > 0) || showSubsEditing,
+          'd-none':
+            (video.subs_l2 && video.subs_l2.length > 0) || showSubsEditing,
           over: over,
           'subs-drop drop p-4 mt-3': true,
         }"
@@ -247,7 +277,11 @@
             >
               Enable Translation Editing
             </b-form-checkbox>
-            <span :class="{'d-none': !showSubsEditing && !enableTranslationEditing}">
+            <span
+              :class="{
+                'd-none': !showSubsEditing && !enableTranslationEditing,
+              }"
+            >
               <u
                 class="mt-2 ml-2 d-inline-block text-danger"
                 style="cursor: pointer"
@@ -399,11 +433,11 @@ export default {
   props: {
     video: Object,
     showVideoDetails: {
-      default: true
+      default: true,
     },
     showTextEditing: {
-      default: true
-    }
+      default: true,
+    },
   },
   data() {
     return {
