@@ -34,7 +34,7 @@
           showPinyin ? 'text-success' : ''
         }`"
       >
-        <span class="annotation-setting-icon">
+        <span class="annotation-setting-icon" style="font-size: 0.8em; font-weight: bold;">
           <ruby v-if="$l2.han" style="position: relative; bottom: -0.1rem">
             拼
             <rt>pīn</rt>
@@ -509,4 +509,10 @@ export default {
   text-align: center;
   display: inline-block;
 }
+
+
+hr {
+  margin: 0.5rem 0;
+}
+
 </style>

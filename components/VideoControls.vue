@@ -33,17 +33,6 @@
         <i class="fa-solid fa-circle-info" v-else></i>
       </button>
       <button
-        v-if="showCollapse"
-        :class="{
-          'btn-video-controls btn-video-controls-collapse text-center': true,
-        }"
-        @click="toggleCollapsed"
-        :title="$t('Collapse Video')"
-      >
-        <i class="fas fa-caret-square-up" v-if="!collapsed"></i>
-        <i class="fas fa-caret-square-down" v-if="collapsed"></i>
-      </button>
-      <button
         :class="{
           'btn-video-controls btn-video-controls-rewind text-center': true,
         }"
@@ -168,7 +157,11 @@
     >
       <div class="video-info-inner">
         <h6>{{ video.title }}</h6>
-        <VideoAdmin :video="video" ref="videoAdmin1" style="font-size: 0.8em; line-height: 2em"/>
+        <VideoAdmin
+          :video="video"
+          ref="videoAdmin1"
+          style="font-size: 0.8em; line-height: 2em"
+        />
         <div class="mt-3">
           <h6 v-if="show">
             <hr />
@@ -183,7 +176,12 @@
               }"
               class="show-all"
             >
-              {{ $t("All") }} {{ largeEpisodeCount > episodes.length ? largeEpisodeCount : episodes.length }}
+              {{ $t("All") }}
+              {{
+                largeEpisodeCount > episodes.length
+                  ? largeEpisodeCount
+                  : episodes.length
+              }}
               <i class="fas fa-chevron-right"></i>
             </router-link>
           </h6>
@@ -212,11 +210,28 @@
       ref="settings-modal"
       centered
       hide-footer
-      :title="$t('Settings')"
+      :title="$t('Video Options')"
       body-class="settings-modal-wrapper"
       modal-class="safe-padding-top mt-4"
-      size="md"
+      size="sm"
     >
+      <div>
+        <button
+          v-if="showCollapse"
+          :class="{
+            'btn btn-unstyled text-center d-block p-0': true,
+            'text-success': collapsed,
+          }"
+          @click="toggleCollapsed"
+          :title="$t('Collapse Video')"
+        >
+          <span class="settings-icon">
+            <i class="fas fa-caret-square-up" v-if="!collapsed"></i>
+            <i class="fas fa-caret-square-down" v-if="collapsed"></i>
+          </span>
+          <span>{{ $t("Collapse Video") }}</span>
+        </button>
+      </div>
       <div>
         <button
           :class="{
@@ -232,7 +247,7 @@
           <span>{{ $t("{speed}x Speed", { speed }) }}</span>
         </button>
       </div>
-      <div class="mt-1">
+      <div>
         <button
           :class="{
             'btn btn-unstyled text-center d-block p-0': true,
@@ -245,7 +260,7 @@
           <span>{{ $t("Auto-Pause") }}</span>
         </button>
       </div>
-      <div class="mt-1">
+      <div>
         <button
           :class="{
             'btn btn-unstyled text-center d-block p-0': true,
@@ -258,7 +273,7 @@
           <span>{{ $t("Smooth Scrolling") }}</span>
         </button>
       </div>
-      <hr />
+      <hr/>
       <AnnotationSettings variant="toolbar" />
     </b-modal>
   </div>
@@ -297,7 +312,7 @@ export default {
     showInfoButton: {
       // Whether to show an "i" button that toggles the video information display modal
       type: Boolean,
-      default: false,
+      default: true,
     },
     showType: {
       type: String,
@@ -618,5 +633,9 @@ export default {
   margin-left: 0.5rem;
   display: inline-block;
   color: #28a745;
+}
+
+hr {
+  margin: 0.5rem 0;
 }
 </style>

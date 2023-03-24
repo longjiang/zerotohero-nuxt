@@ -43,7 +43,6 @@
             show,
             showType,
             largeEpisodeCount,
-            showInfoButton: layout === 'vertical' && showInfo,
             episodes,
             showLineList,
             showFullscreenToggle,
