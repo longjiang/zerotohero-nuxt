@@ -78,7 +78,7 @@
           v-if="video.category === 10 || video.tv_show?.title === 'Music'"
         >
           <a
-            :href="`https://open.spotify.com/search/${encodeURIComponent(video.title)}/tracks`"
+            :href="`https://open.spotify.com/search/song/${encodeURIComponent(video.title)}`"
             target="_blank"
             class="text-secondary mr-2"
           >
