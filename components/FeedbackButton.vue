@@ -3,8 +3,9 @@
     <!-- <router-link :to="{ lastFullHistoryPath }" class="feedback-button">
       <i class="fa-solid fa-arrows-rotate"></i>
     </router-link> -->
-    <span @click="showModal" class="feedback-button">{{ $t("Feedback") }}</span>
-    <b-modal
+    <a href="https://discord.com/channels/1002116370303037500/1002116371536171086" target="_blank" class="feedback-button"><i class="fa-brands fa-discord"></i> {{ $t("Feedback") }}</a>
+    <!-- <span @click="showModal" class="feedback-button"><i class="fa-brands fa-discord"></i> {{ $t("Feedback") }}</span> -->
+    <!-- <b-modal
       ref="feedback-modal"
       centered
       hide-footer
@@ -36,7 +37,7 @@
           </a>
         </p>
       </div>
-    </b-modal>
+    </b-modal> -->
   </div>
 </template>
 
@@ -136,18 +137,23 @@ Previous URL: ${this.previousURL ? this.previousURL : "(Not available)"}`;
 .feedback-button-wrapper {
   position: fixed;
   transform: rotate(-90deg);
+  transform-origin: bottom left;
+  left: 100vw;
+  bottom: 10rem;
   z-index: 999;
-  right: -2rem;
-  bottom: 12rem;
-  height: 22.69px;
-  width: 83.13px;
   overflow: hidden;
+  white-space: nowrap;
+  font-size: 0.8rem;
   .feedback-button {
     cursor: pointer;
-    background: #28a745;
+    background: #5865F2;
     color: white;
     padding: 0.1rem 0.5rem;
     border-radius: 0.25rem 0.25rem 0 0;
+    &:hover {
+      text-decoration: none;
+      background: #3f4cd8;
+    }
   }
 }
 </style>
