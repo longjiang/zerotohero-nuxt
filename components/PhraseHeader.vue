@@ -9,7 +9,7 @@
         icon="bookmark"
         class="mr-2"
       />
-      <Speak :text="term" />
+      <Speak :text="term" ref="speak" />
     </div>
     <h2 class="phrase-header-phrase text-center font-weight-normal mt-3">
       <div class="d-inline-block">
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   props: {
     term: {
@@ -29,6 +30,13 @@ export default {
     },
   },
   computed: {
+    ...mapState("settings", ["l2Settings"]),
+    l2SettingsOfL2() {
+      let l2SettingsOfL2 = {};
+      if (this.l2Settings && this.l2Settings[this.$l2.code])
+        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
+      return l2SettingsOfL2;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -37,6 +45,11 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
+  },
+  mounted() {
+    if (this.$refs.speak && this.l2SettingsOfL2.autoPronounce) {
+      this.$refs.speak.speak(0.75, 0.5); // Speed and volume
+    }
   },
   methods: {
     phraseItem() {

@@ -15,7 +15,7 @@
 <template>
   <div class="main pb-4" v-cloak>
     <div class="container">
-      <div class="row text-center">
+      <div class="row text-center" v-if="sW.length > 0">
         <div class="col-sm-12">
           <div>
             <input
@@ -58,7 +58,7 @@
           >
             <p>{{ $t("To sync words across devices, please login.") }}</p>
             <router-link :to="{ name: 'login' }" class="btn btn-success">
-              {{ $("Login") }}
+              {{ $t("Login") }}
               <i class="fas fa-chevron-right"></i>
             </router-link>
           </div>

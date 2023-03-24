@@ -172,6 +172,7 @@
 import Klingon from "@/lib/klingon";
 import { transliterate as tr } from "transliteration";
 import pinyin2ipa from '@/lib/pinyin2ipa/lib'
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -196,13 +197,16 @@ export default {
     }
   },
   data() {
-    return {
-      nextPath: undefined,
-      prevPath: undefined,
-      wordIndex: undefined,
-    };
+    return {};
   },
   computed: {
+    ...mapState("settings", ["l2Settings"]),
+    l2SettingsOfL2() {
+      let l2SettingsOfL2 = {};
+      if (this.l2Settings && this.l2Settings[this.$l2.code])
+        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
+      return l2SettingsOfL2;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -219,9 +223,7 @@ export default {
     },
   },
   async mounted() {
-    this.prevPath = await this.prevWord();
-    this.nextPath = await this.nextWord();
-    if (this.$refs.speak && this.$store.state.settings.autoPronounce) {
+    if (this.$refs.speak && this.l2SettingsOfL2.autoPronounce && !this.hidePhonetics) {
       this.$refs.speak.speak(0.75, 0.5); // Speed and volume
     }
   },
@@ -247,34 +249,6 @@ export default {
         text = Klingon.latinToConScript(text);
       }
       return text;
-    },
-    async nextWord() {
-      if (this.entry.newHSKMatches) {
-        let match = this.entry.newHSKMatches.find(
-          (match) => match.level === "7-9"
-        );
-        if (match) {
-          let newEntry = await (
-            await this.$getDictionary()
-          ).getByNewHSK("7-9", Math.min(Number(match.num) + 1), 5635);
-          if (newEntry)
-            return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
-        }
-      }
-    },
-    async prevWord() {
-      if (this.entry.newHSKMatches) {
-        let match = this.entry.newHSKMatches.find(
-          (match) => match.level === "7-9"
-        );
-        if (match) {
-          let newEntry = await (
-            await this.$getDictionary()
-          ).getByNewHSK("7-9", Math.max(0, Number(match.num) - 1));
-          if (newEntry)
-            return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${newEntry.id}`;
-        }
-      }
     },
   },
 };
