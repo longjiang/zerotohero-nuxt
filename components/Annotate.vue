@@ -781,9 +781,10 @@ export default {
         sticky: this.sticky,
         explore: this.explore,
         context,
-        quizMode: this.quizMode
+        quizMode: this.quizMode,
       };
       if (token.candidates?.length > 0) attrs.token = token;
+      if (token.mappedPronunciation) attrs.mappedPronunciation = token.mappedPronunciation
       return attrs;
     },
     convertToSentencesRecursive(node) {

@@ -80,6 +80,9 @@ export default {
     quizMode: {
       default: false,
     },
+    mappedPronunciation: {
+      type: Array //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
+    },
     context: {
       type: Object,
       default() {
@@ -239,6 +242,7 @@ export default {
         text: this.transform(text),
         hanja,
       };
+      if (this.mappedPronunciation) attributes.mappedPronunciation = this.mappedPronunciation
       if (this.popup) {
         attributes["data-hover-level"] = "outside";
       }

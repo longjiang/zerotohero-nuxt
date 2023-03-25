@@ -21,7 +21,7 @@
         {{ phonetics }}
       </span>
       <span class="word-block-text-byeonggi-wrapper">
-        <span :class="classes">
+        <span :class="classes" v-if="!mappedPronunciation">
           {{ text }}
         </span>
         <span
@@ -69,6 +69,9 @@ export default {
     },
     phonetics: {
       default: undefined
+    },
+    mappedPronunciation: {
+      type: Array //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
     }
   },
   computed: {
