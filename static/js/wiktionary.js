@@ -1014,7 +1014,7 @@ const Dictionary = {
       text: matchedText
     };
   },
-  tokenize(text, tokenizationType) {
+  tokenize(text, tokenizationType = "integral") {
     if (this.tokenizationCache[text]) return this.tokenizationCache[text];
     else {
       let tokenized = []
@@ -1039,7 +1039,6 @@ const Dictionary = {
   },
   tokenizeIntegral(text) {
     const tokens = text.match(/\p{L}+|[^\p{L}\s]+|\s+/gu);
-
     const labeledTokens = tokens.map(tokenString => {
       let isWord = /^\p{L}+$/u.test(tokenString)
       if (isWord) {
@@ -1048,7 +1047,6 @@ const Dictionary = {
         return tokenString;
       }
     });
-
     return labeledTokens
   },
   tokenizeContinua(text) {

@@ -103,103 +103,23 @@ const Dictionary = {
   },
   tokenize(text) {
     if (this.tokenizationCache[text]) return this.tokenizationCache[text];
-    let subdict = this.subdictFromText(text);
-    let tokenized = this.tokenizeRecursively(text, subdict);
-    if (["tur"].includes(this.l2)) this.tokenizationCache[text] = tokenized;
-    return tokenized;
-  },
-  tokenizeRecursively(text, subdict) {
-    const longest = subdict.longest(text);
-    if (longest.matches && longest.matches.length > 0) {
-      for (let word of longest.matches) {
-        longest.matches = this.stemWordsWithScores(word, 1).map(w => w.w).concat(longest.matches);
-        // longest.matches = longest.matches.concat(this.phrasesWithScores(word, 1)) // This is very slow
-      }
-      let result = [];
-      /*
-      result = [
-        '我',
-        {
-          text: '是'
-          candidates: [{...}, {...}, {...}
-        ],
-        '中国人。'
-      ]
-      */
-      for (let textFragment of text.split(longest.text)) {
-        result.push(textFragment); // '我'
-        result.push({
-          text: longest.text,
-          candidates: longest.matches
-        });
-      }
-      result = result.filter(item => {
-        if (typeof item === "string") {
-          return item !== "";
-        } else {
-          return item.text !== "";
-        }
-      });
-      result.pop(); // last item is always useless, remove it
-      var tokens = [];
-      for (let item of result) {
-        if (typeof item === "string" && item !== text) {
-          for (let token of this.tokenizeRecursively(item, subdict)) {
-            tokens.push(token);
-          }
-        } else {
-          tokens.push(item);
-        }
-      }
-      return tokens;
-    } else {
-      return [text];
+    else {
+      let tokenized = this.tokenizeIntegral(text);
+      this.tokenizationCache[text] = tokenized;
+      return tokenized;
     }
   },
   tokenizeIntegral(text) {
-    if (this.tokenizationCache[text]) return this.tokenizationCache[text]
-    text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
-    tokenized = [];
-    let segs = this.splitByReg(text, /([a-zA-Z0-9]+)/gi);
-    var lemmatizer = new Lemmatizer();
-    let reg = new RegExp(
-      `.*([a-z0-9]+).*`
-    );
-    for (let seg of segs) {
-      let word = seg.toLowerCase();
-      if (
-        reg.test(word) &&
-        !['m', 's', 't', 'll', 'd', 're', 'ain', 'don'].includes(word)
-      ) {
-        let token = {
-          text: seg,
-          candidates: [],
-        };
-        let lemmas = lemmatizer.lemmas(word);
-        if (lemmas && lemmas.length === 1) token.pos = lemmas[0][1]
-        lemmas = [[word, "inflected"]].concat(lemmas);
-        let found = false;
-        let forms = this.unique(lemmas.map(l => l[0]))
-
-        for (let form of forms) {
-          let candidates = this.lookupMultiple(form);
-          if (candidates.length > 0) {
-            found = true;
-            token.candidates = token.candidates.concat(candidates);
-          }
-        }
-        token.candidates = this.uniqueByValue(token.candidates, "id");
-        if (found) {
-          tokenized.push(token);
-        } else {
-          tokenized.push(seg);
-        }
+    const tokens = text.match(/\p{L}+|[^\p{L}\s]+|\s+/gu);
+    const labeledTokens = tokens.map(tokenString => {
+      let isWord = /^\p{L}+$/u.test(tokenString)
+      if (isWord) {
+        return { text: tokenString };
       } else {
-        tokenized.push(seg);
+        return tokenString;
       }
-    }
-    this.tokenizationCache[text] = tokenized
-    return tokenized
+    });
+    return labeledTokens
   },
   unique(a) {
     return a.filter((item, i, ar) => ar.indexOf(item) === i);
