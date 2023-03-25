@@ -4,6 +4,8 @@ importScripts("../vendor/hash-string/hash-string.min.js")
 
 const PYTHON_SERVER = 'https://python.zerotohero.ca/'
 
+const PROXY_SERVER = 'https://server.chinesezerotohero.com/'
+
 const Dictionary = {
   name: "wiktionary",
   version: '2.2.4.2',
@@ -1139,7 +1141,7 @@ const Dictionary = {
   // json or plain text only, and returns object
   async proxy(url, cacheLife = -1, encoding = false) {
     try {
-      let proxyURL = `https://server.chinesezerotohero.com/scrape2.php?cache_life=${cacheLife}${encoding ? "&encoding=" + encoding : ""
+      let proxyURL = `${PROXY_SERVER}scrape2.php?cache_life=${cacheLife}${encoding ? "&encoding=" + encoding : ""
         }&url=${encodeURIComponent(url)}`;
       let response = await axios.get(proxyURL);
       if (response.data) {

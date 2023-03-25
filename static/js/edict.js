@@ -1,8 +1,12 @@
-importScripts('../vendor/kuromoji/kuromoji.js')
+// importScripts('../vendor/kuromoji/kuromoji.js')
 importScripts('../vendor/wanakana/wanakana.min.js')
 importScripts('../vendor/jpconjugations.js')
 importScripts('../vendor/localforage/localforage.js')
 importScripts("../vendor/hash-string/hash-string.min.js")
+
+const PYTHON_SERVER = 'https://python.zerotohero.ca/'
+
+const PROXY_SERVER = 'https://server.chinesezerotohero.com/'
 
 const Dictionary = {
   file: 'https://server.chinesezerotohero.com/data/edict/edict.tsv.txt',
@@ -10,7 +14,7 @@ const Dictionary = {
   words: [],
   tokenizationCache: {},
   name: 'edict',
-  tokenizer: undefined,
+  // tokenizer: undefined,
   credit() {
     return 'The Japanese dictionary is provided by <a href="http://www.edrdg.org/jmdict/edict.html">EDICT</a>, open-source and distribtued under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 license</a>.'
   },
@@ -109,11 +113,11 @@ const Dictionary = {
     "vz": "Ichidan verb - zuru verb (alternative form of -jiru verbs)"
   },
   async load() {
-    this.tokenizer = await new Promise(resolve => {
-      kuromoji.builder({ dicPath: `https://server.chinesezerotohero.com/data/kuromoji/` }).build((err, tokenizer) => {
-        resolve(tokenizer)
-      })
-    })
+    // this.tokenizer = await new Promise(resolve => {
+    //   kuromoji.builder({ dicPath: `https://server.chinesezerotohero.com/data/kuromoji/` }).build((err, tokenizer) => {
+    //     resolve(tokenizer)
+    //   })
+    // })
     let [edictData, wiktionaryData] = await Promise.all([
       this.loadSmart('edict', this.file),
       this.loadSmart('wiktionary-jpn-eng', this.wiktionaryFile)
@@ -242,13 +246,6 @@ const Dictionary = {
       form: word.bare
     }]
     let jpForms = JPConjugations.conjugate(word.bare)
-    if (jpForms.length === 0) {
-      let tokenized = this.tokenizer.tokenize(word.bare);
-      if (tokenized.length > 0) {
-        jpForms = JPConjugations.conjugate(tokenized[0].basic_form)
-      }
-    }
-
     forms = forms.concat(jpForms.map(f => {
       return {
         table: 'conjugation',
@@ -422,33 +419,76 @@ const Dictionary = {
       text: matches && matches.length > 0 ? matches[0].head : ''
     }
   },
-  tokenize(text) {
-    if (this.tokenizationCache[text]) return this.tokenizationCache[text]
-    let t = []
-    let segs = text.split(/\s+/)
-    for (let seg of segs) {
-      let tokenized = this.tokenizer.tokenize(seg);
-      for (let index in tokenized) {
-        let token = tokenized[index]
-        let candidates = this.lookupMultiple(
-          token.surface_form
-        );
-        if (token.basic_form && token.basic_form !== token.surface_form) {
-          candidates = candidates.concat(
-            this.lookupMultiple(
-              token.basic_form
-            )
-          );
-        }
-        t.push({
-          text: token.surface_form,
-          candidates,
-          pos: token.pos
-        })
+  // json or plain text only, and returns object
+  async proxy(url, cacheLife = -1, encoding = false) {
+    try {
+      let proxyURL = `${PROXY_SERVER}scrape2.php?cache_life=${cacheLife}${encoding ? "&encoding=" + encoding : ""
+        }&url=${encodeURIComponent(url)}`;
+      let response = await axios.get(proxyURL);
+      if (response.data) {
+        return response.data;
       }
-      t.push(' ')
+    } catch (err) {
+      console.log(`Cannot get ${url}`);
     }
-    t.pop()
-    return t
+    return false;
+  },
+  async tokenizeJapanese(text) {
+    text = text.replace(/-/g, "- ");
+    let url = `${PYTHON_SERVER}lemmatize-japanese?text=${encodeURIComponent(
+      text
+    )}`;
+    let tokenized = await this.proxy(url, 0);
+    let tokens = [];
+    for (let token of tokenized) {
+      if (!token) {
+        tokens.push(" ");
+      } else if (["補助記号-"].includes(token.pos)) {
+        tokens.push(token.word);
+      } else {
+        tokens.push(token);
+      }
+    }
+    return tokens;
+  },
+  uniqueByValue(array, key) {
+    let flags = [];
+    let unique = [];
+    let l = array.length;
+    for (let i = 0; i < l; i++) {
+      if (flags[array[i][key]]) continue;
+      flags[array[i][key]] = true;
+      unique.push(array[i]);
+    }
+    return unique;
+  },
+  isJapanese(text) {
+    const japaneseRegex = /^[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}\p{Punctuation}\p{Symbol}]+$/ug
+    return japaneseRegex.test(text)
+  },
+  async tokenize(text) {
+    if (this.tokenizationCache[text]) return this.tokenizationCache[text]
+    let tokenized = await this.tokenizeJapanese(text);
+    let final = []
+    for (let index in tokenized) {
+      let token = tokenized[index]
+      let candidates = this.lookupMultiple(
+        token.word
+      );
+      if (token.lemma && token.lemma !== token.word) {
+        candidates = candidates.concat(
+          this.lookupMultiple(
+            token.lemma
+          )
+        );
+      }
+      final.push({
+        text: token.word,
+        candidates,
+        pos: token.pos
+      })
+      if (!this.isJapanese(token.word)) final.push(" ")
+    }
+    return final
   },
 }
