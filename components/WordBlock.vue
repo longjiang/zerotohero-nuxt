@@ -38,6 +38,7 @@
             loading,
             context,
             transliterationprop,
+            farsiRomanizations,
             phraseObj: phraseItem(text),
           }"
           v-if="open"

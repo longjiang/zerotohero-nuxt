@@ -338,7 +338,7 @@ export default {
       if (this.lines) {
         let nextLines = this.lines.slice(
           this.currentLineIndex,
-          this.currentLineIndex + 3
+          this.currentLineIndex + 5
         );
         for (let line of nextLines) {
           let tokens = await dictionary.tokenize(line.line.replace(/\n/g, " "));

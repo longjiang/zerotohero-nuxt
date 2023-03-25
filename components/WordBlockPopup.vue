@@ -234,6 +234,7 @@ export default {
     images: Array,
     transliterationprop: String,
     phraseObj: Object,
+    farsiRomanizations: Object,
     loading: {
       default: false
     },
