@@ -309,6 +309,9 @@ export default {
     getSupplementalLang(word) {
       return this.$languages.getSmart(word.supplementalLang).name;
     },
+    klingonIPA(text) {
+      return Klingon.latinToIPA(text);
+    },
     pronunciation(word) {
       let pronunciation = word.pronunciation;
       if (this.$l2.code === "vi") {

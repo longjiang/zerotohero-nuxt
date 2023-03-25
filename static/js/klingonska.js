@@ -204,48 +204,24 @@ const Dictionary = {
     }
   },
   tokenize(text) {
-    if (this.tokenizationCache[text]) return this.tokenizationCache[text]
-    let tokenized = this.tokenizeRecursively(text, this.subdictFromText(text))
-    this.tokenizationCache[text] = tokenized
-    return tokenized
-  },
-  tokenizeRecursively(text, subdict) {
-    const longest = subdict.longest(text)
-    if (longest.matches.length > 0) {
-      let result = []
-      /* 
-      result = [
-        '我', 
-        {
-          text: '是'
-          candidates: [{...}, {...}, {...}
-        ],
-        '中国人。'
-      ]
-      */
-      for (let textFragment of text.split(longest.text)) {
-        result.push(textFragment) // '我'
-        result.push({
-          text: longest.text,
-          candidates: longest.matches
-        })
-      }
-      result = result.filter(item => item !== '')
-      result.pop() // last item is always useless, remove it
-      var tokens = []
-      for (let item of result) {
-        if (typeof item === 'string') {
-          for (let token of this.tokenizeRecursively(item, subdict)) {
-            tokens.push(token)
-          }
-        } else {
-          tokens.push(item)
-        }
-      }
-      return tokens
-    } else {
-      return [text]
+    if (this.tokenizationCache[text]) return this.tokenizationCache[text];
+    else {
+      let tokenized = this.tokenizeIntegral(text);
+      this.tokenizationCache[text] = tokenized;
+      return tokenized;
     }
+  },
+  tokenizeIntegral(text) {
+    const tokens = text.match(/\p{L}+|[^\p{L}\s]+|\s+/gu);
+    const labeledTokens = tokens.map(tokenString => {
+      let isWord = /^\p{L}+$/u.test(tokenString)
+      if (isWord) {
+        return { text: tokenString };
+      } else {
+        return tokenString;
+      }
+    });
+    return labeledTokens
   },
   lookupFuzzy(text, limit = 30) {
     // text = 'abcde'

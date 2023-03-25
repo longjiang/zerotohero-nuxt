@@ -235,7 +235,7 @@ export default {
         saved: this.savedWord || this.savedPhrase,
         phonetics,
         definition,
-        text,
+        text: this.transform(text),
         hanja,
       };
       if (this.popup) {
@@ -423,9 +423,6 @@ export default {
         }
       }
       if (transliteration !== this.text) return transliteration;
-    },
-    klingonIPA(text) {
-      return Klingon.latinToIPA(text);
     },
     fixKlingonTypos(text) {
       return Klingon.fixTypos(text);
