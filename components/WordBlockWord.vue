@@ -11,19 +11,50 @@
       obscure,
     }"
   >
-    <template>
+    <template v-if="!mappedPronunciation">
+      <span class="word-block-segment">
+        <span
+          class="word-block-definition"
+          v-if="showDefinition"
+          v-html="definition"
+        ></span>
+        <span class="word-block-pinyin" v-if="phonetics">
+          {{ phonetics }}
+        </span>
+        <span class="word-block-text-byeonggi-wrapper">
+          <span :class="classes">
+            {{ text }}
+          </span>
+          <span
+            v-if="hanja"
+            class="word-block-text-byeonggi d-inline-block"
+            v-html="hanja"
+          />
+          <span v-if="saved && definition" class="word-block-text-quick-gloss">
+            {{ definition }}
+          </span>
+        </span>
+      </span>
+    </template>
+    <template v-else>
       <span
-        class="word-block-definition"
-        v-if="definition"
-        v-html="definition"
-      ></span>
-      <span class="word-block-pinyin" v-if="phonetics">
-        {{ phonetics }}
+        class="word-block-segment"
+        v-for="segment in mappedPronunciation"
+        :key="`word-block-segment-${segment.surface}`"
+      >
+        <span
+          class="word-block-definition"
+          v-if="definition"
+          v-html="definition"
+        ></span>
+        <span class="word-block-pinyin" v-if="segment.type === 'kanji' && phonetics">
+          {{ segment.reading }}
+        </span>
+        <span :class="classes">
+          {{ segment.surface }}
+        </span>
       </span>
       <span class="word-block-text-byeonggi-wrapper">
-        <span :class="classes">
-          {{ text }}
-        </span>
         <span
           v-if="hanja"
           class="word-block-text-byeonggi d-inline-block"
@@ -38,6 +69,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default {
   props: {
     popup: {
@@ -62,19 +94,26 @@ export default {
       default: undefined,
     },
     text: {
-      default: ""
+      default: "",
     },
     hanja: {
-      default: undefined
+      default: undefined,
     },
     phonetics: {
-      default: undefined
+      default: undefined,
     },
     mappedPronunciation: {
-      type: Array //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
-    }
+      type: Array, //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
+    },
   },
   computed: {
+    ...mapState("settings", ["l2Settings"]),
+    l2SettingsOfL2() {
+      let l2SettingsOfL2 = {};
+      if (this.l2Settings && this.l2Settings[this.$l2.code])
+        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
+      return l2SettingsOfL2;
+    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -89,9 +128,12 @@ export default {
         klingon: this.$l2.code === "tlh",
         "word-block-hard": this.hard,
       };
-      if (this.pos) classes[`pos-${pos}`] = pos
-      return classes
+      if (this.pos) classes[`pos-${pos}`] = pos;
+      return classes;
     },
+    showDefinition() {
+      return this.l2SettingsOfL2.showDefinition
+    }
   },
 };
 </script>
@@ -178,7 +220,7 @@ export default {
   }
 }
 
-.show-quick-gloss {
+.show-quick-gloss:not(.l2-ja) {
   [dir="ltr"] .word-block.saved.with-quick-gloss {
     text-align: left;
   }
@@ -195,10 +237,13 @@ export default {
     margin: 0;
     position: relative;
     text-indent: 0;
+    font-size: 0;
+    .word-block-segment {
+      display: inline-block;
+    }
 
     .word-block-pinyin,
     .word-block-text-byeonggi-wrapper {
-      display: block;
       line-height: 1.3;
       text-indent: 0;
     }

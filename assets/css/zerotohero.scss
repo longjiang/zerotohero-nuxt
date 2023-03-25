@@ -624,27 +624,27 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
 }
 
 .zerotohero-zoom-1 {
-  .transcript-line-both,
-  .speech-content {
-    font-size: calc(1em * 1.25);
+  .transcript-line-both .word-block-segment,
+  .speech-content .word-block-segment {
+    font-size: calc(1rem * 1.25);
   }
 }
 .zerotohero-zoom-2 {
-  .transcript-line-both,
-  .speech-content {
-    font-size: calc(1em * 1.25 * 1.25);
+  .transcript-line-both .word-block-segment,
+  .speech-content .word-block-segment {
+    font-size: calc(1rem * 1.25 * 1.25);
   }
 }
 .zerotohero-zoom-3 {
-  .transcript-line-both,
-  .speech-content {
-    font-size: calc(1em * 1.25 * 1.25 * 1.25);
+  .transcript-line-both .word-block-segment,
+  .speech-content .word-block-segment {
+    font-size: calc(1rem * 1.25 * 1.25 * 1.25);
   }
 }
 .zerotohero-zoom-4 {
-  .transcript-line-both,
-  .speech-content {
-    font-size: calc(1em * 1.25 * 1.25 * 1.25 * 1.25);
+  .transcript-line-both .word-block-segment,
+  .speech-content .word-block-segment {
+    font-size: calc(1rem * 1.25 * 1.25 * 1.25 * 1.25);
   }
 }
 .text-primary {

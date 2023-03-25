@@ -216,9 +216,7 @@ export default {
     },
     attributes() {
       let word = this.savedWord || this.words?.[0];
-      let definition = this.l2SettingsOfL2.showDefinition
-        ? word?.definitions?.[0]
-        : undefined;
+      let definition = word?.definitions?.[0]
       let phonetics =
         this.l2SettingsOfL2.showPinyin && this.phonetics && this.transliteration
           ? this.savedTransliteration || this.transliteration
