@@ -1,7 +1,7 @@
 <template>
   <div v-if="!loaded" class="hydration-notice text-center" style="background: #000">
     <div class="text-white">
-      <b>Loading app...</b> App unresponsive? <router-link :to="{ lastFullHistoryPath }" style="color: #18d342"><u>Refresh.</u></router-link>
+      <b>{{ translate('Loading app...') }}</b> {{ translate('App unresponsive?') }} <router-link :to="{ lastFullHistoryPath }" style="color: #18d342"><u>{{ translate('Refresh') }}</u></router-link>
     </div>
   </div>
 </template>
@@ -34,6 +34,13 @@ export default {
         return this.$store.state.settings.l2;
     },
   },
+  methods: {
+    translate(text, data = {}) {
+      let code = this.browserLanguage;
+      if (this.$languages) return this.$languages.translate(text, code, data);
+      else return text;
+    },
+  }
 };
 </script>
 
