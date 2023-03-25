@@ -358,7 +358,8 @@ const Dictionary = {
     let hasHangul = text.includes;
   },
   async tokenize(text) {
-    if (this.tokenizationCache[text]) return this.tokenizationCache[text];
+    let cached = this.tokenizationCache[text]
+    if (cached) return cached;
     let t = [];
     let lastPosition = 0;
     let tokenized;

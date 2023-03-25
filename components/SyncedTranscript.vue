@@ -9,7 +9,7 @@
     <client-only>
       <div class="transcript-wrapper">
         <client-only>
-          <Loader class="text-center w-100"/>
+          <Loader class="text-center w-100" />
           <template
             v-for="(line, index) in filteredLines.slice(
               this.visibleMin,
@@ -92,14 +92,6 @@
           </template>
         </client-only>
       </div>
-      <!-- <EndQuiz
-        v-if="!single"
-        :lines="lines"
-        :matchedParallelLines="matchedParallelLines"
-        :hsk="hsk"
-        :skin="skin"
-        class="pl-4"
-      /> -->
     </client-only>
   </div>
 </template>
@@ -109,8 +101,10 @@ import Helper from "@/lib/helper";
 import Vue from "vue";
 
 import { NON_PRO_MAX_LINES, POPULAR_LANGS } from "@/lib/config";
+import { timeout } from "@/lib/utils/timeout";
 const CURRENT_LINE_STARTED_TOLERANCE = 1; // seconds
 const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
+
 
 export default {
   props: {
@@ -184,7 +178,7 @@ export default {
       default: false,
     },
     video: {
-      type: Object
+      type: Object,
     },
   },
   data() {
@@ -236,7 +230,7 @@ export default {
           }
         }
       }
-      quizChunks[this.lines.length - 1] = [...Array(this.lines.length).keys()]
+      quizChunks[this.lines.length - 1] = [...Array(this.lines.length).keys()];
       return quizChunks;
     },
     pro() {
@@ -317,7 +311,7 @@ export default {
       this.executeTimeBasedMethods();
       this.previousTime = this.currentTime;
     },
-    currentLineIndex() {
+    async currentLineIndex() {
       let visibleMax = Math.max(
         this.visibleMax,
         this.currentLineIndex + this.visibleRange
@@ -325,6 +319,7 @@ export default {
       if (visibleMax > this.visibleMax + this.visibleRange / 2) {
         this.visibleMax = visibleMax;
       }
+      if (this.single) this.tokenizeNextLines();
     },
     async currentLine() {
       if (!this.single && !this.paused) this.scrollTo(this.currentLineIndex);
@@ -338,6 +333,18 @@ export default {
     },
   },
   methods: {
+    async tokenizeNextLines() {
+      let dictionary = await this.$getDictionary();
+      if (this.lines) {
+        let nextLines = this.lines.slice(
+          this.currentLineIndex,
+          this.currentLineIndex + 3
+        );
+        for (let line of nextLines) {
+          let tokens = await dictionary.tokenize(line.line.replace(/\n/g, " "));
+        }
+      }
+    },
     onFirstPlay() {
       if (this.currentTime >= this.lines[0].starttime) {
         this.playNearestLine();
@@ -455,8 +462,8 @@ export default {
     matchParallelLines() {
       let matchedParallelLines = [];
       if (!this.parallellines) {
-        this.matchedParallelLines = []
-        return
+        this.matchedParallelLines = [];
+        return;
       }
       for (let lineIndex in this.lines) {
         lineIndex = Number(lineIndex);
@@ -666,7 +673,9 @@ export default {
       if (!this.landscape) {
         let controllerHeight = 52;
         let transcriptContainerWidth = this.$el.clientWidth;
-        let videoHeight = this.collapsed ? 0 : (transcriptContainerWidth * 9) / 16; // video height, hidden if collapsed
+        let videoHeight = this.collapsed
+          ? 0
+          : (transcriptContainerWidth * 9) / 16; // video height, hidden if collapsed
         smallScreenOffset = videoHeight + controllerHeight;
       } else {
         smallScreenOffset = 0;
