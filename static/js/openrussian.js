@@ -5,6 +5,7 @@ const Dictionary = {
   merged: [],
   index: {},
   cache: {},
+  tokenizationCache: {},
   tables: [
     // 'categories_words2', // not sure what this does
     // 'expressions_words', // not sure what this does
@@ -153,20 +154,26 @@ const Dictionary = {
     this.createIndex()    
     return this
   },
-  /*
-  augment(word) {
-    for (let table of this.tables) {
-      if (table.name !== 'declensions') {
-        word[table.name] = this[table.name][word.id]
-      }
+  tokenize(text) {
+    if (this.tokenizationCache[text]) return this.tokenizationCache[text];
+    else {
+      let tokenized = this.tokenizeIntegral(text);
+      this.tokenizationCache[text] = tokenized;
+      return tokenized;
     }
-    if (word.nouns) {
-      word.decl_sg = this.declensions[word.nouns.decl_sg_id]
-      word.decl_pl = this.declensions[word.nouns.decl_pl_id]
-    }
-    return word
   },
-  */
+  tokenizeIntegral(text) {
+    const tokens = text.match(/\p{L}+|[^\p{L}\s]+|\s+/gu);
+    const labeledTokens = tokens.map(tokenString => {
+      let isWord = /^\p{L}+$/u.test(tokenString)
+      if (isWord) {
+        return { text: tokenString };
+      } else {
+        return tokenString;
+      }
+    });
+    return labeledTokens
+  },
   /**
    * Get a word by ID.
    * @param {*} id the word's id
