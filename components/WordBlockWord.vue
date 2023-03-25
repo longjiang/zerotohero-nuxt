@@ -21,7 +21,7 @@
         {{ phonetics }}
       </span>
       <span class="word-block-text-byeonggi-wrapper">
-        <span :class="classes" v-if="!mappedPronunciation">
+        <span :class="classes">
           {{ text }}
         </span>
         <span
