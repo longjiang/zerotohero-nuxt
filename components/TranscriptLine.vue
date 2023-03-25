@@ -19,9 +19,9 @@
           <i class="fa fa-trash"></i>
         </b-button>
       </div>
-      <div class="transcript-line-both">
+      <div :class="{'transcript-line-both': true, transparent: hideWhileAnnotating && !annotated}" >
         <div
-          :class="{'transcript-line-l2-wrapper': true, transparent: hideWhileAnnotating && !annotated}"
+          class="transcript-line-l2-wrapper"
         >
           <div class="dot-wrapper-ltr" v-if="!single && $l2.direction !== 'rtl'">
             <div class="dot" v-if="current"></div>
