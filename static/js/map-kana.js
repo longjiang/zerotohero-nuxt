@@ -91,3 +91,13 @@ function mergeConsecutiveKana(obj) {
     }
     return merged_obj
 }
+
+
+function test() {
+  console.log(mapKana('乗り遅れる', 'のりおくれる'))
+  console.log(mapKana('朝ご飯', 'あさごはん'))
+  console.log(mapKana('食べ物', 'たべもの'))
+  console.log(mapKana('お金', 'おかね'))
+  console.log(mapKana('お弁当', 'おべんとう'))
+  console.log(mapKana('食パン', 'しょくぱん'))
+}
