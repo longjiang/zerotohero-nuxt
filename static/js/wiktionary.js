@@ -1014,20 +1014,53 @@ const Dictionary = {
       text: matchedText
     };
   },
-  tokenize(text) {
+  tokenize(text, tokenizationType) {
     if (this.tokenizationCache[text]) return this.tokenizationCache[text];
-    if (this.l2 === "tur") return this.tokenizeTurkish(text);
-    if (this.l2 === 'ara') return this.tokenizeArabic(text);
+    else {
+      let tokenized = []
+      if (this.l2 === "tur") tokenized = this.tokenizeTurkish(text);
+      else if (this.l2 === 'ara') tokenized = this.tokenizeArabic(text);
+      else {
+        if (['tur', 'ara'].includes(this.l2)) tokenizationType = "server"
+        switch (tokenizationType) {
+          case "integral":
+            tokenized = this.tokenizeIntegral(text);
+            break;
+          case "agglutenative":
+          case "continua":
+            tokenized = this.tokenizeContinua(text);
+            break;
+          default:
+        }
+      }
+      this.tokenizationCache[text] = tokenized;
+      return tokenized;
+    }
+  },
+  tokenizeIntegral(text) {
+    const tokens = text.match(/\p{L}+|[^\p{L}\s]+|\s+/gu);
+
+    const labeledTokens = tokens.map(tokenString => {
+      let isWord = /^\p{L}+$/u.test(tokenString)
+      if (isWord) {
+        return { text: tokenString };
+      } else {
+        return tokenString;
+      }
+    });
+
+    return labeledTokens
+  },
+  tokenizeContinua(text) {
     let subdict = this.subdictFromText(text);
     let tokenized = this.tokenizeRecursively(text, subdict);
-    if (["tur"].includes(this.l2)) this.tokenizationCache[text] = tokenized;
-    return tokenized;
+    return tokenized
   },
   // https://stackoverflow.com/questions/175739/how-can-i-check-if-a-string-is-a-valid-number
   isNumeric(str) {
     if (typeof str != "string") return false // we only process strings!  
     return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-           !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+      !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
   },
   async tokenizeArabic(text) {
     text = text.replace(/-/g, "- ");
