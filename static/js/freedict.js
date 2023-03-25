@@ -35,6 +35,9 @@ const Dictionary = {
     let words = text.replace(reg, '!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!').replace(/^!!!BREAKWORKD!!!/, '').replace(/!!!BREAKWORKD!!!$/, '')
     return words.split('!!!BREAKWORKD!!!')
   },
+  isEnglishPartialClitic(word) {
+    return this.l1 === 'eng' && ['m', 's', 't', 'll', 'd', 're', 'ain', 'don'].includes(word)
+  },
   tokenize(text) {
     if (this.tokenizationCache[text]) return this.tokenizationCache[text]
     text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
@@ -47,8 +50,7 @@ const Dictionary = {
     for (let seg of segs) {
       let word = seg.toLowerCase();
       if (
-        reg.test(word) &&
-        !['m', 's', 't', 'll', 'd', 're', 'ain', 'don'].includes(word)
+        reg.test(word) && !this.isEnglishPartialClitic(word)
       ) {
         let token = {
           text: seg,
@@ -68,11 +70,7 @@ const Dictionary = {
           }
         }
         token.candidates = this.uniqueByValue(token.candidates, "id");
-        if (found) {
-          tokenized.push(token);
-        } else {
-          tokenized.push(seg);
-        }
+        tokenized.push(token);
       } else {
         tokenized.push(seg);
       }
