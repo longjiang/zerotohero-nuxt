@@ -489,6 +489,7 @@ const Dictionary = {
       })
       if (!this.isJapanese(token.word)) final.push(" ")
     }
+    this.tokenizationCache[text] = final
     return final
   },
 }
