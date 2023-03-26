@@ -3,6 +3,7 @@ importScripts('../vendor/wanakana/wanakana.min.js')
 importScripts('../vendor/jpconjugations.js')
 importScripts('../vendor/localforage/localforage.js')
 importScripts("../vendor/hash-string/hash-string.min.js")
+importScripts("../js/map-kana.js")
 
 const PYTHON_SERVER = 'https://python.zerotohero.ca/'
 
@@ -482,10 +483,13 @@ const Dictionary = {
           )
         );
       }
+      let mappedPronunciation = mapKana(token.word, wanakana.toHiragana(token.pronunciation))
       final.push({
         text: token.word,
         candidates,
-        pos: token.pos
+        pos: token.pos,
+        pronunciation: wanakana.toHiragana(token.pronunciation),
+        mappedPronunciation
       })
       if (!this.isJapanese(token.word)) final.push(" ")
     }

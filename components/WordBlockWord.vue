@@ -237,13 +237,14 @@ export default {
     margin: 0;
     position: relative;
     text-indent: 0;
-    font-size: 0;
     .word-block-segment {
       display: inline-block;
+      line-height: 1;
     }
 
     .word-block-pinyin,
     .word-block-text-byeonggi-wrapper {
+      padding-top: 0.5em;
       line-height: 1.3;
       text-indent: 0;
     }
