@@ -25,7 +25,7 @@ const Dictionary = {
     spa: 2,
     est: 3
   },
-  englishLemmatizer: undefined, // For Chinese L1 only
+  englishLemmatizer: undefined, // For Non-English L1 only
   tokenizationCache: {},
   server: "https://server.chinesezerotohero.com/",
   l1: undefined,
@@ -146,12 +146,12 @@ const Dictionary = {
       }
       this.words = words;
       this.createIndices();
-      if (this.l2 === 'eng' && this.l1 === 'zho') this.loadEnglishLemmatizer() // Our strategy of finding lemmas based on the word 'of' in the definition obviously doesn't work for definitions in Chinese
+      if (this.l2 === 'eng' && this.l1 !== 'eng') this.loadEnglishLemmatizer() // Our strategy of finding lemmas based on the word 'of' in the definition obviously doesn't work for definitions not in English
       console.log("Wiktionary: loaded.");
       return this;
     }
   },
-  // For Chinese users
+  // For Non-English users
   async loadEnglishLemmatizer() {
     console.log('Loading English lemmatizer "javascript-lemmatizer"...');
     importScripts('../vendor/javascript-lemmatizer/js/lemmatizer.js')
@@ -630,7 +630,7 @@ const Dictionary = {
       let tokenized = []
       if (this.l2 === "tur") tokenized = this.tokenizeTurkish(text);
       else if (this.l2 === 'ara') tokenized = this.tokenizeArabic(text);
-      else if (this.l2 === 'eng' && this.l1 === 'zho') tokenized = this.tokenizeEnglish(text)
+      else if (this.l2 === 'eng' && this.l1 !== 'eng') tokenized = this.tokenizeEnglish(text)
       else {
         if (['tur', 'ara'].includes(this.l2)) tokenizationType = "server"
         switch (tokenizationType) {
@@ -678,7 +678,7 @@ const Dictionary = {
   isEnglishPartialClitic(word) {
     return this.l1 === 'eng' && ['m', 's', 't', 'll', 'd', 're', 'ain', 'don'].includes(word)
   },
-  // For Chinese L1 only
+  // For Non-English L1 only
   tokenizeEnglish(text) {
     if (!this.englishLemmatizer) return []
     text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
