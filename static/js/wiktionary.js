@@ -19,7 +19,6 @@ const Dictionary = {
   lemmaIndex: {},
   cache: {},
   tables: [],
-  NlpjsTFrDict: {},
   frequency: undefined,
   useJSON: [],
   hasFrequency: [],
@@ -29,8 +28,6 @@ const Dictionary = {
     spa: 2,
     est: 3
   },
-  hanRegex: /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g,
-  hanRegexStrict: /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/,
   tokenizationCache: {},
   server: "https://server.chinesezerotohero.com/",
   l1: undefined,
@@ -85,10 +82,7 @@ const Dictionary = {
     wol: "fra",
     vec: "ita"
   },
-  turkishPOS: {},
   lemmatization: undefined,
-  conjugations: undefined, // for french only
-  romanizations: undefined, // for persian only
   accentCritical: false,
   accentCriticalLangs: ["tur", "vie", "fra"], // Languages that should not strip accents when searching
   credit() {
@@ -158,9 +152,6 @@ const Dictionary = {
       }
       this.words = words;
       this.createIndices();
-      // if (this.l2 === "fra") await this.loadFrenchConjugationsAndLemmatizer();
-      if (this.l2 === "fas") await this.loadPersianRomanization();
-      if (this.l2 === "tur") this.loadTurkishPOS();
       console.log("Wiktionary: loaded.");
       return this;
     }
@@ -427,14 +418,6 @@ const Dictionary = {
     }
     return words;
   },
-  loadTurkishPOS() {
-    let data = this.loadCSVString(turkishPOSCSV, true);
-    for (let row of data) {
-      for (let symbol of row.Symbol.split(",")) {
-        this.turkishPOS[symbol] = row.POS;
-      }
-    }
-  },
   async loadLemmatizationTable(langCode) {
     let res = await axios.get(
       `${this.server}data/lemmatization-lists/lemmatization-${langCode}.txt`
@@ -451,46 +434,6 @@ const Dictionary = {
         }
       }
       return table;
-    }
-  },
-  async loadPersianRomanization() {
-    console.log("Loading Persian romanization file...");
-    try {
-      let res = await axios.get(
-        `${this.server}data/persian-g2p/tihudictBIG-and-wiktionary-merged.csv.txt`
-      );
-      if (res && res.data) {
-        let parsed = Papa.parse(res.data, { header: true });
-        this.romanizations = parsed.data;
-      }
-    } catch (err) { }
-  },
-  async loadFrenchConjugationsAndLemmatizer() {
-    console.log('Loading French conjugations from "french-verbs-lefff"...');
-    let res = await axios.get(
-      `${this.server}data/french-verbs-lefff/conjugations.json.txt`
-    );
-    if (res && res.data) {
-      this.conjugations = res.data;
-    }
-    console.log("Loading French tokenizer...");
-    importScripts("../vendor/nlp-js-tools-french/nlp-js-tools-french.js");
-    for (let key of [
-      "adj",
-      "adv",
-      "art",
-      "con",
-      "nom",
-      "ono",
-      "pre",
-      "ver",
-      "pro"
-    ]) {
-      let res = await axios.get(
-        `/vendor/nlp-js-tools-french/dict/${key.replace("con", "conj")}.json`
-      );
-      let lexi = res.data;
-      this.NlpjsTFrDict[key] = { lexi };
     }
   },
   /**
@@ -526,10 +469,7 @@ const Dictionary = {
     hanja = hanja.replace(/\(.*\)/, "");
     hanja = hanja.replace(/,.*/, "");
     hanja = hanja.trim();
-    // if (!this.isHan(hanja)) {
-    //   let matches = item['etymology_text'].match(this.hanRegex)
-    //   if (matches) hanja = matches[0]
-    // }
+    
     if (this.isHan(hanja)) {
       return hanja;
     }
@@ -575,10 +515,10 @@ const Dictionary = {
     return etymologyText;
   },
   hasHan(text) {
-    return text.match(this.hanRegex);
+    return text.match(/[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g);
   },
   isHan(text) {
-    return this.hanRegexStrict.test(text);
+    return /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/.test(text);
   },
   inflections(sense) {
     let definitions = [];
@@ -798,7 +738,6 @@ const Dictionary = {
         form: word.head
       }
     ];
-    // if (this.l2 === "fra") forms = forms.concat(this.frenchWordForms(word));
     if (this.l2 !== "vie") forms = forms.concat(this.findForms(word));
     forms = this.uniqueByValues(forms, ["table", "field", "form"]);
     return forms;
@@ -867,49 +806,6 @@ const Dictionary = {
   },
   getSize() {
     return this.words.length;
-  },
-  frenchWordForms(word) {
-    let forms = [];
-    let fields = {
-      0: "je",
-      1: "tu",
-      2: "il/elle",
-      3: "nous",
-      4: "vous",
-      5: "ils"
-    };
-    let tables = {
-      P: "présent",
-      S: "subjonctif",
-      Y: "Y",
-      I: "imparfait",
-      G: "gérondif",
-      K: "participe passé",
-      J: "passé simple",
-      T: "subjonctif imparfait",
-      F: "futur",
-      C: "conditionnel présent"
-    };
-    if (this.conjugations) {
-      let conjugations = this.conjugations[word.head];
-      if (conjugations) {
-        for (let key in conjugations) {
-          let conj = conjugations[key];
-          forms = forms.concat(
-            conj
-              .filter(formStr => formStr !== "NA")
-              .map((formStr, index) => {
-                return {
-                  table: tables[key],
-                  field: fields[index],
-                  form: formStr
-                };
-              })
-          );
-        }
-      }
-    }
-    return forms;
   },
   uniqueByValue(array, key) {
     let flags = [];
@@ -1106,7 +1002,6 @@ const Dictionary = {
             candidates = candidates.concat(
               this.lookupMultiple(lemma.lemma).map(w => {
                 w.morphology = lemma.morphemes
-                  .map(m => this.turkishPOS[m] || m)
                   .join(", ")
                   .toLowerCase();
                 return w;
@@ -1247,18 +1142,6 @@ const Dictionary = {
   unique(a) {
     return a.filter((item, i, ar) => ar.indexOf(item) === i);
   },
-  findFrenchStems(text) {
-    let word = text.toLowerCase();
-    if (this.l2 === "fra") {
-      let tokenizer = new NlpjsTFr(this.NlpjsTFrDict, text);
-      var lemmas = tokenizer.lemmatizer();
-      var flattend = this.unique([word].concat(lemmas.map(l => l.lemma)));
-      lemmas = null;
-      return flattend;
-    } else {
-      return [];
-    }
-  },
   randomArrayItem(array, start = 0, length = false) {
     length = length || array.length;
     array = array.slice(start, length);
@@ -1284,73 +1167,3 @@ const Dictionary = {
     return rawString.replace(/[\u0591-\u05C7]/g, "");
   }
 };
-
-let turkishPOSCSV = `POS	Symbol
-Ability/Probability	Abil
-Ablative	Abl
-Accusative 	Acc
-Acquire	Acquire,Acquire-V
-Agentive	Agt
-Agentive	Agt, Agt-N
-Aorist Participle	AorPart
-Causative	Caus
-Conditional	Cond
-Conditional Copula	CondCop
-Continue doing so	Cont
-Continue doing so	Cont2
-Copula	Cop
-Dative	Dat
-Diminutive (Compassion and empathy)	Dim2,Dim2-N
-Diminutive (endearment and affection)	Dim,Dim-N
-Evidential Participle	EvidPart
-Evidential- Narrative Copula	EvidCop
-First Person Plural	A1pl
-First Person Plural Possession	P1pl
-First person singular	A1sg
-First Person Singular Possession	P1sg
-Future	Fut
-Future Participle	FutPart
-Genitive	Gen
-Imparative	Imp
-Infinitive	Inf2
-Infinitive	Inf3
-Infinitive 	Inf
-Instrumental	Inst
-Locative	Loc
-Made For doing stg.	MadeFor,MadeFor-Adj
-Narrative/Evidential	Evid
-Necessity/Obligation	Necess
-NegativeOlumsuzluk	Neg
-Ness	Ness,Ness-N
-No Possession	Pnon
-Nominal	Nom
-Not being able to	NegAbil
-Optative	Opt
-Passive	Pass
-Past	Past
-Past Copula	PastCop
-Past Participle	PastPart
-Plural	Pl
-Present Participle	PresPart
-Present, Aorist 	Aor
-Progressive (Process)	Prog
-Progressive (State)	Prog2
-Reciprocal	Recip
-Reflexive	Reflex
-Rel	Rel
-Related	Related,Related-Adj
-Resemblance	Resemb,Resemb-Adj
-Second Person Plural	A2pl
-Second Person Plural Possession	P2pl
-Second person singular	A2sg
-Second Person Singular Possession	P2sg
-Since	Since,Since-Adv
-Suffix	WorthyOfDoing
-Third Person Plural	A3pl
-Third Person Plural Possession	P3pl
-Third Person Singular	A3sg
-Third Person Singular Possession	P3sg
-To apply something	Apply,Apply-V
-To Become Something	Become,Become-V
-With	With,With-Adj
-Without	Without,Without-Adj`;
