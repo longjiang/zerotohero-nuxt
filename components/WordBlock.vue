@@ -126,9 +126,11 @@ export default {
       return l2SettingsOfL2;
     },
     quickGloss() {
-      let quickGloss = this.savedWord?.definitions?.[0]
+      let definition = this.savedWord?.definitions?.[0] || this.words?.[0]?.definitions?.[0] 
+      let quickGloss = definition
         ?.replace(/\s*\(.*\)/, "")
-        ?.split(/[,;]\s*/)[0];
+        ?.split(/[,;]\s*/)[0]
+        ?.replace(/^.*\./, "");
       if (quickGloss && quickGloss.length < 20) return quickGloss;
     },
     savedTransliteration() {
@@ -216,7 +218,7 @@ export default {
     },
     attributes() {
       let word = this.savedWord || this.words?.[0];
-      let definition = word?.definitions?.[0]
+      let definition = this.quickGloss
       let phonetics =
         this.l2SettingsOfL2.showPinyin && this.phonetics && this.transliteration
           ? this.savedTransliteration || this.transliteration
