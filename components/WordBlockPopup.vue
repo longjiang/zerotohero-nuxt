@@ -186,7 +186,7 @@
     >
       <span
         style="color: #999"
-        v-if="$hasFeature('transliteration') && $l2.code !== 'ja'"
+        v-if="$hasFeature('transliteration')"
       >
         <span>{{ transliterate(text) }}</span>
         <Speak :text="text" class="ml-1" ref="speak" />
