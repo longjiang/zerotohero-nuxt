@@ -9,7 +9,6 @@ const PROXY_SERVER = 'https://server.chinesezerotohero.com/'
 const Dictionary = {
   name: "wiktionary",
   version: '2.2.4.2',
-  arabicStemmer: undefined,
   file: undefined,
   dictionary: undefined,
   words: [],
@@ -162,7 +161,6 @@ const Dictionary = {
       // if (this.l2 === "fra") await this.loadFrenchConjugationsAndLemmatizer();
       if (this.l2 === "fas") await this.loadPersianRomanization();
       if (this.l2 === "tur") this.loadTurkishPOS();
-      // if (this.l2 === 'ara') this.loadArabicLemmatizer()
       console.log("Wiktionary: loaded.");
       return this;
     }
@@ -467,13 +465,6 @@ const Dictionary = {
       }
     } catch (err) { }
   },
-  async loadArabicLemmatizer() {
-    console.log('Loading Arabic stemmer ...');
-    // Available from https://arabicstemmer.com/ and https://github.com/assem-ch/arabicstemmer
-    importScripts("../vendor/arabic-stemmer/snowball.babel.js");
-    importScripts("../vendor/arabic-stemmer/stemmers.js");
-    this.arabicStemmer = snowballFactory.newStemmer("arabic");
-  },
   async loadFrenchConjugationsAndLemmatizer() {
     console.log('Loading French conjugations from "french-verbs-lefff"...');
     let res = await axios.get(
@@ -691,16 +682,12 @@ const Dictionary = {
     return results.slice(0, limit);
   },
   /**
-   * Lemmatizes some languages (languages in this.lemmatizationLangs and Arabic)
+   * Lemmatizes some languages (languages in this.lemmatizationLangs)
    */
   lemmatizeIfAble(text) {
     let lemmaWords = [];
     let lemmas
     if (this.lemmatizationLangs[this.l2]) lemmas = this.lemmatization[text];
-    // if (this.l2 === 'ara') {
-    //   let lemma = this.arabicStemmer.stem(text)
-    //   lemmas = lemma && lemma !== text ? [lemma] : undefined
-    // }
     if (lemmas) {
       for (let lemma of lemmas) {
         lemmaWords = lemmaWords.concat(
