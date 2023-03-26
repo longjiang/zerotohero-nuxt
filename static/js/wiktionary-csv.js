@@ -15,8 +15,8 @@ const Dictionary = {
   headIndex: {},
   searchIndex: {},
   phraseIndex: {},
-  inflectionIndex: {},
-  lemmaIndex: {},
+  inflectionIndex: {}, // inflections keyed by their lemmas, available to all languages
+  lemmaIndex: {}, // lemmas keyed by their inflectional forms, available to all languages
   cache: {},
   tables: [],
   indexDbVerByLang: {
@@ -25,6 +25,7 @@ const Dictionary = {
     spa: 2,
     est: 3
   },
+  englishLemmatizer: undefined, // For Chinese L1 only
   tokenizationCache: {},
   server: "https://server.chinesezerotohero.com/",
   l1: undefined,
@@ -145,9 +146,16 @@ const Dictionary = {
       }
       this.words = words;
       this.createIndices();
+      if (this.l2 === 'eng' && this.l1 === 'zho') this.loadEnglishLemmatizer() // Our strategy of finding lemmas based on the word 'of' in the definition obviously doesn't work for definitions in Chinese
       console.log("Wiktionary: loaded.");
       return this;
     }
+  },
+  // For Chinese users
+  async loadEnglishLemmatizer() {
+    console.log('Loading English lemmatizer "javascript-lemmatizer"...');
+    importScripts('../vendor/javascript-lemmatizer/js/lemmatizer.js')
+    this.englishLemmatizer = new Lemmatizer();
   },
   async loadWords(file) {
     let data
@@ -193,7 +201,7 @@ const Dictionary = {
         }
       }
     }
-    this.buildInflectionIndex()
+    if (this.l1 === 'eng') this.buildInflectionIndex() // this only works for English because we're looking for definitions with the word 'of' to guess the inflection
     for (let key in this.phraseIndex) {
       this.phraseIndex[key] = this.phraseIndex[key].sort((a, b) => a.head.length - b.head.length)
     }
@@ -622,6 +630,7 @@ const Dictionary = {
       let tokenized = []
       if (this.l2 === "tur") tokenized = this.tokenizeTurkish(text);
       else if (this.l2 === 'ara') tokenized = this.tokenizeArabic(text);
+      else if (this.l2 === 'eng' && this.l1 === 'zho') tokenized = this.tokenizeEnglish(text)
       else {
         if (['tur', 'ara'].includes(this.l2)) tokenizationType = "server"
         switch (tokenizationType) {
@@ -661,6 +670,51 @@ const Dictionary = {
     if (typeof str != "string") return false // we only process strings!  
     return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
       !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+  },
+  splitByReg(text, reg) {
+    let words = text.replace(reg, '!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!').replace(/^!!!BREAKWORKD!!!/, '').replace(/!!!BREAKWORKD!!!$/, '')
+    return words.split('!!!BREAKWORKD!!!')
+  },
+  isEnglishPartialClitic(word) {
+    return this.l1 === 'eng' && ['m', 's', 't', 'll', 'd', 're', 'ain', 'don'].includes(word)
+  },
+  // For Chinese L1 only
+  tokenizeEnglish(text) {
+    if (!this.englishLemmatizer) return []
+    text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
+    tokenized = [];
+    let segs = this.splitByReg(text, /([a-zA-Z0-9]+)/gi);
+    let reg = new RegExp(
+      `.*([a-z0-9]+).*`
+    );
+    for (let seg of segs) {
+      let word = seg.toLowerCase();
+      if (
+        reg.test(word) && !this.isEnglishPartialClitic(word)
+      ) {
+        let token = {
+          text: seg,
+          candidates: [],
+        };
+        let lemmas = this.englishLemmatizer.lemmas(word);
+        if (lemmas && lemmas.length === 1) token.pos = lemmas[0][1]
+        lemmas = [[word, "inflected"]].concat(lemmas);
+        let forms = this.unique(lemmas.map(l => l[0]))
+
+        for (let form of forms) {
+          let candidates = this.lookupMultiple(form);
+          if (candidates.length > 0) {
+            found = true;
+            token.candidates = token.candidates.concat(candidates);
+          }
+        }
+        token.candidates = this.uniqueByValue(token.candidates, "id");
+        tokenized.push(token);
+      } else {
+        tokenized.push(seg);
+      }
+    }
+    return tokenized
   },
   async tokenizeArabic(text) {
     text = text.replace(/-/g, "- ");
