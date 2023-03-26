@@ -41,6 +41,7 @@
             farsiRomanizations,
             phraseObj: phraseItem(text),
           }"
+          ref="popup"
           v-if="open"
         />
       </div>
@@ -49,7 +50,8 @@
 </template>
 
 <script>
-import { timeout, unique, uniqueByValue, isMobile, speak } from "@/lib/helper";
+import { timeout, unique, uniqueByValue, isMobile } from "@/lib/utils";
+import { speak } from "@/lib/utils/speak";
 import WordPhotos from "@/lib/word-photos";
 import Klingon from "@/lib/klingon";
 import { mapState } from "vuex";
@@ -550,12 +552,13 @@ export default {
             let speed = 0.75;
             let volume = 0.5;
             // Only wiktionary has real human audio
+            let speakComponent = this.$refs.popup?.$refs.speak?.[0]
             if (
-              this.$dictionaryName === "wiktionary" &&
-              this.$refs.speak &&
-              this.$refs.speak[0]
+              speakComponent &&
+              this.$dictionaryName === "wiktionary-csv" &&
+              this.words?.[0].head?.toLowerCase() === this.text.toLowerCase()
             ) {
-              this.$refs.speak[0].speak(speed, volume);
+              speakComponent.speak(speed, volume);
             } else {
               speak(this.text, this.$l2, speed, volume);
             }
