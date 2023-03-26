@@ -244,7 +244,13 @@ export default {
         text: this.transform(text),
         hanja,
       };
-      if (this.mappedPronunciation) attributes.mappedPronunciation = this.mappedPronunciation
+      if (this.mappedPronunciation) {
+        if (this.savedWord) {
+          attributes.mappedPronunciation = mapKana(this.text, this.savedWord.kana)
+        } else {
+          attributes.mappedPronunciation = this.mappedPronunciation
+        }
+      }
       if (this.popup) {
         attributes["data-hover-level"] = "outside";
       }
@@ -298,6 +304,21 @@ export default {
     this.words = [];
     // you may call unsubscribe to stop the subscription
     this.unsubscribe();
+  },
+  head() {
+    let head = {};
+    if (this.$l2.code === "ja")
+      head.script = [
+        {
+          hid: "wanakana",
+          src: "/vendor/wanakana/wanakana.min.js",
+        },
+        {
+          hid: "map-kana",
+          src: "/js/map-kana.js",
+        },
+      ];
+    return head;
   },
   watch: {
     async wordblockHover() {
