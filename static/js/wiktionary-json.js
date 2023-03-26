@@ -7,7 +7,7 @@ const PYTHON_SERVER = 'https://python.zerotohero.ca/'
 const PROXY_SERVER = 'https://server.chinesezerotohero.com/'
 
 const Dictionary = {
-  name: "wiktionary",
+  name: "wiktionary-json",
   version: '2.2.4.2',
   file: undefined,
   dictionary: undefined,
@@ -410,9 +410,6 @@ const Dictionary = {
           if (this.frequency && !word.frequency)
             word.frequency = this.frequency[word.search];
           words.push(Object.assign(item, word));
-        } else {
-          // definitions.push(this.blankInflection(item))
-          // probably not that useful in practice
         }
       }
     }
@@ -531,9 +528,6 @@ const Dictionary = {
       }
     }
     return definitions;
-  },
-  blankInflection(item) {
-    `(inflected form, see <a href="https://en.wiktionary.org/wiki/${item.word}" target="_blank">Wiktionary</a> for details)`;
   },
   exportCSV() {
     console.log("Wiktionary: Exporting CSV...");
@@ -1156,6 +1150,7 @@ const Dictionary = {
   random() {
     return this.randomProperty(this.words);
   },
+  // Called from <EntryForms> and <WordBlock> components for Russian words
   accent(text) {
     return text.replace(/'/g, "́");
   },
