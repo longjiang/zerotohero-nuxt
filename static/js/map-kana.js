@@ -88,4 +88,3 @@ function test() {
   console.log(mapKana('食パン', 'しょくぱん'))
   console.log(mapKana('占める', 'しめる'))
 }
-test()
