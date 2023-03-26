@@ -19,9 +19,6 @@ const Dictionary = {
   lemmaIndex: {},
   cache: {},
   tables: [],
-  frequency: undefined,
-  useJSON: [],
-  hasFrequency: [],
   indexDbVerByLang: {
     fra: 2,
     eng: 5,
@@ -110,9 +107,7 @@ const Dictionary = {
         .replace("zsm", "msa") // Standard Malaysian uses Malaysian
         .replace("lvs", "lav") // Standard Latvian uses Latvian
         .replace("ekk", "est"); // Standard Estonian uses Estonian
-      let csv = !this.useJSON.includes(this.l2);
-      let filename = `${this.server}data/wiktionary${csv ? "-csv" : ""
-        }/${l2}-${l1}.${csv ? "csv" : "json"}.txt`;
+      let filename = `${this.server}data/wiktionary-csv/${l2}-${l1}.csv.txt`;
       return filename;
     }
   },
@@ -125,8 +120,6 @@ const Dictionary = {
       this.l2 = l2;
       this.accentCritical = this.isAccentCritical();
       this.file = this.dictionaryFile({ l1, l2 });
-      if (this.hasFrequency.includes(this.l2) && this.useJSON.includes(this.l2))
-        await this.loadFrequency();
       let words = await this.loadWords(this.file);
       if (this.lemmatizationLangs[this.l2]) {
         this.lemmatization = await this.loadLemmatizationTable(
@@ -156,38 +149,11 @@ const Dictionary = {
       return this;
     }
   },
-  async loadFrequency() {
-    console.log(`Wiktionary: loading frequency...`);
-    let res = await axios.get(
-      `${this.server}data/frequency/frequency-${this.l2}.csv.txt`
-    );
-    if (res && res.data) {
-      let parsed = Papa.parse(res.data, { header: true });
-      this.frequency = {};
-      for (let row of parsed.data) {
-        let search = row.word.toLowerCase();
-        this.frequency[search] = Math.max(
-          this.frequency[search] || 0,
-          Number(row.count)
-        );
-      }
-    }
-  },
-  getWordsWithFrequencyGreaterThan(frequency) {
-    let count = this.words.filter(w => w.frequency > frequency).length;
-    console.log(
-      `There are ${count} words (${(count / this.words.length) *
-      100}% total) with frequency > ${frequency}`
-    );
-    return count;
-  },
   async loadWords(file) {
     let data
     let indexedDBKey = `wiktionary-${this.l2}-${this.l1}`
     if (this.indexDbVerByLang[this.l2]) indexedDBKey += '-v' + this.indexDbVerByLang[this.l2] // Force refresh a dictionary when it's outdated
-    if (!this.useJSON.includes(this.l2)) {
-      data = await localforage.getItem(indexedDBKey)
-    }
+    data = await localforage.getItem(indexedDBKey)
     if (data) {
       console.log(`Wiktionary: data loaded from local indexedDB via localforage, key '${indexedDBKey}'`);
     } else {
@@ -197,10 +163,8 @@ const Dictionary = {
       res = null;
     }
     if (!data) return
-    if (!this.useJSON.includes(this.l2)) localforage.setItem(indexedDBKey, data)
-    let words = !this.useJSON.includes(this.l2)
-      ? this.parseDictionaryCSV(data)
-      : this.parseDictionaryJSON(data);
+    localforage.setItem(indexedDBKey, data)
+    let words = this.parseDictionaryCSV(data)
     words = words.sort((a, b) => {
       if (a.head && b.head) {
         return b.head.length - a.head.length;
@@ -292,10 +256,7 @@ const Dictionary = {
     delete item.phrases;
     item.wiktionary = true;
     item.definitions = item.definitions ? item.definitions.split("|") : [];
-    // item.phrases = item.phrases ? item.phrases.split("|") : [];
 
-    if (this.frequency && !item.frequency)
-      item.frequency = this.frequency[item.search];
     if (item.han) {
       item.cjk = {
         canonical: item.han,
@@ -304,116 +265,6 @@ const Dictionary = {
       item.hanja = item.han;
     }
     return item;
-  },
-  parseDictionaryJSON(data) {
-    console.log("Wiktionary: parsing words from JSON...");
-    this.words = data;
-    let words = [];
-    for (let item of this.words) {
-      if (item.word && !item.redirect) {
-        let definitions = [];
-        let stems = [];
-        let gender;
-        if (
-          item.head_templates &&
-          item.head_templates[0] &&
-          item.head_templates[0].args &&
-          item.head_templates[0].args.g
-        ) {
-          gender = item.head_templates[0].args.g;
-        }
-        if (item.senses && item.senses[0]) {
-          if (
-            item.senses[0].tags &&
-            ["feminine", "masculine", "neuter"].includes(item.senses[0].tags[0])
-          ) {
-            gender = { masculine: "m", feminine: "f", neuter: "n" }[
-              item.senses[0].tags[0]
-            ];
-          }
-          for (let sense of item.senses) {
-            if (sense.glosses) {
-              if (!sense.complex_inflection_of) {
-                let definition = sense.glosses[0];
-                if (sense.form_of && sense.form_of[0]) {
-                  let stemStr = sense.form_of[0];
-                  if (typeof stemStr === "object" && stemStr.word)
-                    stemStr = stemStr.word;
-                  if (typeof stemStr === "string") {
-                    let stem = this.normalizeStem(stemStr);
-                    stems.push(stem);
-                    if (!definition.includes(" of ")) {
-                      definition = definition + " of " + stem;
-                    }
-                  }
-                }
-                definitions.push(definition);
-              } else {
-                // definitions.concat(this.inflections(sense)) // Probably not that useful in practice.
-              }
-            }
-          }
-        }
-        if (definitions.length > 0) {
-          let audio = undefined;
-          if (item.sounds) {
-            for (let pronunciation of item.sounds) {
-              if (pronunciation.audio) {
-                audio = pronunciation.audio;
-              }
-            }
-          }
-          let bare = this.accentCritical
-            ? this.stripAccents(item.word)
-            : item.word;
-          let sounds = item.sounds && item.sounds.length > 0 ? item.sounds : []
-          if (this.l2 !== 'jpn') sounds = sounds.filter(s => s['ipa'])
-          let pronunciations = sounds.map(s => {
-            let t = []
-            // Each sound has unknown keys like 'ipa', 'other', etc, so we loop through all keys and join them with ', '
-            for (let key in s) {
-              if (s[key] && typeof s[key] === 'string') t.push(s[key].replace(/[/\[\]]/g, ""))
-            }
-            return t.join(', ')
-          })
-          if (item.heads)
-            pronunciations = pronunciations.concat(
-              item.heads.filter(h => h.tr).map(h => h.tr)
-            );
-          pronunciations = this.unique(pronunciations);
-          let search = bare.toLowerCase();
-          if (this.l2.agglutinative) search = search.replace(/^-/, "");
-          let word = {
-            bare,
-            search,
-            head: item.word,
-            pronunciation:
-              pronunciations.length > 0 ? pronunciations.join(", ") : undefined,
-            audio: audio,
-            definitions: definitions,
-            pos: item.pos,
-            gender: gender,
-            stems: stems.filter(s => s !== item.word),
-            phrases: item.derived ? item.derived.map(d => d.word) : [],
-            wiktionary: true
-          };
-          if (["vie", "kor"].includes(this.l2)) {
-            let sino;
-            if (this.l2 === "vie") sino = this.getVietnameseHanTu(item);
-            if (this.l2 === "kor") sino = this.getKoreanHanja(item);
-            word.cjk = {
-              canonical: sino,
-              phonetics: head
-            };
-            word.hanja = sino;
-          }
-          if (this.frequency && !word.frequency)
-            word.frequency = this.frequency[word.search];
-          words.push(Object.assign(item, word));
-        }
-      }
-    }
-    return words;
   },
   async loadLemmatizationTable(langCode) {
     let res = await axios.get(
@@ -450,137 +301,11 @@ const Dictionary = {
       return transliteration;
     }
   },
-  loadCSVString(csv, header = true) {
-    if (typeof Papa !== "undefined") {
-      let r = Papa.parse(csv, {
-        header: header
-      });
-      return r.data;
-    }
-  },
-  getKoreanHanja(item) {
-    if (!item["etymology_text"]) return;
-    let hanja = item["etymology_text"].replace("Sino-Korean word from ", "");
-    hanja = hanja.replace("From Middle Chinese ", "");
-    hanja = hanja.replace(".", "");
-    hanja = hanja.replace(/\(.*\)/, "");
-    hanja = hanja.replace(/,.*/, "");
-    hanja = hanja.trim();
-    
-    if (this.isHan(hanja)) {
-      return hanja;
-    }
-  },
-  getVietnameseHanTu(item) {
-    if (!item["etymology-templates"]) return;
-    let etymologyItems = item["etymology-templates"].filter(
-      t =>
-        t.args &&
-        t.name &&
-        t.name === "der" &&
-        t.args &&
-        t.args[2] &&
-        t.args[2] === "zh" &&
-        t.args[3] &&
-        this.isHan(t.args[3])
-    );
-    if (etymologyItems.length === 0) {
-      etymologyItems = item["etymology-templates"].filter(
-        t =>
-          t.args &&
-          t.name &&
-          t.name === "m" &&
-          t.args &&
-          t.args[1] &&
-          t.args[1] === "vi" &&
-          t.args[2] &&
-          this.isHan(t.args[2])
-      );
-    } else {
-      etymologyItems.map(i => (i.args[2] = i.args[3]));
-    }
-    let etymologyText = etymologyItems.map(i => i.args[2]);
-    if (etymologyText.length > 0) {
-      if (etymologyText[0].length > 1) {
-        etymologyText = etymologyText[0];
-      } else {
-        etymologyText = etymologyText.join("");
-      }
-    } else {
-      etymologyText = undefined;
-    }
-    return etymologyText;
-  },
   hasHan(text) {
     return text.match(/[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g);
   },
   isHan(text) {
     return /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/.test(text);
-  },
-  inflections(sense) {
-    let definitions = [];
-    for (let inflection of sense.complex_inflection_of) {
-      let head = inflection["1"] || inflection["2"];
-      if (head) {
-        definitions.push(
-          `${inflection["3"]} ${inflection["4"]} ${inflection["5"]} inflection of <a href="https://en.wiktionary.org/wiki/${head}" target="_blank">${head}</a>`
-        );
-      }
-    }
-    return definitions;
-  },
-  exportCSV() {
-    console.log("Wiktionary: Exporting CSV...");
-    let words = this.words;
-    let maxFrequency = 0;
-    if (this.frequency) {
-      for (let word of words) {
-        if (word.frequency > maxFrequency) maxFrequency = word.frequency;
-      }
-    }
-    words = words.map(item => {
-      let word = {
-        word: item.head,
-        pronunciation: item.pronunciation,
-        audio: item.audio,
-        definitions: item.definitions.join("|"),
-        pos: item.pos,
-        gender: item.gender
-      };
-      if (["vie", "kor"].includes(this.l2)) {
-        word.han =
-          item.cjk && item.cjk.canonical ? item.cjk.canonical : undefined;
-      }
-      if (this.frequency)
-        word.frequency = Math.round((item.frequency / maxFrequency) * 1000);
-      return word;
-    });
-    let csv = Papa.unparse(words);
-    console.log("CSV exported.");
-    return csv;
-  },
-  normalizeStem(stemStr) {
-    stemStr = stemStr.replace(/ \(.*\)/, "").replace(/ \[\[.*\]\]/g, "");
-    if (this.l2 === "heb") {
-      stemStr = stemStr.split(/ \u000092 /)[0];
-      stemStr = this.stripHebrewVowels(stemStr.replace(/\u200e/gi, ""));
-    }
-    return stemStr.trim();
-  },
-  /**
-   * Get a word by ID.
-   * @param {*} id the word's id
-   * @param {*} head (optional) the head of the word to check if matches the word retrieved; if mismatched, we'll look for a matching word instead.
-   * @returns 
-   */
-  get(id, head) {
-    let word
-    word = this.words.find(w => w.id === id);
-    if (head && word && word.head !== head) {
-      word = this.lookup(head)
-    }
-    this.addPhrasesToWord(word)
-    return word
   },
   addPhrasesToWord(word) {
     if (word) {
@@ -700,6 +425,7 @@ const Dictionary = {
   getWords() {
     return this.words;
   },
+  // Called from <SearchSubComp> to look for exclusion terms.
   getWordsThatContain(text) {
     let words = this.words.filter(
       w => w.head.includes(text) || w.search.includes(text)
@@ -711,9 +437,6 @@ const Dictionary = {
   },
   formTable() {
     return this.tables;
-  },
-  stylize(name) {
-    return name;
   },
   // https://stackoverflow.com/questions/38613654/javascript-find-unique-objects-in-array-based-on-multiple-properties
   uniqueByValues(arr, keyProps) {
@@ -1028,13 +751,6 @@ const Dictionary = {
     }
     return false;
   },
-  splitByReg(text, reg) {
-    let words = text
-      .replace(reg, "!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!")
-      .replace(/^!!!BREAKWORKD!!!/, "")
-      .replace(/!!!BREAKWORKD!!!$/, "");
-    return words.split("!!!BREAKWORKD!!!");
-  },
   isThai(text) {
     let match = text.match(/[\u0E00-\u0E7F]+/g);
     return match;
@@ -1104,13 +820,6 @@ const Dictionary = {
       str = this.stripHebrewVowels(str);
     return str;
   },
-  stringsToWords(strings) {
-    let words = [];
-    for (let s of strings) {
-      words = words.concat(this.lookupMultiple(s));
-    }
-    return words;
-  },
   stemWordsWithScores(word, score = undefined) {
     let stemWords = this.inflectionIndex[word.head];
     if (stemWords) {
@@ -1135,12 +844,6 @@ const Dictionary = {
   },
   unique(a) {
     return a.filter((item, i, ar) => ar.indexOf(item) === i);
-  },
-  randomArrayItem(array, start = 0, length = false) {
-    length = length || array.length;
-    array = array.slice(start, length);
-    let index = Math.floor(Math.random() * array.length);
-    return array[index];
   },
   //https://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
   randomProperty(obj) {
