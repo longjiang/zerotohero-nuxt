@@ -211,6 +211,21 @@ const Dictionary = {
     if (!this.phraseIndex[w]) this.phraseIndex[w] = []
     this.phraseIndex[w].push(word)
   },
+  /**
+   * Get a word by ID. This is called from various components.
+   * @param {*} id the word's id
+   * @param {*} head (optional) the head of the word to check if matches the word retrieved; if mismatched, we'll look for a matching word instead.
+   * @returns 
+   */
+  get(id, head) {
+    let word
+    word = this.words.find(w => w.id === id);
+    if (head && word && word.head !== head) {
+      word = this.lookup(head)
+    }
+    this.addPhrasesToWord(word)
+    return word
+  },
   getPhraseIndex(head) {
     let w = '@' + head
     if (!this.phraseIndex[w]) this.phraseIndex[w] = []
