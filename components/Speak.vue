@@ -16,7 +16,7 @@
 </template>
 <script>
 import commons from "wikimedia-commons-file-path";
-import Helper from "@/lib/helper";
+import { speak } from "@/lib/utils/speak";
 
 export default {
   props: {
@@ -108,7 +108,7 @@ export default {
         }
       } else if (this.text) {
         if (this.$languages.hasFeature(this.$l1, this.$l2, "speech")) {
-          Helper.speak(this.text, this.$l2, speed, volume);
+          speak(this.text, this.$l2, speed, volume);
         }
       }
     },
