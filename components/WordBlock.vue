@@ -222,9 +222,9 @@ export default {
       let word = this.savedWord || this.words?.[0];
       let definition = this.quickGloss
       let phonetics =
-        this.l2SettingsOfL2.showPinyin && this.phonetics && this.transliteration
+        this.l2SettingsOfL2.showPinyin && (this.mappedPronunciation || (this.phonetics && this.transliteration
           ? this.savedTransliteration || this.transliteration
-          : undefined;
+          : undefined));
       let text = this.text;
       if (this.$l2.han && word) {
         text = this.l2SettingsOfL2.useTraditional

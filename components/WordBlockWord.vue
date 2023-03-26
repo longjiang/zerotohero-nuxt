@@ -244,8 +244,14 @@ export default {
 
     .word-block-pinyin,
     .word-block-text-byeonggi-wrapper {
-      line-height: 0.66;
+      line-height: 1;
       text-indent: 0;
+      
+    }
+
+    .word-block-pinyin {
+      position: relative;
+      bottom: -0.3rem;
     }
 
     /* Hide by default */
