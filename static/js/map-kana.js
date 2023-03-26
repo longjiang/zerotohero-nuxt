@@ -1,3 +1,5 @@
+// const wanakana = require('wanakana');
+
 // helper function to check if a character is a kanji
 function isKanji(char) {
   // use Unicode range for kanji characters
@@ -11,15 +13,6 @@ function isHiragana(char) {
 }
 
 
-
-function test() {
-  console.log(mapKana('乗り遅れる', 'のりおくれる'))
-  console.log(mapKana('朝ご飯', 'あさごはん'))
-  console.log(mapKana('食べ物', 'たべもの'))
-  console.log(mapKana('お金', 'おかね'))
-  console.log(mapKana('お弁当', 'おべんとう'))
-  console.log(mapKana('食パン', 'しょくぱん'))
-}
 
 
 const segmentKanjisAndNonKanjis = (text) => {
@@ -57,11 +50,16 @@ const convertKatakanaToHiragana = (katakana) => {
   return converted
 }
 
+const sanitizeRegexString = (str) => {
+  // Escape special characters
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 const createRegex = (segments) => {
   let regexStr = ''
   for (let segment of segments) {
     if (segment.type === 'kanji') regexStr += '(.+)'
-    else regexStr += `(${segment.reading})`
+    else regexStr += `(${sanitizeRegexString(segment.reading)})`
   }
   return new RegExp(regexStr)
 }
@@ -81,4 +79,13 @@ function mapKana(word, reading) {
   }
 }
 
+function test() {
+  console.log(mapKana('乗り遅れる', 'のりおくれる'))
+  console.log(mapKana('朝ご飯', 'あさごはん'))
+  console.log(mapKana('食べ物', 'たべもの'))
+  console.log(mapKana('お金', 'おかね'))
+  console.log(mapKana('お弁当', 'おべんとう'))
+  console.log(mapKana('食パン', 'しょくぱん'))
+  console.log(mapKana('占める', 'しめる'))
+}
 test()

@@ -348,11 +348,26 @@ const Dictionary = {
     }
     return results
   },
+  sanitizeRegexString(str) {
+    // Escape special characters
+    str = str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  
+    // Remove non-alphanumeric characters
+    str = str.replace(/[^a-z0-9.-]/gi, '');
+  
+    // Remove whitespace
+    str = str.replace(/\s+/g, '');
+  
+    // Convert to lowercase
+    str = str.toLowerCase();
+  
+    return str;
+  },
   lookupFuzzy(text, limit = false) {
     let results = []
     if (!this.isRoman(text)) {
       try {
-        let reg = new RegExp(text, 'gi')
+        let reg = new RegExp(sanitizeRegexString(text), 'gi')
         results = this.words
           .filter(
             row => reg.test(row.kanji) || reg.test(row.kana)
