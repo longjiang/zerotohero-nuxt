@@ -44,7 +44,6 @@ export const mutations = {
   UPDATE(state, itemData) {
     if (typeof localStorage !== 'undefined') {
       let prevVersionOfSameItemIndex = state.items.findIndex(i => i.id === itemData.id)
-      console.log({prevVersionOfSameItemIndex},itemData, itemData.id, state.items[0].id)
       if (prevVersionOfSameItemIndex !== -1)
         state.items[prevVersionOfSameItemIndex] = itemData
       localStorage.setItem('zthBookshelf', JSON.stringify(state.items))

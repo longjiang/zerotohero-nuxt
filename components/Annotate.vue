@@ -764,7 +764,7 @@ export default {
         if (typeof token === "object") {
           html += `<WordBlock v-bind="wordBlockAttributes(${batchId},${index})">${token.text}</WordBlock>`;
         } else {
-          html += token;
+          html += `<span class="word-block-unknown"><span class="word-block-segment">${token.replace(/\s/, '&nbsp;')}</span></span>` ;
         }
       }
       return html;

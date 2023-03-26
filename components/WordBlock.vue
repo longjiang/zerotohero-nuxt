@@ -375,8 +375,10 @@ export default {
         let dictionary = await this.$getDictionary();
         savedWord = await dictionary.get(id, head);
       }
-      this.words = uniqueByValue([savedWord, ...this.words], "id");
-      this.savedWord = savedWord;
+      if (savedWord) {
+        this.words = uniqueByValue([savedWord, ...this.words], "id");
+        this.savedWord = savedWord;
+      }
     },
     test(arg) {
       console.log(`Evaluated`, arg);
