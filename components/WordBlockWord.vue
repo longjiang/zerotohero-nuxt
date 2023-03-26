@@ -21,18 +21,17 @@
         <span class="word-block-pinyin" v-if="phonetics">
           {{ phonetics }}
         </span>
-        <span class="word-block-text-byeonggi-wrapper">
-          <span :class="classes">
-            {{ text }}
-          </span>
-          <span
-            v-if="hanja"
-            class="word-block-text-byeonggi d-inline-block"
-            v-html="hanja"
-          />
-          <span v-if="saved && definition" class="word-block-text-quick-gloss">
-            {{ definition }}
-          </span>
+        <span :class="classes">
+          {{ text }}
+        </span>
+      </span><span class="word-block-text-byeonggi-wrapper">
+        <span
+          v-if="hanja"
+          class="word-block-text-byeonggi d-inline-block"
+          v-html="hanja"
+        />
+        <span v-if="saved && definition" class="word-block-text-quick-gloss">
+          {{ definition }}
         </span>
       </span>
     </template>
@@ -47,14 +46,16 @@
           v-if="definition"
           v-html="definition"
         ></span>
-        <span class="word-block-pinyin" v-if="segment.type === 'kanji' && phonetics">
+        <span
+          class="word-block-pinyin"
+          v-if="segment.type === 'kanji' && phonetics"
+        >
           {{ segment.reading }}
         </span>
         <span :class="classes">
           {{ segment.surface }}
         </span>
-      </span>
-      <span class="word-block-text-byeonggi-wrapper">
+      </span><span class="word-block-text-byeonggi-wrapper">
         <span
           v-if="hanja"
           class="word-block-text-byeonggi d-inline-block"
@@ -69,7 +70,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import { mapState } from "vuex";
 export default {
   props: {
     popup: {
@@ -132,8 +133,8 @@ export default {
       return classes;
     },
     showDefinition() {
-      return this.l2SettingsOfL2.showDefinition
-    }
+      return this.l2SettingsOfL2.showDefinition;
+    },
   },
 };
 </script>
@@ -222,11 +223,11 @@ export default {
 
 .show-quick-gloss:not(.l2-ja) {
   [dir="ltr"] .word-block.saved.with-quick-gloss {
-    text-align: left;
+    // text-align: left;
   }
 
   [dir="rtl"] .word-block.saved.with-quick-gloss {
-    text-align: right;
+    // text-align: right;
   }
 }
 
@@ -239,13 +240,11 @@ export default {
     text-indent: 0;
     .word-block-segment {
       display: inline-block;
-      line-height: 1;
     }
 
     .word-block-pinyin,
     .word-block-text-byeonggi-wrapper {
-      padding-top: 0.5em;
-      line-height: 1.3;
+      line-height: 0.66;
       text-indent: 0;
     }
 
