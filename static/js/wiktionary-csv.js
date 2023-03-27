@@ -30,34 +30,98 @@ const Dictionary = {
   server: "https://server.chinesezerotohero.com/",
   l1: undefined,
   l2: undefined,
-  lemmatizationLangs: { // Languages that can be lemmatized by https://github.com/michmech/lemmatization-lists
-    ast: "ast",
-    bul: "bg",
-    // cat: 'ca', // Large ones are disabled because they are not necessary
-    ces: "cs",
-    cym: "cy",
+  tokenizationByServer: [
+    'ast', // tokenized and lemmatized by simplemma
+    "ara", // tokenized and lemmatized by qalsadi
+    "bul", // tokenized and lemmatized by simplemma
+    "cat", // tokenized and lemmatized by simplemma
+    "ces", // tokenized and lemmatized by simplemma
+    "cym", // tokenized and lemmatized by simplemma
+    "dan", // tokenized and lemmatized by simplemma
+    "deu", // tokenized and lemmatized by simplemma
+    "ell", // tokenized and lemmatized by simplemma
+    "eng", // tokenized and lemmatized by simplemma
+    "enm", // tokenized and lemmatized by simplemma
+    "est", // tokenized and lemmatized by simplemma
+    "fas", // tokenized and lemmatized by simplemma
+    "fin", // tokenized and lemmatized by simplemma
+    "fra", // tokenized and lemmatized by simplemma
+    "gla", // tokenized and lemmatized by simplemma
+    "gle", // tokenized and lemmatized by simplemma
+    "glg", // tokenized and lemmatized by simplemma
+    "glv", // tokenized and lemmatized by simplemma
+    "hbs", // tokenized and lemmatized by simplemma
+    // "hin", // tokenized and lemmatized by simplemma
+    "hun", // tokenized and lemmatized by simplemma
+    "hye", // tokenized and lemmatized by simplemma
+    "ind", // tokenized and lemmatized by simplemma
+    "isl", // tokenized and lemmatized by simplemma
+    "ita", // tokenized and lemmatized by simplemma
+    "kat", // tokenized and lemmatized by simplemma
+    "lat", // tokenized and lemmatized by simplemma
+    "lav", // tokenized and lemmatized by simplemma
+    "lit", // tokenized and lemmatized by simplemma
+    "ltz", // tokenized and lemmatized by simplemma
+    "mkd", // tokenized and lemmatized by simplemma
+    "msa", // tokenized and lemmatized by simplemma
+    "nld", // tokenized and lemmatized by simplemma
+    "nno", // tokenized and lemmatized by simplemma
+    "nob", // tokenized and lemmatized by simplemma
+    "pol", // tokenized and lemmatized by simplemma
+    "por", // tokenized and lemmatized by simplemma
+    "ron", // tokenized and lemmatized by simplemma
+    "rus", // tokenized and lemmatized by simplemma
+    "slk", // tokenized and lemmatized by simplemma
+    "slv", // tokenized and lemmatized by simplemma
+    "sme", // tokenized and lemmatized by simplemma
+    "spa", // tokenized and lemmatized by simplemma
+    "sqi", // tokenized and lemmatized by simplemma
+    "swa", // tokenized and lemmatized by simplemma
+    "swe", // tokenized and lemmatized by simplemma
+    "tgl", // tokenized and lemmatized by simplemma
+    "tur", // tokenized and lemmatized by simplemma
+    "tur", // tokenized and lemmatized by zeyrek
+    "ukr", // tokenized and lemmatized by simplemma
+    // "hrv", // tokenized and lemmatized by spacy
+    // "deu",
+    // "eng",
+    // "fra",
+    // "ita",
+    // "jpn", // tokenized and lemmatized by spacy
+    // "kor", // tokenized and lemmatized by spacy
+    // "por",
+    // "spa"
+    // "zho", // tokenized and lemmatized by spacy
+  ],
+  lemmatizationTableLangs: { // Languages that can be lemmatized by https://github.com/michmech/lemmatization-lists
+    // cat: 'ca',
     // deu: 'de',
     // eng: 'en',
-    spa: 'es',
+    // fra: 'fr',
+    // ita: 'it',
+    // por: 'pt',
+    // ron: "ro",
+    // rus: 'ru',
+    // spa: 'es',
+    // swe: 'sv',
+    // ukr: "uk"
+    ast: "ast",
+    bul: "bg",
+    ces: "cs",
+    cym: "cy",
     est: "et",
     fas: "fa",
-    // fra: 'fr',
-    gle: "ga",
     gla: "gd",
+    gle: "ga",
     glg: "gl",
     glv: "gv",
     hun: "hu",
-    // ita: 'it',
-    // por: 'pt',
-    ron: "ro",
-    // rus: 'ru',
     slk: "sk",
     slv: "sl",
-    swe: 'sv', // Swedish is enabled because Swedish wiktionary has difficulty getting lemma
-    ukr: "uk"
   },
   supplementalLangs: {
     arz: "ara",
+    bul: "mkd",
     ceb: "tgl",
     csb: "pol",
     cmn: "zho",
@@ -67,6 +131,7 @@ const Dictionary = {
     ins: "eng",
     jam: "eng",
     kok: "mar",
+    mkd: "bul",
     msa: "ind",
     nob: "nno",
     nor: "nno",
@@ -122,9 +187,9 @@ const Dictionary = {
       this.accentCritical = this.isAccentCritical();
       this.file = this.dictionaryFile({ l1, l2 });
       let words = await this.loadWords(this.file);
-      if (this.lemmatizationLangs[this.l2]) {
+      if (this.lemmatizationTableLangs[this.l2]) {
         this.lemmatization = await this.loadLemmatizationTable(
-          this.lemmatizationLangs[this.l2]
+          this.lemmatizationTableLangs[this.l2]
         );
       }
       let supplementalLang = this.supplementalLangs[l2];
@@ -364,12 +429,12 @@ const Dictionary = {
     return results.slice(0, limit);
   },
   /**
-   * Lemmatizes some languages (languages in this.lemmatizationLangs)
+   * Lemmatizes some languages (languages in this.lemmatizationTableLangs)
    */
   lemmatizeIfAble(text) {
     let lemmaWords = [];
     let lemmas
-    if (this.lemmatizationLangs[this.l2]) lemmas = this.lemmatization[text];
+    if (this.lemmatizationTableLangs[this.l2]) lemmas = this.lemmatization[text];
     if (lemmas) {
       for (let lemma of lemmas) {
         lemmaWords = lemmaWords.concat(
@@ -643,12 +708,11 @@ const Dictionary = {
     if (this.tokenizationCache[text]) return this.tokenizationCache[text];
     else {
       let tokenized = []
-      if (this.l2 === "tur") tokenized = this.tokenizeTurkish(text);
-      else if (this.l2 === 'ara') tokenized = this.tokenizeArabic(text);
+      if (this.tokenizationByServer.includes(this.l2)) tokenized = this.tokenizeFromServer(text)
       else if (this.l2 === 'eng' && this.l1 !== 'eng') tokenized = this.tokenizeEnglish(text)
       else {
-        if (['tur', 'ara'].includes(this.l2)) tokenizationType = "server"
         switch (tokenizationType) {
+          // tokenizationType passed in from <Annotate>
           case "integral":
             tokenized = this.tokenizeIntegral(text);
             break;
@@ -664,9 +728,9 @@ const Dictionary = {
     }
   },
   tokenizeIntegral(text) {
-    const tokens = text.match(/\p{L}+|[^\p{L}\s]+|\s+/gu);
+    const tokens = text.match(/[\p{L}\p{M}]+|[^\p{L}\p{M}\s]+|\s+/gu);
     const labeledTokens = tokens.map(tokenString => {
-      let isWord = /^\p{L}+$/u.test(tokenString)
+      let isWord = /^[\p{L}\p{M}]+$/u.test(tokenString)
       if (isWord) {
         return { text: tokenString };
       } else {
@@ -731,12 +795,58 @@ const Dictionary = {
     }
     return tokenized
   },
+  async tokenizeFromServer(text) {
+    let final = []
+    if (this.l2 === "tur") final = this.tokenizeTurkish(text);
+    else if (this.l2 === 'ara') final = this.tokenizeArabic(text);
+    else {
+      // SpaCy
+      let tokens = [];
+      text = text.replace(/-/g, "- ");
+      let url = `${PYTHON_SERVER}lemmatize-simple?lang=${this.l2}&text=${encodeURIComponent(
+        text
+      )}`;
+      let tokenized = await this.proxy(url);
+      for (let token of tokenized) {
+        if (!token) {
+          tokens.push(" ");
+        } else if (["PUNCT"].includes(token.pos)) {
+          tokens.push(token.word);
+        } else {
+          tokens.push(token);
+        }
+      }
+      for (let index in tokens) {
+        let token = tokens[index]
+        if (typeof token === 'object') {
+          let candidates = this.lookupMultiple(
+            token.word
+          );
+          if (token.lemma && token.lemma !== token.word) {
+            let lemmas = this.lookupMultiple(
+              token.lemma
+            )
+            candidates = [...lemmas, ...candidates]
+          }
+          final.push({
+            text: token.word,
+            candidates,
+          })
+        } else {
+          final.push(token)
+        }
+        final.push(" ")
+      }
+    }
+    this.tokenizationCache[text] = final
+    return final;
+  },
   async tokenizeArabic(text) {
     text = text.replace(/-/g, "- ");
     let url = `${PYTHON_SERVER}lemmatize-arabic?text=${encodeURIComponent(
       text
     )}`;
-    let tokenized = await this.proxy(url, 0);
+    let tokenized = await this.proxy(url);
     let tokens = [];
     for (let lemmas of tokenized) {
       if (!lemmas[0]) {
@@ -772,7 +882,7 @@ const Dictionary = {
     let url = `${PYTHON_SERVER}lemmatize-turkish?text=${encodeURIComponent(
       text
     )}`;
-    let tokenized = await this.proxy(url, 0);
+    let tokenized = await this.proxy(url);
     let tokens = [];
     for (let lemmas of tokenized) {
       if (!lemmas[0]) {

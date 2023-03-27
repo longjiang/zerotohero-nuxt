@@ -746,7 +746,7 @@ export default {
       } else if (["de", "gsw", "no", "hy", "vi"].includes(l2.code)) {
         tokenizationType = "agglutenative";
       } else if (
-        (l2.agglutinative || l2.indo) &&
+        (l2.agglutinative) &&
         l2.wiktionary &&
         l2.wiktionary > 2000
       ) {

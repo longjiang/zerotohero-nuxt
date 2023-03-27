@@ -102,6 +102,7 @@ export default {
       open: false,
       showPhrase: {},
       loading: false,
+      loadingImages: false,
       loaded: false,
       text: this.$slots.default ? this.$slots.default[0].text : undefined,
       images: [],

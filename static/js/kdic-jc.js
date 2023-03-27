@@ -316,7 +316,7 @@ const Dictionary = {
     let url = `${PYTHON_SERVER}lemmatize-japanese?text=${encodeURIComponent(
       text
     )}`;
-    let tokenized = await this.proxy(url, 0);
+    let tokenized = await this.proxy(url);
     let tokens = [];
     for (let token of tokenized) {
       if (!token) {
