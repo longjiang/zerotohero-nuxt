@@ -131,17 +131,22 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
-import Config from "@/lib/config";
 
 export default {
   data() {
     return {
       scope: {
-        'I': 'Individual'
+        'I': 'Individual',
+        'M': 'Macrolanguage', 
+        'S': 'Special', 
       },
       type: {
-        'L': 'Living'
+        'A': 'Ancient',
+        'C': 'Constructed',
+        'E': 'Extinct',
+        'H': 'Historical',
+        'L': 'Living',
+        'S': 'Special'
       }
     };
   },
