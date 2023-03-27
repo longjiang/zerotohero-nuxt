@@ -36,6 +36,7 @@
             words,
             images,
             loading,
+            loadingImages,
             context,
             transliterationprop,
             farsiRomanizations,
@@ -518,6 +519,7 @@ export default {
           })
         ).slice(0, 5);
       }
+      this.loadingImages = false
     },
     togglePopup() {
       if (this.popup) {
@@ -565,7 +567,10 @@ export default {
               ["proper noun", "noun", "Noun", "name", "n"].includes(w.pos)) return true
           })
         }    
-        if (hasImageWorthyWords) this.loadImages();
+        if (hasImageWorthyWords) {
+          this.loadingImages = true
+          this.loadImages();
+        }
         this.open = true;
         await timeout(123);
         if (this.open && this.l2SettingsOfL2.autoPronounce) {

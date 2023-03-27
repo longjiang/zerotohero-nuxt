@@ -3,7 +3,7 @@
     <div
       class="tooltip-images"
       :key="`tooltip-images-${text}`"
-      v-if="images && images.length > 0"
+      v-if="images && (images.length > 0 || loadingImages)"
     >
       <img
         alt
@@ -236,6 +236,9 @@ export default {
     phraseObj: Object,
     farsiRomanizations: Object,
     loading: {
+      default: false
+    },
+    loadingImages: {
       default: false
     },
     context: {
