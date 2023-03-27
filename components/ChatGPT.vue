@@ -29,7 +29,7 @@
               :key="`gpt-respnose-${index}`"
               class="mb-2"
             >
-              <Annotate :buttons="true" :showTranslation="true">
+              <Annotate :buttons="true" :showTranslation="true" :showLoading="false">
                 <span>{{ line }}</span>
               </Annotate>
             </div>
@@ -89,6 +89,7 @@ export default {
       thinking: false,
       openAIToken: undefined,
       watcherActive: false,
+      dictionary: undefined
     };
   },
   async mounted() {

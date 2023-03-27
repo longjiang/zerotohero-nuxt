@@ -5,17 +5,17 @@
   }
 </router>
 <template>
-  <div class="main pt-5 pb-5">
+  <div class="main pb-5">
     <div class="container">
       <div class="row">
         <div class="col-sm-12" style="max-width: 50rem; margin: 0 auto">
           <div v-if="$route.params.l1 && $route.params.l1 && $l1 && $l2">
             <div class="pb-2">
               <h4 class="text-center mb-4">
-                About the {{ $l2.name }} Language
+                About the {{ $l2.name }} {{ $l2.level }}
               </h4>
               <LazyLanguageInfoBox :lang="$l2" class="mb-4" />
-              <p>
+              <p v-if="$l2['iso639-1']">
                 <b>ISO639-1:</b>
                 {{ $l2["iso639-1"] || "Not available" }}
               </p>
@@ -23,11 +23,35 @@
                 <b>ISO639-3:</b>
                 {{ $l2["iso639-3"] || "Not available" }}
               </p>
-              <p>
-                <b>Language ID:</b>
-                {{ $l2.id || "Not available" }}
+              <p v-if="$l2['glottologId']">
+                <b>Glottolog ID:</b>
+                {{ $l2["glottologId"] }}
+              </p>
+              <p v-if="$l2['glottologFamilyId']">
+                <b>glottologFamilyId:</b>
+                {{ $l2["glottologFamilyId"] }}
+              </p>
+              <p v-if="$l2['glottologParentId']">
+                <b>glottologParentId:</b>
+                {{ $l2["glottologParentId"] }}
               </p>
               <p>
+                <b>Language Player ID:</b>
+                {{ $l2.id || "Not available" }}
+              </p>
+              <p v-if="$l2.lat && $l2.long">
+                <b>Location (lat, long):</b>
+                {{ $l2.lat }}, {{ $l2.long }}
+              </p>
+              <p v-if="$l2.scope">
+                <b>Scope:</b>
+                {{ scope[$l2.scope] }}
+              </p>
+              <p v-if="$l2.scope">
+                <b>Type:</b>
+                {{ type[$l2.type] }}
+              </p>
+              <p v-if="$l2.scripts && $l2.scripts.length > 0">
                 <b>Scripts used:</b>
                 {{
                   $l2.scripts
@@ -35,12 +59,16 @@
                     : "Not available"
                 }}
               </p>
-              <p>
+              <p v-if="$l2.otherNames?.length > 0">
+                <b>Other names:</b>
+                {{ $l2.otherNames.join(",") }}
+              </p>
+              <p v-if="$l2.speakers">
                 <b>Number of Speakers:</b>
                 {{ $l2.speakers ? $n($l2.speakers) : "Not available" }}
               </p>
               <p>
-                <b>Speakers native to:</b>
+                <b>Native to:</b>
                 <span
                   v-for="c in $l2.country"
                   :key="`lang-country-${c.alpha2Code}`"
@@ -51,6 +79,23 @@
                     class="flag-icon mr-1"
                   />
                   {{ c.name }}
+                  <span v-if="c.languages?.length > 0">
+                    (Also speaks
+                    <span
+                      v-for="(language, index) in c.languages"
+                      :key="`c-${c.name}-l-${language}`"
+                    >
+                      <router-link
+                        :to="{
+                          name: 'language-info',
+                          params: { l1: 'en', l2: language },
+                        }"
+                      >
+                        {{ language }}
+                      </router-link><span v-if="index + 1 < c.languages.length">,</span>
+                    </span>
+                    )
+                  </span>
                 </span>
               </p>
             </div>
@@ -66,6 +111,18 @@
               </p>
               <FiftySixEthnic skin="light" />
             </div>
+            <div class="pb-2 pt-2">
+              <hr />
+              <h5 class="mt-3 mb-3 text-center">Ask ChatGPT</h5>
+              <div class="alert alert-danger text-center"><b>Note:</b> Some information about lesser-known languages may <em>not</em> be accurate.</div>
+              <ChatGPT
+                :initialMessages="[
+                  `What is the ${$l2.name} language (also known as ${$l2.otherNames.join(',')}, ISO639-3 code ${$l2['iso639-3']}, glottolog ID ${$l2['glottologId']})? Could you give a few common phrases in the language, along with IPA transcriptions and ${$l1.name} translations?`,
+                  `Could you please give the following words in ${$l2.name} (also known as ${$l2.otherNames.join(',')}, ISO639-3 code ${$l2['iso639-3']}, glottolog ID ${$l2['glottologId']}), along with IPA transcriptions and ${$l1.name} translations: hello, yes, no, I, you, this, that, good, what, why, thank you, please, sorry.`,
+                  `Please give a list of printed and online materials for learning the ${$l2.name} language (also known as ${$l2.otherNames.join(',')}, ISO639-3 code ${$l2['iso639-3']}, glottolog ID ${$l2['glottologId']}).`,
+                ]"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -79,7 +136,14 @@ import Config from "@/lib/config";
 
 export default {
   data() {
-    return {};
+    return {
+      scope: {
+        'I': 'Individual'
+      },
+      type: {
+        'L': 'Living'
+      }
+    };
   },
   async mounted() {},
   beforeDestroy() {},
@@ -97,7 +161,13 @@ export default {
         return this.$store.state.settings.adminMode;
     },
   },
-  methods: {},
+  methods: {
+    async getSmart(...args) {
+      await this.$languages.loadFull()
+      let language = this.$languages.getSmart(...args)
+      return language
+    }
+  },
 };
 </script>
 

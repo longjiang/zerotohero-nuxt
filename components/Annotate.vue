@@ -645,7 +645,7 @@ export default {
       if (
         !this.annotating &&
         !this.annotated &&
-        (this.$hasFeature("dictionary") || this.nonLatin())
+        (this.$hasFeature("dictionary"))
       ) {
         if (slot) {
           this.convertToSentencesRecursive(slot.elm);
