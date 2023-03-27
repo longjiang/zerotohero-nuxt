@@ -38,27 +38,21 @@ const Dictionary = {
     "ces", // tokenized and lemmatized by simplemma
     "cym", // tokenized and lemmatized by simplemma
     "dan", // tokenized and lemmatized by simplemma
-    "deu", // tokenized and lemmatized by simplemma
     "ell", // tokenized and lemmatized by simplemma
-    "eng", // tokenized and lemmatized by simplemma
     "enm", // tokenized and lemmatized by simplemma
     "est", // tokenized and lemmatized by simplemma
     "fas", // tokenized and lemmatized by simplemma
     "fin", // tokenized and lemmatized by simplemma
-    "fra", // tokenized and lemmatized by simplemma
     "gla", // tokenized and lemmatized by simplemma
     "gle", // tokenized and lemmatized by simplemma
     "glg", // tokenized and lemmatized by simplemma
     "glv", // tokenized and lemmatized by simplemma
     "hbs", // tokenized and lemmatized by simplemma
-    // "hin", // tokenized and lemmatized by simplemma
     "hun", // tokenized and lemmatized by simplemma
     "hye", // tokenized and lemmatized by simplemma
     "ind", // tokenized and lemmatized by simplemma
     "isl", // tokenized and lemmatized by simplemma
-    "ita", // tokenized and lemmatized by simplemma
     "kat", // tokenized and lemmatized by simplemma
-    "lat", // tokenized and lemmatized by simplemma
     "lav", // tokenized and lemmatized by simplemma
     "lit", // tokenized and lemmatized by simplemma
     "ltz", // tokenized and lemmatized by simplemma
@@ -68,13 +62,11 @@ const Dictionary = {
     "nno", // tokenized and lemmatized by simplemma
     "nob", // tokenized and lemmatized by simplemma
     "pol", // tokenized and lemmatized by simplemma
-    "por", // tokenized and lemmatized by simplemma
     "ron", // tokenized and lemmatized by simplemma
     "rus", // tokenized and lemmatized by simplemma
     "slk", // tokenized and lemmatized by simplemma
     "slv", // tokenized and lemmatized by simplemma
     "sme", // tokenized and lemmatized by simplemma
-    "spa", // tokenized and lemmatized by simplemma
     "sqi", // tokenized and lemmatized by simplemma
     "swa", // tokenized and lemmatized by simplemma
     "swe", // tokenized and lemmatized by simplemma
@@ -82,6 +74,14 @@ const Dictionary = {
     "tur", // tokenized and lemmatized by simplemma
     "tur", // tokenized and lemmatized by zeyrek
     "ukr", // tokenized and lemmatized by simplemma
+    // "deu", // tokenized and lemmatized by simplemma
+    // "eng", // tokenized and lemmatized by simplemma
+    // "fra", // tokenized and lemmatized by simplemma
+    // "hin", // tokenized and lemmatized by simplemma
+    // "ita", // tokenized and lemmatized by simplemma
+    // "lat", // tokenized and lemmatized by simplemma
+    // "por", // tokenized and lemmatized by simplemma
+    // "spa", // tokenized and lemmatized by simplemma
     // "hrv", // tokenized and lemmatized by spacy
     // "deu",
     // "eng",
