@@ -378,16 +378,14 @@ const Dictionary = {
    */
   async romanizePersian(text) {
     if (this.l2 !== "fas") return;
-    text = text.trim();
-    let row = this.romanizations.find(r => r.persian === text);
-    if (row) return row.roman;
-    else {
-      let url = `${PYTHON_SERVER}transliterate-persian?text=${encodeURIComponent(
-        text
-      )}`;
-      let transliteration = await this.proxy(url, -1);
-      return transliteration;
-    }
+    // text = text.trim();
+    // let row = this.romanizations.find(r => r.persian === text);
+    // if (row) return row.roman;
+    let url = `${PYTHON_SERVER}transliterate-persian?text=${encodeURIComponent(
+      text
+    )}`;
+    let transliteration = await this.proxy(url, -1);
+    return transliteration;
   },
   hasHan(text) {
     return text.match(/[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g);
