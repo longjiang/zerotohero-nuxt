@@ -74,7 +74,7 @@ const Dictionary = {
     "tur", // tokenized and lemmatized by simplemma
     "tur", // tokenized and lemmatized by zeyrek
     "ukr", // tokenized and lemmatized by simplemma
-    // "deu", // tokenized and lemmatized by simplemma
+    "deu", // tokenized and lemmatized by simplemma
     // "eng", // tokenized and lemmatized by simplemma
     // "fra", // tokenized and lemmatized by simplemma
     // "hin", // tokenized and lemmatized by simplemma
@@ -838,6 +838,10 @@ const Dictionary = {
     }
     this.tokenizationCache[text] = final
     return final;
+  },
+  getLemmas(text) {
+    let lemmas = this.inflectionIndex[text]
+    return lemmas
   },
   async tokenizeArabic(text) {
     text = text.replace(/-/g, "- ");

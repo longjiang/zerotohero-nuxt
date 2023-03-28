@@ -651,10 +651,10 @@ export default {
         if (dictionary.getLemmas) {
           let allLemmas = [];
           for (let word of words) {
-            let lemmas = await dictionary.getLemmas(word.traditional);
+            let lemmas = await dictionary.getLemmas(word.traditional || word.head);
             if (lemmas) allLemmas = allLemmas.concat(lemmas);
           }
-          if (allLemmas.length > 0) words = words.concat(allLemmas);
+          if (allLemmas.length > 0) words = [...allLemmas, ...words];
         }
         if (dictionary.findPhrases) {
           for (let word of words) {

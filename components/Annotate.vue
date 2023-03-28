@@ -781,9 +781,9 @@ export default {
         sticky: this.sticky,
         explore: this.explore,
         context,
+        token,
         quizMode: this.quizMode,
       };
-      if (token.candidates?.length > 0) attrs.token = token;
       if (token.mappedPronunciation) attrs.mappedPronunciation = token.mappedPronunciation
       if (token.pronunciation) attrs.transliterationprop = token.pronunciation
       return attrs;
