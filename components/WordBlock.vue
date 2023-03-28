@@ -242,6 +242,7 @@ export default {
         seen: this.seen,
         saved: this.savedWord || this.savedPhrase,
         phonetics,
+        pos: this.pos,
         definition,
         text: this.transform(text),
         hanja,

@@ -73,6 +73,7 @@
 import { mapState } from "vuex";
 export default {
   props: {
+    pos: String,
     popup: {
       default: true,
     },
@@ -129,7 +130,7 @@ export default {
         klingon: this.$l2.code === "tlh",
         "word-block-hard": this.hard,
       };
-      if (this.pos) classes[`pos-${pos}`] = pos;
+      if (this.pos) classes[`pos-${this.pos}`] = true;
       return classes;
     },
     showDefinition() {
