@@ -655,7 +655,7 @@ export default {
             let lemmas = await dictionary.getLemmas(word.traditional || word.head);
             if (lemmas) allLemmas = allLemmas.concat(lemmas);
           }
-          if (allLemmas.length > 0) words = [...allLemmas, ...words];
+          if (allLemmas.length > 0) words = [...words, ...allLemmas] // We put lemmas at the bottom because at time irrelevant words can show up as 'lemmas'
         }
         if (dictionary.findPhrases) {
           for (let word of words) {
