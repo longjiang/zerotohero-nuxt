@@ -15,7 +15,7 @@ function isHiragana(char) {
 
 
 
-const segmentKanjisAndNonKanjis = (text) => {
+function segmentKanjisAndNonKanjis(text) {
   let normalized = convertKatakanaToHiragana(text)
   const regex = /([\u4e00-\u9faf]+|[^\u4e00-\u9faf]+)/g;
   const segments = normalized.match(regex);
@@ -41,7 +41,7 @@ const segmentKanjisAndNonKanjis = (text) => {
   return parts;
 }
 
-const convertKatakanaToHiragana = (katakana) => {
+function convertKatakanaToHiragana(katakana) {
   let converted = ''
   for (let char of katakana) {
     if (wanakana.isKatakana(char)) converted += wanakana.toHiragana(char)
@@ -50,12 +50,12 @@ const convertKatakanaToHiragana = (katakana) => {
   return converted
 }
 
-const sanitizeRegexString = (str) => {
+function sanitizeRegexString (str) {
   // Escape special characters
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-const createRegex = (segments) => {
+function createRegex = (segments) {
   let regexStr = ''
   for (let segment of segments) {
     if (segment.type === 'kanji') regexStr += '(.+)'
