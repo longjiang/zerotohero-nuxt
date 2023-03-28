@@ -50,12 +50,12 @@ function convertKatakanaToHiragana(katakana) {
   return converted
 }
 
-function sanitizeRegexString (str) {
+function sanitizeRegexString(str) {
   // Escape special characters
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-function createRegex = (segments) {
+function createRegex(segments) {
   let regexStr = ''
   for (let segment of segments) {
     if (segment.type === 'kanji') regexStr += '(.+)'
