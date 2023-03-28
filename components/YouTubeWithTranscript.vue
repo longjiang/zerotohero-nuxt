@@ -63,81 +63,67 @@
           @updateSmoothScroll="(r) => (this.useSmoothScroll = r)"
           @updateAutoPause="(r) => (this.autoPause = r)"
           @updateRepeatMode="(r) => (this.repeatMode = r)"
-          @goToPreviousLine="$refs.transcript ? $refs.transcript.goToPreviousLine() : null"
-          @goToNextLine="$refs.transcript ? $refs.transcript.goToNextLine() : null"
+          @goToPreviousLine="
+            $refs.transcript ? $refs.transcript.goToPreviousLine() : null
+          "
+          @goToNextLine="
+            $refs.transcript ? $refs.transcript.goToNextLine() : null
+          "
           @seek="onSeek"
         />
         <div
-          v-if="
-            landscape && related && related.length > 0
-          "
+          v-if="landscape && related && related.length > 0"
           class="pl-3 pt-4"
         >
-          <VideoAdmin
-            v-if="$adminMode"
-            :showVideoDetails="false"
-            :showTextEditing="false"
-            :video="video"
-            ref="videoAdmin3"
-            @showSubsEditing="toggleShowSubsEditing"
-            @updateTranslation="updateTranslation"
-            @updateOriginalText="updateOriginalText"
-            @enableTranslationEditing="toggleEnableTranslationEditing"
-            @updateTranscript="updateTranscript"
-          />
-          <YouTubeVideoList
-            :videos="related.slice(0, 6)"
-            :showDate="true"
-            :showProgress="true"
-            skin="dark"
-          />
+          <div
+            class="youtube-video-info youtube-video-info-top"
+            v-if="layout === 'horizontal'"
+          >
+            <h3
+              v-if="video.title"
+              :class="{
+                h4: video.title.length > 30,
+                h5: video.title.length > 60,
+              }"
+              style="line-height: 1.5"
+            >
+              <span v-if="video" :key="`video-title-${video.title}`">
+                <Annotate
+                  :phonetics="false"
+                  :buttons="true"
+                  v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
+                  :showLoading="false"
+                >
+                  <span>{{ video.title }}</span>
+                </Annotate>
+                <span v-else>{{ video.title }}</span>
+              </span>
+            </h3>
+            <VideoAdmin
+              :showVideoDetails="true"
+              :showTextEditing="true"
+              :video="video"
+              ref="videoAdmin1"
+              @showSubsEditing="toggleShowSubsEditing"
+              @updateTranslation="updateTranslation"
+              @updateOriginalText="updateOriginalText"
+              @enableTranslationEditing="toggleEnableTranslationEditing"
+              @updateTranscript="updateTranscript"
+            />
+            <EpisodeNav
+              :video="video"
+              :episodes="episodes"
+              :showType="showType"
+              :skin="skin"
+              :show="show"
+              :largeEpisodeCount="largeEpisodeCount"
+              class="mt-3"
+            />
+          </div>
         </div>
       </div>
     </div>
     <div class="youtube-transcript-column">
-      <div
-        class="youtube-video-info youtube-video-info-top"
-        v-if="layout === 'horizontal'"
-      >
-        <h3
-          v-if="video.title"
-          :class="{
-            h4: video.title.length > 30,
-            h5: video.title.length > 60,
-          }"
-          style="line-height: 1.5"
-        >
-          <span v-if="video" :key="`video-title-${video.title}`">
-            <Annotate
-              :phonetics="false"
-              :buttons="true"
-              v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
-              :showLoading="false"
-            >
-              <span>{{ video.title }}</span>
-            </Annotate>
-            <span v-else>{{ video.title }}</span>
-          </span>
-        </h3>
-        <VideoAdmin
-          :video="video"
-          ref="videoAdmin1"
-          @showSubsEditing="toggleShowSubsEditing"
-          @updateTranslation="updateTranslation"
-          @updateOriginalText="updateOriginalText"
-          @enableTranslationEditing="toggleEnableTranslationEditing"
-          @updateTranscript="updateTranscript"
-        />
-        <EpisodeNav
-          :video="video"
-          :episodes="episodes"
-          :showType="showType"
-          :skin="skin"
-          :show="show"
-          :largeEpisodeCount="largeEpisodeCount"
-          class="mt-3"
-        />
-      </div>
       <!-- this is necessary for updating the transcript upon srt drop -->
       <div class="d-none">{{ transcriptKey }}</div>
       <SyncedTranscript
@@ -399,20 +385,28 @@ export default {
       );
     },
     related() {
-      let related = []
+      let related = [];
       if (this.episodes && this.episodes.length > 0 && this.episodeIndex >= 0) {
-        let watchedYouTubeIds = this.$store.state.history.history.map(h => h.video?.youtube_id)
-        let popularEpisodes = this.episodes.slice().filter(e => !watchedYouTubeIds.includes(e.youtube_id)).sort((a, b) => b.views - a.views)
+        let watchedYouTubeIds = this.$store.state.history.history.map(
+          (h) => h.video?.youtube_id
+        );
+        let popularEpisodes = this.episodes
+          .slice()
+          .filter((e) => !watchedYouTubeIds.includes(e.youtube_id))
+          .sort((a, b) => b.views - a.views);
         related = [
           ...shuffle([
-            ...this.episodes.slice(this.episodeIndex + 2, this.episodeIndex + 16),
+            ...this.episodes.slice(
+              this.episodeIndex + 2,
+              this.episodeIndex + 16
+            ),
             ...shuffle(popularEpisodes.slice(0, 16)),
           ]),
         ];
         let nextEpisode = this.episodes[this.episodeIndex + 1];
-        if (nextEpisode) related = [nextEpisode, ...related]
+        if (nextEpisode) related = [nextEpisode, ...related];
       }
-      return uniqueByValue(related, 'youtube_id');
+      return uniqueByValue(related, "youtube_id");
     },
   },
   created() {
@@ -515,7 +509,8 @@ export default {
       if (this.$l2.code === this.$l1.code) return;
       let video = Object.assign({}, this.video);
       if (!video) return;
-      let missingSubsL1 = !this.video.subs_l1 || this.video.subs_l1.length === 0;
+      let missingSubsL1 =
+        !this.video.subs_l1 || this.video.subs_l1.length === 0;
       if (missingSubsL1) {
         console.log(
           `YouTube with Transcript: Getting available L1 transcripts...`
@@ -561,7 +556,8 @@ export default {
             );
           }
           if (!subs_l1 || !subs_l1[0]) {
-            let useGenerated = !this.video.subs_l2 || this.video.subs_l2.length === 0
+            let useGenerated =
+              !this.video.subs_l2 || this.video.subs_l2.length === 0;
             subs_l1 = await YouTube.getTranslatedTranscript(
               video.youtube_id,
               video.l2Locale || this.$l2.code,

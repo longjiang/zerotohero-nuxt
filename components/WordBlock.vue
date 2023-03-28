@@ -180,7 +180,7 @@ export default {
       if (!pos && this.words && this.words[0]) {
         pos = this.words[0].pos;
       }
-      if (pos) return pos.replace(/\s/g, "-");
+      if (pos) return pos.replace(/\-.*/, '').replace(/\s/g, "-");
     },
     hanja() {
       if (["ko", "vi"].includes(this.$l2.code)) {

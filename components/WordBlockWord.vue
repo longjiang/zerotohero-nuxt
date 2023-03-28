@@ -1,15 +1,6 @@
 <template>
   <span
-    :class="{
-      'word-block': true,
-      'with-popup': popup,
-      'with-quick-gloss': saved && definition,
-      sticky,
-      common,
-      seen,
-      saved,
-      obscure,
-    }"
+    :class="wordBlockClasses"
   >
     <template v-if="!mappedPronunciation">
       <span class="word-block-segment">
@@ -21,7 +12,7 @@
         <span class="word-block-pinyin" v-if="phonetics">
           {{ phonetics }}
         </span>
-        <span :class="classes">
+        <span :class="wordBlockTextClasses">
           {{ text }}
         </span>
       </span><span class="word-block-text-byeonggi-wrapper">
@@ -52,7 +43,7 @@
         >
           {{ segment.reading }}
         </span>
-        <span :class="classes">
+        <span :class="wordBlockTextClasses">
           {{ segment.surface }}
         </span>
       </span><span class="word-block-text-byeonggi-wrapper">
@@ -124,14 +115,27 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-    classes() {
+    wordBlockTextClasses() {
       let classes = {
         "word-block-text d-inline-block": true,
         klingon: this.$l2.code === "tlh",
         "word-block-hard": this.hard,
       };
-      if (this.pos) classes[`pos-${this.pos}`] = true;
       return classes;
+    },
+    wordBlockClasses() {
+      let classes = {
+        'word-block': true,
+        'with-popup': this.popup,
+        'with-quick-gloss': this.saved && this.definition,
+        sticky: this.sticky,
+        common: this.common,
+        seen: this.seen,
+        saved: this.saved,
+        obscure: this.obscure,
+      }
+      if (this.pos) classes[`pos-${this.pos}`] = true;
+      return classes
     },
     showDefinition() {
       return this.l2SettingsOfL2.showDefinition;
@@ -331,14 +335,10 @@ export default {
   text-overflow: ellipsis;
 }
 
-.word-block-simplified,
-.word-block-traditional,
-.word-block-text {
-  &.pos-verb,
-  &.pos-Verb,
-  &.pos-動詞 {
-    border-bottom: 1px solid rgba(204, 204, 204, 0.5);
-  }
+.pos-verb,
+.pos-Verb,
+.pos-動詞 {
+  border-bottom: 1px solid rgba(204, 204, 204, 0.5);
 }
 
 .show-pinyin-for-saved {
