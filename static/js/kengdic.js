@@ -271,10 +271,6 @@ const Dictionary = {
     results = results.sort((a, b) => b.score - a.score);
     return results.slice(0, limit);
   },
-  lookupMultiple(text) {
-    let words = this.words.filter(word => word && word.bare === text);
-    return words;
-  },
   random() {
     return this.randomArrayItem(this.words);
   },
@@ -329,9 +325,14 @@ const Dictionary = {
     return words;
   },
   lookupMultiple(text) {
-    let words = this.words.filter(
-      word => word && (word.bare === text || word.hanja === text)
-    );
+    let lookForHadaVerbs = false
+    if (!text.endsWith('다')) lookForHadaVerbs = true
+    let hadaText = text + '하다'
+    let words = this.words.filter(word => {
+      if (word) {
+        return lookForHadaVerbs ? word.bare === text || word.bare === hadaText : word.bare === text
+      }
+    });
     return words;
   },
   async tokenizeWithOpenKoreanText(text) {
