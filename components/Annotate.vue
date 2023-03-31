@@ -786,6 +786,7 @@ export default {
       };
       if (token.mappedPronunciation) attrs.mappedPronunciation = token.mappedPronunciation
       if (token.pronunciation) attrs.transliterationprop = token.pronunciation
+      if (this.text === '（') console.log({attrs})
       return attrs;
     },
     convertToSentencesRecursive(node) {

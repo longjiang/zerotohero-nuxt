@@ -544,25 +544,30 @@ const Dictionary = {
     let final = []
     for (let index in tokenized) {
       let token = tokenized[index]
-      let candidates = this.lookupMultiple(
-        token.word
-      );
-      if (token.lemma && token.lemma !== token.word) {
-        candidates = candidates.concat(
-          this.lookupMultiple(
-            token.lemma
-          )
+      if (typeof token === 'object' && this.isChinese(token.word)) {
+        let candidates = this.lookupMultiple(
+          token.word
         );
+        if (token.lemma && token.lemma !== token.word) {
+          candidates = candidates.concat(
+            this.lookupMultiple(
+              token.lemma
+            )
+          );
+        }
+        if (candidates.length === 0 && token.word) {
+          candidates = this.getWordsWithinText(token.word)
+        }
+        final.push({
+          text: token.word,
+          candidates,
+          pos: token.pos,
+          pronunciation: token.pronunciation
+        })
+        if (token.word && !this.isChinese(token.word)) final.push(" ")
+      } else {
+        final.push(token.word || token) // string
       }
-      if (candidates.length === 0 && token.word) {
-        candidates = this.getWordsWithinText(token.word)
-      }
-      final.push({
-        text: token.word,
-        candidates,
-        pos: token.pos,
-      })
-      if (token.word && !this.isChinese(token.word)) final.push(" ")
     }
     this.tokenizationCache[text] = final
     return final
