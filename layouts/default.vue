@@ -43,7 +43,7 @@
           :key="`nav-secondary-${l1.code}-${l2.code}`"
         />
       </client-only>
-      <YouTubeViewComp
+      <VideoViewComp
         id="overlay-player"
         ref="youtube-view-comp"
         v-if="overlayPlayerYouTubeId && $route.params.l2"

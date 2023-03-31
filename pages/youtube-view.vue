@@ -10,7 +10,7 @@
 </router>
 <template>
   <div class="youtube-view-page">
-    <YouTubeViewComp :youtube_id="youtube_id" :lesson="lesson" />
+    <VideoViewComp :youtube_id="youtube_id" :lesson="lesson" />
   </div>
 </template>
 
