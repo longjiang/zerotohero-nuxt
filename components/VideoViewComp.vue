@@ -1,12 +1,60 @@
 
 <template>
-  <component
-    :is="currentComponent"
-    v-bind="{ youtube_id, lesson, mini, initialLayout, landscape }"
-    @currentTime="updateCurrentTimeQueryString"
-    @onUpdateLayout="onYouTubeUpdateLayout"
-    @videoLoaded="onVideoLoaded"
-  />
+  <div
+    :class="{
+      'video-view': true,
+      'video-view-minimized': layout === 'mini',
+    }"
+  >
+    <SocialHead
+      :title="`${video ? video.title + ' | ' : ''}Learn ${
+        $l2.name
+      } with Language Player`"
+      :description="`Study the transcript of this video with a popup dictionary`"
+      :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
+    />
+    <div
+      :class="`toggle-wrapper ${layout !== 'mini' ? 'maximized' : 'minimized'}`"
+      v-if="layout === 'mini'"
+    >
+      <router-link
+        :class="`btn btn-unstyled ${
+          layout !== 'mini' ? 'btn-maximize-toggle' : 'btn-minimize-toggle'
+        }`"
+        :to="minimizeToggleRouterLinkTo"
+      >
+        <i class="fas fa-chevron-down" v-if="layout !== 'mini'"></i>
+        <i class="fas fa-chevron-up" v-if="layout === 'mini'"></i>
+      </router-link>
+      <b-button variant="unstyled" class="btn-close" @click="close">
+        <i class="fa fa-times"></i>
+      </b-button>
+    </div>
+    <div
+      :class="{
+        'main-dark main-dark-performant': true,
+        'video-view-content': true,
+        'video-view-landscape': landscape,
+        fullscreen: layout === 'vertical',
+      }"
+    >
+      <div
+        :class="{ 'loader text-center': true, 'd-none': video }"
+        style="padding-top: 30vh; padding-bottom: 30vh"
+      >
+        <Loader :sticky="true" message="Preparing video and transcript..." />
+      </div>
+
+      <component
+        :is="currentComponent"
+        v-bind="{ youtube_id, lesson, mini, initialLayout, landscape }"
+        @currentTime="updateCurrentTimeQueryString"
+        @onUpdateLayout="onYouTubeUpdateLayout"
+        @videoLoaded="onVideoLoaded"
+      />
+
+    </div>
+  </div>
 </template>
 
 <script>

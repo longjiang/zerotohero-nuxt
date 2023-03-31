@@ -1,78 +1,31 @@
 
 <template>
-  <div
-    :class="{
-      'video-view': true,
-      'video-view-minimized': layout === 'mini',
+  <LazyYouTubeWithTranscript
+    v-if="video"
+    ref="youtube"
+    skin="dark"
+    v-bind="{
+      video,
+      starttime,
+      startLineIndex,
+      show,
+      showType,
+      episodes,
+      largeEpisodeCount,
+      useAutoTextSize: true,
+      showInfoButton: true,
+      autoload: true,
+      autoplay: false,
+      forcePortrait: false,
+      initialLayout: layout,
     }"
-  >
-    <SocialHead
-      :title="`${video ? video.title + ' | ' : ''}Learn ${
-        $l2.name
-      } with Language Player`"
-      :description="`Study the transcript of this video with a popup dictionary`"
-      :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
-    />
-    <div
-      :class="`toggle-wrapper ${layout !== 'mini' ? 'maximized' : 'minimized'}`"
-      v-if="layout === 'mini'"
-    >
-      <router-link
-        :class="`btn btn-unstyled ${
-          layout !== 'mini' ? 'btn-maximize-toggle' : 'btn-minimize-toggle'
-        }`"
-        :to="minimizeToggleRouterLinkTo"
-      >
-        <i class="fas fa-chevron-down" v-if="layout !== 'mini'"></i>
-        <i class="fas fa-chevron-up" v-if="layout === 'mini'"></i>
-      </router-link>
-      <b-button variant="unstyled" class="btn-close" @click="close">
-        <i class="fa fa-times"></i>
-      </b-button>
-    </div>
-    <div
-      :class="{
-        'main-dark main-dark-performant': true,
-        'video-view-content': true,
-        'video-view-landscape': landscape,
-        fullscreen: layout === 'vertical',
-      }"
-    >
-      <div
-        :class="{ 'loader text-center': true, 'd-none': video }"
-        style="padding-top: 30vh; padding-bottom: 30vh"
-      >
-        <Loader :sticky="true" message="Preparing video and transcript..." />
-      </div>
-
-      <LazyYouTubeWithTranscript
-        v-if="video"
-        ref="youtube"
-        skin="dark"
-        v-bind="{
-          video,
-          starttime,
-          startLineIndex,
-          show,
-          showType,
-          episodes,
-          largeEpisodeCount,
-          useAutoTextSize: true,
-          showInfoButton: true,
-          autoload: true,
-          autoplay: false,
-          forcePortrait: false,
-          initialLayout: layout,
-        }"
-        :key="`transcript-${video.youtube_id}`"
-        @ended="updateEnded"
-        @previous="goToPreviousEpisode"
-        @next="goToNextEpisode"
-        @currentTime="onCurrentTime"
-        @updateLayout="onUpdateLayout"
-      />
-    </div>
-  </div>
+    :key="`transcript-${video.youtube_id}`"
+    @ended="updateEnded"
+    @previous="goToPreviousEpisode"
+    @next="goToNextEpisode"
+    @currentTime="onCurrentTime"
+    @updateLayout="onUpdateLayout"
+  />
 </template>
 
 <script>
@@ -118,7 +71,6 @@ export default {
       video: undefined,
       largeEpisodeCount: undefined,
       starttime: 0,
-      layout: this.initialLayout,
     };
   },
   computed: {
@@ -154,6 +106,9 @@ export default {
       if (this.episodes && this.episodeIndex > -1) {
         return this.episodes[this.episodeIndex + 1];
       }
+    },
+    layout() {
+      return this.mini ? "mini" : this.initialLayout;
     },
   },
   async fetch() {
