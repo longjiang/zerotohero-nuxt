@@ -242,7 +242,7 @@ export default {
           text = this.l2SettingsOfL2.useTraditional
             ? tify(this.text)
             : sify(this.text);
-          phonetics = this.transliterationprop
+          if (this.l2SettingsOfL2.showPinyin) phonetics = this.transliterationprop
         }
       }
       let hanja =
