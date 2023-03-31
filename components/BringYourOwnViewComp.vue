@@ -1,115 +1,52 @@
 
 <template>
-  <div
-    :class="{
-      'video-view': true,
-      'video-view-minimized': layout === 'mini',
+  <LazyYouTubeWithTranscript
+    v-if="video"
+    ref="youtube"
+    skin="dark"
+    v-bind="{
+      video,
+      starttime,
+      startLineIndex,
+      useAutoTextSize: true,
+      showInfoButton: true,
+      autoload: true,
+      autoplay: false,
+      forcePortrait: false,
+      initialLayout,
     }"
-  >
-    <SocialHead
-      :title="`${video ? video.title + ' | ' : ''}Learn ${
-        $l2.name
-      } with Language Player`"
-      :description="`Study the transcript of this video with a popup dictionary`"
-      :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
-    />
-    <div
-      :class="`toggle-wrapper ${layout !== 'mini' ? 'maximized' : 'minimized'}`"
-      v-if="layout === 'mini'"
-    >
-      <router-link
-        :class="`btn btn-unstyled ${
-          layout !== 'mini' ? 'btn-maximize-toggle' : 'btn-minimize-toggle'
-        }`"
-        :to="minimizeToggleRouterLinkTo"
-      >
-        <i class="fas fa-chevron-down" v-if="layout !== 'mini'"></i>
-        <i class="fas fa-chevron-up" v-if="layout === 'mini'"></i>
-      </router-link>
-      <b-button variant="unstyled" class="btn-close" @click="close">
-        <i class="fa fa-times"></i>
-      </b-button>
-    </div>
-    <div
-      :class="{
-        'main-dark main-dark-performant': true,
-        'video-view-content': true,
-        'video-view-landscape': landscape,
-        fullscreen: layout === 'vertical',
-      }"
-    >
-      <div
-        :class="{ 'loader text-center': true, 'd-none': video }"
-        style="padding-top: 30vh; padding-bottom: 30vh"
-      >
-        <Loader :sticky="true" message="Preparing video and transcript..." />
-      </div>
-
-      <LazyYouTubeWithTranscript
-        v-if="video"
-        ref="youtube"
-        skin="dark"
-        v-bind="{
-          video,
-          starttime,
-          startLineIndex,
-          show,
-          showType,
-          episodes,
-          largeEpisodeCount,
-          useAutoTextSize: true,
-          showInfoButton: true,
-          autoload: true,
-          autoplay: false,
-          forcePortrait: false,
-          initialLayout: layout,
-        }"
-        :key="`transcript-${video.youtube_id}`"
-        @ended="updateEnded"
-        @previous="goToPreviousEpisode"
-        @next="goToNextEpisode"
-        @currentTime="updateCurrentTimeQueryString"
-        @updateLayout="onYouTubeUpdateLayout"
-      />
-    </div>
-  </div>
+    :key="`transcript-bring-your-own`"
+    @ended="updateEnded"
+    @currentTime="onCurrentTime"
+    @updateLayout="onUpdateLayout"
+  />
 </template>
 
 <script>
-import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
-import DateHelper from "@/lib/date-helper";
 import Vue from "vue";
 import { mapState } from "vuex";
 import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
 
 export default {
   props: {
-    youtube_id: {
-      type: String,
-      required: true,
-    },
-    lesson: {
-      type: String, // If the video is a "lesson video" (with lesson vocab highlighted), set this to "lesson"
-      required: false,
-    },
     mini: {
       type: Boolean,
       default: false,
       required: false,
     },
+    initialLayout: {
+      default: "vertical",
+    },
+    landscape: {
+      default: false,
+    },
   },
   data() {
     return {
       currentTime: 0,
-      episodes: [],
-      extrasLoaded: false,
       fetchDone: false,
-      initialLayout: this.$adminMode ? "horizontal" : "vertical",
       mountedDone: false,
-      randomEpisodeYouTubeId: undefined,
-      show: undefined,
-      showType: undefined,
       startLineIndex: 0,
       video: undefined,
       largeEpisodeCount: undefined,
@@ -118,7 +55,6 @@ export default {
   },
   computed: {
     ...mapState("stats", ["stats"]),
-    ...mapState("fullHistory", ["fullHistory"]),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -131,74 +67,10 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
-    fullHistoryPathsByL1L2() {
-      return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
-        l1: this.$l1,
-        l2: this.$l2,
-      });
-    },
-    landscape() {
-      if (this.forcePortrait) return false;
-      if (process.browser && this.viewportWidth && this.viewportHeight) {
-        let landscape = this.viewportWidth > this.viewportHeight;
-        return landscape;
-      }
-    },
-    /**
-     * The router link that we send the user to when they close the player.
-     */
-    maximizeVideoTo() {
-      return {
-        name: "video-view",
-        params: {
-          type: "youtube",
-          youtube_id: this.youtube_id,
-          lesson: this.lesson,
-        },
-      };
-    },
-    minimizeVideoTo() {
-      if (this.fullHistoryPathsByL1L2) {
-        let fullHistoryReversed = [...this.fullHistoryPathsByL1L2].reverse();
-        let lastNonYouTubeViewPath = fullHistoryReversed.find(
-          (h) =>
-            !h.includes("video-view") &&
-            h.includes(this.$l1.code + "/" + this.$l2.code) // Must be the same language!
-        );
-        if (lastNonYouTubeViewPath) return lastNonYouTubeViewPath;
-        else return { name: "explore-media" };
-      }
-      return { name: "explore-media" };
-    },
-    minimizeToggleRouterLinkTo() {
-      return this.mini ? this.maximizeVideoTo : this.minimizeVideoTo;
-    },
-    layout() {
-      return this.mini ? "mini" : this.initialLayout;
-    },
     currentTimeInSeconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
       return t;
     },
-    episodeIndex() {
-      return this.episodes.findIndex(
-        (e) => e.youtube_id === this.video.youtube_id
-      );
-    },
-    previousEpisode() {
-      if (this.episodes && this.episodeIndex > -1) {
-        return this.episodes[this.episodeIndex - 1];
-      }
-    },
-    nextEpisode() {
-      if (this.episodes && this.episodeIndex > -1) {
-        return this.episodes[this.episodeIndex + 1];
-      }
-    },
-  },
-  validate({ params, query, store }) {
-    if (params.youtube_id && params.youtube_id.length > 1) return true;
-    return false;
   },
   async fetch() {
     this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
@@ -218,22 +90,6 @@ export default {
       console.log(e);
     }
   },
-  destroyed() {
-    this.unbindKeys();
-  },
-  beforeDestroy() {
-    if (this.unsubscribe) this.unsubscribe();
-  },
-  mounted() {
-    if (typeof this.$store.state.settings !== "undefined") {
-      this.initialLayout = this.$store.state.settings.layout;
-    }
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("settings")) {
-        this.initialLayout = this.$store.state.settings.layout;
-      }
-    });
-  },
   watch: {
     /**
      * Called when the video is first fetched
@@ -246,13 +102,11 @@ export default {
         this.extrasLoaded = true;
         console.log(`YouTube View (on video change): load subs if missing...`);
         let video = await this.loadSubsIfMissing(this.video);
-        if (this.layout !== "mini" && !Helper.wide()) {
-          let el = this.$refs["youtube"];
-          if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
-        }
         this.video = video;
-        this.saveHistory();
-        this.bindKeys();
+        this.$emit("videoLoaded", {
+          video,
+          duration: this.$refs.youtube?.duration,
+        });
         if (this.$store.state.shows.showsLoaded[this.$l2.code]) {
           if (!this.show) this.setShow();
         }
@@ -279,6 +133,15 @@ export default {
     },
   },
   methods: {
+    onUpdateLayout(layout) {
+      this.$emit("updateLayout", layout);
+    },
+    onCurrentTime(currentTime) {
+      if (this.currentTime !== currentTime) {
+        this.currentTime = currentTime;
+        this.$emit("currentTime", this.currentTime);
+      }
+    },
     async getEpisodes(episodeCount, limit) {
       // If we already have the episodes stored in the show (in Vuex), and the episodes include the current video, just return the episodes
       let videos = [];
@@ -402,13 +265,6 @@ export default {
             lesson: this.nextEpisode.lesson,
           },
         });
-    },
-    close() {
-      if (this.layout !== "mini") this.$router.push(this.minimizeVideoTo);
-      this.$emit("close", this.youtube_id);
-    },
-    onYouTubeUpdateLayout(layout) {
-      this.initialLayout = layout;
     },
     mergeVideos(video, youtube_video) {
       let merged = {};
@@ -537,88 +393,11 @@ export default {
         }
       }
     },
-    updateCurrentTimeQueryString(currentTime) {
-      if (typeof window !== "undefined") {
-        this.currentTime = currentTime;
-        const params = new URLSearchParams(window.location.search);
-        const queryStringTime = params.get("t") ? Number(params.get("t")) : 0;
-        if (this.currentTimeInSeconds !== queryStringTime) {
-          window.history.replaceState(
-            "",
-            "",
-            `?t=${this.currentTimeInSeconds}`
-          );
-          if (this.currentTimeInSeconds % 60 === 0) this.saveHistory(); // Only update history (and push to the server) every minute
-        }
-      }
-    },
     async updateEnded(ended) {
       if (ended !== this.ended) {
         this.ended = ended;
       }
     },
-    bindKeys() {
-      window.onkeydown = (e) => {
-        if (
-          !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
-          !e.metaKey &&
-          !e.target.getAttribute("contenteditable")
-        ) {
-          if (e.code === "KeyM") {
-            if (this.$refs.youtube && this.$refs.youtube.$refs.videoControls)
-              this.$refs.youtube.$refs.videoControls.toggleSpeed();
-            return false;
-          }
-          if (e.code === "Space") {
-            this.$refs.youtube ? this.$refs.youtube.togglePaused() : "";
-            return false;
-          }
-          if (["ArrowUp", "ArrowLeft"].includes(e.code)) {
-            this.$refs.youtube.$refs.transcript.goToPreviousLine();
-            return false;
-          }
-          if (["ArrowDown", "ArrowRight"].includes(e.code)) {
-            this.$refs.youtube.$refs.transcript.goToNextLine();
-            return false;
-          }
-          if (["KeyR"].includes(e.code)) {
-            this.$refs.youtube.$refs.transcript.rewind();
-            return false;
-          }
-        }
-      };
-    },
-    saveHistory() {
-      console.log(`YouTube View: Saving history...`);
-      if (typeof this.video === "undefined") return;
-      let data = {
-        type: "video",
-        id: `${this.$l2.code}-video-${this.video.youtube_id}`,
-        date: DateHelper.unparseDate(new Date()),
-        l1: this.$l1.code,
-        l2: this.$l2.code,
-        video: {
-          id: this.video.id,
-          title: this.video.title,
-          youtube_id: this.video.youtube_id,
-          starttime: this.currentTimeInSeconds,
-        },
-      };
-      if (this.$refs.youtube && this.$refs.youtube.duration) {
-        data.video.duration = this.$refs.youtube.duration;
-        data.video.progress = data.video.starttime / data.video.duration;
-      }
-      this.$store.dispatch("history/add", data); // history's ADD_HISTORY_ITEM mutation automatically checks if this item is already in the history based on it's id (e.g. zh-video-Y23x9L4)
-    },
-    unbindKeys() {
-      window.onkeydown = null;
-    },
-  },
-  activated() {
-    this.bindKeys();
-  },
-  deactivated() {
-    this.unbindKeys();
   },
 };
 </script>

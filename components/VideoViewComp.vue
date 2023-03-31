@@ -47,7 +47,7 @@
 
       <component
         :is="currentComponent"
-        v-bind="{ youtube_id, lesson, mini, initialLayout, landscape }"
+        v-bind="{ youtube_id, lesson, mini, initialLayout: layout, landscape }"
         @currentTime="updateCurrentTimeQueryString"
         @onUpdateLayout="onYouTubeUpdateLayout"
         @videoLoaded="onVideoLoaded"
@@ -59,6 +59,7 @@
 
 <script>
 import DateHelper from "@/lib/date-helper";
+import Helper from "@/lib/helper";
 export default {
   props: {
     type: {
@@ -184,6 +185,10 @@ export default {
     onVideoLoaded({ video, duration }) {
       this.video = video;
       this.duration = duration;
+      if (this.layout !== "mini" && !Helper.wide()) {
+        let el = this.$refs["youtube"];
+        if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
+      }
       this.saveHistory({ type: this.type, video, duration });
     },
     close() {

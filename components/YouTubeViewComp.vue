@@ -17,7 +17,7 @@
       autoload: true,
       autoplay: false,
       forcePortrait: false,
-      initialLayout: layout,
+      initialLayout,
     }"
     :key="`transcript-${video.youtube_id}`"
     @ended="updateEnded"
@@ -75,7 +75,6 @@ export default {
   },
   computed: {
     ...mapState("stats", ["stats"]),
-    ...mapState("fullHistory", ["fullHistory"]),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -106,9 +105,6 @@ export default {
       if (this.episodes && this.episodeIndex > -1) {
         return this.episodes[this.episodeIndex + 1];
       }
-    },
-    layout() {
-      return this.mini ? "mini" : this.initialLayout;
     },
   },
   async fetch() {
@@ -141,10 +137,6 @@ export default {
         this.extrasLoaded = true;
         console.log(`YouTube View (on video change): load subs if missing...`);
         let video = await this.loadSubsIfMissing(this.video);
-        if (this.layout !== "mini" && !Helper.wide()) {
-          let el = this.$refs["youtube"];
-          if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
-        }
         this.video = video;
         this.$emit("videoLoaded", {
           video,
@@ -176,8 +168,8 @@ export default {
     },
   },
   methods: {
-    onUpdateLayout() {
-      this.$emit("updateLayout", this.layout);
+    onUpdateLayout(layout) {
+      this.$emit("updateLayout", layout);
     },
     onCurrentTime(currentTime) {
       if (this.currentTime !== currentTime) {
