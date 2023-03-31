@@ -81,8 +81,8 @@ export default {
         }
         if (youtubeId) {
           this.$router.push({
-            name: "youtube-view",
-            params: { youtube_id: youtubeId },
+            name: "video-view",
+            params: { type: "youtube", youtube_id: youtubeId },
           });
         } else if (playlistId) {
           this.$router.push({

@@ -436,7 +436,7 @@ export default {
               show: false,
             },
             {
-              name: "youtube-view",
+              name: "video-view",
               show: false,
             },
             {

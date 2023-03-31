@@ -84,7 +84,10 @@
                         @compositionend.prevent.stop="() => false"
                         :placeholder="
                           episodeCount
-                            ? $t('Search inside this collection ({num} videos)', {num: episodeCount})
+                            ? $t(
+                                'Search inside this collection ({num} videos)',
+                                { num: episodeCount }
+                              )
                             : $t('Filter videos...')
                         "
                         class="input-ghost-dark"
@@ -95,8 +98,11 @@
                       style="opacity: 0.6; line-height: 1.7"
                       v-if="randomEpisodeYouTubeId"
                       :to="{
-                        name: 'youtube-view',
-                        params: { youtube_id: randomEpisodeYouTubeId },
+                        name: 'video-view',
+                        params: {
+                          type: 'youtube',
+                          youtube_id: randomEpisodeYouTubeId,
+                        },
                       }"
                     >
                       <i class="fas fa-random"></i>
@@ -124,10 +130,7 @@
                           class="fas fa-calendar-alt"
                           v-if="sort === '-date'"
                         ></i>
-                        <i
-                          class="fas fa-eye"
-                          v-if="sort === '-views'"
-                        ></i>
+                        <i class="fas fa-eye" v-if="sort === '-views'"></i>
                       </b-button>
                     </b-button-group>
                   </div>
@@ -296,7 +299,7 @@ export default {
     },
     async sort() {
       this.moreVideos = 0;
-      this.videos = undefined
+      this.videos = undefined;
       this.videos = await this.getVideos({
         limit: this.perPage,
         offset: this.moreVideos,
@@ -328,9 +331,9 @@ export default {
   },
   methods: {
     cycleSort() {
-      let sorts = ['title', '-date', '-views']
-      let i = sorts.findIndex(sort => sort === this.sort)
-      this.sort = sorts[(i + 1) % sorts.length]
+      let sorts = ["title", "-date", "-views"];
+      let i = sorts.findIndex((sort) => sort === this.sort);
+      this.sort = sorts[(i + 1) % sorts.length];
     },
     async deleteShow() {
       if (confirm("Are you sure you want to DELETE this show?")) {

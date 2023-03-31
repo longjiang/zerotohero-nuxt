@@ -8,7 +8,9 @@
   <div class="main container-fluid mt-5">
     <div class="row">
       <div :class="{ 'col-sm-12 mb-5': true }">
-        <div class="text-center mb-5">Convert subs from json to CSV (2021-06-16)</div>
+        <div class="text-center mb-5">
+          Convert subs from json to CSV (2021-06-16)
+        </div>
         <div
           :class="{
             'loader text-center mb-4': true,
@@ -43,7 +45,7 @@
           >
             Remove All Dupes
           </button>
-          
+
           <router-link
             v-if="start > 9"
             :to="`/${$l1.code}/${$l2.code}/db-upgrade/${
@@ -63,7 +65,14 @@
           >
             <i class="fa fa-chevron-right"></i>
           </router-link>
-          <b-progress class="mt-3" variant="success" v-if="videosWithJSONSubs.length > 0" :value="videos.length - videosWithJSONSubs.length" :max="videos.length" animated></b-progress>
+          <b-progress
+            class="mt-3"
+            variant="success"
+            v-if="videosWithJSONSubs.length > 0"
+            :value="videos.length - videosWithJSONSubs.length"
+            :max="videos.length"
+            animated
+          ></b-progress>
         </div>
         <template v-if="videos && videos.length > 0">
           <b-table
@@ -77,8 +86,8 @@
             <template #cell(title)="data">
               <router-link
                 :to="{
-                  name: 'youtube-view',
-                  params: { youtube_id: data.item.youtube_id },
+                  name: 'video-view',
+                  params: { type: 'youtube', youtube_id: data.item.youtube_id },
                 }"
               >
                 {{ data.item.title }}
@@ -95,7 +104,7 @@
                   overflow: auto;
                 "
               >
-                {{ data.item.subs_l2 ? data.item.subs_l2.substr(0,100) : '' }}
+                {{ data.item.subs_l2 ? data.item.subs_l2.substr(0, 100) : "" }}
               </div>
             </template>
             <template #cell(actions)="data">
@@ -179,7 +188,7 @@ export default {
     },
     $l2() {
       return this.$store.state.settings.l2;
-    }
+    },
   },
   async mounted() {
     this.videos = await this.getVideos();
@@ -188,7 +197,9 @@ export default {
     async getVideos() {
       let limit = this.perPage;
       let response = await this.$directus.get(
-        `${this.$directus.youtubeVideosTableName(this.$l2.id)}?sort=-id&limit=${limit}&offset=${
+        `${this.$directus.youtubeVideosTableName(
+          this.$l2.id
+        )}?sort=-id&limit=${limit}&offset=${
           this.start
         }&fields=id,youtube_id,l2,title,subs_l2,channel_id,topic,level,lesson&timestamp=${
           this.$adminMode ? Date.now() : 0
@@ -204,7 +215,7 @@ export default {
       );
       for (let video of videos) {
         await Helper.timeout(150);
-        this.remove(video)
+        this.remove(video);
         console.log(`Removing video: ${video.title}`);
       }
     },
@@ -230,11 +241,9 @@ export default {
         // }
         if (seenYouTubeIds.includes(video.youtube_id)) {
           if (!video.lesson) video._rowVariant = "danger";
-        } 
-        else if (video.subs_l2 && seenSubs.includes(video.subs_l2)) {
+        } else if (video.subs_l2 && seenSubs.includes(video.subs_l2)) {
           if (!video.lesson) video._rowVariant = "warning";
-        } 
-        else {
+        } else {
           seenYouTubeIds.push(video.youtube_id);
           seenSubs.push(video.subs_l2);
         }

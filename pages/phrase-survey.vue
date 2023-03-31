@@ -76,7 +76,14 @@
                     :key="`phrase-${index}`"
                   >
                     <router-link
-                      :to="`/${$l1.code}/${$l2.code}/youtube/view/${phrase.youtube_id}/?t=${phrase.starttime}`"
+                      :to="{
+                        name: 'video-view',
+                        params: {
+                          type: 'youtube',
+                          youtube_id: phrase.youtube_id,
+                        },
+                        query: { t: phrase.starttime },
+                      }"
                       class="link-unstyled d-flex mt-1 mb-1"
                       target="_blank"
                     >
@@ -170,7 +177,7 @@ export default {
     },
     $l2() {
       return this.$store.state.settings.l2;
-    }
+    },
   },
   mounted() {
     this.loadShows();
@@ -332,7 +339,11 @@ export default {
           showFilter = `&filter[talk][eq]=${show.replace("talk-", "")}`;
       }
       let response = await this.$directus.get(
-        `${this.$directus.youtubeVideosTableName(this.$l2.id)}?sort=-id&limit=${limit}&offset=${start}&filter[l2][eq]=${this.$l2.id}${showFilter}&fields=*,tv_show.*,talk.*`
+        `${this.$directus.youtubeVideosTableName(
+          this.$l2.id
+        )}?sort=-id&limit=${limit}&offset=${start}&filter[l2][eq]=${
+          this.$l2.id
+        }${showFilter}&fields=*,tv_show.*,talk.*`
       );
       let videos = response.data.data || [];
       if (["all-tv-shows", "all-videos"].includes(show)) {

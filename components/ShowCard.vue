@@ -11,7 +11,10 @@
     >
       <router-link
         class="youtube-thumbnail-wrapper aspect-wrapper d-block"
-        :to="path(show)"
+        :to="{
+          name: 'video-view',
+          params: { type: 'youtube', youtube_id: show.youtube_id },
+        }"
       >
         <img
           :src="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
@@ -19,7 +22,13 @@
         />
       </router-link>
       <div class="tv-show-card-title">
-        <router-link :to="path(show)" class="link-unstyled">
+        <router-link
+          :to="{
+            name: 'video-view',
+            params: { type: 'youtube', youtube_id: show.youtube_id },
+          }"
+          class="link-unstyled"
+        >
           <h6 class="mb-0">
             {{ show.title }}
             <span
@@ -86,7 +95,7 @@
 
 <script>
 import { languageLevels, formatK } from "@/lib/utils";
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 import Vue from "vue";
 export default {
   data() {
@@ -107,7 +116,7 @@ export default {
     },
   },
   computed: {
-    ...mapState('shows', ['categories']),
+    ...mapState("shows", ["categories"]),
     levels() {
       return languageLevels(this.$l2);
     },
@@ -161,9 +170,6 @@ export default {
           show,
         });
       }
-    },
-    path(show) {
-      return `/${this.$l1.code}/${this.$l2.code}/youtube/view/${show.youtube_id}`;
     },
     async toggle(show, property) {
       let toggled = !show[property]; // If true, make it false, and vice versa

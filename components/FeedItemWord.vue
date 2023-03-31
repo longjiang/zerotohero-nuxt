@@ -68,8 +68,8 @@
     </div>
     <router-link
       :to="{
-        name: 'youtube-view',
-        params: { youtube_id: hit.video.youtube_id },
+        name: 'video-view',
+        params: { type: 'youtube', youtube_id: hit.video.youtube_id },
         query: { t: hit.video.subs_l2[hit.lineIndex].starttime },
       }"
       class="hit-thumb"

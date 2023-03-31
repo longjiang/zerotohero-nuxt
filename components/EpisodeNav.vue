@@ -37,7 +37,8 @@
       }"
     >
       {{ $t(show.title) }}
-      {{ largeEpisodeCount ? "(" + $n(largeEpisodeCount) + ")" : "" }} <i class="fa-solid fa-chevron-right ml-1"></i>
+      {{ largeEpisodeCount ? "(" + $n(largeEpisodeCount) + ")" : "" }}
+      <i class="fa-solid fa-chevron-right ml-1"></i>
     </router-link>
     <router-link
       v-if="episodes && episodes.length && show && !largeEpisodeCount"
@@ -65,7 +66,13 @@
     </router-link>
     <router-link
       v-if="episodes && episodes.length > 0"
-      :to="`/${this.$l1.code}/${this.$l2.code}/youtube/view/${this.randomEpisodeYouTubeId}`"
+      :to="{
+        name: 'video-view',
+        params: {
+          type: 'youtube',
+          youtube_id: this.randomEpisodeYouTubeId,
+        },
+      }"
       :class="{
         'btn btn-medium': true,
         'bg-light': skin === 'light',
@@ -137,8 +144,12 @@ export default {
   methods: {
     to(video) {
       return {
-        name: "youtube-view",
-        params: { youtube_id: video.youtube_id, lesson: video.lesson },
+        name: "video-view",
+        params: {
+          type: "youtube",
+          youtube_id: video.youtube_id,
+          lesson: video.lesson,
+        },
       };
     },
   },

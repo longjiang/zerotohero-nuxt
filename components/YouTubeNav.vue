@@ -21,7 +21,8 @@ export default {
           .replace("https://youtu.be/", "")
           .replace(/.*\?v=([^&]*).*/, "$1");
         this.$router.push({
-          path: `/${this.$l1.code}/${this.$l2.code}/youtube/view/` + id,
+          name: "video-view",
+          params: { type: "youtube", youtube_id: id },
         });
       }
     },

@@ -95,7 +95,11 @@
           <span
             class="statistics-item"
             style="color: #aaa"
-            v-if="(showDate || $adminMode) && video.date && !isNaN(Date.parse(video.date))"
+            v-if="
+              (showDate || $adminMode) &&
+              video.date &&
+              !isNaN(Date.parse(video.date))
+            "
           >
             {{ $d(new Date(video.date), "short", $l1.code) }}
           </span>
@@ -384,8 +388,9 @@ export default {
     },
     to() {
       let to = {
-        name: "youtube-view",
+        name: "video-view",
         params: {
+          type: "youtube",
           youtube_id: this.video.youtube_id,
           l1: this.l1 ? this.l1.code : this.$l1 ? this.$l1.code : "en",
           l2: this.l2

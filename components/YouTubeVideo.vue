@@ -257,7 +257,7 @@ export default {
         ) {
           console.log(
             "😭 Looks like this video is unavailable:",
-            `https://www.languageplayer.io/${this.$l1.code}/${this.$l2.code}/youtube/view/${youtube_id}`
+            `https://www.languageplayer.io/${this.$l1.code}/${this.$l2.code}/video-view/youtube/${youtube_id}`
           );
           this.$emit("videoUnavailable", youtube_id);
         }

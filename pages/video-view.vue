@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/youtube/view/:youtube_id?/:lesson?',
+    path: '/:l1/:l2/video-view/:type/:youtube_id?/:lesson?',
     props: true,
     meta: {
       skin: 'dark',
@@ -9,17 +9,20 @@
   }
 </router>
 <template>
-  <div class="youtube-view-page">
-    <VideoViewComp :youtube_id="youtube_id" :lesson="lesson" />
+  <div class="video-view-page">
+    <VideoViewComp v-bind="{ type, youtube_id, lesson }" />
   </div>
 </template>
 
 <script>
 export default {
   props: {
+    type: {
+      type: String, // One of 'youtube' and 'bring-your-own'
+    },
     youtube_id: {
       type: String,
-      required: true,
+      required: false,
     },
     lesson: {
       type: String, // If the video is a "lesson video" (with lesson vocab highlighted), set this to "lesson"

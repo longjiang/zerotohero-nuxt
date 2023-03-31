@@ -148,8 +148,11 @@
               {{ channel.videos.length }} Videos:
               <router-link
                 :to="{
-                  name: 'youtube-view',
-                  params: { youtube_id: channel.videos[0].youtube_id },
+                  name: 'video-view',
+                  params: {
+                    type: 'youtube',
+                    youtube_id: channel.videos[0].youtube_id,
+                  },
                 }"
               >
                 {{
@@ -324,7 +327,8 @@ export default {
           return false;
         return true;
       });
-      if (!this.$adminMode) filteredVideos = uniqueByValue(filteredVideos, 'youtube_id')
+      if (!this.$adminMode)
+        filteredVideos = uniqueByValue(filteredVideos, "youtube_id");
       return filteredVideos;
     },
     shownVideos() {

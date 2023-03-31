@@ -94,8 +94,8 @@
             <template #cell(title)="data">
               <router-link
                 :to="{
-                  name: 'youtube-view',
-                  params: { youtube_id: data.item.youtube_id },
+                  name: 'video-view',
+                  params: { type: 'youtube', youtube_id: data.item.youtube_id },
                 }"
               >
                 {{ data.item.title }}
@@ -205,7 +205,7 @@ export default {
     },
     $l2() {
       return this.$store.state.settings.l2;
-    }
+    },
   },
   async mounted() {
     this.videos = await this.getVideos();
@@ -235,7 +235,9 @@ export default {
           });
           let recoveredCSV = Papa.unparse(recoveredSubs);
           let patchResponse = await this.$directus.patch(
-            `${this.$directus.youtubeVideosTableName(this.$l2.id)}/${video.id}&fields=id`,
+            `${this.$directus.youtubeVideosTableName(this.$l2.id)}/${
+              video.id
+            }&fields=id`,
             { subs_l2: recoveredCSV }
           );
           if (patchResponse && patchResponse.data) {
@@ -255,7 +257,9 @@ export default {
     async getVideos() {
       let limit = this.perPage;
       let response = await this.$directus.get(
-        `${this.$directus.youtubeVideosTableName(this.$l2.id)}?sort=-id&limit=${limit}&offset=${
+        `${this.$directus.youtubeVideosTableName(
+          this.$l2.id
+        )}?sort=-id&limit=${limit}&offset=${
           this.start
         }&fields=id,youtube_id,l2,title,channel_id,topic,level,lesson,subs_l2&timestamp=${
           this.$adminMode ? Date.now() : 0

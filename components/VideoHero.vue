@@ -35,8 +35,8 @@
                 <router-link
                   v-if="!videoUnavailable"
                   :to="{
-                    name: 'youtube-view',
-                    params: { youtube_id: video.youtube_id },
+                    name: 'video-view',
+                    params: { type: 'youtube', youtube_id: video.youtube_id },
                   }"
                   class="btn btn-success"
                 >

@@ -55,8 +55,11 @@
         <router-link
           v-if="currentHit"
           :to="{
-            name: 'youtube-view',
-            params: { youtube_id: currentHit.video.youtube_id },
+            name: 'video-view',
+            params: {
+              type: 'youtube',
+              youtube_id: currentHit.video.youtube_id,
+            },
             query: {
               t: currentHit.video.subs_l2[currentHit.lineIndex].starttime,
             },
@@ -685,24 +688,28 @@ export default {
      */
     getSavedAndMatchedHits(hits) {
       let savedHits = [];
-      let matchedHits = []
+      let matchedHits = [];
       let remainingHits = hits.filter((hit) => {
-        let pass = true
+        let pass = true;
         if (hit.saved) {
           savedHits.push(hit);
-          pass = false
+          pass = false;
         }
-        if (this.context?.youtube_id && hit.video.youtube_id === this.context.youtube_id) {
-          matchedHits.push(hit)
-          pass = false
+        if (
+          this.context?.youtube_id &&
+          hit.video.youtube_id === this.context.youtube_id
+        ) {
+          matchedHits.push(hit);
+          pass = false;
         }
-        return pass
+        return pass;
       });
-      return {savedHits, matchedHits, remainingHits}
+      return { savedHits, matchedHits, remainingHits };
     },
     groupByLength(hits) {
       let hitGroups = {};
-      let {savedHits, matchedHits, remainingHits} = this.getSavedAndMatchedHits(hits)
+      let { savedHits, matchedHits, remainingHits } =
+        this.getSavedAndMatchedHits(hits);
       let lengths = hits.map(
         (hit) => hit.video.subs_l2[hit.lineIndex].line.length
       );
@@ -713,7 +720,10 @@ export default {
           (hit) => hit.video.subs_l2[hit.lineIndex].line.length === length
         );
       }
-      hitGroups = Object.assign({ zthSaved: savedHits, contextMatched: matchedHits }, hitGroups);
+      hitGroups = Object.assign(
+        { zthSaved: savedHits, contextMatched: matchedHits },
+        hitGroups
+      );
       for (let key in hitGroups) {
         hitGroups[key] = hitGroups[key].sort(
           (a, b) => a.leftContext.length - b.leftContext.length
@@ -723,7 +733,8 @@ export default {
     },
     groupContext(context, hits, leftOrRight) {
       let hitGroups = {};
-      let {savedHits, matchedHits, remainingHits} = this.getSavedAndMatchedHits(hits)
+      let { savedHits, matchedHits, remainingHits } =
+        this.getSavedAndMatchedHits(hits);
       for (let c of context.map((s) => s.charAt(0))) {
         if (!hitGroups[c.charAt(0)]) hitGroups[c.charAt(0)] = {};
         hitGroups[c.charAt(0)] = remainingHits.filter((hit) =>
@@ -732,7 +743,10 @@ export default {
             : hit[`${leftOrRight}Context`] === ""
         );
       }
-      hitGroups = Object.assign({ zthSaved: savedHits, contextMatched: matchedHits }, hitGroups);
+      hitGroups = Object.assign(
+        { zthSaved: savedHits, contextMatched: matchedHits },
+        hitGroups
+      );
       for (let key in hitGroups) {
         hitGroups[key] = hitGroups[key].sort((a, b) =>
           a.leftContext.localeCompare(

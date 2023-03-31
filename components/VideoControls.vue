@@ -108,9 +108,9 @@
 
       <div
         v-if="video && showLineList"
-        :class="{ 'youtube-view-line-list': true, 'd-none': !showList }"
+        :class="{ 'video-view-line-list': true, 'd-none': !showList }"
       >
-        <b-input-group class="youtube-view-line-list-filter-wrapper">
+        <b-input-group class="video-view-line-list-filter-wrapper">
           <b-form-input
             v-model.lazy="filterList"
             placeholder="Filter"
@@ -134,7 +134,7 @@
         <div
           v-for="(line, index) in sortedLines"
           :class="{
-            'youtube-view-line-list-item': true,
+            'video-view-line-list-item': true,
             active: currentLine === line,
           }"
           :key="`video-line-list-${index}`"
@@ -575,7 +575,7 @@ export default {
   }
 }
 
-.youtube-view-line-list {
+.video-view-line-list {
   overflow: auto;
   border-radius: 0.3rem;
   background: white;
@@ -591,24 +591,24 @@ export default {
 }
 
 @media screen and (orientation: landscape) {
-  .youtube-view-line-list {
+  .video-view-line-list {
     max-height: calc(100vh - 50vw * 9 / 16 - 2rem);
   }
 }
 
-.youtube-view-line-list .youtube-view-line-list-item {
+.video-view-line-list .video-view-line-list-item {
   padding: 0.2rem 0.7rem;
 }
 
-.youtube-view-line-list-item {
+.video-view-line-list-item {
   cursor: pointer;
 }
 
-.youtube-view-line-list-item.active {
+.video-view-line-list-item.active {
   background-color: #eee;
 }
 
-.youtube-view-line-list-filter-wrapper {
+.video-view-line-list-filter-wrapper {
   padding: 0.25rem;
   background: white;
   width: calc(100% - 0.5rem);

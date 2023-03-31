@@ -31,7 +31,7 @@
           v-if="l1 && l2 && $route.params.l1 && $route.params.l2"
           :class="{
             'zth-secondary-nav-wrapper': true,
-            'd-none': $route.name === 'youtube-view',
+            'd-none': $route.name === 'video-view',
           }"
           variant="menu-bar"
           level="secondary"
@@ -45,13 +45,13 @@
       </client-only>
       <VideoViewComp
         id="overlay-player"
-        ref="youtube-view-comp"
+        ref="video-view-comp"
         v-if="overlayPlayerYouTubeId && $route.params.l2"
         v-bind="{
           youtube_id: overlayPlayerYouTubeId,
           lesson: overlayPlayerLesson,
           mini: overlayPlayerMinimized,
-          key: `youtube-view-comp-${overlayPlayerYouTubeId}`,
+          key: `video-view-comp-${overlayPlayerYouTubeId}`,
         }"
         @close="overlayPlayerClose"
       />
@@ -138,7 +138,7 @@ export default {
       return count;
     },
     overlayPlayerMinimized() {
-      return this.$route.name !== "youtube-view";
+      return this.$route.name !== "video-view";
     },
     classes() {
       let classes = {
@@ -188,7 +188,7 @@ export default {
   created() {
     this.$nuxt.$on("history", this.addFullHistoryItem); // from Language map
     this.$nuxt.$on("animateStar", this.onAnimateStar);
-    if (this.$route.name === "youtube-view") {
+    if (this.$route.name === "video-view") {
       this.overlayPlayerYouTubeId = this.$route.params.youtube_id;
       this.overlayPlayerLesson = this.$route.params.lesson;
     }
@@ -255,7 +255,7 @@ export default {
     $route() {
       this.addFullHistoryItem(this.$route.fullPath);
       if (
-        this.$route.name === "youtube-view" &&
+        this.$route.name === "video-view" &&
         this.$route.params.youtube_id
       ) {
         this.overlayPlayerYouTubeId = this.$route.params.youtube_id;
@@ -432,7 +432,7 @@ export default {
       }
     },
     async onLanguageChange() {
-      let youtube = this.$refs["youtube-view-comp"];
+      let youtube = this.$refs["video-view-comp"];
       if (
         youtube &&
         youtube.video &&
@@ -519,7 +519,7 @@ export default {
 }
 
 .zerotohero-not-wide.zerotohero-with-nav {
-  &:not(.route-youtube-view):not(.route-learning-path) .zth-content {
+  &:not(.route-video-view):not(.route-learning-path) .zth-content {
     padding-bottom: calc(5rem + env(safe-area-inset-bottom));
   }
 }

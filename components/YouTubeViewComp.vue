@@ -2,8 +2,8 @@
 <template>
   <div
     :class="{
-      'youtube-view': true,
-      'youtube-view-minimized': layout === 'mini',
+      'video-view': true,
+      'video-view-minimized': layout === 'mini',
     }"
   >
     <SocialHead
@@ -33,8 +33,8 @@
     <div
       :class="{
         'main-dark main-dark-performant': true,
-        'youtube-view-content': true,
-        'youtube-view-landscape': landscape,
+        'video-view-content': true,
+        'video-view-landscape': landscape,
         fullscreen: layout === 'vertical',
       }"
     >
@@ -149,8 +149,12 @@ export default {
      */
     maximizeVideoTo() {
       return {
-        name: "youtube-view",
-        params: { youtube_id: this.youtube_id, lesson: this.lesson },
+        name: "video-view",
+        params: {
+          type: "youtube",
+          youtube_id: this.youtube_id,
+          lesson: this.lesson,
+        },
       };
     },
     minimizeVideoTo() {
@@ -158,7 +162,7 @@ export default {
         let fullHistoryReversed = [...this.fullHistoryPathsByL1L2].reverse();
         let lastNonYouTubeViewPath = fullHistoryReversed.find(
           (h) =>
-            !h.includes("youtube/view") &&
+            !h.includes("video-view") &&
             h.includes(this.$l1.code + "/" + this.$l2.code) // Must be the same language!
         );
         if (lastNonYouTubeViewPath) return lastNonYouTubeViewPath;
@@ -380,8 +384,9 @@ export default {
     goToPreviousEpisode() {
       if (this.previousEpisode)
         this.$router.push({
-          name: "youtube-view",
+          name: "video-view",
           params: {
+            type: "youtube",
             youtube_id: this.previousEpisode.youtube_id,
             lesson: this.previousEpisode.lesson,
           },
@@ -390,8 +395,9 @@ export default {
     goToNextEpisode() {
       if (this.nextEpisode)
         this.$router.push({
-          name: "youtube-view",
+          name: "video-view",
           params: {
+            type: "youtube",
             youtube_id: this.nextEpisode.youtube_id,
             lesson: this.nextEpisode.lesson,
           },
@@ -649,7 +655,7 @@ export default {
 }
 
 .zerotohero-wide {
-  .youtube-view-content {
+  .video-view-content {
     :deep(.youtube-with-transcript-landscape) {
       .youtube {
         border-radius: 0.3rem 0.3rem 0 0;
@@ -663,7 +669,7 @@ export default {
   }
 }
 
-.youtube-view-content {
+.video-view-content {
   &.fullscreen {
     max-height: calc(100vh - 3rem - env(safe-area-inset-top));
     background-color: black;
@@ -672,12 +678,12 @@ export default {
   }
 }
 
-.youtube-view {
+.video-view {
   transition: all 1s ease-in-out;
   position: static;
   height: 100%;
   // overflow: scroll;
-  &.youtube-view-minimized {
+  &.video-view-minimized {
     position: fixed;
     height: 5rem;
     bottom: calc(env(safe-area-inset-bottom) + 4.88rem);
@@ -691,17 +697,17 @@ export default {
 }
 
 .zerotohero-wide {
-  .youtube-view-minimized {
+  .video-view-minimized {
     width: inherit;
   }
 }
 .zerotohero-not-wide.zerotohero-with-nav {
-  .youtube-view-minimized {
+  .video-view-minimized {
     width: 100%;
   }
 }
 
-.zerotohero-wide #overlay-player.youtube-view-minimized {
+.zerotohero-wide #overlay-player.video-view-minimized {
   bottom: 0;
 }
 </style>

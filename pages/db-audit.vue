@@ -38,9 +38,7 @@
           </button>
           <router-link
             v-if="start > 9"
-            :to="`/${$l1.code}/${$l2.code}/db-audit/${
-              Number(start) - perPage
-            }`"
+            :to="`/${$l1.code}/${$l2.code}/db-audit/${Number(start) - perPage}`"
             class="btn btn-default"
           >
             <i class="fa fa-chevron-left"></i>
@@ -48,9 +46,7 @@
           <span class="ml-3 mr-3">Page {{ start / perPage + 1 }}</span>
           <router-link
             v-if="videos && videos.length > 0"
-            :to="`/${$l1.code}/${$l2.code}/db-audit/${
-              Number(start) + perPage
-            }`"
+            :to="`/${$l1.code}/${$l2.code}/db-audit/${Number(start) + perPage}`"
             class="btn btn-default"
           >
             <i class="fa fa-chevron-right"></i>
@@ -68,8 +64,8 @@
             <template #cell(title)="data">
               <router-link
                 :to="{
-                  name: 'youtube-view',
-                  params: { youtube_id: data.item.youtube_id },
+                  name: 'video-view',
+                  params: { type: 'youtube', youtube_id: data.item.youtube_id },
                 }"
               >
                 {{ data.item.title }}
@@ -86,7 +82,7 @@
                   overflow: auto;
                 "
               >
-                {{ data.item.subs_l2 ? data.item.subs_l2.substr(0,100) : '' }}
+                {{ data.item.subs_l2 ? data.item.subs_l2.substr(0, 100) : "" }}
               </div>
             </template>
             <template #cell(actions)="data">
@@ -104,9 +100,7 @@
         <div class="mt-4 text-center">
           <router-link
             v-if="start > 9"
-            :to="`/${$l1.code}/${$l2.code}/db-audit/${
-              Number(start) - perPage
-            }`"
+            :to="`/${$l1.code}/${$l2.code}/db-audit/${Number(start) - perPage}`"
             class="btn btn-default"
           >
             <i class="fa fa-chevron-left"></i>
@@ -114,9 +108,7 @@
           <span class="ml-3 mr-3">Page {{ start / perPage + 1 }}</span>
           <router-link
             v-if="videos && videos.length > 0"
-            :to="`/${$l1.code}/${$l2.code}/db-audit/${
-              Number(start) + perPage
-            }`"
+            :to="`/${$l1.code}/${$l2.code}/db-audit/${Number(start) + perPage}`"
             class="btn btn-default"
           >
             <i class="fa fa-chevron-right"></i>
@@ -165,7 +157,7 @@ export default {
     },
     $l2() {
       return this.$store.state.settings.l2;
-    }
+    },
   },
   async mounted() {
     this.videos = await this.getVideos();
@@ -174,7 +166,9 @@ export default {
     async getVideos() {
       let limit = this.perPage;
       let response = await this.$directus.get(
-        `${this.$directus.youtubeVideosTableName(this.$l2.id)}?sort=-id&limit=${limit}&offset=${
+        `${this.$directus.youtubeVideosTableName(
+          this.$l2.id
+        )}?sort=-id&limit=${limit}&offset=${
           this.start
         }&fields=id,youtube_id,l2,title,subs_l2,channel_id,topic,level,lesson,tv_show,talk&timestamp=${
           this.$adminMode ? Date.now() : 0
@@ -190,7 +184,7 @@ export default {
       );
       for (let video of videos) {
         await Helper.timeout(150);
-        this.remove(video)
+        this.remove(video);
         console.log(`Removing video: ${video.title}`);
       }
     },
@@ -213,11 +207,9 @@ export default {
       for (let video of videos) {
         if (seenYouTubeIds.includes(video.youtube_id)) {
           if (!video.lesson) video._rowVariant = "danger";
-        } 
-        else if (video.subs_l2 && seenSubs.includes(video.subs_l2)) {
+        } else if (video.subs_l2 && seenSubs.includes(video.subs_l2)) {
           if (!video.lesson) video._rowVariant = "warning";
-        } 
-        else {
+        } else {
           seenYouTubeIds.push(video.youtube_id);
           seenSubs.push(video.subs_l2);
         }
