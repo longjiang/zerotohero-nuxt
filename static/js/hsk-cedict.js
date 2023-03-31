@@ -1,5 +1,9 @@
 importScripts("../vendor/localforage/localforage.js")
 
+const PYTHON_SERVER = 'https://python.zerotohero.ca/'
+
+const PROXY_SERVER = 'https://server.chinesezerotohero.com/'
+
 const Dictionary = {
   file: undefined,
   characterFile: undefined,
@@ -111,6 +115,20 @@ const Dictionary = {
   },
   getWords() {
     return this.words
+  },
+  // json or plain text only, and returns object
+  async proxy(url, cacheLife = -1, encoding = false) {
+    try {
+      let proxyURL = `${PROXY_SERVER}scrape2.php?cache_life=${cacheLife}${encoding ? "&encoding=" + encoding : ""
+        }&url=${encodeURIComponent(url)}`;
+      let response = await axios.get(proxyURL);
+      if (response.data) {
+        return response.data;
+      }
+    } catch (err) {
+      console.log(`Cannot get ${url}`);
+    }
+    return false;
   },
   findPhrases(word) {
     if (word) {
@@ -495,17 +513,59 @@ const Dictionary = {
     }
   },
   getLemmas(traditional) {
-    return this.variantIndex[traditional]
+    let variants = this.variantIndex[traditional]
+    return variants
   },
-  tokenize(text) {
+  async tokenizeChinese(text) {
+    text = text.replace(/-/g, "- ");
+    let url = `${PYTHON_SERVER}lemmatize-chinese?text=${encodeURIComponent(
+      text
+    )}`;
+    let tokenized = await this.proxy(url);
+    let tokens = [];
+    for (let token of tokenized) {
+      if (!token) {
+        tokens.push(" ");
+      } else if (token.pos === 'x') {
+        tokens.push(token.word);
+      } else {
+        tokens.push(token);
+      }
+    }
+    return tokens;
+  },
+  getWordsWithinText(text) {
+    let candidates = this.words.filter(w => text.match(new RegExp(w.simplified + "|" + w.traditional)))
+    return candidates
+  },
+  async tokenize(text) {
     if (this.tokenizationCache[text]) return this.tokenizationCache[text]
-    let tokenized = this.tokenizeRecursively(
-      text,
-      this.subdictFromText(text),
-      this.isTraditional(text)
-    )
-    this.tokenizationCache[text] = tokenized
-    return tokenized
+    let tokenized = await this.tokenizeChinese(text);
+    let final = []
+    for (let index in tokenized) {
+      let token = tokenized[index]
+      let candidates = this.lookupMultiple(
+        token.word
+      );
+      if (token.lemma && token.lemma !== token.word) {
+        candidates = candidates.concat(
+          this.lookupMultiple(
+            token.lemma
+          )
+        );
+      }
+      if (candidates.length === 0 && token.word) {
+        candidates = this.getWordsWithinText(token.word)
+      }
+      final.push({
+        text: token.word,
+        candidates,
+        pos: token.pos,
+      })
+      if (token.word && !this.isChinese(token.word)) final.push(" ")
+    }
+    this.tokenizationCache[text] = final
+    return final
   },
   variants(word) {
     let variants = []
@@ -518,60 +578,6 @@ const Dictionary = {
       }
     }
     return variants
-  },
-  tokenizeRecursively(text, subdict, traditional = false) {
-    const isChinese = subdict.isChinese(text)
-    if (!isChinese) {
-      return [text]
-    }
-    const longest = subdict.longest(text, traditional)
-    if (longest.matches.length > 0) {
-      // for (let word of longest.matches) {
-      //   longest.matches = longest.matches.concat(this.variants(word)) // possbily too slow
-      // }
-      let result = []
-      /* 
-      result = [
-        '我', 
-        {
-          text: '是'
-          candidates: [{...}, {...}, {...}
-        ],
-        '中国人。'
-      ]
-      */
-      for (let textFragment of text.split(longest.text)) {
-        result.push(textFragment) // '我'
-        result.push({
-          text: longest.text,
-          candidates: longest.matches
-        })
-      }
-      result = result.filter(item => item !== '')
-      result.pop() // last item is always useless, remove it
-      var tokens = []
-      for (let item of result) {
-        if (typeof item === 'string') {
-          for (let token of this.tokenizeRecursively(
-            item,
-            subdict,
-            traditional
-          )) {
-            tokens.push(token)
-          }
-        } else {
-          tokens.push(item)
-        }
-      }
-      if (tokens[0] && tokens[0].candidates && tokens[0].candidates[0].simplified.length === 1) {
-        let character = tokens[0].candidates[0].simplified
-        let hskChar = this.lookupHSKChar(character)
-        if (hskChar) tokens[0].candidates[0].level = hskChar.hsk
-      }
-      return tokens
-    } else {
-      return [text]
-    }
   },
   lookupHSKChar(simplified) {
     return this.characters.find(row => row.word === simplified)
@@ -605,13 +611,6 @@ const Dictionary = {
     const trad = this.unique(matchedTraditional).length
     const simp = this.unique(matchedSimplified).length
     return trad > simp
-  },
-  subdictFromText(text) {
-    return this.subdict(
-      this.words.filter(function (row) {
-        return text.includes(row.simplified) || text.includes(row.traditional)
-      })
-    )
   },
   listCharacters() {
     return this.characters

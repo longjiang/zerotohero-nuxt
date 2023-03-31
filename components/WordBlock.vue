@@ -53,9 +53,10 @@
 <script>
 import { timeout, unique, uniqueByValue, isMobile } from "@/lib/utils";
 import { speak } from "@/lib/utils/speak";
+import { mapState } from "vuex";
+import { tify, sify } from "chinese-conv";
 import WordPhotos from "@/lib/word-photos";
 import Klingon from "@/lib/klingon";
-import { mapState } from "vuex";
 
 export default {
   props: {
@@ -84,7 +85,7 @@ export default {
       default: false,
     },
     mappedPronunciation: {
-      type: Array //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
+      type: Array, //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
     },
     context: {
       type: Object,
@@ -130,7 +131,8 @@ export default {
       return l2SettingsOfL2;
     },
     quickGloss() {
-      let definition = this.savedWord?.definitions?.[0] || this.words?.[0]?.definitions?.[0] 
+      let definition =
+        this.savedWord?.definitions?.[0] || this.words?.[0]?.definitions?.[0];
       let quickGloss = definition
         ?.replace(/\s*\(.*\)/, "")
         ?.split(/[,;]\s*/)[0]
@@ -180,7 +182,7 @@ export default {
       if (!pos && this.words && this.words[0]) {
         pos = this.words[0].pos;
       }
-      if (pos) return pos.replace(/\-.*/, '').replace(/\s/g, "-");
+      if (pos) return pos.replace(/\-.*/, "").replace(/\s/g, "-");
     },
     hanja() {
       if (["ko", "vi"].includes(this.$l2.code)) {
@@ -222,16 +224,26 @@ export default {
     },
     attributes() {
       let word = this.savedWord || this.words?.[0];
-      let definition = this.quickGloss
-      let phonetics =
-        this.l2SettingsOfL2.showPinyin && (this.mappedPronunciation || (this.phonetics && this.transliteration
-          ? this.savedTransliteration || this.transliteration
-          : undefined));
+      let definition = this.quickGloss;
+      let phonetics = false;
+      if (this.l2SettingsOfL2.showPinyin) {
+        if (this.mappedPronunciation) phonetics = true;
+        else if (this.phonetics && this.transliteration) {
+          phonetics = this.savedTransliteration || this.transliteration;
+        }
+      }
       let text = this.text;
       if (this.$l2.han && word) {
-        text = this.l2SettingsOfL2.useTraditional
-          ? word.traditional
-          : word.simplified;
+        if (word.simplified === text || word.traditional === text) 
+          text = this.l2SettingsOfL2.useTraditional
+            ? word.traditional
+            : word.simplified;
+        else {
+          text = this.l2SettingsOfL2.useTraditional
+            ? tify(this.text)
+            : sify(this.text);
+          phonetics = this.transliterationprop
+        }
       }
       let hanja =
         this.l2SettingsOfL2.showByeonggi && this.hanja ? this.hanja : undefined;
@@ -249,9 +261,12 @@ export default {
       };
       if (this.mappedPronunciation) {
         if (this.savedWord) {
-          attributes.mappedPronunciation = mapKana(this.text, this.savedWord.kana)
+          attributes.mappedPronunciation = mapKana(
+            this.text,
+            this.savedWord.kana
+          );
         } else {
-          attributes.mappedPronunciation = this.mappedPronunciation
+          attributes.mappedPronunciation = this.mappedPronunciation;
         }
       }
       if (this.popup) {
@@ -521,7 +536,7 @@ export default {
           })
         ).slice(0, 5);
       }
-      this.loadingImages = false
+      this.loadingImages = false;
     },
     togglePopup() {
       if (this.popup) {
@@ -561,16 +576,19 @@ export default {
             this.lookup();
           }
         }
-        let hasImageWorthyWords = false
+        let hasImageWorthyWords = false;
         if (this.words) {
           hasImageWorthyWords = this.words.find((w) => {
-            if (this.$l2.code === 'ja') return true
-            else if (w.pos &&
-              ["proper noun", "noun", "Noun", "name", "n"].includes(w.pos)) return true
-          })
-        }    
+            if (this.$l2.code === "ja") return true;
+            else if (
+              w.pos &&
+              ["proper noun", "noun", "Noun", "name", "n"].includes(w.pos)
+            )
+              return true;
+          });
+        }
         if (hasImageWorthyWords) {
-          this.loadingImages = true
+          this.loadingImages = true;
           this.loadImages();
         }
         this.open = true;
@@ -580,7 +598,7 @@ export default {
             let speed = 0.75;
             let volume = 0.5;
             // Only wiktionary has real human audio
-            let speakComponent = this.$refs.popup?.$refs.speak?.[0]
+            let speakComponent = this.$refs.popup?.$refs.speak?.[0];
             if (
               speakComponent &&
               this.$dictionaryName === "wiktionary-csv" &&
@@ -652,10 +670,12 @@ export default {
         if (dictionary.getLemmas) {
           let allLemmas = [];
           for (let word of words) {
-            let lemmas = await dictionary.getLemmas(word.traditional || word.head);
+            let lemmas = await dictionary.getLemmas(
+              word.traditional || word.head
+            );
             if (lemmas) allLemmas = allLemmas.concat(lemmas);
           }
-          if (allLemmas.length > 0) words = [...words, ...allLemmas] // We put lemmas at the bottom because at time irrelevant words can show up as 'lemmas'
+          if (allLemmas.length > 0) words = [...words, ...allLemmas]; // We put lemmas at the bottom because at time irrelevant words can show up as 'lemmas'
         }
         if (dictionary.findPhrases) {
           for (let word of words) {
