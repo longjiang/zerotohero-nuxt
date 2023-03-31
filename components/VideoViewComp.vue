@@ -1,6 +1,12 @@
 
 <template>
-  <YouTubeViewComp v-bind="{ youtube_id, lesson, mini }" />
+  <div>
+    <YouTubeViewComp
+      v-if="type === 'youtube'"
+      v-bind="{ youtube_id, lesson, mini }"
+    />
+    <BringYourOwnViewComp v-if="type === 'bring-your-own'" />
+  </div>
 </template>
 
 <script>
@@ -13,8 +19,8 @@ import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
 
 export default {
   props: {
-    bringYourOwn: {
-      default: false,
+    type: {
+      default: "youtube", // or 'bring-your-own'
     },
     youtube_id: {
       type: String,

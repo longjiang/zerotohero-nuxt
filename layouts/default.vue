@@ -48,6 +48,7 @@
         ref="video-view-comp"
         v-if="overlayPlayerYouTubeId && $route.params.l2"
         v-bind="{
+          type: overlayPlayerType,
           youtube_id: overlayPlayerYouTubeId,
           lesson: overlayPlayerLesson,
           mini: overlayPlayerMinimized,
@@ -66,7 +67,7 @@
 </template>
 
 <script lang="javascript">
-import Vue from 'vue'
+import Vue from "vue";
 import Config from "@/lib/config";
 import smoothscroll from "smoothscroll-polyfill";
 import Helper from "@/lib/helper";
@@ -188,10 +189,7 @@ export default {
   created() {
     this.$nuxt.$on("history", this.addFullHistoryItem); // from Language map
     this.$nuxt.$on("animateStar", this.onAnimateStar);
-    if (this.$route.name === "video-view") {
-      this.overlayPlayerYouTubeId = this.$route.params.youtube_id;
-      this.overlayPlayerLesson = this.$route.params.lesson;
-    }
+    this.updateOverlayPlayerProps();
   },
   async mounted() {
     if (this.$auth.loggedIn && this.$route.path === "/") {
@@ -254,20 +252,21 @@ export default {
     },
     $route() {
       this.addFullHistoryItem(this.$route.fullPath);
-      if (
-        this.$route.name === "video-view" &&
-        this.$route.params.youtube_id
-      ) {
-        this.overlayPlayerYouTubeId = this.$route.params.youtube_id;
-        this.overlayPlayerLesson = this.$route.params.lesson;
-      }
+      this.updateOverlayPlayerProps()
     },
     "$auth.user"() {
       this.$directus.initAndGetUserData();
     },
   },
   methods: {
-    overlayPlayerClose(youtube_id) {
+    updateOverlayPlayerProps() {
+      if (this.$route.name === "video-view") {
+        this.overlayPlayerType = this.$route.params.type;
+        this.overlayPlayerYouTubeId = this.$route.params.youtube_id;
+        this.overlayPlayerLesson = this.$route.params.lesson;
+      }
+    },
+    overlayPlayerClose() {
       this.overlayPlayerYouTubeId = undefined;
       this.overlayPlayerLesson = undefined;
       // TODO
@@ -452,7 +451,7 @@ export default {
       let l2SettingsOfL2 = {};
       if (this.l2 && this.l2Settings && this.l2Settings[this.l2.code])
         l2SettingsOfL2 = this.l2Settings[this.l2.code];
-      Vue.set(this, 'l2SettingsOfL2', l2SettingsOfL2);
+      Vue.set(this, "l2SettingsOfL2", l2SettingsOfL2);
     },
     loadLanguageSpecificSettings() {
       if (this.settingsLoaded === this.l2.code) return;
