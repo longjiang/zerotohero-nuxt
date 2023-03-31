@@ -535,7 +535,11 @@ const Dictionary = {
     return tokens;
   },
   getWordsWithinText(text) {
-    let candidates = this.words.filter(w => text.match(new RegExp(w.simplified + "|" + w.traditional)))
+    let reducedText = text.replace(/[一个得不]/gi, '')
+    let candidates = this.words.filter(w => {
+      let regex = new RegExp(w.simplified + "|" + w.traditional)
+      return text.match(regex) || reducedText.match(regex)
+    })
     return candidates
   },
   async tokenize(text) {
