@@ -68,8 +68,8 @@
         @ended="updateEnded"
         @previous="goToPreviousEpisode"
         @next="goToNextEpisode"
-        @currentTime="onCurrentTime"
-        @updateLayout="onUpdateLayout"
+        @currentTime="updateCurrentTimeQueryString"
+        @updateLayout="onYouTubeUpdateLayout"
       />
     </div>
   </div>
@@ -78,6 +78,7 @@
 <script>
 import YouTube from "@/lib/youtube";
 import Helper from "@/lib/helper";
+import DateHelper from "@/lib/date-helper";
 import Vue from "vue";
 import { mapState } from "vuex";
 import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
@@ -97,12 +98,6 @@ export default {
       default: false,
       required: false,
     },
-    initialLayout: {
-      default: "vertical",
-    },
-    landscape: {
-      default: false,
-    },
   },
   data() {
     return {
@@ -110,6 +105,7 @@ export default {
       episodes: [],
       extrasLoaded: false,
       fetchDone: false,
+      initialLayout: this.$adminMode ? "horizontal" : "vertical",
       mountedDone: false,
       randomEpisodeYouTubeId: undefined,
       show: undefined,
@@ -118,7 +114,6 @@ export default {
       video: undefined,
       largeEpisodeCount: undefined,
       starttime: 0,
-      layout: this.initialLayout,
     };
   },
   computed: {
@@ -135,6 +130,51 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    fullHistoryPathsByL1L2() {
+      return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
+        l1: this.$l1,
+        l2: this.$l2,
+      });
+    },
+    landscape() {
+      if (this.forcePortrait) return false;
+      if (process.browser && this.viewportWidth && this.viewportHeight) {
+        let landscape = this.viewportWidth > this.viewportHeight;
+        return landscape;
+      }
+    },
+    /**
+     * The router link that we send the user to when they close the player.
+     */
+    maximizeVideoTo() {
+      return {
+        name: "video-view",
+        params: {
+          type: "youtube",
+          youtube_id: this.youtube_id,
+          lesson: this.lesson,
+        },
+      };
+    },
+    minimizeVideoTo() {
+      if (this.fullHistoryPathsByL1L2) {
+        let fullHistoryReversed = [...this.fullHistoryPathsByL1L2].reverse();
+        let lastNonYouTubeViewPath = fullHistoryReversed.find(
+          (h) =>
+            !h.includes("video-view") &&
+            h.includes(this.$l1.code + "/" + this.$l2.code) // Must be the same language!
+        );
+        if (lastNonYouTubeViewPath) return lastNonYouTubeViewPath;
+        else return { name: "explore-media" };
+      }
+      return { name: "explore-media" };
+    },
+    minimizeToggleRouterLinkTo() {
+      return this.mini ? this.maximizeVideoTo : this.minimizeVideoTo;
+    },
+    layout() {
+      return this.mini ? "mini" : this.initialLayout;
     },
     currentTimeInSeconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
@@ -156,6 +196,10 @@ export default {
       }
     },
   },
+  validate({ params, query, store }) {
+    if (params.youtube_id && params.youtube_id.length > 1) return true;
+    return false;
+  },
   async fetch() {
     this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
     try {
@@ -174,6 +218,22 @@ export default {
       console.log(e);
     }
   },
+  destroyed() {
+    this.unbindKeys();
+  },
+  beforeDestroy() {
+    if (this.unsubscribe) this.unsubscribe();
+  },
+  mounted() {
+    if (typeof this.$store.state.settings !== "undefined") {
+      this.initialLayout = this.$store.state.settings.layout;
+    }
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type.startsWith("settings")) {
+        this.initialLayout = this.$store.state.settings.layout;
+      }
+    });
+  },
   watch: {
     /**
      * Called when the video is first fetched
@@ -191,10 +251,8 @@ export default {
           if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
         }
         this.video = video;
-        this.$emit("videoLoaded", {
-          video,
-          duration: this.$refs.youtube?.duration,
-        });
+        this.saveHistory();
+        this.bindKeys();
         if (this.$store.state.shows.showsLoaded[this.$l2.code]) {
           if (!this.show) this.setShow();
         }
@@ -221,15 +279,6 @@ export default {
     },
   },
   methods: {
-    onUpdateLayout() {
-      this.$emit("updateLayout", this.layout);
-    },
-    onCurrentTime(currentTime) {
-      if (this.currentTime !== currentTime) {
-        this.currentTime = currentTime;
-        this.$emit("currentTime", this.currentTime);
-      }
-    },
     async getEpisodes(episodeCount, limit) {
       // If we already have the episodes stored in the show (in Vuex), and the episodes include the current video, just return the episodes
       let videos = [];
@@ -353,6 +402,13 @@ export default {
             lesson: this.nextEpisode.lesson,
           },
         });
+    },
+    close() {
+      if (this.layout !== "mini") this.$router.push(this.minimizeVideoTo);
+      this.$emit("close", this.youtube_id);
+    },
+    onYouTubeUpdateLayout(layout) {
+      this.initialLayout = layout;
     },
     mergeVideos(video, youtube_video) {
       let merged = {};
@@ -481,11 +537,88 @@ export default {
         }
       }
     },
+    updateCurrentTimeQueryString(currentTime) {
+      if (typeof window !== "undefined") {
+        this.currentTime = currentTime;
+        const params = new URLSearchParams(window.location.search);
+        const queryStringTime = params.get("t") ? Number(params.get("t")) : 0;
+        if (this.currentTimeInSeconds !== queryStringTime) {
+          window.history.replaceState(
+            "",
+            "",
+            `?t=${this.currentTimeInSeconds}`
+          );
+          if (this.currentTimeInSeconds % 60 === 0) this.saveHistory(); // Only update history (and push to the server) every minute
+        }
+      }
+    },
     async updateEnded(ended) {
       if (ended !== this.ended) {
         this.ended = ended;
       }
     },
+    bindKeys() {
+      window.onkeydown = (e) => {
+        if (
+          !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
+          !e.metaKey &&
+          !e.target.getAttribute("contenteditable")
+        ) {
+          if (e.code === "KeyM") {
+            if (this.$refs.youtube && this.$refs.youtube.$refs.videoControls)
+              this.$refs.youtube.$refs.videoControls.toggleSpeed();
+            return false;
+          }
+          if (e.code === "Space") {
+            this.$refs.youtube ? this.$refs.youtube.togglePaused() : "";
+            return false;
+          }
+          if (["ArrowUp", "ArrowLeft"].includes(e.code)) {
+            this.$refs.youtube.$refs.transcript.goToPreviousLine();
+            return false;
+          }
+          if (["ArrowDown", "ArrowRight"].includes(e.code)) {
+            this.$refs.youtube.$refs.transcript.goToNextLine();
+            return false;
+          }
+          if (["KeyR"].includes(e.code)) {
+            this.$refs.youtube.$refs.transcript.rewind();
+            return false;
+          }
+        }
+      };
+    },
+    saveHistory() {
+      console.log(`YouTube View: Saving history...`);
+      if (typeof this.video === "undefined") return;
+      let data = {
+        type: "video",
+        id: `${this.$l2.code}-video-${this.video.youtube_id}`,
+        date: DateHelper.unparseDate(new Date()),
+        l1: this.$l1.code,
+        l2: this.$l2.code,
+        video: {
+          id: this.video.id,
+          title: this.video.title,
+          youtube_id: this.video.youtube_id,
+          starttime: this.currentTimeInSeconds,
+        },
+      };
+      if (this.$refs.youtube && this.$refs.youtube.duration) {
+        data.video.duration = this.$refs.youtube.duration;
+        data.video.progress = data.video.starttime / data.video.duration;
+      }
+      this.$store.dispatch("history/add", data); // history's ADD_HISTORY_ITEM mutation automatically checks if this item is already in the history based on it's id (e.g. zh-video-Y23x9L4)
+    },
+    unbindKeys() {
+      window.onkeydown = null;
+    },
+  },
+  activated() {
+    this.bindKeys();
+  },
+  deactivated() {
+    this.unbindKeys();
   },
 };
 </script>
