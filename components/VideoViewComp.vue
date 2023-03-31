@@ -47,7 +47,7 @@
 
       <component
         :is="currentComponent"
-        v-bind="{ youtube_id, lesson, mini, initialLayout: layout, landscape }"
+        v-bind="{ youtube_id, lesson, mini, initialLayout: layout, landscape, starttime }"
         @currentTime="updateCurrentTimeQueryString"
         @onUpdateLayout="onYouTubeUpdateLayout"
         @videoLoaded="onVideoLoaded"

@@ -56,6 +56,9 @@ export default {
     landscape: {
       default: false,
     },
+    starttime: {
+      default: 0,
+    },
   },
   data() {
     return {
@@ -108,7 +111,6 @@ export default {
     },
   },
   async fetch() {
-    this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
     try {
       console.log(`YouTube View (Fetch): Getting saved video...`);
       let savedVideo, videoFromApi;
