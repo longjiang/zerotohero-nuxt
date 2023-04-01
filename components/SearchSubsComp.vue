@@ -1000,7 +1000,7 @@ export default {
       color: rgba(255, 255, 255, 0.877);
     }
   }
-  :deep(.youtube-transcript-column) {
+  :deep(.video-transcript-column) {
     min-height: 5rem; // Make sure the black space around the subs don't shift too much between lines
   }
 }
@@ -1020,7 +1020,7 @@ export default {
     display: none !important;
   }
 
-  :deep(.youtube-transcript-column) {
+  :deep(.video-transcript-column) {
     margin-top: 0.5rem;
   }
 

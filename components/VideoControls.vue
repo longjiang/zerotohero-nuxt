@@ -153,7 +153,7 @@
       hide-footer
       modal-class="safe-padding-top mt-4"
       size="md"
-      :title="show ? show.title : $t('About this video')"
+      :title="show ? show.title : $t('Video Information')"
     >
       <div class="video-info-inner">
         <h6>{{ video.title }}</h6>

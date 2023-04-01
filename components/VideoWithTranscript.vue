@@ -13,12 +13,12 @@
         'order-2': landscape && $l2.direction === 'rtl',
       }"
     >
-      <div class="video-wrapper" :key="'youtube-' + video.youtube_id">
+      <div class="video-wrapper" :key="`video-${type}-${video.youtube_id}`">
         <LazyVideo
-          ref="youtube"
+          ref="video"
           :class="{ 'd-none': collapsed }"
           v-bind="{
-            type: 'youtube',
+            type,
             speed,
             cc,
             autoload,
@@ -76,10 +76,7 @@
           v-if="landscape && related && related.length > 0"
           class="pl-3 pt-4"
         >
-          <div
-            class="video-info video-info-top"
-            v-if="layout === 'horizontal'"
-          >
+          <div class="video-info video-info-top" v-if="layout === 'horizontal'">
             <h3
               v-if="video.title"
               :class="{
@@ -124,14 +121,14 @@
         </div>
       </div>
     </div>
-    <div class="youtube-transcript-column">
+    <div class="video-transcript-column">
       <!-- this is necessary for updating the transcript upon srt drop -->
       <div class="d-none">{{ transcriptKey }}</div>
       <SyncedTranscript
         v-if="video.subs_l2 && video.subs_l2.length > 0"
         ref="transcript"
         :class="{ 'd-none': layout === 'mini' }"
-        :key="'transcript-' + video.youtube_id + '-' + transcriptKey"
+        :key="`transcript-${type}-${video.youtube_id}-${transcriptKey}`"
         v-bind="{
           lines: video.subs_l2 || [],
           parallellines: video.subs_l1 || [],
@@ -154,17 +151,14 @@
           useSmoothScroll,
           video,
         }"
-        @seek="seekYouTube"
+        @seek="seekVideo"
         @pause="pause"
         @play="play"
         @speechStart="speechStart"
         @speechEnd="speechEnd"
         @updateTranslation="updateTranslation"
       />
-      <div
-        class="video-info video-info-bottom"
-        v-if="layout === 'horizontal'"
-      >
+      <div class="video-info video-info-bottom" v-if="layout === 'horizontal'">
         <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
           <Loader :sticky="true" message="Loading subtitles..." />
         </div>
@@ -177,12 +171,17 @@
           "
         >
           <h6>
-            This YouTube video does not have closed captions (CC) in
-            {{ $l2.name }}.
+            {{
+              $t("This video does not have closed captions (CC) in {l2}.", {
+                l2: $t($l2.name),
+              })
+            }}
           </h6>
           <div class="mt-3">
-            If you have the subtitles file (.srt or .ass), you can add it by
-            dragging &amp; dropping it above.
+            <i18n path="If you have the subtitles file (.srt or .ass), you can add it by uploading in the Video Information area. The Video Information area can be accessed by pressing the {0} Info or {1} Episode Select button in the video controls.">
+              <i class="fa-solid fa-circle-info mr-1"></i>
+              <i class="fa-regular fa-rectangle-history mr-1"></i>
+            </i18n>
           </div>
         </div>
         <client-only>
@@ -233,6 +232,10 @@ import { shuffle, safeShuffle, uniqueByValue } from "@/lib/utils/array";
 
 export default {
   props: {
+    type: {
+      type: String,
+      default: "youtube", // or 'bring-your-own'
+    },
     video: {
       type: Object,
     },
@@ -435,7 +438,7 @@ export default {
       this.$refs.transcript.repeatMode = this.repeatMode;
       this.$refs.transcript.audioMode = this.audioMode;
     }
-    if (this.$refs.youtube) this.$refs.youtube.speed = this.speed;
+    if (this.$refs.video) this.$refs.video.speed = this.speed;
   },
   watch: {
     async "video.youtube_id"() {
@@ -451,9 +454,9 @@ export default {
     },
     startLineIndex() {
       if (
-        this.$refs.youtube &&
-        this.$refs.youtube.player &&
-        this.$refs.youtube.player.seekTo
+        this.$refs.video &&
+        this.$refs.video.player &&
+        this.$refs.video.player.seekTo
       ) {
         this.rewind();
       }
@@ -465,7 +468,7 @@ export default {
   methods: {
     onSeek(percentage) {
       let time = this.duration * percentage;
-      this.seekYouTube(time);
+      this.seekVideo(time);
     },
     updateTranscript() {
       this.transcriptKey++;
@@ -573,7 +576,7 @@ export default {
         textLines.length > 0 &&
         (!this.video.subs_l2 || this.video.subs_l2.length === 0)
       ) {
-        let duration = this.$refs.youtube.getDuration();
+        let duration = this.$refs.video.getDuration();
         let increment = duration / textLines.length;
         subs_l2 = textLines.map((line, lineIndex) => {
           return {
@@ -658,14 +661,14 @@ export default {
     rewind() {
       if (this.video.subs_l2[this.startLineIndex]) {
         let starttime = this.video.subs_l2[this.startLineIndex].starttime;
-        this.seekYouTube(starttime);
+        this.seekVideo(starttime);
       } else if (this.$refs.transcript) this.$refs.transcript.rewind();
     },
     pause() {
-      this.$refs.youtube.pause();
+      this.$refs.video.pause();
     },
     togglePaused() {
-      this.$refs.youtube.togglePaused();
+      this.$refs.video.togglePaused();
     },
     async play() {
       if (this.audioMode) {
@@ -675,7 +678,7 @@ export default {
           this.$refs.transcript.doAudioModeStuff();
         }
       } else {
-        this.$refs.youtube.play();
+        this.$refs.video.play();
         if (this.$refs.transcript) {
           this.$refs.transcript.preventCurrentTimeUpdate = true;
           await timeout(500);
@@ -702,8 +705,8 @@ export default {
     getHighlightLineIndex(term) {
       return this.video.subs_l2.findIndex((line) => line.line.includes(term));
     },
-    seekYouTube(starttime) {
-      this.$refs.youtube.seek(starttime);
+    seekVideo(starttime) {
+      this.$refs.video.seek(starttime);
     },
     toggleFullscreenMode() {
       this.layout = this.layout === "horizontal" ? "vertical" : "horizontal";
@@ -742,7 +745,7 @@ export default {
       }
     }
   }
-  .youtube-transcript-column {
+  .video-transcript-column {
     flex: 1;
     display: flex;
     align-items: center;
@@ -797,7 +800,7 @@ export default {
   .video-column {
     flex: 0;
   }
-  .youtube-transcript-column {
+  .video-transcript-column {
     flex: 1;
     :deep(.synced-transcript) {
       height: 100%;
@@ -826,12 +829,12 @@ export default {
 .video-with-transcript-horizontal-landscape {
   display: flex;
   .video-column,
-  .youtube-transcript-column {
+  .video-transcript-column {
     flex: 1;
   }
 }
 
-.youtube-transcript-column {
+.video-transcript-column {
   width: 100%;
 }
 

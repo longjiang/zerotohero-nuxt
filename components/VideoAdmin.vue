@@ -115,7 +115,7 @@
         @dragleave="over = false"
       >
         <i class="fa fa-file mr-2"></i>
-        Drop .srt or .ass files here to add subtitles
+        {{ $t('Drop .srt or .ass files here to add subtitles') }}
       </drop>
       <div class="video-edit-public" v-if="$adminMode">
         <b-button
@@ -131,15 +131,15 @@
           variant="success"
         >
           <i class="fas fa-plus mr-1"></i>
-          Save Video for Everyone
+          {{ $t('Save Video for Everyone') }}
         </b-button>
         <span v-if="saving">
           <i class="fas fa-hourglass mr-2 text-secondary"></i>
-          Adding...
+          {{ $t('Adding...') }}
         </span>
         <span v-if="video && video.id && isNewVideo">
           <i class="fas fa-check-circle mr-2 text-success"></i>
-          Added
+          {{ $t('Added') }}
         </span>
         <div
           v-if="
@@ -150,12 +150,7 @@
           style="font-size: 0.7em; opacity: 0.7"
           class="mt-2"
         >
-          Once saved, the video will be available for everyone to see. You can
-          find it at
-          <i class="fas fa-photo-video"></i>
-          Media →
-          <i class="fa fa-play"></i>
-          New Videos.
+          {{ $t('Once saved, the video will be available for everyone to see. You can find it from Media > YouTube, then arrange the videos by date.') }}
         </div>
       </div>
       <div class="show-and-date" v-if="$adminMode">
