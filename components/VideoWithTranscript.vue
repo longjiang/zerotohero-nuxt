@@ -33,6 +33,7 @@
           @ended="onEnded"
           @duration="onDuration"
           @videoUnavailable="onVideoUnavailable"
+          @l1TranscriptLoaded="onL1TranscriptLoaded"
         />
         <LazyVideoControls
           v-if="showControls && video"
@@ -178,7 +179,9 @@
             }}
           </h6>
           <div class="mt-3">
-            <i18n path="If you have the subtitles file (.srt or .ass), you can add it by uploading in the Video Information area. The Video Information area can be accessed by pressing the {0} Info or {1} Episode Select button in the video controls.">
+            <i18n
+              path="If you have the subtitles file (.srt or .ass), you can add it by uploading in the Video Information area. The Video Information area can be accessed by pressing the {0} Info or {1} Episode Select button in the video controls."
+            >
               <i class="fa-solid fa-circle-info mr-1"></i>
               <i class="fa-regular fa-rectangle-history mr-1"></i>
             </i18n>
@@ -317,7 +320,7 @@ export default {
     useAutoTextSize: {
       default: false,
     },
-    related: Array
+    related: Array,
   },
   data() {
     return {
@@ -436,7 +439,11 @@ export default {
       this.layout = this.initialLayout;
     },
   },
-  methods: {onCurrentTime(currentTime) {
+  methods: {
+    onL1TranscriptLoaded() {
+      this.updateLayout();
+    },
+    onCurrentTime(currentTime) {
       if (this.neverPlayed) {
         this.neverPlayed = false;
         if (this.layout !== "vertical" && this.$refs["transcript"])
@@ -583,7 +590,6 @@ export default {
         Vue.set(this.video, "subs_l1", subs_l1);
       }
     },
-
 
     onVideoUnavailable(youtube_id) {
       if (youtube_id === this.video.youtube_id) {

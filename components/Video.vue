@@ -23,6 +23,7 @@
     @ended="onEnded"
     @duration="onDuration"
     @videoUnavailable="onVideoUnavailable"
+    @l1TranscriptLoaded="$emit('l1TranscriptLoaded')"
   />
 </template>
 

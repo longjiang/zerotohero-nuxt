@@ -4,7 +4,7 @@
       :style="{
         backgroundImage:
           posterOnly || (!autoplay && !loading)
-            ? `url(https://img.youtube.com/vi/${youtube}/hqdefault.jpg)`
+            ? `url(https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg)`
             : 'none',
         'background-repeat': 'no-repeat',
         'background-size': 'cover',
@@ -25,6 +25,8 @@
 <script>
 import $ from "jquery";
 import Helper from "@/lib/helper";
+import YouTube from "@/lib/youtube";
+import Vue from "vue";
 
 export default {
   props: {
@@ -79,7 +81,7 @@ export default {
   },
   data() {
     return {
-      youtubeIframeID: "youtube-" + this.video.youtube_id + '-' + this._uid,
+      youtubeIframeID: "youtube-" + this.video.youtube_id + "-" + this._uid,
       time: 0,
       neverPlayed: true,
       player: undefined,
@@ -122,11 +124,12 @@ export default {
       return playing;
     },
   },
-  mounted() {
+  async mounted() {
     if (this.autoload && !this.posterOnly) {
       this.loadYouTubeiFrame();
     }
     this.time = this.starttime;
+    await this.getL1Transcript();
   },
   destroyed() {
     if (this.player) {
@@ -147,6 +150,16 @@ export default {
     },
   },
   methods: {
+    async getL1Transcript() {
+      let subs_l1 = await YouTube.getL1Transcript(
+        this.video,
+        this.$l1,
+        this.$l2,
+        this.$adminMode
+      );
+      Vue.set(this.video, "subs_l1", subs_l1);
+      this.$emit('l1TranscriptLoaded')
+    },
     getDuration() {
       if (this.player) {
         let duration = this.player.getDuration();
@@ -164,12 +177,12 @@ export default {
       this.loading = true;
       let id = this.$el.querySelector(".youtube-iframe").getAttribute("id");
       this.removeYouTubeAPIVars();
-      let start = parseInt(this.starttime)
+      let start = parseInt(this.starttime);
       let playerVars = {
         start,
         autoplay: this.autoplay ? 1 : 0,
         cc_load_policy: this.cc ? 1 : 0,
-        cc_lang_pref: this.$l1 ? this.$l1.code : 'en',
+        cc_lang_pref: this.$l1 ? this.$l1.code : "en",
         iv_load_policy: 0,
         showinfo: 0,
         playsinline: 1,
@@ -266,7 +279,8 @@ export default {
     playerIsThisPlayerNotSomeOtherPlayer() {
       if (this.player && this.player.getVideoData) {
         let video_id = this.player.getVideoData().video_id;
-        let playerIsThisPlayerNotSomeOtherPlayer = this.video.youtube_id === video_id;
+        let playerIsThisPlayerNotSomeOtherPlayer =
+          this.video.youtube_id === video_id;
         return playerIsThisPlayerNotSomeOtherPlayer;
       }
     },
