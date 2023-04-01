@@ -28,8 +28,8 @@ import Helper from "@/lib/helper";
 
 export default {
   props: {
-    youtube: {
-      type: String,
+    video: {
+      type: Object,
     },
     starttime: {
       type: Number,
@@ -79,7 +79,7 @@ export default {
   },
   data() {
     return {
-      youtubeIframeID: "youtube-" + this.youtube + '-' + this._uid,
+      youtubeIframeID: "youtube-" + this.video.youtube_id + '-' + this._uid,
       time: 0,
       neverPlayed: true,
       player: undefined,
@@ -187,7 +187,7 @@ export default {
         this.player = new YT.Player(id, {
           height: "390",
           width: "640",
-          videoId: this.youtube,
+          videoId: this.video.youtube_id,
           playerVars,
           events: {
             onStateChange: (event) => {
@@ -233,7 +233,7 @@ export default {
                 }
               }
               if (this.muted && this.player) this.player.mute();
-              this.reportIfVideoUnavailableUponAutoload(this.youtube);
+              this.reportIfVideoUnavailableUponAutoload(this.video.youtube_id);
             },
           },
         });
@@ -245,14 +245,14 @@ export default {
       // playerState of -1 means video is unstarted, but if a user skips the video as soon as it is loaded the video state is still -1
       // which will trigger a 'videoUnavailable' false alarm
       if (
-        this.youtube === youtube_id && // Make sure the video hasn't changed on us
+        this.video.youtube_id === youtube_id && // Make sure the video hasn't changed on us
         this.player &&
         this.player.getPlayerState &&
         this.player.getPlayerState() === -1
       ) {
         await Helper.timeout(1000); // So le'ts make sure we give it a second before doing anything
         if (
-          this.youtube === youtube_id &&
+          this.video.youtube_id === youtube_id &&
           this.player.getPlayerState() === -1
         ) {
           console.log(
@@ -266,7 +266,7 @@ export default {
     playerIsThisPlayerNotSomeOtherPlayer() {
       if (this.player && this.player.getVideoData) {
         let video_id = this.player.getVideoData().video_id;
-        let playerIsThisPlayerNotSomeOtherPlayer = this.youtube === video_id;
+        let playerIsThisPlayerNotSomeOtherPlayer = this.video.youtube_id === video_id;
         return playerIsThisPlayerNotSomeOtherPlayer;
       }
     },

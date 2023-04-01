@@ -24,7 +24,7 @@
             autoload,
             autoplay,
             startAtRandomTime,
-            youtube: video.youtube_id,
+            video,
             controls: false,
             starttime: startTimeOrLineIndex,
           }"

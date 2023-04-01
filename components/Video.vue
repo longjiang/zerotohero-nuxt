@@ -1,9 +1,8 @@
 <template>
   <YouTubeVideo
-    v-if="youtube"
-    :key="`${type}-${youtube}`"
+    v-if="video?.youtube_id"
+    :key="`${type}-${video.youtube_id}`"
     v-bind="{
-      youtube,
       starttime,
       stoptime,
       autoload,
@@ -16,6 +15,7 @@
       posterOnly,
       controls,
       muted,
+      video
     }"
     ref="video"
     @paused="onPaused"
@@ -33,8 +33,8 @@ export default {
       type: String,
       default: "youtube",
     },
-    youtube: {
-      type: String,
+    video: {
+      type: Object,
     },
     starttime: {
       type: Number,
