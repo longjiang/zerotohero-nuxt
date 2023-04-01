@@ -1,5 +1,5 @@
 <template>
-  <div class="youtube" :key="youtube">
+  <div class="youtube">
     <div
       :style="{
         backgroundImage:
