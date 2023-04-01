@@ -24,11 +24,13 @@
     <LazyYouTubeVideo
       v-if="randomShowRandomEpisode"
       layout="vertical"
-      :youtube="randomShowRandomEpisode.youtube_id"
-      :ref="`youtube`"
-      :autoload="true"
-      :autoplay="true"
-      :startAtRandomTime="true"
+      v-bind="{
+        video: randomShowRandomEpisode,
+        autoload: true,
+        autoplay: true,
+        startAtRandomTime: true
+      }"
+      ref="youtube"
       @currentTime="updateCurrentTime"
     />
     <div class="text-center pt-3 pb-3" v-if="randomShowRandomEpisode">

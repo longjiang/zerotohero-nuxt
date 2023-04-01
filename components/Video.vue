@@ -1,7 +1,7 @@
 <template>
-  <YouTubeVideo
-    v-if="video?.youtube_id"
-    :key="`${type}-${video.youtube_id}`"
+  <component
+    :is="currentComponent"
+    :key="`${type}-${video?.youtube_id}`"
     v-bind="{
       starttime,
       stoptime,
@@ -84,7 +84,6 @@ export default {
     },
   },
   data() {
-    return {};
   },
   computed: {
     $l1() {
@@ -94,6 +93,16 @@ export default {
     $l2() {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
+    },
+    currentComponent() {
+      switch (this.type) {
+        case "youtube":
+          return "YouTubeVideo";
+        case "bring-your-own":
+          return "BringYourOwnVideo";
+        default:
+          return "YouTubeVideo";
+      }
     },
   },
   methods: {

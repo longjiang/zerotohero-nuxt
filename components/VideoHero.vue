@@ -9,14 +9,16 @@
       <div class="bottom-overlay"></div>
       <LazyYouTubeVideo
         ref="youtube"
+        v-bind="{
+          autoload: !isMobile,
+          autoplay: !isMobile,
+          muted,
+          cc: false,
+          video,
+          posterOnly: isMobile,
+          icon: false
+        }"
         @videoUnavailable="onVideoUnavailable"
-        :autoload="!isMobile"
-        :autoplay="!isMobile"
-        :muted="muted"
-        :cc="false"
-        :youtube="video.youtube_id"
-        :posterOnly="isMobile"
-        :icon="false"
       />
     </div>
     <div class="hero-video-info-wrapper" v-if="wide">
