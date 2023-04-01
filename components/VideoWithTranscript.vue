@@ -28,10 +28,10 @@
             controls: false,
             starttime: startTimeOrLineIndex,
           }"
-          @paused="updatePaused"
-          @currentTime="updateCurrentTime"
-          @ended="updateEnded"
-          @duration="updateDuration"
+          @paused="onPaused"
+          @currentTime="onCurrentTime"
+          @ended="onEnded"
+          @duration="onDuration"
           @videoUnavailable="onVideoUnavailable"
         />
         <LazyVideoControls
@@ -57,6 +57,7 @@
           @play="play"
           @pause="pause"
           @rewind="rewind"
+          @seek="seek"
           @updateCollapsed="(c) => (this.collapsed = c)"
           @updateAudioMode="(a) => (this.audioMode = a)"
           @updateSpeed="(s) => (speed = s)"
@@ -70,7 +71,6 @@
           @goToNextLine="
             $refs.transcript ? $refs.transcript.goToNextLine() : null
           "
-          @seek="onSeek"
         />
         <div
           v-if="landscape && related && related.length > 0"
@@ -102,11 +102,11 @@
               :showTextEditing="true"
               :video="video"
               ref="videoAdmin1"
-              @showSubsEditing="toggleShowSubsEditing"
-              @updateTranslation="updateTranslation"
-              @updateOriginalText="updateOriginalText"
-              @enableTranslationEditing="toggleEnableTranslationEditing"
-              @updateTranscript="updateTranscript"
+              @showSubsEditing="onShowSubsEditing"
+              @updateTranslation="onUpdateTranslation"
+              @updateOriginalText="onUpdateOriginalText"
+              @enableTranslationEditing="onEnableTranslationEditing"
+              @updateTranscript="onUpdateTranscript"
             />
             <EpisodeNav
               :video="video"
@@ -151,12 +151,12 @@
           useSmoothScroll,
           video,
         }"
-        @seek="seekVideo"
+        @seek="seek"
         @pause="pause"
         @play="play"
-        @speechStart="speechStart"
-        @speechEnd="speechEnd"
-        @updateTranslation="updateTranslation"
+        @speechStart="onSpeechStart"
+        @speechEnd="onSpeechEnd"
+        @updateTranslation="onUpdateTranslation"
       />
       <div class="video-info video-info-bottom" v-if="layout === 'horizontal'">
         <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
@@ -186,8 +186,8 @@
         </div>
         <client-only>
           <EpisodeNav
+            v-if="type === 'youtube'"
             :video="video"
-            v-if="pro"
             :skin="skin"
             :episodes="episodes"
             :show="show"
@@ -200,15 +200,15 @@
             ref="videoAdmin2"
             :class="{ 'mt-5': true }"
             :video="video"
-            @showSubsEditing="toggleShowSubsEditing"
-            @updateTranslation="updateTranslation"
-            @updateOriginalText="updateOriginalText"
-            @updateTranscript="updateTranscript"
-            @enableTranslationEditing="toggleEnableTranslationEditing"
+            @showSubsEditing="onShowSubsEditing"
+            @updateTranslation="onUpdateTranslation"
+            @updateOriginalText="onUpdateOriginalText"
+            @updateTranscript="onUpdateTranscript"
+            @enableTranslationEditing="onEnableTranslationEditing"
           />
         </client-only>
         <div
-          v-if="related && related.length > 0"
+          v-if="type === 'youtube' && related && related.length > 0"
           class="pr-2 pb-5 mb-5"
           style="padding-left: 2rem !important"
         >
@@ -465,19 +465,169 @@ export default {
       this.layout = this.initialLayout;
     },
   },
-  methods: {
-    onSeek(percentage) {
-      let time = this.duration * percentage;
-      this.seekVideo(time);
+  methods: {onCurrentTime(currentTime) {
+      if (this.neverPlayed) {
+        this.neverPlayed = false;
+        if (this.layout !== "vertical" && this.$refs["transcript"])
+          this.$refs["transcript"].scrollTo(
+            this.$refs.transcript.currentLineIndex
+          );
+      }
+      if (this.currentTime !== currentTime) {
+        this.currentTime = currentTime;
+        this.$emit("currentTime", this.currentTime);
+      }
+      if (this.$refs.transcript) {
+        this.$refs.transcript.currentTime = currentTime;
+        if (this.$refs.videoControls) {
+          this.$refs.videoControls.currentLine =
+            this.$refs.transcript.currentLine;
+        }
+      }
+      if (this.$refs.videoControls) {
+        this.$refs.videoControls.currentTime = currentTime;
+      }
     },
-    updateTranscript() {
+    onDuration(duration) {
+      this.duration = duration;
+    },
+    onEnableTranslationEditing(enableTranslationEditing) {
+      this.enableTranslationEditing = enableTranslationEditing;
+      if (this.$refs.videoAdmin1)
+        this.$refs.videoAdmin1.enableTranslationEditing =
+          enableTranslationEditing;
+      if (this.$refs.videoAdmin2)
+        this.$refs.videoAdmin2.enableTranslationEditing =
+          enableTranslationEditing;
+    },
+
+    onEnded(ended) {
+      if (ended !== this.ended) {
+        this.ended = ended;
+        this.$emit("ended", this.ended);
+      }
+      if (this.$refs.transcript) this.$refs.transcript.ended = ended;
+    },
+    onPaused(paused) {
+      if (paused !== this.paused) {
+        this.paused = paused;
+        this.$emit("paused", this.paused);
+      }
+      if (this.$refs.transcript) this.$refs.transcript.paused = paused;
+    },
+    goToLine(line) {
+      if (this.$refs.transcript) this.$refs.transcript.goToLine(line);
+    },
+
+    pause() {
+      this.$refs.video.pause();
+    },
+
+    async play() {
+      if (this.audioMode) {
+        if (this.speaking) {
+          this.$refs.transcript.stopAudioModeStuff();
+        } else {
+          this.$refs.transcript.doAudioModeStuff();
+        }
+      } else {
+        this.$refs.video.play();
+        if (this.$refs.transcript) {
+          this.$refs.transcript.preventCurrentTimeUpdate = true;
+          await timeout(500);
+          this.$refs.transcript.preventCurrentTimeUpdate = false;
+        }
+      }
+    },
+
+    rewind() {
+      if (this.video.subs_l2[this.startLineIndex]) {
+        let starttime = this.video.subs_l2[this.startLineIndex].starttime;
+        this.seek(starttime);
+      } else if (this.$refs.transcript) this.$refs.transcript.rewind();
+    },
+    seek(starttime) {
+      this.$refs.video.seek(starttime);
+    },
+
+    onShowSubsEditing(showSubsEditing) {
+      this.showSubsEditing = showSubsEditing;
+      if (this.$refs.videoAdmin1)
+        this.$refs.videoAdmin1.showSubsEditing = showSubsEditing;
+      if (this.$refs.videoAdmin2)
+        this.$refs.videoAdmin2.showSubsEditing = showSubsEditing;
+    },
+    onSpeechEnd() {
+      this.$emit("speechEnd");
+      this.speaking = false;
+    },
+
+    onSpeechStart() {
+      this.$emit("speechStart");
+      this.speaking = true;
+    },
+
+    onUpdateOriginalText(text) {
+      let textLines = text.split("\n").filter((t) => t !== "");
+      let subs_l2;
+      if (
+        textLines.length > 0 &&
+        (!this.video.subs_l2 || this.video.subs_l2.length === 0)
+      ) {
+        let duration = this.$refs.video.getDuration();
+        let increment = duration / textLines.length;
+        subs_l2 = textLines.map((line, lineIndex) => {
+          return {
+            starttime: increment * lineIndex,
+            line,
+          };
+        });
+      } else {
+        subs_l2 = textLines.map((line, lineIndex) => {
+          if (this.video.subs_l2[lineIndex]) {
+            return {
+              starttime: this.video.subs_l2[lineIndex].starttime,
+              line,
+            };
+          }
+        });
+      }
+      Vue.set(this.video, "subs_l2", subs_l2);
+    },
+
+    onUpdateTranscript() {
       this.transcriptKey++;
     },
+    onUpdateTranslation(translation) {
+      let translationLines = translation.split("\n").filter((t) => t !== "");
+      if (translationLines.length > 0 && this.video.subs_l2) {
+        let subs_l1 = this.video.subs_l2.map((line, lineIndex) => {
+          if (line && translationLines[lineIndex])
+            return {
+              starttime: line.starttime,
+              line: translationLines[lineIndex],
+              l1: this.$l1.code,
+            };
+        });
+        Vue.set(this.video, "subs_l1", subs_l1);
+      }
+    },
+
+
     onVideoUnavailable(youtube_id) {
       if (youtube_id === this.video.youtube_id) {
         this.$emit("videoUnavailable", youtube_id);
       }
     },
+    togglePaused() {
+      this.$refs.video.togglePaused();
+    },
+
+    /***
+     * NON EVENT DRIVEN FUNCTIONS:
+     */
+
+
     updateLayout() {
       this.viewportWidth = this.$el.clientWidth;
       this.viewportHeight = window.innerHeight;
@@ -552,161 +702,11 @@ export default {
     onL1TranscriptLoaded() {
       this.updateLayout();
     },
-    updateDuration(duration) {
-      this.duration = duration;
-    },
-    updateTranslation(translation) {
-      let translationLines = translation.split("\n").filter((t) => t !== "");
-      if (translationLines.length > 0 && this.video.subs_l2) {
-        let subs_l1 = this.video.subs_l2.map((line, lineIndex) => {
-          if (line && translationLines[lineIndex])
-            return {
-              starttime: line.starttime,
-              line: translationLines[lineIndex],
-              l1: this.$l1.code,
-            };
-        });
-        Vue.set(this.video, "subs_l1", subs_l1);
-      }
-    },
-    updateOriginalText(text) {
-      let textLines = text.split("\n").filter((t) => t !== "");
-      let subs_l2;
-      if (
-        textLines.length > 0 &&
-        (!this.video.subs_l2 || this.video.subs_l2.length === 0)
-      ) {
-        let duration = this.$refs.video.getDuration();
-        let increment = duration / textLines.length;
-        subs_l2 = textLines.map((line, lineIndex) => {
-          return {
-            starttime: increment * lineIndex,
-            line,
-          };
-        });
-      } else {
-        subs_l2 = textLines.map((line, lineIndex) => {
-          if (this.video.subs_l2[lineIndex]) {
-            return {
-              starttime: this.video.subs_l2[lineIndex].starttime,
-              line,
-            };
-          }
-        });
-      }
-      Vue.set(this.video, "subs_l2", subs_l2);
-    },
-    toggleShowSubsEditing(showSubsEditing) {
-      this.showSubsEditing = showSubsEditing;
-      if (this.$refs.videoAdmin1)
-        this.$refs.videoAdmin1.showSubsEditing = showSubsEditing;
-      if (this.$refs.videoAdmin2)
-        this.$refs.videoAdmin2.showSubsEditing = showSubsEditing;
-    },
-    toggleEnableTranslationEditing(enableTranslationEditing) {
-      this.enableTranslationEditing = enableTranslationEditing;
-      if (this.$refs.videoAdmin1)
-        this.$refs.videoAdmin1.enableTranslationEditing =
-          enableTranslationEditing;
-      if (this.$refs.videoAdmin2)
-        this.$refs.videoAdmin2.enableTranslationEditing =
-          enableTranslationEditing;
-    },
-    updateEnded(ended) {
-      if (ended !== this.ended) {
-        this.ended = ended;
-        this.$emit("ended", this.ended);
-      }
-      if (this.$refs.transcript) this.$refs.transcript.ended = ended;
-    },
-    updatePaused(paused) {
-      if (paused !== this.paused) {
-        this.paused = paused;
-        this.$emit("paused", this.paused);
-      }
-      if (this.$refs.transcript) this.$refs.transcript.paused = paused;
-    },
-    updateCurrentTime(currentTime) {
-      if (this.neverPlayed) {
-        this.neverPlayed = false;
-        if (this.layout !== "vertical" && this.$refs["transcript"])
-          this.$refs["transcript"].scrollTo(
-            this.$refs.transcript.currentLineIndex
-          );
-      }
-      if (this.currentTime !== currentTime) {
-        this.currentTime = currentTime;
-        this.$emit("currentTime", this.currentTime);
-      }
-      if (this.$refs.transcript) {
-        this.$refs.transcript.currentTime = currentTime;
-        if (this.$refs.videoControls) {
-          this.$refs.videoControls.currentLine =
-            this.$refs.transcript.currentLine;
-        }
-      }
-      if (this.$refs.videoControls) {
-        this.$refs.videoControls.currentTime = currentTime;
-      }
-    },
     goToPreviousLine() {
       if (this.$refs.transcript) this.$refs.transcript.goToPreviousLine();
     },
     goToNextLine() {
       if (this.$refs.transcript) this.$refs.transcript.goToNextLine();
-    },
-    goToLine(line) {
-      if (this.$refs.transcript) this.$refs.transcript.goToLine(line);
-    },
-    rewind() {
-      if (this.video.subs_l2[this.startLineIndex]) {
-        let starttime = this.video.subs_l2[this.startLineIndex].starttime;
-        this.seekVideo(starttime);
-      } else if (this.$refs.transcript) this.$refs.transcript.rewind();
-    },
-    pause() {
-      this.$refs.video.pause();
-    },
-    togglePaused() {
-      this.$refs.video.togglePaused();
-    },
-    async play() {
-      if (this.audioMode) {
-        if (this.speaking) {
-          this.$refs.transcript.stopAudioModeStuff();
-        } else {
-          this.$refs.transcript.doAudioModeStuff();
-        }
-      } else {
-        this.$refs.video.play();
-        if (this.$refs.transcript) {
-          this.$refs.transcript.preventCurrentTimeUpdate = true;
-          await timeout(500);
-          this.$refs.transcript.preventCurrentTimeUpdate = false;
-        }
-      }
-    },
-    speechStart() {
-      this.$emit("speechStart");
-      this.speaking = true;
-    },
-    speechEnd() {
-      this.$emit("speechEnd");
-      this.speaking = false;
-    },
-    getHighlightStartTime(term) {
-      let matchedLines = this.video.subs_l2.filter((line) =>
-        line.line.includes(term)
-      );
-      if (matchedLines.length > 0) {
-        return matchedLines[0].starttime;
-      }
-    },
-    getHighlightLineIndex(term) {
-      return this.video.subs_l2.findIndex((line) => line.line.includes(term));
-    },
-    seekVideo(starttime) {
-      this.$refs.video.seek(starttime);
     },
     toggleFullscreenMode() {
       this.layout = this.layout === "horizontal" ? "vertical" : "horizontal";

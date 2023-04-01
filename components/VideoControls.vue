@@ -430,7 +430,8 @@ export default {
     },
     onSeek(event) {
       let percentage = event.target.value;
-      this.$emit("seek", percentage * 0.01);
+      let time = percentage * 0.01 * this.duration
+      this.$emit("seek", time);
     },
     pause() {
       this.$emit("pause");
