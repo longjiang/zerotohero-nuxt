@@ -51,7 +51,6 @@ export default {
       startLineIndex: 0,
       video: undefined,
       largeEpisodeCount: undefined,
-      starttime: 0,
     };
   },
   computed: {
