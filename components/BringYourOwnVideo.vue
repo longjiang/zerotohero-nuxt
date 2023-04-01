@@ -1,31 +1,45 @@
 <template>
   <div class="video">
-    <div class="upload-wrapper pl-4 pr-4 pt-3" v-if="!loaded">
-      <div class="upload">
-        <div class="w-100 p-4">
-          <label for="video-upload">
-            {{ $t("Choose a video (mp4 or mkv) to open:") }}
-          </label>
-          <br />
-          <input type="file" accept=".mp4,.mkv" @change="loadVideo"  />
+    <client-only>
+      <div class="upload-wrapper pl-4 pr-4 pt-3" v-if="!loaded">
+        <div class="upload">
+          <div class="w-100 p-4">
+            <label for="video-upload">
+              {{
+                $t("Choose a video ({formats}) to open:", {
+                  formats: formats.join(", "),
+                })
+              }}
+            </label>
+            <br />
+            <input
+              type="file"
+              :accept="formats.map((f) => '.' + f).join(',')"
+              @change="loadVideo"
+            />
+          </div>
         </div>
       </div>
-    </div>
-    <video
-      ref="videoPlayer"
-      class="video-player"
-      v-if="loaded"
-      @timeupdate="onTimeUpdate"
-      @pause="onPause"
-      @play="onPlay"
-      @ended="onEnded"
-      @loadedmetadata="onLoadedMetadata"
-      @click="togglePaused"
-    >
-      <source :src="video.url" type="video/mp4" />
-      <source :src="video.url" type="video/mkv" />
-      {{ $t("Your browser does not support the video tag.") }}
-    </video>
+      <video
+        ref="videoPlayer"
+        class="video-player"
+        v-if="loaded"
+        @timeupdate="onTimeUpdate"
+        @pause="onPause"
+        @play="onPlay"
+        @ended="onEnded"
+        @loadedmetadata="onLoadedMetadata"
+        @click="togglePaused"
+      >
+        <source
+          v-for="format in formats"
+          :src="video.url"
+          :type="'video/' + format"
+          :key="`video-source-${format}`"
+        />
+        {{ $t("Your browser does not support the video tag.") }}
+      </video>
+    </client-only>
   </div>
 </template>
 
@@ -90,6 +104,7 @@ export default {
       duration: undefined,
       loaded: false,
       randomSeeked: false,
+      formats: []
     };
   },
   computed: {
@@ -111,6 +126,7 @@ export default {
   },
   async mounted() {
     this.time = this.starttime;
+    this.formats = this.getFormats()
   },
   destroyed() {
     const videoPlayer = this.$refs.videoPlayer;
@@ -130,6 +146,27 @@ export default {
     },
   },
   methods: {
+    getFormats() {
+      const video = document.createElement("video");
+
+      // The different video formats to check for
+      const formats = [
+        "mp4",
+        "webm",
+        "ogg",
+        "mov",
+        "wmv",
+        "avi",
+        "flv",
+        "f4v",
+        "swf",
+        "mkv",
+      ];
+      const supportedFormats = formats.filter(
+        (format) => video.canPlayType("video/" + format) !== ""
+      );
+      return supportedFormats;
+    },
     open() {
       this.$emit("updateVideo", {});
       this.loaded = false;
