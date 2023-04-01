@@ -1032,7 +1032,7 @@ export default {
     text-align: center;
   }
 
-  :deep(.youtube-with-transcript) {
+  :deep(.video-with-transcript) {
     width: calc(1080px / 2);
     height: calc(1920px / 2);
     background: #010101;

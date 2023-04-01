@@ -542,7 +542,7 @@ export default {
   padding-right: 0.5rem;
 }
 
-.youtube-with-transcript-horizontal-portrait .video-controls {
+.video-with-transcript-horizontal-portrait .video-controls {
   background: black;
 }
 

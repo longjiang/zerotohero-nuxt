@@ -1,11 +1,11 @@
 <template>
   <div
-    :class="`youtube-with-transcript youtube-with-transcript-${layout} ${
+    :class="`video-with-transcript video-with-transcript-${layout} ${
       layout === 'horizontal'
-        ? 'youtube-with-transcript-horizontal-' +
+        ? 'video-with-transcript-horizontal-' +
           (landscape ? 'landscape' : 'portrait')
         : ''
-    } ${useAutoTextSize ? 'youtube-with-transcript-auto-size' : ''}`"
+    } ${useAutoTextSize ? 'video-with-transcript-auto-size' : ''}`"
   >
     <div
       :class="{
@@ -716,7 +716,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.youtube-with-transcript-mini {
+.video-with-transcript-mini {
   display: flex;
   .main-dark {
     background: rgba(0, 0, 0, 0.5);
@@ -771,7 +771,7 @@ export default {
       (100vh - 3rem - env(safe-area-inset-top) - 12rem - 4.625rem) * 16 / 9
     );
   }
-  .youtube-with-transcript-vertical.youtube-with-transcript-auto-size {
+  .video-with-transcript-vertical.video-with-transcript-auto-size {
     height: calc(
       100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom) -
         4.75rem
@@ -779,7 +779,7 @@ export default {
   }
 }
 
-.youtube-with-transcript-horizontal {
+.video-with-transcript-horizontal {
   .youtube-video-column {
     position: sticky;
     top: 0;
@@ -787,7 +787,7 @@ export default {
   }
 }
 
-.youtube-with-transcript-vertical.youtube-with-transcript-auto-size {
+.video-with-transcript-vertical.video-with-transcript-auto-size {
   display: flex;
   height: calc(
     100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)
@@ -812,7 +812,7 @@ export default {
 }
 
 #zerotohero {
-  .youtube-with-transcript-horizontal .youtube-video-column {
+  .video-with-transcript-horizontal .youtube-video-column {
     top: calc(env(safe-area-inset-top, 0) + 2.7rem);
   }
 }
@@ -822,7 +822,7 @@ export default {
   padding-right: 0.667rem;
 }
 
-.youtube-with-transcript-horizontal-landscape {
+.video-with-transcript-horizontal-landscape {
   display: flex;
   .youtube-video-column,
   .youtube-transcript-column {
