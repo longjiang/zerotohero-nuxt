@@ -164,11 +164,12 @@
         <b>{{ $t("VIDEO SOURCE") }}:</b>
         <span>{{ currentHit.video.title }}</span>
       </div>
-      <LazyYouTubeWithTranscript
+      <LazyVideoWithTranscript
         v-if="currentHit"
         :ref="`youtube-${hitIndex}`"
         class="main-dark"
         v-bind="{
+          type: 'youtube',
           video: currentHit.video,
           showAnimation: !reels,
           initialLayout: 'vertical',
