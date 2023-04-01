@@ -260,7 +260,7 @@ export default {
         hanja,
       };
       if (this.mappedPronunciation) {
-        if (this.savedWord && mapKana) {
+        if (this.savedWord && typeof mapKana !== 'undefined') {
           attributes.mappedPronunciation = mapKana(
             this.text,
             this.savedWord.kana
