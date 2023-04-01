@@ -429,7 +429,7 @@ export default {
   overflow: auto;
   margin-top: 0 !important;
 }
-.compare-search-subs.fullscreen :deep(.youtube-video-wrapper) {
+.compare-search-subs.fullscreen :deep(.video-wrapper) {
   max-width: calc((100vh - 9rem) * 16 / 9);
   margin: 0 auto;
 }

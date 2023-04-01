@@ -1,6 +1,6 @@
 <template>
   <div
-    :key="`youtube-video-info-${video.youtube_id}-${videoInfoKey}`"
+    :key="`video-info-${video.youtube_id}-${videoInfoKey}`"
     :class="{
       'episode-nav': true,
       'episode-nav-dark': skin === 'dark',

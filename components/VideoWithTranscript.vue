@@ -9,11 +9,11 @@
   >
     <div
       :class="{
-        'youtube-video-column col-sm-12 p-0': true,
+        'video-column col-sm-12 p-0': true,
         'order-2': landscape && $l2.direction === 'rtl',
       }"
     >
-      <div class="youtube-video-wrapper" :key="'youtube-' + video.youtube_id">
+      <div class="video-wrapper" :key="'youtube-' + video.youtube_id">
         <LazyYouTubeVideo
           ref="youtube"
           :class="{ 'd-none': collapsed }"
@@ -76,7 +76,7 @@
           class="pl-3 pt-4"
         >
           <div
-            class="youtube-video-info youtube-video-info-top"
+            class="video-info video-info-top"
             v-if="layout === 'horizontal'"
           >
             <h3
@@ -161,7 +161,7 @@
         @updateTranslation="updateTranslation"
       />
       <div
-        class="youtube-video-info youtube-video-info-bottom"
+        class="video-info video-info-bottom"
         v-if="layout === 'horizontal'"
       >
         <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
@@ -721,7 +721,7 @@ export default {
   .main-dark {
     background: rgba(0, 0, 0, 0.5);
   }
-  .youtube-video-column {
+  .video-column {
     height: 5rem;
     width: 8.88rem;
     max-width: 8.88rem;
@@ -748,7 +748,7 @@ export default {
     .synced-transcript {
       width: 100%;
     }
-    .youtube-video-info {
+    .video-info {
       display: none;
     }
   }
@@ -758,7 +758,7 @@ export default {
   border: 2px dashed #ccc;
 }
 
-.youtube-video-wrapper {
+.video-wrapper {
   max-width: calc((100vh - 3rem - env(safe-area-inset-top) - 12rem) * 16 / 9);
   margin: 0 auto;
   position: sticky;
@@ -766,7 +766,7 @@ export default {
 }
 
 .zerotohero-not-wide {
-  .youtube-video-wrapper {
+  .video-wrapper {
     max-width: calc(
       (100vh - 3rem - env(safe-area-inset-top) - 12rem - 4.625rem) * 16 / 9
     );
@@ -780,7 +780,7 @@ export default {
 }
 
 .video-with-transcript-horizontal {
-  .youtube-video-column {
+  .video-column {
     position: sticky;
     top: 0;
     z-index: 2;
@@ -793,7 +793,7 @@ export default {
     100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)
   );
   flex-direction: column;
-  .youtube-video-column {
+  .video-column {
     flex: 0;
   }
   .youtube-transcript-column {
@@ -812,19 +812,19 @@ export default {
 }
 
 #zerotohero {
-  .video-with-transcript-horizontal .youtube-video-column {
+  .video-with-transcript-horizontal .video-column {
     top: calc(env(safe-area-inset-top, 0) + 2.7rem);
   }
 }
 
-.youtube-video-info {
+.video-info {
   padding-left: 0.667rem;
   padding-right: 0.667rem;
 }
 
 .video-with-transcript-horizontal-landscape {
   display: flex;
-  .youtube-video-column,
+  .video-column,
   .youtube-transcript-column {
     flex: 1;
   }
@@ -834,7 +834,7 @@ export default {
   width: 100%;
 }
 
-.youtube-video-info {
+.video-info {
   padding-left: 1rem;
   padding-right: 1rem;
 }
