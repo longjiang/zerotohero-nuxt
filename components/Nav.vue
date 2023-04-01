@@ -425,8 +425,8 @@ export default {
                 },
                 {
                   name: "video-view",
-                  title: "Play Video File",
-                  icon: "fas fa-file",
+                  title: "Local Video File",
+                  icon: "fas fa-folder-open",
                   show: true,
                   params: { type: "bring-your-own" },
                 },
