@@ -1,12 +1,11 @@
 
 <template>
   <LazyVideoWithTranscript
-    v-if="video"
-    ref="youtube"
+    ref="video"
     skin="dark"
     v-bind="{
-      type: 'youtube',
-      video,
+      type: 'bring-your-own',
+      video: { },
       starttime,
       startLineIndex,
       useAutoTextSize: true,

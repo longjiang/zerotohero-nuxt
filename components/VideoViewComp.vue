@@ -7,11 +7,17 @@
     }"
   >
     <SocialHead
+      v-if="(this.type === 'youtube')"
       :title="`${video ? video.title + ' | ' : ''}Learn ${
         $l2.name
       } with Language Player`"
-      :description="`Study the transcript of this video with a popup dictionary`"
+      description="Study the transcript of this video with a popup dictionary"
       :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
+    />
+    <SocialHead
+      v-else
+      :title="`Play Your Own Video | Learn ${$l2.name} with Language Player`"
+      description="Study the transcript of this video with a popup dictionary"
     />
     <div
       :class="`toggle-wrapper ${layout !== 'mini' ? 'maximized' : 'minimized'}`"
@@ -39,6 +45,7 @@
       }"
     >
       <div
+        v-if="type === 'youtube'"
         :class="{ 'loader text-center': true, 'd-none': video }"
         style="padding-top: 30vh; padding-bottom: 30vh"
       >
@@ -47,12 +54,18 @@
 
       <component
         :is="currentComponent"
-        v-bind="{ youtube_id, lesson, mini, initialLayout: layout, landscape, starttime }"
+        v-bind="{
+          youtube_id,
+          lesson,
+          mini,
+          initialLayout: layout,
+          landscape,
+          starttime,
+        }"
         @currentTime="updateCurrentTimeQueryString"
         @onUpdateLayout="onYouTubeUpdateLayout"
         @videoLoaded="onVideoLoaded"
       />
-
     </div>
   </div>
 </template>
@@ -67,7 +80,6 @@ export default {
     },
     youtube_id: {
       type: String,
-      required: true,
     },
     lesson: {
       type: String, // If the video is a "lesson video" (with lesson vocab highlighted), set this to "lesson"

@@ -60,7 +60,7 @@
           >
             <span v-if="!collapsed">
               <i class="fa-solid fa-caret-left mr-1"></i>
-              {{ $t('Collapse Menu') }}
+              {{ $t("Collapse Menu") }}
             </span>
             <span v-else><i class="fa-solid fa-caret-right"></i></span>
           </b-button>
@@ -424,6 +424,13 @@ export default {
                   show: true,
                 },
                 {
+                  name: "video-view",
+                  title: "Play Video File",
+                  icon: "fas fa-file",
+                  show: true,
+                  params: { type: "bring-your-own" },
+                },
+                {
                   name: "watch-history",
                   icon: "fas fa-history",
                   title: "My History",
@@ -568,7 +575,7 @@ export default {
                   icon: "fas fa-bookmark",
                   title: "My Phrases",
                   show: true,
-                  badge: this.savedPhrasesCount
+                  badge: this.savedPhrasesCount,
                 },
                 {
                   name: "phrase",
