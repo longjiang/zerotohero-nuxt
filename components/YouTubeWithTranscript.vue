@@ -462,32 +462,6 @@ export default {
     },
   },
   methods: {
-    getTextSize() {
-      let el = this.$el.querySelector(".synced-transcript");
-      if (el) {
-        let styles = getComputedStyle(el);
-        let height = Number(styles.height.replace("px", ""));
-        let width = Number(styles.width.replace("px", ""));
-        let area = height * width;
-        let averageL2LineLength =
-          this.video.subs_l2
-            .map((l) => (l.line ? l.line.length : 0))
-            .reduce((p, c) => p + c) / this.video.subs_l2.length;
-        let averageL1LineLength = this.video.subs_l1
-          ? this.video.subs_l1
-              .map((l) => (l.line ? l.line.length : 0))
-              .reduce((p, c) => p + c) / this.video.subs_l1.length
-          : 0;
-        let length = averageL1LineLength + averageL2LineLength;
-        let vertical = this.viewportWidth < this.viewportHeight;
-        const SCALE_FACTOR = vertical ? 1200 : 2000; // Make text bigger on phones
-        let textSize = area / length / SCALE_FACTOR;
-        textSize = Math.min(textSize, 2.2);
-        textSize = Math.max(textSize, 1.2);
-
-        this.textSize = textSize;
-      }
-    },
     onSeek(percentage) {
       let time = this.duration * percentage;
       this.seekYouTube(time);
@@ -503,7 +477,6 @@ export default {
     updateLayout() {
       this.viewportWidth = this.$el.clientWidth;
       this.viewportHeight = window.innerHeight;
-      // if (this.useAutoTextSize) this.getTextSize(); // Too buggy for production
     },
     async getL1Transcript() {
       if (this.$l2.code === this.$l1.code) return;
