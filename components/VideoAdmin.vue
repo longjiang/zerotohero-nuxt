@@ -751,6 +751,8 @@ export default {
   border: 2px dashed rgba(136, 136, 136, 0.5);
   color: rgba(136, 136, 136, 0.85);
   border-radius: 0.25rem;
+  max-width: calc((100vh - 3rem - env(safe-area-inset-top) - 12rem) * 16 / 9 - 3rem);
+  margin: 0 auto;
 
   &:over {
     border: 2px dashed rgba(136, 136, 136, 0.8);
