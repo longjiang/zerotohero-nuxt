@@ -29,6 +29,7 @@
             starttime: startTimeOrLineIndex,
           }"
           @paused="onPaused"
+          @updateVideo="onUpdateVideo"
           @currentTime="onCurrentTime"
           @ended="onEnded"
           @duration="onDuration"
@@ -36,7 +37,7 @@
           @l1TranscriptLoaded="onL1TranscriptLoaded"
         />
         <LazyVideoControls
-          v-if="showControls && video"
+          v-if="showControls && (video.youtube_id || video.url)"
           ref="videoControls"
           v-bind="{
             video,
@@ -48,6 +49,8 @@
             episodes,
             showLineList,
             showFullscreenToggle,
+            showInfoButton,
+            showOpenButton,
             showCollapse: layout === 'horizontal',
             duration,
             initialTime: starttime ? starttime : 0,
@@ -59,6 +62,7 @@
           @pause="pause"
           @rewind="rewind"
           @seek="seek"
+          @open="onOpen"
           @updateCollapsed="(c) => (this.collapsed = c)"
           @updateAudioMode="(a) => (this.audioMode = a)"
           @updateSpeed="(s) => (speed = s)"
@@ -73,10 +77,7 @@
             $refs.transcript ? $refs.transcript.goToNextLine() : null
           "
         />
-        <div
-          v-if="landscape"
-          class="pl-3 pt-4"
-        >
+        <div v-if="landscape" class="pl-3 pt-4">
           <div class="video-info video-info-top" v-if="layout === 'horizontal'">
             <h3
               v-if="video.title"
@@ -99,6 +100,7 @@
               </span>
             </h3>
             <VideoAdmin
+              v-if="type === 'youtube'"
               :showVideoDetails="true"
               :showTextEditing="true"
               :video="video"
@@ -110,6 +112,7 @@
               @updateTranscript="onUpdateTranscript"
             />
             <EpisodeNav
+              v-if="episodes"
               :video="video"
               :episodes="episodes"
               :showType="showType"
@@ -125,6 +128,20 @@
     <div class="video-transcript-column">
       <!-- this is necessary for updating the transcript upon srt drop -->
       <div class="d-none">{{ transcriptKey }}</div>
+
+      <div class="pl-4 pr-4" v-if="video && !video.subs_l2">
+        <VideoAdmin
+          :showVideoDetails="true"
+          :showTextEditing="true"
+          :video="video"
+          ref="videoAdmin1"
+          @showSubsEditing="onShowSubsEditing"
+          @updateTranslation="onUpdateTranslation"
+          @updateOriginalText="onUpdateOriginalText"
+          @enableTranslationEditing="onEnableTranslationEditing"
+          @updateTranscript="onUpdateTranscript"
+        />
+      </div>
       <SyncedTranscript
         v-if="video.subs_l2 && video.subs_l2.length > 0"
         ref="transcript"
@@ -167,6 +184,7 @@
           class="mt-4 mb-5 rounded"
           style="color: rgba(136, 136, 136, 0.85)"
           v-if="
+            type !== 'bring-your-own' &&
             (!video.subs_l2 || video.subs_l2.length === 0) &&
             !video.checkingSubs
           "
@@ -189,7 +207,7 @@
         </div>
         <client-only>
           <EpisodeNav
-            v-if="type === 'youtube'"
+            v-if="episodes"
             :video="video"
             :skin="skin"
             :episodes="episodes"
@@ -255,6 +273,10 @@ export default {
     },
     showInfoButton: {
       // Whether to show an "i" button that toggles the video information display modal
+      type: Boolean,
+      default: false,
+    },
+    showOpenButton: {
       type: Boolean,
       default: false,
     },
@@ -440,8 +462,15 @@ export default {
     },
   },
   methods: {
+    onUpdateVideo(video) {
+      this.$emit("updateVideo", video);
+    },
     onL1TranscriptLoaded() {
       this.updateLayout();
+    },
+    onOpen() {
+      const video = this.$refs.video;
+      if (video) video.open();
     },
     onCurrentTime(currentTime) {
       if (this.neverPlayed) {

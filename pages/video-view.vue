@@ -29,6 +29,9 @@ export default {
       required: false,
     },
   },
+  data() {
+    return {};
+  },
 };
 </script>
 

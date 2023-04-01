@@ -1,21 +1,26 @@
 <template>
   <div class="video">
-    <div class="upload-wrapper" v-if="!loaded">
-      <div>
-        <label for="video-upload">Choose a video (mp4 or mkv) to open:</label>
-        <br />
-        <input type="file" accept=".mp4,.mkv" @change="loadVideo" />
+    <div class="upload-wrapper pl-4 pr-4 pt-3" v-if="!loaded">
+      <div class="upload">
+        <div class="w-100 p-4">
+          <label for="video-upload">
+            {{ $t("Choose a video (mp4 or mkv) to open:") }}
+          </label>
+          <br />
+          <input type="file" accept=".mp4,.mkv" @change="loadVideo"  />
+        </div>
       </div>
     </div>
     <video
       ref="videoPlayer"
       class="video-player"
-      v-else
+      v-if="loaded"
       @timeupdate="onTimeUpdate"
       @pause="onPause"
       @play="onPlay"
       @ended="onEnded"
       @loadedmetadata="onLoadedMetadata"
+      @click="togglePaused"
     >
       <source :src="video.url" type="video/mp4" />
       <source :src="video.url" type="video/mkv" />
@@ -25,8 +30,6 @@
 </template>
 
 <script>
-import Vue from "vue";
-
 export default {
   props: {
     video: {
@@ -127,6 +130,10 @@ export default {
     },
   },
   methods: {
+    open() {
+      this.$emit("updateVideo", {});
+      this.loaded = false;
+    },
     onPause() {
       this.$emit("paused", true);
     },
@@ -140,14 +147,15 @@ export default {
     onLoadedMetadata() {
       if (this.$refs.videoPlayer) {
         this.$emit("duration", this.$refs.videoPlayer.duration);
-        this.$refs.videoPlayer.play()
-      }        
+        this.$refs.videoPlayer.play();
+      }
     },
     loadVideo(event) {
       const file = event.target.files[0];
       if (file) {
-        Vue.set(this.video, "url", URL.createObjectURL(file));
-        this.loaded = true
+        const url = URL.createObjectURL(file);
+        this.$emit("updateVideo", { ...this.video, url });
+        this.loaded = true;
       }
     },
     getDuration() {
@@ -220,9 +228,16 @@ export default {
     left: 0;
   }
   .upload-wrapper {
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
+    .upload {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center; /* Center horizontally */
+      align-items: center; /* Center vertically */
+      border: 2px dashed rgba(136, 136, 136, 0.5);
+      color: rgba(136, 136, 136, 0.85);
+      border-radius: 0.25rem;
+    }
   }
 }
 </style>

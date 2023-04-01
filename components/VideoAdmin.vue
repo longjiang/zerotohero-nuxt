@@ -111,21 +111,18 @@
       </div>
     </div>
     <client-only>
-      <drop
-        @drop="handleDrop"
+      <div
         :class="{
           'd-none':
             (video.subs_l2 && video.subs_l2.length > 0) || showSubsEditing,
-          over: over,
           'subs-drop drop p-4 mt-3': true,
         }"
         :key="`drop-${transcriptKey}`"
-        @dragover="over = true"
-        @dragleave="over = false"
       >
         <i class="fa fa-file mr-2"></i>
-        {{ $t("Drop .srt or .ass files here to add subtitles") }}
-      </drop>
+        {{ $t("Upload subtitles (.srt or .ass)") }}
+        <input type="file" accept=".srt,.ass" @change="handleDrop"  />
+      </div>
       <div class="video-edit-public" v-if="$adminMode">
         <b-button
           size="small"
@@ -314,19 +311,8 @@
             'video-edit-admin-second-line': true,
             'd-none': !showSubsEditing,
           }"
-        >
-          <drop
-            @drop="handleDrop"
-            :class="{
-              over: over,
-              'subs-drop drop text-dark btn btn-sm btn-light w-100 mt-2': true,
-            }"
-            :key="`drop-${transcriptKey}`"
-            @dragover="over = true"
-            @dragleave="over = false"
-          >
-            Drop Subs Here
-          </drop>
+        > {{ $t('Upload Subs')}}
+          <input type="file" accept=".srt,.ass" @change="handleDrop"  />
         </div>
         <b-form-textarea
           :class="{
@@ -666,9 +652,9 @@ export default {
         }
       }
     },
-    handleDrop(data, event) {
+    handleDrop(event) {
       event.preventDefault();
-      let file = event.dataTransfer.files[0];
+      let file = event.target.files[0];
       let reader = new FileReader();
       reader.readAsText(file);
       let parsed = [];

@@ -15,7 +15,7 @@
       posterOnly,
       controls,
       muted,
-      video
+      video,
     }"
     ref="video"
     @paused="onPaused"
@@ -24,6 +24,7 @@
     @duration="onDuration"
     @videoUnavailable="onVideoUnavailable"
     @l1TranscriptLoaded="$emit('l1TranscriptLoaded')"
+    @updateVideo="onUpdateVideo"
   />
 </template>
 
@@ -84,6 +85,7 @@ export default {
     },
   },
   data() {
+    return {};
   },
   computed: {
     $l1() {
@@ -106,6 +108,9 @@ export default {
     },
   },
   methods: {
+    onUpdateVideo(video) {
+      this.$emit("updateVideo", video);
+    },
     onPaused(paused) {
       this.$emit("paused", paused);
     },
@@ -143,6 +148,10 @@ export default {
       if (videoComponent && videoComponent.togglePaused) {
         videoComponent.togglePaused();
       }
+    },
+    open() {
+      const video = this.$refs.video;
+      if (video) video.open();
     },
   },
 };

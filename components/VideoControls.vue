@@ -33,6 +33,16 @@
         <i class="fa-solid fa-circle-info" v-else></i>
       </button>
       <button
+        v-if="showOpenButton"
+        :class="{
+          'btn-video-controls btn-video-controls-open text-center': true,
+        }"
+        @click="$emit('open')"
+        :title="$t('Open Another Video...')"
+      >
+        <i class="fa-solid fa-folder-open"></i>
+      </button>
+      <button
         :class="{
           'btn-video-controls btn-video-controls-rewind text-center': true,
         }"
@@ -313,6 +323,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    showOpenButton: {
+      type: Boolean,
+      default: true,
+    },
     showType: {
       type: String,
     },
@@ -357,9 +371,11 @@ export default {
         return this.$store.state.settings.adminMode;
     },
     episodeIndex() {
-      return this.episodes.findIndex(
-        (e) => e.youtube_id === this.video.youtube_id
-      );
+      if (this.episodes) {
+        return this.episodes.findIndex(
+          (e) => e.youtube_id === this.video.youtube_id
+        );
+      }
     },
     previousEpisode() {
       if (this.episodes && this.episodeIndex > -1) {

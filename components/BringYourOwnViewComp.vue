@@ -5,11 +5,12 @@
     skin="dark"
     v-bind="{
       type: 'bring-your-own',
-      video: { },
+      video,
       starttime,
       startLineIndex,
       useAutoTextSize: true,
-      showInfoButton: true,
+      showInfoButton: false,
+      showOpenButton: true,
       autoload: true,
       autoplay: false,
       forcePortrait: false,
@@ -19,11 +20,13 @@
     @ended="updateEnded"
     @currentTime="onCurrentTime"
     @updateLayout="onUpdateLayout"
+    @updateVideo="onUpdateVideo"
   />
 </template>
 
 <script>
 import { mapState } from "vuex";
+import Vue from "vue";
 
 export default {
   props: {
@@ -48,7 +51,7 @@ export default {
       fetchDone: false,
       mountedDone: false,
       startLineIndex: 0,
-      video: undefined,
+      video: {},
       largeEpisodeCount: undefined,
     };
   },
@@ -71,9 +74,11 @@ export default {
       return t;
     },
   },
-  watch: {
-  },
+  watch: {},
   methods: {
+    onUpdateVideo(video) {
+      Vue.set(this, "video", video);
+    },
     onUpdateLayout(layout) {
       this.$emit("updateLayout", layout);
     },
