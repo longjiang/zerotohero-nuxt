@@ -46,7 +46,7 @@
       <VideoViewComp
         id="overlay-player"
         ref="video-view-comp"
-        v-if="overlayPlayerYouTubeId && $route.params.l2"
+        v-if="overlayPlayerType && $route.params.l2"
         v-bind="{
           type: overlayPlayerType,
           youtube_id: overlayPlayerYouTubeId,
@@ -91,6 +91,7 @@ export default {
       collapsed: false,
       overlayPlayerYouTubeId: undefined,
       overlayPlayerLesson: undefined,
+      overlayPlayerType: undefined,
       l2Time: {},
       timeLoggerID: undefined,
       l2SettingsOfL2: undefined,
@@ -267,6 +268,7 @@ export default {
       }
     },
     overlayPlayerClose() {
+      this.overlayPlayerType = undefined;
       this.overlayPlayerYouTubeId = undefined;
       this.overlayPlayerLesson = undefined;
       // TODO
