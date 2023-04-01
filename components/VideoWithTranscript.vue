@@ -226,9 +226,7 @@
 
 <script>
 import Vue from "vue";
-import YouTube from "@/lib/youtube";
 import { timeout } from "@/lib/utils";
-import { shuffle, safeShuffle, uniqueByValue } from "@/lib/utils/array";
 
 export default {
   props: {
@@ -319,6 +317,7 @@ export default {
     useAutoTextSize: {
       default: false,
     },
+    related: Array
   },
   data() {
     return {
@@ -388,30 +387,6 @@ export default {
         (v) => v.youtube_id === this.video.youtube_id
       );
     },
-    related() {
-      let related = [];
-      if (this.episodes && this.episodes.length > 0 && this.episodeIndex >= 0) {
-        let watchedYouTubeIds = this.$store.state.history.history.map(
-          (h) => h.video?.youtube_id
-        );
-        let popularEpisodes = this.episodes
-          .slice()
-          .filter((e) => !watchedYouTubeIds.includes(e.youtube_id))
-          .sort((a, b) => b.views - a.views);
-        related = [
-          ...shuffle([
-            ...this.episodes.slice(
-              this.episodeIndex + 2,
-              this.episodeIndex + 16
-            ),
-            ...shuffle(popularEpisodes.slice(0, 16)),
-          ]),
-        ];
-        let nextEpisode = this.episodes[this.episodeIndex + 1];
-        if (nextEpisode) related = [nextEpisode, ...related];
-      }
-      return uniqueByValue(related, "youtube_id");
-    },
   },
   created() {
     if (process.browser) {
@@ -422,7 +397,6 @@ export default {
     window.removeEventListener("resize", this.updateLayout);
   },
   async mounted() {
-    this.getL1Transcript();
     this.updateLayout();
     if (typeof this.$store.state.settings !== "undefined") {
       this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
@@ -441,9 +415,6 @@ export default {
     if (this.$refs.video) this.$refs.video.speed = this.speed;
   },
   watch: {
-    async "video.youtube_id"() {
-      await this.getL1Transcript();
-    },
     repeatMode() {
       if (this.$refs.transcript)
         this.$refs.transcript.repeatMode = this.repeatMode;
@@ -622,85 +593,9 @@ export default {
     togglePaused() {
       this.$refs.video.togglePaused();
     },
-
-    /***
-     * NON EVENT DRIVEN FUNCTIONS:
-     */
-
-
     updateLayout() {
       this.viewportWidth = this.$el.clientWidth;
       this.viewportHeight = window.innerHeight;
-    },
-    async getL1Transcript() {
-      if (this.$l2.code === this.$l1.code) return;
-      let video = Object.assign({}, this.video);
-      if (!video) return;
-      let missingSubsL1 =
-        !this.video.subs_l1 || this.video.subs_l1.length === 0;
-      if (missingSubsL1) {
-        console.log(
-          `YouTube with Transcript: Getting available L1 transcripts...`
-        );
-        video = await YouTube.getYouTubeSubsListAndAddLocale(
-          video,
-          this.$l1,
-          this.$l2,
-          this.$adminMode ? 0 : -1 // cacheLife
-        );
-        console.log(
-          `YouTube with Transcript: Getting ${this.$l1.name} transcript`
-        );
-        let subs_l1;
-        if (video.l1Locale && video.l1Locale !== video.l2Locale) {
-          subs_l1 = await YouTube.getTranscript(
-            video.youtube_id,
-            video.l1Locale,
-            undefined
-          );
-          if (!subs_l1 || !subs_l1[0]) {
-            subs_l1 = await YouTube.getTranscript(
-              video.youtube_id,
-              video.l1Locale,
-              undefined,
-              true // force refresh if no subs found
-            );
-          }
-        } else {
-          subs_l1 = await YouTube.getTranslatedTranscript(
-            video.youtube_id,
-            video.l2Locale,
-            video.l2Name,
-            this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code // tlang
-          );
-          if (!subs_l1 || !subs_l1[0]) {
-            subs_l1 = await YouTube.getTranslatedTranscript(
-              video.youtube_id,
-              video.l2Locale,
-              video.l2Name,
-              this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code, // tlang
-              true // forceRefresh
-            );
-          }
-          if (!subs_l1 || !subs_l1[0]) {
-            let useGenerated =
-              !this.video.subs_l2 || this.video.subs_l2.length === 0;
-            subs_l1 = await YouTube.getTranslatedTranscript(
-              video.youtube_id,
-              video.l2Locale || this.$l2.code,
-              video.l2Name,
-              this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code, // tlang
-              true, // forceRefresh
-              useGenerated // get generated subs only if we don't have L2 subs (subs we uploaded)
-            );
-          }
-        }
-        if (subs_l1) Vue.set(this.video, "subs_l1", subs_l1);
-        this.onL1TranscriptLoaded();
-      }
-    },
-    onL1TranscriptLoaded() {
-      this.updateLayout();
     },
     goToPreviousLine() {
       if (this.$refs.transcript) this.$refs.transcript.goToPreviousLine();

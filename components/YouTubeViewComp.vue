@@ -7,6 +7,7 @@
     v-bind="{
       type: 'youtube',
       video,
+      related,
       starttime,
       startLineIndex,
       show,
@@ -35,6 +36,7 @@ import Helper from "@/lib/helper";
 import Vue from "vue";
 import { mapState } from "vuex";
 import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
+import { shuffle, uniqueByValue } from "@/lib/utils/array";
 
 export default {
   props: {
@@ -108,6 +110,30 @@ export default {
       if (this.episodes && this.episodeIndex > -1) {
         return this.episodes[this.episodeIndex + 1];
       }
+    },
+    related() {
+      let related = [];
+      if (this.episodes && this.episodes.length > 0 && this.episodeIndex >= 0) {
+        let watchedYouTubeIds = this.$store.state.history.history.map(
+          (h) => h.video?.youtube_id
+        );
+        let popularEpisodes = this.episodes
+          .slice()
+          .filter((e) => !watchedYouTubeIds.includes(e.youtube_id))
+          .sort((a, b) => b.views - a.views);
+        related = [
+          ...shuffle([
+            ...this.episodes.slice(
+              this.episodeIndex + 2,
+              this.episodeIndex + 16
+            ),
+            ...shuffle(popularEpisodes.slice(0, 16)),
+          ]),
+        ];
+        let nextEpisode = this.episodes[this.episodeIndex + 1];
+        if (nextEpisode) related = [nextEpisode, ...related];
+      }
+      return uniqueByValue(related, "youtube_id");
     },
   },
   async fetch() {
