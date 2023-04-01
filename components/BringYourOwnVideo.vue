@@ -7,14 +7,14 @@
             <label for="video-upload">
               {{
                 $t("Choose a video ({formats}) to open:", {
-                  formats: formats.join(", "),
+                  formats: formats.map(f => f.ext).join(", "),
                 })
               }}
             </label>
             <br />
             <input
               type="file"
-              :accept="formats.map((f) => '.' + f).join(',')"
+              :accept="formats.map((f) => '.' + f.ext).join(',')"
               @change="loadVideo"
             />
           </div>
@@ -34,8 +34,8 @@
         <source
           v-for="format in formats"
           :src="video.url"
-          :type="'video/' + format"
-          :key="`video-source-${format}`"
+          :type="format.mime"
+          :key="`video-source-${format.mime}`"
         />
         {{ $t("Your browser does not support the video tag.") }}
       </video>
@@ -150,21 +150,25 @@ export default {
       const video = document.createElement("video");
 
       // The different video formats to check for
-      const formats = [
-        "mp4",
-        "webm",
-        "ogg",
-        "mov",
-        "wmv",
-        "avi",
-        "flv",
-        "f4v",
-        "swf",
-        "mkv",
-      ];
-      const supportedFormats = formats.filter(
-        (format) => video.canPlayType("video/" + format) !== ""
+      const formats =  [
+        { ext: 'mp4', mime: 'video/mp4' },
+        { ext: 'webm', mime: 'video/webm' },
+        { ext: 'ogg', mime: 'video/ogg' },
+        { ext: 'mkv', mime: 'video/x-matroska' },
+        { ext: 'avi', mime: 'video/x-msvideo' },
+        { ext: 'mpeg', mime: 'video/mpeg' },
+        { ext: 'flv', mime: 'video/x-flv' },
+        { ext: 'mp3', mime: 'audio/mpeg' },
+        { ext: 'ogg', mime: 'audio/ogg' },
+        { ext: 'wav', mime: 'audio/wav' },
+        { ext: 'aac', mime: 'audio/aac' },
+        { ext: 'flac', mime: 'audio/flac' },
+        { ext: 'opus', mime: 'audio/opus' }
+      ]
+      let supportedFormats = formats.filter(
+        (format) => video.canPlayType(format.mime) !== ""
       );
+      supportedFormats = [{ ext: 'mkv', mime: 'video/x-matroska' }, ...supportedFormats]
       return supportedFormats;
     },
     open() {
