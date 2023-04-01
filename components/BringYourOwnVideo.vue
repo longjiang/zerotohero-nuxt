@@ -1,7 +1,11 @@
 <template>
   <div class="video">
-    <div class="video-frame" v-if="!videoUrl">
-      <input type="file" accept=".mp4,.mkv" @change="loadVideo" />
+    <div class="upload-wrapper" v-if="!loaded">
+      <div>
+        <label for="video-upload">Choose a video (mp4 or mkv) to open:</label>
+        <br />
+        <input type="file" accept=".mp4,.mkv" @change="loadVideo" />
+      </div>
     </div>
     <video
       ref="videoPlayer"
@@ -13,14 +17,16 @@
       @ended="onEnded"
       @loadedmetadata="onLoadedMetadata"
     >
-      <source :src="videoUrl" type="video/mp4" />
-      <source :src="videoUrl" type="video/mkv" />
+      <source :src="video.url" type="video/mp4" />
+      <source :src="video.url" type="video/mkv" />
       {{ $t("Your browser does not support the video tag.") }}
     </video>
   </div>
 </template>
 
 <script>
+import Vue from "vue";
+
 export default {
   props: {
     video: {
@@ -79,9 +85,8 @@ export default {
       currentTime: 0,
       interval: undefined,
       duration: undefined,
-      loading: false,
+      loaded: false,
       randomSeeked: false,
-      videoUrl: undefined,
     };
   },
   computed: {
@@ -133,13 +138,16 @@ export default {
       this.$emit("ended", true);
     },
     onLoadedMetadata() {
-      if (this.$refs.videoPlayer)
+      if (this.$refs.videoPlayer) {
         this.$emit("duration", this.$refs.videoPlayer.duration);
+        this.$refs.videoPlayer.play()
+      }        
     },
     loadVideo(event) {
       const file = event.target.files[0];
       if (file) {
-        this.videoUrl = URL.createObjectURL(file);
+        Vue.set(this.video, "url", URL.createObjectURL(file));
+        this.loaded = true
       }
     },
     getDuration() {
@@ -203,13 +211,18 @@ export default {
 .video {
   padding-bottom: 56.25%;
   position: relative;
-  .video-frame,
+  .upload-wrapper,
   .video-player {
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
     left: 0;
+  }
+  .upload-wrapper {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
   }
 }
 </style>
