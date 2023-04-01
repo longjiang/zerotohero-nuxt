@@ -15,7 +15,7 @@
     >
       <source :src="videoUrl" type="video/mp4" />
       <source :src="videoUrl" type="video/mkv" />
-      Your browser does not support the video tag.
+      {{ $t("Your browser does not support the video tag.") }}
     </video>
   </div>
 </template>
@@ -76,7 +76,6 @@ export default {
     return {
       time: 0,
       neverPlayed: true,
-      player: undefined,
       currentTime: 0,
       interval: undefined,
       duration: undefined,
@@ -95,25 +94,26 @@ export default {
         return this.$store.state.settings.l2;
     },
     paused() {
-      return this.player && this.player.getPlayerState
-        ? this.player.getPlayerState() !== 1
-        : true;
+      if (!this.$refs.videoPlayer) return true;
+      else return this.$refs.videoPlayer.paused;
     },
     isPlaying() {
-      let playing =
-        this.player &&
-        this.player.getPlayerState &&
-        this.player.getPlayerState() === 1;
-      return playing;
+      return !this.paused;
     },
   },
   async mounted() {
     this.time = this.starttime;
   },
   destroyed() {
-    if (this.player) {
-      this.player.destroy();
-      this.player = undefined;
+    const videoPlayer = this.$refs.videoPlayer;
+    if (videoPlayer) {
+      videoPlayer.removeEventListener("timeupdate", this.onTimeUpdate);
+      videoPlayer.removeEventListener("pause", this.onPause);
+      videoPlayer.removeEventListener("play", this.onPlay);
+      videoPlayer.removeEventListener("ended", this.onEnded);
+      videoPlayer.removeEventListener("loadedmetadata", this.onLoadedMetadata);
+      videoPlayer.src = "";
+      videoPlayer.load();
     }
   },
   watch: {
@@ -143,10 +143,7 @@ export default {
       }
     },
     getDuration() {
-      if (this.player) {
-        let duration = this.player.getDuration();
-        return duration;
-      }
+      if (this.$refs.videoPlayer) return this.$refs.videoPlayer.duration;
     },
     mute() {
       if (this.$refs.videoPlayer) this.$refs.videoPlayer.muted = true;

@@ -10,15 +10,15 @@
           class="link-unstyled"
         >
           <i class="fas fa-file-alt mr-1"></i>
-          Transcript
+          {{ $t("Transcript") }}
         </a>
         <a :href="translationURL" target="_blank" class="link-unstyled ml-2">
           <i class="fa fa-language mr-1"></i>
-          Translation
+          {{ $t("Translation") }}
         </a>
         <Share class="ml-2" />
       </span>
-      <div class="video-meta">
+      <div class="video-meta" v-if="video.youtube_id">
         <span v-if="video.channel">
           <u>
             <router-link
@@ -78,25 +78,34 @@
           v-if="video.category === 10 || video.tv_show?.title === 'Music'"
         >
           <a
-            :href="`https://open.spotify.com/search/song/${encodeURIComponent(video.title)}`"
+            :href="`https://open.spotify.com/search/song/${encodeURIComponent(
+              video.title
+            )}`"
             target="_blank"
             class="text-secondary mr-2"
           >
-            <i class="text-secondary fa-brands fa-spotify"></i> Spotify
+            <i class="text-secondary fa-brands fa-spotify"></i>
+            Spotify
           </a>
           <a
-            :href="`https://music.apple.com/us/search?term=${encodeURIComponent(video.title)}`"
+            :href="`https://music.apple.com/us/search?term=${encodeURIComponent(
+              video.title
+            )}`"
             target="_blank"
             class="text-secondary mr-2"
           >
-            <i class="text-secondary fa-brands fa-apple"></i> Apple Music
+            <i class="text-secondary fa-brands fa-apple"></i>
+            Apple Music
           </a>
           <a
-            :href="`https://y.qq.com/n/ryqq/search?w=${encodeURIComponent(video.title)}&t=song&remoteplace=txt.yqq.top`"
+            :href="`https://y.qq.com/n/ryqq/search?w=${encodeURIComponent(
+              video.title
+            )}&t=song&remoteplace=txt.yqq.top`"
             target="_blank"
             class="text-secondary mr-2"
           >
-            <i class="text-secondary fa-solid fa-music-note"></i> QQ Music
+            <i class="text-secondary fa-solid fa-music-note"></i>
+            QQ Music
           </a>
         </template>
       </div>
@@ -115,7 +124,7 @@
         @dragleave="over = false"
       >
         <i class="fa fa-file mr-2"></i>
-        {{ $t('Drop .srt or .ass files here to add subtitles') }}
+        {{ $t("Drop .srt or .ass files here to add subtitles") }}
       </drop>
       <div class="video-edit-public" v-if="$adminMode">
         <b-button
@@ -131,15 +140,15 @@
           variant="success"
         >
           <i class="fas fa-plus mr-1"></i>
-          {{ $t('Save Video for Everyone') }}
+          {{ $t("Save Video for Everyone") }}
         </b-button>
         <span v-if="saving">
           <i class="fas fa-hourglass mr-2 text-secondary"></i>
-          {{ $t('Adding...') }}
+          {{ $t("Adding...") }}
         </span>
         <span v-if="video && video.id && isNewVideo">
           <i class="fas fa-check-circle mr-2 text-success"></i>
-          {{ $t('Added') }}
+          {{ $t("Added") }}
         </span>
         <div
           v-if="
@@ -150,7 +159,11 @@
           style="font-size: 0.7em; opacity: 0.7"
           class="mt-2"
         >
-          {{ $t('Once saved, the video will be available for everyone to see. You can find it from Media > YouTube, then arrange the videos by date.') }}
+          {{
+            $t(
+              "Once saved, the video will be available for everyone to see. You can find it from Media > YouTube, then arrange the videos by date."
+            )
+          }}
         </div>
       </div>
       <div class="show-and-date" v-if="$adminMode">
