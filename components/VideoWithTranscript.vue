@@ -14,10 +14,11 @@
       }"
     >
       <div class="video-wrapper" :key="'youtube-' + video.youtube_id">
-        <LazyYouTubeVideo
+        <LazyVideo
           ref="youtube"
           :class="{ 'd-none': collapsed }"
           v-bind="{
+            type: 'youtube',
             speed,
             cc,
             autoload,
