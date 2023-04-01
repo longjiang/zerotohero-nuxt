@@ -1,22 +1,26 @@
 <template>
   <div class="video">
     <div class="video-frame" v-if="!videoUrl">
-      <input type="file" accept=".mp4,.mkv" @change="loadVideo">
+      <input type="file" accept=".mp4,.mkv" @change="loadVideo" />
     </div>
-    <video ref="videoPlayer" class="video-player" v-else>
-      <source :src="videoUrl" type="video/mp4">
-      <source :src="videoUrl" type="video/mkv">
+    <video
+      ref="videoPlayer"
+      class="video-player"
+      v-else
+      @timeupdate="onTimeUpdate"
+      @pause="onPause"
+      @play="onPlay"
+      @ended="onEnded"
+      @loadedmetadata="onLoadedMetadata"
+    >
+      <source :src="videoUrl" type="video/mp4" />
+      <source :src="videoUrl" type="video/mkv" />
       Your browser does not support the video tag.
     </video>
   </div>
 </template>
 
 <script>
-import $ from "jquery";
-import Helper from "@/lib/helper";
-import YouTube from "@/lib/youtube";
-import Vue from "vue";
-
 export default {
   props: {
     video: {
@@ -78,7 +82,7 @@ export default {
       duration: undefined,
       loading: false,
       randomSeeked: false,
-      videoUrl: undefined
+      videoUrl: undefined,
     };
   },
   computed: {
@@ -118,6 +122,20 @@ export default {
     },
   },
   methods: {
+    onPause() {
+      this.$emit("paused", true);
+    },
+    onPlay() {
+      this.$emit("paused", false);
+      this.$emit("ended", false);
+    },
+    onEnded() {
+      this.$emit("ended", true);
+    },
+    onLoadedMetadata() {
+      if (this.$refs.videoPlayer)
+        this.$emit("duration", this.$refs.videoPlayer.duration);
+    },
     loadVideo(event) {
       const file = event.target.files[0];
       if (file) {
@@ -131,16 +149,16 @@ export default {
       }
     },
     mute() {
-      if (this.player && this.player.mute) this.player.mute();
+      if (this.$refs.videoPlayer) this.$refs.videoPlayer.muted = true;
     },
     unMute() {
-      if (this.player) this.player.unMute();
+      if (this.$refs.videoPlayer) this.$refs.videoPlayer.muted = false;
     },
-    updateCurrentTime() {
+    onTimeUpdate() {
+      let player = this.$refs.videoPlayer;
       // This cannot be a computed property because the player is not monitored by Vue
-      if (this.player && this.player.getCurrentTime) {
-        let newTime = this.player.getCurrentTime();
-
+      if (player) {
+        let newTime = player.currentTime;
         if (newTime !== this.currentTime) {
           this.currentTime = newTime;
           if (this.currentTime === 0 && this.neverPlayed) {
@@ -151,28 +169,33 @@ export default {
       }
     },
     seek(starttime) {
-      if (this.player && this.player.seekTo) {
-        this.player.seekTo(starttime);
+      if (this.$refs.videoPlayer) {
+        this.$refs.videoPlayer.currentTime = starttime;
       }
     },
     play() {
-      if (this.player && this.player.playVideo) {
-        this.player.playVideo();
+      if (this.$refs.videoPlayer) {
+        this.$refs.videoPlayer.play();
       }
     },
     pause() {
-      if (this.player && this.player.pauseVideo) {
-        this.player.pauseVideo();
+      if (this.$refs.videoPlayer) {
+        this.$refs.videoPlayer.pause();
       }
     },
     setSpeed(speed) {
-      if (this.player) this.player.setPlaybackRate(speed);
+      if (this.$refs.videoPlayer) {
+        this.$refs.videoPlayer.playbackRate = speed;
+      }
     },
     togglePaused() {
-      if (this.player && this.player.getPlayerState) {
-        this.player.getPlayerState() !== 1
-          ? this.player.playVideo()
-          : this.player.pauseVideo();
+      const videoPlayer = this.$refs.videoPlayer;
+      if (videoPlayer) {
+        if (videoPlayer.paused) {
+          videoPlayer.play();
+        } else {
+          videoPlayer.pause();
+        }
       }
     },
   },

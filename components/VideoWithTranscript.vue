@@ -74,7 +74,7 @@
           "
         />
         <div
-          v-if="landscape && related && related.length > 0"
+          v-if="landscape"
           class="pl-3 pt-4"
         >
           <div class="video-info video-info-top" v-if="layout === 'horizontal'">
