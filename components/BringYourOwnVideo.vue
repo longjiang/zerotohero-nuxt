@@ -30,6 +30,7 @@
         @ended="onEnded"
         @loadedmetadata="onLoadedMetadata"
         @click="togglePaused"
+        playsinline
       >
         <source
           v-for="format in formats"
