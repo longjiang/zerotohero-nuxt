@@ -534,6 +534,39 @@ const Dictionary = {
     }
     return tokens;
   },
+  sortCandidatesInText(candidates, text) {
+    const arr = candidates;
+
+    const sequence = text;
+    
+    function compare(a, b) {
+      const aInSeq = sequence.indexOf(a.head) !== -1;
+      const bInSeq = sequence.indexOf(b.head) !== -1;
+    
+      if (aInSeq && bInSeq) {
+        return sequence.indexOf(a.head) - sequence.indexOf(b.head);
+      }
+      
+      if (aInSeq) return -1;
+      if (bInSeq) return 1;
+    
+      const aMutuallyExclusive = arr.every(el => el === a || !a.head.includes(el.head));
+      const bMutuallyExclusive = arr.every(el => el === b || !b.head.includes(el.head));
+    
+      if (aMutuallyExclusive && bMutuallyExclusive) {
+        return b.head.length - a.head.length;
+      }
+    
+      if (aMutuallyExclusive) return -1;
+      if (bMutuallyExclusive) return 1;
+    
+      return b.head.length - a.head.length;
+    }
+    
+    const sortedArray = arr.sort(compare);
+    
+    return sortedArray
+  },
   getWordsWithinText(text) {
     let reducedText = text.replace(/[一个得不]/gi, '')
     let candidates = this.words.filter(w => {
@@ -562,6 +595,7 @@ const Dictionary = {
         if (candidates.length === 0 && token.word) {
           candidates = this.getWordsWithinText(token.word)
         }
+        candidates = this.sortCandidatesInText(candidates, text)
         final.push({
           text: token.word,
           candidates,
