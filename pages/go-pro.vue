@@ -48,8 +48,8 @@
                   <div v-else>
                     <div>
                       <p>{{ translate('Please choose your method of payment.') }}</p>
-                      <PurchaseStripe :sale="sale" />
-                      <PurchasePayPal :sale="sale" />
+                      <PurchaseStripe :sale="sale" :test="test" />
+                      <PurchasePayPal :sale="sale" :test="test"/>
                     </div>
                   </div>
                 </client-only>
@@ -96,7 +96,8 @@ export default {
   data() {
     return {
       loading: false,
-      sale: false
+      sale: false,
+      test: false
     };
   },
   computed: {

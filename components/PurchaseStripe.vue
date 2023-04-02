@@ -50,14 +50,17 @@ export default {
   props: {
     sale: {
       default: false
+    },
+    test: {
+      default: false
     }
   },
   computed: {
     cnyPaymentURL() {
-      return this.sale ? this.salePriceCNYPaymentLink : this.regularPriceCNYPaymentLink
+      return this.test ? this.testPriceCNYPaymentLink : this.sale ? this.salePriceCNYPaymentLink : this.regularPriceCNYPaymentLink
     },
     price() {
-      return this.sale ? this.salePriceID : this.regularPriceID
+      return this.test ? this.testPriceID :this.sale ? this.salePriceID : this.regularPriceID
     },
     browserLanguage() {
       if (process.browser) {
@@ -71,11 +74,12 @@ export default {
     this.stripePublishableKey = "pk_live_9lnc7wrGHtcFdPKIWZdy9p17";
 
     return {
-      sale: this.sale,
       regularPriceCNYPaymentLink: 'https://buy.stripe.com/4gw2bz7ELbvR8CccMN',
       salePriceCNYPaymentLink: 'https://buy.stripe.com/dR6dUhcZ51VhaKkdQT',
+      testPriceCNYPaymentLink:'https://buy.stripe.com/fZe2bz0cjczV9Gg4gi',
       regularPriceID: 'price_1LArBtG5EbMGvOaflIKUthub',
       salePriceID: 'price_1LaUOfG5EbMGvOaf3HQLg8sL',
+      testPriceID: 'price_1L9zlDG5EbMGvOafpz7PnnGt',
       stripeSuccessURL: this.$auth.user
         ? `${PYTHON_SERVER}stripe_checkout_success?user_id=${this.$auth.user.id}&host=${HOST}&session_id={CHECKOUT_SESSION_ID}`
         : undefined, // Make sure we have the user's id
