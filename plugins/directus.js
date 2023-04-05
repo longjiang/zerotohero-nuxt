@@ -5,7 +5,7 @@ import he from "he"; // html entities
 import Helper from '@/lib/helper'
 import { logError } from '@/lib/utils/error'
 
-export const DIRECTUS_URL = 'https://db2.zerotohero.ca/'
+export const DIRECTUS_URL = 'https://directusvps.zerotohero.ca/'
 
 export const DIRECTUS_API_URL = DIRECTUS_URL + 'zerotohero/'
 
