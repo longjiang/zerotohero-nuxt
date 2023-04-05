@@ -64,6 +64,9 @@
           @error="thumbnailError"
           :src="thumbnail"
         />
+        <div class="duration">
+          {{ parseDuration(video.duration) }}
+        </div>
       </router-link>
       <div class="media-body">
         <div class="youtube-title">
@@ -303,7 +306,6 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
 import YouTube from "@/lib/youtube";
 import Vue from "vue";
@@ -312,7 +314,14 @@ import languageEncoding from "detect-file-encoding-and-language";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import { mapState } from "vuex";
-import { formatK } from "@/lib/utils";
+import {
+  formatK,
+  parseDuration,
+  timeout,
+  logError,
+  level,
+  TOPICS,
+} from "@/lib/utils";
 
 export default {
   components: {
@@ -448,7 +457,7 @@ export default {
       );
     },
     topics() {
-      return Helper.topics;
+      return TOPICS;
     },
   },
   async mounted() {
@@ -477,11 +486,11 @@ export default {
     },
   },
   methods: {
-    level(...args) {
-      return Helper.level(...args);
+    parseDuration(...args) {
+      return parseDuration(...args);
     },
     level(...args) {
-      return Helper.level(...args);
+      return level(...args);
     },
     formatK(n) {
       return formatK(n, 2, this.$l1.code);
@@ -695,7 +704,7 @@ export default {
         }
         return true;
       } catch (err) {
-        Helper.logError(err);
+        logError(err);
       }
     },
     async checkSubsFunc(video) {
@@ -705,7 +714,7 @@ export default {
         Vue.set(video, "checkingSubs", false);
         this.$emit("hasSubs", true);
       } else {
-        await Helper.timeout(this.delay);
+        await timeout(this.delay);
         if (video.subs_l2 && video.subs_l2.length > 0) {
           Vue.set(video, "hasSubs", true);
           Vue.set(video, "checkingSubs", false);
@@ -763,6 +772,18 @@ export default {
     .youtube-thumbnail-wrapper {
       border-radius: 0.25rem;
       overflow: hidden;
+      position: relative;
+      .duration {
+        position: absolute;
+        bottom: 0.2rem;
+        right: 0.2rem;
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: bold;
+        padding: 0.08rem 0.3rem;
+        border-radius: 0.15rem;
+      }
     }
     .youtube-video-card-progress {
       top: calc(100% - 0.5rem);
