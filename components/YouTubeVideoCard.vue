@@ -64,7 +64,7 @@
           @error="thumbnailError"
           :src="thumbnail"
         />
-        <div class="duration">
+        <div class="duration" v-if="video.duration">
           {{ parseDuration(video.duration) }}
         </div>
       </router-link>
