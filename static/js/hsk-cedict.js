@@ -516,12 +516,25 @@ const Dictionary = {
     let variants = this.variantIndex[traditional]
     return variants
   },
+  /**
+   * Tokenizes the given text into words using the lemmatization server and as an array of objects
+   * @param {*} text The text to search for words in
+   * @returns {Array} An array of objects with the following properties:  {traditional, simplified, pinyin, definitions, weight}
+   */
   async tokenizeChinese(text) {
     text = text.replace(/-/g, "- ");
     let url = `${PYTHON_SERVER}lemmatize-chinese?text=${encodeURIComponent(
       text
     )}`;
     let tokenized = await this.proxy(url);
+    // check if the tokenized is an array and not a string
+    if (!tokenized || typeof tokenized === 'string') {
+      // try again without caching
+      tokenized = await this.proxy(url, 0);
+      if (!tokenized || typeof tokenized === 'string') {
+        return
+      }
+    }
     let tokens = [];
     for (let token of tokenized) {
       if (!token) {
@@ -578,6 +591,7 @@ const Dictionary = {
   async tokenize(text) {
     if (this.tokenizationCache[text]) return this.tokenizationCache[text]
     let tokenized = await this.tokenizeChinese(text);
+    if (!tokenized) return this.tokenizeLocally(text);
     let final = []
     for (let index in tokenized) {
       let token = tokenized[index]
@@ -609,6 +623,109 @@ const Dictionary = {
     }
     this.tokenizationCache[text] = final
     return final
+  },
+  subdict(data) {
+    let newDict = Object.assign({}, this)
+    return Object.assign(newDict, { words: data })
+  },
+  isTraditional(text) {
+    let matchedSimplified = []
+    let matchedTraditional = []
+    for (let row of this.words) {
+      if (text.includes(row.simplified)) matchedSimplified.push(row.simplified)
+      if (text.includes(row.traditional))
+        matchedTraditional.push(row.traditional)
+    }
+    const trad = this.unique(matchedTraditional).length
+    const simp = this.unique(matchedSimplified).length
+    return trad > simp
+  },
+  subdictFromText(text) {
+    let subict = this.subdict(
+      this.words.filter(function (row) {
+        return text.includes(row.simplified) || text.includes(row.traditional)
+      })
+    )
+    return subict
+  },
+  /* Returns the longest word in the dictionary that is inside `text` */
+  longest(text, traditional = false) {
+    // Only return the *first* seen word and those the same as it
+    let first = false
+    const tradOrSimp = traditional ? 'traditional' : 'simplified'
+    let matches = this.words
+      .filter(row => this.isChinese(row.simplified))
+      .filter(function (row) {
+        if (first) {
+          return row[tradOrSimp] === first
+        } else {
+          if (text.includes(row[tradOrSimp])) {
+            first = row[tradOrSimp]
+            return true
+          }
+        }
+      })
+      .sort((a, b) => {
+        return b.weight - a.weight
+      })
+    return {
+      matches: matches,
+      text: matches && matches.length > 0 ? matches[0][tradOrSimp] : ''
+    }
+  },
+  tokenizeLocally(text) {
+    this.tokenizationCache[text] = this.tokenizationCache[text] || this.tokenizeRecursively(
+      text,
+      this.subdictFromText(text),
+      this.isTraditional(text)
+    )
+    return this.tokenizationCache[text]
+  },
+  tokenizeRecursively(text, subdict, traditional = false) {
+    const isChinese = subdict.isChinese(text)
+    if (!isChinese) {
+      return [text]
+    }
+    const longest = subdict.longest(text, traditional)
+    if (longest.matches.length > 0) {
+      let result = []
+      /* 
+      result = [
+        '我', 
+        {
+          text: '是'
+          candidates: [{...}, {...}, {...}
+        ],
+        '中国人。'
+      ]
+      */
+      for (let textFragment of text.split(longest.text)) {
+        result.push(textFragment) // '我'
+        result.push({
+          text: longest.text,
+          candidates: longest.matches
+        })
+      }
+      result = result.filter(item => item !== '')
+      result.pop() // last item is always useless, remove it
+      var tokens = []
+      for (let item of result) {
+        if (typeof item === 'string') {
+          for (let token of this.tokenizeRecursively(
+            item,
+            subdict,
+            traditional
+          )) {
+            tokens.push(token)
+          }
+        } else {
+          tokens.push(item)
+        }
+      }
+      return tokens
+    } else {
+      return [text]
+    }
   },
   variants(word) {
     let variants = []
