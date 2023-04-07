@@ -595,7 +595,7 @@ export default {
       }
     },
     pro() {
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+      return !this.$directus.subscriptionExpired();
     },
     native() {
       return Capacitor.isNativePlatform();

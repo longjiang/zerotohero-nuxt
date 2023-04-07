@@ -369,8 +369,7 @@ export default {
   },
   computed: {
     pro() {
-      // if ([this.$l2.code, this.$l1.code].includes("zh")) return true;
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+      return !this.$directus.subscriptionExpired()
     },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")

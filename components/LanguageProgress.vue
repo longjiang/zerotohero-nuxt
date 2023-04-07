@@ -74,14 +74,14 @@
       <div v-if="showDescriptionDetails" class="mt-2">
         <div v-if="$store.state.progress.progressLoaded">
           <i18n
-            path="You've spent {time} in this app learning {l2}."
+            path="You've spent {time} in Language Player learning {l2}."
             tag="span"
           >
             <template #time>
               <b>{{ formatDuration(time) }}</b>
             </template>
             <template #l2>
-              <b>{{ $l2.name }}</b>
+              <b>{{ translate($l2.name) }}</b>
             </template>
           </i18n>
         </div>
@@ -91,7 +91,7 @@
             tag="span"
           >
             <template #num>
-              <b>{{ Math.round(hoursNeeded) }} hours</b>
+              <b>{{ Math.round(hoursNeeded) }}</b>
             </template>
             <template #goal>
               <span v-if="level < 7">
@@ -115,30 +115,43 @@
           }}
         </div>
         <div class="mt-3">
-          Weekly goal: If you log
-          <b>
-            <b-form-select
-              type="number"
-              v-model="manuallySetWeeklyHours"
-              :options="weeklyHoursOptions"
-              size="sm"
-              class="d-inline-block strong text-success"
-              style="width: 6rem"
-            ></b-form-select>
-            a week
-          </b>
-          , you can reach
-          <span v-if="level < 7">
-            {{ goalText }}
-          </span>
-          <span v-else>the next level</span>
-          in
-          <b>{{ Math.ceil(hoursNeeded / weeklyHours) }} weeks</b>
-          (about
-          <span v-if="hoursNeeded / weeklyHours > 52">
-            {{ Math.floor(hoursNeeded / weeklyHours / 4.34 / 12) }} year and
-          </span>
-          {{ Math.ceil(hoursNeeded / weeklyHours / 4.34) % 12 }} months ) .
+          <i18n
+            path="Weekly goal: If you log {numHours} a week, you can reach {goal} in {numWeeks} weeks (about {period} )."
+          >
+            <template #numHours>
+              <b-form-select
+                type="number"
+                v-model="manuallySetWeeklyHours"
+                :options="weeklyHoursOptions"
+                size="sm"
+                class="d-inline-block strong text-success"
+                style="width: 6rem"
+              ></b-form-select>
+            </template>
+            <template #goal>
+              <span v-if="level < 7">
+                {{ translate(goalText) }}
+              </span>
+              <span v-else>{{ translate("the next level") }}</span>
+            </template>
+            <template #numWeeks>
+              <b>{{ Math.ceil(hoursNeeded / weeklyHours) }}</b>
+            </template>
+            <template #period>
+              <span v-if="hoursNeeded / weeklyHours > 52">
+                {{
+                  translate("{num} year(s) and", {
+                    num: Math.floor(hoursNeeded / weeklyHours / 4.34 / 12),
+                  })
+                }}
+              </span>
+              {{
+                translate("{num} months", {
+                  num: Math.ceil(hoursNeeded / weeklyHours / 4.34) % 12,
+                })
+              }}
+            </template>
+          </i18n>
         </div>
       </div>
     </div>
@@ -174,6 +187,7 @@ export default {
   },
   computed: {
     browserLanguage() {
+      if (this.$l1) return this.$l1.code;
       if (process.browser) {
         let code = navigator.language.replace(/-.*/, "");
         return code;
@@ -276,8 +290,10 @@ export default {
   methods: {
     translate(text, data = {}) {
       let code = this.browserLanguage;
-      if (this.$languages) return this.$languages.translate(text, code, data);
-      else return text;
+      if (this.$languages) {
+        let translated = this.$languages.translate(text, code, data);
+        return translated;
+      } else return text;
     },
     levelObj(level) {
       return Helper.languageLevels(this.$l2)[level];

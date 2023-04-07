@@ -11,9 +11,9 @@
         <div class="row">
           <div class="col-sm-12">
             <div class="text-center alert-success p-3 pb-4 rounded mt-4">
-              <p>To track your learning progress, please login.</p>
+              <p>{{ $t("To track your learning progress, please login.") }}</p>
               <router-link :to="{ name: 'login' }" class="btn btn-success">
-                Login
+                {{ $t("Login") }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
             </div>
@@ -23,39 +23,52 @@
       <div class="container" v-else>
         <div class="row mb-3">
           <div class="col-sm-12 text-center">
-            <h3>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</h3>
+            <h4>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</h4>
             <div>{{ $auth.user.email }}</div>
-            <div v-if="subscription && subscriptionExpired">
+            <hr class="mt-3 mb-3" />
+            <div v-if="subscription && !pro">
               {{
-                $t("Your Pro 🚀 has expired on {date}.", {
-                  date: subscription.expires_on,
+                $t("Your Pro has expired on {date}.", {
+                  date: $d(
+                    new Date(subscription.expires_on),
+                    "short",
+                    $l1.code
+                  ),
                 })
               }}
             </div>
-            <div v-if="subscription && !subscriptionExpired && subscription.type !== 'lifetime'">
+            <div v-if="subscription && pro && subscription.type !== 'lifetime'">
               {{
-                $t("Your Pro 🚀 will expire on {date}.", {
+                $t("Your Pro will expire on {date}.", {
                   date: subscription.expires_on,
                 })
               }}
             </div>
             <div v-if="subscription && subscription.type === 'lifetime'">
-              {{ $t("You have lifetime access to Pro. 🚀") }}
+              {{ $t("You have lifetime access to Pro.") }}
             </div>
             <div v-if="!subscription">
-              {{ $t("You are not Pro yet.")
-              }}<router-link :to="{ name: 'go-pro' }">{{
-                $t("Upgrade to Pro 🚀")
-              }}</router-link>
+              {{ $t("You are not Pro yet.") }}
+            </div>
+            <div v-if="!pro">
+              <router-link :to="{ name: 'go-pro' }"
+                >{{ $t("Upgrade to Pro") }} 🚀</router-link
+              >
             </div>
           </div>
         </div>
         <template v-if="level">
+          <hr class="mt-3 mb-3" />
           <div class="row">
-            <div class="col-sm-12 text-center">
-              <LanguageFlag :language="$l2" :autocycle="true" class="mb-2" />
-              <h5 class="mb-4">
-                {{ $auth.user.first_name }}’s {{ $l2.name }} Language Progress
+            <div class="col-sm-12">
+              <h5>
+                <LanguageFlag :language="$l2" :autocycle="true" class="mb-2" />
+                {{
+                  $t("{name}’s {l2} Language Progress", {
+                    name: $auth.user.first_name,
+                    l2: $t($l2.name),
+                  })
+                }}
               </h5>
             </div>
           </div>
@@ -75,13 +88,22 @@
               />
               <div v-if="wordIds">
                 <h5 class="mt-4 mb-3">
-                  Your {{ $l2.name }} Words
+                  {{
+                    $t("Your {l2} Words", {
+                      name: $auth.user.first_name,
+                      l2: $t($l2.name),
+                    })
+                  }}
                   <router-link
                     class="text-success ml-2"
                     style="font-size: 1rem; font-weight: bold"
                     :to="{ name: 'saved-words' }"
                   >
-                    See All {{ wordIds.length }}
+                    {{
+                      $t("See All {wordCount}", {
+                        wordCount: wordIds.length,
+                      })
+                    }}
                     <i class="fas fa-angle-right ml-1"></i>
                   </router-link>
                 </h5>
@@ -93,13 +115,17 @@
               </div>
               <div>
                 <h5 class="mt-5 mb-4">
-                  {{ $l2.name }} Videos You Watched
+                  {{
+                    $t("{l2} Videos You Watched", {
+                      l2: $t($l2.name),
+                    })
+                  }}
                   <router-link
                     class="text-success ml-2"
                     style="font-size: 1rem; font-weight: bold"
                     :to="{ name: 'saved-words' }"
                   >
-                    See Entire History
+                    {{ $t("See All")}}
                     <i class="fas fa-angle-right ml-1"></i>
                   </router-link>
                 </h5>
@@ -112,18 +138,16 @@
                 />
               </div>
               <div class="mt-4 pb-5">
-                <h5 class="mb-4">Danger Zone</h5>
+                <h5 class="mb-4">{{ $t('Danger Zone') }}</h5>
                 <div class="row">
                   <div class="col-sm-12 col-md-6 mb-2">
                     <div class="text-center alert-danger rounded p-4">
                       <b-button variant="danger" @click="removeProgress">
                         <i class="fas fa-trash mr-2"></i>
-                        Remove {{ $l2.name }}
+                        {{ $t("Remove {l2}", { l2: $t($l2.name) }) }}
                       </b-button>
                       <p class="mt-3 mb-0">
-                        This will remove your logged time for {{ $l2.name }},
-                        and remove {{ $l2.name }} from your home screen
-                        Dashboard.
+                        {{ $t('This will remove your logged time for {l2}, and remove {l2} from your home screen Dashboard.', { l2: $t($l2.name) }) }}
                       </p>
                     </div>
                   </div>
@@ -134,11 +158,10 @@
                     >
                       <b-button variant="danger" @click="deleteAccount">
                         <i class="fas fa-times-circle mr-2"></i>
-                        Delete my account
+                        {{ $t('Delete My Account')}}
                       </b-button>
                       <p class="mt-3 mb-0">
-                        This will permanently remove your account. There is no
-                        undo.
+                        {{ $t('This will permanently remove your Language Player account. There is no undo.') }}
                       </p>
                     </div>
                   </div>
@@ -199,14 +222,8 @@ export default {
       let savedWords = this.savedWords[this.$l2.code] || [];
       return savedWords.map((w) => w.id);
     },
-    subscriptionExpired() {
-      if (this.subscription) {
-        if (this.subscription.type === 'lifetime') return false;
-        let now = new Date();
-        let expires = new Date(this.subscription.expires_on);
-        return now > expires;
-      }
-      return false;
+    pro() {
+      return !this.$directus.subscriptionExpired();
     },
   },
   data() {

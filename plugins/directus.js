@@ -347,6 +347,17 @@ export default ({ app }, inject) => {
           return false;
         }
       }
-    }
+    },
+    subscriptionExpired() {
+      let subscription = app.$auth.$storage.getUniversal("subscription");
+      if (subscription) {
+        if (subscription.type === 'lifetime') return false;
+        let now = new Date();
+        let expires = new Date(subscription.expires_on);
+        let expired = now > expires;
+        return expired
+      }
+      return true;
+    },
   })
 }

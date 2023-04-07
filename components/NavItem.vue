@@ -118,7 +118,7 @@ export default {
         return this.$store.state.settings.l2;
     },
     pro() {
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
+      return !this.$directus.subscriptionExpired()
     },
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")

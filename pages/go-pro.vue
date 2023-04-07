@@ -29,7 +29,7 @@
             <div class="mt-4"></div>
             <FeatureComparison :sale="sale" />
             <div v-if="$auth.loggedIn && $auth.user" class="text-center text-white">
-              <div v-if="[1, 4].includes(Number($auth.user.role))">
+              <div v-if="pro">
                 <h5 class="mb-3">🎉 {{ translate('You are already Pro!') }} 🚀 {{ translate('Enjoy!') }}</h5>
                 <router-link class="btn btn-success mb-3" to="/">
                   {{ translate('Start Using Pro') }}
@@ -117,6 +117,9 @@ export default {
       }
       return "en";
     },
+    pro() {
+      return !this.$directus.subscriptionExpired();
+    }
   },
   methods: {
     translate(text, code) {

@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-6 pr-1 text-center">
-      Your current level
+      {{ translate("Your current level") }}
       <b-form-select
         v-model="manuallySetLevel"
         :options="levels"
@@ -9,14 +9,16 @@
       ></b-form-select>
     </div>
     <div class="col-6 pl-1 text-center">
-      Your next goal
+      {{ translate("Your next goal") }}
       <br />
       <div class="goal">
         <template v-if="level < 7">
           {{ levelObj(level + 1).exam.name }}
           {{ levelObj(level + 1).level }}
         </template>
-        <template v-if="level >= 7" class="goal">Mastery</template>
+        <template v-if="level >= 7" class="goal">{{
+          translate("Mastery")
+        }}</template>
         <img src="/img/trophy.svg" />
       </div>
     </div>
@@ -33,6 +35,14 @@ export default {
     $l2: Object,
   },
   computed: {
+    browserLanguage() {
+      if (this.$l1) return this.$l1.code;
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
     time() {
       return this.$store.state.progress.progressLoaded
         ? this.$store.getters["progress/time"](this.$l2)
@@ -86,6 +96,13 @@ export default {
     });
   },
   methods: {
+    translate(text, data = {}) {
+      let code = this.browserLanguage;
+      if (this.$languages) {
+        let translated = this.$languages.translate(text, code, data);
+        return translated;
+      } else return text;
+    },
     levelObj(level) {
       return Helper.languageLevels(this.$l2)[level];
     },
