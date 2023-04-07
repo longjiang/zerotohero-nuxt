@@ -67,7 +67,6 @@ export default {
   router: {
     middleware: [
       'language-switch',
-      'redirect'
     ]
   },
 
