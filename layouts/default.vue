@@ -1,7 +1,6 @@
 <template>
   <div id="zerotohero" :class="classes">
     <FeedbackButton />
-    <!-- <delay-hydration> -->
     <HydrationNotice v-if="$route.path === '/'" />
     <client-only>
       <!-- Main nav - side bar on wide screen, bottom bar on small screen /-->
@@ -60,8 +59,6 @@
         <Nuxt class="nuxt-content" />
       </div>
     </div>
-
-    <!-- </delay-hydration> -->
     <i class="fas fa-star star-animation"></i>
   </div>
 </template>
@@ -101,9 +98,6 @@ export default {
           "//" +
           window.location.hostname +
           (window.location.port ? ":" + window.location.port : ""),
-      // transition: false,
-      // edgeDetected: false,
-      // translateX: 0,
     };
   },
   computed: {
@@ -129,14 +123,12 @@ export default {
     },
     savedWordsCount() {
       let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
-      // eslint-disable-next-line vue/no-parsing-error
       return count;
     },
     savedPhrasesCount() {
       let count = this.$store.getters["savedPhrases/count"]({
         l2: this.l2.code,
       });
-      // eslint-disable-next-line vue/no-parsing-error
       return count;
     },
     overlayPlayerMinimized() {
@@ -208,6 +200,7 @@ export default {
       this.$store.dispatch("history/load");
     }
     await this.$directus.initAndGetUserData(); // Make sure user data is fetched from the server
+    await this.$directus.checkSubscription();
     console.log("Default.vue: User data initialized.");
     if (this.l1 && this.l2) {
       this.loadLanguageSpecificSettings(); // Make sure this line is AFTER registering mutation event listeners above!
@@ -271,8 +264,6 @@ export default {
       this.overlayPlayerType = undefined;
       this.overlayPlayerYouTubeId = undefined;
       this.overlayPlayerLesson = undefined;
-      // TODO
-      // If the user closes the youtube overlay player, we should never go back to it in history
     },
     subscribeToVuexMutations() {
       this.unsubscribe = this.$store.subscribe((mutation) => {

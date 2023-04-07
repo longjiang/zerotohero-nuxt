@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="main pt-3 pb-5">
+  <div class="main pb-5">
     <client-only>
       <div v-if="!$auth.loggedIn" class="container">
         <div class="row">
@@ -21,21 +21,39 @@
         </div>
       </div>
       <div class="container" v-else>
-        <!-- <div class="row">
+        <div class="row mb-3">
           <div class="col-sm-12 text-center">
             <h3>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</h3>
-            <p>{{ $auth.user.email }}</p>
-            <p>{{ $auth.user.avatar }}</p>
+            <div>{{ $auth.user.email }}</div>
+            <div v-if="subscription && subscriptionExpired">
+              {{
+                $t("Your Pro 🚀 has expired on {date}.", {
+                  date: subscription.expires_on,
+                })
+              }}
+            </div>
+            <div v-if="subscription && !subscriptionExpired && subscription.type !== 'lifetime'">
+              {{
+                $t("Your Pro 🚀 will expire on {date}.", {
+                  date: subscription.expires_on,
+                })
+              }}
+            </div>
+            <div v-if="subscription && subscription.type === 'lifetime'">
+              {{ $t("You have lifetime access to Pro. 🚀") }}
+            </div>
+            <div v-if="!subscription">
+              {{ $t("You are not Pro yet.")
+              }}<router-link :to="{ name: 'go-pro' }">{{
+                $t("Upgrade to Pro 🚀")
+              }}</router-link>
+            </div>
           </div>
-        </div> -->
+        </div>
         <template v-if="level">
           <div class="row">
             <div class="col-sm-12 text-center">
-              <LanguageFlag
-                :language="$l2"
-                :autocycle="true"
-                class="mb-2"
-              />
+              <LanguageFlag :language="$l2" :autocycle="true" class="mb-2" />
               <h5 class="mb-4">
                 {{ $auth.user.first_name }}’s {{ $l2.name }} Language Progress
               </h5>
@@ -110,7 +128,10 @@
                     </div>
                   </div>
                   <div class="col-sm-12 col-md-6 mb-2">
-                    <div class="text-center alert-danger rounded p-4" style="height: 100%">
+                    <div
+                      class="text-center alert-danger rounded p-4"
+                      style="height: 100%"
+                    >
                       <b-button variant="danger" @click="deleteAccount">
                         <i class="fas fa-times-circle mr-2"></i>
                         Delete my account
@@ -133,7 +154,6 @@
 
 <script>
 import Helper from "@/lib/helper";
-import Config from "@/lib/config";
 import { mapState } from "vuex";
 export default {
   computed: {
@@ -179,12 +199,22 @@ export default {
       let savedWords = this.savedWords[this.$l2.code] || [];
       return savedWords.map((w) => w.id);
     },
+    subscriptionExpired() {
+      if (this.subscription) {
+        if (this.subscription.type === 'lifetime') return false;
+        let now = new Date();
+        let expires = new Date(this.subscription.expires_on);
+        return now > expires;
+      }
+      return false;
+    },
   },
   data() {
     return {
       showManuallySetHours: false,
       mannuallySetLevel: this.level,
       mannuallySetHours: undefined,
+      subscription: undefined,
     };
   },
   beforeDestroy() {
@@ -202,6 +232,8 @@ export default {
         );
       }
     });
+    let subscription = this.$auth.$storage.getUniversal("subscription");
+    this.subscription = subscription;
   },
   watch: {
     mannuallySetLevel() {
@@ -253,7 +285,7 @@ export default {
             this.$toast.success("Success: User account has been deleted.", {
               duration: 5000,
             });
-            this.$router.push('/logout')
+            this.$router.push("/logout");
           } else {
             this.$toast.error("Error: Cannot delete admin users.", {
               duration: 5000,

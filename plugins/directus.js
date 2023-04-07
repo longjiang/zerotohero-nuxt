@@ -334,5 +334,19 @@ export default ({ app }, inject) => {
         return false;
       }
     },
+    async checkSubscription() {
+      let res = await this.get(
+        `items/subscriptions?filter[owner][eq]=${app.$auth.user.id}&timestamp=${Date.now()}`
+      );
+      if (res && res.data && res.data.data) {
+        if (res.data.data[0]) {
+          let subscription = res.data.data[0];
+          app.$auth.$storage.setUniversal("subscription", subscription);
+          return subscription;
+        } else {
+          return false;
+        }
+      }
+    }
   })
 }
