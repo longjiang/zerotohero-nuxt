@@ -388,9 +388,6 @@ export default {
         l2SettingsOfL2 = this.l2Settings[this.$l2.code];
       return l2SettingsOfL2;
     },
-    pro() {
-      return !this.$directus.subscriptionExpired()
-    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -434,6 +431,11 @@ export default {
     startLineIndex() {
       let startLineIndex = this.currentHit.lineIndex;
       return startLineIndex;
+    },
+  },
+  asyncComputed: {
+    async pro() {
+      return await !this.$directus.subscriptionExpired()
     },
   },
   watch: {

@@ -200,7 +200,12 @@ export default {
       this.$store.dispatch("history/load");
     }
     await this.$directus.initAndGetUserData(); // Make sure user data is fetched from the server
-    await this.$directus.checkSubscription();
+    if (this.$auth.loggedIn) {
+      await this.$store.dispatch(
+        "subscriptions/checkSubscription",
+        this.$auth.user.id
+      );
+    }
     console.log("Default.vue: User data initialized.");
     if (this.l1 && this.l2) {
       this.loadLanguageSpecificSettings(); // Make sure this line is AFTER registering mutation event listeners above!

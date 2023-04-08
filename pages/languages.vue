@@ -336,9 +336,6 @@ export default {
     };
   },
   computed: {
-    pro() {
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
-    },
     browserLanguage() {
       if (process.browser) {
         let code = navigator.language.replace(/-.*/, "");
@@ -387,6 +384,9 @@ export default {
         let randomLanguageObj = this.$languages.getSmart(randomLanguage);
         return randomLanguageObj;
       }
+    },
+    pro() {
+      return this.forcePro || this.$store.state.subscriptions.active;
     },
   },
   async created() {

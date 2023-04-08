@@ -117,9 +117,6 @@ export default {
       if (typeof this.$store.state.settings.l2 !== "undefined")
         return this.$store.state.settings.l2;
     },
-    pro() {
-      return !this.$directus.subscriptionExpired()
-    },
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
@@ -152,6 +149,9 @@ export default {
         });
         return currentChild ? currentChild : item;
       }
+    },
+    pro() {
+      return this.forcePro || this.$store.state.subscriptions.active;
     },
   },
   watch: {

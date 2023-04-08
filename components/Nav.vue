@@ -238,6 +238,9 @@ export default {
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
     ...mapState("shows", ["categories"]),
+    pro() {
+      return this.forcePro || this.$store.state.subscriptions.active;
+    },
     background() {
       return background(this.l2);
     },
@@ -271,9 +274,6 @@ export default {
         (typeof window !== "undefined" &&
           window.matchMedia("(display-mode: standalone)").matches)
       );
-    },
-    pro() {
-      return !this.$directus.subscriptionExpired()
     },
     currentParent() {
       return this.findParent(this.$route.name);

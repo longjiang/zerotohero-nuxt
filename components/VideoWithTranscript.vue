@@ -368,9 +368,6 @@ export default {
     };
   },
   computed: {
-    pro() {
-      return !this.$directus.subscriptionExpired()
-    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -410,6 +407,9 @@ export default {
       return this.episodes.findIndex(
         (v) => v.youtube_id === this.video.youtube_id
       );
+    },
+    pro() {
+      return this.forcePro || this.$store.state.subscriptions.active;
     },
   },
   created() {

@@ -231,9 +231,6 @@ export default {
           window.matchMedia("(display-mode: standalone)").matches)
       );
     },
-    pro() {
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
-    },
     languageMapPath() {
       if (this.fullHistory) {
         let historyMatches = this.fullHistory
@@ -264,6 +261,9 @@ export default {
     },
     native() {
       return Capacitor.isNativePlatform();
+    },
+    pro() {
+      return this.forcePro || this.$store.state.subscriptions.active;
     },
   },
   watch: {

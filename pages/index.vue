@@ -594,9 +594,6 @@ export default {
         }
       }
     },
-    pro() {
-      return !this.$directus.subscriptionExpired();
-    },
     native() {
       return Capacitor.isNativePlatform();
     },
@@ -648,6 +645,9 @@ export default {
         let randomLanguageObj = this.$languages.getSmart(randomLanguage);
         return randomLanguageObj;
       }
+    },
+    pro() {
+      return this.forcePro || this.$store.state.subscriptions.active;
     },
   },
   async created() {

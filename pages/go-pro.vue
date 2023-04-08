@@ -104,9 +104,6 @@ export default {
     background() {
       return background();
     },
-    pro() {
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
-    },
     native() {
       return Capacitor.isNativePlatform();
     },
@@ -118,8 +115,8 @@ export default {
       return "en";
     },
     pro() {
-      return !this.$directus.subscriptionExpired();
-    }
+      return this.forcePro || this.$store.state.subscriptions.active;
+    },
   },
   methods: {
     translate(text, code) {

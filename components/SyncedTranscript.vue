@@ -233,10 +233,6 @@ export default {
       quizChunks[this.lines.length - 1] = [...Array(this.lines.length).keys()];
       return quizChunks;
     },
-    pro() {
-      if (this.forcePro) return true;
-      return !this.$directus.subscriptionExpired()
-    },
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -275,6 +271,9 @@ export default {
       } else {
         return filteredLines.filter((line) => line);
       }
+    },
+    pro() {
+      return this.forcePro || this.$store.state.subscriptions.active;
     },
   },
   async created() {

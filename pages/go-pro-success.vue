@@ -72,11 +72,6 @@ import axios from "axios";
 import { background } from "@/lib/utils/background";
 
 export default {
-  computed: {
-    pro() {
-      return [1, 4].includes(Number(this.$auth.user?.role)) ? true : false;
-    },
-  },
   async mounted() {
     if (this.$auth.loggedIn) {
       let email = this.$auth.user?.email;
@@ -91,7 +86,9 @@ export default {
     }
   },
   computed: {
-
+    pro() {
+      return this.forcePro || this.$store.state.subscriptions.active;
+    },
     background() {
       return background();
     },

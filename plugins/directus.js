@@ -348,8 +348,8 @@ export default ({ app }, inject) => {
         }
       }
     },
-    subscriptionExpired() {
-      let subscription = app.$auth.$storage.getUniversal("subscription");
+    async subscriptionExpired() {
+      let subscription = await this.checkSubscription()
       if (subscription) {
         if (subscription.type === 'lifetime') return false;
         let now = new Date();

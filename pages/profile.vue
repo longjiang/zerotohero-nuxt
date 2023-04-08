@@ -38,9 +38,13 @@
               }}
             </div>
             <div v-if="subscription && pro && subscription.type !== 'lifetime'">
-              {{
+              🚀 {{
                 $t("Your Pro will expire on {date}.", {
-                  date: subscription.expires_on,
+                  date: $d(
+                    new Date(subscription.expires_on),
+                    "short",
+                    $l1.code
+                  ),
                 })
               }}
             </div>
@@ -223,15 +227,17 @@ export default {
       return savedWords.map((w) => w.id);
     },
     pro() {
-      return !this.$directus.subscriptionExpired();
+      return this.$store.state.subscriptions.active;
     },
+    subscription() {
+      return this.$store.state.subscriptions.subscription;
+    }
   },
   data() {
     return {
       showManuallySetHours: false,
       mannuallySetLevel: this.level,
       mannuallySetHours: undefined,
-      subscription: undefined,
     };
   },
   beforeDestroy() {
@@ -249,8 +255,6 @@ export default {
         );
       }
     });
-    let subscription = this.$auth.$storage.getUniversal("subscription");
-    this.subscription = subscription;
   },
   watch: {
     mannuallySetLevel() {

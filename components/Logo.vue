@@ -46,8 +46,7 @@ export default {
   },
   computed: {
     pro() {
-      if (this.forcePro) return true;
-      return !this.$directus.subscriptionExpired()
+      return this.forcePro || this.$store.state.subscriptions.active;
     },
   },
 };
