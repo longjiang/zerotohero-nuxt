@@ -58,8 +58,11 @@ export default {
     }
   },
   data() {
-    let defaultPrice = "119.00"
-    let discountPrice = "59.50"
+    let defaultPrice = "89.00"
+    let discountPrice = "44.50"
+    // New pricing will come in to effect on 2023-04-10
+    // let defaultPrice = "119.00"
+    // let discountPrice = "59.50"
     let price = this.sale ? discountPrice : defaultPrice
     return {
       price,
