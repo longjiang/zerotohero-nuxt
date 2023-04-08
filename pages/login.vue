@@ -142,6 +142,10 @@ export default {
         if (res && res.data && res.data.data && res.data.data.user) {
           let user = res.data.data.user;
           this.$auth.setUser(user);
+          await this.$store.dispatch(
+            "subscriptions/checkSubscription",
+            this.$auth.user.id
+          )
           this.$toast.success(
             this.translate("Welcome back, {name}!", this.browserLanguage, {
               name: this.$auth.user.first_name

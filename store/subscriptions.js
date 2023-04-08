@@ -18,10 +18,12 @@ export const actions = {
       let active = false;
       const subscription = await this.$directus.checkSubscription()
       if (subscription) {
-        if (subscription.type === 'lifetime') return false;
-        let now = new Date();
-        let expiresOn = new Date(subscription.expires_on);
-        active = now < expiresOn;
+        if (subscription.type === 'lifetime') active = true;
+        else {
+          let now = new Date();
+          let expiresOn = new Date(subscription.expires_on);
+          active = now < expiresOn;
+        }
         commit("SET_SUBSCRIPTION", subscription);
       }
       commit("SET_ACTIVE", active);

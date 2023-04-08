@@ -49,7 +49,7 @@
               }}
             </div>
             <div v-if="subscription && subscription.type === 'lifetime'">
-              {{ $t("You have lifetime access to Pro.") }}
+              🚀 {{ $t("You have lifetime access to Pro.") }}
             </div>
             <div v-if="!subscription">
               {{ $t("You are not Pro yet.") }}
