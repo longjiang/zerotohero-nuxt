@@ -58,8 +58,8 @@ export default {
     }
   },
   data() {
-    let defaultPrice = "89.00"
-    let discountPrice = "44.50"
+    let defaultPrice = "119.00"
+    let discountPrice = "59.50"
     let price = this.sale ? discountPrice : defaultPrice
     return {
       price,
