@@ -5,14 +5,15 @@
   }
 </router>
 <template>
-  <div 
+  <div
     :style="`min-height: 100vh; ${
       background
         ? 'background-image: url(' +
           background +
           '); background-size: cover; background-position: center;'
         : ''
-    }`">
+    }`"
+  >
     <SiteTopBar />
     <div class="go-pro-wrapper container">
       <div class="row">
@@ -22,15 +23,19 @@
             <hr />
           </div>
           <div class="mt-4" />
-          <h3 class="text-center mt-3">🎉 You’re now Pro!</h3>
+          <h3 class="text-center mt-3">
+            🎉 {{ translate("You’re now Pro!") }}
+          </h3>
           <div class="mt-4" />
           <client-only>
             <div v-if="$auth.loggedIn && $auth.user && pro" class="text-center">
               <div>
-                Welcome
-                <b>{{ $auth.user ? $auth.user.first_name : "" }}</b>
-                , you now enjoy the benefit of a Pro account across all
-                languages.
+                {{
+                  translate(
+                    "Welcome {name}, you now enjoy the benefit of a Pro account across all languages.",
+                    { name: $auth.user ? $auth.user.first_name : "" }
+                  )
+                }}
               </div>
               <div class="mt-4"></div>
               <div>
@@ -38,14 +43,17 @@
                   :to="{ path: '/' }"
                   class="btn btn-success pl-4 pr-4"
                 >
-                  Start Using Pro
+                  {{ translate("Start Using Pro") }}
                 </router-link>
               </div>
             </div>
             <div v-else class="text-center">
               <p>
-                Your upgrade was successful. Please login again to activate your
-                Pro features.
+                {{
+                  translate(
+                    "Your upgrade was successful. Please login again to activate your Pro features."
+                  )
+                }}
               </p>
               <div class="mt-4" />
               <div>
@@ -53,7 +61,7 @@
                   :to="{ path: '/login?redirect=/' }"
                   class="btn btn-success pl-4 pr-4"
                 >
-                  Login with Pro
+                  {{ translate("Login with Pro") }}
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
               </div>
@@ -92,7 +100,21 @@ export default {
     background() {
       return background();
     },
-  }
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
+  },
+  methods: {
+    translate(text, code) {
+      if (!code) code = this.browserLanguage;
+      if (this.$languages) return this.$languages.translate(text, code);
+      else return text;
+    },
+  },
 };
 </script>
 <style scoped>
