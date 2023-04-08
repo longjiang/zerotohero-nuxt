@@ -6,13 +6,13 @@
       <div>
         <p class="text-white mb-1 strong" style="font-size: 1.2em">
           <template v-if="message">{{ message }}</template>
-          <template
-            v-else
-          >{{ $t('See complete subtitles with Pro.') }}</template>
+          <template v-else>{{
+            $t("See complete subtitles with Pro.")
+          }}</template>
         </p>
       </div>
       <div class="mt-3" />
-      <div class="text-white pl-5">
+      <!-- <div class="text-white pl-5">
         <span v-if="sale">
           <del style="opacity: 0.5">
             <sup style="font-size: 1rem">$</sup>
@@ -37,9 +37,12 @@
       </div>
       <div class="mt-1" />
       <div class="strong text-white mb-2" style="font-size: 0.85em">{{ $t('Pay once, enjoy forever!') }}</div>
+       -->
       <div class="mt-4" />
       <div>
-        <router-link class="btn btn-success pl-3 pr-3" :to="{ name: 'go-pro' }">🚀 {{ $t('Upgrade to Pro') }}</router-link>
+        <router-link class="btn btn-success pl-3 pr-3" :to="{ name: 'go-pro' }"
+          >🚀 {{ $t("Upgrade to Pro") }}</router-link
+        >
       </div>
     </div>
   </div>
@@ -50,13 +53,13 @@ import { mapState } from "vuex";
 export default {
   props: {
     message: {
-      type: String
-    }
+      type: String,
+    },
   },
   data() {
     return {
-      sale: false
-    }
+      sale: false,
+    };
   },
   computed: {
     ...mapState("stats", ["stats"]),
@@ -71,8 +74,8 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
-    }
-  }
+    },
+  },
 };
 </script>
 

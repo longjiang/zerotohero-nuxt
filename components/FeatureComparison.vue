@@ -1,7 +1,7 @@
 <template>
   <div class="pricing-cards">
     <div class="mb-3 bg-white pricing-card pricing-card-free">
-      <h5 class="pb-3 pt-3">{{ translate("Free Account") }}</h5>
+      <h5 class="">{{ translate("Free Account") }}</h5>
       <hr />
       <ul class="list-unstyled">
         <li>
@@ -16,7 +16,7 @@
             )
           }}
         </li>
-        <li>
+        <!-- <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
           {{
             translate(
@@ -27,7 +27,7 @@
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
           {{ translate("Watch live TV in the target language") }}
-        </li>
+        </li> -->
         <li>
           <i class="fa-solid fa-lock text-warning mr-1"></i>
           {{
@@ -50,44 +50,8 @@
           {{ translate('money-back guarantee') }}
         </span>
       </div>
-      <h4>{{ translate("Pro Account") }} 🚀</h4>
-      <div class="price">
-        <client-only>
-          <span v-if="sale">
-            <del style="opacity: 0.5">
-              <span style="position: relative; bottom: 0.4rem">US$</span>
-              <b style="font-size: 1.5rem">89</b>
-            </del>
-            <span class="text-primary ml-2">
-              <span style="position: relative; bottom: 1.2rem">US$</span>
-              <b style="font-size: 2.68rem">44</b>
-              <b v-if="native" style="position: relative; bottom: 1.2rem">
-                .99
-              </b>
-              <b v-else style="position: relative; bottom: 1.2rem">.50</b>
-            </span>
-          </span>
-          <span v-else>
-            <span style="position: relative; bottom: 1.2rem">US$</span>
-            <b style="font-size: 2.68rem">89</b>
-            <b v-if="native" style="position: relative; bottom: 1.2rem">.99</b>
-          </span>
-        </client-only>
-        <span
-          style="
-            display: inline-block;
-            position: relative;
-            bottom: 0.4rem;
-            margin-left: 0.3rem;
-          "
-        >
-          <span style="display: block; margin-bottom: 0; line-height: 0.4">
-            {{ translate("lifetime") }}
-          </span>
-          <small class="text-success">{{ translate("never expires") }}</small>
-        </span>
-      </div>
-      <hr />
+      <h4 class="mt-5">{{ translate("Pro Account") }} 🚀</h4>
+      <hr class="" />
       <ul class="list-unstyled">
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
@@ -101,7 +65,7 @@
             )
           }}
         </li>
-        <li>
+        <!-- <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
           {{
             translate(
@@ -112,7 +76,7 @@
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
           {{ translate("Watch live TV in the target language") }}
-        </li>
+        </li> -->
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
           {{
@@ -196,7 +160,7 @@ export default {
     position: absolute;
     top: 0;
     left: 22rem;
-    padding-bottom: 4rem;
+    padding-bottom: 2rem;
     li {
       padding-right: 2rem;
     }
