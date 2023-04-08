@@ -432,10 +432,8 @@ export default {
       let startLineIndex = this.currentHit.lineIndex;
       return startLineIndex;
     },
-  },
-  asyncComputed: {
-    async pro() {
-      return await !this.$directus.subscriptionExpired()
+    pro() {
+      return this.forcePro || this.$store.state.subscriptions.active;
     },
   },
   watch: {
