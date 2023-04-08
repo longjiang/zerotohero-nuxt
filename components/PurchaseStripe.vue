@@ -93,9 +93,6 @@ export default {
     this.stripePublishableKey = "pk_live_9lnc7wrGHtcFdPKIWZdy9p17";
 
     return {
-      regularPriceCNYPaymentLink: 'https://buy.stripe.com/4gw2bz7ELbvR8CccMN',
-      salePriceCNYPaymentLink: 'https://buy.stripe.com/dR6dUhcZ51VhaKkdQT',
-      testPriceCNYPaymentLink:'https://buy.stripe.com/fZe2bz0cjczV9Gg4gi',
       stripeCancelURL: HOST + "/go-pro",
       productID: "prod_Lri8TEDq5YDfjb",
       prices: [
@@ -103,43 +100,35 @@ export default {
           plan: 'lifetime', // monthly, annual, lifetime
           type: 'regular', // regular, sale, test
           mode: 'payment', // payment, subscription
-          id: "price_1LArBtG5EbMGvOaflIKUthub",
+          id: "price_1Muh8kG5EbMGvOafeKMCODAG",
           currency: "usd",
-          amount: "89",
+          amount: 119,
         },
         {
           plan: 'lifetime',
           type: 'regular',
           mode: 'payment',
-          id: "price_1LAr9NG5EbMGvOafz1UBoihK",
+          id: "price_1MuhBrG5EbMGvOafqwjKPV0I",
           currency: "cny",
-          amount: "598",
-          paymentLink: "https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
-        },
-        {
-          plan: 'lifetime',
-          type: 'sale',
-          mode: 'payment',
-          id: "price_1LaUOfG5EbMGvOaf3HQLg8sL",
-          currency: "usd",
-          amount: "44.5", // 50% off
-        },
-        {
-          plan: 'lifetime',
-          type: 'sale',
-          mode: 'payment',
-          id: "price_1LaUS8G5EbMGvOafptHDa9zZ",
-          currency: "cny",
-          amount: "299", // 50% off
-          paymentLink: "https://buy.stripe.com/dR6dUhcZ51VhaKkdQT"
+          amount: 799,
+          paymentLink: "https://buy.stripe.com/4gw03r5wD0Rd05GfZ3"
         },
         {
           plan: 'lifetime',
           type: 'test',
           mode: 'payment',
-          id: "price_1L9zlDG5EbMGvOafpz7PnnGt",
-          currency: "cad",
-          amount: "0.5",
+          id: "price_1MuhOYG5EbMGvOaf0CstpKKf",
+          currency: "usd",
+          amount: 0.52,
+        },
+        {
+          plan: 'lifetime',
+          type: 'test',
+          mode: 'payment',
+          id: "price_1MuhOtG5EbMGvOafztopdzqS",
+          currency: "cny",
+          amount: 3.02,
+          paymentLink: "https://buy.stripe.com/dR63fD9MT57tdWw8wC"
         },
         {
           plan: 'annual',
@@ -147,7 +136,24 @@ export default {
           mode: 'subscription',
           id: "price_1MuVSwG5EbMGvOafWG8aC89o",
           currency: "usd",
-          amount: "59",
+          amount: 59,
+        },
+        {
+          plan: 'annual',
+          type: 'regular',
+          mode: 'payment', // not a re-occurring payment so it can work with Alipay and WeChat Pay
+          id: "price_1MuhpjG5EbMGvOaf5NyI7JMT",
+          currency: "cny",
+          amount: 399,
+          paymentLink: "https://buy.stripe.com/14kaI51gneI37y87sB",
+        },
+        {
+          plan: 'annual',
+          type: 'test',
+          mode: 'subscription',
+          id: "price_1MuhH3G5EbMGvOafQBDaBkmU",
+          currency: "usd",
+          amount: 0.51,
         },
         {
           plan: 'monthly',
@@ -155,7 +161,24 @@ export default {
           mode: 'subscription',
           id: "price_1MuVVsG5EbMGvOafrx27nKxM",
           currency: "usd",
-          amount: "6",
+          amount: 6,
+        },
+        {
+          plan: 'monthly',
+          type: 'regular',
+          mode: 'subscription',
+          id: "price_1Muhw5G5EbMGvOafXWqu0m1l",
+          currency: "cny",
+          amount: 39,
+          paymentLink: "https://buy.stripe.com/3cs6rPbV10Rdg4E14e"
+        },
+        {
+          plan: 'monthly',
+          type: 'test',
+          mode: 'subscription',
+          id: "price_1MuhF5G5EbMGvOaf0xv2sMRf",
+          currency: "usd",
+          amount: 0.50,
         },
       ]
     };
