@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/pricing/:currency?',
+    path: '/:l1/:l2/czh-pricing/:currency?',
     props: true
   }
 </router>

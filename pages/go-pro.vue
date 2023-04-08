@@ -21,13 +21,13 @@
     <div class="pt-5 pb-5 container">
       <div class="row">
         <div class="col-sm-12">
-          <div v-if="sale" class="bg-primary text-white p-3 rounded text-center mb-5" style="max-width: 46rem; margin: 0 auto; font-size: 1.2em" >
+          <div v-if="type === 'sale'" class="bg-primary text-white p-3 rounded text-center mb-5" style="max-width: 46rem; margin: 0 auto; font-size: 1.2em" >
             <div><b>{{ translate('VALENTINES DAY SALE!') }}</b> {{ translate('50% off on lifetime Pro account upgrade') }}</div>
             <small style="text-small">{{ $t('Offer ends:')}} {{ $d(new Date(2023, 1, 14), 'short', browserLanguage) }}</small>
           </div>
           <client-only>
             <div class="mt-4"></div>
-            <FeatureComparison :sale="sale" />
+            <FeatureComparison :type="type" />
             <div v-if="$auth.loggedIn && $auth.user" class="text-center text-white">
               <div v-if="pro">
                 <h5 class="mb-3">🎉 {{ translate('You are already Pro!') }} 🚀 {{ translate('Enjoy!') }}</h5>
@@ -40,18 +40,22 @@
                   <div class="mt-5 mb-4">
                     <h5>{{ translate('Ready to upgrade to Pro?') }}</h5>
                   </div>
-                  <div v-if="native">
-                    <div class="pt-4 pb-5">
-                      <PurchaseiOS :sale="sale" />
+                  <p>{{ translate('Please choose your plan.') }}</p>
+                  <Pricing @plan-selected="handlePlanSelection" />
+                  <section class="mt-3" v-if="selectedPlan" id="payment-methods" ref="paymentMethods">
+                    <div v-if="native">
+                      <div class="pt-4 pb-5">
+                        <PurchaseiOS :type="type" :plan="selectedPlan.name" />
+                      </div>
                     </div>
-                  </div>
-                  <div v-else>
-                    <div>
-                      <p>{{ translate('Please choose your method of payment.') }}</p>
-                      <PurchaseStripe :sale="sale" :test="test" />
-                      <PurchasePayPal :sale="sale" :test="test"/>
+                    <div v-else>
+                      <div>
+                        <p>{{ translate('Please choose your method of payment.') }}</p>
+                        <PurchaseStripe :type="type" :plan="selectedPlan.name" />
+                        <PurchasePayPal :type="type" :plan="selectedPlan.name" />
+                      </div>
                     </div>
-                  </div>
+                  </section>
                 </client-only>
               </div>
             </div>
@@ -91,13 +95,14 @@
 <script>
 import { Capacitor } from "@capacitor/core";
 import { background } from "@/lib/utils/background";
+import { timeout } from "@/lib/utils/timeout";
 
 export default {
   data() {
     return {
       loading: false,
-      sale: false,
-      test: false
+      type: 'regular',
+      selectedPlan: undefined,
     };
   },
   computed: {
@@ -119,6 +124,11 @@ export default {
     },
   },
   methods: {
+    async handlePlanSelection(plan) {
+      this.selectedPlan = plan;
+      await timeout(1000)
+      this.$refs.paymentMethods.scrollIntoView({ behavior: 'smooth' });
+    },
     translate(text, code) {
       if (!code) code = this.browserLanguage;
       if (this.$languages) return this.$languages.translate(text, code);
