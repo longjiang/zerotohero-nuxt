@@ -9,8 +9,27 @@
       }"
       @click="selectPlan(plan)"
     >
-      <h3>{{ plan.priceText }}</h3>
-      <div>{{ plan.description }}</div>
+      <div class="price" style="white-space: nowrap">
+        <span
+          ><span style="position: relative; bottom: 1.2rem">{{
+            plan.currency
+          }}</span>
+          <b style="font-size: 2.68rem">{{ plan.amount }}</b></span
+        >
+        <span
+          style="
+            display: inline-block;
+            position: relative;
+            bottom: 1.2rem;
+            margin-left: 0.1rem;
+            text-align: left;
+          "
+          ><span style="display: block; margin-bottom: 0px; line-height: 0.4">
+            {{ translate(plan.intervalText) }}
+          </span>
+        </span>
+      </div>
+      <div>{{ translate(plan.description) }}</div>
     </div>
   </div>
 </template>
@@ -22,27 +41,47 @@ export default {
       selectedPlan: null,
       pricingPlans: [
         {
-          name: 'monthly',
-          priceText: '$6/mo',
-          description: 'Billed monthly',
+          name: "monthly",
+          currency: "US$",
+          amount: "6",
+          intervalText: "/mo",
+          description: "Billed monthly",
         },
         {
-          name: 'annual',
-          priceText: '$59/yr',
-          description: 'Billed annually',
+          name: "annual",
+          currency: "US$",
+          amount: "59",
+          intervalText: "/yr",
+          description: "Billed annually",
         },
         {
-          name: 'lifetime',
-          priceText: '$119',
-          description: 'One-time payment, lifetime access.',
+          name: "lifetime",
+          currency: "US$",
+          amount: "119",
+          intervalText: "/lifetime",
+          description: "One-time payment, lifetime access.",
         },
       ],
     };
   },
+  computed: {
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
+  },
   methods: {
     selectPlan(plan) {
       this.selectedPlan = plan;
-      this.$emit('plan-selected', plan);
+      this.$emit("plan-selected", plan);
+    },
+    translate(text, code) {
+      if (!code) code = this.browserLanguage;
+      if (this.$languages) return this.$languages.translate(text, code);
+      else return text;
     },
   },
 };
