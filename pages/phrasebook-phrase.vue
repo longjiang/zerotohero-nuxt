@@ -21,7 +21,7 @@
               <router-link class="link-unstyled mb-4 d-block" :to="homeRoute">
                 <h5 class="phrasebook-title">
                   <i class="fa fa-chevron-left mr-2"></i>
-                  {{ phrasebook.title }}
+                  {{ $t(phrasebook.title, { l2: $t(this.$l2.name) }) }}
                 </h5>
               </router-link>
               <Star v-if="word" :word="word" class="ml-1 mr-1" />
@@ -52,7 +52,7 @@
                         <span class="mr-1">
                           {{ phraseObj.pronunciation }}
                         </span>
-                        <Speak :text="phraseObj.phrase"/>
+                        <Speak :text="phraseObj.phrase" />
                       </div>
                       <Annotate
                         :phonetics="!phraseObj.pronunciation"
@@ -80,7 +80,10 @@
                         <span class="mr-1">
                           {{ phraseObj.pronunciation }}
                         </span>
-                        <Speak :text="phraseObj.phrase" class="phrase-pronunciation" />
+                        <Speak
+                          :text="phraseObj.phrase"
+                          class="phrase-pronunciation"
+                        />
                       </div>
                       <Annotate
                         @textChanged="textChanged"
@@ -151,7 +154,11 @@
                 <Flashcard>
                   <template v-slot:front>
                     <div>
-                      <LazyEntryHeader :entry="word" :hidePhonetics="true" :disabled="true"/>
+                      <LazyEntryHeader
+                        :entry="word"
+                        :hidePhonetics="true"
+                        :disabled="true"
+                      />
                       <DefinitionsList
                         v-if="word.definitions"
                         :class="{ 'mt-3': true, transparent: true }"
@@ -161,7 +168,11 @@
                   </template>
                   <template v-slot:back>
                     <div>
-                      <LazyEntryHeader :entry="word" :hidePhonetics="false" :disabled="true" />
+                      <LazyEntryHeader
+                        :entry="word"
+                        :hidePhonetics="false"
+                        :disabled="true"
+                      />
                       <DefinitionsList
                         v-if="word.definitions"
                         :class="{ 'mt-3': true, transparent: false }"
@@ -212,7 +223,6 @@
                 :tvShow="phrasebook.tv_show"
                 :exact="phraseObj.exact || phrasebook.exact"
                 :showExternal="false"
-
                 :showImages="false"
                 :showCollocations="false"
                 :showExamples="false"
@@ -502,7 +512,7 @@ export default {
       let phrasebooks, phrasebook;
       if (this.bookId === "saved") {
         phrasebook = {
-          title: `Saved ${this.$l2.name} Phrases`,
+          title: "Saved {l2} Phrases",
           phrases: this.savedPhrases[this.$l2.code] || [],
           l2: this.$l2,
           id: "saved",

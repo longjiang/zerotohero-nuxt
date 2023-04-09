@@ -89,7 +89,6 @@ export const mutations = {
   REMOVE_ALL_SAVED_PHRASES(state, { l2 } = {}) {
     if (typeof localStorage !== 'undefined') {
       let savedPhrases = Object.assign({}, state.savedPhrases)
-      console.log('l2', l2)
       if (l2) {
         if (state.savedPhrases[l2]) {
           savedPhrases[l2] = []

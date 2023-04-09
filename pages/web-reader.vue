@@ -19,12 +19,12 @@
     <div class="container bg-white rounded">
       <div class="row">
         <div class="col-sm-12 p-4">
-          <h4 class="mb-3">Read a web page</h4>
+          <h4 class="mb-3">{{ $t('Read a {l2} web page', {l2: $t($l2.name)}) }}</h4>
           <b-form @submit="onSubmit">
             <b-input-group>
               <b-form-input v-model="url" placeholder="https://"></b-form-input>
               <b-button type="submit" size="sm" text="Button" variant="success" class="ml-1">
-                Read
+                {{ $t('Read') }}
               </b-button>
             </b-input-group>
           </b-form>
@@ -40,6 +40,16 @@ export default {
     return {
       url: "",
     };
+  },
+  computed: {
+    $l1() {
+      if (typeof this.$store.state.settings.l1 !== "undefined")
+        return this.$store.state.settings.l1;
+    },
+    $l2() {
+      if (typeof this.$store.state.settings.l2 !== "undefined")
+        return this.$store.state.settings.l2;
+    },
   },
   methods: {
     onSubmit(event) {

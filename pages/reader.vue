@@ -17,33 +17,37 @@
 <template>
   <div class="main pt-3 pb-5">
     <SocialHead
-      :title="`${$l2.name} Text Reader (Annotator) | Language Player`"
-      :description="`Read ${$l2.name} text with phonetic annotation dictionary lookup. Save new words for review.`"
+      :title="`${$l2.name} ${$t('Text Reader (Annotator)')} | Language Player`"
+      :description="`${$t(
+        'Read {l2} text with phonetic annotation dictionary lookup. Save new words for review.',
+        { l2: $l2.name }
+      )}`"
     />
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
           <div class="reader-header-message" v-if="!$auth.loggedIn">
             <h3 class="text-center mt-3 mb-3">
-              {{ $l2.name }} Reader (Annotator)
+              {{ $t("{l2} Text Reader (Annotator)", { l2: $t($l2.name) }) }}
             </h3>
-            <p class="text-center mb-4">
-              I can
-              <b class="text-success">convert any {{ $l2.name }} text</b>
-              into a learner-friendly format, with
-              <span v-if="$hasFeature('transliteration')">
-                {{
-                  {
-                    zh: "pinyin annotation",
-                    ja: "furigana (Japanese alphabet) annotation",
-                    ko: "Hanja byeonggi (Chinese character annotation)",
-                    vi: "Hán tự (Chinese character) annotation",
-                  }[$l2.code] || "phonetic transcription"
-                }}
-                and
-              </span>
-              a popup dictionary!
-            </p>
+            <i18n
+              path="I can convert any {l2} text into a learner-friendly format, with {transliteration} and a popup dictionary!"
+              class="text-center mb-4"
+            >
+              <template #l2>{{ $t($l2.name) }}</template>
+              <template #transliteration>
+                <span v-if="$hasFeature('transliteration')">
+                  {{
+                    {
+                      zh: $t("pinyin annotation"),
+                      ja: $t("furigana (Japanese syllabary) annotation"),
+                      ko: $t("Hanja byeonggi (Chinese character annotation)"),
+                      vi: $t("Hán tự (Chinese character) annotation"),
+                    }[$l2.code] || $t("phonetic transcription")
+                  }}
+                </span>
+              </template>
+            </i18n>
           </div>
           <client-only>
             <router-link
@@ -52,7 +56,7 @@
               :to="{ name: 'my-text' }"
             >
               <i class="fa fa-chevron-left"></i>
-              {{ $t('My Texts') }}
+              {{ $t("My Texts") }}
             </router-link>
             <h4 class="mt-3 mb-3" v-if="shared">{{ shared.title }}</h4>
           </client-only>
@@ -77,7 +81,7 @@
             <div class="text-center mt-4" v-if="canShare">
               <b-button @click="upload" variant="success" size="sm">
                 <i class="fas fa-paper-plane"></i>
-                Share Annotated Text
+                {{ $t("Share Annotated Text") }}
               </b-button>
             </div>
             <div
@@ -87,7 +91,7 @@
               <div v-if="!sharing">
                 <div class="strong mb-2">
                   <i class="fas fa-paper-plane"></i>
-                  Shareable via link:
+                  {{ $t("Shareable via link:") }}
                 </div>
                 <div class="share-banner-url border-gray rounded p-2 bg-white">
                   <span>{{ shareURL }}</span>
@@ -101,51 +105,69 @@
                 </b-button>
               </div>
               <div v-if="sharing" class="strong">
-                Creating a shareable URL...
+                {{ $t("Creating a shareable URL...") }}
               </div>
             </div>
           </client-only>
         </div>
       </div>
-      <h5 class="mt-5">More about this {{ $l2.name }} Reader</h5>
+      <h5 class="mt-5">
+        {{ $t("More about this {l2} Reader", { l2: $t($l2.name) }) }}
+      </h5>
       <ul>
         <li>
-          This is a {{ $l2.name }} text reading tool (a.k.a annotator,
-          tokenizer, lemmatizer)
+          {{
+            $t(
+              "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)",
+              { l2: $t($l2.name) }
+            )
+          }}
         </li>
-        <li>Tap on any word below for a popup dictionary.</li>
-        <li>Tap on the three dots "..." next to each line for translation.</li>
+        <li>{{ $t("Tap on any word below for a popup dictionary.") }}</li>
         <li>
-          You can customize the output in
-          <router-link to="settings">Settings</router-link>
-          .
+          {{
+            $t('Tap on the three dots "..." next to each line for translation.')
+          }}
         </li>
         <li>
-          <code>Markdown</code>
-          and
-          <code>HTML</code>
-          are also supported.
+          <i18n path="You can customize the output in {settings}.">
+            <template #settings>
+              <router-link to="settings">{{ $t("Settings") }}</router-link>
+            </template>
+          </i18n>
         </li>
-        <li v-if="dictionaryCredit" v-html="dictionaryCredit"></li>
+        <li>
+          <i18n path="{markdown} and {html} are also supported.">
+            <template #markdown>
+              <code>Markdown</code>
+            </template>
+            <template #html>
+              <code>HTML</code>
+            </template>
+          </i18n>
+        </li>
+        <li v-if="dictionaryCredit" v-html="$t(dictionaryCredit)"></li>
       </ul>
       <div class="row mt-3">
         <div class="col-sm-12">
           <h5 class="mb-3">{{ $t("Not sure what to read?") }}</h5>
           <ul>
             <li>
-              {{ $t(`Look for ${$l2.name} music lyrics on Google.`) }}
+              {{
+                $t("Look for {l2} music lyrics on Google.", { l2: $t($l2.name) })
+              }}
             </li>
-            <li v-html="$t('libraryIntro', { l2: $l2.name })" />
+            <li v-html="$t('Read various {l2} documents directly on the “Books” page.', { l2: $t($l2.name) })" />
           </ul>
         </div>
       </div>
-      <h5 class="mt-2">Keywords for search engines</h5>
+      <h5 class="mt-2">{{ $t("Keywords for search engines") }}</h5>
       <ul>
-        <li>Online {{ $l2.name }} lemmatizer</li>
-        <li>Online {{ $l2.name }} annotator</li>
-        <li>Online {{ $l2.name }} reader</li>
-        <li>Online {{ $l2.name }} tokenizer</li>
-        <li>Online {{ $l2.name }} NLP tool</li>
+        <li>{{ $t("Online {l2} lemmatizer", { l2: $t($l2.name) }) }}</li>
+        <li>{{ $t("Online {l2} annotator", { l2: $t($l2.name) }) }}</li>
+        <li>{{ $t("Online {l2} reader", { l2: $t($l2.name) }) }}</li>
+        <li>{{ $t("Online {l2} tokenizer", { l2: $t($l2.name) }) }}</li>
+        <li>{{ $t("Online {l2} NLP tool", { l2: $t($l2.name) }) }}</li>
       </ul>
     </div>
     <div class="container">
@@ -159,7 +181,6 @@
 <script>
 import ReaderComp from "@/components/ReaderComp";
 import Helper from "@/lib/helper";
-import Config from "@/lib/config";
 import SAMPLE_TEXT from "@/lib/utils/sample-text";
 import { markdownToTxt } from "markdown-to-txt";
 import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from "node-html-markdown";
@@ -250,7 +271,7 @@ export default {
         Helper.logError(err);
       }
     } else if (["md", "html", "txt"].includes(method)) {
-      text = arg.replace(/\n+/g, '\n\n')
+      text = arg.replace(/\n+/g, "\n\n");
     } else {
       let r = this.get(); // from localStorage
       text = r.text;

@@ -61,7 +61,7 @@
               <span v-else>[{{ word.pronunciation }}]</span>
             </span>
             <span v-if="word.kana" class="wordlist-item-pinyin">
-              ( {{ word.kana }}, {{ transliterate(word.kana) }} )
+              ( {{ word.kana }} <template v-if="word.romaji">, {{word.romaji }}</template> )
             </span>
             <span
               v-if="
@@ -127,7 +127,6 @@
   </div>
 </template>
 <script>
-import { transliterate as tr } from "transliteration";
 import Helper from "@/lib/helper";
 
 export default {
@@ -219,7 +218,11 @@ export default {
       if (this.ids) {
         let dictionary = await this.$getDictionary();
         let words = await Promise.all(
-          this.ids.map(async (id) => await dictionary.get(id))
+          this.ids.map(async (id) => {
+            let word = await dictionary.get(id)
+            if (this.$l2.code === 'ja') word.romaji = await dictionary.transliterate(text)
+            return word
+          })
         );
         words = words ? words.filter((w) => w) : [];
         return words;
@@ -239,10 +242,6 @@ export default {
     },
     unique(list) {
       return Helper.unique(list);
-    },
-    transliterate(text) {
-      let transliteration = tr(text);
-      if (transliteration !== text) return tr(text);
     },
     getUrl(word, index) {
       if (!word) return;

@@ -6,20 +6,45 @@
 </router>
 <template>
   <div class="main">
-    <div class="container pt-5 pb-5">
+    <b-modal
+      id="confirm-remove-all"
+      :title="$t('Remove All Saved Phrases')"
+      hide-footer
+    >
+      <p class="my-4">
+        {{ $t("Are you sure you want to remove all saved phrases?") }}
+      </p>
+      <div class="text-right">
+        <b-button
+          variant="secondary"
+          @click="$bvModal.hide('confirm-remove-all')"
+          >{{ $t("Cancel") }}</b-button
+        >
+        <b-button variant="danger" @click="confirmRemoveAll">{{
+          $t("Remove All")
+        }}</b-button>
+      </div>
+    </b-modal>
+    <div class="container pb-5">
       <SocialHead :title="title" :description="description" :image="image" />
       <client-only>
+        <div
+          class="text-center mb-4"
+          v-if="phrasebook && phrasebook.phrases.length > 0"
+        >
+          <b-button
+            variant="danger"
+            @click="$bvModal.show('confirm-remove-all')"
+          >
+            <i class="fa fa-trash mr-1"></i>
+            {{ $t("Remove All Saved Phrases") }}
+          </b-button>
+        </div>
         <PhrasebookComp
           v-if="phrasebook"
           :phrasebook="phrasebook"
           :initId="initId"
         />
-        <div class="text-center mt-4" v-if="phrasebook && phrasebook.phrases.length > 0">
-          <b-button variant="danger" @click="removeAll">
-            <i class="fa fa-trash mr-1"></i>
-            Remove All Saved Phrases
-          </b-button>
-        </div>
       </client-only>
     </div>
   </div>
@@ -57,7 +82,9 @@ export default {
     },
     title() {
       if (this.phrasebook) {
-        return `${this.phrasebook.title} | Language Player`;
+        return `${this.$t(this.phrasebook.title, {
+          l2: this.$t(this.$l2.name),
+        })}} | Language Player`;
       }
       return `${this.$l2 ? this.$l2.name : ""} Phrasebook | Language Player`;
     },
@@ -77,7 +104,7 @@ export default {
   },
   async mounted() {
     let phrasebook = {
-      title: `Saved ${this.$l2.name} Phrases`,
+      title: "Saved {l2} Phrases",
       phrases: this.savedPhrases[this.$l2.code] || [],
       l2: this.$l2,
       id: "saved",
@@ -104,6 +131,10 @@ export default {
     if (this.unsubscribe) this.unsubscribe();
   },
   methods: {
+    confirmRemoveAll() {
+      this.removeAll();
+      this.$bvModal.hide('confirm-remove-all');
+    },
     removeAll() {
       this.$store.dispatch("savedPhrases/removeAll", {
         l2: this.$l2.code,
@@ -128,5 +159,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

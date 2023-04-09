@@ -511,4 +511,7 @@ const Dictionary = {
     this.tokenizationCache[text] = final
     return final
   },
+  transliterate(text) {
+    return wanakana.toRomaji(text)
+  }
 }

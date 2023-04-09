@@ -16,7 +16,7 @@ const Dictionary = {
   name: 'edict',
   // tokenizer: undefined,
   credit() {
-    return 'The Japanese dictionary is provided by ...'
+    return '日汉词典来自StarDict格式的<a href="https://github.com/a0726h77/stardict-dict-ja" target="_blank">kdic-jc</a>。'
   },
   async load() {
     // this.tokenizer = await new Promise(resolve => {
@@ -373,4 +373,7 @@ const Dictionary = {
     this.tokenizationCache[text] = final
     return final
   },
+  transliterate(text) {
+    return wanakana.toRomaji(text)
+  }
 }

@@ -4,14 +4,18 @@
   }
 </router>
 <template>
-  <div class="main books pt-5 pb-5">
+  <div class="main books pb-5">
     <container-query :query="query" v-model="params">
       <div class="container pb-5">
         <div class="row">
           <div class="col-sm-12">
             <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
-            <h3 class="text-center mt-3">{{ $l2.name }} Books</h3>
-            <p class="text-center" v-if="count">({{ count }} books)</p>
+            <h3 class="text-center mt-3">
+              {{ $t("{l2} Books", { l2: $t($l2.name) }) }}
+            </h3>
+            <p class="text-center" v-if="count">
+              ({{ $t("{count} books", { count }) }})
+            </p>
           </div>
         </div>
         <div class="row mb-4 p-2">
@@ -19,7 +23,7 @@
             <b-form-input
               class="mr-1 w-100"
               type="text"
-              placeholder="Search"
+              :placeholder="$t('Search')"
               v-model="search"
               :lazy="true"
             />
@@ -33,13 +37,13 @@
         </div>
         <div class="row mt-5 mb-5" v-if="!books">
           <div class="col-sm-12 text-center">
-            <Loader :sticky="true" message="Loading books..." />
+            <Loader :sticky="true" message="$t('Loading books...')" />
           </div>
         </div>
         <div class="row" v-if="books">
           <div
-            v-for="book in books"
-            :key="book.id"
+            v-for="(book, index) in books"
+            :key="`book-${index}`"
             :class="{
               'mb-5': true,
               'col-6': params.xs,
@@ -50,12 +54,23 @@
           >
             <BookCard :book="book" />
           </div>
+          <div class="text-center col-12">
+            <infinite-loading
+              @infinite="loadMoreBooks"
+              ref="infiniteLoading"
+            ></infinite-loading>
+          </div>
         </div>
         <div class="row" v-if="books && books.length === 0">
           <div class="col-sm-12">
             <div class="text-center">
-              Sorry, we could not find any {{ $l2.name }} books matching your
-              search term 😭.
+              {{
+                $t(
+                  "Sorry, we could not find any {l2} books matching your search term.",
+                  { l2: $t($l2.name) }
+                )
+              }}
+              😭
             </div>
           </div>
         </div>
@@ -67,10 +82,12 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import Helper from "@/lib/helper";
+import InfiniteLoading from "vue-infinite-loading";
 
 export default {
   components: {
     ContainerQuery,
+    InfiniteLoading,
   },
   data() {
     return {
@@ -116,9 +133,9 @@ export default {
     bookshelfOptions() {
       if (this.bookshelves) {
         let options = this.bookshelves.map((s) => {
-          return { value: s, text: s };
+          return { value: s, text: this.$t(s) };
         });
-        options = [{ value: null, text: "All Topics" }, ...options];
+        options = [{ value: null, text: this.$t("All Topics") }, ...options];
         return options;
       } else {
         return [];
@@ -138,6 +155,9 @@ export default {
   },
   methods: {
     async getBooks() {
+      // Reset the next URL and count before fetching new books
+      this.next = undefined;
+      this.count = undefined;
       this.books = undefined;
       try {
         let params = {
@@ -170,9 +190,41 @@ export default {
         Helper.logError(err);
       }
     },
+    async loadMoreBooks($state) {
+      if (!this.next) {
+        $state.complete();
+        return;
+      }
+
+      try {
+        let data = await Helper.proxy(this.next);
+
+        if (data && data.results) {
+          this.books = this.books.concat(data.results);
+          this.count = data.count;
+          this.next = data.next;
+
+          let bookshelves = this.bookshelves || [];
+          data.results.forEach(
+            (b) => (bookshelves = bookshelves.concat(b.bookshelves))
+          );
+          this.bookshelves = Helper.unique(bookshelves).sort((a, b) =>
+            a.localeCompare(b)
+          );
+        }
+
+        if (this.next) {
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      } catch (err) {
+        Helper.logError(err);
+        $state.error();
+      }
+    },
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>

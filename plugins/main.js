@@ -9,7 +9,9 @@ import VueMq from 'vue-mq'
 import VueSmoothScroll from 'vue2-smooth-scroll'
 import Languages from '@/lib/languages'
 import AsyncComputed from 'vue-async-computed'
+import { ModalPlugin } from 'bootstrap-vue'
 
+Vue.use(ModalPlugin)
 Vue.config.productionTip = false
 Vue.use(VTooltip)
 Vue.use(VueSimpleSVG)

@@ -9,8 +9,8 @@
     <div class="container pt-3 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="mb-5 text-center">{{ $l2.name }} Minimal Pairs</h3>
-          <p class="text-center mb-3">Enter two distinct phonetic segments:</p>
+          <h3 class="mb-5 text-center">{{ $t('{l2} Minimal Pairs', {l2: $t($l2.name)})}}</h3>
+          <p class="text-center mb-3">{{ $t('Enter two distinct phonetic segments:') }}</p>
           <div style="max-width: 20rem; margin: 0 auto">
             <b-input-group>
               <b-form-input
@@ -31,7 +31,7 @@
                   @click="findMinimalPairs"
                   :disabled="!(a && b)"
                 >
-                  Find Minimal Pairs
+                  {{ $t('Find Minimal Pairs')}}
                 </b-button>
               </b-input-group-append>
             </b-input-group>
@@ -40,7 +40,7 @@
             v-if="defaults[$l2.code] && defaults[$l2.code].length > 1"
             class="mt-4 text-center"
           >
-            <p class="mb-3">Or use a preset:</p>
+            <p class="mb-3">{{ $t('Or use a preset:') }}</p>
             <b-form-select
               v-model="presetSelect"
               :options="presetOptions"
@@ -55,7 +55,7 @@
             <Loader :sticky="true" message="Looking for minimal pairs..." />
           </div>
           <p v-if="minimalPairs && minimalPairs.length > 0" class="text-center">
-            <strong>{{ minimalPairs.length }} pairs found:</strong>
+            <strong>{{ $t('{num} pairs found:', {num: minimalPairs.length}) }}</strong>
           </p>
           <table
             class="table table-responsive mt-3"
@@ -82,8 +82,12 @@
                     <i class="fa fa-play" />
                   </router-link>
                 </td>
-                <td style="width: 50%"><WordList :maxDefinitions="1" :words="[row.a.w]" /></td>
-                <td style="width: 50%"><WordList :maxDefinitions="1" :words="[row.b.w]" /></td>
+                <td style="width: 50%">
+                  <WordList :maxDefinitions="1" :words="[row.a.w]" />
+                </td>
+                <td style="width: 50%">
+                  <WordList :maxDefinitions="1" :words="[row.b.w]" />
+                </td>
               </tr>
             </tbody>
           </table>
@@ -133,22 +137,23 @@ export default {
           ["əŋ˨˩˦", "əŋ˨˩˨"],
           ["əŋ˦˥", "əŋ˨˩˨"],
         ],
-        ja: [["また", "まだ"]],
+        ja: [
+          ["た", "だ"],
+          ["た", "った"],
+          ["かん", "がん"],
+          ["きょ", "ぎょ"],
+          ["く", "ぐ"],
+          ["とう", "どう"],
+        ],
         ru: [["ш", "щ"]],
         en: [
-          ["liːt", "lɪt"],
-          ["lɪt", "lɛt"],
-          ["ɛt", "æt"],
-          ["ɛt", "eɪt"],
+          ["iːt", "ɪt"],
           ["æt", "aɪt"],
-          ["ʌt", "ɑːt"],
           ["fr", "θr"],
           ["tr", "θr"],
           ["sɪ", "θɪ"],
           ["sæ", "θæ"],
-          ["zæ", "ðæ"],
-          ['ɪ', 'jɪ'],
-          ['iː', 'jiː']
+          ["i", "ji"],
         ],
         fr: [["ɑ̃", "œ̃"]],
         es: [["ɾo", "ro"]],
@@ -208,14 +213,18 @@ export default {
       }
     },
     async findMinimalPairs() {
+      function countOccurrences(string, subString) {
+        const regex = new RegExp(escapeRegExp(subString), "g");
+        return (string.match(regex) || []).length;
+      }
+
+      function escapeRegExp(string) {
+        return string.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
+      }
       let dictionaryName = this.$store.state.settings.dictionaryName;
       let property = "pronunciation";
-      if (
-        ["kengdic", "openrussian"].includes(dictionaryName) ||
-        this.$l2.code === "it"
-      )
-        property = "head";
-      if (dictionaryName === "edict") property = "kana";
+      if (["ko", "ru", "it"].includes(this.$l2.code)) property = "head";
+      if (this.$l2.code === "ja") property = "kana";
       this.crunching = true;
       let dictionary = await this.$getDictionary();
       let words = await dictionary.getWords();
@@ -233,21 +242,20 @@ export default {
           return { w, chosenPornunciation };
         });
       let as = pronunciations.filter(
-        (p) => p.chosenPornunciation.split(this.a).length === 2
+        (p) => countOccurrences(p.chosenPornunciation, this.a) === 1
       );
       let bs = pronunciations.filter(
-        (p) => p.chosenPornunciation.split(this.b).length === 2
+        (p) => countOccurrences(p.chosenPornunciation, this.b) === 1
       );
       let minimalPairs = [];
       for (let a of as) {
-        let aSplit = a.chosenPornunciation.split(this.a);
-        if (aSplit.length > 2) continue;
-        let b = bs.find((b) => {
-          let bSplit = b.chosenPornunciation.split(this.b);
-          if (bSplit.length > 2) return;
-          return aSplit[0] === bSplit[0] && aSplit[1] === bSplit[1];
-        });
-        if (b) minimalPairs.push({ a, b });
+        const aReplaced = a.chosenPornunciation;
+        for (let b of bs) {
+          const bReplaced = b.chosenPornunciation.replace(this.b, this.a);
+          if (aReplaced === bReplaced) {
+            minimalPairs.push({ a, b });
+          }
+        }
       }
       this.crunching = false;
       minimalPairs = minimalPairs.sort(
@@ -260,5 +268,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

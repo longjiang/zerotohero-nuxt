@@ -2,15 +2,17 @@
   <div>
     <div class="row mb-3">
       <div class="col-sm-12" v-if="phrasebook">
-        <h4 class="text-center">{{ phrasebook.title }}</h4>
+        <h4 class="text-center">
+          {{ $t(phrasebook.title, { l2: $t($l2.name) }) }}
+        </h4>
         <div class="mt-2 text-center">
-          {{ $t('{num} phrases', {num: phrasebook.phrases.length}) }}
+          {{ $t("{num} phrases", { num: phrasebook.phrases.length }) }}
         </div>
         <div class="text-center mt-3">
           <b-input-group :prepend="$t('Start from')">
             <b-form-input v-model.lazy="startRow" type="number"></b-form-input>
             <b-input-group-append>
-              <b-button variant="primary">{{ $t('OK') }}</b-button>
+              <b-button variant="primary">{{ $t("OK") }}</b-button>
             </b-input-group-append>
             <a
               :href="csvHref"
@@ -23,12 +25,12 @@
             </a>
           </b-input-group>
         </div>
-        <div class="mt-3 phrasebook-description"><small v-html="phrasebook.description" class="mt-1 text-center" /></div>
+        <div class="mt-3 phrasebook-description">
+          <small v-html="phrasebook.description" class="mt-1 text-center" />
+        </div>
       </div>
     </div>
-    <div
-      class="pt-3 pb-3 mb-3 bg-white hide-defs"
-    >
+    <div class="pt-3 pb-3 mb-3 bg-white hide-defs">
       <LazyHideDefs
         @hideWord="hideWord = arguments[0]"
         @hideDefinitions="hideDefinitions = arguments[0]"
@@ -192,16 +194,14 @@ export default {
           translations: {},
         };
         if (phrase[this.$l1.code])
-          phraseItem.translations[this.$l1.code] = phrase[this.$l1.code]
-        else if (phrase.en) 
-          phraseItem.translations.en = phrase.en
+          phraseItem.translations[this.$l1.code] = phrase[this.$l1.code];
+        else if (phrase.en) phraseItem.translations.en = phrase.en;
         return phraseItem;
       }
     },
   },
 };
 </script>
-
 
 <style lang="scss" scoped>
 .phrasebook-phrase-images {
