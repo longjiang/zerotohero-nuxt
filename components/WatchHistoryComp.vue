@@ -203,7 +203,7 @@ export default {
       if (typeof this.history !== "undefined") {
         return this.history.filter((i) => {
           if (this.l2 && i.l2 !== this.l2.code) return false;
-          if (i.type === "video") return typeof i.video !== "undefined";
+          if (i.type === "video") return typeof i.video !== "undefined" && i.video.youtube_id;
           if (i.type === "phrasebook")
             return (
               typeof i.phrasebook !== "undefined" && i.phrasebook.id !== "saved"

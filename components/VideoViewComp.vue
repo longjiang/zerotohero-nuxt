@@ -262,7 +262,7 @@ export default {
       };
     },
     saveHistory({ type, video, duration }) {
-      if (type === "youtube" && video) {
+      if (type === "youtube" && video && video.youtube_id) {
         console.log(`YouTube View: Saving history...`);
         let data = {
           type: "video",
