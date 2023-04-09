@@ -11,8 +11,12 @@
 <template>
   <div style="display: flex; flex-direction: column; height: 100vh">
     <SocialHead
-      title="Map of World Languages | Language Player"
-      description="Tap on any language label to learn the language! Live TV channels, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.”"
+      :title="translate('Map of World Languages') + '| Language Player'"
+      :description="
+        translate(
+          'Tap on any language label to learn the language! Live TV channels, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.”'
+        )
+      "
       image="/img/thumbnail-language-map-2.jpg"
     />
     <SiteTopBar class="safe-padding-top" />
@@ -28,30 +32,42 @@
         @click="hideDescription = !hideDescription"
       >
         <i class="fa-solid fa-xmark" v-if="!hideDescription"></i>
-        <span v-else>Show Legend</span>
+        <span v-else>{{ translate("Show Legend") }}</span>
       </b-button>
-      <h5 class="text-white">World Language Map</h5>
+      <h5 class="text-white">{{ translate("World Language Map") }}</h5>
       <p class="text-white">
         <i class="fa-solid fa-arrow-pointer"></i>
-        Click on any language to learn it.
+        {{ translate("Click on any language to learn it.") }}
       </p>
       <p v-if="filteredLangsWithGeo">
-        This is an interactive map of
-        {{ filteredLangsWithGeo.length }} languages of the world, including
-        {{ livingLangs.length }} living languages,
-        {{ historicLangs.length }} historic languages,
-        {{ extinctLangs.length }} extinct languages, and
-        {{ constructedLangs.length }} constructed languages.
+        {{
+          translate(
+            "This is an interactive map of {numLanguages} languages of the world, including {livingLanguages} living languages, {historicLanguages} historic languages, {extinctLanguages} extinct languages, and {constructedLanguages} constructed languages.",
+            {
+              numLanguages: filteredLangsWithGeo.length,
+              livingLanguages: livingLangs.length,
+              historicLanguages: historicLangs.length,
+              extinctLanguages: extinctLangs.length,
+              constructedLanguages: constructedLangs.length,
+            }
+          )
+        }}
       </p>
+
       <p v-else>
-        This is an interactive map of 7,268 languages of the world, including
-        6,924 living languages, 105 historic languages, 220 extinct languages,
-        and 5 constructed languages.
+        {{
+          translate(
+            "This is an interactive map of 7,268 languages of the world, including 6,924 living languages, 105 historic languages, 220 extinct languages, and 5 constructed languages."
+          )
+        }}
       </p>
       <p>
-        <b class="text-white">Legend.</b>
-        Circle sizes correspond to speaker populations. Circles are colour-coded
-        by language families.
+        <b class="text-white">{{ translate("Legend.") }}</b>
+        {{
+          translate(
+            "Circle sizes correspond to speaker populations. Circles are colour-coded by language families."
+          )
+        }}
       </p>
       <ul class="list-unstyled">
         <li v-for="family in langFamilies" :key="`legend-family-${family.id}`">
@@ -59,7 +75,7 @@
             class="legend-dot"
             :style="`background-color: ${family.color};`"
           ></span>
-          <span>{{ family.name }}</span>
+          <span>{{ translate(family.name) }}</span>
         </li>
       </ul>
     </div>
@@ -69,14 +85,16 @@
           <div class="loader-wrapper" v-if="loadingMap">
             <Loader
               :sticky="true"
-              message="Loading map, and plotting thousands of languages..."
+              :message="
+                translate('Loading map, and plotting thousands of languages...')
+              "
             />
           </div>
           <client-only v-if="filteredLangsWithGeo">
             <div class="options-bar">
               <LanguageSwitch
                 style="flex: 1; z-index: 999; margin-left: 0.25rem"
-                placeholder="Search languages..."
+                :placeholder="translate('Search languages...')"
                 :nav="false"
                 :button="false"
                 :showRandom="false"
@@ -173,8 +191,20 @@ export default {
         ? this.filteredLangsWithGeo.filter((l) => l.type === "C")
         : undefined;
     },
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
   },
   methods: {
+    translate(text, data = {}) {
+      let code = this.browserLanguage;
+      if (this.$languages) return this.$languages.translate(text, code, data);
+      else return text;
+    },
     onReady() {
       this.loadingMap = false;
     },

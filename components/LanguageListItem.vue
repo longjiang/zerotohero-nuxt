@@ -18,7 +18,7 @@
         }"
         title="Live TV"
       >
-        <i class="fa fa-broadcast-tower" />
+        <i class="fa fa-tv-retro" />
       </router-link>
       <router-link
         :to="{
@@ -55,7 +55,7 @@
         "
         class="language-list-item-speakers"
       >
-        {{ speakers(language.speakers) }}
+        {{ formatSpeakers(language.speakers) }}
       </span>
     </span>
     <router-link :to="base">
@@ -77,8 +77,16 @@
           {{ badge }}
         </div>
       </span>
-      <span class="language-list-item-from-name" v-if="from && from.code !== 'en'">
-        ({{ $languages.translate(`from ${this.languageName(from)}`, from['iso639-3']) }})
+      <span
+        class="language-list-item-from-name"
+        v-if="from && from.code !== 'en'"
+      >
+        ({{
+          $languages.translate(
+            `from ${this.languageName(from)}`,
+            from["iso639-3"]
+          )
+        }})
       </span>
       <span
         v-if="keyword && language.otherNames.length > 0"
@@ -99,7 +107,7 @@
       "
       class="language-list-item-speakers"
     >
-      {{ speakers(language.speakers) }} Speakers
+      {{ $t("{num} Speakers", { num: formatSpeakers(language.speakers) }) }}
     </span>
   </div>
 </template>
@@ -153,19 +161,33 @@ export default {
       );
       return english;
     },
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
   },
   methods: {
+    translate(text, data = {}) {
+      let code = this.browserLanguage;
+      if (this.$languages) return this.$languages.translate(text, code, data);
+      else return text;
+    },
     cycleFlags() {
       if (this.$refs.flag) this.$refs.flag.cycleFlags();
     },
     stopCycling() {
       if (this.$refs.flag) this.$refs.flag.stopCycling();
     },
-    speakers(number) {
-      return Helper.formatK(number, 1);
+    formatSpeakers(number) {
+      return Helper.formatK(number, 1, this.browserLanguage);
     },
     languagePath(language) {
-      return `/${this.from ? this.from.code : "en"}/${language.code}/explore-media`;
+      return `/${this.from ? this.from.code : "en"}/${
+        language.code
+      }/explore-media`;
     },
     hasDictionary(l1, l2) {
       return (
@@ -179,7 +201,7 @@ export default {
       return this.$languages.hasFeature(l1, l2, "live-tv");
     },
     languageName(language) {
-      let name = language.name.replace(/ \(.*\)/gi, "");
+      let name = this.translate(language.name.replace(/ \(.*\)/gi, ""));
       return name;
     },
   },

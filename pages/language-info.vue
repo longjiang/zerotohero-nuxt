@@ -12,63 +12,63 @@
           <div v-if="$route.params.l1 && $route.params.l1 && $l1 && $l2">
             <div class="pb-2">
               <h4 class="text-center mb-4">
-                About the {{ $l2.name }} {{ $l2.level }}
+                {{ $t("About the {l2} language", { l2: $t($l2.name) }) }}
               </h4>
               <LazyLanguageInfoBox :lang="$l2" class="mb-4" />
               <p v-if="$l2['iso639-1']">
-                <b>ISO639-1:</b>
-                {{ $l2["iso639-1"] || "Not available" }}
+                <b>{{ $t("ISO639-1:") }}</b>
+                {{ $l2["iso639-1"] || $t("Not available") }}
               </p>
               <p>
-                <b>ISO639-3:</b>
-                {{ $l2["iso639-3"] || "Not available" }}
+                <b>{{ $t("ISO639-3:") }}</b>
+                {{ $l2["iso639-3"] || $t("Not available") }}
               </p>
               <p v-if="$l2['glottologId']">
-                <b>Glottolog ID:</b>
+                <b>{{ $t("Glottolog ID:") }}</b>
                 {{ $l2["glottologId"] }}
               </p>
               <p v-if="$l2['glottologFamilyId']">
-                <b>glottologFamilyId:</b>
+                <b>{{ $t("Glottolog Family ID:") }}</b>
                 {{ $l2["glottologFamilyId"] }}
               </p>
               <p v-if="$l2['glottologParentId']">
-                <b>glottologParentId:</b>
-                {{ $l2["glottologParentId"] }}
+                <b>{{ $t("glottologParentId:") }}</b>
+                {{ $l2["Glottolog Parent ID"] }}
               </p>
               <p>
-                <b>Language Player ID:</b>
-                {{ $l2.id || "Not available" }}
+                <b>{{ $t("Language Player Language ID:") }}</b>
+                {{ $l2.id || $t("Not available") }}
               </p>
               <p v-if="$l2.lat && $l2.long">
-                <b>Location (lat, long):</b>
+                <b>{{ $t("Location (lat, long):") }}</b>
                 {{ $l2.lat }}, {{ $l2.long }}
               </p>
               <p v-if="$l2.scope">
-                <b>Scope:</b>
+                <b>{{ $t("Language Scope:") }}</b>
                 {{ scope[$l2.scope] }}
               </p>
               <p v-if="$l2.scope">
-                <b>Type:</b>
+                <b>{{ $t("Language Type:") }}</b>
                 {{ type[$l2.type] }}
               </p>
               <p v-if="$l2.scripts && $l2.scripts.length > 0">
-                <b>Scripts used:</b>
+                <b>{{ $t("Orthography Code:") }}</b>
                 {{
                   $l2.scripts
                     ? $l2.scripts.map((s) => s.script).join(", ")
-                    : "Not available"
+                    : $t("Not available")
                 }}
               </p>
               <p v-if="$l2.otherNames?.length > 0">
-                <b>Other names:</b>
+                <b>{{ $t("Other names:") }}</b>
                 {{ $l2.otherNames.join(",") }}
               </p>
               <p v-if="$l2.speakers">
-                <b>Number of Speakers:</b>
-                {{ $l2.speakers ? $n($l2.speakers) : "Not available" }}
+                <b>{{ $t("Number of Speakers:") }}</b>
+                {{ $l2.speakers ? $n($l2.speakers, $l1.code || 'en') : $t("Not available") }}
               </p>
               <p>
-                <b>Native to:</b>
+                <b>{{ $t("Native to:") }}</b>
                 <span
                   v-for="c in $l2.country"
                   :key="`lang-country-${c.alpha2Code}`"
@@ -80,7 +80,7 @@
                   />
                   {{ c.name }}
                   <span v-if="c.languages?.length > 0">
-                    (Also speaks
+                    ({{ $t("Also speaks:") }}
                     <span
                       v-for="(language, index) in c.languages"
                       :key="`c-${c.name}-l-${language}`"
@@ -91,8 +91,8 @@
                           params: { l1: 'en', l2: language },
                         }"
                       >
-                        {{ language }}
-                      </router-link><span v-if="index + 1 < c.languages.length">,</span>
+                        {{ language }} </router-link
+                      ><span v-if="index + 1 < c.languages.length">,</span>
                     </span>
                     )
                   </span>
@@ -100,26 +100,57 @@
               </p>
             </div>
             <div class="pb-2 pt-5" v-if="$l2.han">
-              <h4 class="text-center mb-4">Dialects of Chinese</h4>
-              <p class="text-center">Bar graph shows number of speakers.</p>
+              <h4 class="text-center mb-4">{{ $t("Dialects of Chinese") }}</h4>
+              <p class="text-center">
+                {{ $t("Bar graph shows number of speakers.") }}
+              </p>
               <Dialects skin="light" />
             </div>
             <div class="pb-2 pt-5" v-if="$l2.han">
-              <h4 class="text-center">56 Ethnic Groups of China</h4>
+              <h4 class="text-center">{{ $t("56 Ethnic Groups of China") }}</h4>
               <p class="text-center">
-                Bar graph shows number of speakers. (2010 Numbers)
+                {{ $t("Bar graph shows number of speakers.") }}
+                ( {{ $t("2010 Numbers") }})
               </p>
               <FiftySixEthnic skin="light" />
             </div>
             <div class="pb-2 pt-2">
               <hr />
-              <h5 class="mt-3 mb-3 text-center">Ask ChatGPT</h5>
-              <div class="alert alert-danger text-center"><b>Note:</b> Some information about lesser-known languages may <em>not</em> be accurate.</div>
+              <h5 class="mt-3 mb-3 text-center">{{ $t("Ask ChatGPT") }}</h5>
+              <div class="alert alert-danger text-center">
+                <b>{{ $t("Note:") }}</b> {{ $t('Some information about lesser-known languages may not be accurate.') }}
+              </div>
               <ChatGPT
                 :initialMessages="[
-                  `What is the ${$l2.name} language (also known as ${$l2.otherNames.join(',')}, ISO639-3 code ${$l2['iso639-3']}, glottolog ID ${$l2['glottologId']})? Could you give a few common phrases in the language, along with IPA transcriptions and ${$l1.name} translations?`,
-                  `Could you please give the following words in ${$l2.name} (also known as ${$l2.otherNames.join(',')}, ISO639-3 code ${$l2['iso639-3']}, glottolog ID ${$l2['glottologId']}), along with IPA transcriptions and ${$l1.name} translations: hello, yes, no, I, you, this, that, good, what, why, thank you, please, sorry.`,
-                  `Please give a list of printed and online materials for learning the ${$l2.name} language (also known as ${$l2.otherNames.join(',')}, ISO639-3 code ${$l2['iso639-3']}, glottolog ID ${$l2['glottologId']}).`,
+                  $t(
+                    'What is the {l2} language (also known as {otherNames}, ISO639-3 code {isoCode}, glottolog ID {glottologId})? Could you give a few common phrases in the language, along with IPA transcriptions and {l1} translations?',
+                    {
+                      l2: $t($l2.name),
+                      otherNames: $l2.otherNames.join(','),
+                      isoCode: $l2['iso639-3'],
+                      glottologId: $l2['glottologId'],
+                      l1: $t($l1.name),
+                    }
+                  ),
+                  $t(
+                    'Could you please give the following words in {l2} (also known as {otherNames}, ISO639-3 code {isoCode}, glottolog ID {glottologId}), along with IPA transcriptions and {l1} translations: hello, yes, no, I, you, this, that, good, what, why, thank you, please, sorry.',
+                    {
+                      l2: $t($l2.name),
+                      otherNames: $l2.otherNames.join(','),
+                      isoCode: $l2['iso639-3'],
+                      glottologId: $l2['glottologId'],
+                      l1: $t($l1.name),
+                    }
+                  ),
+                  $t(
+                    'Please give a list of printed and online materials for learning the {l2} language (also known as {otherNames}, ISO639-3 code {isoCode}, glottolog ID {glottologId}).',
+                    {
+                      l2: $t($l2.name),
+                      otherNames: $l2.otherNames.join(','),
+                      isoCode: $l2['iso639-3'],
+                      glottologId: $l2['glottologId'],
+                    }
+                  ),
                 ]"
               />
             </div>
@@ -131,23 +162,22 @@
 </template>
 
 <script>
-
 export default {
   data() {
     return {
       scope: {
-        'I': 'Individual',
-        'M': 'Macrolanguage', 
-        'S': 'Special', 
+        I: "Individual",
+        M: "Macrolanguage",
+        S: "Special",
       },
       type: {
-        'A': 'Ancient',
-        'C': 'Constructed',
-        'E': 'Extinct',
-        'H': 'Historical',
-        'L': 'Living',
-        'S': 'Special'
-      }
+        A: "Ancient",
+        C: "Constructed",
+        E: "Extinct",
+        H: "Historical",
+        L: "Living",
+        S: "Special",
+      },
     };
   },
   async mounted() {},
@@ -168,10 +198,10 @@ export default {
   },
   methods: {
     async getSmart(...args) {
-      await this.$languages.loadFull()
-      let language = this.$languages.getSmart(...args)
-      return language
-    }
+      await this.$languages.loadFull();
+      let language = this.$languages.getSmart(...args);
+      return language;
+    },
   },
 };
 </script>

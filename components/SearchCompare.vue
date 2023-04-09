@@ -23,7 +23,7 @@
       :term="compareTerm"
       ref="compare"
       :type="type"
-      placeholder="Compare with..."
+      :placeholder="$t('Compare with')"
       :defaultURL="compareUrlFunc"
       :hrefFunc="compareHrefFunc"
       v-if="!loading"
@@ -100,9 +100,11 @@ export default {
   methods: {
     compareHrefFunc(compareEntry) {
       const entry = this.$refs.search.entry || this.entry;
+      if (!entry || !compareEntry) return;
       return `/${this.$l1.code}/${this.$l2.code}/compare/${this.$store.state.settings.dictionaryName}/${entry.id},${compareEntry.id}`;
     },
     compareHrefFuncFirst(entry) {
+      if (!entry) return;
       return `/${this.$l1.code}/${this.$l2.code}/compare/${this.$store.state.settings.dictionaryName}/${entry.id},${this.compareEntry.id}`;
     },
     focusOnSearch() {

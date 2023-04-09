@@ -50,7 +50,7 @@
       >
         {{ termsB[0] }}
       </b-button>
-      <div class="float-right mr-1">
+      <!-- <div class="float-right mr-1">
         <b-button
           class="search-subs-fullscreen border-0 ml-1"
           :variant="skin === 'dark' ? 'ghost-dark' : 'gray'"
@@ -69,7 +69,7 @@
         >
           <i class="fas fa-times" />
         </b-button>
-      </div>
+      </div> -->
       <div
         style="height: 0.5rem"
         :data-bg-level="

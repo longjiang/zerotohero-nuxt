@@ -10,7 +10,7 @@
 <template>
   <div class="bg-white" style="min-height: 100vh">
     <SocialHead
-      title="Online Translators | Language Player"
+      title="Compare AI Translators | Language Player"
       description="Check the availability of online translators for any given language."
     />
     <SiteTopBar />
@@ -18,17 +18,21 @@
     <div class="container" v-if="translators">
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5 text-center">
-          <h3>Online Translators</h3>
+          <h3>{{ $t("Compare AI Translators") }}</h3>
           <p>
-            {{ filteredTranslators.length }} translators,
-            {{ filteredLangs.length }} languages.
+            {{
+              $t("{num1} translators, {num2} languages.", {
+                num1: filteredTranslators.length,
+                num2: filteredLangs.length,
+              })
+            }}
           </p>
 
           <b-input-group class="mt-5 mb-3 input-group-ghost-dark">
             <b-form-input
               v-model="keyword"
               @compositionend.prevent.stop="() => false"
-              placeholder="Filter by language or country"
+              :placeholder="$t('Filter by language or country')"
             />
             <b-input-group-append>
               <b-button variant="gray">
@@ -48,7 +52,7 @@
           >
             <thead style="position: sticky; top: 0; background: #eee">
               <tr>
-                <th>Language (Code)</th>
+                <th>{{ $t('Language (Code)') }}</th>
                 <th
                   v-for="(t, i) in filteredTranslators"
                   :key="`translator-header-${i}`"
@@ -97,7 +101,7 @@
       </div>
       <div class="row mt-5 mb-5">
         <div class="col-sm-12 text-center">
-          <h4 class="mb-3">World Map of Languages</h4>
+          <h4 class="mb-3">{{ $t('World Language Map') }}</h4>
           <router-link to="/language-map">
             <div>
               <img
@@ -174,6 +178,18 @@ export default {
       });
       return languages;
     },
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
+  },
+  mounted() {
+    let l1 = this.$languages.getSmart(this.browserLanguage);
+    this.$i18n.locale = l1.code;
+    this.$i18n.setLocaleMessage(l1.code, l1.translations);
   },
   methods: {
     googleImagesURL(l2) {

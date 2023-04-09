@@ -19,27 +19,29 @@
       {{ wikipediaSummary }}
       <div>
         <i class="fa-solid fa-arrow-right"></i>
-        Learn more on
-        <a
-          target="blank"
-          :href="page.url()"
-          class="link-unstyled font-weight-bold text-success"
-          style="text-decoration: underline"
-        >
-          Wikipedia
-        </a>
+        <i18n path="Learn more on {0}" tag="span">
+          <a
+            target="blank"
+            :href="page.url()"
+            class="link-unstyled font-weight-bold text-success"
+            style="text-decoration: underline"
+          >
+            <i18n path="Wikipedia" tag="span" />
+          </a>
+        </i18n>
       </div>
       <div v-if="lang.omniglot">
         <i class="fa-solid fa-arrow-right"></i>
-        Learn useful phrases on
-        <a
-          target="blank"
-          class="link-unstyled font-weight-bold  text-success"
-          style="text-decoration: underline"
-          :href="`https://omniglot.com/writing/${lang.omniglot}`"
-        >
-          Omniglot
-        </a>
+        <i18n path="Learn useful phrases on {0}" tag="span">
+          <a
+            target="blank"
+            :href="`https://omniglot.com/writing/${lang.omniglot}`"
+            class="link-unstyled font-weight-bold text-success"
+            style="text-decoration: underline"
+          >
+            Omniglot
+          </a>
+        </i18n>
       </div>
     </div>
   </div>
@@ -80,8 +82,15 @@ export default {
     if (this.lang) {
       try {
         let page = await wiki({
-          apiUrl: `https://${this.$l1.code}.wikipedia.org/w/api.php`,
+          apiUrl: `https://en.wikipedia.org/w/api.php`,
         }).page(`${this.lang.name} language`);
+        if (this.$l1.code !== 'en') {
+          let langs = await page.langlinks();
+          let translation = langs.find((l) => l.lang === this.$l1.code);
+          page = await wiki({
+            apiUrl: `https://${this.$l1.code}.wikipedia.org/w/api.php`,
+          }).page(translation.title);
+        }
         this.page = page;
         let summary = await page.summary();
         let shortSummary = summary
@@ -91,7 +100,9 @@ export default {
           .replace(/(.*?\. .*?\. .*?\. .*?\. .*?\. .*?\.) .*/, "$1 . . .");
         if (this.brief) shortSummary = shortSummary.replace(/(.*?\. ).*/, "$1");
         this.wikipediaSummary = shortSummary;
-      } catch (err) {}
+      } catch (err) {
+        console.log(err);
+      }
     }
   },
 };

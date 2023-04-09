@@ -9,23 +9,23 @@
     <div class="container">
       <div class="row">
         <div class="col">
-          <h3 class="text-center">What’s New</h3>
+          <h3 class="text-center">{{ $t('What’s New') }}</h3>
           <p class="mt-5 mb-5" style="font-size: 1.2em">
-            <b>
-              Follow our Twitter account
-              <a href="https://twitter.com/zerotohero_ca" target="_blank">
-                @zerotohero_ca
-              </a>
-            </b>
-            to keep yourself up-to-date with our latest features and
-            announcements.
+            <i18n path="Follow our Twitter account {0} to keep yourself up-to-date with our latest features and announcements." tag="p">
+              <a
+                href="https://twitter.com/language_player"
+                target="_blank"
+                slot="link"
+                >@language_player</a
+              >
+            </i18n>
           </p>
           <client-only>
             <a
               class="twitter-timeline"
-              href="https://twitter.com/zerotohero_ca?ref_src=twsrc%5Etfw"
+              href="https://twitter.com/language_player"
             >
-              Tweets by @zerotohero_ca
+              {{ $t('Tweets by {handle}', {handle: '@language_player'}) }}
             </a>
           </client-only>
         </div>
@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 export default {
   async mounted() {
     let twitterScript = document.createElement("script");

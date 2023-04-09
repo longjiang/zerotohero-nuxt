@@ -1,6 +1,6 @@
 <template>
   <div class="social-logos">
-    <a href="https://twitter.com/zerotohero_ca">
+    <a href="https://twitter.com/language_player">
       <img
         src="/img/twitter-text.png"
         style="height: 0.9rem; padding: 0 0.5rem"

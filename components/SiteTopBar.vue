@@ -141,7 +141,7 @@
         size="xl"
         centered
         hide-footer
-        :title="translate('Switch languages')"
+        :title="$t('Switch languages')"
         modal-class="safe-padding-top mt-4"
         body-class="languages-modal-wrapper"
         @show="onLanguagesModalShown"
@@ -150,13 +150,13 @@
           <div class="mb-3">
             <router-link to="/dashboard" class="text-success">
               <i class="fas fa-chevron-left"></i>
-              {{ translate("Back to Dashboard") }}
+              {{ $t("Back to Dashboard") }}
             </router-link>
           </div>
           <LazyDashboard class="mb-5" v-if="hasDashboard" />
           <div class="pb-5">
             <h5 class="text-center mb-2">
-              {{ translate("Learn another language") }}
+              {{ $t("Learn another language") }}
             </h5>
             <Triage />
           </div>

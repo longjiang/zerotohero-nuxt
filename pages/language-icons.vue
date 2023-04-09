@@ -18,15 +18,21 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5 text-center">
-          <h3>Face of the Language</h3>
+          <h3>{{ translate("Face of the Language") }}</h3>
           <client-only>
-            <p>{{ filteredLangs.length }} languages listed</p>
+            <p>
+              {{
+                translate("{num} languages listed", {
+                  num: filteredLangs.length,
+                })
+              }}
+            </p>
           </client-only>
           <b-input-group class="mt-5 mb-3 input-group-ghost-dark">
             <b-form-input
               v-model="keyword"
               @compositionend.prevent.stop="() => false"
-              placeholder="Filter by speaker, language or country"
+              :placeholder="translate('Filter by speaker, language or country')"
             />
             <b-input-group-append>
               <b-button variant="gray">
@@ -51,24 +57,33 @@
             </router-link>
             <div class="lang-item-description mt-2">
               <span v-if="lang.logoDesc">
-                {{ lang.logoDesc.replace(/ /g, " ") }}, a user of
-                <router-link
-                  :to="`/en/${lang.code}/`"
-                  class="link-unstyled font-weight-bold"
-                >
-                  {{ lang.name }} ({{ lang.code }})
-                </router-link>
-                .
+                <i18n path="{description}, a user of {language}.">
+                  <template #description>
+                    <span class="font-weight-bold">{{
+                      lang.logoDesc.replace(/ /g, " ")
+                    }}</span>
+                  </template>
+                  <template #language>
+                    <router-link
+                      :to="`/en/${lang.code}/`"
+                      class="font-weight-bold text-success"
+                    >
+                      {{ translate(lang.name) }} ({{ lang.code }})
+                    </router-link>
+                  </template>
+                </i18n>
               </span>
               <span v-else>
-                A user of
-                <router-link
-                  :to="`/en/${lang.code}/`"
-                  class="link-unstyled font-weight-bold"
-                >
-                  {{ lang.name }} ({{ lang.code }})
-                </router-link>
-                .
+                <i18n path="A user of {language}.">
+                  <template #language>
+                    <router-link
+                      :to="`/en/${lang.code}/`"
+                      class="font-weight-bold text-success"
+                    >
+                      {{ lang.name }} ({{ lang.code }})
+                    </router-link>
+                  </template>
+                </i18n>
               </span>
               <a
                 v-if="wikipedia(lang)"
@@ -84,7 +99,7 @@
       </div>
       <div class="row mt-5 mb-5">
         <div class="col-sm-12 text-center">
-          <h4 class="mb-3">World Map of Languages</h4>
+          <h4 class="mb-3">{{ translate('World Language Map') }}</h4>
           <router-link to="/language-map">
             <div>
               <img
@@ -99,13 +114,9 @@
       </div>
     </div>
     <footer class="bg-dark mt-5 p-5" style="z-index: -1">
-      <div
-        class="text-center"
-        style="line-height: 1.2; font-size: 1.1em"
-      >
+      <div class="text-center" style="line-height: 1.2; font-size: 1.1em">
         <router-link class="link-unstyled text-white" to="/">
-          <strong>ZERO TO HERO</strong>
-          <span style="font-weight: 300">LANGUAGES</span>
+          <strong>Language Player</strong>
         </router-link>
       </div>
     </footer>
@@ -152,8 +163,25 @@ export default {
         return [];
       }
     },
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
+  },
+  mounted() {
+    let l1 = this.$languages.getSmart(this.browserLanguage);
+    this.$i18n.locale = l1.code;
+    this.$i18n.setLocaleMessage(l1.code, l1.translations);
   },
   methods: {
+    translate(text, data = {}) {
+      let code = this.browserLanguage;
+      if (this.$languages) return this.$languages.translate(text, code, data);
+      else return text;
+    },
     googleImagesURL(l2) {
       return `https://www.google.com/searchbyimage?q=${l2.name}+language&image_url=https://languageplayer.io/img/logo-square/${l2.code}.jpeg`;
     },

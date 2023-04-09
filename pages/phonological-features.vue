@@ -18,19 +18,19 @@
     <div class="container pb-5">
       <div class="row">
         <div class="col-sm-12 pt-5">
-          <h3 class="mb-4 text-center">Phonological Features</h3>
+          <h3 class="mb-4 text-center">{{ $t("Phonological Features") }}</h3>
 
           <b-form-input
             v-model.lazy="ipa"
             @compositionend.prevent.stop="() => false"
-            placeholder="Type IPA symbols here"
+            :placeholder="$t('Input IPA symbols')"
           />
           <div class="mt-2 text-right">
             <a
               href="https://www.internationalphoneticassociation.org/IPAcharts/inter_chart_2018/IPA_2018.html"
               target="_blank"
             >
-              IPA keyboard
+              {{ $t("IPA keyboard") }}
               <i class="fa-solid fa-arrow-up-right-from-square"></i>
             </a>
           </div>
@@ -39,12 +39,16 @@
       <div class="row mt-4">
         <div class="col-sm-12 col-md-6 mb-4">
           <h6 v-if="ipa">
-            <u>MINIMAL</u>
-            set of phonological features exclusively identifying
-            <span v-for="phoneme in this.phonemes" :key="`phoneme-${phoneme}`">
-              [{{ phoneme }}]
-            </span>
-            :
+            <i18n path="Minimal phonological shared by {phonemes}:">
+              <template v-slot:phonemes>
+                <span
+                  v-for="phoneme in phonemes"
+                  :key="`phoneme-${phoneme}`"
+                >
+                  [{{ phoneme }}]
+                </span>
+              </template>
+            </i18n>
           </h6>
           <div
             v-for="(value, feature) in minimalCommonFeatures"
@@ -59,12 +63,16 @@
         </div>
         <div class="col-sm-12 col-md-6 mb-4">
           <h6 v-if="ipa">
-            <u>ALL</u>
-            phonological shared by
-            <span v-for="phoneme in this.phonemes" :key="`phoneme-${phoneme}`">
-              [{{ phoneme }}]
-            </span>
-            :
+            <i18n path="All phonological features shared by {phonemes}:">
+              <template v-slot:phonemes>
+                <span
+                  v-for="phoneme in phonemes"
+                  :key="`phoneme-${phoneme}`"
+                >
+                  [{{ phoneme }}]
+                </span>
+              </template>
+            </i18n>
           </h6>
           <div
             v-for="(value, feature) in commonFeatures"
@@ -96,7 +104,19 @@ export default {
       minimalCommonFeatures: {},
     };
   },
+  computed: {
+    browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
+  },
   async mounted() {
+    let l1 = this.$languages.getSmart(this.browserLanguage);
+    this.$i18n.locale = l1.code;
+    this.$i18n.setLocaleMessage(l1.code, l1.translations);
     let res = await axios.get(`/data/phonemes/phonemes.json`);
     if (res && res.data) {
       let features = res.data;
@@ -207,24 +227,22 @@ export default {
         (a, b) => b.length - a.length
       );
       let tokens = [];
-      let length = ipa.length
+      let length = ipa.length;
       for (let i = 0; i < length; i++) {
-        let found = false
+        let found = false;
         for (let phoneme of phonemes) {
           if (ipa.startsWith(phoneme)) {
-            found = true
+            found = true;
             tokens.push(phoneme);
             ipa = ipa.substring(phoneme.length);
           }
         }
-        if (!found) ipa = ipa.substring(1)
+        if (!found) ipa = ipa.substring(1);
       }
-      console.log({ ipa, phonemes, tokens })
       return tokens.filter((token) => phonemes.includes(token));
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

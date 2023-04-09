@@ -74,7 +74,13 @@
     <div class="container">
       <div class="row">
         <div class="col-md-12">
-          <Widget v-if="a && b" :key="`${a.id}-subs`" id="compare-search-subs">
+          <Widget
+            v-if="a && b"
+            :key="`${a.id}-subs`"
+            skin="dark"
+            :withPadding="false"
+            id="compare-search-subs"
+          >
             <template #title>
               “{{ a.head }}” and “{{ b.head }}” in
               <LazyShowFilter @showFilter="reloadSearchSubs" />
