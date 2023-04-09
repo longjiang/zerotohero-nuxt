@@ -23,7 +23,7 @@
           }`"
         >
           <i class="fa fa-arrow-right mr-2" />
-          {{ $t('New HSK {num}', {num: entry.newHSK})}}
+          {{ $t("New HSK {num}", { num: entry.newHSK }) }}
           <span
             v-if="entry.newHSKMatches.length === 1"
             style="color: #999; font-weight: normal"
@@ -47,7 +47,7 @@
       <Annotate
         tag="div"
         v-if="entry.counters"
-        :class="{ 'mt-1 mb-2': true, 'transparent': hidePhonetics && !reveal }"
+        :class="{ 'mt-1 mb-2': true, transparent: hidePhonetics && !reveal }"
       >
         <span>
           一{{
@@ -58,39 +58,16 @@
       <div class="entry-word-wrapper" style="display: inline-block">
         <div class="mb-2">
           <div class="entry-pinyin">
-            
-            <span :class="{ 'ml-2 mr-1': true, transparent: hidePhonetics && !reveal }">
-              <span v-if="$l2.code === 'tlh'">
-                {{ entry.head }} /{{ klingonIPA(entry.head) }}/
-              </span>
-              <template v-else>
-                <span
-                  v-if="$l2.code === 'vi' && entry.pronunciation"
-                  v-html="
-                    '[' +
-                    entry.pronunciation.replace(
-                      /\[\[(.+?)#Vietnamese\|.+?]]/g,
-                      '$1'
-                    ) +
-                    ']'
-                  "
-                />
-                <template v-if="$l2.code === 'ja' && entry.cjk">
-                  {{ entry.cjk.phonetics }} ({{ transliterate(entry.cjk.phonetics) }})
-                </template>
-                <template v-else-if="$l2.code === 'zh'">
-                  {{ entry.pronunciation }} [{{ pinyin2ipa(entry.pronunciation, {toneMarker: 'chaoletter'}) }}]
-                </template>
-                <span v-else-if="entry.pronunciation">
-                  [{{ entry.pronunciation }}]
-                </span>
-                <span v-else>
-                  {{ transliterate(entry.head) }}
-                </span>
-              </template>
+            <span
+              :class="{
+                'ml-2 mr-1': true,
+                transparent: hidePhonetics && !reveal,
+              }"
+            >
+              {{ formattedPronunciation }}
             </span>
             <Speak
-              :class="{'ml-1 mr-2': true, 'transparent': hidePhonetics}"
+              :class="{ 'ml-1 mr-2': true, transparent: hidePhonetics }"
               ref="speak"
               :text="entry.head"
               :mp3="entry.audio"
@@ -99,7 +76,8 @@
           </div>
         </div>
         <span :class="{ transparent: hideWord && !reveal }">
-          <component :is="disabled ? 'span' : 'router-link'"
+          <component
+            :is="disabled ? 'span' : 'router-link'"
             :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${entry.id}`"
           >
             <template
@@ -131,7 +109,10 @@
                 >
                   {{ { n: "das", m: "der", f: "die" }[entry.gender] }}
                 </span>
-                <span v-html="transform(entry.accented || entry.head)" :class="{klingon: $l2.code === 'tlh'}"></span>
+                <span
+                  v-html="transform(entry.accented || entry.head)"
+                  :class="{ klingon: $l2.code === 'tlh' }"
+                ></span>
               </span>
             </template>
           </component>
@@ -171,7 +152,7 @@
 <script>
 import Klingon from "@/lib/klingon";
 import { transliterate as tr } from "transliteration";
-import pinyin2ipa from '@/lib/pinyin2ipa/lib'
+import pinyin2ipa from "@/lib/pinyin2ipa/lib";
 import { mapState } from "vuex";
 
 export default {
@@ -190,11 +171,11 @@ export default {
       default: false,
     },
     reveal: {
-      default: false
+      default: false,
     },
     disabled: {
-      default: false // Disabling the router-link to the dictionary entry
-    }
+      default: false, // Disabling the router-link to the dictionary entry
+    },
   },
   data() {
     return {};
@@ -222,14 +203,43 @@ export default {
       return this.$store.state.settings.dictionaryName;
     },
   },
+  asyncComputed: {
+    async formattedPronunciation() {
+      const entry = this.entry;
+      const dictionary = await this.$getDictionary();
+
+      if (this.$l2.code === "tlh") {
+        return `${entry.head} /${this.klingonIPA(entry.head)}/`;
+      } else if (this.$l2.code === "vi" && entry.pronunciation) {
+        return `[${entry.pronunciation.replace(
+          /\[\[(.+?)#Vietnamese\|.+?]]/g,
+          "$1"
+        )}]`;
+      } else if (this.$l2.code === "ja" && entry.kana) {
+        return `${entry.kana} (${await dictionary.transliterate(entry.kana)})`;
+      } else if (this.$l2.code === "zh") {
+        return `${entry.pronunciation} [${this.pinyin2ipa(entry.pronunciation, {
+          toneMarker: "chaoletter",
+        })}]`;
+      } else if (entry.pronunciation) {
+        return `[${entry.pronunciation}]`;
+      } else {
+        return this.transliterate(entry.head);
+      }
+    },
+  },
   async mounted() {
-    if (this.$refs.speak && this.l2SettingsOfL2.autoPronounce && !this.hidePhonetics) {
+    if (
+      this.$refs.speak &&
+      this.l2SettingsOfL2.autoPronounce &&
+      !this.hidePhonetics
+    ) {
       this.$refs.speak.speak(0.75, 0.5); // Speed and volume
     }
   },
   methods: {
     pinyin2ipa(...args) {
-      return pinyin2ipa(...args)
+      return pinyin2ipa(...args);
     },
     transliterate(text) {
       let transliteration = tr(text);
