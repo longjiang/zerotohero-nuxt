@@ -37,8 +37,42 @@
                 })
               }}
             </div>
-            <div v-if="subscription && pro && subscription.type !== 'lifetime'">
-              🚀 {{
+            <div
+              v-if="
+                subscription &&
+                pro &&
+                subscription.type !== 'lifetime' &&
+                subscription.payment_processor === 'stripe'
+              "
+            >
+              🚀
+              {{
+                $t("Your Pro will auto-renew on {date}.", {
+                  date: $d(
+                    new Date(subscription.expires_on),
+                    "short",
+                    $l1.code
+                  ),
+                })
+              }}
+              <i18n path="Cancel anytime by {emailing_us}.">
+                <template #emailing_us>
+                  <a href="mailto:jon.long@zerotohero.ca">{{
+                    $t("emailing us")
+                  }}</a>
+                </template>
+              </i18n>
+            </div>
+            <div
+              v-if="
+                subscription &&
+                pro &&
+                subscription.type !== 'lifetime' &&
+                subscription.payment_processor !== 'stripe'
+              "
+            >
+              🚀
+              {{
                 $t("Your Pro will expire on {date}.", {
                   date: $d(
                     new Date(subscription.expires_on),
@@ -129,7 +163,7 @@
                     style="font-size: 1rem; font-weight: bold"
                     :to="{ name: 'saved-words' }"
                   >
-                    {{ $t("See All")}}
+                    {{ $t("See All") }}
                     <i class="fas fa-angle-right ml-1"></i>
                   </router-link>
                 </h5>
@@ -142,7 +176,7 @@
                 />
               </div>
               <div class="mt-4 pb-5">
-                <h5 class="mb-4">{{ $t('Danger Zone') }}</h5>
+                <h5 class="mb-4">{{ $t("Danger Zone") }}</h5>
                 <div class="row">
                   <div class="col-sm-12 col-md-6 mb-2">
                     <div class="text-center alert-danger rounded p-4">
@@ -151,7 +185,12 @@
                         {{ $t("Remove {l2}", { l2: $t($l2.name) }) }}
                       </b-button>
                       <p class="mt-3 mb-0">
-                        {{ $t('This will remove your logged time for {l2}, and remove {l2} from your home screen Dashboard.', { l2: $t($l2.name) }) }}
+                        {{
+                          $t(
+                            "This will remove your logged time for {l2}, and remove {l2} from your home screen Dashboard.",
+                            { l2: $t($l2.name) }
+                          )
+                        }}
                       </p>
                     </div>
                   </div>
@@ -162,10 +201,14 @@
                     >
                       <b-button variant="danger" @click="deleteAccount">
                         <i class="fas fa-times-circle mr-2"></i>
-                        {{ $t('Delete My Account')}}
+                        {{ $t("Delete My Account") }}
                       </b-button>
                       <p class="mt-3 mb-0">
-                        {{ $t('This will permanently remove your Language Player account. There is no undo.') }}
+                        {{
+                          $t(
+                            "This will permanently remove your Language Player account. There is no undo."
+                          )
+                        }}
                       </p>
                     </div>
                   </div>
@@ -231,7 +274,7 @@ export default {
     },
     subscription() {
       return this.$store.state.subscriptions.subscription;
-    }
+    },
   },
   data() {
     return {
