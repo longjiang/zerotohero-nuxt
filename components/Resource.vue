@@ -23,8 +23,8 @@
         </h6>
         <div>{{ resource.description }}</div>
         <div class="mt-3 text-right">
-          <a :href="resource.url" target="_blank" :data-level="level"  class="link-unstyled">
-            {{ buttonText }}
+          <a :href="resource.url" target="_blank" :data-level="level"  class="link-unstyled text-success">
+            {{ $t(buttonText) }}
             <i class="fa-solid fa-arrow-up-right-from-square ml-1"></i>
           </a>
         </div>

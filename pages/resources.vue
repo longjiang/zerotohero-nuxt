@@ -17,14 +17,16 @@
   <div class="main pt-5 pb-5">
     <SocialHead
       v-if="resources[0]"
-      :title="`${resources.length} Resources to Help You Learn ${$l2.name} | Language Player`"
+      :title="$t('{resources} Resources to Help You Learn {l2}', { resources: resources.length, l2: $t($l2.name) }) + ' | Language Player'"
       :description="`${resources.map((r) => r.title).join(', ')}`"
       :image="resources[0].thumbnail"
     />
     <div class="container">
       <div class="row">
         <div class="col-12">
-          <h3 class="mb-5 text-center">Resources for learning {{ $l2.name }}</h3>
+          <h3 class="mb-5 text-center">
+            {{ $t("Resources for learning {l2}", { l2: $t($l2.name) }) }}
+          </h3>
         </div>
       </div>
       <div class="row">
@@ -32,7 +34,7 @@
           <ResourceList :resources="resources" />
         </div>
         <div class="col-sm-12 col-md-4">
-          <h6 class="text-center mb-4">Filter by Topic</h6>
+          <h6 class="text-center mb-4">{{ $t("Filter by Topic") }}</h6>
           <div class="list-group">
             <router-link
               :class="{
@@ -43,7 +45,7 @@
               }"
               :to="`/${$l1.code}/${$l2.code}/resource/list/all/${type}`"
             >
-              All
+              {{ $t("All") }}
             </router-link>
             <router-link
               v-for="(topicName, topicValue) in topics"
@@ -56,10 +58,10 @@
               }"
               :to="`/${$l1.code}/${$l2.code}/resource/list/${topicValue}/all`"
             >
-              {{ topicName }}
+              {{ $t(topicName) }}
             </router-link>
           </div>
-          <h6 class="mt-4 mb-4 text-center">Filter by Type</h6>
+          <h6 class="mt-4 mb-4 text-center">{{ $t("Filter by Type") }}</h6>
           <div class="list-group">
             <router-link
               :class="{
@@ -70,7 +72,7 @@
               }"
               :to="`/${$l1.code}/${$l2.code}/resource/list/${topic}/all`"
             >
-              All
+              {{ $t("All") }}
             </router-link>
             <router-link
               v-for="(typeName, typeValue) in types"
@@ -83,7 +85,7 @@
               }"
               :to="`/${$l1.code}/${$l2.code}/resource/list/all/${typeValue}`"
             >
-              {{ typeName }}
+              {{ $t(typeName) }}
             </router-link>
           </div>
         </div>
@@ -95,7 +97,6 @@
 <script>
 import Config from "@/lib/config";
 import ResourceList from "@/components/ResourceList";
-import axios from "axios";
 
 export default {
   components: {

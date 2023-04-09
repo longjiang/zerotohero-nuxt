@@ -17,11 +17,20 @@
     </div>
     <div v-else>
       <div v-for="(message, index) in messages" :key="index" class="mt-4 mb-2">
-        <div v-if="message.sender === 'user'" class="d-flex">
-          <b style="flex: 0 0 1.5rem">{{ $t("Q:") }}</b>
-          <b style="flex: 1">{{ message.text }}</b>
+        <div v-if="message.sender === 'user'">
+          <div class="d-flex">
+            <b style="flex: 0 0 1.5rem">{{ $t("Q:") }}</b>
+            <b style="flex: 1">{{ message.text }}</b>
+          </div>
+
+          <div v-if="errorMessage" class="mt-3 alert alert-warning">
+            {{ errorMessage }}
+          </div>
         </div>
-        <div v-if="message.sender === 'bot' && message.text" class="d-flex">
+        <div
+          v-if="message.sender === 'bot' && typeof message.text === 'string'"
+          class="d-flex"
+        >
           <span style="flex: 0 0 1.5rem">{{ $t("A:") }}</span>
           <div style="flex: 1">
             <div
@@ -29,7 +38,11 @@
               :key="`gpt-respnose-${index}`"
               class="mb-2"
             >
-              <Annotate :buttons="true" :showTranslation="true" :showLoading="false">
+              <Annotate
+                :buttons="true"
+                :showTranslation="true"
+                :showLoading="false"
+              >
                 <span>{{ line }}</span>
               </Annotate>
             </div>
@@ -44,7 +57,10 @@
               <router-link
                 :to="{
                   name: 'reader',
-                  params: { method: 'md', arg: message.text.replace('\n', '\n\n') },
+                  params: {
+                    method: 'md',
+                    arg: message.text.replace('\n', '\n\n'),
+                  },
                 }"
                 class="text-success"
               >
@@ -73,7 +89,7 @@
 <script>
 import OpenAI from "openai-api";
 import { timeout } from "@/lib/utils";
-import Vue from 'vue';
+import Vue from "vue";
 
 export default {
   props: {
@@ -89,7 +105,8 @@ export default {
       thinking: false,
       openAIToken: undefined,
       watcherActive: false,
-      dictionary: undefined
+      dictionary: undefined,
+      errorMessage: undefined,
     };
   },
   async mounted() {
@@ -145,7 +162,17 @@ export default {
         };
       } catch (error) {
         this.thinking = false;
-        return { text: error, sender: "bot" };
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.error
+        ) {
+          this.errorMessage = `Error from ChatGPT API: ${error.response.data.error.message}`;
+          return { text: error.response.data.error, sender: "bot" };
+        } else {
+          this.errorMessage = `Error from ChatGPT API: ${error.message}`;
+          return { text: error.message, sender: "bot" };
+        }
       }
     },
     async resendMessage(message) {
@@ -158,7 +185,7 @@ export default {
       let botMessage = this.messages[messageIndex + 1];
 
       if (botMessage) {
-        Vue.set(botMessage, 'text', '')
+        Vue.set(botMessage, "text", "");
         let newBotMessage = await this.getCompletion(message.text);
         Vue.set(this.messages, messageIndex + 1, newBotMessage);
       }

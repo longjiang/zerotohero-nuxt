@@ -15,28 +15,37 @@
         <div class="col-sm-12 col-md-8">
           <div v-if="subreddits && subreddits.length > 0">
             <h3 class="mb-5">
-              Reddit Posts under
-              <a :href="`https://www.reddit.com/${subreddits[0].sub}`">
-                {{ subreddits[0].sub }}
-              </a>
+              <i18n path="Reddit Posts under {0}" tag="span">
+                <a :href="`https://www.reddit.com/${subreddits[0].sub}`">
+                  {{ subreddits[0].sub }}
+                </a>
+              </i18n>
             </h3>
             <RedditArticlesList :path="`${subreddits[0].sub}/hot`" />
           </div>
           <div v-if="subreddits && subreddits.length === 0">
             <div class="jumbotron shadow rounded bg-white text-center">
               <h5>
-                We don’t know about a subreddit for learning {{ $l2.name }} yet.
+                {{
+                  $t("We don’t know about a subreddit for learning {l2} yet.", {
+                    l2: $t($l2.name),
+                  })
+                }}
               </h5>
               <p class="lead mb-3">
-                If you know of a subreddit related to learning {{ $l2.name }},
-                pleaes let us know so we can add it.
+                {{
+                  $t(
+                    "If you know of a subreddit related to learning {l2}, please let us know so we can add it.",
+                    { l2: $t($l2.name) }
+                  )
+                }}
               </p>
               <div class="text-center">
                 <a
                   :href="`/${$l1.code}/${$l2.code}/contact-us`"
                   class="btn btn-success"
                 >
-                  Contact Us
+                  {{ $t("Contact Us")}}
                 </a>
               </div>
             </div>
@@ -46,18 +55,13 @@
           class="col-sm-12 col-md-4"
           v-if="subreddits && subreddits.length > 0"
         >
-          <h4 class="mb-5">About Reddit</h4>
+          <h4 class="mb-5">{{ $t('About Reddit') }}</h4>
           <hr />
-          <p>
-            This is a community for people studying or teaching {{ $l2.name }} -
-            or just interested in the language. Please post interesting links,
-            language learning advice, or questions about the
-            {{ $l2.name }} language. To participate and create new content,
+          <i18n path="This is a community for people studying or teaching {0} - or just interested in the language. Please post interesting links, language learning advice, or questions about the {0} language. To participate and create new content, visit the community on Reddit." tag="p">
             <a :href="`https://www.reddit.com/${subreddits[0].sub}/`">
-              visit the community on Reddit
+              {{ $t($l2.name) }}
             </a>
-            .
-          </p>
+          </i18n>
         </div>
       </div>
     </div>
@@ -75,7 +79,6 @@
 import Config from "@/lib/config";
 import RedditArticlesList from "@/components/RedditArticlesList.vue";
 import RedditArticle from "@/components/RedditArticle.vue";
-import axios from "axios";
 
 export default {
   components: {
