@@ -143,13 +143,39 @@ export default {
       }
     },
     async loadChapter(href) {
-      this.currentChapterHref = href;
-      let spine = await this.book.loaded.spine;
-      let item = spine.get(href);
-      let contents = await item.load(this.book.load.bind(this.book));
-      this.currentChapterHTML = contents.innerHTML;
-      this.$refs.tocModal.hide();
-      this.updateChapterNavigation();
+      // Remove the hash (fragment identifier) from the href
+      // The hash is used to identify the page number in books that are read right-to-left (e.g. Japanese)
+      const cleanHref = href.split("#")[0];
+      this.currentChapterHref = cleanHref;
+
+      // Load the spine of the book and get the linear spine items (items that are part of the main reading flow)
+      const spine = await this.book.loaded.spine;
+      const linearItems = spine.spineItems.filter((item) => item.linear);
+
+      // Find the index of the current spine item in the linear spine items array
+      let currentSpineIndex = linearItems.findIndex(
+        (item) => item.href === cleanHref
+      );
+      let chapterHTML = "";
+
+      // Load the current spine item and all following spine items in the same chapter
+      // This is done to concatenate the content of spine items in the same chapter (e.g. right-to-left books)
+      while (
+        currentSpineIndex < linearItems.length &&
+        linearItems[currentSpineIndex].properties["rendition:layout"] !==
+          "pre-paginated"
+      ) {
+        const currentItem = linearItems[currentSpineIndex];
+        const contents = await currentItem.load(this.book.load.bind(this.book));
+        chapterHTML += contents.innerHTML;
+        currentItem.unload(); // Unload the spine item after using its contents to free up memory
+
+        currentSpineIndex++;
+      }
+
+      this.currentChapterHTML = chapterHTML;
+      this.$refs.tocModal.hide(); // Hide the Table of Contents modal
+      this.updateChapterNavigation(); // Update the navigation for previous and next chapters
     },
 
     async previousChapter() {
@@ -178,7 +204,8 @@ export default {
           return previous;
         }
 
-        if (item.subitems && item.subitems.length) {
+        const cleanItemHref = item.href.split("#")[0];
+        if (cleanItemHref === currentHref) {
           const found = this.getPrevChapterHref(
             item.subitems,
             currentHref,
@@ -200,8 +227,8 @@ export default {
         if (foundCurrent) {
           return item.href;
         }
-
-        if (item.href === currentHref) {
+        const cleanItemHref = item.href.split("#")[0];
+        if (cleanItemHref === currentHref) {
           foundCurrent = true;
         }
 
