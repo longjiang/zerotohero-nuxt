@@ -18,6 +18,7 @@
           />
         </div>
       </b-modal>
+      <!-- <img v-if="coverUrl" :src="coverUrl" alt="" /> -->
       <!-- <div v-html="currentChapterHTML" class="chapter-container mt-3"></div> -->
       <TextWithSpeechBar
         class="mt-3"
@@ -34,19 +35,19 @@
         @previousPage="onPreviousPage"
         @nextPage="onNextPage"
         @goToPage="onGoToPage"
-        @nextChapter="nextChapter"
-        @previousChapter="previousChapter"
+        @nextChapter="goToNextChapter"
+        @previousChapter="goToPreviousChapter"
       />
       <div class="chapter-navigation text-center">
         <button
-          @click="previousChapter"
+          @click="goToPreviousChapter"
           :disabled="!hasPreviousChapter"
           class="btn btn-secondary"
         >
           <i class="fas fa-step-backward mr-1"></i>
         </button>
         <button
-          @click="nextChapter"
+          @click="goToNextChapter"
           :disabled="!hasNextChapter"
           class="btn btn-secondary"
         >
@@ -68,6 +69,7 @@ export default {
     return {
       book: null,
       toc: [],
+      coverUrl: null,
       currentChapterHref: null,
       currentChapterHTML: null,
       page: 1,
@@ -133,14 +135,14 @@ export default {
         this.book = ePub(epubData);
         let navigation = await this.book.loaded.navigation;
         this.toc = navigation.toc;
+        this.coverUrl = await this.book.coverUrl();
         if (this.toc.length > 0) {
-          let firstChapter = this.toc[0];
-          this.loadChapter(firstChapter.href);
+          this.loadChapter("cover");
         }
       } catch (error) {
         console.error("Error loading book:", error);
       }
-    },  
+    },
     updateImageURLs(chapterHTML) {
       // Load the chapter HTML into a DOMParser
       const parser = new DOMParser();
@@ -153,7 +155,7 @@ export default {
         const img = images[i];
         const src = img.getAttribute("src");
         const absoluteSrc = this.book.path.resolve(src);
-        const urlCache = this.book.archive.urlCache
+        const urlCache = this.book.archive.urlCache;
         const absoluteUrl = urlCache[absoluteSrc];
         img.setAttribute("src", absoluteUrl);
       }
@@ -163,6 +165,15 @@ export default {
       return serializer.serializeToString(doc.documentElement);
     },
     async loadChapter(href) {
+      console.log('Loading', {href})
+      // Treat the cover as a "chapter"
+      // If the href is "cover", load the cover image
+      if (href === "cover") {
+        this.currentChapterHTML = `<img src="${this.coverUrl}" alt="Cover Image">`;
+        this.currentChapterHref = "cover";
+        this.$refs.tocModal.hide();
+        return;
+      }
       // Remove the hash (fragment identifier) from the href
       // The hash is used to identify the page number in books that are read right-to-left (e.g. Japanese)
       const cleanHref = href.split("#")[0];
@@ -198,7 +209,7 @@ export default {
       this.$refs.tocModal.hide(); // Hide the Table of Contents modal
     },
 
-    async previousChapter() {
+    async goToPreviousChapter() {
       const prevHref = this.getPrevChapterHref(
         this.toc,
         this.currentChapterHref
@@ -208,7 +219,7 @@ export default {
       }
     },
 
-    async nextChapter() {
+    async goToNextChapter() {
       const nextHref = this.getNextChapterHref(
         this.toc,
         this.currentChapterHref
@@ -219,6 +230,12 @@ export default {
     },
 
     getPrevChapterHref(toc, currentHref, previous = null) {
+      if (currentHref === "cover") {
+        return null;
+      }
+      if (previous === null) {
+        return "cover";
+      }
       for (const item of toc) {
         if (item.href === currentHref) {
           return previous;
@@ -243,6 +260,10 @@ export default {
     },
 
     getNextChapterHref(toc, currentHref, foundCurrent = false) {
+      console.log({toc, currentHref, foundCurrent})
+      if (currentHref === "cover") {
+        return toc[0].href.split("#")[0];
+      }
       for (const item of toc) {
         if (foundCurrent) {
           return item.href;
