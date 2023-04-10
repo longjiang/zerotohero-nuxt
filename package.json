@@ -39,6 +39,7 @@
     "css-percentage-circle": "^2.0.1",
     "deep-equal": "^2.0.5",
     "detect-file-encoding-and-language": "^2.1.0",
+    "epubjs": "0.3.93",
     "fast-xml-parser": "^3.19.0",
     "fastest-levenshtein": "^1.0.16",
     "flatted": "^3.2.5",
