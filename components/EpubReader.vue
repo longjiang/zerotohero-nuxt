@@ -15,21 +15,35 @@
       <TextWithSpeechBar
         class="mt-3"
         v-if="currentChapterHTML"
-        :key="`text-with-speech-bar-${epubFileName}-${currentChapterHref}-${page}`"
-        :html="currentChapterHTML"
-        :page="page"
-        :showTocButton="true"
+        v-bind="{
+          showTocButton: true,
+          hasPreviousChapter,
+          hasNextChapter,
+          html: currentChapterHTML,
+          page,
+          key: `text-with-speech-bar-${epubFileName}-${currentChapterHref}-${page}`,
+        }"
         @showTOC="onShowTOC"
         @previousPage="onPreviousPage"
         @nextPage="onNextPage"
         @goToPage="onGoToPage"
+        @nextChapter="nextChapter"
+        @previousChapter="previousChapter"
       />
-      <div class="chapter-navigation">
-        <button @click="previousChapter" :disabled="!prevChapterHref">
-          {{ $t("Previous") }}
+      <div class="chapter-navigation text-center">
+        <button
+          @click="previousChapter"
+          :disabled="!hasPreviousChapter"
+          class="btn btn-secondary"
+        >
+          <i class="fas fa-step-backward mr-1"></i>
         </button>
-        <button @click="nextChapter" :disabled="!nextChapterHref">
-          {{ $t("Next") }}
+        <button
+          @click="nextChapter"
+          :disabled="!hasNextChapter"
+          class="btn btn-secondary"
+        >
+          <i class="fas fa-step-forward ml-1"></i>
         </button>
       </div>
     </div>
@@ -52,7 +66,7 @@ export default {
       nextChapterHref: null,
       currentChapterHTML: null,
       page: 1,
-      epubFileName: undefined
+      epubFileName: undefined,
     };
   },
   head() {
@@ -71,6 +85,19 @@ export default {
   },
   mounted() {
     // this.openEpub();
+  },
+  computed: {
+    hasPreviousChapter() {
+      return (
+        this.getPrevChapterHref(this.toc, this.currentChapterHref) !== null
+      );
+    },
+
+    hasNextChapter() {
+      return (
+        this.getNextChapterHref(this.toc, this.currentChapterHref) !== null
+      );
+    },
   },
   methods: {
     onShowTOC() {
@@ -101,9 +128,9 @@ export default {
         this.book = ePub(epubData);
         let navigation = await this.book.loaded.navigation;
         this.toc = navigation.toc;
-        if(this.toc.length > 0) {
-          let firstChapter = this.toc[0]
-          this.loadChapter(firstChapter.href)
+        if (this.toc.length > 0) {
+          let firstChapter = this.toc[0];
+          this.loadChapter(firstChapter.href);
         }
       } catch (error) {
         console.error("Error loading book:", error);
@@ -118,15 +145,73 @@ export default {
 
       this.updateChapterNavigation();
     },
-    previousChapter() {
-      if (this.prevChapterHref) {
-        this.loadChapter(this.prevChapterHref);
+
+    async previousChapter() {
+      const prevHref = this.getPrevChapterHref(
+        this.toc,
+        this.currentChapterHref
+      );
+      if (prevHref) {
+        await this.loadChapter(prevHref);
       }
     },
-    nextChapter() {
-      if (this.nextChapterHref) {
-        this.loadChapter(this.nextChapterHref);
+
+    async nextChapter() {
+      const nextHref = this.getNextChapterHref(
+        this.toc,
+        this.currentChapterHref
+      );
+      if (nextHref) {
+        await this.loadChapter(nextHref);
       }
+    },
+
+    getPrevChapterHref(toc, currentHref, previous = null) {
+      for (const item of toc) {
+        if (item.href === currentHref) {
+          return previous;
+        }
+
+        if (item.subitems && item.subitems.length) {
+          const found = this.getPrevChapterHref(
+            item.subitems,
+            currentHref,
+            item.href
+          );
+          if (found) {
+            return found;
+          }
+        }
+
+        previous = item.href;
+      }
+
+      return null;
+    },
+
+    getNextChapterHref(toc, currentHref, foundCurrent = false) {
+      for (const item of toc) {
+        if (foundCurrent) {
+          return item.href;
+        }
+
+        if (item.href === currentHref) {
+          foundCurrent = true;
+        }
+
+        if (item.subitems && item.subitems.length) {
+          const found = this.getNextChapterHref(
+            item.subitems,
+            currentHref,
+            foundCurrent
+          );
+          if (found) {
+            return found;
+          }
+        }
+      }
+
+      return null;
     },
     updateChapterNavigation() {
       const spine = this.book.spine.spineItems;
@@ -134,7 +219,7 @@ export default {
         (item) => item.href === this.currentChapterHref
       );
       this.prevChapterHref =
-        currentIndex > 0 ? spine[currentIndex - 1].href : null;
+        currentIndex > 1 ? spine[currentIndex - 1].href : null; // The spine is 1-indexed
       this.nextChapterHref =
         currentIndex < spine.length - 1 ? spine[currentIndex + 1].href : null;
     },

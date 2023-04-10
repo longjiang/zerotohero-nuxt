@@ -16,7 +16,11 @@
                 browser()
               "
             >
-              <b-button variant="light" @click="$emit('showTOC')" v-if="showTocButton">
+              <b-button
+                variant="light"
+                @click="$emit('showTOC')"
+                v-if="showTocButton"
+              >
                 <i class="fas fa-bars"></i>
               </b-button>
               <b-dropdown
@@ -26,7 +30,7 @@
                 style="flex: 1"
               >
                 <template #button-content>
-                  <i class="fa-solid fa-lips"></i>
+                  <i class="fa-solid fa-lips" :title="$t('Voice')"></i>
                 </template>
                 <b-dropdown-item
                   v-for="(voice, index) in voices"
@@ -36,6 +40,14 @@
                   {{ voice.name }}
                 </b-dropdown-item>
               </b-dropdown>
+              <b-button
+                v-if="showTocButton"
+                :disabled="!hasPreviousChapter"
+                variant="light"
+                @click="$emit('nextChapter')"
+              >
+                <i class="fas fa-step-backward"></i>
+              </b-button>
               <b-button variant="light" @click="previous()">
                 <i class="fas fa-arrow-up"></i>
               </b-button>
@@ -56,12 +68,20 @@
               <b-button variant="light" @click="next()">
                 <i class="fas fa-arrow-down"></i>
               </b-button>
+              <b-button
+                v-if="showTocButton"
+                :disabled="!hasNextChapter"
+                variant="light"
+                @click="$emit('nextChapter')"
+              >
+                <i class="fas fa-step-forward"></i>
+              </b-button>
               <b-button variant="light" @click="toggleSpeed">
                 <span>{{ speed }}x</span>
               </b-button>
             </template>
-            <b-button variant="light" @click="translateAll()">
-              {{ $t("Translate") }}
+            <b-button variant="light" @click="translateAll()" :title="$t('Translate')">
+              <i class="fas fa-language"></i>
             </b-button>
           </b-button-group>
         </client-only>
@@ -176,7 +196,13 @@ export default {
       default: false,
     },
     showTocButton: {
-      default: false
+      default: false,
+    },
+    hasPreviousChapter: {
+      default: false,
+    },
+    hasNextChapter: {
+      default: false,
     },
     lang: {
       default: undefined,
@@ -199,7 +225,7 @@ export default {
       translationOffset: 0, // When translation and content is out of sync, the user can click on the translation to put them in sync.
       voice: 0,
       speed: 1,
-      linesPerPage: 10,
+      linesPerPage: 15,
       utterance: undefined,
       speaking: false,
       speakingLineIndex: undefined,
@@ -232,7 +258,7 @@ export default {
       for (let i = 1; i <= this.pageCount; i++) {
         options.push({
           value: i,
-          text: this.$t("Page {i} / {num}", {i, num: this.pageCount} ),
+          text: this.$t("Page {i} / {num}", { i, num: this.pageCount }),
         });
       }
       return options;
@@ -383,7 +409,7 @@ export default {
     },
     getVoices() {
       let speechSynthesis = window?.speechSynthesis;
-      if (!speechSynthesis) return
+      if (!speechSynthesis) return;
       let voices = speechSynthesis
         .getVoices()
         .filter(
@@ -473,7 +499,7 @@ export default {
     },
     play() {
       let speechSynthesis = window?.speechSynthesis;
-      if (!speechSynthesis) return
+      if (!speechSynthesis) return;
       this.speaking = true;
       if (speechSynthesis.paused && this.speakingLineIndex === this.current) {
         speechSynthesis.resume();
@@ -540,6 +566,9 @@ export default {
   position: sticky;
   top: 5.75rem;
   z-index: 11;
+  .btn {
+    padding: 0.375rem 0.2rem;
+  }
 }
 
 :deep(img) {
