@@ -18,9 +18,10 @@
           />
         </div>
       </b-modal>
+      <img v-if="coverUrl && !coverTapped" :src="coverUrl" alt="" class="book-cover" @click="coverTapped = true" />
       <TextWithSpeechBar
         class="mt-3"
-        v-if="currentChapterHTML"
+        v-if="currentChapterHTML && coverTapped"
         v-bind="{
           showTocButton: true,
           hasPreviousChapter,
@@ -73,6 +74,8 @@ export default {
       currentChapterHTML: null,
       page: 1,
       epubFileName: undefined,
+      coverUrl: null,
+      coverTapped: false,
     };
   },
   head() {
@@ -119,6 +122,7 @@ export default {
       this.page = this.page - 1;
     },
     async openEpub(event) {
+      this.coverTapped = false
       const file = event.target.files[0];
       if (!file) return;
       this.epubFileName = file.name;
@@ -134,6 +138,7 @@ export default {
         this.book = ePub(epubData);
         let navigation = await this.book.loaded.navigation;
         this.toc = navigation.toc;
+        this.coverUrl = await this.book.coverUrl();
         if (this.toc.length > 0) {
           let firstChapter = this.toc[0];
           this.loadChapter(firstChapter.href);
@@ -147,9 +152,30 @@ export default {
       let spine = await this.book.loaded.spine;
       let item = spine.get(href);
       let contents = await item.load(this.book.load.bind(this.book));
-      this.currentChapterHTML = contents.innerHTML;
+      this.currentChapterHTML = this.updateImageURLs(contents.innerHTML);
       this.$refs.tocModal.hide();
       this.updateChapterNavigation();
+    },
+    updateImageURLs(chapterHTML) {
+      // Load the chapter HTML into a DOMParser
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(chapterHTML, "text/html");
+
+      // Update the image URLs
+      const images = doc.getElementsByTagName("img");
+      // Replace image src attributes with absolute URLs
+      for (let i = 0; i < images.length; i++) {
+        const img = images[i];
+        const src = img.getAttribute("src");
+        const absoluteSrc = this.book.path.resolve(src);
+        const urlCache = this.book.archive.urlCache;
+        const absoluteUrl = urlCache[absoluteSrc];
+        img.setAttribute("src", absoluteUrl);
+      }
+
+      // Serialize the DOM back to a string
+      const serializer = new XMLSerializer();
+      return serializer.serializeToString(doc.documentElement);
     },
 
     async previousChapter() {
@@ -240,5 +266,14 @@ export default {
 
 :deep(.modal-body) {
   padding: 0;
+}
+
+.book-cover {
+  cursor: pointer;
+  max-width: 100%;
+  max-height: calc(100vh - 10rem);
+  margin: 3rem auto;
+  display: block;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
 }
 </style>
