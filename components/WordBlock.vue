@@ -452,7 +452,7 @@ export default {
         this.text = this.text.replace(/\u064a/g, "\u06cc"); // Arabic YEH to Farsi YEH
         let roman = await this.getFarsiRomanization(this.text);
         transliteration = roman.replace(/\^/g, "");
-      } else if (this.token && this.token.candidates.length > 0) {
+      } else if (this.token && this.token.candidates?.length > 0) {
         if (this.$l2.code !== "ja" && this.token.candidates[0].pronunciation) {
           transliteration =
             this.token.candidates[0].pronunciation.split(",")[
