@@ -57,43 +57,48 @@ export default {
       const file = event.target.files[0];
       if (!file) return;
 
-      const fileReader = new FileReader();
-      fileReader.onload = async () => {
-        try {
-          const epubData = fileReader.result;
-          this.book = ePub(epubData);
-          console.log(this.book)
-          let navigation = await this.book.loaded.navigation
-          this.toc = navigation.toc
-        } catch (error) {
-          console.error("Error loading book:", error);
-        }
-      };
-      fileReader.readAsArrayBuffer(file);
-      return
+      try {
+        const epubData = await new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.onload = () => resolve(fileReader.result);
+          fileReader.onerror = () => reject(fileReader.error);
+          fileReader.readAsArrayBuffer(file);
+        });
 
-      this.book = ePub(fileURL);
-      console.log(this.book)
-      this.rendition = this.book.renderTo(this.$refs.bookContainer, {
-        width: '100%',
-        height: '100%',
-      });
-      this.rendition.display();
-      
-      let navigation = await this.book.loaded.navigation
-      this.toc = navigation.toc
+        this.book = ePub(epubData);
+        let navigation = await this.book.loaded.navigation;
+        this.toc = navigation.toc;
+        let spine = await this.book.loaded.spine
+        this.book.loaded.spine.then((spine) => {
+          spine.each((item) => {
+            console.log({item})
+            item.load(this.book.load.bind(this.book)).then((contents) => {
+              console.log(contents);
+            });
+          });
+        });
+      } catch (error) {
+        console.error("Error loading book:", error);
+      }
     },
     async loadChapter(href) {
+      console.log({href})
       this.currentChapterHref = href;
 
       try {
-        const chapterDocument = await this.book.renderTo(href, { contain: "width" });
-        this.currentChapterHTML = chapterDocument.documentElement.innerHTML;
+        const chapterDocument = await this.book.renderTo(this.$refs.bookContainer, {
+        width: '100%',
+        height: '100%',
+      });
+        console.log({chapterDocument})
+        console.log("chapterDocument.documentElement", chapterDocument.documentElement)
+        console.log(await chapterDocument.started )
+        // this.currentChapterHTML = chapterDocument.documentElement.innerHTML;
       } catch (error) {
         console.error("Error loading chapter:", error);
       }
 
-      this.updateChapterNavigation();
+      // this.updateChapterNavigation();
     },
     previousChapter() {
       if (this.prevChapterHref) {
