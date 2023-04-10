@@ -466,13 +466,19 @@ export default {
               name: "reader",
               title: "Reader",
               icon: "fas fa-file-alt",
-              show: true,
+              show: false,
             },
             {
               name: "my-text",
-              title: "My Texts",
+              title: "Reader",
               icon: "fas fa-edit",
               show: this.$auth?.loggedIn,
+            },
+            {
+              name: "epub",
+              title: "Local ePub",
+              icon: "fas fa-book-circle-arrow-up",
+              show: true,
             },
             {
               name: "books",
@@ -485,21 +491,15 @@ export default {
               show: false,
             },
             {
-              name: "web-reader",
-              title: "Web Reader",
-              icon: "fas fa-globe-asia",
-              show: true,
-            },
-            {
               icon: "fas fa-ellipsis-h",
               title: `More`,
               name: "library",
               show: true,
               children: [
                 {
-                  name: "epub",
-                  title: "Open Local ePub",
-                  icon: "fas fa-book-circle-arrow-up",
+                  name: "web-reader",
+                  title: "Web Reader",
+                  icon: "fas fa-globe-asia",
                   show: true,
                 },
                 {

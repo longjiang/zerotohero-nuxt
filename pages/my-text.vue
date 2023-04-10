@@ -38,13 +38,43 @@
                 v-if="!$auth.loggedIn"
                 class="text-center alert-success p-3 pb-4 rounded mt-4 w-100"
               >
-                <p>{{ $t('To create new texts, please login.') }}</p>
+                <p>{{ $t("To create new texts, please login.") }}</p>
                 <router-link :to="{ name: 'login' }" class="btn btn-success">
-                  {{ $t('Login') }}
+                  {{ $t("Login") }}
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
               </div>
-              <div v-else>{{ $t('You have not created any text yet.') }}</div>
+              <div v-else>
+                <p>
+                  <i18n
+                    path="This tool will annotate {l2} text with {transliteration} and a popup dictionary."
+                    class="text-center mb-4"
+                  >
+                    <template #l2>{{ $t($l2.name) }}</template>
+                    <template #transliteration>
+                      <span v-if="$hasFeature('transliteration')">
+                        {{
+                          {
+                            zh: $t("pinyin annotation"),
+                            ja: $t("furigana (Japanese syllabary) annotation"),
+                            ko: $t(
+                              "Hanja byeonggi (Chinese character annotation)"
+                            ),
+                            vi: $t("Hán tự (Chinese character) annotation"),
+                          }[$l2.code] || $t("phonetic transcription")
+                        }}
+                      </span>
+                    </template>
+                  </i18n>
+                </p>
+                <p>
+                  {{
+                    $t(
+                      'To get started, tap on the "New Text" button (bottom-right corner) to create a new Text.'
+                    )
+                  }}
+                </p>
+              </div>
             </div>
             <b-button
               v-if="$auth.loggedIn"
@@ -54,11 +84,11 @@
             >
               <span v-if="!creating">
                 <i class="fas fa-plus mr-1"></i>
-                {{ $t('New Text') }}
+                {{ $t("New Text") }}
               </span>
               <span v-else>
                 <i class="fas fa-sync-alt"></i>
-                {{ $t('Creating...') }}
+                {{ $t("Creating...") }}
               </span>
             </b-button>
           </div>
@@ -77,15 +107,15 @@ export default {
   data() {
     return {
       loaded: false,
-      creating: false
+      creating: false,
     };
   },
   mounted() {
-    this.updateLoaded()
+    this.updateLoaded();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "savedText/LOAD") {
-        console.log('savedText/LOAD mutation detected')
-        this.updateLoaded()
+        console.log("savedText/LOAD mutation detected");
+        this.updateLoaded();
       }
     });
     if (!this.loadedByL2?.[this.$l2.code]) {
@@ -96,7 +126,7 @@ export default {
     }
   },
   beforeDestroy() {
-    this.unsubscribe()
+    this.unsubscribe();
   },
   computed: {
     ...mapState("savedText", ["loadedByL2"]),
@@ -125,13 +155,13 @@ export default {
   },
   methods: {
     updateLoaded() {
-      this.loaded = this.loadedByL2?.[this.$l2.code]
+      this.loaded = this.loadedByL2?.[this.$l2.code];
     },
     onTextRemoved(id) {
       this.$store.dispatch("savedText/remove", { l2: this.$l2, itemId: id });
     },
     async newText() {
-      this.creating = true
+      this.creating = true;
       let item = await this.$store.dispatch("savedText/add", { l2: this.$l2 });
       if (item) {
         this.$router.push({
@@ -139,7 +169,7 @@ export default {
           params: { method: "shared", arg: item.id },
         });
       }
-      this.creating = false
+      this.creating = false;
     },
   },
 };
@@ -161,7 +191,6 @@ export default {
     bottom: 6rem;
   }
 }
-
 
 .zerotohero-not-wide.zerotohero-with-mini-player {
   .new-button {

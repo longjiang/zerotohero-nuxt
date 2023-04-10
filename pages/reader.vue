@@ -31,7 +31,7 @@
               {{ $t("{l2} Text Reader (Annotator)", { l2: $t($l2.name) }) }}
             </h3>
             <i18n
-              path="I can convert any {l2} text into a learner-friendly format, with {transliteration} and a popup dictionary!"
+              path="This tool will annotate {l2} text with {transliteration} and a popup dictionary."
               class="text-center mb-4"
             >
               <template #l2>{{ $t($l2.name) }}</template>
