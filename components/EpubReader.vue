@@ -9,10 +9,21 @@
           <button @click="loadChapter(item.href)">{{ item.label }}</button>
         </li>
       </ol>
-      <TextWithSpeechBar v-if="currentChapterHTML" :html="currentChapterHTML" />
+      <TextWithSpeechBar
+        v-if="currentChapterHTML"
+        :html="currentChapterHTML"
+        :page="page"
+        @previousPage="onPreviousPage"
+        @nextPage="onNextPage"
+        @goToPage="onGoToPage"
+      />
       <div class="chapter-navigation">
-        <button @click="previousChapter" :disabled="!prevChapterHref">Previous</button>
-        <button @click="nextChapter" :disabled="!nextChapterHref">Next</button>
+        <button @click="previousChapter" :disabled="!prevChapterHref">
+          {{ $t("Previous") }}
+        </button>
+        <button @click="nextChapter" :disabled="!nextChapterHref">
+          {{ $t("Next") }}
+        </button>
       </div>
     </div>
   </div>
@@ -33,6 +44,7 @@ export default {
       prevChapterHref: null,
       nextChapterHref: null,
       currentChapterHTML: null,
+      page: 1,
     };
   },
   head() {
@@ -53,6 +65,15 @@ export default {
     // this.openEpub();
   },
   methods: {
+    onGoToPage(page) {
+      this.page = page
+    },
+    onNextPage() {
+      this.page = this.page + 1
+    },
+    onPreviousPage() {
+      this.page = this.page - 1
+    },
     async openEpub(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -68,37 +89,18 @@ export default {
         this.book = ePub(epubData);
         let navigation = await this.book.loaded.navigation;
         this.toc = navigation.toc;
-        let spine = await this.book.loaded.spine
-        this.book.loaded.spine.then((spine) => {
-          spine.each((item) => {
-            console.log({item})
-            item.load(this.book.load.bind(this.book)).then((contents) => {
-              console.log(contents);
-            });
-          });
-        });
       } catch (error) {
         console.error("Error loading book:", error);
       }
     },
     async loadChapter(href) {
-      console.log({href})
       this.currentChapterHref = href;
+      let spine = await this.book.loaded.spine;
+      let item = spine.get(href);
+      let contents = await item.load(this.book.load.bind(this.book));
+      this.currentChapterHTML = contents.innerHTML;
 
-      try {
-        const chapterDocument = await this.book.renderTo(this.$refs.bookContainer, {
-        width: '100%',
-        height: '100%',
-      });
-        console.log({chapterDocument})
-        console.log("chapterDocument.documentElement", chapterDocument.documentElement)
-        console.log(await chapterDocument.started )
-        // this.currentChapterHTML = chapterDocument.documentElement.innerHTML;
-      } catch (error) {
-        console.error("Error loading chapter:", error);
-      }
-
-      // this.updateChapterNavigation();
+      this.updateChapterNavigation();
     },
     previousChapter() {
       if (this.prevChapterHref) {
@@ -112,9 +114,13 @@ export default {
     },
     updateChapterNavigation() {
       const spine = this.book.spine.spineItems;
-      const currentIndex = spine.findIndex((item) => item.href === this.currentChapterHref);
-      this.prevChapterHref = currentIndex > 0 ? spine[currentIndex - 1].href : null;
-      this.nextChapterHref = currentIndex < spine.length - 1 ? spine[currentIndex + 1].href : null;
+      const currentIndex = spine.findIndex(
+        (item) => item.href === this.currentChapterHref
+      );
+      this.prevChapterHref =
+        currentIndex > 0 ? spine[currentIndex - 1].href : null;
+      this.nextChapterHref =
+        currentIndex < spine.length - 1 ? spine[currentIndex + 1].href : null;
     },
   },
 };
