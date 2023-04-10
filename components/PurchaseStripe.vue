@@ -99,41 +99,41 @@ export default {
       productID: this.test ? "prod_NgFwoKIzOmLCA3" : "prod_Lri8TEDq5YDfjb",
       prices: [
         // Legacy pricing
-        {
-          plan: 'lifetime', // monthly, annual, lifetime
-          type: 'regular', // regular, sale, test
-          mode: 'payment', // payment, subscription
-          id: this.test ? "price_1MutQRG5EbMGvOafQPHpDuQt" : "price_1LArBtG5EbMGvOaflIKUthub",
-          currency: "usd",
-          amount: 89,
-        },
-        {
-          plan: 'lifetime',
-          type: 'regular',
-          mode: 'payment',
-          id: this.test ? "price_1MutQRG5EbMGvOafyMTUX7xk" : "price_1LAr9NG5EbMGvOafz1UBoihK",
-          currency: "cny",
-          amount: 598,
-          paymentLink: "https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
-        },
-        // New pricing will come into effect on 2021-10-01
         // {
         //   plan: 'lifetime', // monthly, annual, lifetime
         //   type: 'regular', // regular, sale, test
         //   mode: 'payment', // payment, subscription
-        //   id: this.test ? "price_1MutQQG5EbMGvOaf9gV6n0mF" : "price_1Muh8kG5EbMGvOafeKMCODAG",
+        //   id: this.test ? "price_1MutQRG5EbMGvOafQPHpDuQt" : "price_1LArBtG5EbMGvOaflIKUthub",
         //   currency: "usd",
-        //   amount: 119,
+        //   amount: 89,
         // },
         // {
         //   plan: 'lifetime',
         //   type: 'regular',
         //   mode: 'payment',
-        //   id: this.test ? "price_1MutQQG5EbMGvOafjVE35Ozh" : "price_1MuhBrG5EbMGvOafqwjKPV0I",
+        //   id: this.test ? "price_1MutQRG5EbMGvOafyMTUX7xk" : "price_1LAr9NG5EbMGvOafz1UBoihK",
         //   currency: "cny",
-        //   amount: 799,
-        //   paymentLink: this.test ? "https://buy.stripe.com/test_5kAdRk6XretR6Y05kk" : "https://buy.stripe.com/4gw03r5wD0Rd05GfZ3"
+        //   amount: 598,
+        //   paymentLink: "https://buy.stripe.com/4gw2bz7ELbvR8CccMN"
         // },
+        // New in effect on 2021-10-01
+        {
+          plan: 'lifetime', // monthly, annual, lifetime
+          type: 'regular', // regular, sale, test
+          mode: 'payment', // payment, subscription
+          id: this.test ? "price_1MutQQG5EbMGvOaf9gV6n0mF" : "price_1Muh8kG5EbMGvOafeKMCODAG",
+          currency: "usd",
+          amount: 119,
+        },
+        {
+          plan: 'lifetime',
+          type: 'regular',
+          mode: 'payment',
+          id: this.test ? "price_1MutQQG5EbMGvOafjVE35Ozh" : "price_1MuhBrG5EbMGvOafqwjKPV0I",
+          currency: "cny",
+          amount: 799,
+          paymentLink: this.test ? "https://buy.stripe.com/test_5kAdRk6XretR6Y05kk" : "https://buy.stripe.com/4gw03r5wD0Rd05GfZ3"
+        },
         {
           plan: 'annual',
           type: 'regular',
