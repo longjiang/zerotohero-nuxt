@@ -18,6 +18,7 @@
           />
         </div>
       </b-modal>
+      <!-- <div v-html="currentChapterHTML" class="chapter-container mt-3"></div> -->
       <TextWithSpeechBar
         class="mt-3"
         v-if="currentChapterHTML"
@@ -139,6 +140,27 @@ export default {
       } catch (error) {
         console.error("Error loading book:", error);
       }
+    },  
+    updateImageURLs(chapterHTML) {
+      // Load the chapter HTML into a DOMParser
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(chapterHTML, "text/html");
+
+      // Update the image URLs
+      const images = doc.getElementsByTagName("img");
+      // Replace image src attributes with absolute URLs
+      for (let i = 0; i < images.length; i++) {
+        const img = images[i];
+        const src = img.getAttribute("src");
+        const absoluteSrc = this.book.path.resolve(src);
+        const urlCache = this.book.archive.urlCache
+        const absoluteUrl = urlCache[absoluteSrc];
+        img.setAttribute("src", absoluteUrl);
+      }
+
+      // Serialize the DOM back to a string
+      const serializer = new XMLSerializer();
+      return serializer.serializeToString(doc.documentElement);
     },
     async loadChapter(href) {
       // Remove the hash (fragment identifier) from the href
@@ -171,7 +193,8 @@ export default {
         currentSpineIndex++;
       }
 
-      this.currentChapterHTML = chapterHTML;
+      // Update the image URLs
+      this.currentChapterHTML = this.updateImageURLs(chapterHTML);
       this.$refs.tocModal.hide(); // Hide the Table of Contents modal
     },
 
