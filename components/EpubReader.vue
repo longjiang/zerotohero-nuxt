@@ -68,8 +68,6 @@ export default {
       book: null,
       toc: [],
       currentChapterHref: null,
-      prevChapterHref: null,
-      nextChapterHref: null,
       currentChapterHTML: null,
       page: 1,
       epubFileName: undefined,
@@ -175,7 +173,6 @@ export default {
 
       this.currentChapterHTML = chapterHTML;
       this.$refs.tocModal.hide(); // Hide the Table of Contents modal
-      this.updateChapterNavigation(); // Update the navigation for previous and next chapters
     },
 
     async previousChapter() {
@@ -245,16 +242,6 @@ export default {
       }
 
       return null;
-    },
-    updateChapterNavigation() {
-      const spine = this.book.spine.spineItems;
-      const currentIndex = spine.findIndex(
-        (item) => item.href === this.currentChapterHref
-      );
-      this.prevChapterHref =
-        currentIndex > 1 ? spine[currentIndex - 1].href : null; // The spine is 1-indexed
-      this.nextChapterHref =
-        currentIndex < spine.length - 1 ? spine[currentIndex + 1].href : null;
     },
   },
 };
