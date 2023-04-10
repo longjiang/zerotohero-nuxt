@@ -497,6 +497,12 @@ export default {
               show: true,
               children: [
                 {
+                  name: "epub",
+                  title: "Open Local ePub",
+                  icon: "fas fa-book-circle-arrow-up",
+                  show: true,
+                },
+                {
                   name: "library",
                   title: "Books (Legacy)",
                   icon: "fas fa-book-open",
