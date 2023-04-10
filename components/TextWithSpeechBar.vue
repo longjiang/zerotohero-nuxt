@@ -475,7 +475,7 @@ export default {
         if (this.voices.length === 0) this.getVoices();
         this.utterance = new SpeechSynthesisUtterance(text);
         // this.utterance.lang = this.lang || this.$l2.code
-        this.utterance.rate = this.speed;
+        this.utterance.rate = this.speed * 0.9;
         if (this.voices[this.voice]) {
           this.utterance.voice = this.voices[this.voice];
         }
