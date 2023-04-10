@@ -3,16 +3,22 @@
     <input type="file" @change="openEpub" accept=".epub" />
     <div ref="bookContainer" class="book-container"></div>
     <div v-if="book">
-      <h2>Table of Contents</h2>
-      <ol>
-        <li v-for="(item, index) in toc" :key="index">
-          <button @click="loadChapter(item.href)">{{ item.label }}</button>
-        </li>
-      </ol>
+      <b-modal ref="tocModal" title="Table of Contents" size="lg">
+        <ul>
+          <li v-for="(item, index) in toc" :key="index">
+            <a href="#" @click.prevent="loadChapter(item.href)">{{
+              item.label
+            }}</a>
+          </li>
+        </ul>
+      </b-modal>
       <TextWithSpeechBar
+        class="mt-3"
         v-if="currentChapterHTML"
         :html="currentChapterHTML"
         :page="page"
+        :showTocButton="true"
+        @showTOC="onShowTOC"
         @previousPage="onPreviousPage"
         @nextPage="onNextPage"
         @goToPage="onGoToPage"
@@ -65,14 +71,17 @@ export default {
     // this.openEpub();
   },
   methods: {
+    onShowTOC() {
+      this.$refs.tocModal.show();
+    },
     onGoToPage(page) {
-      this.page = page
+      this.page = page;
     },
     onNextPage() {
-      this.page = this.page + 1
+      this.page = this.page + 1;
     },
     onPreviousPage() {
-      this.page = this.page - 1
+      this.page = this.page - 1;
     },
     async openEpub(event) {
       const file = event.target.files[0];
@@ -89,6 +98,10 @@ export default {
         this.book = ePub(epubData);
         let navigation = await this.book.loaded.navigation;
         this.toc = navigation.toc;
+        if(this.toc.length > 0) {
+          let firstChapter = this.toc[0]
+          this.loadChapter(firstChapter.href)
+        }
       } catch (error) {
         console.error("Error loading book:", error);
       }

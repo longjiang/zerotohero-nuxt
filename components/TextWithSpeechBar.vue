@@ -16,6 +16,29 @@
                 browser()
               "
             >
+              <b-button variant="light" @click="$emit('showTOC')" v-if="showTocButton">
+                <i class="fas fa-bars"></i>
+              </b-button>
+              <b-dropdown
+                variant="light"
+                right
+                :text="$t('Voice')"
+                style="flex: 1"
+              >
+                <template #button-content>
+                  <i class="fa-solid fa-lips"></i>
+                </template>
+                <b-dropdown-item
+                  v-for="(voice, index) in voices"
+                  :key="`speech-bar-voice-${index}-${voice.name}`"
+                  @click="setvoice(index)"
+                >
+                  {{ voice.name }}
+                </b-dropdown-item>
+              </b-dropdown>
+              <b-button variant="light" @click="previous()">
+                <i class="fas fa-arrow-up"></i>
+              </b-button>
               <b-button
                 variant="light text-success"
                 v-if="!speaking"
@@ -30,29 +53,12 @@
               >
                 <i class="fas fa-pause"></i>
               </b-button>
-              <b-button variant="light" @click="previous()">
-                <i class="fas fa-arrow-up"></i>
-              </b-button>
               <b-button variant="light" @click="next()">
                 <i class="fas fa-arrow-down"></i>
               </b-button>
               <b-button variant="light" @click="toggleSpeed">
                 <span>{{ speed }}x</span>
               </b-button>
-              <b-dropdown
-                variant="light"
-                right
-                :text="$t('Voice')"
-                style="flex: 1"
-              >
-                <b-dropdown-item
-                  v-for="(voice, index) in voices"
-                  :key="`speech-bar-voice-${index}-${voice.name}`"
-                  @click="setvoice(index)"
-                >
-                  {{ voice.name }}
-                </b-dropdown-item>
-              </b-dropdown>
             </template>
             <b-button variant="light" @click="translateAll()">
               {{ $t("Translate") }}
@@ -168,6 +174,9 @@ export default {
     },
     showLoading: {
       default: false,
+    },
+    showTocButton: {
+      default: false
     },
     lang: {
       default: undefined,

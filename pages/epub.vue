@@ -14,7 +14,7 @@
   }
 </router>
 <template>
-  <div class="main pt-3 pb-5">
+  <div class="main pb-5">
     <SocialHead
       :title="`${$l2.name} ${$t('ePub Reader (Annotator)')} | Language Player`"
       :description="`${$t(
