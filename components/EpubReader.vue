@@ -3,14 +3,20 @@
     <input type="file" @change="openEpub" accept=".epub" />
     <div ref="bookContainer" class="book-container"></div>
     <div v-if="book">
-      <b-modal ref="tocModal" title="Table of Contents" size="lg">
-        <ul>
-          <li v-for="(item, index) in toc" :key="index">
-            <a href="#" @click.prevent="loadChapter(item.href)">{{
-              item.label
-            }}</a>
-          </li>
-        </ul>
+      <b-modal
+        ref="tocModal"
+        :title="$t('Table of Contents')"
+        :hide-footer="true"
+        size="md"
+      >
+        <div class="toc-container">
+          <TocItem
+            v-for="(item, index) in toc"
+            :key="index"
+            :item="item"
+            @load-chapter="loadChapter"
+          />
+        </div>
       </b-modal>
       <TextWithSpeechBar
         class="mt-3"
@@ -230,5 +236,9 @@ export default {
 <style scoped>
 .chapter-navigation {
   margin-top: 10px;
+}
+
+:deep(.modal-body) {
+  padding: 0;
 }
 </style>
