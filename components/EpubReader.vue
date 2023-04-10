@@ -15,6 +15,7 @@
       <TextWithSpeechBar
         class="mt-3"
         v-if="currentChapterHTML"
+        :key="`text-with-speech-bar-${epubFileName}-${currentChapterHref}-${page}`"
         :html="currentChapterHTML"
         :page="page"
         :showTocButton="true"
@@ -51,6 +52,7 @@ export default {
       nextChapterHref: null,
       currentChapterHTML: null,
       page: 1,
+      epubFileName: undefined
     };
   },
   head() {
@@ -86,6 +88,7 @@ export default {
     async openEpub(event) {
       const file = event.target.files[0];
       if (!file) return;
+      this.epubFileName = file.name;
 
       try {
         const epubData = await new Promise((resolve, reject) => {
