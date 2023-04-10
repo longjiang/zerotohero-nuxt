@@ -148,7 +148,7 @@ export default {
       let item = spine.get(href);
       let contents = await item.load(this.book.load.bind(this.book));
       this.currentChapterHTML = contents.innerHTML;
-
+      this.$refs.tocModal.hide();
       this.updateChapterNavigation();
     },
 

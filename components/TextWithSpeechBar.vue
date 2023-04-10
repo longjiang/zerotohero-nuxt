@@ -564,7 +564,7 @@ export default {
 
 .speech-bar {
   position: sticky;
-  top: 5.75rem;
+  top: calc(5.75rem + env(safe-area-inset-top));
   z-index: 11;
   .btn {
     padding: 0.375rem 0.2rem;
