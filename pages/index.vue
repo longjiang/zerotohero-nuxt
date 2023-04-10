@@ -233,9 +233,9 @@
                       <i class="fa-solid fa-down mr-1"></i>
                       {{ translate("Or, download the Android app as an") }}
                       <a
-                        href="https://server.chinesezerotohero.com/data/android/language-player-android-2.4.10.apk"
+                        href="https://server.chinesezerotohero.com/data/android/language-player-android-2.14.1.apk"
                       >
-                        {{ translate("Android Package") }} (APK) - v2.4.10
+                        {{ translate("Android Package") }} (APK) - v2.14.1
                       </a>
                     </small>
                   </p>
