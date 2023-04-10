@@ -30,7 +30,6 @@
         </span>
       </div>
       <div>{{ translate(plan.description) }}</div>
-      <div v-if="plan.name === 'lifetime'" class="mt-2 text-danger">{{ translate("Will increase to $119 on Apr 10.") }}</div>
     </div>
   </div>
 </template>
@@ -55,6 +54,7 @@ export default {
           intervalText: "/yr",
           description: "Billed annually",
         },
+        // Legacy
         {
           name: "lifetime",
           currency: "US$",
@@ -63,13 +63,13 @@ export default {
           description: "One-time payment, lifetime access.",
         },
         // New pricing will come into effect on 2021-10-01
-        // {
-        //   name: "lifetime",
-        //   currency: "US$",
-        //   amount: "119",
-        //   intervalText: "/lifetime",
-        //   description: "One-time payment, lifetime access.",
-        // },
+        {
+          name: "lifetime",
+          currency: "US$",
+          amount: "119",
+          intervalText: "/lifetime",
+          description: "One-time payment, lifetime access.",
+        },
       ],
     };
   },
