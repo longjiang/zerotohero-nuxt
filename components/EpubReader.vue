@@ -50,11 +50,29 @@ export default {
     return head;
   },
   mounted() {
-    this.openEpub();
+    // this.openEpub();
   },
   methods: {
-    async openEpub() {
-      this.book = await ePub('https://server.chinesezerotohero.com/data/epubs/en/alice-s-adventures-in-wonderland.epub');
+    async openEpub(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const fileReader = new FileReader();
+      fileReader.onload = async () => {
+        try {
+          const epubData = fileReader.result;
+          this.book = ePub(epubData);
+          console.log(this.book)
+          let navigation = await this.book.loaded.navigation
+          this.toc = navigation.toc
+        } catch (error) {
+          console.error("Error loading book:", error);
+        }
+      };
+      fileReader.readAsArrayBuffer(file);
+      return
+
+      this.book = ePub(fileURL);
       console.log(this.book)
       this.rendition = this.book.renderTo(this.$refs.bookContainer, {
         width: '100%',
@@ -63,7 +81,7 @@ export default {
       this.rendition.display();
       
       let navigation = await this.book.loaded.navigation
-      console.log(navigation.toc)
+      this.toc = navigation.toc
     },
     async loadChapter(href) {
       this.currentChapterHref = href;
