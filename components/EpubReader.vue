@@ -18,11 +18,10 @@
           />
         </div>
       </b-modal>
-      <!-- <img v-if="coverUrl" :src="coverUrl" alt="" /> -->
-      <!-- <div v-html="currentChapterHTML" class="chapter-container mt-3"></div> -->
+      <img v-if="coverUrl && !coverTapped" :src="coverUrl" alt="" class="book-cover" @click="coverTapped = true" />
       <TextWithSpeechBar
         class="mt-3"
-        v-if="currentChapterHTML"
+        v-if="currentChapterHTML && coverTapped"
         v-bind="{
           showTocButton: true,
           hasPreviousChapter,
@@ -35,19 +34,19 @@
         @previousPage="onPreviousPage"
         @nextPage="onNextPage"
         @goToPage="onGoToPage"
-        @nextChapter="goToNextChapter"
-        @previousChapter="goToPreviousChapter"
+        @nextChapter="nextChapter"
+        @previousChapter="previousChapter"
       />
       <div class="chapter-navigation text-center">
         <button
-          @click="goToPreviousChapter"
+          @click="previousChapter"
           :disabled="!hasPreviousChapter"
           class="btn btn-secondary"
         >
           <i class="fas fa-step-backward mr-1"></i>
         </button>
         <button
-          @click="goToNextChapter"
+          @click="nextChapter"
           :disabled="!hasNextChapter"
           class="btn btn-secondary"
         >
@@ -69,11 +68,14 @@ export default {
     return {
       book: null,
       toc: [],
-      coverUrl: null,
       currentChapterHref: null,
+      prevChapterHref: null,
+      nextChapterHref: null,
       currentChapterHTML: null,
       page: 1,
       epubFileName: undefined,
+      coverUrl: null,
+      coverTapped: false,
     };
   },
   head() {
@@ -120,6 +122,7 @@ export default {
       this.page = this.page - 1;
     },
     async openEpub(event) {
+      this.coverTapped = false
       const file = event.target.files[0];
       if (!file) return;
       this.epubFileName = file.name;
@@ -137,11 +140,21 @@ export default {
         this.toc = navigation.toc;
         this.coverUrl = await this.book.coverUrl();
         if (this.toc.length > 0) {
-          this.loadChapter("cover");
+          let firstChapter = this.toc[0];
+          this.loadChapter(firstChapter.href);
         }
       } catch (error) {
         console.error("Error loading book:", error);
       }
+    },
+    async loadChapter(href) {
+      this.currentChapterHref = href;
+      let spine = await this.book.loaded.spine;
+      let item = spine.get(href);
+      let contents = await item.load(this.book.load.bind(this.book));
+      this.currentChapterHTML = this.updateImageURLs(contents.innerHTML);
+      this.$refs.tocModal.hide();
+      this.updateChapterNavigation();
     },
     updateImageURLs(chapterHTML) {
       // Load the chapter HTML into a DOMParser
@@ -164,52 +177,8 @@ export default {
       const serializer = new XMLSerializer();
       return serializer.serializeToString(doc.documentElement);
     },
-    async loadChapter(href) {
-      console.log('Loading', {href})
-      // Treat the cover as a "chapter"
-      // If the href is "cover", load the cover image
-      if (href === "cover") {
-        this.currentChapterHTML = `<img src="${this.coverUrl}" alt="Cover Image">`;
-        this.currentChapterHref = "cover";
-        this.$refs.tocModal.hide();
-        return;
-      }
-      // Remove the hash (fragment identifier) from the href
-      // The hash is used to identify the page number in books that are read right-to-left (e.g. Japanese)
-      const cleanHref = href.split("#")[0];
-      this.currentChapterHref = cleanHref;
 
-      // Load the spine of the book and get the linear spine items (items that are part of the main reading flow)
-      const spine = await this.book.loaded.spine;
-      const linearItems = spine.spineItems.filter((item) => item.linear);
-
-      // Find the index of the current spine item in the linear spine items array
-      let currentSpineIndex = linearItems.findIndex(
-        (item) => item.href === cleanHref
-      );
-      let chapterHTML = "";
-
-      // Load the current spine item and all following spine items in the same chapter
-      // This is done to concatenate the content of spine items in the same chapter (e.g. right-to-left books)
-      while (
-        currentSpineIndex < linearItems.length &&
-        linearItems[currentSpineIndex].properties["rendition:layout"] !==
-          "pre-paginated"
-      ) {
-        const currentItem = linearItems[currentSpineIndex];
-        const contents = await currentItem.load(this.book.load.bind(this.book));
-        chapterHTML += contents.innerHTML;
-        currentItem.unload(); // Unload the spine item after using its contents to free up memory
-
-        currentSpineIndex++;
-      }
-
-      // Update the image URLs
-      this.currentChapterHTML = this.updateImageURLs(chapterHTML);
-      this.$refs.tocModal.hide(); // Hide the Table of Contents modal
-    },
-
-    async goToPreviousChapter() {
+    async previousChapter() {
       const prevHref = this.getPrevChapterHref(
         this.toc,
         this.currentChapterHref
@@ -219,7 +188,7 @@ export default {
       }
     },
 
-    async goToNextChapter() {
+    async nextChapter() {
       const nextHref = this.getNextChapterHref(
         this.toc,
         this.currentChapterHref
@@ -230,19 +199,12 @@ export default {
     },
 
     getPrevChapterHref(toc, currentHref, previous = null) {
-      if (currentHref === "cover") {
-        return null;
-      }
-      if (previous === null) {
-        return "cover";
-      }
       for (const item of toc) {
         if (item.href === currentHref) {
           return previous;
         }
 
-        const cleanItemHref = item.href.split("#")[0];
-        if (cleanItemHref === currentHref) {
+        if (item.subitems && item.subitems.length) {
           const found = this.getPrevChapterHref(
             item.subitems,
             currentHref,
@@ -260,16 +222,12 @@ export default {
     },
 
     getNextChapterHref(toc, currentHref, foundCurrent = false) {
-      console.log({toc, currentHref, foundCurrent})
-      if (currentHref === "cover") {
-        return toc[0].href.split("#")[0];
-      }
       for (const item of toc) {
         if (foundCurrent) {
           return item.href;
         }
-        const cleanItemHref = item.href.split("#")[0];
-        if (cleanItemHref === currentHref) {
+
+        if (item.href === currentHref) {
           foundCurrent = true;
         }
 
@@ -287,6 +245,16 @@ export default {
 
       return null;
     },
+    updateChapterNavigation() {
+      const spine = this.book.spine.spineItems;
+      const currentIndex = spine.findIndex(
+        (item) => item.href === this.currentChapterHref
+      );
+      this.prevChapterHref =
+        currentIndex > 1 ? spine[currentIndex - 1].href : null; // The spine is 1-indexed
+      this.nextChapterHref =
+        currentIndex < spine.length - 1 ? spine[currentIndex + 1].href : null;
+    },
   },
 };
 </script>
@@ -298,5 +266,14 @@ export default {
 
 :deep(.modal-body) {
   padding: 0;
+}
+
+.book-cover {
+  cursor: pointer;
+  max-width: 100%;
+  max-height: calc(100vh - 10rem);
+  margin: 3rem auto;
+  display: block;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
 }
 </style>
