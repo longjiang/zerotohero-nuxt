@@ -58,7 +58,7 @@ export default {
         {
           name: "lifetime",
           currency: "US$",
-          amount: "89",
+          amount: "119",
           intervalText: "/lifetime",
           description: "One-time payment, lifetime access.",
         },
