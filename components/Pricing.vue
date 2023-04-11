@@ -55,13 +55,13 @@ export default {
           description: "Billed annually",
         },
         // Legacy
-        {
-          name: "lifetime",
-          currency: "US$",
-          amount: "119",
-          intervalText: "/lifetime",
-          description: "One-time payment, lifetime access.",
-        },
+        // {
+        //   name: "lifetime",
+        //   currency: "US$",
+        //   amount: "119",
+        //   intervalText: "/lifetime",
+        //   description: "One-time payment, lifetime access.",
+        // },
         // New pricing will come into effect on 2021-10-01
         {
           name: "lifetime",
