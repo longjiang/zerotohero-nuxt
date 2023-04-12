@@ -18,7 +18,13 @@
           />
         </div>
       </b-modal>
-      <img v-if="coverUrl && !coverTapped" :src="coverUrl" alt="" class="book-cover" @click="coverTapped = true" />
+      <img
+        v-if="coverUrl && !coverTapped"
+        :src="coverUrl"
+        alt=""
+        class="book-cover"
+        @click="coverTapped = true"
+      />
       <TextWithSpeechBar
         class="mt-3"
         v-if="currentChapterHTML && coverTapped"
@@ -122,7 +128,7 @@ export default {
       this.page = this.page - 1;
     },
     async openEpub(event) {
-      this.coverTapped = false
+      this.coverTapped = false;
       const file = event.target.files[0];
       if (!file) return;
       this.epubFileName = file.name;
@@ -149,12 +155,75 @@ export default {
     },
     async loadChapter(href) {
       this.currentChapterHref = href;
-      let spine = await this.book.loaded.spine;
-      let item = spine.get(href);
-      let contents = await item.load(this.book.load.bind(this.book));
-      this.currentChapterHTML = this.updateImageURLs(contents.innerHTML);
+      const spine = await this.book.loaded.spine;
+      const item = spine.get(href.split("#")[0]);
+
+      const fullContents = await item.load(this.book.load.bind(this.book));
+      const startIndex = href.indexOf("#") !== -1 ? href.split("#")[1] : null;
+      const tocHrefs = this.toc.map((item) => item.href);
+      const currentTocIndex = tocHrefs.findIndex((tocHref) => tocHref === href);
+      const endIndex =
+        currentTocIndex + 1 < tocHrefs.length
+          ? tocHrefs[currentTocIndex + 1].split("#")[1]
+          : null;
+      const filteredContents = this.filterContentsByFragment(
+        fullContents.innerHTML,
+        startIndex,
+        endIndex
+      );
+      this.currentChapterHTML = this.updateImageURLs(filteredContents);
       this.$refs.tocModal.hide();
       this.updateChapterNavigation();
+    },
+    filterContentsByFragment(contents, startFragment, endFragment) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(contents, "text/html");
+
+      const startElement = doc.getElementById(startFragment);
+      const endElement = doc.getElementById(endFragment);
+
+      if (startElement && endElement) {
+        const allElements = Array.from(doc.body.querySelectorAll(`#${startElement.id} ~ *`));
+        const elementsBetween = this.getElementsBetweenIds(
+          startElement,
+          endElement
+        );
+
+        let elementsToRemove = [];
+
+
+        for (const el of allElements) {
+          if (!elementsBetween.includes(el)) {
+            let notAncestor = !el.contains(startElement) && !el.contains(endElement)
+            if (notAncestor) {
+              elementsToRemove.push(el);
+            }
+          }
+        }
+
+        for (const el of elementsToRemove) {
+          el.remove();
+        }
+      }
+
+      const serializer = new XMLSerializer();
+      return serializer.serializeToString(doc.body);
+    },
+
+    getElementsBetweenIds(startElement, endElement) {
+      const allElements = startElement.parentNode.querySelectorAll(
+        `:is(#${startElement.id}) ~ :not(#${endElement.id})`
+      );
+
+      const elementsBetween = Array.from(allElements).filter(
+        (el) =>
+          el.compareDocumentPosition(endElement) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+      );
+
+      elementsBetween.unshift(startElement);
+
+      return elementsBetween;
     },
     updateImageURLs(chapterHTML) {
       // Load the chapter HTML into a DOMParser
