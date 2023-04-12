@@ -63,8 +63,7 @@
           :level="level"
           skin="dark"
         />
-        <h4 class="mt-5 mb-4">More Videos</h4>
-        <b-button @click="refresh()">Refresh</b-button>
+        <h4 class="mt-5 mb-4">More Videos <span @click="refresh()" class="text-success small"><u>Refresh</u></span></h4>
         <LazyYouTubeVideoList
           :noThumbs="false"
           :updateVideos="updateVideos"
@@ -75,9 +74,12 @@
           :level="level"
           skin="dark"
         >
-        <template v-slot:footer="{ video }">
-          <b-button @click="addVideoToLesson(video)">Add Video to Lesson</b-button>
-        </template>
+          <template v-slot:footer="{ video }">
+            <div>"{{ video.matches.map(w => w.head).join(', ') }}"</div>
+            <b-button @click="addVideoToLesson(video)" class="mt-2 btn-sm"
+              >Add to Lesson</b-button
+            >
+          </template>
         </LazyYouTubeVideoList>
       </div>
     </div>
@@ -141,11 +143,10 @@ export default {
     },
     async getLessonVideos() {
       this.lessonVideos = [];
-      let videos = await this.$directus.getVideos(
-        { l2Id: this.$l2.id, query: `filter[l2][eq]=${
-          this.$l2.id
-        }&filter[level][eq]=${this.level}&filter[lesson][eq]=${this.lesson}`}
-      );
+      let videos = await this.$directus.getVideos({
+        l2Id: this.$l2.id,
+        query: `filter[l2][eq]=${this.$l2.id}&filter[level][eq]=${this.level}&filter[lesson][eq]=${this.lesson}`,
+      });
       if (videos.length > 0) {
         videos = videos.map((video) => {
           video.subs_l2 = this.$subs.parseSavedSubs(video.subs_l2);
@@ -167,35 +168,24 @@ export default {
       let words = this.unmatchedWords;
       this.videos = [];
       let videos = [];
+
       if (words.length > 0) {
+        let allWordForms = [];
         if (videos.length === 0) {
-          let promises = [];
-          for (let word of words.slice(0, 10)) {
-            let wordForms =
-              this.$l2.han && this.$l2.code !== "ja"
-                ? [word.simplified, word.traditional]
-                : [word.head];
-            wordForms = Helper.unique(wordForms);
-            for (let wordForm of wordForms) {
-              let query = `?filter[l2][eq]=${
-                this.$l2.id
-              }&filter[lesson][null]&filter[subs_l2][contains]=${JSON.stringify(
-                wordForm
-              ).replace(/"/gi, "")}&limit=200`;
-              let promise = new Promise(async (resolve, reject) => {
-                let newVideos = await this.$directus.getVideos({
-                  l2Id: this.$l2.id,
-                  query: query,
-                });
-                videos = videos.concat(newVideos)
-                resolve();
-              });
-              promises.push(promise);
-            }
-          }
-          await Promise.all(promises);
+          allWordForms = words.slice(0, 10).map((word) => word.head); // We're only using the head to make the search simpler
         }
+        allWordForms = Helper.unique(allWordForms);
+        console.log({ words, allWordForms })
+
+        let params = {
+          l2Id: this.$l2.id,
+          terms: allWordForms,
+        };
+        let newVideos = await this.$directus.searchCaptions(params);
+        console.log({ newVideos });
+        videos = videos.concat(newVideos);
         videos = Helper.uniqueByValue(videos, "id");
+
         if (videos.length > 0) {
           videos = videos.map((video) => {
             if (video.subs_l2) {
@@ -282,7 +272,11 @@ export default {
     },
     async addVideoToLesson(video) {
       let payload = { level: this.level, lesson: this.lesson };
-      let updatedVideo = await this.$directus.patchVideo({ id: video.id, l2Id: this.$l2.id, payload })
+      let updatedVideo = await this.$directus.patchVideo({
+        id: video.id,
+        l2Id: this.$l2.id,
+        payload,
+      });
       if (updatedVideo) {
         video = Object.assign(video, updatedVideo);
         this.lessonVideos.push(video);
