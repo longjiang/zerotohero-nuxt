@@ -103,7 +103,7 @@
               <i class="far fa-star mr-1"></i>
               {{ $t("Save All") }}
             </button>
-            <div>{{ $t('Before opening the video, save all the above words so they will be highlighted.') }}</div>
+            <div style="color: #666" class="mt-2" >{{ $t('Save all the above words so they will be highlighted in the video.') }}</div>
           </div>
         </div>
 
