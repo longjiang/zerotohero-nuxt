@@ -281,22 +281,10 @@ export default {
       }
     },
     async addVideoToLesson(video) {
-      let response = await $.ajax({
-        url: `${this.$directus.youtubeVideosTableName(this.$l2.id)}/${
-          video.id
-        }`,
-        data: JSON.stringify({ level: this.level, lesson: this.lesson }),
-        type: "PATCH",
-        contentType: "application/json",
-        xhr: function () {
-          return window.XMLHttpRequest == null ||
-            new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject("Microsoft.XMLHTTP")
-            : $.ajaxSettings.xhr();
-        },
-      });
-      if (response && response.data) {
-        video = Object.assign(video, response.data);
+      let payload = { level: this.level, lesson: this.lesson };
+      let updatedVideo = await this.$directus.patchVideo({ id: video.id, l2Id: this.$l2.id, payload })
+      if (updatedVideo) {
+        video = Object.assign(video, updatedVideo);
         this.lessonVideos.push(video);
         this.updateMatches();
         this.videos = this.videos

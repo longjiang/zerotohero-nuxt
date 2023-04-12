@@ -92,8 +92,18 @@
             <WordList
               :words="video.matches"
               :key="`matched-words-${videoIndex}-${matchedWordsKey}`"
+              ref="wordList"
               skin="dark"
             ></WordList>
+            <button
+              v-if="video.matches && video.matches.length > 0"
+              class="btn btn-sm mr-1 bg-warning text-white mt-2"
+              @click="saveAllWordsInList(videoIndex)"
+            >
+              <i class="far fa-star mr-1"></i>
+              {{ $t("Save All") }}
+            </button>
+            <div>{{ $t('Before opening the video, save all the above words so they will be highlighted.') }}</div>
           </div>
         </div>
 
@@ -238,6 +248,13 @@ export default {
     }
   },
   methods: {
+    saveAllWordsInList(videoIndex) {
+      let wordList = this.$refs.wordList[videoIndex];
+      if (wordList) {
+        let buttons = wordList.$el.querySelectorAll(".not-saved");
+        buttons.forEach((b) => b.click());
+      }
+    },
     changeLevel(level) {
       this.$router.push({
         path: `/${this.$l1.code}/${this.$l2.code}/lesson-videos/${level}/1`,
