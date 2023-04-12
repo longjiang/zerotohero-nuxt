@@ -154,24 +154,54 @@ export default {
       }
     },
     async loadChapter(href) {
-      this.currentChapterHref = href;
-      const spine = await this.book.loaded.spine;
-      const item = spine.get(href.split("#")[0]);
+      const cleanHref = href.split("#")[0];
+      this.currentChapterHref = cleanHref;
 
-      const fullContents = await item.load(this.book.load.bind(this.book));
-      const startIndex = href.indexOf("#") !== -1 ? href.split("#")[1] : null;
-      const tocHrefs = this.toc.map((item) => item.href);
-      const currentTocIndex = tocHrefs.findIndex((tocHref) => tocHref === href);
-      const endIndex =
-        currentTocIndex + 1 < tocHrefs.length
-          ? tocHrefs[currentTocIndex + 1].split("#")[1]
-          : null;
-      const filteredContents = this.filterContentsByFragment(
-        fullContents.innerHTML,
-        startIndex,
-        endIndex
+      let spine = await this.book.loaded.spine;
+      let tocHrefs = this.toc.map((item) => item.href);
+
+      let startIndex = spine.items.findIndex((item) => item.href === cleanHref);
+      let endIndex = spine.items.findIndex(
+        (item, index) =>
+          index > startIndex &&
+          tocHrefs.map((href) => href.split("#")[0]).includes(item.href)
       );
-      this.currentChapterHTML = this.updateImageURLs(filteredContents);
+
+      endIndex = endIndex === -1 ? spine.items.length : endIndex;
+
+      let chapterHTML = "";
+      for (let i = startIndex; i < endIndex; i++) {
+        let item = spine.get(spine.items[i].href);
+        let contents = await item.load(this.book.load.bind(this.book));
+
+        const currentHref = tocHrefs.find((href) => href.startsWith(item.href));
+        const currentTocIndex = tocHrefs.findIndex(
+          (tocHref) => tocHref === currentHref
+        );
+
+        let filteredContents = contents.innerHTML;
+
+        if (currentHref) {
+          const startIndex =
+            currentHref.indexOf("#") !== -1 ? currentHref.split("#")[1] : null;
+          const endIndex =
+            currentTocIndex + 1 < tocHrefs.length
+              ? tocHrefs[currentTocIndex + 1].split("#")[1]
+              : null;
+
+          if (startIndex || endIndex) {
+            filteredContents = this.filterContentsByFragment(
+              contents.innerHTML,
+              startIndex,
+              endIndex
+            );
+          }
+        }
+
+        chapterHTML += this.updateImageURLs(filteredContents);
+      }
+
+      this.currentChapterHTML = chapterHTML;
       this.$refs.tocModal.hide();
       this.updateChapterNavigation();
     },
@@ -183,7 +213,9 @@ export default {
       const endElement = doc.getElementById(endFragment);
 
       if (startElement && endElement) {
-        const allElements = Array.from(doc.body.querySelectorAll(`#${startElement.id} ~ *`));
+        const allElements = Array.from(
+          doc.body.querySelectorAll(`#${startElement.id} ~ *`)
+        );
         const elementsBetween = this.getElementsBetweenIds(
           startElement,
           endElement
@@ -191,10 +223,10 @@ export default {
 
         let elementsToRemove = [];
 
-
         for (const el of allElements) {
           if (!elementsBetween.includes(el)) {
-            let notAncestor = !el.contains(startElement) && !el.contains(endElement)
+            let notAncestor =
+              !el.contains(startElement) && !el.contains(endElement);
             if (notAncestor) {
               elementsToRemove.push(el);
             }
