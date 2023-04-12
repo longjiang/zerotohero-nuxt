@@ -193,7 +193,7 @@
               />
             </router-link>
             <div
-              v-if="video.id && video.topic"
+              v-if="video.id && video.topic && topics"
               class="youtube-video-card-badge"
             >
               {{ topics[video.topic] }}

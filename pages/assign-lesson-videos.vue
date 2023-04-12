@@ -4,6 +4,7 @@
       props: true,
       meta: {
         title: 'Lesson Videos | Language Player',
+        skin: 'dark',
         metaTags: [
           {
             name: 'description',
@@ -14,25 +15,27 @@
     }
 </router>
 <template>
-  <div class="container-fluid main mb-5">
+  <div class="container-fluid main main-dark mb-5">
     <div class="row">
       <div class="col-md-12">
-        <a
+        <router-link
           class="btn btn-gray mr-2"
-          :href="`/${$l1.code}/${$l2.code}/assign-lesson-videos/${level}/${
-            Number(lesson) - 1
-          }`"
+          :to="{
+            name: 'assign-lesson-videos',
+            params: { level: level, lesson: Number(lesson) - 1 },
+          }"
         >
           Previous Lesson
-        </a>
-        <a
+        </router-link>
+        <router-link
           class="btn btn-gray"
-          :href="`/${$l1.code}/${$l2.code}/assign-lesson-videos/${level}/${
-            Number(lesson) + 1
-          }`"
+          :to="{
+            name: 'assign-lesson-videos',
+            params: { level: level, lesson: Number(lesson) + 1 },
+          }"
         >
           Next Lesson
-        </a>
+        </router-link>
       </div>
     </div>
     <div class="row">
@@ -54,10 +57,11 @@
           :noThumbs="false"
           :updateVideos="updateLessonVideos"
           :videos="lessonVideos"
-          :checkSubs="true"
+          :checkSubs="false"
           :assignLessonMode="true"
           :lesson="lesson"
           :level="level"
+          skin="dark"
         />
         <h4 class="mt-5 mb-4">More Videos</h4>
         <b-button @click="refresh()">Refresh</b-button>
@@ -65,10 +69,11 @@
           :noThumbs="false"
           :updateVideos="updateVideos"
           :videos="videos"
-          :checkSubs="true"
+          :checkSubs="false"
           :assignLessonMode="true"
           :lesson="lesson"
           :level="level"
+          skin="dark"
         />
       </div>
     </div>
@@ -80,6 +85,7 @@ import WordList from "@/components/WordList";
 import Helper from "@/lib/helper";
 
 export default {
+  props: ["level", "lesson"],
   data() {
     return {
       words: [],
@@ -94,16 +100,22 @@ export default {
   components: {
     WordList,
   },
-  props: ["level", "lesson"],
   activated() {
     this.route();
   },
-  watch: {
-    $route() {
-      if (this.$route.name === "assign-lesson-videos") {
-        this.route();
-      }
-    },
+  async mounted() {
+    let dictionary = await this.$getDictionary();
+    let words = await dictionary.lookupByLesson(this.level, this.lesson);
+    words = words.filter((word) => !word.oofc || !word.oofc === "");
+    if (this.$l2.han && this.$l2.code !== "ja") {
+      this.words = Helper.uniqueByValue(words, "simplified");
+    } else {
+      this.words = Helper.uniqueByValue(words, "head");
+    }
+    await this.getLessonVideos();
+    await this.getVideos();
+    this.updateVideos++;
+    this.updateLessonVideos++;
   },
   computed: {
     $l1() {
@@ -119,35 +131,17 @@ export default {
     },
   },
   methods: {
-    async route() {
-      let words = await (
-        await this.$getDictionary()
-      ).lookupByLesson(this.level, this.lesson);
-      words = words.filter((word) => !word.oofc || !word.oofc === "");
-      if (this.$l2.han && this.$l2.code !== "ja") {
-        this.words = Helper.uniqueByValue(words, "simplified");
-      } else {
-        this.words = Helper.uniqueByValue(words, "head");
-      }
-      await this.getLessonVideos();
-      await this.getVideos();
-      this.updateVideos++;
-      this.updateLessonVideos++;
-    },
     async refresh() {
       await this.getVideos();
       this.updateVideos++;
     },
     async getLessonVideos() {
       this.lessonVideos = [];
-      let response = await $.getJSON(
-        `${this.$directus.youtubeVideosTableName(
+      let videos = await this.$directus.getVideos(
+        { l2Id: this.$l2.id, query: `filter[l2][eq]=${
           this.$l2.id
-        )}?sort=-id&filter[l2][eq]=${this.$l2.id}&filter[level][eq]=${
-          this.level
-        }&filter[lesson][eq]=${this.lesson}`
+        }&filter[level][eq]=${this.level}&filter[lesson][eq]=${this.lesson}`}
       );
-      let videos = response.data || [];
       if (videos.length > 0) {
         videos = videos.map((video) => {
           video.subs_l2 = this.$subs.parseSavedSubs(video.subs_l2);
@@ -179,26 +173,20 @@ export default {
                 : [word.head];
             wordForms = Helper.unique(wordForms);
             for (let wordForm of wordForms) {
-              promises.push(
-                new Promise((resolve, reject) => {
-                  $.getJSON(
-                    `${this.$directus.youtubeVideosTableName(
-                      this.$l2.id
-                    )}?sort=-id&filter[l2][eq]=${
-                      this.$l2.id
-                    }&filter[lesson][null]&filter[subs_l2][contains]=${JSON.stringify(
-                      wordForm
-                    ).replace(/"/gi, "")}&limit=200`
-                  ).then((response) => {
-                    if (response.data) {
-                      videos = videos.concat(response.data);
-                      resolve();
-                    } else {
-                      reject();
-                    }
-                  });
-                })
-              );
+              let query = `?filter[l2][eq]=${
+                this.$l2.id
+              }&filter[lesson][null]&filter[subs_l2][contains]=${JSON.stringify(
+                wordForm
+              ).replace(/"/gi, "")}&limit=200`;
+              let promise = new Promise(async (resolve, reject) => {
+                let newVideos = await this.$directus.getVideos({
+                  l2Id: this.$l2.id,
+                  query: query,
+                });
+                videos = videos.concat(newVideos)
+                resolve();
+              });
+              promises.push(promise);
             }
           }
           await Promise.all(promises);
@@ -221,6 +209,7 @@ export default {
           }
           return true;
         });
+
         videos = videos
           .sort((a, b) => {
             let aScore = a.text ? a.text.length || 0 : 0;
@@ -241,13 +230,16 @@ export default {
             return overlap.length === 0;
           });
         }
+
         this.videos = videos;
       }
       return true;
     },
     async removeVideo(video) {
       let response = await $.ajax({
-        url: `${this.$directus.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
+        url: `${this.$directus.youtubeVideosTableName(this.$l2.id)}/${
+          video.id
+        }`,
         type: "DELETE",
         contentType: "application/json",
         xhr: function () {
@@ -264,7 +256,9 @@ export default {
     },
     async removeVideoFromLesson(video) {
       let response = await $.ajax({
-        url: `${this.$directus.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
+        url: `${this.$directus.youtubeVideosTableName(this.$l2.id)}/${
+          video.id
+        }`,
         data: JSON.stringify({ level: null, lesson: null }),
         type: "PATCH",
         contentType: "application/json",
@@ -284,7 +278,9 @@ export default {
     },
     async addVideoToLesson(video) {
       let response = await $.ajax({
-        url: `${this.$directus.youtubeVideosTableName(this.$l2.id)}/${video.id}`,
+        url: `${this.$directus.youtubeVideosTableName(this.$l2.id)}/${
+          video.id
+        }`,
         data: JSON.stringify({ level: this.level, lesson: this.lesson }),
         type: "PATCH",
         contentType: "application/json",
