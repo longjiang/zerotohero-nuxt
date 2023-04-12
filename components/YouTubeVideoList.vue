@@ -189,7 +189,12 @@
             :showProgress="showProgress"
             :showPlayButton="showPlayButton"
             :showLanguage="multilingual"
-          />
+          >
+
+            <template v-slot:footer>
+              <slot name="footer" :video="video"></slot>
+            </template>
+          </LazyYouTubeVideoCard>
         </div>
       </div>
     </div>

@@ -8,7 +8,7 @@
         metaTags: [
           {
             name: 'description',
-            content: 'Assign videos to enforce lesson vocabulary.'
+            content: 'Assign videos to reenforce lesson vocabulary.'
           }
         ]
       }
@@ -74,7 +74,11 @@
           :lesson="lesson"
           :level="level"
           skin="dark"
-        />
+        >
+        <template v-slot:footer="{ video }">
+          <b-button @click="addVideoToLesson(video)">Add Video to Lesson</b-button>
+        </template>
+        </LazyYouTubeVideoList>
       </div>
     </div>
   </div>

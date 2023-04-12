@@ -291,6 +291,7 @@
               {{ video.subs_l2[0].line }}
             </div>
           </div>
+          <slot name="footer" :video="video"></slot>
         </client-only>
         <client-only>
           <b-progress
