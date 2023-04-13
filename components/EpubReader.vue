@@ -89,7 +89,7 @@ export default {
     head.script = [
       {
         hid: "jszip",
-        src: "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js", // v0.3.88
+        src: "/vendor/jszip/jszip.min.js", // v3.10.1
       },
       {
         hid: "epubjs",
