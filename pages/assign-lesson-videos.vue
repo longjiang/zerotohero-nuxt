@@ -305,6 +305,9 @@ export default {
         this.lessonVideos.push(video);
         this.updateMatches();
         this.videos = this.videos
+          .filter((v) => {
+            return v !== video
+          })
           .map((video) => {
             if (video.subs_l2) {
               video.matches = this.matchWords(video).filter(
@@ -314,7 +317,7 @@ export default {
             return video;
           })
           .filter((v) => {
-            return v !== video && v.matches?.length > 0;
+            return v.matches?.length > 0;
           });
       }
     },
