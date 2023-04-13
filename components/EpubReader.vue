@@ -43,22 +43,6 @@
         @nextChapter="nextChapter"
         @previousChapter="previousChapter"
       />
-      <div class="chapter-navigation text-center">
-        <button
-          @click="previousChapter"
-          :disabled="!hasPreviousChapter"
-          class="btn btn-secondary"
-        >
-          <i class="fas fa-step-backward mr-1"></i>
-        </button>
-        <button
-          @click="nextChapter"
-          :disabled="!hasNextChapter"
-          class="btn btn-secondary"
-        >
-          <i class="fas fa-step-forward ml-1"></i>
-        </button>
-      </div>
     </div>
   </div>
 </template>
@@ -155,8 +139,9 @@ export default {
       }
     },
     async loadChapter(href) {
+      this.currentChapterHref = href;
+
       const cleanHref = href.split("#")[0];
-      this.currentChapterHref = cleanHref;
 
       let spine = await this.book.loaded.spine;
       let tocHrefs = this.toc.map((item) => item.href);

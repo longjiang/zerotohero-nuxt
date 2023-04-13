@@ -138,21 +138,29 @@
       </div>
       <div
         class="speech-nav mt-5 text-center d-flex mb-4 rounded p-2 shadow"
-        v-if="page && pageCount > 1"
+        v-if="page"
         style="
           justify-content: center;
           align-items: center;
           border: 1px solid #dedede;
         "
       >
-        <button
+        <b-button
+          v-if="showTocButton"
+          :disabled="!hasPreviousChapter"
+          class="mr-1"
+          variant="light"
+          @click="$emit('previousChapter')"
+        >
+          <i class="fas fa-step-backward"></i>
+        </b-button>
+        <b-button
           v-if="Number(page) > 1"
-          class="btn text-success btn-sm mr-1"
+          variant="light"
           @click="$emit('previousPage')"
-          style="width: 2rem"
         >
           <i class="fas fa-arrow-left"></i>
-        </button>
+        </b-button>
         <b-form-select
           size="md"
           v-model="goToPage"
@@ -160,14 +168,21 @@
           class="text-center border-0"
           style="width: auto; padding-right: 1.25rem !important; margin: auto"
         />
-        <button
+        <b-button
           v-if="Number(page) < pageCount"
-          class="btn text-success btn-sm ml-1"
+          variant="light"
           @click="$emit('nextPage')"
-          style="width: 2rem"
         >
           <i class="fas fa-arrow-right"></i>
-        </button>
+        </b-button>
+        <b-button
+          v-if="showTocButton"
+          :disabled="!hasNextChapter"
+          variant="light"
+          @click="$emit('nextChapter')"
+        >
+          <i class="fas fa-step-forward"></i>
+        </b-button>
       </div>
     </div>
   </container-query>
