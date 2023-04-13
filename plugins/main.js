@@ -92,7 +92,7 @@ export default async ({ app, store, route }, inject) => {
       .includes(feature);
   });
   inject('getDictionary', async () => {
-    if (store.state.settings.l1 && store.state.settings.l1 && store.state.settings.dictionaryName) {
+    if (store.state.settings.l1 && store.state.settings.l2 && store.state.settings.dictionaryName) {
       if (process.client) {
         let dictionary = WorkerModuleLoader.load(store.state.settings.dictionaryName, { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] || store.state.settings.l2["glottologId"] })
         return dictionary
@@ -107,7 +107,7 @@ export default async ({ app, store, route }, inject) => {
   })
   
   inject('getGrammar', async () => {
-    if (store.state.settings.l1 && store.state.settings.l1 && store.state.settings.dictionaryName) {
+    if (store.state.settings.l1 && store.state.settings.l2 && store.state.settings.dictionaryName) {
       let grammar = ModuleLoader.load('grammar', { l1: store.state.settings.l1["iso639-3"], l2: store.state.settings.l2["iso639-3"] || store.state.settings.l2["glottologId"] })
       return grammar
     }

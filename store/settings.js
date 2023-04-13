@@ -10,11 +10,17 @@ export const romanizationOffByDefault = [
   "vi",
 ];
 
-export const transientProperties = ["l1", "l2", "dictionary", "dictionaryName"];
-
-export const defaultGeneralSettings = {
-  adminMode: false,
-  skin: "dark",
+export const getDefaultL2Settings = (l2) => {
+  let l2SettingsOfL2 = defaultL2Settings;
+  if (
+    (l2.scripts &&
+      l2.scripts[0] &&
+      ["Cyrl", "Latn"].includes(l2.scripts[0].script)) ||
+    romanizationOffByDefault.includes(l2.code)
+  ) {
+    l2SettingsOfL2.showPinyin = false;
+  }
+  return l2SettingsOfL2;
 };
 
 export const defaultL2Settings = {
@@ -35,39 +41,31 @@ export const defaultL2Settings = {
   zoomLevel: 0,
 };
 
-export const getDefaultL2Settings = (l2) => {
-  let l2SettingsOfL2 = defaultL2Settings;
-  if (
-    (l2.scripts &&
-      l2.scripts[0] &&
-      ["Cyrl", "Latn"].includes(l2.scripts[0].script)) ||
-    romanizationOffByDefault.includes(l2.code)
-  ) {
-    l2SettingsOfL2.showPinyin = false;
-  }
-  return l2SettingsOfL2;
+export const defaultTransientSettings = {
+  l1: undefined, // L1 language object
+  l2: undefined, // L2 language object
+  dictionary: undefined,
+  dictionaryName: undefined,
+  settingsLoaded: false,
+  l2Settings: {}, // keyed by language
+}
+
+export const defaultGeneralSettings = {
+  adminMode: false,
+  skin: "dark",
+  preferredCategories: [],
+  layout: "vertical", // or 'horizontal'
+  autoPause: false,
+  speed: 1,
+  hideWord: false, // as used in the <HideDefs> component
+  hidePhonetics: false, // as used in the <HideDefs> component
+  hideDefinitions: false, // as used in the <HideDefs> component
+  subsSearchLimit: true,
+  openAIToken: undefined,
 };
 
 export const state = () => {
-  return {
-    l1: undefined, // L1 language object
-    l2: undefined, // L2 language object
-    dictionary: undefined,
-    dictionaryName: undefined,
-    adminMode: false,
-    skin: "dark",
-    hideWord: false, // as used in the <HideDefs> component
-    hidePhonetics: false, // as used in the <HideDefs> component
-    hideDefinitions: false, // as used in the <HideDefs> component
-    subsSearchLimit: true,
-    openAIToken: undefined,
-    layout: "vertical", // or 'horizontal'
-    autoPause: false,
-    speed: 1,
-    l2Settings: {}, // keyed by language
-    settingsLoaded: false,
-    preferredCategories: [],
-  };
+  return Object.assign({}, defaultGeneralSettings, defaultTransientSettings);
 };
 
 /**
@@ -78,7 +76,7 @@ export const saveSettingsToStorage = (state) => {
   if (typeof localStorage !== "undefined") {
     let settingsToSave = {};
     for (let property in state) {
-      if (!transientProperties.includes(property))
+      if (!Object.keys(defaultTransientSettings).includes(property))
         settingsToSave[property] = state[property];
     }
     localStorage.setItem("zthSettings", JSON.stringify(settingsToSave));
@@ -143,8 +141,8 @@ export const mutations = {
     state.l1 = null;
     state.l2 = null;
   },
-  SET_DICTIONARY(state, dictionary) {
-    state.dictionary = dictionary;
+  SET_DICTIONARY_NAME(state, dictionaryName) {
+    state.dictionaryName = dictionaryName;
   },
   SET_GENERAL_SETTINGS(state, generalSettings) {
     for (let property in generalSettings) {
@@ -210,6 +208,9 @@ export const getters = {
 export const actions = {
   setL1L2({ commit }, { l1, l2 }) {
     commit("SET_L1_L2", { l1, l2 });
+  },
+  setDictionaryName({ commit }, dictionaryName) {
+    commit("SET_DICTIONARY_NAME", dictionaryName);
   },
   setGeneralSettings({ dispatch, commit }, generalSettings) {
     commit("SET_GENERAL_SETTINGS", generalSettings);

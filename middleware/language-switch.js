@@ -19,7 +19,7 @@ export default async function ({ error, route, app, store, params, i18n }) {
           return
         }
       }
-      store.commit('settings/SET_L1_L2', { l1, l2 })
+      store.dispatch('settings/setL1L2', { l1, l2 })
       if (l1) {
         i18n.locale = l1.code;
         if (l1.translations) {
@@ -35,7 +35,7 @@ export default async function ({ error, route, app, store, params, i18n }) {
 
         if (dictionaries) {
           console.log('Setting dictionary name to', dictionaries[0])
-          store.commit('settings/SET_GENERAL_SETTINGS', { dictionaryName: dictionaries[0] })
+          store.dispatch('settings/setDictionaryName', dictionaries[0])
         }
       }
     }
