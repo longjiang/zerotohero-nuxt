@@ -182,7 +182,6 @@
             :checkSubs="checkSubsData"
             :checkSaved="checkSavedData"
             :view="view"
-            :skin="skin"
             :showSubsEditing="showSubsEditing"
             :showBadges="showBadges"
             :showDate="showDate"

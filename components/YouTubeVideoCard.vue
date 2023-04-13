@@ -2,10 +2,11 @@
   <drop
     @drop="handleDrop"
     :class="[
-      `youtube-video-card-wrapper-${skin} play-button-wrapper`,
       {
-        over: over,
+        'play-button-wrapper': true,
         'youtube-video-card-wrapper': true,
+        [`skin-${skin}`]: true,
+        over,
         media: true,
         nosubs:
           !generated &&
@@ -52,7 +53,7 @@
         <client-only>
           <b-progress
             class="youtube-video-card-progress"
-            v-if="progress && skin !== 'card'"
+            v-if="progress"
             :value="progress"
             :max="1"
           ></b-progress>
@@ -293,14 +294,6 @@
           </div>
           <slot name="footer" :video="video"></slot>
         </client-only>
-        <client-only>
-          <b-progress
-            class="youtube-video-card-progress"
-            v-if="progress && skin === 'card'"
-            :value="progress"
-            :max="1"
-          ></b-progress>
-        </client-only>
       </div>
     </div>
   </drop>
@@ -363,8 +356,8 @@ export default {
     showPlayButton: {
       default: false,
     },
-    skin: {
-      default: "card", // or 'dark'
+    skinOverride: {
+      default: null,
     },
     view: {
       type: String,
@@ -389,6 +382,16 @@ export default {
   },
   computed: {
     ...mapState("history", ["history"]),
+    ...mapState("settings", ["l2Settings"]),
+    l2SettingsOfL2() {
+      let l2SettingsOfL2 = {};
+      if (this.l2Settings && this.l2Settings[this.$l2.code])
+        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
+      return l2SettingsOfL2;
+    },
+    skin() {
+      return this.skinOverride ? this.skinOverride : this.l2SettingsOfL2?.darkMode ? "dark" : "light";
+    },
     language() {
       let language = this.$languages.l1s.find((l1) => l1.id === this.video.l2);
       return language;
@@ -763,8 +766,8 @@ export default {
   &.nosubs:not(.over) > * {
     opacity: 0.2;
   }
-  &.youtube-video-card-wrapper-dark,
-  &.youtube-video-card-wrapper-light {
+  &.youtube-video-card-wrapper,
+  &.youtube-video-card-wrapper {
     background: none;
     overflow: visible;
     .media-body {
@@ -797,17 +800,26 @@ export default {
       backdrop-filter: blur(5px);
     }
   }
-  &.youtube-video-card-wrapper-light {
+  &.youtube-video-card-wrapper.skin-light {
     .youtube-thumbnail-wrapper {
       box-shadow: 0 5px 25px #0000002f;
     }
   }
-  &.youtube-video-card-wrapper-dark {
+  &.youtube-video-card-wrapper.skin-dark {
     .youtube-thumbnail-wrapper {
       box-shadow: 0 -1px 1px #ffffff69;
     }
     .media-body {
       color: hsla(0deg 0% 100% / 75%);
+    }
+    .youtube-video-card-badge {
+      color: #ffffff88;
+      &.bg-success {
+        background-color: rgba(0, 128, 0, 0.562) !important;
+      }
+      &.text-white {
+        color: #ffffffaa !important;
+      }
     }
   }
   &.youtube-video-card-wrapper-card {
@@ -878,17 +890,6 @@ export default {
     color: #666;
   }
   padding-bottom: 0.25rem;
-}
-.main-dark {
-  .youtube-video-card-badge {
-    color: #ffffff88;
-    &.bg-success {
-      background-color: rgba(0, 128, 0, 0.562) !important;
-    }
-    &.text-white {
-      color: #ffffffaa !important;
-    }
-  }
 }
 
 .no-subs-badge {

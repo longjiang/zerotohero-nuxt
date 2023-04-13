@@ -130,7 +130,7 @@
               :videos="random(music).slice(0, 12)"
               :showAdminToolsInAdminMode="false"
               :showDate="true"
-              skin="dark"
+              :skin="skin"
             />
           </div>
 
@@ -218,7 +218,7 @@
                 :videos="random(news).slice(0, 12)"
                 :showAdminToolsInAdminMode="false"
                 :showDate="true"
-                skin="dark"
+                :skin="skin"
               />
             </div>
           </div>
@@ -248,9 +248,7 @@
 <script>
 import Helper from "@/lib/helper";
 import { mapState } from "vuex";
-import { languageLevels, LANGS_WITH_LEVELS } from "@/lib/utils";
-import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
-import { shuffle } from "@/lib/utils/array";
+import { languageLevels, randomItemFromArray, LANGS_WITH_LEVELS, LANGS_WITH_CONTENT } from "@/lib/utils";
 
 export default {
   data() {
@@ -311,6 +309,16 @@ export default {
     ...mapState("shows", ["categories"]),
     ...mapState("settings", ["preferredCategories", "settingsLoaded"]),
     ...mapState("progress", ["progress", "progressLoaded"]),
+    ...mapState("settings", ["l2Settings"]),
+    l2SettingsOfL2() {
+      let l2SettingsOfL2 = {};
+      if (this.l2Settings && this.l2Settings[this.$l2.code])
+        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
+      return l2SettingsOfL2;
+    },
+    skin() {
+      return this.l2SettingsOfL2?.darkMode ? "dark" : "light";
+    },
     languageLevel() {
       if (
         this.progress &&
@@ -360,16 +368,8 @@ export default {
       this.hasWatchHistory = true;
     },
     async loadHeroVideo() {
-      if (this.talks) {
-        let randomTalk = this.random(this.talks.slice(0, 7), 1)[0];
-        if (randomTalk) {
-          let query = `filter[talk][eq]=${randomTalk.id}&fields=l2,id,title,youtube_id,tv_show,talk,l2&limit=1"`;
-          let randomVideos = await this.$directus.getVideos({
-            l2Id: this.$l2.id,
-            query,
-          });
-          if (randomVideos) this.heroVideo = randomVideos[0];
-        }
+      if (this.music?.length > 0) {
+        this.heroVideo = randomItemFromArray(this.music);
       }
     },
     onVideoUnavailable(youtube_id) {

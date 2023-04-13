@@ -22,7 +22,6 @@ export default async function ({ error, route, app, store, params, i18n }) {
       store.commit('settings/SET_L1_L2', { l1, l2 })
       if (l1) {
         i18n.locale = l1.code;
-        i18n.silentTranslationWarn = true;
         if (l1.translations) {
           i18n.setLocaleMessage(
             l1.code,

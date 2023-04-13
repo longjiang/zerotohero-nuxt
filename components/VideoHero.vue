@@ -1,10 +1,14 @@
-  <template>
-  <div
-    style="position: relative"
-    :class="{ unavailable: videoUnavailable }"
-    v-observe-visibility="visibilityChanged"
-  >
-    <div class="video-hero" @click="play" v-if="wide">
+<template>
+  <div style="position: relative" v-observe-visibility="visibilityChanged">
+    <div
+      :class="{
+        'video-hero': true,
+        unavailable: videoUnavailable,
+        [`skin-${skin}`]: true,
+      }"
+      @click="play"
+      v-if="wide"
+    >
       <div class="top-overlay"></div>
       <div class="bottom-overlay"></div>
       <LazyYouTubeVideo
@@ -16,7 +20,7 @@
           cc: false,
           video,
           posterOnly: isMobile,
-          icon: false
+          icon: false,
         }"
         @videoUnavailable="onVideoUnavailable"
       />
@@ -79,6 +83,8 @@
 
 <script>
 import Helper from "@/lib/helper";
+import { mapState } from "vuex";
+
 export default {
   props: {
     video: {
@@ -93,7 +99,7 @@ export default {
   data() {
     return {
       videoUnavailable: false,
-      muted: true,
+      muted: false,
       wide: false,
     };
   },
@@ -101,6 +107,16 @@ export default {
     this.wide = Helper.wide();
   },
   computed: {
+    ...mapState("settings", ["l2Settings"]),
+    l2SettingsOfL2() {
+      let l2SettingsOfL2 = {};
+      if (this.l2Settings && this.l2Settings[this.$l2.code])
+        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
+      return l2SettingsOfL2;
+    },
+    skin() {
+      return this.l2SettingsOfL2?.darkMode ? "dark" : "light";
+    },
     isMobile() {
       return Helper.isMobile();
     },
@@ -219,6 +235,7 @@ export default {
     video() {
       this.videoUnavailable = false;
     },
+    skin() {},
   },
   methods: {
     play() {
@@ -245,21 +262,46 @@ export default {
   position: relative;
   max-height: 50vh;
   padding-bottom: 10%;
-  background: black;
   .top-overlay {
-    background: linear-gradient(black 0%, rgba(0, 0, 0, 0) 100%);
-    height: 25%;
+    height: 2.5%;
     width: 100%;
     position: absolute;
     z-index: 2;
   }
   .bottom-overlay {
-    background: linear-gradient(rgba(0, 0, 0, 0) 0%, black 75%);
-    height: 75%;
+    height: 20%;
     width: 100%;
     position: absolute;
     bottom: 0;
     z-index: 2;
+  }
+  &.skin-light {
+    .top-overlay {
+      background: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 100%);
+    }
+    .bottom-overlay {
+      background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 75%);
+    }
+  }
+  &.skin-dark {
+    .top-overlay {
+      background: linear-gradient(black 0%, rgba(0, 0, 0, 0) 100%);
+    }
+    .bottom-overlay {
+      background: linear-gradient(rgba(255, 255, 255, 0) 0%, white 75%);
+    }
+  }
+  &.unavailable {
+    .hero-video-info-wrapper .hero-video-info {
+      max-width: 100%;
+    }
+    .hero-video-title {
+      text-align: center;
+    }
+    .youtube {
+      opacity: 0;
+      padding-bottom: 7rem;
+    }
   }
 }
 
@@ -289,19 +331,6 @@ export default {
       text-overflow: ellipsis;
       overflow: hidden;
     }
-  }
-}
-
-.unavailable {
-  .hero-video-info-wrapper .hero-video-info {
-    max-width: 100%;
-  }
-  .hero-video-title {
-    text-align: center;
-  }
-  .youtube {
-    opacity: 0;
-    padding-bottom: 7rem;
   }
 }
 
