@@ -144,7 +144,7 @@ export default {
       return {
         name: "video-view",
         params: {
-          type: "youtube",
+          type: this.type,
           youtube_id: this.youtube_id,
           lesson: this.lesson,
         },

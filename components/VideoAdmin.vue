@@ -78,7 +78,7 @@
           v-if="video.category === 10 || video.tv_show?.title === 'Music'"
         >
           <a
-            :href="`https://open.spotify.com/search/song/${encodeURIComponent(
+            :href="`https://play.spotify.com/search/${encodeURIComponent(
               video.title
             )}`"
             target="_blank"
@@ -747,6 +747,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.video-view-minimized {
+  .subs-drop {
+    display: none;
+  }
+}
 .subs-drop {
   border: 2px dashed rgba(136, 136, 136, 0.5);
   color: rgba(136, 136, 136, 0.85);

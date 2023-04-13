@@ -258,6 +258,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.video-view-minimized {
+  .upload-wrapper {
+    display: none;
+  }
+}
 .video {
   padding-bottom: 56.25%;
   position: relative;
