@@ -57,6 +57,7 @@ export default {
     },
   },
   computed: {
+    ...mapState("history", ["history"]),
     to() {
       let to;
       if (this.phrasebook.index)
@@ -84,27 +85,9 @@ export default {
       }
       return to;
     },
-    $l1() {
-      if (typeof this.l1 !== "undefined") {
-        return this.l1;
-      } else if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-      else return this.$languages.getSmart("en");
-    },
-    $l2() {
-      if (typeof this.l2 !== "undefined") {
-        return this.l2;
-      } else if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     historyId() {
       return `${this.$l2.code}-phrasebook-${this.phrasebook.id}`;
     },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
-    ...mapState("history", ["history"]),
     progress() {
       if (this.showProgress && this.history) {
         if (this.historyItem && this.historyItem.phrasebook) {

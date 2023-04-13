@@ -51,14 +51,6 @@ export default {
     },
   },
   computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     prevYear() {
       let yyyy = Number(this.yyyy) - 1;
       return yyyy === 0 ? yyyy - 1 : yyyy;

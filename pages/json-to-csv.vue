@@ -41,12 +41,6 @@
 import Helper from "@/lib/helper";
 export default {
   computed: {
-    $l1() {
-      return this.$store.state.settings.l1;
-    },
-    $l2() {
-      return this.$store.state.settings.l2;
-    },
   },
   data() {
     return {

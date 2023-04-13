@@ -126,7 +126,6 @@
 import Marked from "marked";
 import Helper from "@/lib/helper";
 import { ContainerQuery } from "vue-container-query";
-import { mapState } from "vuex";
 
 export default {
   components: {
@@ -179,7 +178,6 @@ export default {
     },
   },
   computed: {
-    ...mapState("savedWords", ["savedWords"]),
     savedWordIdsInText() {
       if (!this.text) return;
       if (this.savedWords) {
@@ -199,14 +197,6 @@ export default {
     },
     translationSrc() {
       return this.translationUrl(this.$l1.code, this.$l2.code, this.text);
-    },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
     },
     marked() {
       let text = this.textThrottled || this.text;

@@ -461,21 +461,8 @@ export default {
     };
   },
   computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     levels() {
       return Helper.languageLevels(this.$l2);
-    },
-    $adminMode() {
-      this.mounted; // So that this component shows up on first load (updates $adminMode)
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
     },
     text() {
       if (this.video.subs_l2)

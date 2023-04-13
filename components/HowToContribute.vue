@@ -98,20 +98,6 @@ export default {
       bookmarkletHref: `javascript:(function()%7Blet l2 %3D window.prompt("Enter language code (e.g. 'ja' for Japanese)%3A")%3B%0A    let open %3D (%7Bparams%2C channelId%2C playlistTitle%2C channelTitle%2C external%3Dtrue%7D%3D%7B%7D)%3D>%7B%0A        let url%0A        let baseUrl %3D 'https%3A%2F%2Flanguageplayer.io'%0A        if (params.list) %7B%0A            url %3D %60%24%7BbaseUrl%7D%2Fen%2F%24%7Bl2%7D%2Fyoutube%2Fplaylist%2F%24%7Bparams.list%7D%2F%24%7BencodeURIComponent(playlistTitle)%7D%60%0A        %7D else if (params.v) %7B%0A            url %3D %60%24%7BbaseUrl%7D%2Fen%2F%24%7Bl2%7D%2Fyoutube%2Fview%2F%24%7Bparams.v%7D%60%0A        %7D else if (channelId) %7B%0A            url %3D %60%24%7BbaseUrl%7D%2Fen%2F%24%7Bl2%7D%2Fyoutube%2Fchannel%2F%24%7BchannelId%7D%2F%24%7BencodeURIComponent(channelTitle)%7D%60%0A        %7D%0A        if (url) %7B%0A            if (external)%0A                window.open(url)%0A            else%0A                window.location.href %3D url%0A        %7D%0A    %7D%0A    if (window.location.href.includes('results')) %7B%0A        let nodes %3D document.querySelectorAll('ytd-playlist-renderer')%0A        let playlists %3D %5B%5D%0A        for (let node of %5B...nodes%5D) %7B%0A            let playlistTitle %3D node.querySelector('%23video-title').innerText%0A            let count %3D node.querySelector('.style-scope.ytd-thumbnail-overlay-side-panel-renderer').innerText%0A            if (count.includes('K')) count %3D Number(count.replace('K'%2C '')) * 1000%0A            let url %3D node.querySelector('.yt-simple-endpoint').getAttribute('href')%0A            let search %3D url.replace(%2F%5C%2F%5B%5E%3F%5D%2B%2F%2C '')%0A            let urlSearchParams %3D new URLSearchParams(search)%3B%0A            let params %3D Object.fromEntries(urlSearchParams.entries())%3B%0A            playlists.push(%7B%0A                playlistTitle%2C%0A                count%2C%0A                params%0A            %7D)%0A        %7D%0A        playlists %3D playlists.sort((a%2Cb)%3D>b.count - a.count)%0A        console.log('Opening the longest 10 playlists on this page...')%0A        for (let playlist of playlists.slice(0%2C 10).reverse()) %7B%0A            let %7Bparams%2C playlistTitle%2C count%7D %3D playlist%0A            open(%7B%0A                params%2C%0A                playlistTitle%2C%0A                external%3A true%0A            %7D)%0A        %7D%0A    %7D else %7B%0A        let urlSearchParams %3D new URLSearchParams(window.location.search)%3B%0A        let params %3D Object.fromEntries(urlSearchParams.entries())%3B%0A        let playlistTitle%2C channelTitle%2C channelId%0A        if (params.list)%0A            playlistTitle %3D document.querySelector('.title.style-scope.ytd-playlist-panel-renderer').innerText.trim()%0A        if (window.location.href.includes('https%3A%2F%2Fwww.youtube.com%2Fchannel%2F')) %7B%0A            channelId %3D window.location.href.replace(%2F.*%5C%2Fchannel%5C%2F(%5B%5E%2F%3F%5D%2B).*%3F%2F%2C "%241")%0A            channelTitle %3D document.querySelector('.style-scope.ytd-channel-name').innerText.trim()%0A        %7D%0A        open(%7B%0A            params%2C%0A            channelId%2C%0A            playlistTitle%2C%0A            channelTitle%0A        %7D)%0A    %7D%7D)()%3B`,
     };
   },
-  computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
-  },
 };
 </script>
 

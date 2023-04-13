@@ -83,19 +83,6 @@ export default {
     }
     this.augmentedDefinitions = augmentedDefinitions;
   },
-  computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $dictionaryName() {
-      return this.$store.state.settings.dictionaryName;
-    },
-  },
   methods: {
     async getWord(term) {
       let words = await (

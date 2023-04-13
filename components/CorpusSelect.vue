@@ -59,16 +59,6 @@ export default {
       corpora: undefined,
     };
   },
-  computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-  },
   async mounted() {
     this.corpora = await this.getCorpora();
     this.corpname = await SketchEngine.corpname(this.$l2);

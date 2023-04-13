@@ -174,12 +174,6 @@ export default {
     if (this.a && this.b) this.findMinimalPairs();
   },
   computed: {
-    $l1() {
-      return this.$store.state.settings.l1;
-    },
-    $l2() {
-      return this.$store.state.settings.l2;
-    },
     filteredRows() {
       return this.minimalPairs.slice(0, this.numRowsVisible);
     },

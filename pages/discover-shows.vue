@@ -57,16 +57,6 @@ export default {
     english() {
       return this.$languages.l1s.find((language) => language.code === "en");
     },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
-    $l1() {
-      if (this.l1 && this.$languages) return this.$languages.getSmart(this.l1);
-    },
-    $l2() {
-      if (this.l2 && this.$languages) return this.$languages.getSmart(this.l2);
-    },
   },
   methods: {
     async getLastShowId() {

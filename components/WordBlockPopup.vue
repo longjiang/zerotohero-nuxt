@@ -258,19 +258,6 @@ export default {
       entryClasses: { "tooltip-entry": true }, // Other classes are added upon update
     };
   },
-  computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $dictionaryName() {
-      return this.$store.state.settings.dictionaryName;
-    },
-  },
   mounted() {
     if (this.$l1) this.entryClasses[`l1-${this.$l1.code}`] = true;
     if (this.$l2) this.entryClasses[`l2-${this.$l2.code}`] = true;

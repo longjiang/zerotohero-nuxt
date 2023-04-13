@@ -22,14 +22,6 @@ export default {
     level: String,
   },
   computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
   },
   mounted() {
     if (this.category !== 'all' && isNaN(Number(this.category))) {

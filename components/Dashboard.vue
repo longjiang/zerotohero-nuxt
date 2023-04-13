@@ -21,8 +21,8 @@
               <span class="language-name">{{ translate(l2Progress.language.name, browserLanguage) }}</span>
             </div>
             <LanguageProgress
-              :$l1="$languages.getSmart(getL1Code(l2Progress.language))"
-              :$l2="l2Progress.language"
+              :l1="$languages.getSmart(getL1Code(l2Progress.language))"
+              :l2="l2Progress.language"
             />
           </router-link>
         </div>

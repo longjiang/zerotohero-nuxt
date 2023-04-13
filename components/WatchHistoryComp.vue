@@ -167,19 +167,6 @@ export default {
   },
   computed: {
     ...mapState("history", ["history"]),
-    $l1() {
-      if (typeof this.l1 !== "undefined") {
-        return this.l1;
-      } else if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-      else return this.$languages.getSmart("en");
-    },
-    $l2() {
-      if (typeof this.l2 !== "undefined") {
-        return this.l2;
-      } else if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     groups() {
       let history = this.itemsFiltered
         .sort((a, b) => b.date.localeCompare(a.date))

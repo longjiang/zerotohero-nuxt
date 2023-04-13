@@ -136,14 +136,6 @@ export default {
     };
   },
   computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     rows() {
       if (this.csv) {
         let headerRow = "phrase\t" + this.$l1.code + "\tpronunciation\n";

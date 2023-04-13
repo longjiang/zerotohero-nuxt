@@ -233,27 +233,6 @@ export default {
       quizChunks[this.lines.length - 1] = [...Array(this.lines.length).keys()];
       return quizChunks;
     },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $dictionary() {
-      return this.$getDictionary();
-    },
-    $dictionaryName() {
-      return this.$store.state.settings.dictionaryName;
-    },
-    $hanzi() {
-      return this.$getHanzi();
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
     previousLine() {
       let previousIndex = Math.max(this.currentLineIndex - 1, 0);
       return this.lines && this.lines[previousIndex]

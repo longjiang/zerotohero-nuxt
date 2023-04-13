@@ -172,12 +172,6 @@ export default {
     };
   },
   computed: {
-    $l1() {
-      return this.$store.state.settings.l1;
-    },
-    $l2() {
-      return this.$store.state.settings.l2;
-    },
   },
   mounted() {
     this.loadShows();
@@ -360,18 +354,6 @@ export default {
   },
 
   computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
     showOptions() {
       let options = [];
       if (this.shows) {

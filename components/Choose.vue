@@ -45,15 +45,6 @@ export default {
     };
   },
   computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-
     english() {
       return this.$languages.l1s.find((language) => language.code === "en");
     },

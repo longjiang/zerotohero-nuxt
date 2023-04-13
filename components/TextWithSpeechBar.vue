@@ -261,14 +261,6 @@ export default {
       let currentSentence = sentences?.[this.current];
       return currentSentence;
     },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     pageOptions() {
       let options = [];
       for (let i = 1; i <= this.pageCount; i++) {

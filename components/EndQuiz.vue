@@ -62,18 +62,6 @@ export default {
         l2SettingsOfL2 = this.l2Settings[this.$l2.code];
       return l2SettingsOfL2;
     },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
     quiz() {
       if (typeof this.l2SettingsOfL2 !== "undefined")
         return this.l2SettingsOfL2.showQuiz;

@@ -129,12 +129,6 @@ export default {
     };
   },
   computed: {
-    $l1() {
-      return this.$store.state.settings.l1;
-    },
-    $l2() {
-      return this.$store.state.settings.l2;
-    },
     unmatchedWords() {
       return this.words.filter(
         (word) => !this.matchedWords.map((w) => w.id).includes(word.id)

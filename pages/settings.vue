@@ -142,14 +142,6 @@ export default {
     this.watcherActive = true;
   },
   computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     userIsAdmin() {
       return this.$auth.user && this.$auth.user.role == 1;
     },

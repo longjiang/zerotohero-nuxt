@@ -369,24 +369,6 @@ export default {
     phraseSaved() {
       return this.$refs["savePhrase"] && this.$refs["savePhrase"].saved;
     },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $dictionaryName() {
-      return this.$store.state.settings.dictionaryName;
-    },
-    $hanzi() {
-      return this.$getHanzi();
-    },
     disableAnnotation() {
       return this.l2SettingsOfL2.disableAnnotation;
     },

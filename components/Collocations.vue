@@ -180,14 +180,6 @@ export default {
   },
   computed: {
     ...mapState("savedCollocations", ["savedCollocations"]),
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     sC() {
       return (this.savedCollocations[this.$l2.code] || [])
         .filter((collocation) => collocation.term === this.term)
@@ -198,15 +190,6 @@ export default {
     },
     term() {
       return this.word ? this.word.head : this.text;
-    },
-    $dictionary() {
-      return this.$getDictionary();
-    },
-    $dictionaryName() {
-      return this.$store.state.settings.dictionaryName;
-    },
-    $hanzi() {
-      return this.$getHanzi();
     },
     colDescArray() {
       let colDescArray = [];

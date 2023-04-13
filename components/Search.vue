@@ -152,19 +152,6 @@ export default {
       lookingUp: false
     };
   },
-  computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $dictionary() {
-      return this.$getDictionary();
-    },
-  },
   watch: {
     $route() {
       this.active = false;

@@ -22,28 +22,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 export default {
   props: {
     term: {
       type: String,
-    },
-  },
-  computed: {
-    ...mapState("settings", ["l2Settings"]),
-    l2SettingsOfL2() {
-      let l2SettingsOfL2 = {};
-      if (this.l2Settings && this.l2Settings[this.$l2.code])
-        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
-      return l2SettingsOfL2;
-    },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
     },
   },
   mounted() {

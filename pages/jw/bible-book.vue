@@ -35,16 +35,6 @@ export default {
       book: undefined,
     };
   },
-  computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-  },
   async fetch() {
     this.book = await Wol.getBibleBook(this.id, this.$l2);
     // console.log(await Wol.('https://wol.jw.org/en/wol/b/r1/lp-e/nwt/1/1'))

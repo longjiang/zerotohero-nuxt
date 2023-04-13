@@ -256,19 +256,6 @@ export default {
   },
   computed: {
     ...mapState("shows", ["categories"]),
-
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
     levels() {
       let langLevels = languageLevels(this.$l2);
       return [1, 2, 3, 4, 5, 6, 7].map((l) => langLevels[l]);

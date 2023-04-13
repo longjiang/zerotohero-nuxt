@@ -127,14 +127,6 @@ export default {
     pdfBtn() {
       return this.$refs["pdfBtn"];
     },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
   },
   mounted() {
     this.id = new Date().getTime();

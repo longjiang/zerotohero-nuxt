@@ -99,16 +99,6 @@ export default {
       this.markedText = html.replace(/\n/g, "<br>");
     },
   },
-  computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-  },
   updated: function () {
     $(".case-marked").hover(caseMarkedOver);
     $(".case-marked").mouseout(function () {

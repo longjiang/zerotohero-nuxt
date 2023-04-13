@@ -201,14 +201,6 @@ export default {
     levels() {
       return Helper.languageLevels(this.$l2);
     },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     unmatchedWords() {
       return this.words.filter((word) => {
         let noMatch = true;

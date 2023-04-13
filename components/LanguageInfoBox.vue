@@ -70,14 +70,6 @@ export default {
       page: undefined,
     };
   },
-  computed: {
-    $l1() {
-      return this.$store.state.settings.l1;
-    },
-    $l2() {
-      return this.$store.state.settings.l2;
-    },
-  },
   async mounted() {
     if (this.lang) {
       try {

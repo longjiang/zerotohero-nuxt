@@ -33,12 +33,6 @@ import Helper from "@/lib/helper";
 export default {
   // layout: "test-layout",
   computed: {
-    $l1() {
-      return this.$store.state.settings.l1;
-    },
-    $l2() {
-      return this.$store.state.settings.l2;
-    },
     output() {
       let text = this.text;
       text = this.renumberNotes(text);

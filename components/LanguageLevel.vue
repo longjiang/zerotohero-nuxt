@@ -34,14 +34,6 @@ import { languageLevels, LANGS_WITH_LEVELS } from "@/lib/utils";
 export default {
   computed: {
     ...mapState("progress", ["progress"]),
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     levels() {
       let langLevels = languageLevels(this.$l2);
       return [1, 2, 3, 4, 5, 6, 7].map((l) => langLevels[l]);

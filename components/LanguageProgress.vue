@@ -17,7 +17,7 @@
     <div v-if="showManuallySetHours" class="mt-2 mb-3">
       {{
         translate("Mannually set your total time on {l2} to", {
-          l2: translate($l2.name),
+          l2: translate(l2.name),
         })
       }}
       <b-form-input
@@ -81,7 +81,7 @@
               <b>{{ formatDuration(time) }}</b>
             </template>
             <template #l2>
-              <b>{{ translate($l2.name) }}</b>
+              <b>{{ translate(l2.name) }}</b>
             </template>
           </i18n>
         </div>
@@ -106,7 +106,7 @@
             translate(
               "Typically, {l1} speakers need {num} hours from {level} to {goal}.",
               {
-                l1: translate($l1.name),
+                l1: translate(l1.name),
                 num: Math.round(hoursNeeded),
                 level: levelText,
                 goal: goalText,
@@ -164,8 +164,14 @@ import { LEVELS } from "~/lib/utils/language-levels";
 
 export default {
   props: {
-    $l1: Object,
-    $l2: Object,
+    l1: {
+      type: Object,
+      required: false,
+    },
+    l2: {
+      type: Object,
+      required: true,
+    },
     dot: {
       default: false,
     },
@@ -187,7 +193,7 @@ export default {
   },
   computed: {
     browserLanguage() {
-      if (this.$l1) return this.$l1.code;
+      if (this.l1) return this.l1.code;
       if (process.browser) {
         let code = navigator.language.replace(/-.*/, "");
         return code;
@@ -196,20 +202,20 @@ export default {
     },
     time() {
       return this.$store.state.progress.progressLoaded
-        ? this.$store.getters["progress/time"](this.$l2)
+        ? this.$store.getters["progress/time"](this.l2)
         : 0;
     },
     targetHours() {
       if (this.level)
-        return LEVELS[this.level].hoursMultiplier * this.$l2.hours;
+        return LEVELS[this.level].hoursMultiplier * this.l2.hours;
     },
     level() {
       return this.$store.state.progress.progressLoaded
-        ? Number(this.$store.getters["progress/level"](this.$l2))
+        ? Number(this.$store.getters["progress/level"](this.l2))
         : 0;
     },
     levels() {
-      let levels = Helper.languageLevels(this.$l2);
+      let levels = Helper.languageLevels(this.l2);
       return Object.keys(levels).map((key) => {
         return {
           value: Number(key),
@@ -234,7 +240,7 @@ export default {
     },
     weeklyHours() {
       return this.$store.state.progress.progressLoaded
-        ? Number(this.$store.getters["progress/weeklyHours"](this.$l2))
+        ? Number(this.$store.getters["progress/weeklyHours"](this.l2))
         : 7;
     },
     weeklyHoursOptions() {
@@ -260,13 +266,13 @@ export default {
   watch: {
     manuallySetHours() {
       this.$store.dispatch("progress/setTime", {
-        l2: this.$l2,
+        l2: this.l2,
         time: this.manuallySetHours * 60 * 60 * 1000,
       });
     },
     manuallySetWeeklyHours() {
       this.$store.dispatch("progress/setWeeklyHours", {
-        l2: this.$l2,
+        l2: this.l2,
         weeklyHours: this.manuallySetWeeklyHours,
       });
     },
@@ -277,12 +283,12 @@ export default {
   mounted() {
     if (this.$store.state.progress.progressLoaded)
       this.manuallySetWeeklyHours = Number(
-        this.$store.getters["progress/weeklyHours"](this.$l2)
+        this.$store.getters["progress/weeklyHours"](this.l2)
       );
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "progress/LOAD") {
         this.manuallySetWeeklyHours = Number(
-          this.$store.getters["progress/weeklyHours"](this.$l2)
+          this.$store.getters["progress/weeklyHours"](this.l2)
         );
       }
     });
@@ -296,7 +302,7 @@ export default {
       } else return text;
     },
     levelObj(level) {
-      return Helper.languageLevels(this.$l2)[level];
+      return Helper.languageLevels(this.l2)[level];
     },
     // https://www.codegrepper.com/code-examples/javascript/javascript+duration+format
     formatDuration(time) {

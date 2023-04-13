@@ -151,14 +151,6 @@ export default {
       ],
     };
   },
-  computed: {
-    $l1() {
-      return this.$store.state.settings.l1;
-    },
-    $l2() {
-      return this.$store.state.settings.l2;
-    },
-  },
   async mounted() {
     this.videos = await this.getVideos();
   },
@@ -259,18 +251,6 @@ export default {
     },
   },
   computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
     videosWithJSONSubs() {
       if (this.videos) {
         return this.videos.filter((v) => this.type(v.subs_l2) === "json");

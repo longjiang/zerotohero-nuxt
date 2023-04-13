@@ -12,6 +12,13 @@ Vue.mixin({
       }
       return l2SettingsOfL2;
     },
+    $browserLanguage() {
+      if (process.browser) {
+        let code = navigator.language.replace(/-.*/, "");
+        return code;
+      }
+      return "en";
+    },
     $skin() {
       let skinInSettings
       if (typeof this.$store.state.settings.skin !== "undefined")
@@ -32,6 +39,9 @@ Vue.mixin({
     },
     $dictionaryName() {
       return this.$store.state.settings.dictionaryName;
+    },
+    $dictionary() {
+      return this.$getDictionary();
     },
     $hanzi() {
       return this.$getHanzi();

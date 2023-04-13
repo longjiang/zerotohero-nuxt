@@ -97,16 +97,6 @@ export default {
       return Helper.stripTags(html);
     },
   },
-  computed: {
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-  },
   async fetch() {
     if (this.$route.params.method) {
       this.method = this.$route.params.method;

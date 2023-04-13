@@ -115,8 +115,8 @@
             <div class="col-sm-12">
               <LanguageProgress
                 class="mt-3"
-                :$l1="$l1"
-                :$l2="$l2"
+                :l1="$l1"
+                :l2="$l2"
                 :description="true"
                 :dot="true"
                 :edit="true"
@@ -228,14 +228,6 @@ import { mapState } from "vuex";
 export default {
   computed: {
     ...mapState("savedWords", ["savedWords"]),
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     time() {
       return this.$store.state.progress.progressLoaded
         ? this.$store.getters["progress/time"](this.$l2)
