@@ -4,7 +4,7 @@ import { mapState } from "vuex";
 Vue.mixin({
   computed: {
     ...mapState("settings", ["l2Settings"]),
-    $l2SettingsOfL2() {
+    $l2Settings() {
       let l2SettingsOfL2 = {};
       if (this.l2) {
         if (this.l2Settings && this.l2Settings[this.l2.code])

@@ -295,11 +295,11 @@ export default {
     ...mapState("settings", ["preferredCategories", "settingsLoaded"]),
     ...mapState("progress", ["progress", "progressLoaded"]),
     ...mapState("settings", ["l2Settings"]),
-    l2SettingsOfL2() {
-      let l2SettingsOfL2 = {};
+    $l2Settings() {
+      let $l2Settings = {};
       if (this.l2Settings && this.l2Settings[this.$l2.code])
-        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
-      return l2SettingsOfL2;
+        $l2Settings = this.l2Settings[this.$l2.code];
+      return $l2Settings;
     },
     languageLevel() {
       if (

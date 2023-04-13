@@ -56,15 +56,15 @@ export default {
   computed: {
     ...mapState("savedWords", ["savedWords"]),
     ...mapState("settings", ["l2Settings"]),
-    l2SettingsOfL2() {
-      let l2SettingsOfL2 = {};
+    $l2Settings() {
+      let $l2Settings = {};
       if (this.l2Settings && this.l2Settings[this.$l2.code])
-        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
-      return l2SettingsOfL2;
+        $l2Settings = this.l2Settings[this.$l2.code];
+      return $l2Settings;
     },
     quiz() {
-      if (typeof this.l2SettingsOfL2 !== "undefined")
-        return this.l2SettingsOfL2.showQuiz;
+      if (typeof this.$l2Settings !== "undefined")
+        return this.$l2Settings.showQuiz;
       else return false;
     },
     reviewFiltered() {

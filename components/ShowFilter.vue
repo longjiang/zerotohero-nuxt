@@ -246,8 +246,8 @@ export default {
       });
     },
     loadSettings() {
-      this.tvShowFilter = this.l2SettingsOfL2.tvShowFilter || 'all';
-      this.talkFilter = this.l2SettingsOfL2.talkFilter || 'all';
+      this.tvShowFilter = this.$l2Settings.tvShowFilter || 'all';
+      this.talkFilter = this.$l2Settings.talkFilter || 'all';
       this.allVideosChecked =
         this.tvShowFilter === "all" && this.talkFilter === "all";
       if (!this.allVideosChecked) {

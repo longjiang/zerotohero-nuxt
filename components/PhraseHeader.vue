@@ -29,7 +29,7 @@ export default {
     },
   },
   mounted() {
-    if (this.$refs.speak && this.l2SettingsOfL2.autoPronounce) {
+    if (this.$refs.speak && this.$l2Settings.autoPronounce) {
       this.$refs.speak.speak(0.75, 0.5); // Speed and volume
     }
   },

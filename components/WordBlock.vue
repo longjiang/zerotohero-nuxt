@@ -124,11 +124,11 @@ export default {
   computed: {
     ...mapState("settings", ["l2Settings"]),
     ...mapState("savedWords", ["savedWords"]),
-    l2SettingsOfL2() {
-      let l2SettingsOfL2 = {};
+    $l2Settings() {
+      let $l2Settings = {};
       if (this.l2Settings && this.l2Settings[this.$l2.code])
-        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
-      return l2SettingsOfL2;
+        $l2Settings = this.l2Settings[this.$l2.code];
+      return $l2Settings;
     },
     quickGloss() {
       let definition =
@@ -209,7 +209,7 @@ export default {
       let word = this.savedWord || this.words?.[0];
       let definition = this.quickGloss;
       let phonetics = false;
-      if (this.l2SettingsOfL2.showPinyin) {
+      if (this.$l2Settings.showPinyin) {
         if (this.mappedPronunciation) phonetics = true;
         else if (this.phonetics && this.transliteration) {
           phonetics = this.savedTransliteration || this.transliteration;
@@ -218,18 +218,18 @@ export default {
       let text = this.text;
       if (this.$l2.han && word) {
         if (word.simplified === text || word.traditional === text) 
-          text = this.l2SettingsOfL2.useTraditional
+          text = this.$l2Settings.useTraditional
             ? word.traditional
             : word.simplified;
         else {
-          text = this.l2SettingsOfL2.useTraditional
+          text = this.$l2Settings.useTraditional
             ? tify(this.text)
             : sify(this.text);
-          if (this.l2SettingsOfL2.showPinyin) phonetics = this.transliterationprop
+          if (this.$l2Settings.showPinyin) phonetics = this.transliterationprop
         }
       }
       let hanja =
-        this.l2SettingsOfL2.showByeonggi && this.hanja ? this.hanja : undefined;
+        this.$l2Settings.showByeonggi && this.hanja ? this.hanja : undefined;
       let attributes = {
         popup: this.popup,
         sticky: this.sticky,
@@ -414,7 +414,7 @@ export default {
       if (isVisible && (!this.words || this.words.length === 0)) {
         if (this.$l2.code !== "fa") {
           let quick = true;
-          if (this.l2SettingsOfL2.showPinyin && !this.transliteration)
+          if (this.$l2Settings.showPinyin && !this.transliteration)
             quick = false; // If the user wants to see IPA, we get all the words from the get go by setting quick to false, which can take a performance hit
           await this.lookup(quick);
         }
@@ -576,7 +576,7 @@ export default {
         }
         this.open = true;
         await timeout(123);
-        if (this.open && this.l2SettingsOfL2.autoPronounce) {
+        if (this.open && this.$l2Settings.autoPronounce) {
           if (!this.quizMode || this.reveal) {
             let speed = 0.75;
             let volume = 0.5;

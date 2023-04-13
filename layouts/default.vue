@@ -58,7 +58,7 @@
         <Nuxt
           :class="{
             'nuxt-content': true,
-            'main-dark': this.$l2SettingsOfL2.darkMode,
+            'main-dark': $skin === 'dark',
             
           }"
         />
@@ -155,20 +155,20 @@ export default {
       ) {
         this.l1, this.l2;
         classes["zerotohero-with-nav"] = true;
-        if (this.$l2SettingsOfL2) {
+        if (this.$l2Settings) {
           classes = Object.assign(classes, {
-            "show-pinyin": this.$l2SettingsOfL2.showPinyin,
+            "show-pinyin": this.$l2Settings.showPinyin,
             "show-pinyin-for-saved":
-              !this.$l2SettingsOfL2.showPinyin && this.l2 && this.l2.han,
-            "show-simplified": !this.$l2SettingsOfL2.useTraditional,
-            "show-traditional": this.$l2SettingsOfL2.useTraditional,
-            "show-definition": this.$l2SettingsOfL2.showDefinition,
-            "show-translation": this.$l2SettingsOfL2.showTranslation,
-            "show-quick-gloss": this.$l2SettingsOfL2.showQuickGloss,
-            "show-byeonggi": this.$l2SettingsOfL2.showByeonggi,
-            "use-serif": this.$l2SettingsOfL2.useSerif,
+              !this.$l2Settings.showPinyin && this.l2 && this.l2.han,
+            "show-simplified": !this.$l2Settings.useTraditional,
+            "show-traditional": this.$l2Settings.useTraditional,
+            "show-definition": this.$l2Settings.showDefinition,
+            "show-translation": this.$l2Settings.showTranslation,
+            "show-quick-gloss": this.$l2Settings.showQuickGloss,
+            "show-byeonggi": this.$l2Settings.showByeonggi,
+            "use-serif": this.$l2Settings.useSerif,
           });
-          classes[`zerotohero-zoom-${this.$l2SettingsOfL2.zoomLevel}`] = true;
+          classes[`zerotohero-zoom-${this.$l2Settings.zoomLevel}`] = true;
         }
         classes[`l1-${this.l1.code}`] = true;
         classes[`l2-${this.l2.code}`] = true;

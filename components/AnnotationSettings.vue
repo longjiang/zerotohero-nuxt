@@ -283,10 +283,10 @@ export default {
   methods: {
     loadSettings() {
       if (!this.$l2.code) return;
-      if (!this.l2SettingsOfL2) return;
+      if (!this.$l2Settings) return;
       for (let property in defaultSettings) {
-        if (this[property] !== this.l2SettingsOfL2[property])
-          this[property] = this.l2SettingsOfL2[property];
+        if (this[property] !== this.$l2Settings[property])
+          this[property] = this.$l2Settings[property];
       }
       if (this.adminMode) this.onceAdmin = true;
     },

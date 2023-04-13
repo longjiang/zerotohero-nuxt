@@ -56,7 +56,7 @@
           youtube_id,
           lesson,
           mini,
-          skin: this.l2SettingsOfL2.darkMode ? 'dark' : 'light',
+          skin: $skin,
           initialLayout: layout,
           landscape,
           starttime,

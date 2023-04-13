@@ -622,6 +622,13 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
   display: none;
 }
 
+.zerotohero-zoom-0 {
+  .transcript-line-both .word-block-segment,
+  .speech-content .word-block-segment {
+    // No change
+  }
+}
+
 .zerotohero-zoom-1 {
   .transcript-line-both .word-block-segment,
   .speech-content .word-block-segment {

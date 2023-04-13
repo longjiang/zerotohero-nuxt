@@ -69,8 +69,8 @@ export default {
   },
   computed: {
     $useTraditional() {
-      if (typeof this.l2SettingsOfL2 !== "undefined")
-        return this.l2SettingsOfL2.useTraditional;
+      if (typeof this.$l2Settings !== "undefined")
+        return this.$l2Settings.useTraditional;
     },
   },
 };

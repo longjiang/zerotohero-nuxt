@@ -126,14 +126,14 @@
 
       <button
         class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
-        @click="zoomLevel = Math.max(zoomLevel - 1, 0)"
+        @click="zoomLevel = zoomLevel ? Math.max(zoomLevel - 1, 0) : 0"
       >
         <span class="annotation-setting-icon">ᴛ</span>
         {{ $tb("Smaller text") }}
       </button>
       <button
         class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
-        @click="zoomLevel = Math.min(zoomLevel + 1, 4)"
+        @click="zoomLevel = zoomLevel ? Math.min(zoomLevel + 1, 4) : 1"
       >
         <span class="annotation-setting-icon">T</span>
         {{ $tb("Bigger text") }}
@@ -179,7 +179,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 const defaultSettings = {
   zoomLevel: 0,
   autoPronounce: true,
@@ -210,6 +209,7 @@ export default {
     this.loadSettings();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "settings/LOAD_SETTINGS") {
+        console.log("Mutation: settings/LOAD_SETTINGS")
         this.loadSettings();
       }
     });
@@ -223,10 +223,12 @@ export default {
   methods: {
     loadSettings() {
       if (!this.$l2?.code) return;
-      if (!this.l2SettingsOfL2) return;
+      if (!this.$l2Settings) return;
       for (let property in defaultSettings) {
-        if (this[property] !== this.l2SettingsOfL2[property])
-          this[property] = this.l2SettingsOfL2[property];
+        if (this[property] !== this.$l2Settings[property]) {
+          console.log("Loading setting", property, this.$l2Settings[property])
+          this[property] = this.$l2Settings[property];
+        }
       }
       if (this.adminMode) this.onceAdmin = true;
     },
@@ -241,15 +243,19 @@ export default {
     },
   },
   watch: {
+    $l2() {
+      this.loadSettings()
+    },
     adminMode() {
       this.$store.dispatch("settings/setGeneralSettings", {
         adminMode: this.adminMode,
       });
     },
     skin() {
-      this.$store.dispatch("settings/setGeneralSettings", {
-        skin: this.skin,
-      });
+      if (this.skin)
+        this.$store.dispatch("settings/setGeneralSettings", {
+          skin: this.skin,
+        });
     },
     // More watchers are set up in setupWatchers()
   },

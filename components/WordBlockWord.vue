@@ -117,7 +117,7 @@ export default {
       return classes
     },
     showDefinition() {
-      return this.l2SettingsOfL2.showDefinition;
+      return this.$l2Settings.showDefinition;
     },
   },
 };

@@ -290,7 +290,7 @@
         </button>
       </div>
       <hr />
-      <AnnotationSettings variant="toolbar" />
+      <QuickSettings />
     </b-modal>
   </div>
 </template>

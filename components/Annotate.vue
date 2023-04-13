@@ -25,7 +25,7 @@
           'd-none': showLoading && !annotated,
           annotated,
           'text-right': dir() === 'rtl',
-          'add-pinyin': l2SettingsOfL2 && l2SettingsOfL2.showPinyin,
+          'add-pinyin': $l2Settings && $l2Settings.showPinyin,
           phonetics,
           fullscreen: fullscreenMode,
           'with-buttons': buttons,
@@ -212,7 +212,7 @@
         </div>
         <TranslatorLinks class="mt-2 pl-1" :text="text" />
         <hr />
-        <AnnotationSettings variant="toolbar" />
+        <QuickSettings />
       </div>
     </b-modal>
   </div>
@@ -352,14 +352,14 @@ export default {
   },
   computed: {
     ...mapState("settings", ["l2Settings"]),
-    l2SettingsOfL2() {
-      let l2SettingsOfL2 = {};
+    $l2Settings() {
+      let $l2Settings = {};
       if (this.l2Settings && this.l2Settings[this.$l2.code])
-        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
-      return l2SettingsOfL2;
+        $l2Settings = this.l2Settings[this.$l2.code];
+      return $l2Settings;
     },
     quizMode() {
-      return this.l2SettingsOfL2?.quizMode;
+      return this.$l2Settings?.quizMode;
     },
     level() {
       return this.$store.state.progress.progressLoaded
@@ -370,7 +370,7 @@ export default {
       return this.$refs["savePhrase"] && this.$refs["savePhrase"].saved;
     },
     disableAnnotation() {
-      return this.l2SettingsOfL2.disableAnnotation;
+      return this.$l2Settings.disableAnnotation;
     },
     l2LevelName() {
       return l2LevelName(this.$l2.code);

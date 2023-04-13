@@ -476,8 +476,8 @@ export default {
     loadSettings() {
       this.tvShowFilter = this.tvShow
         ? [this.tvShow.id]
-        : this.l2SettingsOfL2.tvShowFilter;
-      this.talkFilter = this.l2SettingsOfL2.talkFilter;
+        : this.$l2Settings.tvShowFilter;
+      this.talkFilter = this.$l2Settings.talkFilter;
     },
     showPlaylistModal() {
       this.$refs["playlist-modal"].show();
