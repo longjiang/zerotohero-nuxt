@@ -153,7 +153,7 @@ export default {
       default: "menu-bar", // or 'page' (flattened grid), 'side-bar' (on wide screen), or 'bottom-bar' (on small screen)
     },
     skin: {
-      default: "dark", // or 'light'
+      default: null, // this overrides user's settings
     },
     mode: {
       type: String,

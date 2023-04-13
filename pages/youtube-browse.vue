@@ -8,7 +8,7 @@
   }
 </router>
 <template>
-  <div>
+  <div :class="`youtube-browse skin-${$skin}`">
     <VideoHero
       v-if="heroVideo"
       :video="heroVideo"
@@ -62,7 +62,7 @@
       <i18n
         path="Recommendations based on your {0}."
         tag="div"
-        style="font-weight: normal; font-size: 0.8em; text-align: center;"
+        style="font-weight: normal; font-size: 0.8em; text-align: center"
         v-if="sort === 'recommended'"
       >
         <router-link
@@ -75,62 +75,35 @@
           <u>{{ $t("content preferences") }}</u>
         </router-link>
       </i18n>
-      <h5
+      <div
         v-if="
           $refs['tv-shows'] &&
           $refs['tv-shows'].filteredShows &&
           $refs['tv-shows'].filteredShows.length > 0
         "
       >
-        {{ $t('TV Shows') }}
-      </h5>
-      <hr class="mb-4" />
-      <Shows
+        <h5>
+          {{ $t("TV Shows") }}
+        </h5>
+        <hr class="mb-4" />
+      </div>
+      <div
         v-if="!(category === 'all' && level === 'all' && kidsOnly === false)"
-        v-bind="{
-          kidsOnly,
-          category,
-          level,
-          showFilter: false,
-          showHero: false,
-          routeType: 'tv-shows',
-          tag: 'all',
-        }"
-        ref="tv-shows"
-      />
-      <!-- <h5
-        v-if="
-          $refs['talks'] &&
-          $refs['talks'].filteredShows &&
-          $refs['talks'].filteredShows.length > 0
-        "
       >
-        {{ $t('YouTube Channels') }}
-      </h5>
-      <hr class="mb-4" />
-      <Shows
-        v-if="!(category === 'all' && level === 'all' && kidsOnly === false)"
-        v-bind="{
-          kidsOnly,
-          category,
-          level,
-          showFilter: false,
-          showHero: false,
-          routeType: 'talks',
-          tag: 'all',
-        }"
-        ref="talks"
-      />
-      <h5
-        v-if="
-          $refs['videos'] &&
-          $refs['videos'].videos &&
-          $refs['videos'].videos.length > 0
-        "
-      >
-        {{ $t('Videos') }}
-      </h5> -->
-      <hr class="mb-4" />
+        <Shows
+          v-bind="{
+            kidsOnly,
+            category,
+            level,
+            showFilter: false,
+            showHero: false,
+            routeType: 'tv-shows',
+            tag: 'all',
+          }"
+          ref="tv-shows"
+        />
+        <hr class="mb-4" />
+      </div>
       <MediaSearchResults
         v-bind="{
           category,
@@ -146,6 +119,7 @@
         }"
         @videosLoaded="onVideosLoaded"
         ref="videos"
+        class="mt-3"
       />
       <client-only>
         <Nav
@@ -175,7 +149,7 @@
             }"
             class="link-unstyled"
           >
-            {{ $t('All Categories') }}
+            {{ $t("All Categories") }}
           </router-link>
         </div>
         <div
@@ -234,7 +208,7 @@
             }"
             class="link-unstyled"
           >
-            {{ $t('All Levels') }}
+            {{ $t("All Levels") }}
           </router-link>
         </div>
         <div
@@ -312,20 +286,20 @@ export default {
     return {
       videos: [],
       LANGS_WITH_LEVELS,
-      sort: 'recommended',
+      sort: "recommended",
       sortText: {
-        recommended: 'Sort by Recommended',
-        id: 'Sort by Date Added',
-        date: 'Sort by Date Uploaded',
-        views: 'Sort by Views',
-        title: 'Sort by Title',
-      }
+        recommended: "Sort by Recommended",
+        id: "Sort by Date Added",
+        date: "Sort by Date Uploaded",
+        views: "Sort by Views",
+        title: "Sort by Title",
+      },
     };
   },
   watch: {
     sort() {
       this.$refs["sortModal"]?.hide();
-    }
+    },
   },
   methods: {
     showModal(name) {
@@ -342,12 +316,15 @@ export default {
     onVideosLoaded(videos) {
       this.videos = videos || [];
     },
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>
 .filter-dropdown {
-  color: white;
   cursor: pointer;
+}
+
+.youtube-browse.skin-dark {
+  color: white;
 }
 </style>

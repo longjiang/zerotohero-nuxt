@@ -10,19 +10,6 @@
 <template>
   <div>
     <div v-if="featuredVideo">{{ featuredVideo.show }}</div>
-    <VideoHero
-      v-if="featuredVideo"
-      :video="featuredVideo"
-      :showEpisodes="false"
-      :playButtonIcon="heroButtonIcon"
-      :playButtonText="heroButtonText"
-      :title="
-        ['Music', 'News', 'Movies'].includes(show.title)
-          ? featuredVideo.title
-          : show.title
-      "
-      @videoUnavailable="onVideoUnavailable"
-    />
     <div class="youtube-browse pb-5" style="min-height: 100vh">
       <div class="container">
         <SocialHead
@@ -35,6 +22,21 @@
         />
         <div class="row">
           <div class="col-sm-12 text-center">
+            <VideoHero
+              v-if="featuredVideo"
+              :video="featuredVideo"
+              :showEpisodes="false"
+              :playButtonIcon="heroButtonIcon"
+              :playButtonText="heroButtonText"
+              :title="
+                ['Music', 'News', 'Movies'].includes(show.title)
+                  ? featuredVideo.title
+                  : show.title
+              "
+              @videoUnavailable="onVideoUnavailable"
+              class="rounded"
+              style="overflow: hidden"
+            />
             <div
               :class="{
                 'loader text-center pt-5 pb-5': true,
@@ -72,9 +74,9 @@
             </p>
           </div>
 
-          <div class="col-sm-12 mb-5">
-            <div class="youtube-video-list-wrapper">
-              <div class="row mb-5" v-if="videos">
+          <div class="col-sm-12 mt-3 mb-5">
+            <div class="episode-list-wrapper">
+              <div class="episode-filter row mb-3" v-if="videos">
                 <div class="col-sm-12 mb-2">
                   <div class="d-flex">
                     <b-input-group class="flex-1 input-group-ghost-dark">
@@ -90,11 +92,15 @@
                               )
                             : $t('Filter videos...')
                         "
-                        class="input-ghost-dark"
+                        :class="{ 'input-ghost-dark': $skin === 'dark' }"
                       />
                     </b-input-group>
                     <router-link
-                      class="btn btn-ghost-dark-no-bg ml-2"
+                      :class="{
+                        'btn ml-2': true,
+                        'btn-ghost-dark-no-bg': $skin === 'dark',
+                        'btn-light': $skin === 'light',
+                      }"
                       style="opacity: 0.6; line-height: 1.7"
                       v-if="randomEpisodeYouTubeId"
                       :to="{
@@ -109,18 +115,24 @@
                     </router-link>
                     <b-button-group style="opacity: 0.6">
                       <b-button
-                        variant="ghost-dark-no-bg"
-                        class="ml-1"
+                        :class="{
+                          'btn ml-1': true,
+                          'btn-ghost-dark-no-bg': $skin === 'dark',
+                          'btn-light': $skin === 'light',
+                        }"
                         @click="view = view === 'grid' ? 'list' : 'grid'"
                       >
                         <i class="fas fa-th" v-if="view === 'grid'"></i>
                         <i class="fas fa-list" v-if="view === 'list'"></i>
                       </b-button>
                       <b-button
-                        variant="ghost-dark-no-bg"
                         @click="cycleSort"
                         title="Sort by..."
-                        class="ml-1"
+                        :class="{
+                          'btn': true,
+                          'btn-ghost-dark-no-bg': $skin === 'dark',
+                          'btn-light': $skin === 'light',
+                        }"
                       >
                         <i
                           class="fas fa-sort-alpha-down"

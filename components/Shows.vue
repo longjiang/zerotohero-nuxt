@@ -1,157 +1,149 @@
 <template>
-  <div>
-    <!-- <VideoHero
-      v-if="showHero && featureEpisode"
-      :video="featureEpisode"
-      @videoUnavailable="onVideoUnavailable"
-    /> -->
-    <div>
-      <div>
-        <SocialHead
-          v-if="shows && shows[0]"
-          :title="`Learn ${$l2.name} with ${routeTitles[routeType]} | Language Player`"
-          :description="`Learn ${$l2.name} with ${routeTitles[routeType]}.`"
-          :image="
-            routeType === 'tv-shows' && $l2.code === 'zh'
-              ? '/img/tv-shows.jpg'
-              : `https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`
-          "
-        />
-        <div class="row mt-3 mb-2" v-if="showFilter">
-          <div class="col-sm-12 text-center mb-4">
-            <span
-              v-if="Object.keys(categoriesFiltered).length > 0"
-              @click="showModal('categories')"
-              class="filter-dropdown mr-2"
-            >
-              {{
-                $t(
-                  category && categoriesFiltered[category]
-                    ? categoriesFiltered[category]
-                    : "All Categories"
-                )
-              }}
-              <i class="fa-solid fa-caret-down"></i>
-            </span>
-            <span
-              v-if="levels && levels.length > 0"
-              @click="showModal('levels')"
-              class="filter-dropdown mr-2"
-            >
-              {{
-                $t(
-                  level && levels.find((l) => l.numeric === level)
-                    ? levels.find((l) => l.numeric === level).name
-                    : "All Levels"
-                )
-              }}
-              <i class="fa-solid fa-caret-down"></i>
-            </span>
-            <span @click="showModal('sort')" class="filter-dropdown">
-              {{ $t(`Sort by ${ucFirst(sort)}`) }}
-              <i class="fa-solid fa-caret-down"></i>
-            </span>
+  <div :class="`shows skin-${$skin}`">
+    <SocialHead
+      v-if="shows && shows[0]"
+      :title="`Learn ${$l2.name} with ${routeTitles[routeType]} | Language Player`"
+      :description="`Learn ${$l2.name} with ${routeTitles[routeType]}.`"
+      :image="
+        routeType === 'tv-shows' && $l2.code === 'zh'
+          ? '/img/tv-shows.jpg'
+          : `https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`
+      "
+    />
+    <div class="show-filter row mt-3 mb-2" v-if="showFilter">
+      <div class="col-sm-12 text-center mb-4">
+        <span
+          v-if="Object.keys(categoriesFiltered).length > 0"
+          @click="showModal('categories')"
+          class="filter-dropdown mr-2"
+        >
+          {{
+            $t(
+              category && categoriesFiltered[category]
+                ? categoriesFiltered[category]
+                : "All Categories"
+            )
+          }}
+          <i class="fa-solid fa-caret-down"></i>
+        </span>
+        <span
+          v-if="levels && levels.length > 0"
+          @click="showModal('levels')"
+          class="filter-dropdown mr-2"
+        >
+          {{
+            $t(
+              level && levels.find((l) => l.numeric === level)
+                ? levels.find((l) => l.numeric === level).name
+                : "All Levels"
+            )
+          }}
+          <i class="fa-solid fa-caret-down"></i>
+        </span>
+        <span @click="showModal('sort')" class="filter-dropdown">
+          {{ $t(`Sort by ${ucFirst(sort)}`) }}
+          <i class="fa-solid fa-caret-down"></i>
+        </span>
 
-            <i18n
-              path="Recommendations based on your {0}."
-              tag="div"
-              style="font-weight: normal; font-size: 0.8em; margin-top: 0.5rem"
-              v-if="sort === 'recommended'"
+        <i18n
+          path="Recommendations based on your {0}."
+          tag="div"
+          style="font-weight: normal; font-size: 0.8em; margin-top: 0.5rem"
+          v-if="sort === 'recommended'"
+        >
+          <router-link
+            :to="{
+              name: LANGS_WITH_LEVELS.includes(this.$l2.code)
+                ? 'set-language-level'
+                : 'set-content-preferences',
+            }"
+          >
+            <u>{{ $t("content preferences") }}</u>
+          </router-link>
+        </i18n>
+      </div>
+      <div class="col-sm-12" v-if="showFilter">
+        <b-input-group class="mb-5">
+          <b-form-input
+            v-model="keyword"
+            @compositionend.prevent.stop="() => false"
+            :placeholder="
+              $t('Filter {num} {l2} {type}...', {
+                num: filteredShows ? filteredShows.length : '',
+                l2: $t($l2.name),
+                type: $t(routeTitles[routeType]),
+              })
+            "
+            ref="filter"
+            :class="{
+              'input-ghost-dark': $skin === 'dark',
+            }"
+          />
+        </b-input-group>
+      </div>
+    </div>
+    <div class="show-list row">
+      <div class="col-sm-12">
+        <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
+        <div class="show-list-wrapper">
+          <template v-if="showLoader">
+            <div
+              :class="{
+                'loader text-center': true,
+                'd-none': shows,
+              }"
+              style="flex: 1"
             >
-              <router-link
-                :to="{
-                  name: LANGS_WITH_LEVELS.includes(this.$l2.code)
-                    ? 'set-language-level'
-                    : 'set-content-preferences',
-                }"
-              >
-                <u>{{ $t("content preferences") }}</u>
-              </router-link>
-            </i18n>
-          </div>
-        </div>
-        <div class="row" v-if="showFilter">
-          <div class="col-sm-12">
-            <b-input-group class="mb-5 input-group-ghost-dark">
-              <b-form-input
-                v-model="keyword"
-                @compositionend.prevent.stop="() => false"
-                :placeholder="
-                  $t('Filter {num} {l2} {type}...', {
-                    num: filteredShows ? filteredShows.length : '',
-                    l2: $t($l2.name),
-                    type: $t(routeTitles[routeType]),
-                  })
-                "
-                ref="filter"
-                class="input-ghost-dark"
-              />
-            </b-input-group>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-12">
-            <!-- <Sale class="mt-5 mb-5" v-if="$l2.code === 'zh'" /> -->
-            <div class="show-list-wrapper">
-              <template v-if="showLoader">
-                <div
-                  :class="{
-                    'loader text-center': true,
-                    'd-none': shows,
-                  }"
-                  style="flex: 1"
+              <Loader :sticky="true" message="Getting shows..." />
+            </div>
+            <div
+              class="text-center"
+              v-if="filteredShows && filteredShows.length === 0"
+            >
+              {{
+                $t("No {showType} found.", {
+                  showType: routeTitles[routeType],
+                })
+              }}
+              <div>
+                <router-link
+                  :to="{ name: routeType, params: {} }"
+                  class="btn btn-success mt-3"
                 >
-                  <Loader :sticky="true" message="Getting shows..." />
-                </div>
-                <div
-                  class="text-center"
-                  v-if="filteredShows && filteredShows.length === 0"
-                >
-                  {{
-                    $t("No {showType} found.", {
-                      showType: routeTitles[routeType],
-                    })
-                  }}
-                  <div>
-                    <router-link
-                      :to="{ name: routeType, params: {} }"
-                      class="btn btn-success mt-3"
-                    >
-                      <i class="fa-solid fa-arrows-rotate"></i>
-                      {{ $t("Reset filters") }}
-                    </router-link>
-                  </div>
-                </div>
-              </template>
-              <ShowList
-                v-if="shows && shows.length > 0"
-                :shows="filteredShows"
-                :type="type"
-                :key="`shows-filtered-${this.keyword}`"
-              />
-              <div
-                v-if="
-                  keyword &&
-                  filteredShows &&
-                  filteredShows.length === 0 &&
-                  showExtraSearchResults
-                "
-              >
-                <MediaSearchResults :keyword="keyword" />
-                <YouTubeSearchResults
-                  :term="keyword"
-                  :infinite="true"
-                  :showProgress="false"
-                  skin="dark"
-                  ref="youtubeSearchResults"
-                  :cloakVideosWithoutSubs="!$adminMode"
-                />
+                  <i class="fa-solid fa-arrows-rotate"></i>
+                  {{ $t("Reset filters") }}
+                </router-link>
               </div>
             </div>
+          </template>
+          <ShowList
+            v-if="shows && shows.length > 0"
+            :shows="filteredShows"
+            :type="type"
+            :key="`shows-filtered-${this.keyword}`"
+          />
+          <div
+            v-if="
+              keyword &&
+              filteredShows &&
+              filteredShows.length === 0 &&
+              showExtraSearchResults
+            "
+          >
+            <MediaSearchResults :keyword="keyword" />
+            <YouTubeSearchResults
+              :term="keyword"
+              :infinite="true"
+              :showProgress="false"
+              skin="dark"
+              ref="youtubeSearchResults"
+              :cloakVideosWithoutSubs="!$adminMode"
+            />
           </div>
         </div>
       </div>
     </div>
+
     <b-modal
       ref="categoriesModal"
       size="lg"
@@ -382,18 +374,6 @@ export default {
       }
       return categories;
     },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
     tags() {
       let tags = [];
       if (this.shows?.length > 0) {
@@ -580,10 +560,16 @@ export default {
 
 <style lang="scss" scoped>
 .filter-dropdown {
-  color: white;
   font-size: 0.9em;
   cursor: pointer;
 }
+
+.skin-dark {
+  .filter-dropdown {
+    color: white;
+  }
+}
+
 :deep(.synced-transcript) {
   height: 5rem;
   overflow: hidden;

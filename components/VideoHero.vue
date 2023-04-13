@@ -9,8 +9,8 @@
       @click="play"
       v-if="wide"
     >
-      <div class="top-overlay"></div>
-      <div class="bottom-overlay"></div>
+      <!-- <div class="top-overlay"></div>
+      <div class="bottom-overlay"></div> -->
       <LazyYouTubeVideo
         ref="youtube"
         v-bind="{
@@ -21,6 +21,7 @@
           video,
           posterOnly: isMobile,
           icon: false,
+          controls: false,
         }"
         @videoUnavailable="onVideoUnavailable"
       />
@@ -37,7 +38,7 @@
               <h4 class="hero-video-title">
                 {{ displayTitle }}
               </h4>
-              <div>
+              <div class="text-left">
                 <router-link
                   v-if="!videoUnavailable"
                   :to="{
@@ -257,7 +258,6 @@ export default {
   overflow: hidden;
   position: relative;
   max-height: 50vh;
-  padding-bottom: 10%;
   .top-overlay {
     height: 2.5%;
     width: 100%;
@@ -284,7 +284,7 @@ export default {
       background: linear-gradient(black 0%, rgba(0, 0, 0, 0) 100%);
     }
     .bottom-overlay {
-      background: linear-gradient(rgba(255, 255, 255, 0) 0%, white 75%);
+      background: linear-gradient(rgba(255, 255, 255, 0) 0%, black 75%);
     }
   }
   &.unavailable {
