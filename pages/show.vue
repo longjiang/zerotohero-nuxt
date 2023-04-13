@@ -23,7 +23,7 @@
       "
       @videoUnavailable="onVideoUnavailable"
     />
-    <div class="youtube-browse main-dark pb-5" style="min-height: 100vh">
+    <div class="youtube-browse pb-5" style="min-height: 100vh">
       <div class="container">
         <SocialHead
           v-if="show"

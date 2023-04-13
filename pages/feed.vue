@@ -9,7 +9,7 @@
 </router>
 <template>
   <container-query :query="query" v-model="params">
-    <div class="main-dark pb-5">
+    <div class="pb-5">
       <!-- <VideoHero
         v-if="heroVideo"
         :video="heroVideo"

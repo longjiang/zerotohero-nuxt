@@ -4,7 +4,7 @@
   }
 </router>
 <template>
-  <div class="home main-dark">
+  <div class="home">
     <SocialHead
       :title="`Language Player ${$l2.name}`"
       :description="`Learn ${$l2.name} language from zero to fluency with ${

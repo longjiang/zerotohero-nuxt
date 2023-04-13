@@ -10,13 +10,16 @@
 </router>
 <template>
   <div class="video-view-page">
-    <VideoViewComp v-bind="{ type, youtube_id, lesson }" />
+    <VideoViewComp v-bind="{ type, youtube_id, lesson, skin }" />
   </div>
 </template>
 
 <script>
 export default {
   props: {
+    skin: {
+      default: 'dark',
+    },
     type: {
       type: String, // One of 'youtube' and 'bring-your-own'
     },

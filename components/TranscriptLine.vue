@@ -268,7 +268,6 @@ export default {
     // max-width: calc((100vh - 3rem - env(safe-area-inset-top) - 10rem) * 16 / 9);
     padding: 0 1rem;
     margin: 0 auto;
-    background: black;
     .transcript-line-l2 {
       padding-left: 1.5rem;
       :deep(.annotated) {

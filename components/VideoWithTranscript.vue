@@ -43,6 +43,7 @@
             video,
             paused,
             layout,
+            skin,
             show,
             showType,
             largeEpisodeCount,
@@ -237,7 +238,7 @@
             :videos="related.slice(0, 24)"
             :showDate="true"
             :showProgress="true"
-            skin="dark"
+            :skin="skin"
           />
         </div>
       </div>
@@ -251,6 +252,9 @@ import { timeout } from "@/lib/utils";
 
 export default {
   props: {
+    skin: {
+      default: 'dark',
+    },
     type: {
       type: String,
       default: "youtube", // or 'bring-your-own'
@@ -317,9 +321,6 @@ export default {
     },
     stopLineIndex: {
       default: -1,
-    },
-    skin: {
-      default: "light",
     },
     forcePortrait: {
       default: false,

@@ -46,10 +46,10 @@
             </div>
           </div>
         </div>
-        <div class="bg-white" style="opacity: 0.8">
+        <div>
           <div class="container" v-if="!entry">
             <div class="row">
-              <div class="col-sm-12 bg-white">
+              <div class="col-sm-12">
                 <!-- <Sale style="border-radius: 1rem !important" class="pb-5 pl-5 pr-5" v-if="$l2.code === 'zh'" /> -->
                 <div style="max-width: 50rem; margin: 0 auto" class="mt-5">
                   <ul class="list-unstyled">
@@ -531,7 +531,6 @@ export default {
 <style lang="scss" scoped>
 .dictionary {
   min-height: 100vh;
-  background: white;
 }
 
 .zerotohero-wide-collapsed .dictionary-wide .dictionary-search-bar {
@@ -541,7 +540,6 @@ export default {
 
 .dictionary-main {
   min-height: calc(100vh - 40rem);
-  background: white;
 }
 
 .dictionary-wide {

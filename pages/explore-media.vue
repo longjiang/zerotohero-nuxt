@@ -8,7 +8,7 @@
   }
 </router>
 <template>
-  <div class="main-dark">
+  <div>
     <VideoHero
       v-if="heroVideo"
       :video="heroVideo"

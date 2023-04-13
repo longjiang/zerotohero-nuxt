@@ -8,7 +8,7 @@
   }
 </router>
 <template>
-  <div class="main-dark">
+  <div>
     <div class="container">
       <div class="row pb-5">
         <div class="col-sm-12">

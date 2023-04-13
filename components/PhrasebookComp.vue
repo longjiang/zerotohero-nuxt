@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="pt-3 pb-3 mb-3 bg-white hide-defs">
+    <div class="pt-3 pb-3 mb-3 hide-defs">
       <LazyHideDefs
         @hideWord="hideWord = arguments[0]"
         @hideDefinitions="hideDefinitions = arguments[0]"

@@ -38,7 +38,6 @@
     </div>
     <div
       :class="{
-        'main-dark main-dark-performant': true,
         'video-view-content': true,
         'video-view-landscape': landscape,
         fullscreen: layout === 'vertical',
@@ -51,13 +50,13 @@
       >
         <Loader :sticky="true" message="Preparing video and transcript..." />
       </div>
-
       <component
         :is="currentComponent"
         v-bind="{
           youtube_id,
           lesson,
           mini,
+          skin: this.l2SettingsOfL2.darkMode ? 'dark' : 'light',
           initialLayout: layout,
           landscape,
           starttime,
@@ -73,6 +72,8 @@
 <script>
 import DateHelper from "@/lib/date-helper";
 import Helper from "@/lib/helper";
+import { mapState } from "vuex";
+
 export default {
   props: {
     type: {
@@ -102,6 +103,7 @@ export default {
     };
   },
   computed: {
+    ...mapState("settings", ["l2Settings"]),
     $l1() {
       if (typeof this.$store.state.settings.l1 !== "undefined")
         return this.$store.state.settings.l1;
@@ -113,6 +115,12 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
+    },
+    l2SettingsOfL2() {
+      let l2SettingsOfL2 = {};
+      if (this.l2Settings && this.l2Settings[this.$l2.code])
+        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
+      return l2SettingsOfL2;
     },
     currentComponent() {
       switch (this.type) {
@@ -334,10 +342,6 @@ export default {
       .youtube {
         border-radius: 0.3rem 0.3rem 0 0;
         overflow: hidden;
-
-        .video-area {
-          background: black;
-        }
       }
     }
   }
@@ -346,8 +350,6 @@ export default {
 .video-view-content {
   &.fullscreen {
     max-height: calc(100vh - 3rem - env(safe-area-inset-top));
-    background-color: black;
-    color: #ffffffaa;
     z-index: 21;
   }
 }

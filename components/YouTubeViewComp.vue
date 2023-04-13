@@ -1,12 +1,13 @@
 
 <template>
-  <LazyVideoWithTranscript
+  <div>
+    <LazyVideoWithTranscript
     v-if="video"
     ref="youtube"
-    skin="dark"
     v-bind="{
       type: 'youtube',
       video,
+      skin,
       related,
       starttime,
       startLineIndex,
@@ -28,6 +29,7 @@
     @currentTime="onCurrentTime"
     @updateLayout="onUpdateLayout"
   />
+  </div>
 </template>
 
 <script>
@@ -40,6 +42,9 @@ import { shuffle, uniqueByValue } from "@/lib/utils/array";
 
 export default {
   props: {
+    skin: {
+      default: 'dark',
+    },
     youtube_id: {
       type: String,
       required: true,

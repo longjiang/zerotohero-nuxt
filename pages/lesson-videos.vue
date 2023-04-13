@@ -8,7 +8,7 @@
   }
 </router>
 <template>
-  <div class="main-dark">
+  <div>
     <div class="container pb-5 lesson-videos">
       <SocialHead
         v-if="lessonVideos[0]"

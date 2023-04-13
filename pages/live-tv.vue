@@ -9,7 +9,7 @@
 </router>
 <template>
   <container-query :query="query" v-model="params">
-    <div class="main-dark">
+    <div>
       <div class="pb-5 container-fluid">
         <SocialHead
           v-if="channels"

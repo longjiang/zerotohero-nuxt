@@ -154,7 +154,7 @@ export default {
       default: "menu-bar", // or 'page' (flattened grid), 'side-bar' (on wide screen), or 'bottom-bar' (on small screen)
     },
     skin: {
-      default: "light", // or 'dark'
+      default: "dark", // or 'light'
     },
     mode: {
       type: String,
@@ -1343,21 +1343,18 @@ export default {
   }
 }
 
-.zth-nav-light {
-  .nav-menu-bar,
-  .nav-side-bar {
-    z-index: 3;
-  }
 
-  &.zth-nav-secondary {
-    background: linear-gradient(white 0%, white 66%, transparent 100%);
-  }
+.nav-menu-bar,
+.nav-side-bar {
+  z-index: 3;
 }
 
-.zth-nav-dark {
-  &.zth-nav-secondary {
-    background: linear-gradient(black 0%, black 66%, transparent 100%);
-  }
+.zth-nav-secondary.zth-nav-light {
+  background: linear-gradient(white 0%, white 66%, transparent 100%);
+}
+
+.zth-nav-secondary.zth-nav-dark {
+  background: linear-gradient(black 0%, black 66%, transparent 100%);
 }
 
 .zth-nav-menu-bar {

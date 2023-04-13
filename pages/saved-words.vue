@@ -79,7 +79,7 @@
             <Loader :sticky="true" :message="$t('Loading saved words...')" />
           </div>
           <div
-            class="hide-defs pb-3 pt-3 bg-white text-center"
+            class="hide-defs pb-3 pt-3 text-center"
             v-if="sWLoaded && sW.length > 0"
           >
             <LazyHideDefs

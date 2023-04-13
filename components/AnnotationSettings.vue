@@ -136,6 +136,17 @@
         {{ $t("Bigger text") }}
       </button>
       <button
+        @click="darkMode = !darkMode"
+        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
+          darkMode ? 'annotation-setting-toggle-active' : ''
+        }`"
+      >
+        <span class="annotation-setting-icon">
+          <i class="fa fa-moon"></i>
+        </span>
+        <span>{{ $t("Dark Mode") }}</span>
+      </button>
+      <button
         v-if="userIsAdmin"
         @click="adminMode = !adminMode"
         :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
@@ -414,6 +425,7 @@ const defaultSettings = {
   showByeonggi: undefined,
   disableAnnotation: undefined,
   quizMode: false,
+  darkMode: true
 };
 export default {
   props: {

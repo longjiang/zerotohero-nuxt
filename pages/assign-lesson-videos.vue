@@ -15,7 +15,7 @@
     }
 </router>
 <template>
-  <div class="container-fluid main main-dark mb-5">
+  <div class="container-fluid main mb-5">
     <div class="row">
       <div class="col-md-12">
         <router-link

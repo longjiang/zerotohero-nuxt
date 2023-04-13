@@ -11,7 +11,7 @@
         :l2="l2"
         :key="`nav-main-${l1.code}-${l2.code}`"
         :variant="wide ? 'side-bar' : 'bottom-bar'"
-        :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+        :skin="this.l2SettingsOfL2.darkMode ? 'dark' : 'light'"
         @collapsed="updateCollapsed"
         level="main"
       />
@@ -20,7 +20,7 @@
       <client-only>
         <SiteTopBar
           v-if="showTopBar"
-          :skin="$route.meta.skin ? $route.meta.skin : 'light'"
+          :skin="this.l2SettingsOfL2.darkMode ? 'dark' : 'light'"
           variant="menu-bar"
           :badge="savedWordsCount + savedPhrasesCount"
           :wide="wide"
@@ -37,7 +37,7 @@
           v-bind="{
             l1,
             l2,
-            skin: $route.meta.skin ? $route.meta.skin : 'light',
+            skin: this.l2SettingsOfL2.darkMode ? 'dark' : 'light',
           }"
           :key="`nav-secondary-${l1.code}-${l2.code}`"
         />
@@ -56,7 +56,13 @@
         @close="overlayPlayerClose"
       />
       <div id="main" v-if="overlayPlayerMinimized">
-        <Nuxt class="nuxt-content" />
+        <Nuxt
+          :class="{
+            'nuxt-content': true,
+            'main-dark': this.l2SettingsOfL2.darkMode,
+            
+          }"
+        />
       </div>
     </div>
     <i class="fas fa-star star-animation"></i>
@@ -91,7 +97,6 @@ export default {
       overlayPlayerType: undefined,
       l2Time: {},
       timeLoggerID: undefined,
-      l2SettingsOfL2: undefined,
       host: process.server
         ? process.env.baseUrl
         : window.location.protocol +
@@ -104,6 +109,12 @@ export default {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
+    l2SettingsOfL2() {
+      let l2SettingsOfL2 = {};
+      if (this.l2Settings && this.l2Settings[this.l2.code])
+        l2SettingsOfL2 = this.l2Settings[this.l2.code];
+      return l2SettingsOfL2;
+    },
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
@@ -139,7 +150,7 @@ export default {
         "zerotohero-wide": this.wide,
         "zerotohero-not-wide": !this.wide,
         "zerotohero-wide-collapsed": this.collapsed,
-        "zerotohero-dark": this.$route.meta && this.$route.meta.skin === "dark",
+        "zerotohero-dark": this.l2SettingsOfL2.darkMode,
         "zerotohero-light":
           this.$route.meta && this.$route.meta.skin === "light",
         "zerotohero-with-mini-player":
@@ -251,7 +262,7 @@ export default {
     },
     $route() {
       this.addFullHistoryItem(this.$route.fullPath);
-      this.updateOverlayPlayerProps()
+      this.updateOverlayPlayerProps();
     },
     "$auth.user"() {
       this.$directus.initAndGetUserData();
@@ -446,10 +457,6 @@ export default {
         this.dictionaryCredit = await dictionary.credit();
       }
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
-      let l2SettingsOfL2 = {};
-      if (this.l2 && this.l2Settings && this.l2Settings[this.l2.code])
-        l2SettingsOfL2 = this.l2Settings[this.l2.code];
-      Vue.set(this, "l2SettingsOfL2", l2SettingsOfL2);
     },
     loadLanguageSpecificSettings() {
       if (this.settingsLoaded === this.l2.code) return;

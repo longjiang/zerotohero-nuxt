@@ -1,5 +1,12 @@
 <template>
-  <div class="video-controls" v-if="video">
+  <div
+    :class="{
+      'video-controls': true,
+      'video-controls-dark': skin === 'dark',
+      'video-controls-light': skin === 'light',
+    }"
+    v-if="video"
+  >
     <div class="video-controls-progress d-flex">
       <div class="video-controls-time mr-2 ml-2">
         {{ currentTime ? toHHMMSS(currentTime) : "--:--" }}
@@ -282,7 +289,7 @@
           <span>{{ $t("Smooth Scrolling") }}</span>
         </button>
       </div>
-      <hr/>
+      <hr />
       <AnnotationSettings variant="toolbar" />
     </b-modal>
   </div>
@@ -305,6 +312,9 @@ export default {
     },
     layout: {
       default: "horizontal",
+    },
+    skin: {
+      default: "dark",
     },
     show: {
       type: Object,
@@ -446,7 +456,7 @@ export default {
     },
     onSeek(event) {
       let percentage = event.target.value;
-      let time = percentage * 0.01 * this.duration
+      let time = percentage * 0.01 * this.duration;
       this.$emit("seek", time);
     },
     pause() {
@@ -563,6 +573,14 @@ export default {
   background: black;
 }
 
+.video-controls-light .btn-video-controls {
+  color: #242424;
+}
+
+.video-controls-dark .btn-video-controls {
+  color: #ffffff;
+}
+
 .video-controls-buttons {
   text-align: center;
   display: flex;
@@ -575,7 +593,6 @@ export default {
     border: none;
     padding: 0 0.5rem;
     background: none;
-    color: #ffffffcc;
     margin: 0 0.2rem;
 
     &:disabled {
