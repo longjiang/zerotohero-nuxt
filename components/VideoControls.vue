@@ -181,7 +181,7 @@
         />
         <div class="mt-3">
           <h6 v-if="show">
-            <hr />
+            <hr class="mb-3" />
             {{ $t("More Episodes") }}
             <router-link
               :to="{
@@ -210,6 +210,7 @@
         <YouTubeVideoList
           :videos="show ? episodes : related.slice(0, 24)"
           :showDate="true"
+          skin="light"
           class="p-2"
         />
         <EpisodeNav

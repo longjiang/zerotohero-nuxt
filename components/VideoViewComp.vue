@@ -1,13 +1,13 @@
-
 <template>
   <div
     :class="{
       'video-view': true,
       'video-view-minimized': layout === 'mini',
+      [`skin-${$skin}`]: true,
     }"
   >
     <SocialHead
-      v-if="(this.type === 'youtube')"
+      v-if="this.type === 'youtube'"
       :title="`${video ? video.title + ' | ' : ''}Learn ${
         $l2.name
       } with Language Player`"
@@ -286,6 +286,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.video-view-minimized {
+  &.skin-dark {
+    background: #000000aa;
+    .toggle-wrapper {
+      color: #ccc;
+    }
+  }
+  &.skin-light {
+    background: #e6e6e6aa;
+    .toggle-wrapper {
+      color: #444;
+    }
+  }
+}
 .toggle-wrapper {
   color: white;
   height: 5rem;
@@ -297,7 +311,6 @@ export default {
   position: fixed;
   right: 0;
   .btn {
-    color: white;
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     border-radius: 0;
   }
@@ -346,10 +359,7 @@ export default {
     bottom: calc(env(safe-area-inset-bottom) + 4.88rem);
     overflow: hidden;
     z-index: 9;
-    .skin-dark {
-      background: #000000aa;
-      backdrop-filter: blur(20px);
-    }
+    backdrop-filter: blur(20px);
   }
 }
 

@@ -171,12 +171,13 @@
           :class="colClasses(video, videoIndex)"
           :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
         >
-          <LazyFeedItem v-if="view === 'feed'" :video="video" :skin="skin" />
+          <LazyFeedItem v-if="view === 'feed'" :video="video" :skin="$skin" />
           <LazyYouTubeVideoCard
             v-else
             ref="youTubeVideoCard"
             @newShow="newShow"
             @hasSubs="onHasSubs"
+            :skin="$skin"
             :video="video"
             :generated="generated"
             :checkSubs="checkSubsData"
@@ -242,7 +243,7 @@ export default {
       default: false,
     },
     skin: {
-      default: "card", // or 'dark'
+      default: null
     },
     showProgress: {
       default: false,
@@ -512,12 +513,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.col-compact {
-  padding: 0.5rem;
-  :deep(.media-body) {
-    font-size: 0.9em;
-  }
-}
+
 .youtube-video-list-admin-bar {
   background: rgb(205, 207, 212);
 }
@@ -526,8 +522,19 @@ export default {
   .youtube-video-list-admin-bar {
     background-color: #88888822;
   }
-  .youtube-title {
-    color: white;
+}
+
+
+.skin-light {
+  .youtube-video-list-admin-bar {
+    background-color: #88888822;
+  }
+}
+
+.col-compact {
+  padding: 0.5rem;
+  :deep(.media-body) {
+    font-size: 0.9em;
   }
 }
 

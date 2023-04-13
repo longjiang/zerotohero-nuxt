@@ -11,9 +11,9 @@
               <SimpleSearch
                 placeholder="Search"
                 ref="searchLibrary"
-                skin="dark"
                 class="mr-1"
                 style="flex: 1"
+                :skin="skin"
                 :action="
                   (url) => {
                     this.$router.push({
@@ -56,8 +56,8 @@
       <div class="col-sm-12">
         <template v-if="videos && videos.length > 0">
           <LazyYouTubeVideoList
-            skin="dark"
             ref="youtubeVideoList"
+            :skin="skin"
             :videos="videos"
             :defaultShowTitle="keyword"
             :checkSubs="false"
@@ -139,6 +139,9 @@ export default {
     },
     infiniteScroll: {
       default: true
+    },
+    skin: {
+      default: null
     }
   },
   data() {

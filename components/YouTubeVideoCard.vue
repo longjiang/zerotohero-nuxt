@@ -356,6 +356,9 @@ export default {
     showPlayButton: {
       default: false,
     },
+    skin: {
+      default: null,
+    },
     view: {
       type: String,
       default: "grid", // or 'list'
@@ -732,6 +735,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.youtube-video-card-wrapper.skin-dark {
+  .youtube-thumbnail-wrapper {
+    box-shadow: 0 -1px 1px #ffffff69;
+  }
+}
+.youtube-video-card-wrapper.skin-light {
+  .youtube-thumbnail-wrapper {
+    box-shadow: 0 -1px 1px #00000069;
+  }
+}
+
 .youtube-video-card-wrapper {
   overflow: hidden;
   &.nosubs:not(.over) > * {
@@ -776,53 +790,12 @@ export default {
       box-shadow: 0 5px 25px #0000002f;
     }
   }
-  &.youtube-video-card-wrapper.skin-dark {
-    .youtube-thumbnail-wrapper {
-      box-shadow: 0 -1px 1px #ffffff69;
-    }
-    .media-body {
-      color: hsla(0deg 0% 100% / 75%);
-    }
-    .youtube-video-card-badge {
-      color: #ffffff88;
-      &.bg-success {
-        background-color: rgba(0, 128, 0, 0.562) !important;
-      }
-      &.text-white {
-        color: #ffffffaa !important;
-      }
-    }
-  }
-  &.youtube-video-card-wrapper-card {
-    border-radius: 0.25rem;
-    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-    height: 100%;
-    .youtube-video-card {
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      height: 100%;
-      .media-body {
-        background: white;
-        padding-bottom: 2rem;
-        flex: 1;
-        .youtube-video-card-progress {
-          bottom: 0.5rem;
-          left: 0.5rem;
-          width: calc(100% - 1rem);
-          position: absolute;
-          background-color: hsla(0deg 0% 50% / 30%);
-        }
-      }
-    }
-  }
   &.drop.over {
     border: 2px dashed #ccc;
   }
   .youtube-video-card,
   .youtube-video-card:hover {
     position: relative;
-    color: #666;
     text-decoration: none;
     .youtube-title {
       .youtube-title-text {

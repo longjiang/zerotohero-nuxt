@@ -7,6 +7,7 @@
       :class="{
         'tv-show-card media': true,
         'tv-show-card-hidden': show.hidden,
+        [`skin-${$skin}`]: true,
       }"
     >
       <router-link
@@ -184,10 +185,29 @@ export default {
   left: 1rem;
   width: calc(100% - 2rem);
   border-radius: 0.25rem;
-  background-color: #767676;
-  border: 1px solid rgb(138, 138, 138);
-  box-shadow: 1px -3px 4px #00000070;
 }
+
+.skin-dark {
+  .deck1,
+  .deck2,
+  .deck3 {
+    background-color: #767676;
+    box-shadow: 1px -3px 4px #00000070;
+    border: 1px solid rgb(138, 138, 138);
+  }
+}
+
+
+.skin-light {
+  .deck1,
+  .deck2,
+  .deck3 {
+    background-color: #ffffff;
+    box-shadow: 1px -3px 4px #00000019;
+    border: 1px solid rgb(217, 217, 217);
+  }
+}
+
 .col-compact {
   .deck1,
   .deck2,
@@ -243,7 +263,6 @@ export default {
   }
   .tv-show-card-title {
     padding-top: 0.5rem;
-    color: #fff;
     a {
       z-index: 1;
       width: 100%;
