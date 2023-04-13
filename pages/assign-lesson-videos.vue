@@ -72,7 +72,10 @@
         </LazyYouTubeVideoList>
         <h4 class="mt-5 mb-4">
           More Videos
-          <span @click="refresh()" class="text-success small"
+          <span
+            @click="refresh()"
+            class="text-success small"
+            style="cursor: pointer"
             ><u>Refresh</u></span
           >
         </h4>
@@ -93,6 +96,7 @@
             >
           </template>
         </LazyYouTubeVideoList>
+        <div class="text-center mt-3 mb-3"><Loader :sticky="true" v-if="loading" /></div>
       </div>
     </div>
   </div>
@@ -114,6 +118,7 @@ export default {
       updateLessonVideos: 0,
       updateVideos: 0,
       matchedWordsKey: 0,
+      loading: false
     };
   },
   components: {
@@ -158,7 +163,9 @@ export default {
       this.lessonVideos = [];
       let videos = await this.$directus.getVideos({
         l2Id: this.$l2.id,
-        query: `filter[l2][eq]=${this.$l2.id}&filter[level][eq]=${this.level}&filter[lesson][eq]=${this.lesson}`,
+        query: `filter[l2][eq]=${this.$l2.id}&filter[level][eq]=${
+          this.level
+        }&filter[lesson][eq]=${this.lesson}&timestamp=${Date.now()}`,
       });
       if (videos.length > 0) {
         videos = videos.map((video) => {
@@ -196,6 +203,7 @@ export default {
       return sortedArray;
     },
     async getVideos() {
+      this.loading = true;
       let words = this.unmatchedWords;
       this.videos = [];
       let videos = [];
@@ -210,6 +218,7 @@ export default {
         let params = {
           l2Id: this.$l2.id,
           terms: allWordForms,
+          limit: 1000,
         };
         let newVideos = await this.$directus.searchCaptions(params);
         videos = videos.concat(newVideos);
@@ -222,9 +231,9 @@ export default {
               video.matches = this.matchWords(video).filter(
                 (word) => !this.matchedWords.map((w) => w.id).includes(word.id)
               );
-              video.parsedDuration = timeStringToSeconds(
+              video.parsedDuration = video.duration ? timeStringToSeconds(
                 parseDuration(video.duration)
-              );
+              ) : 0;
             }
             return video;
           });
@@ -239,25 +248,25 @@ export default {
           return true;
         });
 
-        this.rankByViews(videos);
         videos = videos
-          // Sort by the length of video
           .sort((a, b) => {
-            let aScore, bScore;
+            return b.views / b.parsedDuration - a.views / a.parsedDuration;
+          })
+          // .sort((a, b) => {
+          //   return  - aMatchCount;
+          //   // return  bMatchCount / b.parsedDuration - aMatchCount / a.parsedDuration;
+          // })
+          .sort((a, b) => {
             let aMatchCount = a.matches?.length || 0;
             let bMatchCount = b.matches?.length || 0;
-            aScore =
-              (aMatchCount / a.parsedDuration) * 3 +
-              ((videos.length - a.viewRank) / videos.length) * 1;
-            bScore =
-              (bMatchCount / b.parsedDuration) * 3 +
-              ((videos.length - b.viewRank) / videos.length) * 1;
-            return bScore - aScore;
+            return bMatchCount - aMatchCount;
+            // return  bMatchCount / b.parsedDuration - aMatchCount / a.parsedDuration;
           });
         videos = Helper.uniqueByValue(videos, "youtube_id");
 
         this.videos = videos;
       }
+      this.loading = false
       return true;
     },
     async removeVideo(video) {
@@ -306,7 +315,7 @@ export default {
         this.updateMatches();
         this.videos = this.videos
           .filter((v) => {
-            return v !== video
+            return v !== video;
           })
           .map((video) => {
             if (video.subs_l2) {
