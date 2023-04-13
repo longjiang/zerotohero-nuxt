@@ -328,13 +328,13 @@ export default {
   text-overflow: ellipsis;
 }
 
-
-.pos-v,
-.pos-verb,
-.pos-Verb,
-.pos-動詞 {
-  border-bottom: 1px solid #888;
-}
+// Turn this off until we can have this set in options
+// .pos-v,
+// .pos-verb,
+// .pos-Verb,
+// .pos-動詞 {
+//   border-bottom: 1px solid #888;
+// }
 
 .show-pinyin-for-saved {
   .word-block:hover:not(.saved) {
