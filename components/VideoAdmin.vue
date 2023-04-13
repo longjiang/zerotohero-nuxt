@@ -751,7 +751,7 @@ export default {
     color: rgba(136, 136, 136, 1);
   }
 }
-.main-dark {
+.skin-dark {
   .video-edit-admin {
     background-color: #88888822;
   }

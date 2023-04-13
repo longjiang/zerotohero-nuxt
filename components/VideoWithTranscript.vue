@@ -644,7 +644,7 @@ export default {
 <style lang="scss" scoped>
 .video-with-transcript-mini {
   display: flex;
-  .main-dark {
+  .skin-dark {
     background: rgba(0, 0, 0, 0.5);
   }
   .video-column {

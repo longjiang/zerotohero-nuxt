@@ -522,7 +522,7 @@ export default {
   background: rgb(205, 207, 212);
 }
 
-.main-dark {
+.skin-dark {
   .youtube-video-list-admin-bar {
     background-color: #88888822;
   }

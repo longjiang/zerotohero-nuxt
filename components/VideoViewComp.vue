@@ -346,7 +346,7 @@ export default {
     bottom: calc(env(safe-area-inset-bottom) + 4.88rem);
     overflow: hidden;
     z-index: 9;
-    .main-dark {
+    .skin-dark {
       background: #000000aa;
       backdrop-filter: blur(20px);
     }

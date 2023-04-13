@@ -83,7 +83,7 @@ export default {
   color: white;
 }
 
-.main-dark,
+.skin-dark,
 .widget-dark {
   .popup-note {
     background-color: rgb(255 255 255 / 38%);

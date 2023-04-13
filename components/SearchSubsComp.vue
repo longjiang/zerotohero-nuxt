@@ -167,7 +167,6 @@
       <LazyVideoWithTranscript
         v-if="currentHit"
         :ref="`youtube-${hitIndex}`"
-        class="main-dark"
         v-bind="{
           autoload: true,
           autoplay: navigated,

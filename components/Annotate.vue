@@ -945,7 +945,7 @@ export default {
   color: white;
 }
 
-.main-dark,
+.skin-dark,
 .widget-dark {
   .annotator-menu-toggle {
     color: #ffffff55;

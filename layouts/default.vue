@@ -58,8 +58,7 @@
         <Nuxt
           :class="{
             'nuxt-content': true,
-            'main-dark': $skin === 'dark',
-            
+            [`skin-${$skin}`]: true,
           }"
         />
       </div>

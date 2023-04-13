@@ -1133,14 +1133,9 @@ button.bg-primary:focus {
   }
 }
 
-.main-dark {
+.skin-dark {
   background-color: black;
   color: #ccc;
-  &.main-dark-performant {
-    background-color: black;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
 }
 
 .playlist-modal-wrapper {

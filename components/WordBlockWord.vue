@@ -1,7 +1,5 @@
 <template>
-  <span
-    :class="wordBlockClasses"
-  >
+  <span :class="wordBlockClasses">
     <template v-if="!mappedPronunciation">
       <span class="word-block-segment">
         <span
@@ -14,8 +12,8 @@
         </span>
         <span :class="wordBlockTextClasses">
           {{ text }}
-        </span>
-      </span><span class="word-block-text-byeonggi-wrapper">
+        </span> </span
+      ><span class="word-block-text-byeonggi-wrapper">
         <span
           v-if="hanja"
           class="word-block-text-byeonggi d-inline-block"
@@ -31,16 +29,19 @@
         class="word-block-segment"
         v-for="segment in mappedPronunciation"
         :key="`word-block-segment-${segment.surface}`"
-      ><span
+        ><span
           class="word-block-definition"
           v-if="definition"
           v-html="definition"
-        ></span><span
+        ></span
+        ><span
           class="word-block-pinyin"
           v-if="segment.type === 'kanji' && phonetics"
-        >{{ segment.reading }}</span><span :class="wordBlockTextClasses">
-          {{ segment.surface }}</span>
-      </span><span class="word-block-text-byeonggi-wrapper">
+          >{{ segment.reading }}</span
+        ><span :class="wordBlockTextClasses">
+          {{ segment.surface }}</span
+        > </span
+      ><span class="word-block-text-byeonggi-wrapper">
         <span
           v-if="hanja"
           class="word-block-text-byeonggi d-inline-block"
@@ -104,17 +105,17 @@ export default {
     },
     wordBlockClasses() {
       let classes = {
-        'word-block': true,
-        'with-popup': this.popup,
-        'with-quick-gloss': this.saved && this.definition,
+        "word-block": true,
+        "with-popup": this.popup,
+        "with-quick-gloss": this.saved && this.definition,
         sticky: this.sticky,
         common: this.common,
         seen: this.seen,
         saved: this.saved,
         obscure: this.obscure,
-      }
+      };
       if (this.pos) classes[`pos-${this.pos}`] = true;
-      return classes
+      return classes;
     },
     showDefinition() {
       return this.$l2Settings.showDefinition;
@@ -124,19 +125,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main-dark {
-  .word-block,
-  .word-block-unknown {
-    color: #ccc;
-    &.animate {
-      animation-name: shine;
-      animation-iteration-count: 1;
-      animation-duration: 2s;
-      animation-timing-function: ease-in-out;
-    }
-    &.saved.animate {
-      animation-name: shinesaved;
-    }
+.show-pinyin .word-block .word-block-hard {
+  // text-decoration: underline;
+  background-color: rgba(255, 226, 129, 0.137);
+}
+.word-block-definition {
+  color: #aaa;
+}
+.word-block-text-byeonggi {
+  color: rgba(143, 158, 172, 0.8);
+  font-size: 6em;
+}
+
+.word-block-unknown {
+  color: #ccc;
+}
+
+.word-block,
+.word-block-unknown {
+  &.animate {
+    animation-name: shine;
+    animation-iteration-count: 1;
+    animation-duration: 2s;
+    animation-timing-function: ease-in-out;
+  }
+  &.saved.animate {
+    animation-name: shinesaved;
   }
 }
 
@@ -146,27 +160,16 @@ export default {
 
 @keyframes shine {
   0% {
-    color: #ccc;
+    color: inherit;
   }
   10% {
     color: #54ff7c;
   }
   100% {
-    color: #ccc;
+    color: inherit;
   }
 }
 
-@keyframes shinesaved {
-  0% {
-    color: #28a745;
-  }
-  10% {
-    color: #54ff7c;
-  }
-  100% {
-    color: #28a745;
-  }
-}
 
 .word-block.with-popup {
   cursor: pointer;
@@ -174,15 +177,6 @@ export default {
   &.saved {
     font-weight: bold;
   }
-
-  &:hover {
-    background-color: rgba(250, 248, 195, 0.5);
-  }
-}
-
-.widget-dark .word-block.with-popup:hover,
-.main-dark .word-block.with-popup:hover {
-  background-color: #00000066;
 }
 
 .word-block-text-quick-gloss {
@@ -196,11 +190,6 @@ export default {
 
   .word-block-text {
     font-size: 10em;
-  }
-
-  .word-block-text-byeonggi {
-    color: rgba(143, 158, 172, 0.8);
-    font-size: 6em;
   }
 }
 
@@ -229,7 +218,6 @@ export default {
     .word-block-text-byeonggi-wrapper {
       line-height: 1;
       text-indent: 0;
-      
     }
 
     .word-block-pinyin {
@@ -259,11 +247,6 @@ export default {
 .show-traditional .word-block .word-block-traditional,
 .show-definition .word-block .word-block-definition {
   display: block;
-}
-
-.show-pinyin .word-block .word-block-hard {
-  // text-decoration: underline;
-  background-color: rgba(255, 226, 129, 0.137);
 }
 
 .show-byeonggi .word-block .word-block-text-byeonggi {
@@ -302,7 +285,6 @@ export default {
 
 .word-block-definition {
   display: none;
-  color: #aaa;
   font-size: 0.7em;
   font-style: italic;
   margin-top: 0.5em;
