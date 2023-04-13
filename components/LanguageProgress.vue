@@ -10,14 +10,14 @@
           class="btn-edit text-secondary ml-2"
         >
           <i class="fas fa-pencil-alt mr-1"></i>
-          {{ translate("Edit hours") }}
+          {{ $tb("Edit hours") }}
         </span>
       </h5>
     </div>
     <div v-if="showManuallySetHours" class="mt-2 mb-3">
       {{
-        translate("Mannually set your total time on {l2} to", {
-          l2: translate(l2.name),
+        $tb("Mannually set your total time on {l2} to", {
+          l2: $tb(l2.name),
         })
       }}
       <b-form-input
@@ -52,9 +52,9 @@
     <div class="bottom-labels">
       <div class="bottom-label-left" style="color: #999">
         {{
-          translate("{hours} to {goal}", {
+          $tb("{hours} to {goal}", {
             hours: Math.round((hours / hoursNeeded) * 100),
-            goal: translate(goalText),
+            goal: $tb(goalText),
           })
         }}
       </div>
@@ -69,7 +69,7 @@
           class="fas fa-question-circle mr-1"
         ></i>
         <i class="fas fa-chevron-up mr-1" v-else></i>
-        {{ translate("What do the numbers mean?") }}
+        {{ $tb("What do the numbers mean?") }}
       </b-button>
       <div v-if="showDescriptionDetails" class="mt-2">
         <div v-if="$store.state.progress.progressLoaded">
@@ -81,7 +81,7 @@
               <b>{{ formatDuration(time) }}</b>
             </template>
             <template #l2>
-              <b>{{ translate(l2.name) }}</b>
+              <b>{{ $tb(l2.name) }}</b>
             </template>
           </i18n>
         </div>
@@ -95,18 +95,18 @@
             </template>
             <template #goal>
               <span v-if="level < 7">
-                {{ translate(goalText) }}
+                {{ $tb(goalText) }}
               </span>
-              <span v-else>{{ translate("native-like mastery") }}</span>
+              <span v-else>{{ $tb("native-like mastery") }}</span>
             </template>
           </i18n>
         </div>
         <div class="mt-3" v-else>
           {{
-            translate(
+            $tb(
               "Typically, {l1} speakers need {num} hours from {level} to {goal}.",
               {
-                l1: translate(l1.name),
+                l1: $tb(l1.name),
                 num: Math.round(hoursNeeded),
                 level: levelText,
                 goal: goalText,
@@ -130,9 +130,9 @@
             </template>
             <template #goal>
               <span v-if="level < 7">
-                {{ translate(goalText) }}
+                {{ $tb(goalText) }}
               </span>
-              <span v-else>{{ translate("the next level") }}</span>
+              <span v-else>{{ $tb("the next level") }}</span>
             </template>
             <template #numWeeks>
               <b>{{ Math.ceil(hoursNeeded / weeklyHours) }}</b>
@@ -140,13 +140,13 @@
             <template #period>
               <span v-if="hoursNeeded / weeklyHours > 52">
                 {{
-                  translate("{num} year(s) and", {
+                  $tb("{num} year(s) and", {
                     num: Math.floor(hoursNeeded / weeklyHours / 4.34 / 12),
                   })
                 }}
               </span>
               {{
-                translate("{num} months", {
+                $tb("{num} months", {
                   num: Math.ceil(hoursNeeded / weeklyHours / 4.34) % 12,
                 })
               }}
@@ -192,14 +192,6 @@ export default {
     },
   },
   computed: {
-    browserLanguage() {
-      if (this.l1) return this.l1.code;
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
     time() {
       return this.$store.state.progress.progressLoaded
         ? this.$store.getters["progress/time"](this.l2)
@@ -236,7 +228,7 @@ export default {
     goalText() {
       let goal = this.levelObj(this.level + 1);
       if (goal) return goal.exam.name + " " + goal.level;
-      else return this.translate("Mastery");
+      else return this.$tb("Mastery");
     },
     weeklyHours() {
       return this.$store.state.progress.progressLoaded
@@ -247,7 +239,7 @@ export default {
       let options = [1, 2, 3, 7, 14, 21, 28, 35, 42, 49, 56, 63].map(
         (value) => {
           return {
-            text: this.translate("{num} hours", { num: value }),
+            text: this.$tb("{num} hours", { num: value }),
             value,
           };
         }
@@ -294,13 +286,6 @@ export default {
     });
   },
   methods: {
-    translate(text, data = {}) {
-      let code = this.browserLanguage;
-      if (this.$languages) {
-        let translated = this.$languages.translate(text, code, data);
-        return translated;
-      } else return text;
-    },
     levelObj(level) {
       return Helper.languageLevels(this.l2)[level];
     },
@@ -310,13 +295,13 @@ export default {
       var hours = Math.floor(sec_num / 3600);
       var minutes = Math.floor((sec_num - hours * 3600) / 60);
       var seconds = sec_num - hours * 3600 - minutes * 60;
-      let formatted = this.translate("{hours}{minutes}{seconds}", {
-        hours: hours ? this.translate("{num} hr", { num: hours }) : "",
-        minutes: minutes ? this.translate("{num} min", { num: minutes }) : "",
-        seconds: seconds ? this.translate("{num} sec", { num: seconds }) : "",
+      let formatted = this.$tb("{hours}{minutes}{seconds}", {
+        hours: hours ? this.$tb("{num} hr", { num: hours }) : "",
+        minutes: minutes ? this.$tb("{num} min", { num: minutes }) : "",
+        seconds: seconds ? this.$tb("{num} sec", { num: seconds }) : "",
       });
       formatted =
-        formatted.trim() === "" ? this.translate("Just started") : formatted;
+        formatted.trim() === "" ? this.$tb("Just started") : formatted;
       return formatted;
     },
   },

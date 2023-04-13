@@ -85,7 +85,7 @@
                   :autocycle="true"
                 />
                 <h5 class="strong mt-2">
-                  {{ translate("Learn English", browserLanguage) }}
+                  {{ $tb("Learn English") }}
                 </h5>
               </router-link>
               <div class="row mt-4">
@@ -206,22 +206,22 @@
         <div class="col-sm-12">
           <div class="home-card p-2">
             <h5 class="text-center mt-3 mb-3">
-              {{ translate("Learn More Languages", browserLanguage) }}
+              {{ $tb("Learn More Languages") }}
             </h5>
             <div class="mb-3 pl-1 pr-1" style="display: flex">
               <b-form-input
                 v-model="langKeyword"
                 style="flex: 1; margin-right: 0.5rem"
                 @compositionend.prevent.stop="() => false"
-                :placeholder="translate('Search languages', browserLanguage)"
+                :placeholder="$tb('Search languages')"
               />
               <router-link class="btn btn-success d-block" to="/language-map">
                 <i class="fas fa-map-marker-alt mr-1"></i>
                 <span class="d-none d-sm-inline">
-                  {{ translate("Find on Map", browserLanguage) }}
+                  {{ $tb("Find on Map") }}
                 </span>
                 <span class="d-xs-inline d-sm-none">
-                  {{ translate("Map", browserLanguage) }}
+                  {{ $tb("Map") }}
                 </span>
               </router-link>
             </div>
@@ -336,17 +336,6 @@ export default {
     };
   },
   computed: {
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        if (
-          this.langsWithEnDict &&
-          this.langsWithEnDict.find((l) => l.code === code)
-        )
-          return code;
-      }
-      return "en";
-    },
     langsWithEnDict() {
       if (this.$languages) {
         let langsWithEnDict = this.$languages.l1s.filter(
@@ -393,10 +382,6 @@ export default {
     await this.$languagesPromise;
   },
   methods: {
-    translate(text, code) {
-      if (this.$languages) return this.$languages.translate(text, code);
-      else return text;
-    },
     language(code) {
       if (this.$languages) return this.$languages.getSmart(code);
     },

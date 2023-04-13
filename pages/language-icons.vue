@@ -18,11 +18,11 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5 text-center">
-          <h3>{{ translate("Face of the Language") }}</h3>
+          <h3>{{ $tb("Face of the Language") }}</h3>
           <client-only>
             <p>
               {{
-                translate("{num} languages listed", {
+                $tb("{num} languages listed", {
                   num: filteredLangs.length,
                 })
               }}
@@ -32,7 +32,7 @@
             <b-form-input
               v-model="keyword"
               @compositionend.prevent.stop="() => false"
-              :placeholder="translate('Filter by speaker, language or country')"
+              :placeholder="$tb('Filter by speaker, language or country')"
             />
             <b-input-group-append>
               <b-button variant="gray">
@@ -68,7 +68,7 @@
                       :to="`/en/${lang.code}/`"
                       class="font-weight-bold text-success"
                     >
-                      {{ translate(lang.name) }} ({{ lang.code }})
+                      {{ $tb(lang.name) }} ({{ lang.code }})
                     </router-link>
                   </template>
                 </i18n>
@@ -99,7 +99,7 @@
       </div>
       <div class="row mt-5 mb-5">
         <div class="col-sm-12 text-center">
-          <h4 class="mb-3">{{ translate('World Language Map') }}</h4>
+          <h4 class="mb-3">{{ $tb('World Language Map') }}</h4>
           <router-link to="/language-map">
             <div>
               <img
@@ -163,13 +163,6 @@ export default {
         return [];
       }
     },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
   },
   mounted() {
     let l1 = this.$languages.getSmart(this.browserLanguage);
@@ -177,11 +170,6 @@ export default {
     this.$i18n.setLocaleMessage(l1.code, l1.translations);
   },
   methods: {
-    translate(text, data = {}) {
-      let code = this.browserLanguage;
-      if (this.$languages) return this.$languages.translate(text, code, data);
-      else return text;
-    },
     googleImagesURL(l2) {
       return `https://www.google.com/searchbyimage?q=${l2.name}+language&image_url=https://languageplayer.io/img/logo-square/${l2.code}.jpeg`;
     },

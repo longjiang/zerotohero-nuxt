@@ -28,12 +28,12 @@
               <div :class="`home-card skin-${$skin} p-2 pt-4 pb-4`">
                 <h5 class="text-center mt-2 mb-1" v-if="$auth.user?.first_name">
                   {{ $auth.user.first_name
-                  }}{{ translate("’s Language Dashboard") }}
+                  }}{{ $tb("’s Language Dashboard") }}
                 </h5>
                 <div v-if="!progressLoaded" class="text-center mt-4">
                   <Loader
                     :sticky="true"
-                    :message="translate('Loading your learning progress...')"
+                    :message="$tb('Loading your learning progress...')"
                   />
                 </div>
                 <LazyDashboard ref="dashboard" v-if="hasDashboard" />
@@ -44,7 +44,7 @@
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4">
                 <h5 class="text-center mb-2" v-if="hasDashboard">
-                  {{ translate('Learn another language') }}
+                  {{ $tb('Learn another language') }}
                 </h5>
                 <Triage />
               </div>
@@ -54,11 +54,11 @@
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4">
                 <h5 class="text-center mb-3">
-                  {{ translate('Tools for linguists') }}
+                  {{ $tb('Tools for linguists') }}
                 </h5>
                 <div class="row pl-3 pr-3">
                   <div class="col-sm-12 col-md-4 mt-1 mb-1" v-for="link in linguisticsTools" :key="`linguistics-tools-link-${link.name}`">
-                    <router-link :to="link" class="text-contrast"><i :class="link.icon" style="width: 2em; text-align: center"></i> {{ translate(link.title) }}</router-link>
+                    <router-link :to="link" class="text-contrast"><i :class="link.icon" style="width: 2em; text-align: center"></i> {{ $tb(link.title) }}</router-link>
                   </div>
                 </div>
               </div>
@@ -141,24 +141,8 @@ export default {
         return langsWithEnDict;
       }
     },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        if (
-          this.langsWithEnDict &&
-          this.langsWithEnDict.find((l) => l.code === code)
-        )
-          return code;
-      }
-      return "en";
-    },
   },
   methods: {
-    translate(text, code, data = {}) {
-      if (!code) code = this.browserLanguage
-      if (this.$languages) return this.$languages.translate(text, code, data);
-      else return text;
-    },
   },
 };
 </script>

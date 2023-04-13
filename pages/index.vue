@@ -37,7 +37,7 @@
                   to="/go-pro"
                   v-if="$auth.loggedIn && !pro"
                 >
-                  {{ translate("Go Pro") }}
+                  {{ $tb("Go Pro") }}
                 </router-link>
                 <span
                   class="index-nav-item"
@@ -45,35 +45,35 @@
                   style="cursor: pointer"
                   v-else
                 >
-                  {{ translate("Features") }}
+                  {{ $tb("Features") }}
                 </span>
                 <router-link
                   class="index-nav-item link-unstyled"
                   to="/login"
                   v-if="!$auth.loggedIn"
                 >
-                  {{ translate("Login") }}
+                  {{ $tb("Login") }}
                 </router-link>
                 <router-link
                   class="index-nav-item btn btn-success"
                   to="/register"
                   v-if="!$auth.loggedIn"
                 >
-                  {{ translate("Sign Up") }}
+                  {{ $tb("Sign Up") }}
                 </router-link>
                 <router-link
                   class="index-nav-item link-unstyled"
                   to="/logout"
                   v-if="$auth.loggedIn"
                 >
-                  {{ translate("Logout") }}
+                  {{ $tb("Logout") }}
                 </router-link>
                 <router-link
                   class="index-nav-item btn btn-success"
                   to="/dashboard"
                   v-if="$auth.loggedIn"
                 >
-                  {{ translate("Dashboard") }}
+                  {{ $tb("Dashboard") }}
                 </router-link>
               </nav>
             </client-only>
@@ -112,7 +112,7 @@
           <div class="col-md-5">
             <h3 class="text-white mb-2">
               {{
-                translate(
+                $tb(
                   "Drastically improve your language skills by binge watching videos in the target language.",
                   browserLanguage
                 )
@@ -120,7 +120,7 @@
             </h3>
             <p class="text-white">
               {{
-                translate(
+                $tb(
                   "Languages include Chinese (Mandarin and Cantonese), Japanese, English, French, German, Spanish, Korean, Russian, Italian, and 207 other languages.",
                   browserLanguage
                 )
@@ -130,28 +130,28 @@
               <client-only>
                 <template v-if="$auth.loggedIn">
                   <p class="text-white">
-                    {{ translate("Welcome back") }}
+                    {{ $tb("Welcome back") }}
                     {{ $auth.user.first_name }}.
                   </p>
                   <router-link class="btn btn-success" to="/dashboard">
-                    {{ translate("Go to Dashboard") }}
+                    {{ $tb("Go to Dashboard") }}
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
                   <router-link to="/logout" class="text-white ml-3">
-                    {{ translate("Or") }}
-                    <u>{{ translate("Logout") }}</u>
+                    {{ $tb("Or") }}
+                    <u>{{ $tb("Logout") }}</u>
                   </router-link>
                 </template>
                 <template v-else>
                   <router-link class="btn btn-success" to="/register">
-                    {{ translate("Create a Free Account") }}
+                    {{ $tb("Create a Free Account") }}
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
                   <span class="text-white ml-2">
-                    {{ translate("Or") }}
+                    {{ $tb("Or") }}
                     <router-link to="/login" class="text-white">
                       <u>
-                        {{ translate("Login") }}
+                        {{ $tb("Login") }}
                       </u>
                     </router-link>
                   </span>
@@ -171,10 +171,10 @@
           </div>
           <div class="col-md-6 mb-3 pl-4">
             <h3 class="text-white mb-2">
-              {{ translate("Learn on the go with our mobile apps.") }}
+              {{ $tb("Learn on the go with our mobile apps.") }}
             </h3>
             <p class="text-white">
-              {{ translate("Available on iOS and Android.") }}
+              {{ $tb("Available on iOS and Android.") }}
             </p>
             <div class="row">
               <div class="col-12 col-md-6">
@@ -199,7 +199,7 @@
                     <p class="mt-3 text-white">
                       <small>
                         {{
-                          translate(
+                          $tb(
                             "Search for “Language Player 2” in the iOS App Store."
                           )
                         }}
@@ -231,11 +231,11 @@
                   <p class="mt-3 text-white">
                     <small>
                       <i class="fa-solid fa-down mr-1"></i>
-                      {{ translate("Or, download the Android app as an") }}
+                      {{ $tb("Or, download the Android app as an") }}
                       <a
                         href="https://server.chinesezerotohero.com/data/android/language-player-android-2.14.1.apk"
                       >
-                        {{ translate("Android Package") }} (APK) - v2.14.1
+                        {{ $tb("Android Package") }} (APK) - v2.14.1
                       </a>
                     </small>
                   </p>
@@ -247,11 +247,11 @@
         <div class="row index-section" id="index-features">
           <div class="col-md-4 mb-3">
             <h3 class="text-white mb-2">
-              {{ translate("Massive content library") }}
+              {{ $tb("Massive content library") }}
             </h3>
             <p class="text-white">
               {{
-                translate(
+                $tb(
                   "With 600,000 videos in over 200 languages, you will always find something interesting to watch."
                 )
               }}
@@ -278,12 +278,12 @@
           <div class="col-md-4 mb-3">
             <h3 class="text-white mb-2">
               {{
-                translate("Interactive transcripts with English translation")
+                $tb("Interactive transcripts with English translation")
               }}
             </h3>
             <p class="text-white">
               {{
-                translate(
+                $tb(
                   "Tap any line in the transcript to play that line. Tap on any word to look up."
                 )
               }}
@@ -293,11 +293,11 @@
         <div class="row index-section">
           <div class="col-md-4 mb-3">
             <h3 class="text-white mb-2">
-              {{ translate("See examples of words in videos") }}
+              {{ $tb("See examples of words in videos") }}
             </h3>
             <p class="text-white">
               {{
-                translate(
+                $tb(
                   "Learn words by watching hundreds of video clips that contain this word."
                 )
               }}
@@ -314,10 +314,10 @@
         </div>
         <div class="row index-section">
           <div class="col-12 mb-3 text-center">
-            <h3 class="text-white mb-2">{{ translate("Pricing Options") }}</h3>
+            <h3 class="text-white mb-2">{{ $tb("Pricing Options") }}</h3>
             <p class="text-white">
               {{
-                translate("Get unlimited access with a lifetime Pro account.")
+                $tb("Get unlimited access with a lifetime Pro account.")
               }}
             </p>
           </div>
@@ -328,7 +328,7 @@
         <div class="row index-section" id="index-testimonials">
           <div class="col-md-12 mb-3 text-center">
             <h3 class="text-white mb-2">
-              {{ translate("What our users say about us") }}
+              {{ $tb("What our users say about us") }}
             </h3>
           </div>
           <div class="col-md-4 mb-3">
@@ -438,11 +438,11 @@
         <div class="row index-section">
           <div class="col-md-12 mb-3 text-center">
             <h3 class="text-white mb-2">
-              {{ translate("We support 217 languages") }}
+              {{ $tb("We support 217 languages") }}
             </h3>
             <p class="text-white">
               {{
-                translate(
+                $tb(
                   "Including constructed languages (Esperanto, Klingon), sign languages (ASL, KSL), ancient languages (Aramaic, Gothic, Classical Chinese), and dialects (Hakka, Min Nan)."
                 )
               }}
@@ -461,7 +461,7 @@
             </div>
             <div class="mt-4 text-white">
               <router-link to="/stats" class="link-unstyled">
-                <u>{{ translate("See latest stats.") }}</u>
+                <u>{{ $tb("See latest stats.") }}</u>
               </router-link>
             </div>
           </div>
@@ -469,11 +469,11 @@
         <div class="row index-section">
           <div class="col-md-12 mb-3 text-center">
             <h3 class="text-white mb-2">
-              {{ translate("Ready to give it a try?") }}
+              {{ $tb("Ready to give it a try?") }}
             </h3>
             <p class="text-white">
               {{
-                translate(
+                $tb(
                   "Start by creating a free account, and explore our content library."
                 )
               }}
@@ -483,13 +483,13 @@
               <client-only>
                 <template v-if="$auth.loggedIn">
                   <router-link class="btn btn-success" to="/dashboard">
-                    {{ translate("Go to Dashboard") }}
+                    {{ $tb("Go to Dashboard") }}
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
                   <div class="mt-3 text-white">
-                    {{ translate("Or") }}
+                    {{ $tb("Or") }}
                     <router-link to="/logout" class="text-white">
-                      <u>{{ translate("Logout") }}</u>
+                      <u>{{ $tb("Logout") }}</u>
                     </router-link>
                   </div>
                 </template>
@@ -512,11 +512,11 @@
         <div class="row index-section">
           <div class="col-md-12 mb-3 text-center">
             <h3 class="text-white mb-4">
-              {{ translate("Join our Discord* Server") }}
+              {{ $tb("Join our Discord* Server") }}
             </h3>
             <p class="text-white">
               {{
-                translate(
+                $tb(
                   "And connect with people passionate about learning languages, just like you!"
                 )
               }}
@@ -524,7 +524,7 @@
             <p class="text-white small">
               *
               {{
-                translate(
+                $tb(
                   "Discord is a chat and streaming app that allows groups to create separate chatrooms (channels) for different purposes."
                 )
               }}
@@ -544,7 +544,7 @@
                 class="btn btn-success"
               >
                 <i class="fa-brands fa-discord"></i>
-                {{ translate("Language Player Discord Server") }}
+                {{ $tb("Language Player Discord Server") }}
               </a>
             </div>
           </div>
@@ -552,7 +552,7 @@
         <div class="row index-section">
           <div class="col-md-12 mb-3 text-center">
             <h3 class="text-white mb-4">
-              {{ translate("Made with ❤️ by language lovers like you.") }}
+              {{ $tb("Made with ❤️ by language lovers like you.") }}
             </h3>
             <div class="text-left text-white"><LazyFooter /></div>
           </div>
@@ -596,17 +596,6 @@ export default {
     },
     native() {
       return Capacitor.isNativePlatform();
-    },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        if (
-          this.langsWithEnDict &&
-          this.langsWithEnDict.find((l) => l.code === code)
-        )
-          return code;
-      }
-      return "en";
     },
     langsWithEnDict() {
       if (this.$languages) {
@@ -654,11 +643,6 @@ export default {
     await this.$languagesPromise;
   },
   methods: {
-    translate(text, code) {
-      if (!code) code = this.browserLanguage;
-      if (this.$languages) return this.$languages.translate(text, code);
-      else return text;
-    },
     language(code) {
       if (this.$languages) return this.$languages.getSmart(code);
     },

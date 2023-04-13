@@ -24,14 +24,14 @@
           </div>
           <div class="mt-4" />
           <h3 class="text-center mt-3">
-            🎉 {{ translate("You’re now Pro!") }}
+            🎉 {{ $tb("You’re now Pro!") }}
           </h3>
           <div class="mt-4" />
           <client-only>
             <div v-if="$auth.loggedIn && $auth.user && pro" class="text-center">
               <div>
                 {{
-                  translate(
+                  $tb(
                     "Welcome {name}, you now enjoy the benefit of a Pro account across all languages.",
                     { name: $auth.user ? $auth.user.first_name : "" }
                   )
@@ -43,14 +43,14 @@
                   :to="{ path: '/' }"
                   class="btn btn-success pl-4 pr-4"
                 >
-                  {{ translate("Start Using Pro") }}
+                  {{ $tb("Start Using Pro") }}
                 </router-link>
               </div>
             </div>
             <div v-else class="text-center">
               <p>
                 {{
-                  translate(
+                  $tb(
                     "Your upgrade was successful. Please login again to activate your Pro features."
                   )
                 }}
@@ -61,7 +61,7 @@
                   :to="{ path: '/login?redirect=/' }"
                   class="btn btn-success pl-4 pr-4"
                 >
-                  {{ translate("Login with Pro") }}
+                  {{ $tb("Login with Pro") }}
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
               </div>
@@ -100,20 +100,8 @@ export default {
     background() {
       return background();
     },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
   },
   methods: {
-    translate(text, code) {
-      if (!code) code = this.browserLanguage;
-      if (this.$languages) return this.$languages.translate(text, code);
-      else return text;
-    },
   },
 };
 </script>

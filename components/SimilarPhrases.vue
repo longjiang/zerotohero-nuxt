@@ -180,13 +180,6 @@ export default {
     };
   },
   computed: {
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
   },
   mounted() {
     if (this.translation)
@@ -195,11 +188,6 @@ export default {
     if (this.autoLoad) this.getSimilarPhrases();
   },
   methods: {
-    translate(text, code) {
-      if (!code) code = this.browserLanguage;
-      if (this.$languages) return this.$languages.translate(text, code);
-      else return text;
-    },
     async getSimilarPhrases() {
       this.updating = true;
       this.showButton = false;

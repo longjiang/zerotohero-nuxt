@@ -72,7 +72,7 @@
       </div>
 
       <span class="language-list-item-name">
-        {{ $languages.translate(languageName(language), from["iso639-3"]) }}
+        {{ $tb(languageName(language), from["iso639-3"]) }}
         <div class="badge" v-if="!showFlags && badge && badge !== 0">
           {{ badge }}
         </div>
@@ -82,7 +82,7 @@
         v-if="from && from.code !== 'en'"
       >
         ({{
-          $languages.translate(
+          $tb(
             `from ${this.languageName(from)}`,
             from["iso639-3"]
           )
@@ -161,20 +161,8 @@ export default {
       );
       return english;
     },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
   },
   methods: {
-    translate(text, data = {}) {
-      let code = this.browserLanguage;
-      if (this.$languages) return this.$languages.translate(text, code, data);
-      else return text;
-    },
     cycleFlags() {
       if (this.$refs.flag) this.$refs.flag.cycleFlags();
     },
@@ -201,7 +189,7 @@ export default {
       return this.$languages.hasFeature(l1, l2, "live-tv");
     },
     languageName(language) {
-      let name = this.translate(language.name.replace(/ \(.*\)/gi, ""));
+      let name = this.$tb(language.name.replace(/ \(.*\)/gi, ""));
       return name;
     },
   },

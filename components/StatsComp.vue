@@ -11,14 +11,14 @@
             <b class="stat-big-number">{{ formatNumber(stats.totalCount) }}</b>
           </router-link>
           <br />
-          {{ translate("Videos with Subs", browserLanguage) }}
+          {{ $tb("Videos with Subs") }}
         </div>
         <div style="flex: 1" class="text-center">
           <router-link :to="{ name: 'stats' }">
             <b class="stat-big-number">{{ stats.langs.length - 11 }}</b>
           </router-link>
           <br />
-          {{ translate("Languages", browserLanguage) }}
+          {{ $tb("Languages") }}
         </div>
       </div>
     </div>
@@ -31,12 +31,12 @@
           <div style="flex: 1" class="text-center">
             <b class="stat-big-number">{{ formatNumber(stats.totalCount) }}</b>
             <br />
-            {{ translate("Videos", browserLanguage) }}
+            {{ $tb("Videos") }}
           </div>
           <div style="flex: 1" class="text-center">
             <b class="stat-big-number">{{ stats.langs.length }}</b>
             <br />
-            {{ translate("Languages", browserLanguage) }}
+            {{ $tb("Languages") }}
           </div>
         </div>
       </div>
@@ -99,17 +99,6 @@ export default {
     await this.getStats();
   },
   computed: {
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        if (
-          this.langsWithEnDict &&
-          this.langsWithEnDict.find((l) => l.code === code)
-        )
-          return code;
-      }
-      return "en";
-    },
     langsWithEnDict() {
       if (this.$languages) {
         let langsWithEnDict = this.$languages.l1s.filter(
@@ -120,10 +109,6 @@ export default {
     },
   },
   methods: {
-    translate(text, code) {
-      if (this.$languages) return this.$languages.translate(text, code);
-      else return text;
-    },
     async getStats(refresh = false) {
       let data = await Helper.proxy(
         `https://directusvps.zerotohero.ca/count-all.php${

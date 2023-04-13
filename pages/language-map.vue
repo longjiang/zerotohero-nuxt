@@ -11,9 +11,9 @@
 <template>
   <div style="display: flex; flex-direction: column; height: 100vh">
     <SocialHead
-      :title="translate('Map of World Languages') + '| Language Player'"
+      :title="$tb('Map of World Languages') + '| Language Player'"
       :description="
-        translate(
+        $tb(
           'Tap on any language label to learn the language! Live TV channels, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.”'
         )
       "
@@ -32,16 +32,16 @@
         @click="hideDescription = !hideDescription"
       >
         <i class="fa-solid fa-xmark" v-if="!hideDescription"></i>
-        <span v-else>{{ translate("Show Legend") }}</span>
+        <span v-else>{{ $tb("Show Legend") }}</span>
       </b-button>
-      <h5 class="text-white">{{ translate("World Language Map") }}</h5>
+      <h5 class="text-white">{{ $tb("World Language Map") }}</h5>
       <p class="text-white">
         <i class="fa-solid fa-arrow-pointer"></i>
-        {{ translate("Click on any language to learn it.") }}
+        {{ $tb("Click on any language to learn it.") }}
       </p>
       <p v-if="filteredLangsWithGeo">
         {{
-          translate(
+          $tb(
             "This is an interactive map of {numLanguages} languages of the world, including {livingLanguages} living languages, {historicLanguages} historic languages, {extinctLanguages} extinct languages, and {constructedLanguages} constructed languages.",
             {
               numLanguages: filteredLangsWithGeo.length,
@@ -56,15 +56,15 @@
 
       <p v-else>
         {{
-          translate(
+          $tb(
             "This is an interactive map of 7,268 languages of the world, including 6,924 living languages, 105 historic languages, 220 extinct languages, and 5 constructed languages."
           )
         }}
       </p>
       <p>
-        <b class="text-white">{{ translate("Legend.") }}</b>
+        <b class="text-white">{{ $tb("Legend.") }}</b>
         {{
-          translate(
+          $tb(
             "Circle sizes correspond to speaker populations. Circles are colour-coded by language families."
           )
         }}
@@ -75,7 +75,7 @@
             class="legend-dot"
             :style="`background-color: ${family.color};`"
           ></span>
-          <span>{{ translate(family.name) }}</span>
+          <span>{{ $tb(family.name) }}</span>
         </li>
       </ul>
     </div>
@@ -86,7 +86,7 @@
             <Loader
               :sticky="true"
               :message="
-                translate('Loading map, and plotting thousands of languages...')
+                $tb('Loading map, and plotting thousands of languages...')
               "
             />
           </div>
@@ -94,7 +94,7 @@
             <div class="options-bar">
               <LanguageSwitch
                 style="flex: 1; z-index: 999; margin-left: 0.25rem"
-                :placeholder="translate('Search languages...')"
+                :placeholder="$tb('Search languages...')"
                 :nav="false"
                 :button="false"
                 :showRandom="false"
@@ -191,20 +191,8 @@ export default {
         ? this.filteredLangsWithGeo.filter((l) => l.type === "C")
         : undefined;
     },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
   },
   methods: {
-    translate(text, data = {}) {
-      let code = this.browserLanguage;
-      if (this.$languages) return this.$languages.translate(text, code, data);
-      else return text;
-    },
     onReady() {
       this.loadingMap = false;
     },

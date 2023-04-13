@@ -18,7 +18,7 @@
           >
             <div class="language-flag-wrapper">
               <LanguageFlag :language="l2Progress.language" :autocycle="true" />
-              <span class="language-name">{{ translate(l2Progress.language.name, browserLanguage) }}</span>
+              <span class="language-name">{{ $tb(l2Progress.language.name) }}</span>
             </div>
             <LanguageProgress
               :l1="$languages.getSmart(getL1Code(l2Progress.language))"
@@ -84,19 +84,8 @@ export default {
         .sort((a, b) => b.level - a.level);
       return sorted;
     },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
   },
   methods: {
-    translate(text, code) {
-      if (this.$languages) return this.$languages.translate(text, code);
-      else return text;
-    },
     getL1Code(l2) {
       let l2Settings = this.$store.getters["settings/l2Settings"](l2.code);
       if (l2Settings?.l1) {

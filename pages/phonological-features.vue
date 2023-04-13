@@ -105,13 +105,6 @@ export default {
     };
   },
   computed: {
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
   },
   async mounted() {
     let l1 = this.$languages.getSmart(this.browserLanguage);

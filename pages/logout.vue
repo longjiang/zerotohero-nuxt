@@ -24,7 +24,7 @@
           <div class="text-center mb-4">
             <Logo skin="light" />
           </div>
-          <h4 class="mt-5 mb-5 text-center">{{ translate('Logging you out...') }}</h4>
+          <h4 class="mt-5 mb-5 text-center">{{ $tb('Logging you out...') }}</h4>
         </div>
       </div>
     </div>
@@ -50,25 +50,13 @@ export default {
     backgroundImage() {
       return Helper.background(this.$l2);
     },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    }
   },
   methods: {
-    translate(text, code, data = {}) {
-      if (!code) code = this.browserLanguage
-      if (this.$languages) return this.$languages.translate(text, code, data);
-      else return text;
-    },
     async logout() {
       await this.$auth.logout();
       await this.$auth.setUser(null);
       this.$toast.success(
-        this.translate("You have been logged out."),
+        this.$tb("You have been logged out."),
         {
           position: "top-center",
           duration: 5000

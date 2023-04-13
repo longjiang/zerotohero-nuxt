@@ -101,7 +101,7 @@
                   <span v-if="filteredPhrases.length > maxPhraes">...</span>
                 </div>
                 <span class="language-marker-phrases-language">
-                  {{ translate(language.name) }}
+                  {{ $tb(language.name) }}
                 </span>
               </div>
             </div>
@@ -228,13 +228,6 @@ export default {
     arabic() {
       return this.$languages.l1s.find((language) => language.code === "ar");
     },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
   },
   watch: {
     phrases() {
@@ -242,11 +235,6 @@ export default {
     },
   },
   methods: {
-    translate(text, data = {}) {
-      let code = this.browserLanguage;
-      if (this.$languages) return this.$languages.translate(text, code, data);
-      else return text;
-    },
     uniqueByValue() {
       return Helper.uniqueByValue(...arguments);
     },

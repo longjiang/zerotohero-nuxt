@@ -21,7 +21,7 @@
           <i class="fab fa-cc-apple-pay"></i>
           <i class="fab fa-google-pay mr-1"></i>
         </span>
-        {{ translate('Credit Card') }}
+        {{ $tb('Credit Card') }}
         <i class="fa-solid fa-chevron-right ml-1"></i>
       </b-button>
     </template>
@@ -31,7 +31,7 @@
       class="btn btn-success btn-purchase"
     >
       <span class="icons"><i class="fab fa-weixin"></i></span>
-      {{ translate('WeChat Pay') }}
+      {{ $tb('WeChat Pay') }}
       <i class="fa-solid fa-chevron-right ml-1"></i>
     </a>
     <a
@@ -39,7 +39,7 @@
       class="btn btn-success btn-purchase"
     >
       <span class="icons"><i class="fab fa-alipay"></i></span>
-      {{ translate('Alipay') }}
+      {{ $tb('Alipay') }}
       <i class="fa-solid fa-chevron-right ml-1"></i>
     </a>
     </template>
@@ -80,13 +80,6 @@ export default {
       } else  {
         return matchedPrices[0]
       }
-    },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
     },
     stripeSuccessURL() {
       return this.$auth.user ? `${PYTHON_SERVER}stripe_checkout_success?user_id=${this.$auth.user.id}&host=${HOST}&session_id={CHECKOUT_SESSION_ID}` : undefined // Make sure we have the user's id
@@ -172,11 +165,6 @@ export default {
     };
   },
   methods: {
-    translate(text, code) {
-      if (!code) code = this.browserLanguage;
-      if (this.$languages) return this.$languages.translate(text, code);
-      else return text;
-    },
     submitStripeUSD() {
       // You will be redirected to Stripe's secure checkout page
       this.$refs.stripeCheckoutUSDRef.redirectToCheckout();

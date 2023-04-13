@@ -28,13 +28,13 @@
               <Logo skin="light" />
             </div>
             <b-form @submit.prevent="login">
-              <div v-if="message" class="alert alert-danger mt-2">{{ translate(message) }}</div>
+              <div v-if="message" class="alert alert-danger mt-2">{{ $tb(message) }}</div>
               <b-form-group id="input-group-1" label-for="email">
                 <b-form-input
                   id="email"
                   v-model="form.email"
                   type="email"
-                  :placeholder="translate('Email')"
+                  :placeholder="$tb('Email')"
                   required
                 ></b-form-input>
               </b-form-group>
@@ -44,14 +44,14 @@
                   id="password"
                   type="password"
                   v-model="form.password"
-                  :placeholder="translate('Password')"
+                  :placeholder="$tb('Password')"
                   required
                 ></b-form-input>
               </b-form-group>
 
               <b-button class="d-block w-100" type="submit" variant="success">
                 <b-spinner small v-if="loading" />
-                <span v-else>{{ translate('Login') }}</span>
+                <span v-else>{{ $tb('Login') }}</span>
               </b-button>
               <div class="mt-3 text-center">
                 <router-link
@@ -59,13 +59,13 @@
                     name: 'register',
                     query: { redirect: $route.query.redirect },
                   }"
-                >{{ translate('Register') }}</router-link>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                >{{ $tb('Register') }}</router-link>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <router-link
                   :to="{
                     name: 'forgot-password',
                     query: { redirect: $route.query.redirect },
                   }"
-                >{{ translate('Forgot Password?') }}</router-link>
+                >{{ $tb('Forgot Password?') }}</router-link>
               </div>
             </b-form>
           </div>
@@ -96,13 +96,6 @@ export default {
     backgroundImage() {
       return Helper.background(this.$l2);
     },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    }
   },
   mounted() {
     if (this.$auth.loggedIn) {
@@ -110,11 +103,6 @@ export default {
     }
   },
   methods: {
-    translate(text, code, data = {}) {
-      if (!code) code = this.browserLanguage
-      if (this.$languages) return this.$languages.translate(text, code, data);
-      else return text;
-    },
     redirect() {
       if (this.$route.query.redirect) {
         this.$router.push({ path: this.$route.query.redirect });
@@ -139,7 +127,7 @@ export default {
             this.$auth.user.id
           )
           this.$toast.success(
-            this.translate("Welcome back, {name}!", this.browserLanguage, {
+            this.$tb("Welcome back, {name}!", this.browserLanguage, {
               name: this.$auth.user.first_name
             }),
             {
@@ -157,7 +145,7 @@ export default {
           });
         } else {
           this.$toast.error(
-            this.translate("There has been an error.", this.browserLanguage),
+            this.$tb("There has been an error.", this.browserLanguage),
             {
               position: "top-center",
               duration: 5000

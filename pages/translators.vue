@@ -178,13 +178,6 @@ export default {
       });
       return languages;
     },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
   },
   mounted() {
     let l1 = this.$languages.getSmart(this.browserLanguage);

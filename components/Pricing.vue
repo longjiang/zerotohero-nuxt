@@ -25,11 +25,11 @@
             text-align: left;
           "
           ><span style="display: block; margin-bottom: 0px; line-height: 0.4">
-            {{ translate(plan.intervalText) }}
+            {{ $tb(plan.intervalText) }}
           </span>
         </span>
       </div>
-      <div>{{ translate(plan.description) }}</div>
+      <div>{{ $tb(plan.description) }}</div>
     </div>
   </div>
 </template>
@@ -74,23 +74,11 @@ export default {
     };
   },
   computed: {
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
   },
   methods: {
     selectPlan(plan) {
       this.selectedPlan = plan;
       this.$emit("plan-selected", plan);
-    },
-    translate(text, code) {
-      if (!code) code = this.browserLanguage;
-      if (this.$languages) return this.$languages.translate(text, code);
-      else return text;
     },
   },
 };

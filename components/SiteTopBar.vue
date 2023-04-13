@@ -12,7 +12,7 @@
           v-if="$route.path !== '/'"
         >
           <i class="fas fa-arrow-left"></i>
-          {{ translate("Back", browserLanguage) }}
+          {{ $tb("Back") }}
         </b-button>
       </div>
       <div class="site-top-bar-center">
@@ -47,7 +47,7 @@
         <client-only>
           <span v-if="!$route.params.l1 && !$route.params.l2">
             <router-link to="/go-pro" v-if="!pro" class="mr-2">
-              🚀 {{ translate("Go Pro") }}
+              🚀 {{ $tb("Go Pro") }}
             </router-link>
             <span
               to="/profile"
@@ -56,10 +56,10 @@
                 $auth && $auth.loggedIn && $auth.user && $auth.user.first_name
               "
             >
-              <router-link to="/logout">{{ translate("Logout") }}</router-link>
+              <router-link to="/logout">{{ $tb("Logout") }}</router-link>
             </span>
             <span v-else>
-              <router-link to="/login">{{ translate("Login") }}</router-link>
+              <router-link to="/login">{{ $tb("Login") }}</router-link>
             </span>
           </span>
         </client-only>
@@ -74,7 +74,7 @@
         <b-button
           :class="`top-bar-buttontop ml-2 mr-1`"
           variant="unstyled"
-          :title="translate('Quick Settings')"
+          :title="$tb('Quick Settings')"
           @click="showSettingsModal"
         >
           <i class="fas fa-cog"></i>
@@ -82,7 +82,7 @@
         <b-button
           :class="`top-bar-buttontop ml-2`"
           variant="unstyled"
-          :title="translate('Share')"
+          :title="$tb('Share')"
           v-if="canShare"
           @click="share"
         >
@@ -238,13 +238,6 @@ export default {
     flagCode() {
       if (this.$l2) return this.$languages.countryCode(this.$l2);
     },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
     canShare() {
       return typeof navigator !== "undefined" && navigator.share;
     },
@@ -262,11 +255,6 @@ export default {
     },
   },
   methods: {
-    translate(text, code) {
-      if (!code) code = this.browserLanguage;
-      if (this.$languages) return this.$languages.translate(text, code);
-      else return text;
-    },
     hasDashboard() {
       return (
         this.$auth.loggedIn &&
@@ -306,7 +294,7 @@ export default {
         if (this.native) {
           await Share.share({
             url: canonicalURL,
-            dialogTitle: this.translate("Share"),
+            dialogTitle: this.$tb("Share"),
           });
         } else if (this.canShare) {
           navigator.share({

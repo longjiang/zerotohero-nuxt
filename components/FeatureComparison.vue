@@ -1,17 +1,17 @@
 <template>
   <div class="pricing-cards">
     <div class="mb-3 bg-white pricing-card pricing-card-free">
-      <h5 class="">{{ translate("Free Account") }}</h5>
+      <h5 class="">{{ $tb("Free Account") }}</h5>
       <hr />
       <ul class="list-unstyled">
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          {{ translate("Access 600,000+ videos across 207+ languages") }}
+          {{ $tb("Access 600,000+ videos across 207+ languages") }}
         </li>
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
           {{
-            translate(
+            $tb(
               "See collocations, example sentences, verb inflections and Chinese character decomposition in the dictionary"
             )
           }}
@@ -19,48 +19,48 @@
         <!-- <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
           {{
-            translate(
+            $tb(
               "Read books, web pages or your own text with a popup dictionary"
             )
           }}
         </li>
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          {{ translate("Watch live TV in the target language") }}
+          {{ $tb("Watch live TV in the target language") }}
         </li> -->
         <li>
           <i class="fa-solid fa-lock text-warning mr-1"></i>
           {{
-            translate(
+            $tb(
               "See only first 10 lines of interactive transcripts with English translation"
             )
           }}
         </li>
         <li>
           <i class="fa-solid fa-lock text-warning mr-1"></i>
-          {{ translate("See only 2 examples of words in videos") }}
+          {{ $tb("See only 2 examples of words in videos") }}
         </li>
       </ul>
     </div>
     <div class="mb-3 bg-white pricing-card pricing-card-pro">
       <div class="badge-money-back text-center">
         <span>
-          <b style="font-size: 1.3em">{{ translate('14 day') }}</b>
+          <b style="font-size: 1.3em">{{ $tb('14 day') }}</b>
           <br />
-          {{ translate('money-back guarantee') }}
+          {{ $tb('money-back guarantee') }}
         </span>
       </div>
-      <h4 class="mt-5">{{ translate("Pro Account") }} 🚀</h4>
+      <h4 class="mt-5">{{ $tb("Pro Account") }} 🚀</h4>
       <hr class="" />
       <ul class="list-unstyled">
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          {{ translate("Access 600,000+ videos across 207+ languages") }}
+          {{ $tb("Access 600,000+ videos across 207+ languages") }}
         </li>
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
           {{
-            translate(
+            $tb(
               "See collocations, example sentences, verb inflections and Chinese character decomposition in the dictionary"
             )
           }}
@@ -68,19 +68,19 @@
         <!-- <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
           {{
-            translate(
+            $tb(
               "Read books, web pages or your own text with a popup dictionary"
             )
           }}
         </li>
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          {{ translate("Watch live TV in the target language") }}
+          {{ $tb("Watch live TV in the target language") }}
         </li> -->
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
           {{
-            translate(
+            $tb(
               "See complete interactive transcripts with English translation"
             )
           }}
@@ -88,7 +88,7 @@
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
           {{
-            translate(
+            $tb(
               "See hundreds of examples of words in videos, or in particular TV shows"
             )
           }}
@@ -109,20 +109,6 @@ export default {
   computed: {
     native() {
       return Capacitor.isNativePlatform();
-    },
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
-  },
-  methods: {
-    translate(text, code) {
-      if (!code) code = this.browserLanguage;
-      if (this.$languages) return this.$languages.translate(text, code);
-      else return text;
     },
   },
 };

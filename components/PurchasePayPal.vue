@@ -14,17 +14,17 @@
         class="alert alert-warning p-3 text-center"
         v-if="paypalPaymentStatus === 'cancelled'"
       >
-        {{ translate("It seems like you've cancelled the checkout, please try again.") }}
+        {{ $tb("It seems like you've cancelled the checkout, please try again.") }}
       </div>
       <div
         class="alert alert-warning p-3 text-center"
         v-if="paypalPaymentStatus === 'error'"
       >
         <p>
-          {{ translate("We're sorry, your payment didn't work this time, please try again.") }}
+          {{ $tb("We're sorry, your payment didn't work this time, please try again.") }}
         </p>
         <p>
-          {{ translate('If you need further assistance, please contact support') }}: <a href="mailto:jon.long@zerotohero.ca">{{ translate('Send us an email') }}</a>
+          {{ $tb('If you need further assistance, please contact support') }}: <a href="mailto:jon.long@zerotohero.ca">{{ $tb('Send us an email') }}</a>
         </p>
       </div>
     </div>
@@ -91,20 +91,8 @@ export default {
     }
   },
   computed: {
-    browserLanguage() {
-      if (process.browser) {
-        let code = navigator.language.replace(/-.*/, "");
-        return code;
-      }
-      return "en";
-    },
   },
   methods: {
-    translate(text, code) {
-      if (!code) code = this.browserLanguage;
-      if (this.$languages) return this.$languages.translate(text, code);
-      else return text;
-    },
     onPayPalPaymentAuthorized(e) {
       // {
       //   "intent": "sale",
