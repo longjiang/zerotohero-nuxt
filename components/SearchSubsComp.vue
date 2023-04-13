@@ -169,22 +169,23 @@
         :ref="`youtube-${hitIndex}`"
         class="main-dark"
         v-bind="{
-          type: 'youtube',
-          video: currentHit.video,
-          showAnimation: !reels,
-          initialLayout: 'vertical',
-          startLineIndex: Math.max(startLineIndex, 0),
-          speed,
-          show: currentHit.show,
-          showType: currentHit.showType,
-          showFullscreenToggle: true,
-          skin: 'dark',
           autoload: true,
           autoplay: navigated,
-          showLineList: false,
-          showInfo: true,
           episodes: hits.map((h) => h.video),
           forcePro: true,
+          initialLayout: 'vertical',
+          show: currentHit.show,
+          showInfoButton: true,
+          showAnimation: !reels,
+          showFullscreenToggle: true,
+          showInfo: true,
+          showLineList: false,
+          showType: currentHit.showType,
+          skin: 'dark',
+          speed,
+          startLineIndex: Math.max(startLineIndex, 0),
+          type: 'youtube',
+          video: currentHit.video,
         }"
         @previous="goToPrevHit"
         @next="goToNextHit"
