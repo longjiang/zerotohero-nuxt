@@ -80,9 +80,10 @@
           >
         </h4>
         <LazyYouTubeVideoList
+          v-if="sortedVideos"
           :noThumbs="false"
           :updateVideos="updateVideos"
-          :videos="videos"
+          :videos="sortedVideos"
           :checkSubs="false"
           :assignLessonMode="true"
           :lesson="lesson"
@@ -90,13 +91,19 @@
           skin="dark"
         >
           <template v-slot:footer="{ video }">
-            <div>"{{ video.matches.map((w) => w.head).join(", ") }}"</div>
+            <div>
+              {{ video.lesson }}"{{
+                video.matches.map((w) => w.head).join(", ")
+              }}"
+            </div>
             <b-button @click="addVideoToLesson(video)" class="mt-2 btn-sm"
               >Add to Lesson</b-button
             >
           </template>
         </LazyYouTubeVideoList>
-        <div class="text-center mt-3 mb-3"><Loader :sticky="true" v-if="loading" /></div>
+        <div class="text-center mt-3 mb-3">
+          <Loader :sticky="true" v-if="loading" />
+        </div>
       </div>
     </div>
   </div>
@@ -118,8 +125,41 @@ export default {
       updateLessonVideos: 0,
       updateVideos: 0,
       matchedWordsKey: 0,
-      loading: false
+      loading: false,
     };
+  },
+  computed: {
+    $l1() {
+      return this.$store.state.settings.l1;
+    },
+    $l2() {
+      return this.$store.state.settings.l2;
+    },
+    unmatchedWords() {
+      return this.words.filter(
+        (word) => !this.matchedWords.map((w) => w.id).includes(word.id)
+      );
+    },
+    sortedVideos() {
+      if (!this.videos) return []
+      let videos = this.videos
+        .sort((a, b) => {
+          return b.views - a.views;
+        })
+        .sort((a, b) => {
+          return (
+            Math.round(a.parsedDuration / 300) * 300 -
+            Math.round(b.parsedDuration / 300) * 300
+          );
+        })
+        .sort((a, b) => {
+          let aMatchCount = a.matches?.length || 0;
+          let bMatchCount = b.matches?.length || 0;
+          return bMatchCount - aMatchCount;
+        });
+      videos = Helper.uniqueByValue(videos, "youtube_id");
+      return videos
+    },
   },
   components: {
     WordList,
@@ -140,19 +180,6 @@ export default {
     await this.getVideos();
     this.updateVideos++;
     this.updateLessonVideos++;
-  },
-  computed: {
-    $l1() {
-      return this.$store.state.settings.l1;
-    },
-    $l2() {
-      return this.$store.state.settings.l2;
-    },
-    unmatchedWords() {
-      return this.words.filter(
-        (word) => !this.matchedWords.map((w) => w.id).includes(word.id)
-      );
-    },
   },
   methods: {
     async refresh() {
@@ -231,9 +258,9 @@ export default {
               video.matches = this.matchWords(video).filter(
                 (word) => !this.matchedWords.map((w) => w.id).includes(word.id)
               );
-              video.parsedDuration = video.duration ? timeStringToSeconds(
-                parseDuration(video.duration)
-              ) : 0;
+              video.parsedDuration = video.duration
+                ? timeStringToSeconds(parseDuration(video.duration))
+                : 0;
             }
             return video;
           });
@@ -248,25 +275,11 @@ export default {
           return true;
         });
 
-        videos = videos
-          .sort((a, b) => {
-            return b.views / b.parsedDuration - a.views / a.parsedDuration;
-          })
-          // .sort((a, b) => {
-          //   return  - aMatchCount;
-          //   // return  bMatchCount / b.parsedDuration - aMatchCount / a.parsedDuration;
-          // })
-          .sort((a, b) => {
-            let aMatchCount = a.matches?.length || 0;
-            let bMatchCount = b.matches?.length || 0;
-            return bMatchCount - aMatchCount;
-            // return  bMatchCount / b.parsedDuration - aMatchCount / a.parsedDuration;
-          });
-        videos = Helper.uniqueByValue(videos, "youtube_id");
+        this.rankByViews(videos);
 
         this.videos = videos;
       }
-      this.loading = false
+      this.loading = false;
       return true;
     },
     async removeVideo(video) {
