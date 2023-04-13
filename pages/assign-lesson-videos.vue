@@ -62,8 +62,20 @@
           :lesson="lesson"
           :level="level"
           skin="dark"
-        />
-        <h4 class="mt-5 mb-4">More Videos <span @click="refresh()" class="text-success small"><u>Refresh</u></span></h4>
+        >
+          <template v-slot:footer="{ video }">
+            <div>"{{ video.matches.map((w) => w.head).join(", ") }}"</div>
+            <b-button @click="removeVideoFromLesson(video)" class="mt-2 btn-sm"
+              >Remove from Lesson</b-button
+            >
+          </template>
+        </LazyYouTubeVideoList>
+        <h4 class="mt-5 mb-4">
+          More Videos
+          <span @click="refresh()" class="text-success small"
+            ><u>Refresh</u></span
+          >
+        </h4>
         <LazyYouTubeVideoList
           :noThumbs="false"
           :updateVideos="updateVideos"
@@ -75,7 +87,7 @@
           skin="dark"
         >
           <template v-slot:footer="{ video }">
-            <div>"{{ video.matches.map(w => w.head).join(', ') }}"</div>
+            <div>"{{ video.matches.map((w) => w.head).join(", ") }}"</div>
             <b-button @click="addVideoToLesson(video)" class="mt-2 btn-sm"
               >Add to Lesson</b-button
             >
@@ -89,6 +101,7 @@
 <script>
 import WordList from "@/components/WordList";
 import Helper from "@/lib/helper";
+import { parseDuration, timeStringToSeconds } from "@/lib/utils";
 
 export default {
   props: ["level", "lesson"],
@@ -164,6 +177,24 @@ export default {
       this.updateLessonVideos++;
       return true;
     },
+    rankByViews(arr) {
+      // Sort the array in descending order based on the views property
+      const sortedArray = arr.slice().sort((a, b) => b.views - a.views);
+
+      // Iterate through the sorted array and add the rank property to each object
+      sortedArray.forEach((item, index) => {
+        // If it's the first item or the views are different from the previous item,
+        // assign the current index + 1 as the rank
+        if (index === 0 || sortedArray[index - 1].views !== item.views) {
+          item.viewRank = index + 1;
+        } else {
+          // If the views are the same as the previous item, assign the same viewRank
+          item.viewRank = sortedArray[index - 1].viewRank;
+        }
+      });
+
+      return sortedArray;
+    },
     async getVideos() {
       let words = this.unmatchedWords;
       this.videos = [];
@@ -175,14 +206,12 @@ export default {
           allWordForms = words.slice(0, 10).map((word) => word.head); // We're only using the head to make the search simpler
         }
         allWordForms = Helper.unique(allWordForms);
-        console.log({ words, allWordForms })
 
         let params = {
           l2Id: this.$l2.id,
           terms: allWordForms,
         };
         let newVideos = await this.$directus.searchCaptions(params);
-        console.log({ newVideos });
         videos = videos.concat(newVideos);
         videos = Helper.uniqueByValue(videos, "id");
 
@@ -193,37 +222,39 @@ export default {
               video.matches = this.matchWords(video).filter(
                 (word) => !this.matchedWords.map((w) => w.id).includes(word.id)
               );
+              video.parsedDuration = timeStringToSeconds(
+                parseDuration(video.duration)
+              );
             }
             return video;
           });
         }
+
+        // Do not return videos already in a lesson, or has more than 50 characters on any line
         videos = videos.filter((video) => {
+          if (video.lesson) return false;
           for (let line of video.subs_l2) {
             if (line.line.length > 50) return false;
           }
           return true;
         });
 
+        this.rankByViews(videos);
         videos = videos
+          // Sort by the length of video
           .sort((a, b) => {
-            let aScore = a.text ? a.text.length || 0 : 0;
-            let bScore = b.text ? b.text.length || 0 : 0;
-            return aScore - bScore;
-          })
-          .sort((a, b) => {
-            let aScore = a.matches ? a.matches.length || 0 : 0;
-            let bScore = b.matches ? b.matches.length || 0 : 0;
+            let aScore, bScore;
+            let aMatchCount = a.matches?.length || 0;
+            let bMatchCount = b.matches?.length || 0;
+            aScore =
+              (aMatchCount / a.parsedDuration) * 3 +
+              ((videos.length - a.viewRank) / videos.length) * 1;
+            bScore =
+              (bMatchCount / b.parsedDuration) * 3 +
+              ((videos.length - b.viewRank) / videos.length) * 1;
             return bScore - aScore;
           });
         videos = Helper.uniqueByValue(videos, "youtube_id");
-        if (this.lessonVideos.length > 0) {
-          videos = videos.filter((video) => {
-            let overlap = this.lessonVideos.filter(
-              (lessonVideo) => video.id === lessonVideo.id
-            );
-            return overlap.length === 0;
-          });
-        }
 
         this.videos = videos;
       }
@@ -249,22 +280,14 @@ export default {
       }
     },
     async removeVideoFromLesson(video) {
-      let response = await $.ajax({
-        url: `${this.$directus.youtubeVideosTableName(this.$l2.id)}/${
-          video.id
-        }`,
-        data: JSON.stringify({ level: null, lesson: null }),
-        type: "PATCH",
-        contentType: "application/json",
-        xhr: function () {
-          return window.XMLHttpRequest == null ||
-            new window.XMLHttpRequest().addEventListener == null
-            ? new window.ActiveXObject("Microsoft.XMLHTTP")
-            : $.ajaxSettings.xhr();
-        },
+      let payload = { level: null, lesson: null };
+      let updatedVideo = await this.$directus.patchVideo({
+        id: video.id,
+        l2Id: this.$l2.id,
+        payload,
       });
-      if (response && response.data) {
-        video = Object.assign(video, response.data);
+      if (updatedVideo) {
+        video = Object.assign(video, updatedVideo);
         this.lessonVideos = this.lessonVideos.filter((v) => v.id !== video.id);
         this.updateMatches();
         this.updateVideos++;
@@ -282,7 +305,6 @@ export default {
         this.lessonVideos.push(video);
         this.updateMatches();
         this.videos = this.videos
-          .filter((v) => v != video)
           .map((video) => {
             if (video.subs_l2) {
               video.matches = this.matchWords(video).filter(
@@ -291,21 +313,16 @@ export default {
             }
             return video;
           })
-          .sort((a, b) => {
-            let aScore = a.matches
-              ? Math.pow(a.matches.length, 4) / a.text.length || 0
-              : 0;
-            let bScore = b.matches
-              ? Math.pow(b.matches.length, 4) / b.text.length || 0
-              : 0;
-            return bScore - aScore;
+          .filter((v) => {
+            return v !== video && v.matches?.length > 0;
           });
       }
     },
     matchWords(video) {
       let matches = [];
       if (video.subs_l2) {
-        video.text = video.subs_l2.map((line) => line.line).join("\n");
+        if (!video.text)
+          video.text = video.subs_l2.map((line) => line.line).join("\n");
         if (this.words && this.words.length > 0) {
           for (let word of this.words) {
             if (
