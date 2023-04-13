@@ -4,6 +4,7 @@
       :class="{
         'annotate-wrapper': true,
         'annotate-with-translation': showTranslation && translationData,
+        'use-zoom': useZoom,
       }"
       v-observe-visibility="{
         callback: visibilityChanged,
@@ -300,6 +301,10 @@ export default {
     starttime: {
       type: Number,
     },
+    useZoom: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -348,7 +353,7 @@ export default {
   computed: {
     ...mapState("settings", ["l2Settings"]),
     quizMode() {
-      return this.l2SettingsOfL2?.quizMode
+      return this.l2SettingsOfL2?.quizMode;
     },
     level() {
       return this.$store.state.progress.progressLoaded
@@ -620,7 +625,8 @@ export default {
     },
     async getGrammar() {
       let grammar = await this.$getGrammar();
-      if (grammar) this.matchedGrammar = grammar.findInText(this.text, this.level);
+      if (grammar)
+        this.matchedGrammar = grammar.findInText(this.text, this.level);
     },
     async annotateInputBlur(e) {
       let newText = e.target.value;
@@ -645,7 +651,7 @@ export default {
       if (
         !this.annotating &&
         !this.annotated &&
-        (this.$hasFeature("dictionary"))
+        this.$hasFeature("dictionary")
       ) {
         if (slot) {
           this.convertToSentencesRecursive(slot.elm);
@@ -735,7 +741,7 @@ export default {
       return node;
     },
     tokenizationType(l2) {
-      let tokenizationType = "integral" // default
+      let tokenizationType = "integral"; // default
       if (l2.continua) {
         tokenizationType = "continua";
       } else if (
@@ -745,34 +751,40 @@ export default {
         tokenizationType = "integral";
       } else if (["de", "gsw", "no", "hy", "vi"].includes(l2.code)) {
         tokenizationType = "agglutenative";
-      } else if (
-        (l2.agglutinative) &&
-        l2.wiktionary &&
-        l2.wiktionary > 2000
-      ) {
+      } else if (l2.agglutinative && l2.wiktionary && l2.wiktionary > 2000) {
         tokenizationType = "agglutenative";
       }
       return tokenizationType;
     },
     async tokenize(text, batchId) {
       let html = "";
-      let dictionary = await this.$getDictionary()
-      let tokens = await dictionary.tokenize(text, this.tokenizationType(this.$l2));
-      this.tokenized[batchId] = tokens
+      let dictionary = await this.$getDictionary();
+      let tokens = await dictionary.tokenize(
+        text,
+        this.tokenizationType(this.$l2)
+      );
+      this.tokenized[batchId] = tokens;
       for (let index in this.tokenized[batchId]) {
         let token = this.tokenized[batchId][index];
         if (typeof token === "object") {
           html += `<WordBlock v-bind="wordBlockAttributes(${batchId},${index})">${token.text}</WordBlock>`;
         } else {
-          html += `<span class="word-block-unknown"><span class="word-block-segment">${token.replace(/\s/, '&nbsp;')}</span></span>` ;
+          html += `<span class="word-block-unknown"><span class="word-block-segment">${token.replace(
+            /\s/,
+            "&nbsp;"
+          )}</span></span>`;
         }
       }
       return html;
     },
     wordBlockAttributes(batchId, index) {
       let token = this.tokenized[batchId][index];
-      let text = token.text
-      let context = { text: this.text, youtube_id: this.youtube_id, starttime: this.starttime }; // { text, starttime = undefined, youtube_id = undefined}
+      let text = token.text;
+      let context = {
+        text: this.text,
+        youtube_id: this.youtube_id,
+        starttime: this.starttime,
+      }; // { text, starttime = undefined, youtube_id = undefined}
       let attrs = {
         transliterationprop: tr(text).replace(/"/g, ""),
         ref: "word-block",
@@ -784,9 +796,10 @@ export default {
         token,
         quizMode: this.quizMode,
       };
-      if (token.mappedPronunciation) attrs.mappedPronunciation = token.mappedPronunciation
-      if (token.pronunciation) attrs.transliterationprop = token.pronunciation
-      if (this.text === '（') console.log({attrs})
+      if (token.mappedPronunciation)
+        attrs.mappedPronunciation = token.mappedPronunciation;
+      if (token.pronunciation) attrs.transliterationprop = token.pronunciation;
+      if (this.text === "（") console.log({ attrs });
       return attrs;
     },
     convertToSentencesRecursive(node) {
@@ -1006,6 +1019,39 @@ export default {
   &:hover {
     background-color: #efefef;
     cursor: pointer;
+  }
+}
+
+.zerotohero-zoom-1 {
+  .annotate-wrapper.use-zoom {
+    .annotate-slot,
+    .word-block-segment {
+      font-size: calc(1rem * 1.25);
+    }
+  }
+}
+.zerotohero-zoom-2 {
+  .annotate-wrapper.use-zoom {
+    .annotate-slot,
+    .word-block-segment {
+      font-size: calc(1rem * 1.25 * 1.25);
+    }
+  }
+}
+.zerotohero-zoom-3 {
+  .annotate-wrapper.use-zoom {
+    .annotate-slot,
+    .word-block-segment {
+      font-size: calc(1rem * 1.25 * 1.25 * 1.25);
+    }
+  }
+}
+.zerotohero-zoom-4 {
+  .annotate-wrapper.use-zoom {
+    .annotate-slot,
+    .word-block-segment {
+      font-size: calc(1rem * 1.25 * 1.25 * 1.25 * 1.25);
+    }
   }
 }
 </style>

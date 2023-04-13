@@ -41,6 +41,7 @@
               showGrammar: true,
               youtube_id: this.video.youtube_id,
               starttime: this.line.starttime,
+              useZoom: true,
             }"
             :class="{
               'transcript-line-l2': true,

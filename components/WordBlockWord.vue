@@ -31,21 +31,15 @@
         class="word-block-segment"
         v-for="segment in mappedPronunciation"
         :key="`word-block-segment-${segment.surface}`"
-      >
-        <span
+      ><span
           class="word-block-definition"
           v-if="definition"
           v-html="definition"
-        ></span>
-        <span
+        ></span><span
           class="word-block-pinyin"
           v-if="segment.type === 'kanji' && phonetics"
-        >
-          {{ segment.reading }}
-        </span>
-        <span :class="wordBlockTextClasses">
-          {{ segment.surface }}
-        </span>
+        >{{ segment.reading }}</span><span :class="wordBlockTextClasses">
+          {{ segment.surface }}</span>
       </span><span class="word-block-text-byeonggi-wrapper">
         <span
           v-if="hanja"
