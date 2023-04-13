@@ -359,7 +359,6 @@ h6,
   color: #28a745 !important;
 }
 
-
 [data-hover-level="outside"]:hover .word-block-text-byeonggi,
 [data-hover-level="outside"].saved .word-block-text-byeonggi {
   opacity: 0.8;
@@ -650,6 +649,18 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
 }
 .text-primary {
   color: #fd4f1c !important;
+}
+
+.zerotohero-dark {
+  .text-contrast {
+    color: white;
+  }
+}
+
+.zerotohero-light {
+  .text-contrast {
+    color: #444;
+  }
 }
 
 .bg-primary,
@@ -1086,18 +1097,21 @@ button.bg-primary:focus {
 }
 
 .home-card {
-  background-color: rgba(228, 228, 228, 1);
-  border: 1px solid rgba(255, 255, 255, 0.9);
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
   height: 100%;
-  color: #444;
   :deep(.language-list) .language-list-item a {
     color: #000000cc !important;
   }
-  &.home-card-dark {
-    background-color: rgba(0, 0, 0, 0.5);
+  color: #444;
+  background-color: rgba(228, 228, 228, 1);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+}
+
+.zerotohero-dark {
+  .home-card {
+    background-color: rgb(48, 48, 48);
     border: 1px solid rgba(255, 255, 255, 0.226);
     border-top: 1px solid rgba(255, 255, 255, 0.5);
     border-bottom: 1px solid rgba(0, 0, 0, 0.5);

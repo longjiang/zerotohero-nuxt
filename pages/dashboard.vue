@@ -2,16 +2,12 @@
   {
     name: 'dashboard',
     path: '/dashboard',
-    meta: {
-      layout: 'full',
-      skin: 'dark'
-    }
   }
 </router>
 <template>
   <div>
     <client-only>
-      <SiteTopBar skin="dark" />
+      <SiteTopBar />
       <SocialHead
         title="Language Player | Master any language by comprehensible input."
         description="We provide TV shows with subtitles, music with lyrics, live TV channels, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” Our company, Zero to Hero Education, is also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
@@ -29,7 +25,7 @@
         <div class="container pb-5">
           <div :class="{ 'row mb-5': true }" >
             <div class="col-sm-12">
-              <div class="home-card p-2 pt-4 pb-4 bg-white">
+              <div :class="`home-card skin-${$skin} p-2 pt-4 pb-4`">
                 <h5 class="text-center mt-2 mb-1" v-if="$auth.user?.first_name">
                   {{ $auth.user.first_name
                   }}{{ translate("’s Language Dashboard") }}
@@ -46,7 +42,7 @@
           </div>
           <div class="row mt-5">
             <div class="col-sm-12">
-              <div class="home-card p-2 pt-4 pb-4 bg-white">
+              <div class="home-card p-2 pt-4 pb-4">
                 <h5 class="text-center mb-2" v-if="hasDashboard">
                   {{ translate('Learn another language') }}
                 </h5>
@@ -56,13 +52,13 @@
           </div>
           <div class="row mt-5">
             <div class="col-sm-12">
-              <div class="home-card p-2 pt-4 pb-4 bg-white">
+              <div class="home-card p-2 pt-4 pb-4">
                 <h5 class="text-center mb-3">
                   {{ translate('Tools for linguists') }}
                 </h5>
                 <div class="row pl-3 pr-3">
                   <div class="col-sm-12 col-md-4 mt-1 mb-1" v-for="link in linguisticsTools" :key="`linguistics-tools-link-${link.name}`">
-                    <router-link :to="link" class="text-dark"><i :class="link.icon" style="width: 2em; text-align: center"></i> {{ translate(link.title) }}</router-link>
+                    <router-link :to="link" class="text-contrast"><i :class="link.icon" style="width: 2em; text-align: center"></i> {{ translate(link.title) }}</router-link>
                   </div>
                 </div>
               </div>

@@ -5,7 +5,7 @@
         wide ? 'wide' : 'not-wide'
       } site-top-bar-${skin}`"
     >
-      <div>
+      <div class="site-top-bar-left">
         <b-button
           @click="$router.back()"
           variant="unstyled"
@@ -15,96 +15,37 @@
           {{ translate("Back", browserLanguage) }}
         </b-button>
       </div>
-      <span
-        :class="`logo ${
-          !params.xs ? 'logo-absolute-centered' : ''
-        } flex-1 text-center`"
-        v-if="!wide && $route.path !== '/'"
-      >
-        <router-link
-          :to="
-            $auth.loggedIn
-              ? $route.path === '/dashboard'
-                ? '/'
-                : '/dashboard'
-              : '/'
-          "
-          class="btn btn-unstyled"
-          title="Dashboard"
+      <div class="site-top-bar-center">
+        <span
+          :class="{
+            'logo flex-1 text-center': true,
+          }"
+          v-if="!wide && $route.path !== '/'"
         >
-          <img
-            src="/img/logo-play-circle-light.png"
-            alt=""
-            class="logo"
-            data-not-lazy
-          />
-          <span>Language Player</span>
-        </router-link>
-      </span>
-      <template v-if="$route.params.l1 && $route.params.l2">
-        <div>
           <router-link
-            :to="{ name: 'youtube-search' }"
-            :class="`btn top-bar-buttontop btn-unstyled link-unstyled mr-1`"
-            title="Search Videos"
+            :to="
+              $auth.loggedIn
+                ? $route.path === '/dashboard'
+                  ? '/'
+                  : '/dashboard'
+                : '/'
+            "
+            class="btn btn-unstyled"
+            title="Dashboard"
           >
-            <i class="fas fa-search"></i>
+            <img
+              src="/img/logo-play-circle-light.png"
+              alt=""
+              class="logo"
+              data-not-lazy
+            />
+            <span>Language Player</span>
           </router-link>
-          <b-button
-            :class="`top-bar-buttontop ml-2 mr-1`"
-            variant="unstyled"
-            v-if="$route.params.l1 && $route.params.l2"
-            :title="translate('Quick Settings')"
-            @click="showSettingsModal"
-          >
-            <i class="fas fa-cog"></i>
-          </b-button>
-          <b-button
-            :class="`top-bar-buttontop ml-2`"
-            variant="unstyled"
-            :title="translate('Share')"
-            v-if="canShare"
-            @click="share"
-          >
-            <i class="fas fa-share"></i>
-          </b-button>
-          <div
-            class="d-inline-block"
-            @mouseover="cycleFlags"
-            @mouseleave="stopCycling"
-            v-if="$route.params.l2 && $l2"
-          >
-            <span
-              @click="showPlaylistModal"
-              class="language-flag-and-name"
-              style="cursor: pointer"
-            >
-              <LanguageFlag
-                v-if="$l2 && flagCode"
-                ref="flag"
-                style="
-                  transform: scale(0.7);
-                  margin-right: -0.5rem;
-                  margin-bottom: -0.3rem;
-                "
-                :key="`top-bar-flag-${$l2.code}`"
-                :autocycle="false"
-                :language="$l2"
-                class="ml-2"
-              />
-              <span :class="`${!$route.params.l2 ? 'd-none' : ''} ml-1`">
-                <i
-                  class="fas fa-sort-down"
-                  style="position: relative; bottom: 0.2rem; opacity: 0.7"
-                ></i>
-              </span>
-            </span>
-          </div>
-        </div>
-      </template>
-      <template v-else>
+        </span>
+      </div>
+      <div class="site-top-bar-right">
         <client-only>
-          <div>
+          <span v-if="!$route.params.l1 && !$route.params.l2">
             <router-link to="/go-pro" v-if="!pro" class="mr-2">
               🚀 {{ translate("Go Pro") }}
             </router-link>
@@ -120,9 +61,66 @@
             <span v-else>
               <router-link to="/login">{{ translate("Login") }}</router-link>
             </span>
-          </div>
+          </span>
         </client-only>
-      </template>
+        <router-link
+          v-if="$route.params.l1 && $route.params.l2"
+          :to="{ name: 'youtube-search' }"
+          :class="`btn top-bar-buttontop btn-unstyled link-unstyled mr-1`"
+          title="Search Videos"
+        >
+          <i class="fas fa-search"></i>
+        </router-link>
+        <b-button
+          :class="`top-bar-buttontop ml-2 mr-1`"
+          variant="unstyled"
+          :title="translate('Quick Settings')"
+          @click="showSettingsModal"
+        >
+          <i class="fas fa-cog"></i>
+        </b-button>
+        <b-button
+          :class="`top-bar-buttontop ml-2`"
+          variant="unstyled"
+          :title="translate('Share')"
+          v-if="canShare"
+          @click="share"
+        >
+          <i class="fas fa-share"></i>
+        </b-button>
+        <div
+          class="d-inline-block"
+          @mouseover="cycleFlags"
+          @mouseleave="stopCycling"
+          v-if="$route.params.l2 && $l2"
+        >
+          <span
+            @click="showPlaylistModal"
+            class="language-flag-and-name"
+            style="cursor: pointer"
+          >
+            <LanguageFlag
+              v-if="$l2 && flagCode"
+              ref="flag"
+              style="
+                transform: scale(0.7);
+                margin-right: -0.5rem;
+                margin-bottom: -0.3rem;
+              "
+              :key="`top-bar-flag-${$l2.code}`"
+              :autocycle="false"
+              :language="$l2"
+              class="ml-2"
+            />
+            <span :class="`${!$route.params.l2 ? 'd-none' : ''} ml-1`">
+              <i
+                class="fas fa-sort-down"
+                style="position: relative; bottom: 0.2rem; opacity: 0.7"
+              ></i>
+            </span>
+          </span>
+        </div>
+      </div>
       <b-modal
         ref="settings-modal"
         size="sm"
@@ -133,7 +131,7 @@
         body-class="settings-modal-wrapper"
       >
         <div class="settings-modal">
-          <AnnotationSettings variant="toolbar" />
+          <QuickSettings />
         </div>
       </b-modal>
       <b-modal
@@ -166,14 +164,13 @@
   </container-query>
 </template>
 <script>
-import AnnotationSettings from "./AnnotationSettings.vue";
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
 import { Capacitor } from "@capacitor/core";
 import { Share } from "@capacitor/share";
 
 export default {
-  components: { AnnotationSettings, ContainerQuery },
+  components: { ContainerQuery },
   data() {
     return {
       keyword: undefined,
@@ -216,14 +213,6 @@ export default {
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
     isPWA() {
       return (
         (typeof navigator !== "undefined" && navigator.standalone) ||

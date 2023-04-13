@@ -142,7 +142,7 @@ export const mutations = {
   SET_L2_SETTINGS(state, l2Settings) {
     // This method might be called (by showfilter.vue) before the settings are loaded from storage
     // Make sure this does not overwrite what's in storage!
-    if (!state.l2Settings[state.l2.code]) return
+    if (!state.l2 || !state.l2Settings[state.l2.code]) return
     state.l2Settings[state.l2.code] = Object.assign(state.l2Settings[state.l2.code], l2Settings);
     if (typeof localStorage !== "undefined") {
       let loadedSettings = loadSettingsFromStorage();

@@ -118,6 +118,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.zerotohero-light {
+  .language-name {
+      color: #444;
+  }
+}
+
+.zerotohero-dark {
+  .language-name {
+      color: white;
+  }
+}
+
+
 .language-overview-item {
   display: flex;
   padding: 1rem 0;
@@ -138,7 +152,6 @@ export default {
     }
     .language-name {
       display: block;
-      color: #444;
       font-size: 0.8em;
       font-weight: bold;
       position: relative;

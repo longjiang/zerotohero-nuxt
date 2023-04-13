@@ -448,20 +448,8 @@ export default {
     this.setupWatchers();
   },
   computed: {
-    ...mapState("settings", ["l2Settings", "l1", "l2"]),
     userIsAdmin() {
       return this.$auth.user && this.$auth.user.role == 1;
-    },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    l2SettingsOfL2() {
-      if (this.l2Settings) return this.l2Settings[this.$l2.code];
     },
   },
   methods: {

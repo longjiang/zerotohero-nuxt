@@ -37,7 +37,7 @@
     </div>
     <div class="progress-bar-wrapper">
       <b-progress
-        class="mt-2"
+        class="mt-2 language-progress-bar"
         :max="hoursNeeded"
         :show-value="progressBarShowValue"
         :height="progressBarHeight"
@@ -318,6 +318,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.zerotohero-dark {
+  .language-progress-bar {
+    background-color: #5f5f5f;
+  }
+}
 .description {
   margin-top: 2rem;
   clear: both;
