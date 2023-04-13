@@ -352,7 +352,6 @@ export default {
       }
       if (isFinal) {
         if (deltaX < 0 && this.edgeDetected === "right") {
-          console.log("FORWARD");
           this.transition = true;
           this.translateX = -1 * window.innerWidth;
           await Helper.timeout(500);
@@ -361,7 +360,6 @@ export default {
           this.translateX = 0;
         }
         if (deltaX > 0 && this.edgeDetected === "left") {
-          console.log("BACK");
           this.transition = true;
           this.translateX = window.innerWidth;
           await Helper.timeout(500);
@@ -408,7 +406,7 @@ export default {
       if (this.l1 && this.l2) {
         let l1 = this.$languages.getSmart(this.l1.code);
         let l2 = this.$languages.getSmart(this.l2.code);
-        this.$store.commit("settings/SET_L1_L2", { l1, l2 });
+        this.$store.dispatch("settings/setL1L2", { l1, l2 });
       }
     },
     addFullHistoryItem(path) {

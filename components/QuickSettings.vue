@@ -209,7 +209,6 @@ export default {
     this.loadSettings();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "settings/LOAD_SETTINGS") {
-        console.log("Mutation: settings/LOAD_SETTINGS")
         this.loadSettings();
       }
     });
@@ -226,7 +225,6 @@ export default {
       if (!this.$l2Settings) return;
       for (let property in defaultSettings) {
         if (this[property] !== this.$l2Settings[property]) {
-          console.log("Loading setting", property, this.$l2Settings[property])
           this[property] = this.$l2Settings[property];
         }
       }
