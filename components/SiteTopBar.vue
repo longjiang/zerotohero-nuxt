@@ -126,7 +126,7 @@
         size="sm"
         centered
         hide-footer
-        :title="$t('Quick Settings')"
+        :title="$tb('Quick Settings')"
         modal-class="safe-padding-top mt-4"
         body-class="settings-modal-wrapper"
       >

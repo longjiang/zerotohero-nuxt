@@ -12,8 +12,8 @@
         <span class="annotation-setting-icon">
           <i class="far fa-rocket-launch"></i>
         </span>
-        <span v-if="quizMode">{{ $t("Quiz Mode On") }}</span>
-        <span v-if="!quizMode">{{ $t("Quiz Mode Off") }}</span>
+        <span v-if="quizMode">{{ $tb("Quiz Mode On") }}</span>
+        <span v-if="!quizMode">{{ $tb("Quiz Mode Off") }}</span>
       </button>
       <button
         @click="autoPronounce = !autoPronounce"
@@ -25,8 +25,8 @@
           <i class="fa fa-volume-up" v-if="autoPronounce"></i>
           <i class="fas fa-volume-mute" v-else></i>
         </span>
-        <span v-if="autoPronounce">{{ $t("Auto pronounce words") }}</span>
-        <span v-else>{{ $t("Do not auto pronounce words") }}</span>
+        <span v-if="autoPronounce">{{ $tb("Auto pronounce words") }}</span>
+        <span v-else>{{ $tb("Do not auto pronounce words") }}</span>
       </button>
       <button
         @click="showPinyin = !showPinyin"
@@ -56,7 +56,7 @@
           </ruby>
           <span v-else>[pʰ]</span>
         </span>
-        {{ $t(showPinyin ? "Phonetics on" : "Phonetics off") }}
+        {{ $tb(showPinyin ? "Phonetics on" : "Phonetics off") }}
       </button>
       <button
         v-if="$l2.han"
@@ -70,7 +70,7 @@
           <span v-if="!useTraditional">简</span>
         </span>
         {{
-          $t(
+          $tb(
             useTraditional ? "Traditional characters" : "Simplified characters"
           )
         }}
@@ -84,7 +84,7 @@
         <span class="annotation-setting-icon">
           <i class="fas fa-language"></i>
         </span>
-        {{ $t(showTranslation ? "Translation on" : "Translation off") }}
+        {{ $tb(showTranslation ? "Translation on" : "Translation off") }}
       </button>
       <button
         @click="showQuickGloss = !showQuickGloss"
@@ -95,7 +95,7 @@
         <span class="annotation-setting-icon">
           <i class="fas fa-text-size"></i>
         </span>
-        {{ $t(showQuickGloss ? "Quick Gloss on" : "Quick Gloss off") }}
+        {{ $tb(showQuickGloss ? "Quick Gloss on" : "Quick Gloss off") }}
       </button>
       <button
         v-if="$l2.code === 'ko'"
@@ -108,7 +108,7 @@
           자
           <small style="font-size: 0.5em">字</small>
         </span>
-        {{ $t(showByeonggi ? "Hanja On" : "Hanja Off") }}
+        {{ $tb(showByeonggi ? "Hanja On" : "Hanja Off") }}
       </button>
       <button
         v-if="$l2.code === 'vi'"
@@ -121,7 +121,7 @@
           Tự
           <small style="font-size: 0.5em">字</small>
         </span>
-        {{ $t(showByeonggi ? "Han Tự On" : "Han Tự Off") }}
+        {{ $tb(showByeonggi ? "Han Tự On" : "Han Tự Off") }}
       </button>
 
       <button
@@ -129,14 +129,14 @@
         @click="zoomLevel = Math.max(zoomLevel - 1, 0)"
       >
         <span class="annotation-setting-icon">ᴛ</span>
-        {{ $t("Smaller text") }}
+        {{ $tb("Smaller text") }}
       </button>
       <button
         class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
         @click="zoomLevel = Math.min(zoomLevel + 1, 4)"
       >
         <span class="annotation-setting-icon">T</span>
-        {{ $t("Bigger text") }}
+        {{ $tb("Bigger text") }}
       </button>
       <hr />
     </div>
@@ -151,8 +151,8 @@
           <i v-if="skin === 'dark'" class="fa fa-moon"></i>
           <i v-else class="fa fa-sun"></i>
         </span>
-        <span v-if="skin === 'dark'">{{ $t("Dark Mode") }}</span>
-        <span v-else>{{ $t("Light Mode") }}</span>
+        <span v-if="skin === 'dark'">{{ $tb("Dark Mode") }}</span>
+        <span v-else>{{ $tb("Light Mode") }}</span>
       </button>
       <button
         v-if="userIsAdmin"
@@ -164,12 +164,13 @@
         <span class="annotation-setting-icon">
           <i class="fa fa-wrench"></i>
         </span>
-        <span>{{ $t("Admin Mode") }}</span>
+        <span>{{ $tb("Admin Mode") }}</span>
       </button>
+      <hr />
       <div :class="`annotation-setting-toggle`">
         <router-link :to="{ name: 'settings' }" class="text-success">
           <i class="fa-solid fa-gears annotation-setting-icon"></i>
-          {{ $t("More Settings") }}
+          {{ $tb("More Settings") }}
           <i class="fa-solid fa-chevron-right"></i>
         </router-link>
       </div>
