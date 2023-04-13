@@ -5,7 +5,7 @@
   }
 </router>
 <template>
-  <div class="main pt-5 pb-5">
+  <div class="main pb-5">
     <SocialHead
       :title="`My ${$l2.name} Text | Language Player`"
       :description="`Read ${$l2.name} text with phonetic annotation dictionary lookup. Save new words for review.`"
@@ -15,6 +15,7 @@
         <div class="col-sm-12">
           <div v-if="loaded">
             <div v-if="savedtexts.length > 0">
+              <h4 class="mb-4 text-center">{{ $t('My Texts') }}</h4>
               <div
                 v-for="savedText in savedtexts"
                 :key="savedText.id"
