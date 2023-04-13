@@ -111,8 +111,10 @@ export default {
     ...mapState("fullHistory", ["fullHistory"]),
     l2SettingsOfL2() {
       let l2SettingsOfL2 = {};
-      if (this.l2Settings && this.l2Settings[this.l2.code])
-        l2SettingsOfL2 = this.l2Settings[this.l2.code];
+      if (this.l2) {
+        if (this.l2Settings && this.l2Settings[this.l2.code])
+          l2SettingsOfL2 = this.l2Settings[this.l2.code];
+      }
       return l2SettingsOfL2;
     },
     $adminMode() {
