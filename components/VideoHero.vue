@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative" v-observe-visibility="visibilityChanged">
+  <div class="video-hero-wrapper" v-observe-visibility="visibilityChanged">
     <div
       :class="{
         'video-hero': true,
@@ -242,6 +242,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.video-hero-wrapper {
+  position: relative;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
 .video-hero {
   overflow: hidden;
   position: relative;

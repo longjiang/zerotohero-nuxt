@@ -6,11 +6,6 @@
 </router>
 <template>
   <div>
-    <VideoHero
-      v-if="heroVideo"
-      :video="heroVideo"
-      @videoUnavailable="onVideoUnavailable"
-    />
     <div class="container pb-5">
       <SocialHead
         :title="`Learn ${$l2.name} with Videos | Language Player`"
@@ -32,6 +27,12 @@
       </div>
       <div class="row" v-else>
         <div class="col-sm-12">
+          <VideoHero
+            v-if="heroVideo"
+            :video="heroVideo"
+            @videoUnavailable="onVideoUnavailable"
+            class="mb-5"
+          />
           <div :class="{ 'media-section': true, 'd-none': !hasWatchHistory }">
             <h3 class="media-seaction-heading">
               {{ $t('Continue Studying') }}

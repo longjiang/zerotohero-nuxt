@@ -34,8 +34,6 @@
                   : show.title
               "
               @videoUnavailable="onVideoUnavailable"
-              class="rounded"
-              style="overflow: hidden"
             />
             <div
               :class="{
