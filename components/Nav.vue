@@ -1,8 +1,7 @@
 <template>
   <div
     :class="{
-      'zth-nav-light': skin === 'light',
-      'zth-nav-dark': skin === 'dark',
+      [`zth-nav-${$skin}`]: true,
       'zth-nav-menu-bar': variant === 'menu-bar',
       'zth-nav-side-bar': variant === 'side-bar',
       'zth-nav-bottom': variant === 'bottom-bar',
@@ -277,18 +276,6 @@ export default {
     },
     currentParent() {
       return this.findParent(this.$route.name);
-    },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
     },
     levels() {
       // Levels feature works for Chinese, German, English, Spanish, French and Arabic only

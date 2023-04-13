@@ -4,7 +4,7 @@
       :class="{
         'video-hero': true,
         unavailable: videoUnavailable,
-        [`skin-${skin}`]: true,
+        [`skin-${$skin}`]: true,
       }"
       @click="play"
       v-if="wide"
@@ -113,9 +113,6 @@ export default {
       if (this.l2Settings && this.l2Settings[this.$l2.code])
         l2SettingsOfL2 = this.l2Settings[this.$l2.code];
       return l2SettingsOfL2;
-    },
-    skin() {
-      return this.l2SettingsOfL2?.darkMode ? "dark" : "light";
     },
     isMobile() {
       return Helper.isMobile();
@@ -235,7 +232,6 @@ export default {
     video() {
       this.videoUnavailable = false;
     },
-    skin() {},
   },
   methods: {
     play() {

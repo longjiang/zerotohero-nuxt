@@ -18,7 +18,6 @@ export const defaultL2Settings = {
   talkFilter: "all", // By default we search all talks.
   autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
   quizMode: false,
-  darkMode: true,
   disableAnnotation: false,
   zoomLevel: 0
 }
@@ -43,6 +42,7 @@ export const state = () => {
     dictionary: undefined,
     dictionaryName: undefined,
     adminMode: false,
+    skin: 'dark',
     hideWord: false, // as used in the <HideDefs> component
     hidePhonetics: false, // as used in the <HideDefs> component
     hideDefinitions: false, // as used in the <HideDefs> component

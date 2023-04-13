@@ -136,15 +136,17 @@
         {{ $t("Bigger text") }}
       </button>
       <button
-        @click="darkMode = !darkMode"
+        @click="skin = skin === 'light' ? 'dark' : 'light'"
         :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
-          darkMode ? 'annotation-setting-toggle-active' : ''
+          skin === 'dark' ? 'annotation-setting-toggle-active' : ''
         }`"
       >
         <span class="annotation-setting-icon">
-          <i class="fa fa-moon"></i>
+          <i v-if="skin === 'dark'" class="fa fa-moon"></i>
+          <i v-else class="fa fa-sun"></i>
         </span>
-        <span>{{ $t("Dark Mode") }}</span>
+        <span v-if="skin === 'dark'">{{ $t("Dark Mode") }}</span>
+        <span v-else>{{ $t("Light Mode") }}</span>
       </button>
       <button
         v-if="userIsAdmin"
@@ -425,7 +427,7 @@ const defaultSettings = {
   showByeonggi: undefined,
   disableAnnotation: undefined,
   quizMode: false,
-  darkMode: true
+  skin: null
 };
 export default {
   props: {
@@ -483,12 +485,17 @@ export default {
     },
   },
   watch: {
-    // set up in setupWatchers()
     adminMode() {
       this.$store.dispatch("settings/setGeneralSettings", {
         adminMode: this.adminMode,
       });
     },
+    skin() {
+      this.$store.dispatch("settings/setGeneralSettings", {
+        skin: this.skin,
+      });
+    },
+    // More watchers are set up in setupWatchers()
   },
 };
 </script>

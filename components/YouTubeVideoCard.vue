@@ -5,7 +5,7 @@
       {
         'play-button-wrapper': true,
         'youtube-video-card-wrapper': true,
-        [`skin-${skin}`]: true,
+        [`skin-${$skin}`]: true,
         over,
         media: true,
         nosubs:
@@ -356,9 +356,6 @@ export default {
     showPlayButton: {
       default: false,
     },
-    skinOverride: {
-      default: null,
-    },
     view: {
       type: String,
       default: "grid", // or 'list'
@@ -383,15 +380,6 @@ export default {
   computed: {
     ...mapState("history", ["history"]),
     ...mapState("settings", ["l2Settings"]),
-    l2SettingsOfL2() {
-      let l2SettingsOfL2 = {};
-      if (this.l2Settings && this.l2Settings[this.$l2.code])
-        l2SettingsOfL2 = this.l2Settings[this.$l2.code];
-      return l2SettingsOfL2;
-    },
-    skin() {
-      return this.skinOverride ? this.skinOverride : this.l2SettingsOfL2?.darkMode ? "dark" : "light";
-    },
     language() {
       let language = this.$languages.l1s.find((l1) => l1.id === this.video.l2);
       return language;

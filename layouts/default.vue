@@ -11,7 +11,7 @@
         :l2="l2"
         :key="`nav-main-${l1.code}-${l2.code}`"
         :variant="wide ? 'side-bar' : 'bottom-bar'"
-        :skin="this.l2SettingsOfL2.darkMode ? 'dark' : 'light'"
+        :skin="$skin"
         @collapsed="updateCollapsed"
         level="main"
       />
@@ -20,7 +20,7 @@
       <client-only>
         <SiteTopBar
           v-if="showTopBar"
-          :skin="this.l2SettingsOfL2.darkMode ? 'dark' : 'light'"
+          :skin="$skin"
           variant="menu-bar"
           :badge="savedWordsCount + savedPhrasesCount"
           :wide="wide"
@@ -37,7 +37,6 @@
           v-bind="{
             l1,
             l2,
-            skin: this.l2SettingsOfL2.darkMode ? 'dark' : 'light',
           }"
           :key="`nav-secondary-${l1.code}-${l2.code}`"
         />
@@ -59,7 +58,7 @@
         <Nuxt
           :class="{
             'nuxt-content': true,
-            'main-dark': this.l2SettingsOfL2.darkMode,
+            'main-dark': this.$l2SettingsOfL2.darkMode,
             
           }"
         />
@@ -87,7 +86,6 @@ export default {
       focus: false,
       loaded: false,
       wide: false,
-      skin: "light",
       dictionaryCredit: "",
       settingsLoaded: undefined,
       fullPageRoutes: ["index", "sale"],
@@ -109,18 +107,6 @@ export default {
     ...mapState("settings", ["l2Settings", "l1", "l2"]),
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
-    l2SettingsOfL2() {
-      let l2SettingsOfL2 = {};
-      if (this.l2) {
-        if (this.l2Settings && this.l2Settings[this.l2.code])
-          l2SettingsOfL2 = this.l2Settings[this.l2.code];
-      }
-      return l2SettingsOfL2;
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
-    },
     showTopBar() {
       if (this.$route.meta && this.$route.meta.layout === "full") return false;
       else
@@ -152,14 +138,14 @@ export default {
         "zerotohero-wide": this.wide,
         "zerotohero-not-wide": !this.wide,
         "zerotohero-wide-collapsed": this.collapsed,
-        "zerotohero-dark": this.l2SettingsOfL2.darkMode,
-        "zerotohero-light":
-          this.$route.meta && this.$route.meta.skin === "light",
         "zerotohero-with-mini-player":
           this.overlayPlayerYouTubeId && this.overlayPlayerMinimized,
         "zerotohero-with-nav":
           this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2,
       };
+      if (this.$skin) {
+        classes[`zerotohero-${this.$skin}`] = true
+      }
       classes[`route-${this.$route.name}`] = true;
       if (
         this.$route.params.l1 &&
@@ -169,20 +155,20 @@ export default {
       ) {
         this.l1, this.l2;
         classes["zerotohero-with-nav"] = true;
-        if (this.l2SettingsOfL2) {
+        if (this.$l2SettingsOfL2) {
           classes = Object.assign(classes, {
-            "show-pinyin": this.l2SettingsOfL2.showPinyin,
+            "show-pinyin": this.$l2SettingsOfL2.showPinyin,
             "show-pinyin-for-saved":
-              !this.l2SettingsOfL2.showPinyin && this.l2 && this.l2.han,
-            "show-simplified": !this.l2SettingsOfL2.useTraditional,
-            "show-traditional": this.l2SettingsOfL2.useTraditional,
-            "show-definition": this.l2SettingsOfL2.showDefinition,
-            "show-translation": this.l2SettingsOfL2.showTranslation,
-            "show-quick-gloss": this.l2SettingsOfL2.showQuickGloss,
-            "show-byeonggi": this.l2SettingsOfL2.showByeonggi,
-            "use-serif": this.l2SettingsOfL2.useSerif,
+              !this.$l2SettingsOfL2.showPinyin && this.l2 && this.l2.han,
+            "show-simplified": !this.$l2SettingsOfL2.useTraditional,
+            "show-traditional": this.$l2SettingsOfL2.useTraditional,
+            "show-definition": this.$l2SettingsOfL2.showDefinition,
+            "show-translation": this.$l2SettingsOfL2.showTranslation,
+            "show-quick-gloss": this.$l2SettingsOfL2.showQuickGloss,
+            "show-byeonggi": this.$l2SettingsOfL2.showByeonggi,
+            "use-serif": this.$l2SettingsOfL2.useSerif,
           });
-          classes[`zerotohero-zoom-${this.l2SettingsOfL2.zoomLevel}`] = true;
+          classes[`zerotohero-zoom-${this.$l2SettingsOfL2.zoomLevel}`] = true;
         }
         classes[`l1-${this.l1.code}`] = true;
         classes[`l2-${this.l2.code}`] = true;

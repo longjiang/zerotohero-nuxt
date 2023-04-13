@@ -130,7 +130,8 @@ export default {
     ['nuxt-i18n', {
       vueI18n: {
         fallbackLocale: 'en',
-        dateTimeFormats
+        dateTimeFormats,
+        silentTranslationWarn: true
       }
     }],
     '@nuxtjs/google-fonts',
@@ -210,6 +211,7 @@ export default {
     '~plugins/jw.js',
     '~plugins/directus.js',
     '~plugins/subs.js',
+    '~/plugins/global-mixin',
     { src: '~plugins/d-player.js', mode: 'client' },
     { src: '~/plugins/stripe.js', mode: 'client' },
     { src: '~/plugins/paypal.js', mode: 'client' },

@@ -2,9 +2,6 @@
   {
     path: '/:l1/:l2/explore-media',
     props: true,
-    meta: {
-      skin: 'dark'
-    }
   }
 </router>
 <template>
@@ -46,7 +43,6 @@
             <WatchHistoryComp
               :l2="$l2"
               ref="watch-history"
-              skin="dark"
               :class="{ 'mt-3': true, 'd-none': !hasWatchHistory }"
               :showDate="false"
               :showClear="false"
@@ -130,7 +126,6 @@
               :videos="random(music).slice(0, 12)"
               :showAdminToolsInAdminMode="false"
               :showDate="true"
-              :skin="skin"
             />
           </div>
 
@@ -153,7 +148,6 @@
                 :videos="random(movies).slice(0, 12)"
                 :showAdminToolsInAdminMode="false"
                 :showDate="true"
-                skin="dark"
               />
             </div>
           </div>
@@ -218,7 +212,6 @@
                 :videos="random(news).slice(0, 12)"
                 :showAdminToolsInAdminMode="false"
                 :showDate="true"
-                :skin="skin"
               />
             </div>
           </div>
@@ -288,15 +281,6 @@ export default {
         this.loadShows();
       }
     });
-    // if (!this.videos || this.videos.length === 0) {
-    //   let videos = await this.getVideos({
-    //     limit: 200,
-    //     sort: "-likes",
-    //   });
-    //   if (this.musicShow?.id) videos = videos.filter(v => v.tv_show !== this.musicShow.id)
-    //   videos = shuffle(videos)
-    //   this.videos = videos
-    // }
     await Helper.timeout(5000);
     this.loading = false; // Incase resources fail to load, at least show them
   },
@@ -316,9 +300,6 @@ export default {
         l2SettingsOfL2 = this.l2Settings[this.$l2.code];
       return l2SettingsOfL2;
     },
-    skin() {
-      return this.l2SettingsOfL2?.darkMode ? "dark" : "light";
-    },
     languageLevel() {
       if (
         this.progress &&
@@ -329,18 +310,6 @@ export default {
     },
     audiobooks() {
       return this.talks.filter((t) => t.audiobook);
-    },
-    $l1() {
-      if (typeof this.$store.state.settings.l1 !== "undefined")
-        return this.$store.state.settings.l1;
-    },
-    $l2() {
-      if (typeof this.$store.state.settings.l2 !== "undefined")
-        return this.$store.state.settings.l2;
-    },
-    $adminMode() {
-      if (typeof this.$store.state.settings.adminMode !== "undefined")
-        return this.$store.state.settings.adminMode;
     },
     levels() {
       let langLevels = languageLevels(this.$l2);

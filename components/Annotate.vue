@@ -358,9 +358,6 @@ export default {
         l2SettingsOfL2 = this.l2Settings[this.$l2.code];
       return l2SettingsOfL2;
     },
-    skin() {
-      return this.l2SettingsOfL2?.darkMode ? "dark" : "light";
-    },
     quizMode() {
       return this.l2SettingsOfL2?.quizMode;
     },
