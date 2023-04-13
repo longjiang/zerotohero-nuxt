@@ -30,7 +30,7 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-12">
-            <div class="hero-video-info">
+            <div class="hero-video-info text-left">
               <div class="hero-video-show-type" v-if="show">
                 <i :class="`${show.icon} mr-1`"></i>
                 {{ $t(show.type) }}
@@ -38,7 +38,7 @@
               <h4 class="hero-video-title">
                 {{ displayTitle }}
               </h4>
-              <div class="text-left">
+              <div>
                 <router-link
                   v-if="!videoUnavailable"
                   :to="{

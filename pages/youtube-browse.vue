@@ -9,11 +9,6 @@
 </router>
 <template>
   <div :class="`youtube-browse skin-${$skin}`">
-    <VideoHero
-      v-if="heroVideo"
-      :video="heroVideo"
-      @videoUnavailable="onVideoUnavailable"
-    />
     <div class="youtube-browse container pb-5">
       <SocialHead
         :title="`Study ${$l2.name} videos with subs | Language Player`"
@@ -23,6 +18,12 @@
       />
       <div class="row mb-2" v-if="!kidsOnly">
         <div class="col-sm-12 text-center">
+          <VideoHero
+            v-if="heroVideo"
+            :video="heroVideo"
+            @videoUnavailable="onVideoUnavailable"
+            class="mb-5"
+          />
           <span
             v-if="Object.keys(categories).length > 0"
             @click="showModal('categories')"
