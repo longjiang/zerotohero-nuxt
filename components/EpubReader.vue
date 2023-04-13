@@ -1,8 +1,7 @@
 <template>
   <div class="epub-reader">
     <input type="file" @change="openEpub" accept=".epub" />
-    <div ref="bookContainer" class="book-container"></div>
-    <div v-if="book">
+    <div v-if="book" ref="book">
       <b-modal
         ref="tocModal"
         :title="$t('Table of Contents')"
@@ -36,6 +35,7 @@
           page,
           key: `text-with-speech-bar-${epubFileName}-${currentChapterHref}-${page}`,
         }"
+        ref="reader"
         @showTOC="onShowTOC"
         @previousPage="onPreviousPage"
         @nextPage="onNextPage"
@@ -120,12 +120,13 @@ export default {
     },
     onGoToPage(page) {
       this.page = page;
+      if (window) window.scrollTo({ top: 0, behavior: "smooth" });
     },
     onNextPage() {
-      this.page = this.page + 1;
+      this.onGoToPage(this.page + 1);
     },
     onPreviousPage() {
-      this.page = this.page - 1;
+      this.onGoToPage(this.page - 1);
     },
     async openEpub(event) {
       this.coverTapped = false;
@@ -202,8 +203,10 @@ export default {
       }
 
       this.currentChapterHTML = chapterHTML;
+      this.page = 1;
       this.$refs.tocModal.hide();
       this.updateChapterNavigation();
+      if (window) window.scrollTo({ top: 0, behavior: "smooth" });
     },
     filterContentsByFragment(contents, startFragment, endFragment) {
       const parser = new DOMParser();
