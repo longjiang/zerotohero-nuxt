@@ -1,5 +1,5 @@
 <template>
-  <v-popover :open="open" placement="top" ref="popover">
+  <v-popover :open="open" placement="top" ref="popover" :popoverInnerClass="`tooltip-inner popover-inner skin-${$skin}`">
     <div
       v-on="popup ? { click: wordBlockClick } : {}"
       v-observe-visibility="visibilityChanged"

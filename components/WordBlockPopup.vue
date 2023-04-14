@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="word-block-popup">
     <div
       class="tooltip-images"
       :key="`tooltip-images-${text}`"
@@ -184,15 +184,16 @@
       v-if="words && words.length === 0 && loading === false"
       class="no-entry"
     >
-      <span
-        style="color: #999"
-        v-if="$hasFeature('transliteration')"
-      >
+      <span style="color: #999" v-if="$hasFeature('transliteration')">
         <span>{{ transliterate(text) }}</span>
         <Speak :text="text" class="ml-1" ref="speak" />
       </span>
       <div style="font-size: 1.5rem; font-weight: bold">
-        <router-link data-level="outside" :to="{name: 'phrase', params: {term: text}}">{{ text }} <i class="fa fa-chevron-right"></i></router-link>
+        <router-link
+          data-level="outside"
+          :to="{ name: 'phrase', params: { term: text } }"
+          >{{ text }} <i class="fa fa-chevron-right"></i
+        ></router-link>
         <span class="copy-button">
           <i class="ml-1 fa-regular fa-copy" @click="copyClick"></i>
         </span>
@@ -236,10 +237,10 @@ export default {
     phraseObj: Object,
     farsiRomanizations: Object,
     loading: {
-      default: false
+      default: false,
     },
     loadingImages: {
-      default: false
+      default: false,
     },
     context: {
       type: Object,
@@ -363,8 +364,31 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "~@/assets/scss/variables.scss";
+.tooltip-inner.skin-dark {
+  background: #161616;
+  .tooltip-arrow,
+  .tooltip-inner {
+    background: #161616;
+  }
+  hr {
+    border-color: #333;
+  }
+  .tooltip-entry + .tooltip-entry {
+    border-top: 1px solid #333;
+  }
+}
+.tooltip-inner.skin-light {
+  background: #fff;
+  .tooltip-arrow,
+  .tooltip-inner {
+    background: #fff;
+  }
+  .tooltip-entry + .tooltip-entry {
+    border-top: 1px solid #ccc;
+  }
+}
 
 .tooltip-inner {
   .word-block-pinyin,
@@ -393,7 +417,6 @@ export default {
 
 .tooltip {
   display: block !important;
-  $color: white;
   $height: 20rem;
   $width: 20rem;
   border: none;
@@ -493,7 +516,6 @@ export default {
     border-style: solid;
     position: absolute;
     margin: 5px;
-    border-color: $color;
   }
 
   .tooltip-inner {
@@ -501,8 +523,6 @@ export default {
     text-align: left;
     overflow-y: auto;
     overflow-x: hidden;
-    background: $color;
-    color: black;
     box-shadow: 0 5px 20px rgba(black, 0.2);
     max-width: $width;
     max-height: $height;
@@ -527,13 +547,8 @@ export default {
       }
     }
 
-    .tooltip-entry {
-      color: #666;
-    }
-
     .tooltip-entry + .tooltip-entry {
       margin-top: 1rem;
-      border-top: 1px solid #ccc;
       padding-top: 1rem;
     }
 

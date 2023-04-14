@@ -17,7 +17,6 @@
           <span
             class="word-type mt-3"
             v-if="showPOS && index === 0 && entry && entry.pos"
-            style="color: #999"
           >
             {{
               entry.gender
