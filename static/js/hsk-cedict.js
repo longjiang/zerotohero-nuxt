@@ -539,7 +539,7 @@ const Dictionary = {
     for (let token of tokenized) {
       if (!token) {
         tokens.push(" ");
-      } else if (token.pos === 'x') {
+      } else if (token.pos === 'x' && !this.isChinese(token.word)) {
         tokens.push(token.word);
       } else {
         tokens.push(token);
