@@ -826,7 +826,7 @@ button.bg-primary:focus {
   border-bottom: 1px solid #ececec;
   padding-bottom: 0.5rem;
   margin-bottom: 1rem;
-  color: #fd4f1c;
+  color: $primary-color;
 }
 
 .article-list-item .article-body {
@@ -859,13 +859,13 @@ button.bg-primary:focus {
 }
 
 .btn-default:hover {
-  background: #fd4f1c;
+  background: $primary-color;
   color: white;
 }
 
 .list-group-item.active {
-  background-color: #fd4f1c;
-  border-color: #fd4f1c;
+  background-color: $primary-color;
+  border-color: $primary-color;
 }
 
 .list-group-item.active:hover {
@@ -889,7 +889,7 @@ button.bg-primary:focus {
 .coupon-code {
   background-color: white;
   font-size: 1.2em;
-  color: #fd4f1c;
+  color: $primary-color;
   padding: 0.2rem 0.5rem;
   border-radius: 0.2rem;
 }

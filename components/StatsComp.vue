@@ -146,6 +146,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/variables.scss";
+
 .stats-dark {
   .stat-big-number {
     color: #1bd445;
@@ -154,7 +156,7 @@ export default {
 
 .stats-light {
   .stat-big-number {
-    color: #fd4f1c;
+    color: $primary-color;
   }
 }
 

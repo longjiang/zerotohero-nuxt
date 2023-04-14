@@ -139,7 +139,8 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "~@/assets/scss/variables.scss";
 .dewey-l1.collapsed,
 .dewey-l2.collapsed,
 .dewey-l3.collapsed {
@@ -170,7 +171,7 @@ export default {
 .collapse-btn,
 .expand-btn {
   color: white;
-  background: #fd4f1c;
+  background: $primary-color;
   width: 1.2em;
   height: 1.2em;
   text-align: center;

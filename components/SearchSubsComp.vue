@@ -932,6 +932,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .search-subs {
   max-width: calc(100vh - 5rem);
   margin: 0 auto;
@@ -981,7 +982,7 @@ export default {
 }
 
 .btn.active {
-  color: #fd4f1c;
+  color: $primary-color;
 }
 
 .show-pinyin .reels {

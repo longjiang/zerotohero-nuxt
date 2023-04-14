@@ -635,6 +635,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .zerotohero-wide {
   .content-pane-left {
     overflow-y: auto;
@@ -670,7 +671,7 @@ export default {
 
 .phrasebook-title {
   &:hover {
-    color: #fd4f1c;
+    color: $primary-color;
   }
 }
 

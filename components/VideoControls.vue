@@ -590,7 +590,7 @@ export default {
     }
 
     &.btn-video-controls-active {
-      color: #fd4f1c;
+      color: $primary-color;
     }
 
     &.play-pause {
