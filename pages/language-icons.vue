@@ -165,7 +165,7 @@ export default {
     },
   },
   mounted() {
-    let l1 = this.$languages.getSmart(this.browserLanguage);
+    let l1 = this.$languages.getSmart(this.$browserLanguage);
     this.$i18n.locale = l1.code;
     this.$i18n.setLocaleMessage(l1.code, l1.translations);
   },

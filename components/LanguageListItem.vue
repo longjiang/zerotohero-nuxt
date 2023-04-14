@@ -170,7 +170,7 @@ export default {
       if (this.$refs.flag) this.$refs.flag.stopCycling();
     },
     formatSpeakers(number) {
-      return Helper.formatK(number, 1, this.browserLanguage);
+      return Helper.formatK(number, 1, this.$browserLanguage);
     },
     languagePath(language) {
       return `/${this.from ? this.from.code : "en"}/${

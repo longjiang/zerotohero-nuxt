@@ -28,7 +28,9 @@
               <Logo skin="light" />
             </div>
             <b-form @submit.prevent="login">
-              <div v-if="message" class="alert alert-danger mt-2">{{ $tb(message) }}</div>
+              <div v-if="message" class="alert alert-danger mt-2">
+                {{ $tb(message) }}
+              </div>
               <b-form-group id="input-group-1" label-for="email">
                 <b-form-input
                   id="email"
@@ -51,7 +53,7 @@
 
               <b-button class="d-block w-100" type="submit" variant="success">
                 <b-spinner small v-if="loading" />
-                <span v-else>{{ $tb('Login') }}</span>
+                <span v-else>{{ $tb("Login") }}</span>
               </b-button>
               <div class="mt-3 text-center">
                 <router-link
@@ -59,13 +61,15 @@
                     name: 'register',
                     query: { redirect: $route.query.redirect },
                   }"
-                >{{ $tb('Register') }}</router-link>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  >{{ $tb("Register") }}</router-link
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <router-link
                   :to="{
                     name: 'forgot-password',
                     query: { redirect: $route.query.redirect },
                   }"
-                >{{ $tb('Forgot Password?') }}</router-link>
+                  >{{ $tb("Forgot Password?") }}</router-link
+                >
               </div>
             </b-form>
           </div>
@@ -80,16 +84,16 @@ import Helper from "@/lib/helper";
 
 export default {
   props: {
-    message: String
+    message: String,
   },
   data() {
     return {
       form: {
         email: "",
-        password: ""
+        password: "",
       },
       shaking: false,
-      loading: false
+      loading: false,
     };
   },
   computed: {
@@ -110,7 +114,7 @@ export default {
         if (this.$l1 && this.$l2)
           this.$router.push({
             name: "profile",
-            params: { l1: this.$l1.code, l2: this.$l2.code }
+            params: { l1: this.$l1.code, l2: this.$l2.code },
           });
         else this.$router.push("/dashboard");
       }
@@ -125,14 +129,14 @@ export default {
           await this.$store.dispatch(
             "subscriptions/checkSubscription",
             this.$auth.user.id
-          )
+          );
           this.$toast.success(
-            this.$tb("Welcome back, {name}!", this.browserLanguage, {
-              name: this.$auth.user.first_name
+            this.$tb("Welcome back, {name}!", {
+              name: this.$auth.user.first_name,
             }),
             {
               position: "top-center",
-              duration: 5000
+              duration: 5000,
             }
           );
           this.redirect();
@@ -141,14 +145,14 @@ export default {
         if (err.response && err.response.data) {
           this.$toast.error(err.response.data.error.message, {
             position: "top-center",
-            duration: 5000
+            duration: 5000,
           });
         } else {
           this.$toast.error(
-            this.$tb("There has been an error.", this.browserLanguage),
+            this.$tb("There has been an error."),
             {
               position: "top-center",
-              duration: 5000
+              duration: 5000,
             }
           );
         }
@@ -160,8 +164,8 @@ export default {
       this.shaking = true;
       await Helper.timeout(500);
       this.shaking = false;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

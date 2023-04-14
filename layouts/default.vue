@@ -229,12 +229,12 @@ export default {
       deep: true,
       immediate: true,
       handler() {
-        this.updatel2SettingsClasses();
+        this.updateL2SettingsClasses();
       },
     },
   },
   methods: {
-    updatel2SettingsClasses() {
+    updateL2SettingsClasses() {
       if (
         this.$route.params.l1 &&
         this.$route.params.l2 &&
@@ -284,7 +284,11 @@ export default {
           if (mutation.type === "settings/SET_L1_L2") {
             this.updatei18n();
             this.loadLanguageSpecificSettings();
+            this.updateL2SettingsClasses();
             this.$store.dispatch("settings/resetShowFilters");
+          }
+          if (mutation.type === "settings/SET_L2_SETTINGS") {
+            this.updateL2SettingsClasses();
           }
         }
         if (

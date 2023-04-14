@@ -1,3 +1,4 @@
+// ~/plugins/global-mixin.js
 import Vue from "vue";
 import { mapState } from "vuex";
 
