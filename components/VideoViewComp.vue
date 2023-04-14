@@ -298,16 +298,15 @@ export default {
   }
   &.skin-light {
     background: #e6e6e6cc;
-    border-top: 1px solid #00000044;
+    border-top: 1px solid #ddd;
     .toggle-wrapper {
       .btn {
-        color: #ccc;
+        color: #444;
       }
     }
   }
 }
 .toggle-wrapper {
-  color: white;
   height: 5rem;
   display: flex;
   align-items: center;
@@ -317,7 +316,6 @@ export default {
   position: fixed;
   right: 0;
   .btn {
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     border-radius: 0;
   }
   &.maximized {
@@ -361,8 +359,9 @@ export default {
   // overflow: scroll;
   &.video-view-minimized {
     position: fixed;
+    border-radius: 0.25rem;
     height: 5rem;
-    bottom: calc(env(safe-area-inset-bottom) + 4.88rem);
+    bottom: calc(env(safe-area-inset-bottom) + 4.88rem + 0.5rem);
     overflow: hidden;
     z-index: 9;
     backdrop-filter: blur(20px);
@@ -371,16 +370,16 @@ export default {
 
 .zerotohero-wide {
   .video-view-minimized {
-    width: inherit;
+    left: calc(13rem + 1rem);
+    width: calc(100% - 13rem - 2rem);
+    bottom: 1rem;
   }
 }
 .zerotohero-not-wide.zerotohero-with-nav {
   .video-view-minimized {
-    width: 100%;
+    left: 0.5rem;
+    width: calc(100% - 1rem);
   }
 }
 
-.zerotohero-wide #overlay-player.video-view-minimized {
-  bottom: 0;
-}
 </style>

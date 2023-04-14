@@ -1362,11 +1362,11 @@ export default {
 }
 
 .zth-nav-secondary.zth-nav-light {
-  background: linear-gradient(white 0%, white 66%, transparent 100%);
+  background: linear-gradient($bg-color-light-1 0%, $bg-color-light-1 66%, transparent 100%);
 }
 
 .zth-nav-secondary.zth-nav-dark {
-  background: linear-gradient(black 0%, black 66%, transparent 100%);
+  background: linear-gradient($bg-color-dark-1 0%, $bg-color-dark-1 66%, transparent 100%);
 }
 
 .zth-nav-menu-bar {
