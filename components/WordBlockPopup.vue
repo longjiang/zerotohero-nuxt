@@ -363,7 +363,8 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 
 .tooltip-inner {
   .word-block-pinyin,
@@ -474,7 +475,7 @@ export default {
 
   .word-block-tool-tip-close {
     border-radius: 100%;
-    background: #28a745;
+    background: $primary-color;
     color: white;
     border: none;
     position: fixed;
@@ -561,7 +562,7 @@ export default {
       color: #999;
       cursor: pointer;
       &:hover {
-        color: #28a745;
+        color: $primary-color;
       }
     }
   }

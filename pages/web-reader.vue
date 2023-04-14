@@ -16,7 +16,7 @@
 </router>
 <template>
   <div class="p-5">
-    <div class="container bg-white rounded">
+    <div class="container rounded">
       <div class="row">
         <div class="col-sm-12 p-4">
           <h4 class="mb-3">{{ $t('Read a {l2} web page', {l2: $t($l2.name)}) }}</h4>

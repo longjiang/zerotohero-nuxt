@@ -259,7 +259,8 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss">
+@import "~@/assets/scss/variables.scss";
 .translated-line {
   color: #aaa;
   font-style: italic;
@@ -280,7 +281,7 @@ export default {
 }
 
 .annotation-setting-toggle-active {
-  color: #28a745;
+  color: $primary-color;
 }
 
 .annotation-setting-icon {

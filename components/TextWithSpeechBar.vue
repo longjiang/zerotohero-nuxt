@@ -1,12 +1,9 @@
 <template>
   <container-query :query="query" v-model="params">
-    <div id="speech-container">
-      <div class="speech-bar mb-4 bg-white">
+    <div id="speech-container" :class="`skin-${$skin}`">
+      <div class="speech-bar mb-4">
         <client-only>
-          <b-button-group
-            class="d-flex speech-bar-inner shadow rounded"
-            style="border: 1px solid #dedede"
-          >
+          <b-button-group class="d-flex speech-bar-inner shadow rounded">
             <template
               v-if="
                 html &&
@@ -17,14 +14,14 @@
               "
             >
               <b-button
-                variant="light"
+                :variant="$skin"
                 @click="$emit('showTOC')"
                 v-if="showTocButton"
               >
                 <i class="fas fa-bars"></i>
               </b-button>
               <b-dropdown
-                variant="light"
+                :variant="$skin"
                 right
                 :text="$t('Voice')"
                 style="flex: 1"
@@ -43,44 +40,50 @@
               <b-button
                 v-if="showTocButton"
                 :disabled="!hasPreviousChapter"
-                variant="light"
+                :variant="$skin"
                 @click="$emit('nextChapter')"
               >
                 <i class="fas fa-step-backward"></i>
               </b-button>
-              <b-button variant="light" @click="previous()">
+              <b-button :variant="$skin" @click="previous()">
                 <i class="fas fa-arrow-up"></i>
               </b-button>
               <b-button
-                variant="light text-success"
+                class="text-success"
+                :variant="$skin"
                 v-if="!speaking"
                 @click="play()"
               >
                 <i class="fas fa-play"></i>
               </b-button>
               <b-button
-                variant="light text-success"
+                class="text-success"
+                :variant="$skin"
                 v-if="speaking"
                 @click="pause()"
               >
                 <i class="fas fa-pause"></i>
               </b-button>
-              <b-button variant="light" @click="next()">
+              <b-button :variant="$skin" @click="next()">
                 <i class="fas fa-arrow-down"></i>
               </b-button>
               <b-button
                 v-if="showTocButton"
                 :disabled="!hasNextChapter"
-                variant="light"
+                :variant="$skin"
                 @click="$emit('nextChapter')"
               >
                 <i class="fas fa-step-forward"></i>
               </b-button>
-              <b-button variant="light" @click="toggleSpeed">
+              <b-button :variant="$skin" @click="toggleSpeed">
                 <span>{{ speed }}x</span>
               </b-button>
             </template>
-            <b-button variant="light" @click="translateAll()" :title="$t('Translate')">
+            <b-button
+              :variant="$skin"
+              @click="translateAll()"
+              :title="$t('Translate')"
+            >
               <i class="fas fa-language"></i>
             </b-button>
           </b-button-group>
@@ -138,25 +141,20 @@
       </div>
       <div
         class="speech-nav mt-5 text-center d-flex mb-4 rounded p-2 shadow"
-        v-if="page"
-        style="
-          justify-content: center;
-          align-items: center;
-          border: 1px solid #dedede;
-        "
+        v-if="pageCount > 1 || showTocButton"
       >
         <b-button
           v-if="showTocButton"
           :disabled="!hasPreviousChapter"
           class="mr-1"
-          variant="light"
+          :variant="$skin"
           @click="$emit('previousChapter')"
         >
           <i class="fas fa-step-backward"></i>
         </b-button>
         <b-button
           v-if="Number(page) > 1"
-          variant="light"
+          :variant="$skin"
           @click="$emit('previousPage')"
         >
           <i class="fas fa-arrow-left"></i>
@@ -164,13 +162,13 @@
         <b-form-select
           size="md"
           v-model="goToPage"
+          class="speech-nav-page-select text-center border-0"
           :options="pageOptions"
-          class="text-center border-0"
-          style="width: auto; padding-right: 1.25rem !important; margin: auto"
+          :variant="$skin"
         />
         <b-button
           v-if="Number(page) < pageCount"
-          variant="light"
+          :variant="$skin"
           @click="$emit('nextPage')"
         >
           <i class="fas fa-arrow-right"></i>
@@ -178,7 +176,7 @@
         <b-button
           v-if="showTocButton"
           :disabled="!hasNextChapter"
-          variant="light"
+          :variant="$skin"
           @click="$emit('nextChapter')"
         >
           <i class="fas fa-step-forward"></i>
@@ -560,6 +558,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#speech-container.skin-dark {
+  .speech-bar,
+  .speech-nav {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #666;
+    border-radius: 0.25rem;
+  }
+  .speech-nav-page-select {
+    background-color: #555;
+    color: #ccc;
+    cursor: pointer;
+  }
+}
+.speech-nav {
+  justify-content: center;
+  align-items: center;
+  .speech-nav-page-select {
+    width: auto;
+    padding-right: 1.25rem !important;
+    margin: auto;
+  }
+}
+
 :deep(.sentence.current),
 :deep(.translation-sentence.current),
 :deep(.annotate-translation-sentence.current) {
@@ -586,7 +608,6 @@ export default {
 }
 
 .annotated-line {
-  color: black;
   :deep(.annotate-translation) {
     color: #444;
   }

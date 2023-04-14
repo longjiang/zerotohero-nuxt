@@ -43,7 +43,6 @@ export default {
   .info {
     text-align: center;
     padding-top: 1rem;
-    color: black;
     .title {
       font-weight: bold;
     }

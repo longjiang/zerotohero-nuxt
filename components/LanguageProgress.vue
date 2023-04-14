@@ -309,6 +309,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 
 .zerotohero-dark {
   .language-progress-bar {
@@ -359,7 +360,7 @@ export default {
 }
 
 .hours-display {
-  color: #28a745;
+  color: $primary-color;
 }
 
 /* https://codepen.io/availchet/pen/rNMRvZB */
@@ -373,7 +374,7 @@ export default {
   height: 0.66rem;
   width: 0.66rem;
   border-radius: 50%;
-  background: #28a745;
+  background: $primary-color;
   opacity: 1;
 }
 
@@ -383,7 +384,7 @@ export default {
   height: 0.66rem;
   width: 0.66rem;
   border-radius: 50%;
-  background: #28a745;
+  background: $primary-color;
   display: block;
   animation: pulse 2s ease 0s infinite;
 }
@@ -394,7 +395,7 @@ export default {
   height: 0.66rem;
   width: 0.66rem;
   border-radius: 50%;
-  background: #28a745;
+  background: $primary-color;
   display: block;
   animation: pulse2 2s ease 0s infinite;
 }

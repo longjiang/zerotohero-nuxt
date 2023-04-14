@@ -86,7 +86,7 @@
             </div>
             <div
               v-if="shared || sharing || !canShare"
-              class="share-banner alert alert-success mt-2"
+              class="share-banner alert mt-4"
             >
               <div v-if="!sharing">
                 <div class="strong mb-2">
@@ -460,13 +460,29 @@ export default {
     color: #444;
   }
 }
-.share-banner-url {
-  span {
-    width: calc(100% - 2rem);
-    white-space: nowrap;
-    display: block;
-    text-overflow: ellipsis;
-    overflow: hidden;
+.zerotohero-dark {
+  .share-banner {
+    // dark green background
+    background-color: #04442b;
+  }
+}
+// Do the same for light theme
+.zerotohero-light {
+  .share-banner {
+    // light green background
+    background-color: #96ddb3;
+  }
+}
+
+.share-banner {
+  .share-banner-url {
+    span {
+      width: calc(100% - 2rem);
+      white-space: nowrap;
+      display: block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
   }
 }
 </style>

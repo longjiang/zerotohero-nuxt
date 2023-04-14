@@ -161,6 +161,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import "~@/assets/scss/variables.scss";
 .nav-item-bottom-bar {
   .nav-item-icon {
     width: 1.25rem;
@@ -189,7 +190,7 @@ export default {
     text-shadow: none;
     &.nav-item-active,
     &:hover {
-      color: #28a745;
+      color: $primary-color;
       background: hsla(0deg, 100%, 100%, 0.75);
     }
   }
@@ -222,7 +223,7 @@ export default {
       }
       &.nav-item-active,
       &:hover {
-        color: #28a745;
+        color: $primary-color;
       }
       .nav-item-count {
         display: none;
@@ -238,10 +239,10 @@ export default {
     &.nav-item-active,
     &:hover {
       .nav-item-icon {
-        color: #28a745;
+        color: $primary-color;
         opacity: 1;
       }
-      border-bottom: 0.4rem solid #28a745cc;
+      border-bottom: 0.4rem solid rgba($primary-color, 0.8);
     }
   }
 }
@@ -317,7 +318,7 @@ export default {
       }
       &.nav-item-active,
       &:hover {
-        border-right: 0.4rem solid #28a745cc;
+        border-right: 0.4rem solid rgba($primary-color, 0.8);
       }
     }
   }

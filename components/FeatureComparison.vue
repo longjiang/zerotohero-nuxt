@@ -115,6 +115,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .pricing-card {
   text-shadow: none;
   padding: 2rem 2rem 1rem 2rem;
@@ -160,7 +161,7 @@ export default {
 
 .badge-money-back {
   line-height: 1.1;
-  background-color: #28a745;
+  background-color: $primary-color;
   color: white;
   width: 7.25rem;
   height: 7.25rem;

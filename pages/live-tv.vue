@@ -395,6 +395,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .live-video-column {
   position: sticky;
   top: 0;
@@ -407,7 +408,7 @@ export default {
 }
 .channel-button {
   &.channel-button-current {
-    background-color: #28a745;
+    background-color: $primary-color;
     color: white;
   }
   img {

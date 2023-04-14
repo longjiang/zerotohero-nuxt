@@ -1,3 +1,5 @@
+@import 'variables';
+
 @font-face {
   font-family: AndikaW;
   src: url("/fonts/Andika-Regular.woff2");
@@ -6,6 +8,16 @@
 @font-face {
   font-family: "Klingon pIqaD HaSta";
   src: url("/fonts/Klingon-pIqaD-HaSta.ttf") format("truetype");
+}
+
+
+.zerotohero-light {
+  color: #333;
+}
+
+.zerotohero-dark,
+.skin-dark {
+  color: #ddd;
 }
 
 button {
@@ -36,13 +48,6 @@ html * {
   font-display: swap;
 }
 
-.zerotohero-light {
-  color: #444;
-}
-
-.zerotohero-dark {
-  color: #ccc;
-}
 
 h1,
 h2,
@@ -365,7 +370,7 @@ h6,
 [data-hover-level="outside"].saved,
 [data-hover-level="outside"]:hover .word-block-text-byeonggi,
 [data-hover-level="outside"].saved .word-block-text-byeonggi {
-  color: #28a745 !important;
+  color: $primary-color !important;
 }
 
 [data-hover-level="outside"]:hover .word-block-text-byeonggi,
@@ -425,7 +430,7 @@ h6,
 
 .bg-leveloutside,
 [data-bg-level="outside"] {
-  background-color: #28a745 !important;
+  background-color: $primary-color !important;
   color: white !important;
 }
 
@@ -509,7 +514,7 @@ h6,
 .l2-zh
   .show-level-7
   [data-hover-level="outside"].sticky:not(.seen):not(.common) {
-  color: #28a745 !important;
+  color: $primary-color !important;
 }
 
 .l2-zh .bg-level1,
@@ -556,7 +561,7 @@ h6,
 
 .l2-zh .bg-leveloutside,
 .l2-zh [data-bg-level="outside"] {
-  background-color: #28a745 !important;
+  background-color: $primary-color !important;
   color: white !important;
 }
 
@@ -664,7 +669,7 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
   }
 }
 .text-primary {
-  color: #fd4f1c !important;
+  color: $primary-color !important;
 }
 
 .zerotohero-dark {
@@ -684,7 +689,7 @@ a.bg-primary:hover,
 button.bg-primary:hover,
 a.bg-primary:focus,
 button.bg-primary:focus {
-  background-color: #fd4f1c !important;
+  background-color: $primary-color !important;
 }
 
 .border-dashed {
@@ -693,7 +698,7 @@ button.bg-primary:focus {
 }
 
 .border-primary {
-  border-color: #fd4f1c !important;
+  border-color: $primary-color !important;
 }
 
 .bg-gray {
@@ -726,16 +731,18 @@ button.bg-primary:focus {
 }
 
 .btn-primary {
-  background-color: #fd4f1c;
-  border-color: #fd4f1c;
+  background-color: $primary-color;
+  border-color: $primary-color;
   color: white;
 }
+
+
 
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
-  background-color: #d33e10;
-  border-color: #d33e10;
+  background-color: $primary-color-dark;
+  border-color: $primary-color-dark;
   color: white;
 }
 
@@ -1142,10 +1149,6 @@ button.bg-primary:focus {
   }
 }
 
-.skin-dark {
-  background-color: black;
-  color: #ccc;
-}
 
 .playlist-modal-wrapper {
   padding: 0;

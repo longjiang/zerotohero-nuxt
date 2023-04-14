@@ -420,6 +420,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .language-map {
   width: 100%;
   height: 40rem;
@@ -496,7 +497,7 @@ export default {
 
       &.language-marker-size-family-drav1251 {
         // Dravidian
-        background-color: #28a745;
+        background-color: $primary-color;
       }
 
       &.language-marker-size-family-aust1305 {
@@ -546,7 +547,7 @@ export default {
   .similar-phrase {
     .similar-phrase-l2 {
       font-weight: bold;
-      color: #28a745;
+      color: $primary-color;
       font-size: 1.5em;
       font-style: italic;
     }

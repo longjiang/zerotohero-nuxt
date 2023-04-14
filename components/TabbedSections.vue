@@ -51,6 +51,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
+
 .dictionary-entry-section {
   overflow: visible;
   padding: 1rem 0;
@@ -78,7 +80,7 @@ export default {
 
       &:hover,
       &.section-nav-item-current {
-        background-image: linear-gradient(#28a745cc, #28a745cc);
+        background-image: linear-gradient(rgba($primary-color, 0.8), rgba($primary-color-dark, 0.8));
         background-position: 50% 100%;
         background-size: 70% 0.35rem;
         background-repeat: no-repeat;

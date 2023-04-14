@@ -244,9 +244,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .lookup-link {
   white-space: nowrap;
   display: inline-block;
-  color: #28a745;
+  color: $primary-color;
 }
 </style>

@@ -553,6 +553,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 :deep(.youtube-videos) > * {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -654,7 +655,7 @@ export default {
   font-size: 1rem;
   margin-left: 0.5rem;
   display: inline-block;
-  color: #28a745;
+  color: $primary-color;
 }
 
 hr {

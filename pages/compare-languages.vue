@@ -307,6 +307,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+@import "~@/assets/scss/variables.scss";
+
 .similar-phrases-panel {
   background: white;
   position: fixed;
@@ -336,7 +339,7 @@ export default {
       }
       .all-phrases-list-item-phrase {
         font-weight: bold;
-        color: #28a745;
+        color: $primary-color;
         font-size: 1.5em;
         font-style: italic;
       }

@@ -243,6 +243,7 @@ export default {
 
 <style lang="scss" scoped>
 
+@import "~@/assets/scss/variables.scss";
 .video-hero-wrapper {
   position: relative;
   border-radius: 0.25rem;
@@ -310,7 +311,7 @@ export default {
       color: #ccc;
       font-size: 0.8em;
       i {
-        color: #28a745;
+        color: $primary-color;
       }
     }
     .hero-video-title {

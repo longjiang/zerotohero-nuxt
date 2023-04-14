@@ -195,6 +195,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 :deep(.synced-transcript) {
   height: 5rem;
   overflow: hidden;
@@ -209,6 +210,6 @@ h3 {
   font-size: 1rem;
   margin-left: 1rem;
   display: inline-block;
-  color: #28a745;
+  color: $primary-color;
 }
 </style>

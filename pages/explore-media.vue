@@ -494,6 +494,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+@import "~@/assets/scss/variables.scss";
+
 .media-section {
   padding-bottom: 2rem;
   // border-bottom: 1px solid #111;
@@ -531,6 +534,6 @@ h3 {
   font-size: 1rem;
   margin-left: 0.5rem;
   display: inline-block;
-  color: #28a745;
+  color: $primary-color;
 }
 </style>

@@ -102,6 +102,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .goal {
   display: inline-block;
   width: 100%;
@@ -134,7 +135,7 @@ export default {
   height: 0.66rem;
   width: 0.66rem;
   border-radius: 50%;
-  background: #28a745;
+  background: $primary-color;
   opacity: 1;
 }
 
@@ -144,7 +145,7 @@ export default {
   height: 0.66rem;
   width: 0.66rem;
   border-radius: 50%;
-  background: #28a745;
+  background: $primary-color;
   display: block;
   animation: pulse 2s ease 0s infinite;
 }
@@ -155,7 +156,7 @@ export default {
   height: 0.66rem;
   width: 0.66rem;
   border-radius: 50%;
-  background: #28a745;
+  background: $primary-color;
   display: block;
   animation: pulse2 2s ease 0s infinite;
 }

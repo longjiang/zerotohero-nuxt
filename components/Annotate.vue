@@ -828,6 +828,7 @@ export default {
 </script>
 
 <style lang="scss">
+@import '~/assets/scss/variables';
 .annotate-translation {
   font-size: 0.8em;
   opacity: 0.7;
@@ -838,7 +839,7 @@ export default {
 }
 
 .word-block.saved {
-  color: #28a745;
+  color: $primary-color;
 }
 
 .sentence + .sentence {
@@ -980,7 +981,7 @@ export default {
 
 .annotate-grammar-button {
   font-size: 0.8rem;
-  background: #28a745;
+  background: $primary-color;
   color: white;
   border-radius: 100%;
   width: 1.3rem;

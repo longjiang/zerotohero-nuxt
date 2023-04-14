@@ -252,12 +252,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
+
 .wordlist {
   margin-bottom: inherit;
 
   .wordlist-item {
     a {
-      color: #28a745;
+      color: $primary-color;
     }
 
     a:hover {

@@ -79,13 +79,12 @@
 
           <div
             v-if="$l2.han && $l2.code !== 'lzh'"
-            class="text-center lead rounded bg-gray p-3 mt-3"
+            :class="{ 'text-center lead rounded p-3 mt-3': true, 'bg-gray' : $skin === 'light', 'bg-dark' : $skin === 'dark' }"
           >
             Also check out the
-            <router-link to="/en/lzh/library">
-              Classical Chinese library
+            <router-link to="/en/lzh/library" class="text-success">
+              Classical Chinese Library <i class="fas fa-chevron-right"></i>
             </router-link>
-            .
           </div>
         </div>
       </div>
@@ -112,8 +111,7 @@ export default {
       sources: [],
     };
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     source(url) {
       return Library.source(url);

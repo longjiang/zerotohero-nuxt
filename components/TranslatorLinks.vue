@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span v-if="translators && translators.length > 0" class="text-secondary">
+    <span v-if="translators && translators.length > 0">
       {{ $t("Translate with:") }}
     </span>
     <span v-for="translator of translators" :key="`trans-${translator.id}`">
@@ -39,10 +39,11 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .translator-link {
   white-space: nowrap;
   display: inline-block;
-  color: #28a745;
+  color: $primary-color;
 }
 </style>

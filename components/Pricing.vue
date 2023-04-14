@@ -85,6 +85,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .pricing-container {
   display: flex;
   justify-content: center;
@@ -102,10 +103,10 @@ export default {
   color: #666;
   cursor: pointer;
   // add a matching green border when the card is hovered
-  border: 3px solid #28a74500;
+  border: 3px solid rgba($primary-color, 0);
   &:hover,
   &.selected {
-    border: 3px solid #28a745;
+    border: 3px solid $primary-color;
   }
 }
 </style>

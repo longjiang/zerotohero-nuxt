@@ -34,8 +34,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.identical-languages {
-  color: rgba(255, 255, 255, 1);
+.zerotohero-light {
+  .identical-languages {
+    color: rgba(255, 255, 255, 1);
+  }
 }
 .identical-languages {
   text-align: center;

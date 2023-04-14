@@ -61,7 +61,7 @@ export default {
   css: [
     'css-percentage-circle',
     'video.js/dist/video-js.css',
-    '@/assets/css/zerotohero.scss',
+    '@/assets/scss/zerotohero.scss',
   ],
 
   router: {

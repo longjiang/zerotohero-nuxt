@@ -388,9 +388,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .similar-phrase-l2 {
   font-weight: bold;
-  color: #28a745;
+  color: $primary-color;
 }
 .similar-phrases-list {
   &.similar-phrases-list-1-col {

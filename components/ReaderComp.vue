@@ -8,7 +8,10 @@
       >
         <i class="fas fa-pencil-alt" />
       </button>
-      <div :class="{ reader: true, fullscreen }" v-else>
+      <div
+        :class="{ reader: true, fullscreen, [`skin-${$skin}`]: true }"
+        v-else
+      >
         <div class="text-center">
           <Loader class="mb-5" />
         </div>
@@ -45,14 +48,20 @@
                 size="sm"
                 @click="showWords = true"
               >
-                {{ $t('Show Vocabulary List ({num})', { num: savedWordIdsInText.length }) }}
+                {{
+                  $t("Show Vocabulary List ({num})", {
+                    num: savedWordIdsInText.length,
+                  })
+                }}
               </b-button>
             </div>
             <div v-if="showWords">
               <hr class="mt-0 mb-4" />
               <div style="font-size: 1rem; line-height: 1" class="mb-3">
                 <div class="mt-1">
-                  <small>{{ $t('Here are your saved that appear in this text:') }}</small>
+                  <small>{{
+                    $t("Here are your saved that appear in this text:")
+                  }}</small>
                 </div>
               </div>
               <WordList :ids="savedWordIdsInText" />
@@ -85,7 +94,7 @@
               style="font-size: 0.9em"
             >
               <i class="fas fa-keyboard"></i>
-              {{ $t('Enter Translation') }}
+              {{ $t("Enter Translation") }}
             </button>
           </div>
           <div class="d-flex">
@@ -110,7 +119,7 @@
             ></textarea>
           </div>
 
-          <TranslatorLinks v-bind="{ text }" />
+          <TranslatorLinks v-bind="{ text }" class="mt-2"/>
         </div>
         <iframe
           v-if="showTranslate"
@@ -280,6 +289,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
+.reader.skin-dark {
+  #reader-textarea {
+    background: #333;
+    color: #eee;
+    border-color: #555;
+  }
+}
+.reader.skin-light {
+}
+
 .reader-annotated-wide.with-translation {
   .line {
     display: flex;
@@ -320,12 +340,12 @@ export default {
   }
 }
 
+
 #reader-annotated :deep(del) .word-block {
   color: red !important;
 }
 
 #reader-annotated {
-  background: white;
   border-radius: 0.25rem;
 }
 
