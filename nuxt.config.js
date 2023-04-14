@@ -212,6 +212,7 @@ export default {
     '~plugins/directus.js',
     '~plugins/subs.js',
     '~/plugins/global-mixin',
+    { src: '~/plugins/vue-slider.js', mode: 'client' },
     { src: '~plugins/d-player.js', mode: 'client' },
     { src: '~/plugins/stripe.js', mode: 'client' },
     { src: '~/plugins/paypal.js', mode: 'client' },

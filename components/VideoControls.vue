@@ -2,8 +2,7 @@
   <div
     :class="{
       'video-controls': true,
-      'video-controls-dark': skin === 'dark',
-      'video-controls-light': skin === 'light',
+      [`skin-${$skin}`]: true,
     }"
     v-if="video"
   >
@@ -11,18 +10,20 @@
       <div class="video-controls-time mr-2 ml-2">
         {{ currentTime ? toHHMMSS(currentTime) : "--:--" }}
       </div>
-      <input
-        type="range"
-        class="d-block w-100 flex-1"
-        step="0.1"
-        @change="onSeek"
-        @focus="pause"
-        @mousedown="pause"
-        @mouseup="play"
-        @touchstart="pause"
-        @touchend="play"
-        :value="currentPercentage"
-      />
+      <client-only>
+        <vue-slider
+          v-model="progressPercentage"
+          class="video-controls-progress d-block w-100 flex-1"
+          step="0.1"
+          tooltip="none"
+          @change="onSeek"
+          @focus="pause"
+          @mousedown="pause"
+          @mouseup="play"
+          @touchstart="pause"
+          @touchend="play"
+        ></vue-slider>
+    </client-only>
       <div class="video-controls-time ml-2 mr-2">
         {{ duration ? toHHMMSS(duration) : "--:--" }}
       </div>
@@ -82,8 +83,8 @@
         @click="paused ? play() : pause()"
         :title="paused ? $t('Play') : $t('Pause')"
       >
-        <i v-if="paused" class="fas fa-play"></i>
-        <i v-else class="fas fa-pause"></i>
+        <i v-if="paused" class="fas fa-play text-success"></i>
+        <i v-else class="fas fa-pause text-success"></i>
       </button>
       <button
         class="btn-video-controls btn-video-controls-next-line text-center"
@@ -366,6 +367,7 @@ export default {
       collapsed: false,
       currentLine: undefined,
       currentTime: this.initialTime,
+      progressPercentage: 0,
     };
   },
   computed: {
@@ -438,13 +440,16 @@ export default {
     $route() {
       this.hideInfoModal();
     },
+    currentPercentage(newPercentage) {
+      this.progressPercentage = newPercentage;
+    },
   },
   methods: {
     toHHMMSS(duration) {
       return toHHMMSS(duration);
     },
-    onSeek(event) {
-      let percentage = event.target.value;
+    onSeek() {
+      let percentage = this.progressPercentage
       let time = percentage * 0.01 * this.duration;
       this.$emit("seek", time);
     },
@@ -559,8 +564,15 @@ export default {
   padding-right: 0.5rem;
 }
 
-.video-with-transcript-horizontal-portrait .video-controls {
-  background: black;
+.video-with-transcript-horizontal-portrait {
+  .video-controls.skin-dark {
+    background: black;
+  }
+}
+.video-with-transcript-horizontal-portrait {
+  .video-controls.skin-light {
+    background: white;
+  }
 }
 
 .video-controls-light .btn-video-controls {
@@ -643,6 +655,7 @@ export default {
 .video-controls-time {
   white-space: nowrap;
   font-size: 0.8em;
+  padding: 2px 0;
 }
 
 .settings-icon {
@@ -660,5 +673,19 @@ export default {
 
 hr {
   margin: 0.5rem 0;
+}
+.video-controls-progress {
+  /* Change the progress color */
+  :deep(.vue-slider-process) {
+    background-color: $primary-color;
+  }
+  :deep(.vue-slider-rail){
+    height: 0.5rem;
+  }
+
+  /* Hide the thumb */
+  :deep(.vue-slider-dot) {
+    display: none;
+  }
 }
 </style>
