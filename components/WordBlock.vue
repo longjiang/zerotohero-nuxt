@@ -33,6 +33,7 @@
         <WordBlockPopup
           v-bind="{
             text,
+            token,
             words,
             images,
             loading,

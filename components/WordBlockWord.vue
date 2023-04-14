@@ -31,7 +31,7 @@
         :key="`word-block-segment-${segment.surface}`"
         ><span
           class="word-block-definition"
-          v-if="definition"
+          v-if="showDefinition"
           v-html="definition"
         ></span
         ><span
@@ -296,13 +296,6 @@ export default {
   font-size: 0.8rem;
   margin: 0 0.2rem;
   opacity: 0.7;
-}
-
-[dir="rtl"] .annotate-template {
-  font-size: 1.33em;
-  .word-block-pinyin {
-    font-size: 0.7em;
-  }
 }
 
 .word-block.saved {

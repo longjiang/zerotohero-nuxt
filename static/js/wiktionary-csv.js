@@ -41,7 +41,7 @@ const Dictionary = {
     "ell", // tokenized and lemmatized by simplemma
     "enm", // tokenized and lemmatized by simplemma
     "est", // tokenized and lemmatized by simplemma
-    "fas", // tokenized and lemmatized by simplemma
+    "fas", // tokenized and lemmatized by hazm
     "fin", // tokenized and lemmatized by simplemma
     "gla", // tokenized and lemmatized by simplemma
     "gle", // tokenized and lemmatized by simplemma
@@ -83,14 +83,14 @@ const Dictionary = {
     // "por", // tokenized and lemmatized by simplemma
     // "spa", // tokenized and lemmatized by simplemma
     // "hrv", // tokenized and lemmatized by spacy
-    // "deu",
-    // "eng",
-    // "fra",
-    // "ita",
+    // "deu", // dictionary large enough, lemmatization done locally
+    // "eng", // dictionary large enough, lemmatization done locally
+    // "fra", // dictionary large enough, lemmatization done locally
+    // "ita", // dictionary large enough, lemmatization done locally
     // "jpn", // tokenized and lemmatized by spacy
     // "kor", // tokenized and lemmatized by spacy
-    // "por",
-    // "spa"
+    // "por", // dictionary large enough, lemmatization done locally
+    // "spa" // dictionary large enough, lemmatization done locally
     // "zho", // tokenized and lemmatized by spacy
   ],
   lemmatizationTableLangs: { // Languages that can be lemmatized by https://github.com/michmech/lemmatization-lists
@@ -797,8 +797,9 @@ const Dictionary = {
     let final = []
     if (this.l2 === "tur") final = this.tokenizeTurkish(text);
     else if (this.l2 === 'ara') final = this.tokenizeArabic(text);
+    else if (this.l2 === 'fas') final = this.tokenizePersian(text);
     else {
-      // SpaCy
+      // Lemmatize-simple
       let tokens = [];
       text = text.replace(/-/g, "- ");
       let url = `${PYTHON_SERVER}lemmatize-simple?lang=${this.l2}&text=${encodeURIComponent(
@@ -828,6 +829,8 @@ const Dictionary = {
           }
           final.push({
             text: token.word,
+            lemmas: [token.lemma],
+            pos: token.pos,
             candidates,
           })
         } else {
@@ -842,6 +845,53 @@ const Dictionary = {
   getLemmas(text) {
     let lemmas = this.inflectionIndex[text]
     return lemmas
+  },
+  async tokenizePersian(text) {
+    text = text.replace(/-/g, "- ");
+    let url = `${PYTHON_SERVER}lemmatize-persian?text=${encodeURIComponent(
+      text
+    )}`;
+    let tokens = await this.proxy(url);
+    tokens = tokens.map (token => {
+      const lemmaWithStem = token.lemma;
+      const parts = lemmaWithStem.split('#');
+      const lemma = parts[0];
+      const stem = parts.length > 1 ? parts[1] : null;
+      token.lemma = lemma;
+      token.stem = stem;
+      return token
+    })
+    return this.lookupFromTokens(tokens);
+  },
+  lookupFromTokens(tokens) {
+    let final = []
+    for (let index in tokens) {
+      let token = tokens[index]
+      if (typeof token === 'object') {
+        let candidates = this.lookupMultiple(
+          token.word
+        );
+        if (token.lemma && token.lemma !== token.word) {
+          candidates = candidates.concat(
+            this.lookupMultiple(
+              token.lemma
+            )
+          );
+        }
+        final.push({
+          text: token.word,
+          candidates,
+          lemmas: [token.lemma],
+          pos: token.pos,
+          stem: token.stem,
+          pronunciation: token.pronunciation
+        })
+        final.push(" ")
+      } else {
+        final.push(token.word || token) // string
+      }
+    }
+    return final
   },
   async tokenizeArabic(text) {
     text = text.replace(/-/g, "- ");
@@ -870,7 +920,7 @@ const Dictionary = {
         candidates = this.uniqueByValue(candidates, "id");
         tokens.push({
           text: lemmas[0].word,
-          lemmas,
+          lemmas: lemmas.map(l => l.lemma),
           candidates,
           pos: lemmas[0].pos
         });
@@ -909,7 +959,7 @@ const Dictionary = {
         candidates = this.uniqueByValue(candidates, "id");
         tokens.push({
           text: lemmas[0].word,
-          lemmas,
+          lemmas: lemmas.map(l => l.lemma),
           candidates,
           pos: lemmas[0].pos
         });
