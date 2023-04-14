@@ -149,10 +149,10 @@
       >
         <span class="annotation-setting-icon">
           <i v-if="skin === 'dark'" class="fa fa-moon"></i>
-          <i v-else class="fa fa-sun"></i>
+          <i v-if="skin === 'light'" class="fa fa-sun"></i>
         </span>
         <span v-if="skin === 'dark'">{{ $tb("Dark Mode") }}</span>
-        <span v-else>{{ $tb("Light Mode") }}</span>
+        <span v-if="skin === 'light'">{{ $tb("Light Mode") }}</span>
       </button>
       <button
         v-if="userIsAdmin"
@@ -179,23 +179,38 @@
 </template>
 
 <script>
-const defaultSettings = {
-  zoomLevel: 0,
-  autoPronounce: true,
-  adminMode: false,
-  onceAdmin: false,
-  showDefinition: undefined,
-  showTranslation: undefined,
-  showQuickGloss: undefined,
-  showPinyin: undefined,
-  useTraditional: undefined,
-  showQuiz: undefined,
-  useSerif: undefined,
-  showByeonggi: undefined,
-  disableAnnotation: undefined,
+export const defaultL2Settings = {
+  l1: "en", // the L1 the user used last time when they studied this language
+  showDefinition: false,
+  showPinyin: true,
+  useTraditional: false,
+  showTranslation: true,
+  showQuickGloss: true,
+  useSerif: false,
+  showQuiz: true,
+  showByeonggi: true,
+  tvShowFilter: "all", // By default we only search TV shows.
+  talkFilter: "all", // By default we search all talks.
+  autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
   quizMode: false,
-  skin: null,
+  disableAnnotation: false,
+  zoomLevel: 0,
 };
+
+export const defaultGeneralSettings = {
+  adminMode: false,
+  skin: "dark",
+  preferredCategories: [],
+  layout: "vertical", // or 'horizontal'
+  autoPause: false,
+  speed: 1,
+  hideWord: false, // as used in the <HideDefs> component
+  hidePhonetics: false, // as used in the <HideDefs> component
+  hideDefinitions: false, // as used in the <HideDefs> component
+  subsSearchLimit: true,
+  openAIToken: undefined,
+};
+
 export default {
   props: {
     variant: {
@@ -203,7 +218,14 @@ export default {
     },
   },
   data() {
-    return defaultSettings;
+    return Object.assign(
+      {
+        unsubscribe: null,
+        onceAdmin: false,
+      },
+      defaultGeneralSettings,
+      defaultL2Settings
+    );
   },
   mounted() {
     this.loadSettings();
@@ -223,37 +245,38 @@ export default {
     loadSettings() {
       if (!this.$l2?.code) return;
       if (!this.$l2Settings) return;
-      for (let property in defaultSettings) {
+      for (let property in defaultL2Settings) {
         if (this[property] !== this.$l2Settings[property]) {
           this[property] = this.$l2Settings[property];
+        }
+      }
+      for (let property in defaultGeneralSettings) {
+        if (this[property] !== this.$store.state.settings[property]) {
+          this[property] = this.$store.state.settings[property];
         }
       }
       if (this.adminMode) this.onceAdmin = true;
     },
     setupWatchers() {
-      for (let property in defaultSettings) {
+      for (let property in defaultL2Settings) {
         this.$watch(property, (newValue, oldValue) => {
           let payload = {};
           payload[property] = newValue;
           this.$store.dispatch("settings/setL2Settings", payload);
         });
       }
+      for (let property in defaultGeneralSettings) {
+        this.$watch(property, (newValue, oldValue) => {
+          let payload = {};
+          payload[property] = newValue;
+          this.$store.dispatch("settings/setGeneralSettings", payload);
+        });
+      }
     },
   },
   watch: {
     $l2() {
-      this.loadSettings()
-    },
-    adminMode() {
-      this.$store.dispatch("settings/setGeneralSettings", {
-        adminMode: this.adminMode,
-      });
-    },
-    skin() {
-      if (this.skin)
-        this.$store.dispatch("settings/setGeneralSettings", {
-          skin: this.skin,
-        });
+      this.loadSettings();
     },
     // More watchers are set up in setupWatchers()
   },

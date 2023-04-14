@@ -14,6 +14,9 @@ Vue.mixin({
       }
       return l2SettingsOfL2;
     },
+    $generalSettings() {
+      return this.$state.store.settings;
+    },
     $browserLanguage() {
       if (process.browser) {
         let code = navigator.language.replace(/-.*/, "");
