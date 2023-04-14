@@ -370,6 +370,7 @@ export default {
 @import "~@/assets/scss/variables.scss";
 $tooltip-background-dark: #312d2d;
 $tooltip-background-light: #fff;
+$tooltip-border-dark: #474545;
 
 .tooltip-arrow.skin-dark {
   color: $tooltip-background-dark;
@@ -380,10 +381,10 @@ $tooltip-background-light: #fff;
     background: $tooltip-background-dark;
   }
   hr {
-    border-color: #333;
+    border-color: $tooltip-border-dark;
   }
   .tooltip-entry + .tooltip-entry {
-    border-top: 1px solid #333;
+    border-top: 1px solid $tooltip-border-dark;
   }
 }
 .tooltip-arrow.skin-light {
