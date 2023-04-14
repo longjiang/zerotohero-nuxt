@@ -767,8 +767,9 @@ export default {
         youtube_id: this.youtube_id,
         starttime: this.starttime,
       }; // { text, starttime = undefined, youtube_id = undefined}
+      let transliterationprop = token.pronunciation ? token.pronunciation : tr(text).replace(/"/g, "")
       let attrs = {
-        transliterationprop: tr(text).replace(/"/g, ""),
+        transliterationprop,
         ref: "word-block",
         popup: this.popup,
         phonetics: this.phonetics,
@@ -780,7 +781,6 @@ export default {
       };
       if (token.mappedPronunciation)
         attrs.mappedPronunciation = token.mappedPronunciation;
-      if (token.pronunciation) attrs.transliterationprop = token.pronunciation;
       if (this.text === "（") console.log({ attrs });
       return attrs;
     },

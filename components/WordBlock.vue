@@ -1,5 +1,10 @@
 <template>
-  <v-popover :open="open" placement="top" ref="popover" :popoverInnerClass="`tooltip-inner popover-inner skin-${$skin}`">
+  <v-popover
+    :open="open"
+    placement="top"
+    ref="popover"
+    :popoverInnerClass="`tooltip-inner popover-inner skin-${$skin}`"
+  >
     <div
       v-on="popup ? { click: wordBlockClick } : {}"
       v-observe-visibility="visibilityChanged"
@@ -40,7 +45,6 @@
             loadingImages,
             context,
             transliterationprop,
-            farsiRomanizations,
             phraseObj: phraseItem(text),
           }"
           ref="popup"
@@ -116,7 +120,6 @@ export default {
       tooltipHover: false,
       highlightHardWords: true,
       transliteration: undefined,
-      farsiRomanizations: {},
       lastLookupWasQuick: false,
       reveal: false,
       t: 0,
@@ -218,7 +221,7 @@ export default {
       }
       let text = this.text;
       if (this.$l2.han && word) {
-        if (word.simplified === text || word.traditional === text) 
+        if (word.simplified === text || word.traditional === text)
           text = this.$l2Settings.useTraditional
             ? word.traditional
             : word.simplified;
@@ -226,7 +229,7 @@ export default {
           text = this.$l2Settings.useTraditional
             ? tify(this.text)
             : sify(this.text);
-          if (this.$l2Settings.showPinyin) phonetics = this.transliterationprop
+          if (this.$l2Settings.showPinyin) phonetics = this.transliterationprop;
         }
       }
       let hanja =
@@ -244,7 +247,12 @@ export default {
         hanja,
       };
       if (this.mappedPronunciation) {
-        if (this.text && this.savedWord && this.savedWord.kana && typeof mapKana !== 'undefined') {
+        if (
+          this.text &&
+          this.savedWord &&
+          this.savedWord.kana &&
+          typeof mapKana !== "undefined"
+        ) {
           attributes.mappedPronunciation = mapKana(
             this.text,
             this.savedWord.kana
@@ -421,27 +429,20 @@ export default {
         }
       }
     },
-    async getFarsiRomanization(text) {
-      if (this.$l2.code === "fa") {
-        let dictionary = await this.$getDictionary();
-        let roman = await (await dictionary).romanizePersian(text);
-        return roman || this.transliterate(text);
-      }
-    },
     async getTransliteration() {
       let transliteration;
       if (this.$l2.code === "tlh") {
         return this.fixKlingonTypos(this.text);
-      } else if (this.$l2.code === "fa") {
-        this.text = this.text.replace(/\u064a/g, "\u06cc"); // Arabic YEH to Farsi YEH
-        let roman = await this.getFarsiRomanization(this.text);
-        transliteration = roman.replace(/\^/g, "");
       } else if (this.token && this.token.candidates?.length > 0) {
-        if (this.$l2.code !== "ja" && this.token.candidates[0].pronunciation) {
-          transliteration =
-            this.token.candidates[0].pronunciation.split(",")[
-              this.$l2.code === "vi" ? 1 : 0
-            ];
+        if (this.$l2.code !== "ja") {
+          if (this.token.pronunciation) {
+            transliteration = this.token.pronunciation;
+          } else if (this.token.candidates[0].pronunciation) {
+            transliteration =
+              this.token.candidates[0].pronunciation.split(",")[
+                this.$l2.code === "vi" ? 1 : 0
+              ];
+          }
         }
         transliteration =
           transliteration ||
@@ -621,10 +622,6 @@ export default {
         words = await dictionary.lookupFuzzy(this.text, 20, quick);
         if (words && !quick) {
           for (let word of words) {
-            if (this.$l2.code === "fa") {
-              this.farsiRomanizations[word.head] =
-                await this.getFarsiRomanization(word.head);
-            }
             // Russian
             if (word && word.matches) {
               for (let match of word.matches) {

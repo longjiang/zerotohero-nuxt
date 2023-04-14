@@ -240,7 +240,6 @@ export default {
     images: Array,
     transliterationprop: String,
     phraseObj: Object,
-    farsiRomanizations: Object,
     loading: {
       default: false,
     },
@@ -319,8 +318,6 @@ export default {
       } else if (this.$l2.code === "tlh")
         pronunciation = this.klingonIPA(word.head);
       else if (word.kana && word.kana !== word.head) pronunciation = word.kana;
-      else if (this.$l2.code === "fa")
-        pronunciation = this.farsiRomanizations[word.head];
       else if (word.jyutping && word.pinyin)
         pronunciation = [word.jyutping, word.pinyin].join(", ");
       else if (
