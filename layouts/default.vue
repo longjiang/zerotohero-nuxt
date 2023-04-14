@@ -447,7 +447,7 @@ export default {
         youtube.video.l2.id &&
         youtube.video.l2.id !== this.l2.id
       ) {
-        this.overlayPlayerYouTubeId = undefined; // Close the mini player unless the language matches
+        this.overlayPlayerClose();  // Close the mini player unless the language matches
       }
       if (this.l1) this.updatei18n();
       let dictionary = await this.$getDictionary();
