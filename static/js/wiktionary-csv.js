@@ -1,14 +1,14 @@
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
-importScripts("../vendor/localforage/localforage.js")
-importScripts("../vendor/hash-string/hash-string.min.js")
+importScripts("../vendor/localforage/localforage.js");
+importScripts("../vendor/hash-string/hash-string.min.js");
 
-const PYTHON_SERVER = 'https://python.zerotohero.ca/'
+const PYTHON_SERVER = "https://python.zerotohero.ca/";
 
-const PROXY_SERVER = 'https://server.chinesezerotohero.com/'
+const PROXY_SERVER = "https://server.chinesezerotohero.com/";
 
 const Dictionary = {
   name: "wiktionary-csv",
-  version: '2.2.4.2',
+  version: "2.2.4.2",
   file: undefined,
   dictionary: undefined,
   words: [],
@@ -23,7 +23,7 @@ const Dictionary = {
     fra: 2,
     eng: 5,
     spa: 2,
-    est: 3
+    est: 3,
   },
   englishLemmatizer: undefined, // For Non-English L1 only
   tokenizationCache: {},
@@ -31,7 +31,7 @@ const Dictionary = {
   l1: undefined,
   l2: undefined,
   tokenizationByServer: [
-    'ast', // tokenized and lemmatized by simplemma
+    "ast", // tokenized and lemmatized by simplemma
     "ara", // tokenized and lemmatized by qalsadi
     "bul", // tokenized and lemmatized by simplemma
     "cat", // tokenized and lemmatized by simplemma
@@ -93,7 +93,8 @@ const Dictionary = {
     // "spa" // dictionary large enough, lemmatization done locally
     // "zho", // tokenized and lemmatized by spacy
   ],
-  lemmatizationTableLangs: { // Languages that can be lemmatized by https://github.com/michmech/lemmatization-lists
+  lemmatizationTableLangs: {
+    // Languages that can be lemmatized by https://github.com/michmech/lemmatization-lists
     // cat: 'ca',
     // deu: 'de',
     // eng: 'en',
@@ -143,7 +144,7 @@ const Dictionary = {
     tsd: "ell",
     tir: "amh",
     wol: "fra",
-    vec: "ita"
+    vec: "ita",
   },
   lemmatization: undefined,
   accentCritical: false,
@@ -211,7 +212,7 @@ const Dictionary = {
       }
       this.words = words;
       this.createIndices();
-      if (this.l2 === 'eng' && this.l1 !== 'eng') this.loadEnglishLemmatizer() // Our strategy of finding lemmas based on the word 'of' in the definition obviously doesn't work for definitions not in English
+      if (this.l2 === "eng" && this.l1 !== "eng") this.loadEnglishLemmatizer(); // Our strategy of finding lemmas based on the word 'of' in the definition obviously doesn't work for definitions not in English
       console.log("Wiktionary: loaded.");
       return this;
     }
@@ -219,32 +220,35 @@ const Dictionary = {
   // For Non-English users
   async loadEnglishLemmatizer() {
     console.log('Loading English lemmatizer "javascript-lemmatizer"...');
-    importScripts('../vendor/javascript-lemmatizer/js/lemmatizer.js')
+    importScripts("../vendor/javascript-lemmatizer/js/lemmatizer.js");
     this.englishLemmatizer = new Lemmatizer();
   },
   async loadWords(file) {
-    let data
-    let indexedDBKey = `wiktionary-${this.l2}-${this.l1}`
-    if (this.indexDbVerByLang[this.l2]) indexedDBKey += '-v' + this.indexDbVerByLang[this.l2] // Force refresh a dictionary when it's outdated
-    data = await localforage.getItem(indexedDBKey)
+    let data;
+    let indexedDBKey = `wiktionary-${this.l2}-${this.l1}`;
+    if (this.indexDbVerByLang[this.l2])
+      indexedDBKey += "-v" + this.indexDbVerByLang[this.l2]; // Force refresh a dictionary when it's outdated
+    data = await localforage.getItem(indexedDBKey);
     if (data) {
-      console.log(`Wiktionary: data loaded from local indexedDB via localforage, key '${indexedDBKey}'`);
+      console.log(
+        `Wiktionary: data loaded from local indexedDB via localforage, key '${indexedDBKey}'`
+      );
     } else {
       console.log(`Wiktionary: loading ${file}`);
       let res = await axios.get(file);
-      data = res.data
+      data = res.data;
       res = null;
     }
-    if (!data) return
-    localforage.setItem(indexedDBKey, data)
-    let words = this.parseDictionaryCSV(data)
+    if (!data) return;
+    localforage.setItem(indexedDBKey, data);
+    let words = this.parseDictionaryCSV(data);
     words = words.sort((a, b) => {
       if (a.head && b.head) {
         return b.head.length - a.head.length;
       }
     });
     words = words.map((word, index) => {
-      word.id = 'w' + hash(word.head + word.definitions[0]);
+      word.id = "w" + hash(word.head + word.definitions[0]);
       return word;
     });
     console.log(`Wiktionary: ${file} loaded.`);
@@ -256,82 +260,91 @@ const Dictionary = {
       for (let indexType of ["head", "search"]) {
         if (!Array.isArray(this[indexType + "Index"][word[indexType]]))
           this[indexType + "Index"][word[indexType]] = [];
-        this[indexType + "Index"][word[indexType]] = this[indexType + "Index"][
-          word[indexType]
-        ].concat(word);
+        this[indexType + "Index"][word[indexType]] =
+          this[indexType + "Index"][word[indexType]].concat(word);
       }
       if (/[\s'.\-]/.test(word.head)) {
         for (let w of word.head.split(/[\s']/)) {
-          this.addToPhraseIndex(w, word)
+          this.addToPhraseIndex(w, word);
         }
       }
     }
-    if (this.l1 === 'eng') this.buildInflectionIndex() // this only works for English because we're looking for definitions with the word 'of' to guess the inflection
+    if (this.l1 === "eng") this.buildInflectionIndex(); // this only works for English because we're looking for definitions with the word 'of' to guess the inflection
     for (let key in this.phraseIndex) {
-      this.phraseIndex[key] = this.phraseIndex[key].sort((a, b) => a.head.length - b.head.length)
+      this.phraseIndex[key] = this.phraseIndex[key].sort(
+        (a, b) => a.head.length - b.head.length
+      );
     }
   },
   addToPhraseIndex(head, word) {
-    let w = '@' + head
-    if (!this.phraseIndex[w]) this.phraseIndex[w] = []
-    this.phraseIndex[w].push(word)
+    let w = "@" + head;
+    if (!this.phraseIndex[w]) this.phraseIndex[w] = [];
+    this.phraseIndex[w].push(word);
   },
   /**
    * Get a word by ID. This is called from various components.
    * @param {*} id the word's id
    * @param {*} head (optional) the head of the word to check if matches the word retrieved; if mismatched, we'll look for a matching word instead.
-   * @returns 
+   * @returns
    */
   get(id, head) {
-    let word
-    word = this.words.find(w => w.id === id);
+    let word;
+    word = this.words.find((w) => w.id === id);
     if (head && word && word.head !== head) {
-      word = this.lookup(head)
+      word = this.lookup(head);
     }
-    this.addPhrasesToWord(word)
-    return word
+    this.addPhrasesToWord(word);
+    return word;
   },
   getPhraseIndex(head) {
-    let w = '@' + head
-    if (!this.phraseIndex[w]) this.phraseIndex[w] = []
-    return this.phraseIndex[w]
+    let w = "@" + head;
+    if (!this.phraseIndex[w]) this.phraseIndex[w] = [];
+    return this.phraseIndex[w];
   },
   lemmaKey(lemma) {
-    return 'l' + lemma
+    return "l" + lemma;
   },
   buildInflectionIndex() {
     for (let word of this.words) {
       for (let definition of word.definitions) {
-        let lemma = this.lemmaFromDefinition(definition)
+        let lemma = this.lemmaFromDefinition(definition);
         if (lemma) {
-          let lemmaWords = this.searchIndex[lemma.lemma.toLowerCase()]
+          let lemmaWords = this.searchIndex[lemma.lemma.toLowerCase()];
           if (lemmaWords) {
-            let lemmaKey = this.lemmaKey(lemma.lemma)
-            this.inflectionIndex[word.head] = this.inflectionIndex[word.head] || []
-            this.inflectionIndex[word.head] = this.inflectionIndex[word.head].concat(lemmaWords)
-            this.lemmaIndex[lemmaKey] = this.lemmaIndex[lemmaKey] || []
-            this.lemmaIndex[lemmaKey].push(word)
+            let lemmaKey = this.lemmaKey(lemma.lemma);
+            this.inflectionIndex[word.head] =
+              this.inflectionIndex[word.head] || [];
+            this.inflectionIndex[word.head] =
+              this.inflectionIndex[word.head].concat(lemmaWords);
+            this.lemmaIndex[lemmaKey] = this.lemmaIndex[lemmaKey] || [];
+            this.lemmaIndex[lemmaKey].push(word);
           }
         }
       }
     }
     for (let form in this.inflectionIndex) {
-      this.inflectionIndex[form] = this.uniqueByValue(this.inflectionIndex[form], 'id')
+      this.inflectionIndex[form] = this.uniqueByValue(
+        this.inflectionIndex[form],
+        "id"
+      );
     }
 
     for (let lemmaKey in this.lemmaIndex) {
-      this.lemmaIndex[lemmaKey] = this.uniqueByValue(this.lemmaIndex[lemmaKey], 'id')
+      this.lemmaIndex[lemmaKey] = this.uniqueByValue(
+        this.lemmaIndex[lemmaKey],
+        "id"
+      );
     }
   },
   parseDictionaryCSV(data) {
     console.log("Wiktionary: parsing words from CSV...");
     let parsed = Papa.parse(data, { header: true });
     let words = parsed.data;
-    let hasStems = parsed.meta.fields.includes('stems')
-    let hasPhrases = parsed.meta.fields.includes('phrases')
+    let hasStems = parsed.meta.fields.includes("stems");
+    let hasPhrases = parsed.meta.fields.includes("phrases");
     words = words
-      .filter(w => w.word.length > 0) // filter empty rows
-      .map(item => this.augmentCSVRow(item, !hasStems, !hasPhrases));
+      .filter((w) => w.word.length > 0) // filter empty rows
+      .map((item) => this.augmentCSVRow(item, !hasStems, !hasPhrases));
     return words;
   },
   augmentCSVRow(item, findStems = false, findPhrases = false) {
@@ -348,7 +361,7 @@ const Dictionary = {
     if (item.han) {
       item.cjk = {
         canonical: item.han,
-        pronunciation: item.head
+        pronunciation: item.head,
       };
       item.hanja = item.han;
     }
@@ -388,15 +401,19 @@ const Dictionary = {
     return transliteration;
   },
   hasHan(text) {
-    return text.match(/[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g);
+    return text.match(
+      /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g
+    );
   },
   isHan(text) {
-    return /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/.test(text);
+    return /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/.test(
+      text
+    );
   },
   addPhrasesToWord(word) {
     if (word) {
       if (!word.phrases || word.phrases.length === 0) {
-        word.phrases = this.getPhraseIndex(word.head) || []
+        word.phrases = this.getPhraseIndex(word.head) || [];
       }
     }
   },
@@ -431,32 +448,39 @@ const Dictionary = {
    */
   lemmatizeIfAble(text) {
     let lemmaWords = [];
-    let lemmas
-    if (this.lemmatizationTableLangs[this.l2]) lemmas = this.lemmatization[text];
+    let lemmas;
+    if (this.lemmatizationTableLangs[this.l2])
+      lemmas = this.lemmatization[text];
     if (lemmas) {
       for (let lemma of lemmas) {
-        lemmaWords = lemmaWords.concat(
-          this.lookupMultiple(lemma)
-        );
+        lemmaWords = lemmaWords.concat(this.lookupMultiple(lemma));
       }
-      lemmaWords = lemmaWords.map(w => {
+      lemmaWords = lemmaWords.map((w) => {
         return {
-          score: 1,
-          w: Object.assign({ morphology: "Inflected form" }, w)
+          score: 1.1,
+          w: Object.assign({ morphology: "Inflected form" }, w),
         };
       });
     }
-    return lemmaWords
+    return lemmaWords;
   },
   lookupFuzzy(text, limit = 30, quick = false) {
-    // text = 'abcde'
     if (!this.accentCritical) text = this.stripAccents(text);
     text = text.toLowerCase();
-    let words = [];
-    words = (this.searchIndex[text] || []).map(w => {
-      return { score: 1, w };
+    let uniqueWords = new Set();
+    
+    (this.searchIndex[text] || []).forEach(word => {
+      uniqueWords.add(word);
     });
-    words = words.concat(this.lemmatizeIfAble(text))
+  
+    this.lemmatizeIfAble(text).forEach(word => {
+      uniqueWords.add(word);
+    });
+  
+    let words = Array.from(uniqueWords).map(word => {
+      return { score: 1, w: word };
+    });
+  
     if (!quick) {
       if (words.length === 0 && this.words.length < 200000) {
         for (let word of this.words) {
@@ -470,20 +494,22 @@ const Dictionary = {
             words.push({ score: similarity, w: word });
           }
         }
+        words = words.sort((a, b) => b.score - a.score);
       }
-
+  
       let lemmaWords = []
-
+  
       for (let word of words.slice(0, 10)) {
         let lemmas = this.inflectionIndex[word.w.head.toLowerCase()]
-        if (lemmas) lemmaWords = lemmaWords.concat(lemmas.map(w => { return { w, score: 1 } }))
+        if (lemmas) lemmaWords = lemmaWords.concat(lemmas.map(w => { return { w, score: 1.1 } }))
       }
       words = [...lemmaWords, ...words]
-
+  
+      words = words.sort((a, b) => b.score - a.score);
+      words = words.slice(0, limit);
       words.forEach(w => {
         this.addPhrasesToWord(w.w)
-      })
-      words = words.sort((a, b) => b.score - a.score);
+      });
     }
     words = words.slice(0, limit);
     return words.map(w => w.w);
@@ -514,11 +540,11 @@ const Dictionary = {
   // Called from <SearchSubComp> to look for exclusion terms.
   getWordsThatContain(text) {
     let words = this.words.filter(
-      w => w.head.includes(text) || w.search.includes(text)
+      (w) => w.head.includes(text) || w.search.includes(text)
     );
     let strings = words
-      .map(word => word.search)
-      .concat(words.map(word => word.head));
+      .map((word) => word.search)
+      .concat(words.map((word) => word.head));
     return this.unique(strings);
   },
   formTable() {
@@ -526,8 +552,8 @@ const Dictionary = {
   },
   // https://stackoverflow.com/questions/38613654/javascript-find-unique-objects-in-array-based-on-multiple-properties
   uniqueByValues(arr, keyProps) {
-    const kvArray = arr.map(entry => {
-      const key = keyProps.map(k => entry[k]).join("|");
+    const kvArray = arr.map((entry) => {
+      const key = keyProps.map((k) => entry[k]).join("|");
       return [key, entry];
     });
     const map = new Map(kvArray);
@@ -538,8 +564,8 @@ const Dictionary = {
       {
         table: "head",
         field: "head",
-        form: word.head
-      }
+        form: word.head,
+      },
     ];
     if (this.l2 !== "vie") forms = forms.concat(this.findForms(word));
     forms = this.uniqueByValues(forms, ["table", "field", "form"]);
@@ -553,26 +579,26 @@ const Dictionary = {
       if (this.l2 === "lat") lemma = this.stripAccents(lemma);
       return {
         lemma,
-        morphology: m
+        morphology: m,
       };
     }
   },
   findForms(word) {
     let forms = [];
-    let lemmaWords = this.inflectionIndex[word.search]
+    let lemmaWords = this.inflectionIndex[word.search];
     if (lemmaWords) {
       forms = forms.concat(
-        lemmaWords.map(s => {
+        lemmaWords.map((s) => {
           return {
             table: "lemma",
             field: "lemma",
-            form: s.head
+            form: s.head,
           };
         })
       );
     }
     // Find all forms of the word, that is, words whose stem matches word.head
-    let words = this.lemmaIndex[this.lemmaKey(word.head)] || []
+    let words = this.lemmaIndex[this.lemmaKey(word.head)] || [];
     let moreForms = [];
     let heads = [word.head];
     for (let w of words) {
@@ -589,18 +615,18 @@ const Dictionary = {
               if (table === "") {
                 table = "inflected";
                 field =
-                  field.replace("A(n) ", "").replace("A", "inflected") + " form";
+                  field.replace("A(n) ", "").replace("A", "inflected") +
+                  " form";
               } else field = field.replace(table, "");
               if (field === "A") field = "inflected";
               let form = {
                 table,
                 field: field ? field : table,
-                form: w.head
+                form: w.head,
               };
               moreForms.push(form);
             }
           }
-
         }
       }
     }
@@ -628,7 +654,7 @@ const Dictionary = {
   subdictFromText(text) {
     let search = text.toLowerCase();
     if (!this.accentCritical) search = this.stripAccents(search);
-    let subdictFilterFunction = row => {
+    let subdictFilterFunction = (row) => {
       if (this.accentCritical) {
         return text.includes(row.head) || search.includes(row.head);
       } else {
@@ -679,11 +705,11 @@ const Dictionary = {
         }
       }
       if (matched) {
-        this.addPhrasesToWord(word)
+        this.addPhrasesToWord(word);
         matches.push({
           word,
           matchedIndex,
-          matchEndIndex
+          matchEndIndex,
         });
       }
     }
@@ -698,16 +724,18 @@ const Dictionary = {
       });
     }
     return {
-      matches: matches.map(m => m.word),
-      text: matchedText
+      matches: matches.map((m) => m.word),
+      text: matchedText,
     };
   },
   tokenize(text, tokenizationType = "integral") {
     if (this.tokenizationCache[text]) return this.tokenizationCache[text];
     else {
-      let tokenized = []
-      if (this.tokenizationByServer.includes(this.l2)) tokenized = this.tokenizeFromServer(text)
-      else if (this.l2 === 'eng' && this.l1 !== 'eng') tokenized = this.tokenizeEnglish(text)
+      let tokenized = [];
+      if (this.tokenizationByServer.includes(this.l2))
+        tokenized = this.tokenizeFromServer(text);
+      else if (this.l2 === "eng" && this.l1 !== "eng")
+        tokenized = this.tokenizeEnglish(text);
       else {
         switch (tokenizationType) {
           // tokenizationType passed in from <Annotate>
@@ -727,56 +755,60 @@ const Dictionary = {
   },
   tokenizeIntegral(text) {
     const tokens = text.match(/[\p{L}\p{M}]+|[^\p{L}\p{M}\s]+|\s+/gu);
-    const labeledTokens = tokens.map(tokenString => {
-      let isWord = /^[\p{L}\p{M}]+$/u.test(tokenString)
+    const labeledTokens = tokens.map((tokenString) => {
+      let isWord = /^[\p{L}\p{M}]+$/u.test(tokenString);
       if (isWord) {
         return { text: tokenString };
       } else {
         return tokenString;
       }
     });
-    return labeledTokens
+    return labeledTokens;
   },
   tokenizeContinua(text) {
     let subdict = this.subdictFromText(text);
     let tokenized = this.tokenizeRecursively(text, subdict);
-    return tokenized
+    return tokenized;
   },
   // https://stackoverflow.com/questions/175739/how-can-i-check-if-a-string-is-a-valid-number
   isNumeric(str) {
-    if (typeof str != "string") return false // we only process strings!  
-    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-      !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+    if (typeof str != "string") return false; // we only process strings!
+    return (
+      !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+      !isNaN(parseFloat(str))
+    ); // ...and ensure strings of whitespace fail
   },
   splitByReg(text, reg) {
-    let words = text.replace(reg, '!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!').replace(/^!!!BREAKWORKD!!!/, '').replace(/!!!BREAKWORKD!!!$/, '')
-    return words.split('!!!BREAKWORKD!!!')
+    let words = text
+      .replace(reg, "!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!")
+      .replace(/^!!!BREAKWORKD!!!/, "")
+      .replace(/!!!BREAKWORKD!!!$/, "");
+    return words.split("!!!BREAKWORKD!!!");
   },
   isEnglishPartialClitic(word) {
-    return this.l1 === 'eng' && ['m', 's', 't', 'll', 'd', 're', 'ain', 'don'].includes(word)
+    return (
+      this.l1 === "eng" &&
+      ["m", "s", "t", "ll", "d", "re", "ain", "don"].includes(word)
+    );
   },
   // For Non-English L1 only
   tokenizeEnglish(text) {
-    if (!this.englishLemmatizer) return []
+    if (!this.englishLemmatizer) return [];
     text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
     tokenized = [];
     let segs = this.splitByReg(text, /([a-zA-Z0-9]+)/gi);
-    let reg = new RegExp(
-      `.*([a-z0-9]+).*`
-    );
+    let reg = new RegExp(`.*([a-z0-9]+).*`);
     for (let seg of segs) {
       let word = seg.toLowerCase();
-      if (
-        reg.test(word) && !this.isEnglishPartialClitic(word)
-      ) {
+      if (reg.test(word) && !this.isEnglishPartialClitic(word)) {
         let token = {
           text: seg,
           candidates: [],
         };
         let lemmas = this.englishLemmatizer.lemmas(word);
-        if (lemmas && lemmas.length === 1) token.pos = lemmas[0][1]
+        if (lemmas && lemmas.length === 1) token.pos = lemmas[0][1];
         lemmas = [[word, "inflected"]].concat(lemmas);
-        let forms = this.unique(lemmas.map(l => l[0]))
+        let forms = this.unique(lemmas.map((l) => l[0]));
 
         for (let form of forms) {
           let candidates = this.lookupMultiple(form);
@@ -791,20 +823,20 @@ const Dictionary = {
         tokenized.push(seg);
       }
     }
-    return tokenized
+    return tokenized;
   },
   async tokenizeFromServer(text) {
-    let final = []
+    let final = [];
     if (this.l2 === "tur") final = this.tokenizeTurkish(text);
-    else if (this.l2 === 'ara') final = this.tokenizeArabic(text);
-    else if (this.l2 === 'fas') final = this.tokenizePersian(text);
+    else if (this.l2 === "ara") final = this.tokenizeArabic(text);
+    else if (this.l2 === "fas") final = this.tokenizePersian(text);
     else {
       // Lemmatize-simple
       let tokens = [];
       text = text.replace(/-/g, "- ");
-      let url = `${PYTHON_SERVER}lemmatize-simple?lang=${this.l2}&text=${encodeURIComponent(
-        text
-      )}`;
+      let url = `${PYTHON_SERVER}lemmatize-simple?lang=${
+        this.l2
+      }&text=${encodeURIComponent(text)}`;
       let tokenized = await this.proxy(url);
       for (let token of tokenized) {
         if (!token) {
@@ -816,35 +848,31 @@ const Dictionary = {
         }
       }
       for (let index in tokens) {
-        let token = tokens[index]
-        if (typeof token === 'object') {
-          let candidates = this.lookupMultiple(
-            token.word
-          );
+        let token = tokens[index];
+        if (typeof token === "object") {
+          let candidates = this.lookupMultiple(token.word);
           if (token.lemma && token.lemma !== token.word) {
-            let lemmas = this.lookupMultiple(
-              token.lemma
-            )
-            candidates = [...lemmas, ...candidates]
+            let lemmas = this.lookupMultiple(token.lemma);
+            candidates = [...lemmas, ...candidates];
           }
           final.push({
             text: token.word,
             lemmas: [token.lemma],
             pos: token.pos,
             candidates,
-          })
+          });
         } else {
-          final.push(token)
+          final.push(token);
         }
-        final.push(" ")
+        final.push(" ");
       }
     }
-    this.tokenizationCache[text] = final
+    this.tokenizationCache[text] = final;
     return final;
   },
   getLemmas(text) {
-    let lemmas = this.inflectionIndex[text]
-    return lemmas
+    let lemmas = this.inflectionIndex[text];
+    return lemmas;
   },
   async tokenizePersian(text) {
     text = text.replace(/-/g, "- ");
@@ -852,31 +880,25 @@ const Dictionary = {
       text
     )}`;
     let tokens = await this.proxy(url);
-    tokens = tokens.map (token => {
+    tokens = tokens.map((token) => {
       const lemmaWithStem = token.lemma;
-      const parts = lemmaWithStem.split('#');
+      const parts = lemmaWithStem.split("#");
       const lemma = parts[0];
       const stem = parts.length > 1 ? parts[1] : null;
       token.lemma = lemma;
       token.stem = stem;
-      return token
-    })
+      return token;
+    });
     return this.lookupFromTokens(tokens);
   },
   lookupFromTokens(tokens) {
-    let final = []
+    let final = [];
     for (let index in tokens) {
-      let token = tokens[index]
-      if (typeof token === 'object') {
-        let candidates = this.lookupMultiple(
-          token.word
-        );
+      let token = tokens[index];
+      if (typeof token === "object") {
+        let candidates = this.lookupMultiple(token.word);
         if (token.lemma && token.lemma !== token.word) {
-          candidates = candidates.concat(
-            this.lookupMultiple(
-              token.lemma
-            )
-          );
+          candidates = candidates.concat(this.lookupMultiple(token.lemma));
         }
         final.push({
           text: token.word,
@@ -884,14 +906,14 @@ const Dictionary = {
           lemmas: [token.lemma],
           pos: token.pos,
           stem: token.stem,
-          pronunciation: token.pronunciation
-        })
-        final.push(" ")
+          pronunciation: token.pronunciation,
+        });
+        final.push(" ");
       } else {
-        final.push(token.word || token) // string
+        final.push(token.word || token); // string
       }
     }
-    return final
+    return final;
   },
   async tokenizeArabic(text) {
     text = text.replace(/-/g, "- ");
@@ -906,23 +928,24 @@ const Dictionary = {
       } else if (["punc"].includes(lemmas[0].pos)) {
         tokens.push(lemmas[0].word);
         tokens.push(" ");
-      } else if (["all"].includes(lemmas[0].pos) && this.isNumeric(lemmas[0].word)) {
+      } else if (
+        ["all"].includes(lemmas[0].pos) &&
+        this.isNumeric(lemmas[0].word)
+      ) {
         tokens.push(lemmas[0].word);
         tokens.push(" ");
       } else {
         let candidates = [];
         for (let lemma of lemmas) {
           candidates = candidates.concat(this.lookupMultiple(lemma.word));
-          candidates = candidates.concat(
-            this.lookupMultiple(lemma.lemma)
-          );
+          candidates = candidates.concat(this.lookupMultiple(lemma.lemma));
         }
         candidates = this.uniqueByValue(candidates, "id");
         tokens.push({
           text: lemmas[0].word,
-          lemmas: lemmas.map(l => l.lemma),
+          lemmas: lemmas.map((l) => l.lemma),
           candidates,
-          pos: lemmas[0].pos
+          pos: lemmas[0].pos,
         });
         tokens.push(" ");
       }
@@ -948,10 +971,8 @@ const Dictionary = {
           candidates = candidates.concat(this.lookupMultiple(lemma.word));
           if (lemma !== "Unk")
             candidates = candidates.concat(
-              this.lookupMultiple(lemma.lemma).map(w => {
-                w.morphology = lemma.morphemes
-                  .join(", ")
-                  .toLowerCase();
+              this.lookupMultiple(lemma.lemma).map((w) => {
+                w.morphology = lemma.morphemes.join(", ").toLowerCase();
                 return w;
               })
             );
@@ -959,9 +980,9 @@ const Dictionary = {
         candidates = this.uniqueByValue(candidates, "id");
         tokens.push({
           text: lemmas[0].word,
-          lemmas: lemmas.map(l => l.lemma),
+          lemmas: lemmas.map((l) => l.lemma),
           candidates,
-          pos: lemmas[0].pos
+          pos: lemmas[0].pos,
         });
         tokens.push(" ");
       }
@@ -971,8 +992,9 @@ const Dictionary = {
   // json or plain text only, and returns object
   async proxy(url, cacheLife = -1, encoding = false) {
     try {
-      let proxyURL = `${PROXY_SERVER}scrape2.php?cache_life=${cacheLife}${encoding ? "&encoding=" + encoding : ""
-        }&url=${encodeURIComponent(url)}`;
+      let proxyURL = `${PROXY_SERVER}scrape2.php?cache_life=${cacheLife}${
+        encoding ? "&encoding=" + encoding : ""
+      }&url=${encodeURIComponent(url)}`;
       let response = await axios.get(proxyURL);
       if (response.data) {
         return response.data;
@@ -996,7 +1018,9 @@ const Dictionary = {
     }
     if (longest.matches.length > 0) {
       for (let word of longest.matches) {
-        longest.matches = this.stemWordsWithScores(word, 1).map(w => w.w).concat(longest.matches);
+        longest.matches = this.stemWordsWithScores(word, 1)
+          .map((w) => w.w)
+          .concat(longest.matches);
         // longest.matches = longest.matches.concat(this.phrasesWithScores(word, 1)) // This is very slow
       }
       let result = [];
@@ -1014,10 +1038,10 @@ const Dictionary = {
         result.push(textFragment); // '我'
         result.push({
           text: longest.text,
-          candidates: longest.matches
+          candidates: longest.matches,
         });
       }
-      result = result.filter(item => {
+      result = result.filter((item) => {
         if (typeof item === "string") {
           return item !== "";
         } else {
@@ -1054,11 +1078,11 @@ const Dictionary = {
   stemWordsWithScores(word, score = undefined) {
     let stemWords = this.inflectionIndex[word.head];
     if (stemWords) {
-      let stemWordsWithScores = stemWords.map(w => {
+      let stemWordsWithScores = stemWords.map((w) => {
         return { score, w };
       });
       return stemWordsWithScores;
-    } else return []
+    } else return [];
   },
   /**
    * Find phrases that contain a word
@@ -1067,10 +1091,12 @@ const Dictionary = {
    * @returns {Array} An array of phrases each wrapped in an object { w: word, score: score }
    */
   phrasesWithScores(word, score = undefined) {
-    let phraseObjs = this.getPhraseIndex(word.head)
+    let phraseObjs = this.getPhraseIndex(word.head);
     if (phraseObjs) {
-      let mapped = phraseObjs.map(w => { return { w, score } })
-      return mapped
+      let mapped = phraseObjs.map((w) => {
+        return { w, score };
+      });
+      return mapped;
     } else return [];
   },
   unique(a) {
@@ -1094,5 +1120,5 @@ const Dictionary = {
   /* @shimondoodkin suggested even a much shorter way to do this */
   stripHebrewVowels(rawString) {
     return rawString.replace(/[\u0591-\u05C7]/g, "");
-  }
+  },
 };
