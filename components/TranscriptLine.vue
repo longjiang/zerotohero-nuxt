@@ -2,6 +2,7 @@
   <container-query :query="query" v-model="params">
     <div
       :class="{
+        [`skin-${$skin}`]: true,
         'transcript-line': true,
         'transcript-line-abnormal': abnormal,
         'transcript-line-current': current,
@@ -236,6 +237,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+
+.skin-dark {
+  .dot,
+  .dot:before,
+  .dot:after {
+    background: #54ff7c;
+  }
+}
+.skin-light {
+  .dot,
+  .dot:before,
+  .dot:after {
+    background: #0cac31;
+  }
+}
+
 .dot-wrapper-ltr {
   width: 1.5rem;
   min-width: 1.5rem;
@@ -346,9 +364,10 @@ export default {
   height: 0.66rem;
   width: 0.66rem;
   border-radius: 50%;
-  background: #54ff7c;
   opacity: 0.5;
 }
+
+
 
 .dot:after {
   content: "";
@@ -356,7 +375,6 @@ export default {
   height: 0.66rem;
   width: 0.66rem;
   border-radius: 50%;
-  background: #54ff7c;
   display: block;
   animation: pulse 2s ease 0s infinite;
 }
@@ -367,7 +385,6 @@ export default {
   height: 0.66rem;
   width: 0.66rem;
   border-radius: 50%;
-  background: #54ff7c;
   display: block;
   animation: pulse2 2s ease 0s infinite;
 }

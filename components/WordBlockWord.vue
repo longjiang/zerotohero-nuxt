@@ -125,6 +125,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.zerotohero-dark {
+  .word-block,
+  .word-block-unknown {
+    &.animate {
+      animation-name: shinedark;
+    }
+  }
+}
+
+.zerotohero-light {
+  .word-block,
+  .word-block-unknown {
+    &.animate {
+      animation-name: shinelight;
+    }
+  }
+}
+
 .show-pinyin .word-block .word-block-hard {
   // text-decoration: underline;
   background-color: rgba(255, 226, 129, 0.137);
@@ -144,7 +162,6 @@ export default {
 .word-block,
 .word-block-unknown {
   &.animate {
-    animation-name: shine;
     animation-iteration-count: 1;
     animation-duration: 2s;
     animation-timing-function: ease-in-out;
@@ -158,12 +175,24 @@ export default {
   opacity: 0;
 }
 
-@keyframes shine {
+@keyframes shinedark {
   0% {
     color: inherit;
   }
   10% {
     color: #54ff7c;
+  }
+  100% {
+    color: inherit;
+  }
+}
+
+@keyframes shinelight {
+  0% {
+    color: inherit;
+  }
+  10% {
+    color: #00d031;
   }
   100% {
     color: inherit;

@@ -558,6 +558,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 #speech-container.skin-dark {
   .speech-bar,
   .speech-nav {
@@ -572,6 +573,28 @@ export default {
     cursor: pointer;
   }
 }
+
+:deep(.sentence.current),
+:deep(.translation-sentence.current),
+:deep(.annotate-translation-sentence.current) {
+  background-color: rgba($primary-color, 0.25);
+}
+
+#speech-container.skin-light {
+  .speech-bar,
+  .speech-nav {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #eaeaea;
+    border-radius: 0.25rem;
+  }
+  .speech-nav-page-select {
+    background-color: #eee;
+    color: #333;
+    cursor: pointer;
+  }
+}
+
 .speech-nav {
   justify-content: center;
   align-items: center;
@@ -580,12 +603,6 @@ export default {
     padding-right: 1.25rem !important;
     margin: auto;
   }
-}
-
-:deep(.sentence.current),
-:deep(.translation-sentence.current),
-:deep(.annotate-translation-sentence.current) {
-  background-color: rgba(212, 212, 255, 0.5);
 }
 
 .translation-sentence {

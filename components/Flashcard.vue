@@ -3,6 +3,7 @@
     @click="toggleReveal"
     :class="{
       flashcard: active,
+      [`skin-${$skin}`]: true,
       flipped,
     }"
   >
@@ -37,16 +38,31 @@ export default {
 
 <style lang="scss" scoped>
 .flashcard {
+  &.skin-light {
+    filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.33));
+    .front,
+    .back {
+      background-color: #ffffff;
+      border: 1px solid #dddddd;
+    }
+  }
+  &.skin-dark {
+    filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.33));
+    .front,
+    .back {
+      background-color: #222;
+      border: 1px solid #444;
+    }
+  }
+}
+.flashcard {
   position: relative;
   width: 100%;
   margin-bottom: 1rem;
-  filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.33));
 }
 
 .flashcard .front,
 .flashcard .back {
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
   border-radius: 5px;
   /* box-shadow: 4px 6px 11px rgba(0, 0, 0, 0.2); */
   display: flex;

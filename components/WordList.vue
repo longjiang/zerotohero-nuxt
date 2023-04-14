@@ -52,16 +52,19 @@
               <span
                 v-if="$l2.code === 'vi'"
                 v-html="
-                  '[' + word.pronunciation.replace(
+                  '[' +
+                  word.pronunciation.replace(
                     /\[\[(.+?)#Vietnamese\|.+?]]/g,
                     '$1'
-                  ) + ']'
+                  ) +
+                  ']'
                 "
               />
               <span v-else>[{{ word.pronunciation }}]</span>
             </span>
             <span v-if="word.kana" class="wordlist-item-pinyin">
-              ( {{ word.kana }} <template v-if="word.romaji">, {{word.romaji }}</template> )
+              ( {{ word.kana }}
+              <template v-if="word.romaji">, {{ word.romaji }}</template> )
             </span>
             <span
               v-if="
@@ -78,7 +81,7 @@
             v-if="word.definitions"
             :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
           >
-            <span class="word-type" v-if="word.pos" style="color: #999">
+            <span class="word-type" v-if="word.pos">
               {{
                 word.gender
                   ? { m: "masculine", f: "feminine", n: "neuter" }[word.gender]
@@ -165,7 +168,7 @@ export default {
       type: Function,
     },
     skin: {
-      default: "light",
+      default: null,
     },
     hideWord: {
       default: false,
@@ -181,18 +184,18 @@ export default {
       default: false,
     },
     showSpeak: {
-      default: true
-    }
+      default: true,
+    },
   },
   computed: {
     classes() {
       let classes = {
         wordlist: true,
-        "wordlist-dark": this.skin === "dark",
         "list-unstyled": true,
         collapsed: this.collapse > 0,
       };
       classes[`collapse-${this.collapse}`] = true;
+      classes[`skin-${this.$skin}`] = true;
       return classes;
     },
   },
@@ -202,9 +205,10 @@ export default {
         let dictionary = await this.$getDictionary();
         let words = await Promise.all(
           this.ids.map(async (id) => {
-            let word = await dictionary.get(id)
-            if (this.$l2.code === 'ja') word.romaji = await dictionary.transliterate(text)
-            return word
+            let word = await dictionary.get(id);
+            if (this.$l2.code === "ja")
+              word.romaji = await dictionary.transliterate(text);
+            return word;
           })
         );
         words = words ? words.filter((w) => w) : [];
@@ -253,6 +257,38 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/assets/scss/variables.scss";
+.word-type {
+  opacity: 0.7;
+}
+
+.wordlist.skin-light {
+  .wordlist-item a {
+    .wordlist-item-pinyin,
+    .wordlist-item-pinyin * {
+      color: #779bb5;
+    }
+
+    .wordlist-item-l1 {
+      color: #666;
+    }
+
+    .wordlist-item-byeonggi {
+      color: rgb(143, 158, 172);
+    }
+  }
+}
+
+.wordlist.skin-dark {
+  .wordlist-item a {
+    .wordlist-item-pinyin,
+    .wordlist-item-pinyin * {
+      color: rgba(255, 255, 255, 0.589);
+    }
+    .wordlist-item-l1 {
+      color: rgba(255, 255, 255, 0.781);
+    }
+  }
+}
 
 .wordlist {
   margin-bottom: inherit;
@@ -271,29 +307,12 @@ export default {
       font-size: 1.4em;
     }
 
-    .wordlist-item-l1 {
-      color: #666;
-    }
-
-    .wordlist-item-byeonggi {
-      color: rgb(143, 158, 172);
-    }
-
     &.matched {
       opacity: 0.2;
     }
     .wordlist-item-pinyin,
     .wordlist-item-pinyin * {
-      color: #779bb5;
       font-family: AndikaW, Andika, Arial, sans-serif;
-    }
-  }
-  &.wordlist-dark {
-    .wordlist-item-pinyin {
-      color: rgba(255, 255, 255, 0.589);
-    }
-    .wordlist-item-l1 {
-      color: rgba(255, 255, 255, 0.781);
     }
   }
 }

@@ -13,11 +13,33 @@
 
 .zerotohero-light {
   color: #333;
+  .list-group-item {
+    background-color: #fff;
+    &:hover {
+      background-color: #eee;
+    }
+  }
+  .bg-accent {
+    background-color: #fff;
+  }
+}
+
+.skin-dark hr {
+  border-color: #444;
 }
 
 .zerotohero-dark,
 .skin-dark {
   color: #ddd;
+  .list-group-item {
+    background-color: #333;
+    &:hover {
+      background-color: #444;
+    }
+  }
+  .bg-accent {
+    background-color: #333;
+  }
 }
 
 button {
@@ -361,7 +383,7 @@ h6,
 [data-level="C2"],
 [data-hover-level="C2"]:hover,
 [data-hover-level="C2"].saved {
-  color: #005f58 !important;
+  color: #9cc4c1 !important;
 }
 
 .leveloutside,
@@ -424,7 +446,7 @@ h6,
 .bg-levelC2,
 [data-bg-level="C2"],
 [data-bg-level="7"] {
-  background-color: #005f58 !important;
+  background-color: $color-c2 !important;
   color: white !important;
 }
 
@@ -504,7 +526,7 @@ h6,
 .l2-zh [data-hover-level="7-9"]:hover,
 .l2-zh [data-hover-level="7-9"].saved,
 .l2-zh .show-level-7-9 [data-hover-level="7-9"].sticky:not(.seen) {
-  color: #005f58 !important;
+  color: $color-c2 !important;
 }
 
 .l2-zh .leveloutside,
@@ -555,7 +577,7 @@ h6,
 
 .l2-zh .bg-level7-9,
 .l2-zh [data-bg-level="7-9"] {
-  background-color: #005f58 !important;
+  background-color: $color-c2 !important;
   color: white !important;
 }
 
@@ -861,6 +883,10 @@ button.bg-primary:focus {
 .btn-default:hover {
   background: $primary-color;
   color: white;
+}
+
+.btn-dark {
+  color: #ddd;
 }
 
 .list-group-item.active {

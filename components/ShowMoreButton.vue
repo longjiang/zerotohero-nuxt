@@ -1,15 +1,16 @@
 <template>
-  <button
+  <b-button
     v-if="visible()"
-    class="show-more btn-medium btn-gray focus-exclude"
-    :class="{ collapsed: collapsed }"
+    size="sm"
+    :class="{ 'show-more focus-exclude': true, collapsed: collapsed }"
+    :variant="$skin"
     v-on:click="showMoreClick"
   >
     <span v-if="collapsed">
       <slot>{{ $t('Show {count} More', {count: count()}) }}</slot>
     </span>
-    <span v-else>Collapse</span>
-  </button>
+    <span v-else>{{ $t('Collapse') }}</span>
+  </b-button>
 </template>
 
 <script>

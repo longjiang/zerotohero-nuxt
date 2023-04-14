@@ -115,7 +115,7 @@
             </router-link>
           </client-only>
           <client-only placeholder="Read the original">
-            <div class="bg-light p-4 mb-3 rounded" v-if="source(args)">
+            <div class="bg-accent p-4 mb-3 rounded" v-if="source(args)">
               <a :href="args" class="link-unstyled" target="_blank">
                 Read the original on
                 <img

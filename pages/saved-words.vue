@@ -108,7 +108,6 @@
               :hideDefinitions="hideDefinitions"
               :hidePhonetics="hidePhonetics"
               :hideWord="hideWord"
-              skin="light"
               class="mt-3"
             ></WordList>
           </div>
@@ -317,6 +316,16 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.zerotohero-dark {
+  .hide-defs {
+    background: #000;
+  }
+}
+.zerotohero-light {
+  .hide-defs {
+    background: #fff;
+  }
+}
 .hide-defs {
   position: sticky;
   z-index: 2;

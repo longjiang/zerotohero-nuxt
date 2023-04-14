@@ -1,5 +1,5 @@
 <template>
-  <div class="hide-defs-toggle">
+  <div :class="`hide-defs-toggle skin-${$skin}`">
     <b-button
       variant="unstyled"
       size="sm"
@@ -74,10 +74,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.skin-light {
+  .hide-defs-toggle {
+    button {
+      color: #666;
+    }
+  }
+}
+.skin-dark {
+  .hide-defs-toggle {
+    button {
+      color: #ccc;
+    }
+  }
+}
 .hide-defs-toggle {
   button {
     font-size: 0.8em;
-    color: #666;
     padding: 0;
   }
 }

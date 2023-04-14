@@ -288,15 +288,21 @@ export default {
 <style lang="scss" scoped>
 .video-view-minimized {
   &.skin-dark {
-    background: #000000aa;
+    background: #000000cc;
+    border-top: 1px solid #ffffff44;
     .toggle-wrapper {
-      color: #ccc;
+      .btn {
+        color: #ccc;
+      }
     }
   }
   &.skin-light {
-    background: #e6e6e6aa;
+    background: #e6e6e6cc;
+    border-top: 1px solid #00000044;
     .toggle-wrapper {
-      color: #444;
+      .btn {
+        color: #ccc;
+      }
     }
   }
 }

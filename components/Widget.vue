@@ -2,8 +2,8 @@
   <div
     :class="{
       widget: true,
-      'widget-dark': skin === 'dark',
-      'widget-light': skin === 'light',
+      'widget-dark': $skin === 'dark',
+      'widget-light': $skin === 'light',
     }"
   >
     <div class="widget-title">
@@ -19,7 +19,7 @@
 export default {
   props: {
     skin: {
-      default: "light",
+      default: null,
     },
     withPadding: {
       default: true
@@ -46,7 +46,7 @@ export default {
     border-radius: 0 0 0.3rem 0.3rem;
   }
   &.widget-dark {
-    background: black;
+    background: #222;
     color: rgba(255, 255, 255, 0.8);
     .widget-title {
       background-image: linear-gradient(180deg, #ffffff33 0%, #ffffff00 100%);

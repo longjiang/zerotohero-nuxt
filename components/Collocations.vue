@@ -1,128 +1,135 @@
 <template>
   <container-query :query="query" v-model="params">
-    <div class="widget">
-      <div class="widget-title">
+    <Widget>
+      <template #title>
         {{ $t("Collocations with “{text}”", { text: term }) }}
-      </div>
-      <div class="widget-body container jumbotron-fluid p-4">
-        <div class="text-center p-5" v-if="updating">
-          <Loader :sticky="true" message="Loading collocations..." />
-        </div>
-        <div class="row">
-          <div class="col-sm-12" v-if="sC.length > 0">
-            <ul class="list-unstyled mb-4 saved-collocations">
-              <li
-                v-for="collocation of sC"
-                :key="`collocation-${collocation.term}-${collocation.line}`"
-                class="mb-2 p-2"
-                style="display: flex"
-              >
-                <WebImages
-                  :text="collocation.line"
-                  limit="2"
-                  style="flex: 1; margin-right: 2rem"
-                />
-                <Annotate
-                  tag="div"
-                  :checkSaved="false"
-                  :buttons="true"
-                  style="flex: 1"
+      </template>
+      <template #body>
+        <div class="container">
+          <div class="text-center p-5" v-if="updating">
+            <Loader :sticky="true" message="Loading collocations..." />
+          </div>
+          <div class="row">
+            <div class="col-sm-12" v-if="sC.length > 0">
+              <ul class="list-unstyled mb-4 saved-collocations">
+                <li
+                  v-for="collocation of sC"
+                  :key="`collocation-${collocation.term}-${collocation.line}`"
+                  class="mb-2 p-2"
+                  style="display: flex"
                 >
-                  <span
-                    v-html="
-                      highlight(
-                        collocation.line,
-                        word ? word.head : text,
-                        level
-                      )
-                    "
-                    style="font-size: 1.2em"
+                  <WebImages
+                    :text="collocation.line"
+                    limit="2"
+                    style="flex: 1; margin-right: 2rem"
                   />
-                </Annotate>
-                <SmallStar
-                  :item="collocation"
-                  :saved="(collocation) => collocation.saved"
-                  :save="saveLine"
-                  :remove="removeSavedLine"
-                  style="
-                    overflow: hidden;
-                    margin-left: 0.5rem;
-                    margin-right: 1rem;
-                    float: right;
-                  "
-                />
-              </li>
-            </ul>
-            <button
-              class="btn-medium btn-secondary text-white mb-5 d-block"
-              :data-bg-level="collapsed ? level : false"
-              @click="collapsed = !collapsed"
-              v-if="sC.length > 0 && sketch && sketch.Gramrels"
-              style="margin: 0 auto; transform: translateX(-1.8rem)"
-            >
-              <span v-if="collapsed">More Collocations</span>
+                  <Annotate
+                    tag="div"
+                    :checkSaved="false"
+                    :buttons="true"
+                    style="flex: 1"
+                  >
+                    <span
+                      v-html="
+                        highlight(
+                          collocation.line,
+                          word ? word.head : text,
+                          level
+                        )
+                      "
+                      style="font-size: 1.2em"
+                    />
+                  </Annotate>
+                  <SmallStar
+                    :item="collocation"
+                    :saved="(collocation) => collocation.saved"
+                    :save="saveLine"
+                    :remove="removeSavedLine"
+                    style="
+                      overflow: hidden;
+                      margin-left: 0.5rem;
+                      margin-right: 1rem;
+                      float: right;
+                    "
+                  />
+                </li>
+              </ul>
+              <button
+                class="btn-medium btn-secondary text-white mb-5 d-block"
+                :data-bg-level="collapsed ? level : false"
+                @click="collapsed = !collapsed"
+                v-if="sC.length > 0 && sketch && sketch.Gramrels"
+                style="margin: 0 auto; transform: translateX(-1.8rem)"
+              >
+                <span v-if="collapsed">More Collocations</span>
 
-              <span v-else>Hide Other Collocations</span>
-            </button>
+                <span v-else>Hide Other Collocations</span>
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="row" v-if="sketch && sketch.Gramrels">
+          <div class="row" v-if="sketch && sketch.Gramrels">
+            <div
+              v-for="(description, index) in colDescArray"
+              :class="{
+                'col-12': params.xs,
+                'col-6': params.sm,
+                'col-4': params.md,
+                'col-3': params.lg || params.xl || params.xxl,
+              }"
+              :key="`collocations-${index}`"
+            >
+              <Collocation
+                class="mb-4"
+                :word="word"
+                :text="text"
+                :level="level"
+                :title="description.title"
+                :type="description.name"
+                :id="`collocation-${description.name}`"
+                :collocation="description.gramrel"
+              ></Collocation>
+            </div>
+          </div>
           <div
-            v-for="(description, index) in colDescArray"
-            :class="{
-              'col-12': params.xs,
-              'col-6': params.sm,
-              'col-4': params.md,
-              'col-3': params.lg || params.xl || params.xxl,
-            }"
-            :key="`collocations-${index}`"
+            v-if="
+              !updating &&
+              (!sketch || !sketch.Gramrels || sketch.Gramrels.length === 0)
+            "
           >
-            <Collocation
-              class="mb-4"
-              :word="word"
-              :text="text"
-              :level="level"
-              :title="description.title"
-              :type="description.name"
-              :id="`collocation-${description.name}`"
-              :collocation="description.gramrel"
-            ></Collocation>
+            {{
+              $t(
+                "Sorry, we could not find any collocations with “{term}” in this corpus.",
+                { term }
+              )
+            }}
+            <i18n path="You can set a different corpus in {0}.">
+              <router-link :to="{ name: 'settings' }">
+                {{ $t("Settings") }}
+              </router-link>
+            </i18n>
+          </div>
+          <div class="mt-2">
+            {{ $t("Collocations provided by") }}
+            <a
+              target="_blank"
+              :href="`https://app.sketchengine.eu/#wordsketch?corpname=${encodeURIComponent(
+                corpname
+              )}&tab=basic&lemma=${term}&showresults=1`"
+            >
+              <img
+                src="/img/logo-sketch-engine.png"
+                alt="Sketch Engine"
+                class="ml-2 mr-2 logo-small"
+              />
+            </a>
+            <span v-if="corpname">
+              {{ $t("Corpus") }}:
+              <code>{{ corpname.replace("preloaded/", "") }}</code>
+            </span>
           </div>
         </div>
-        <div
-          v-if="
-            !updating &&
-            (!sketch || !sketch.Gramrels || sketch.Gramrels.length === 0)
-          "
-        >
-          {{ $t('Sorry, we could not find any collocations with “{term}” in this corpus.', {term} ) }}
-          <i18n path="You can set a different corpus in {0}.">
-            <router-link :to="{name: 'settings'}">
-              {{ $t('Settings') }}
-            </router-link>
-          </i18n>
-        </div>
-        <div class="mt-2">
-          {{ $t("Collocations provided by") }}
-          <a
-            target="_blank"
-            :href="`https://app.sketchengine.eu/#wordsketch?corpname=${encodeURIComponent(
-              corpname
-            )}&tab=basic&lemma=${term}&showresults=1`"
-          >
-            <img
-              src="/img/logo-sketch-engine.png"
-              alt="Sketch Engine"
-              class="ml-2 mr-2 logo-small"
-            />
-          </a>
-          <span v-if="corpname">
-            {{ $t('Corpus') }}:
-            <code>{{ corpname.replace("preloaded/", "") }}</code>
-          </span>
-        </div>
-      </div>
-    </div>
+      </template>
+    </Widget>
   </container-query>
 </template>
 
