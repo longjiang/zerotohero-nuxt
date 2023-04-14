@@ -23,7 +23,7 @@
           @touchstart="pause"
           @touchend="play"
         ></vue-slider>
-    </client-only>
+      </client-only>
       <div class="video-controls-time ml-2 mr-2">
         {{ duration ? toHHMMSS(duration) : "--:--" }}
       </div>
@@ -449,7 +449,7 @@ export default {
       return toHHMMSS(duration);
     },
     onSeek() {
-      let percentage = this.progressPercentage
+      let percentage = this.progressPercentage;
       let time = percentage * 0.01 * this.duration;
       this.$emit("seek", time);
     },
@@ -575,12 +575,24 @@ export default {
   }
 }
 
-.video-controls.skin-light .btn-video-controls {
-  color: #333;
+.video-controls.skin-light {
+  .btn-video-controls {
+    color: #333;
+  }
+  :deep(.vue-slider-rail) {
+    background-color: $bg-color-light-2;
+  }
 }
 
-.video-controls.skin-dark .btn-video-controls {
-  color: #ccc;
+.video-controls.skin-dark {
+  .btn-video-controls {
+    color: #ccc;
+  }
+  .video-controls-progress {
+    :deep(.vue-slider-rail) {
+      background-color: $bg-color-dark-2;
+    }
+  }
 }
 
 .video-controls-buttons {
@@ -679,13 +691,8 @@ hr {
   :deep(.vue-slider-process) {
     background-color: $primary-color;
   }
-  :deep(.vue-slider-rail){
+  :deep(.vue-slider-rail) {
     height: 0.5rem;
-  }
-
-  /* Hide the thumb */
-  :deep(.vue-slider-dot) {
-    // display: none;
   }
 }
 </style>
