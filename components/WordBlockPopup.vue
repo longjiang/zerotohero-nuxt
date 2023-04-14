@@ -368,11 +368,16 @@ export default {
 
 <style lang="scss">
 @import "~@/assets/scss/variables.scss";
+$tooltip-background-dark: #312d2d;
+$tooltip-background-light: #fff;
+
+.tooltip-arrow.skin-dark {
+  color: $tooltip-background-dark;
+}
 .tooltip-inner.skin-dark {
-  background: #161616;
-  .tooltip-arrow,
+  background: $tooltip-background-dark;
   .tooltip-inner {
-    background: #161616;
+    background: $tooltip-background-dark;
   }
   hr {
     border-color: #333;
@@ -381,11 +386,14 @@ export default {
     border-top: 1px solid #333;
   }
 }
+.tooltip-arrow.skin-light {
+  color: $tooltip-background-light;
+}
 .tooltip-inner.skin-light {
-  background: #fff;
+  background: $tooltip-background-light;
   .tooltip-arrow,
   .tooltip-inner {
-    background: #fff;
+    background: $tooltip-background-light;
   }
   .tooltip-entry + .tooltip-entry {
     border-top: 1px solid #ccc;

@@ -4,6 +4,7 @@
     placement="top"
     ref="popover"
     :popoverInnerClass="`tooltip-inner popover-inner skin-${$skin}`"
+    :popoverArrowClass="`tooltip-arrow popover-arrow skin-${$skin}`"
   >
     <div
       v-on="popup ? { click: wordBlockClick } : {}"
