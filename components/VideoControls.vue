@@ -685,7 +685,7 @@ hr {
 
   /* Hide the thumb */
   :deep(.vue-slider-dot) {
-    display: none;
+    // display: none;
   }
 }
 </style>
