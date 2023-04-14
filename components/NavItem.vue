@@ -20,10 +20,7 @@
       class="link-unstyled nav-item-link"
       ref="link"
     >
-      <div
-        v-if="['page', 'bottom-bar'].includes(variant)"
-        class="icon-wrapper"
-      >
+      <div v-if="['page', 'bottom-bar'].includes(variant)" class="icon-wrapper">
         <i
           v-if="showIcon"
           :class="`nav-item-icon ${item.icon} ${
@@ -39,7 +36,9 @@
           })
         }}
         <i class="fas fa-pro" v-if="item.title === 'Me' && pro"></i>
-        <span class="nav-item-count" v-cloak v-if="item.count">{{ $n(item.count) }}</span>
+        <span class="nav-item-count" v-cloak v-if="item.count">{{
+          $n(item.count)
+        }}</span>
         <span class="saved-words-count" v-cloak v-if="item.badge">
           {{ item.badge }}
         </span>
@@ -71,7 +70,10 @@
             class="link-unstyled dropdown-nav-child"
           >
             <i :class="`nav-item-icon ${child.icon} mr-1`"></i>
-            {{ $t(child.title) }} <span v-if="child.count" class="nav-item-count">({{ child.count }})</span>
+            {{ $t(child.title) }}
+            <span v-if="child.count" class="nav-item-count"
+              >({{ child.count }})</span
+            >
             <span class="saved-words-count" v-cloak v-if="child.badge">
               {{ child.badge }}
             </span>
@@ -162,6 +164,32 @@ export default {
 
 <style lang="scss">
 @import "~@/assets/scss/variables.scss";
+
+.zth-nav-light {
+  &.zth-nav-side-bar {
+    .main-nav-item {
+      color: #444;
+      &.nav-item-active,
+      &:hover {
+        color: #444;
+        text-shadow: none;
+        background: rgba(255, 255, 255, 0.75);
+      }
+    }
+  }
+}
+
+.zth-nav-dark {
+  &.zth-nav-side-bar {
+    .main-nav-item {
+      &.nav-item-active,
+      &:hover {
+        background: #323232;
+      }
+    }
+  }
+}
+
 .nav-item-bottom-bar {
   .nav-item-icon {
     width: 1.25rem;
@@ -274,26 +302,6 @@ export default {
 }
 
 .zth-nav-side-bar {
-  &.zth-nav-light {
-    .main-nav-item {
-      color: white;
-      text-shadow: black 0 1px 3px;
-      &.nav-item-active,
-      &:hover {
-        color: #444;
-        text-shadow: none;
-        background: rgba(255, 255, 255, 0.75);
-      }
-    }
-  }
-  &.zth-nav-dark {
-    .main-nav-item {
-      &.nav-item-active,
-      &:hover {
-        background: #323232;
-      }
-    }
-  }
   .main-nav {
     .main-nav-item {
       border-radius: 0.3rem;

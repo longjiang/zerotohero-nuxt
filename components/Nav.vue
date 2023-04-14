@@ -19,9 +19,6 @@
         'nav-page': variant === 'page',
         'nav-bottom-bar': variant === 'bottom-bar',
       }"
-      :style="
-        variant === 'side-bar' ? `background-image: url(${background});` : ''
-      "
     >
       <template v-if="variant !== 'page'">
         <nav v-if="level === 'main'" :class="{ 'main-nav': true }">
@@ -1295,6 +1292,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
+
+.zth-nav-dark {
+  &.zth-nav-side-bar {
+    background-color: $bg-color-dark-2;
+  }
+  .collapse-toggle {
+    color: white;
+    background: rgb(255 255 255 / 20%);
+    text-shadow: rgba(0, 0, 0, 0.465) 0 1px 3px;
+  }
+  &.zth-nav-bottom {
+    background: $bg-color-dark-2;
+    border-top: 1px solid #666;
+  }
+}
+.zth-nav-light {
+  &.zth-nav-side-bar {
+    background-color: $bg-color-light-2;
+  }
+  .collapse-toggle {
+    background: white;
+  }
+  &.zth-nav-bottom {
+    background: $bg-color-light-2;
+    border-top: rgb(222, 222, 222);
+  }
+}
+
 .zerotohero-wide {
   .zth-main-nav-wrapper.zth-nav-collapsed {
     width: 5rem;
@@ -1329,7 +1355,6 @@ export default {
     backdrop-filter: blur(20px);
   }
 }
-
 
 .nav-menu-bar,
 .nav-side-bar {
@@ -1396,20 +1421,11 @@ export default {
   bottom: 0;
   z-index: 99;
   width: 100%;
-  box-shadow: 0 0px 20px rgba(0, 0, 0, 0.15);
   padding-bottom: calc(env(safe-area-inset-bottom) + 0.25rem);
   transition: 0.2s all ease-in-out;
   &.zth-nav-bottom-hidden {
     bottom: -5rem;
     padding-bottom: 0;
-  }
-  &.zth-nav-dark {
-    background: black;
-    border-top: 1px solid #666;
-  }
-  &.zth-nav-light {
-    background: white;
-    border-top: 1px solid #ccc;
   }
   .main-nav-items {
     padding: 0.5rem 0.5rem 0 0.5rem;
@@ -1550,13 +1566,10 @@ export default {
 }
 
 .collapse-toggle {
-  background: rgb(255 255 255 / 20%);
   margin-left: 1rem;
   width: calc(100% - 2rem);
   text-align: center;
   position: absolute;
   bottom: 1rem;
-  color: white;
-  text-shadow: rgba(0, 0, 0, 0.465) 0 1px 3px;
 }
 </style>
