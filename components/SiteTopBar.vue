@@ -310,6 +310,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .flag-icon {
   position: relative;
   bottom: 0.1rem;
@@ -336,12 +337,12 @@ export default {
     a {
       color: #000000aa;
       &:hover {
-        color: black;
+        color: $bg-color-dark-1;
       }
     }
   }
   &.site-top-bar-dark {
-    background-color: black;
+    background-color: $bg-color-dark-1;
     .btn,
     a {
       color: #ffffffaa;

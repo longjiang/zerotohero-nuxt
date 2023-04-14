@@ -527,12 +527,6 @@ export default {
 
 #zerotohero {
   min-height: 100vh;
-  &.zerotohero-light {
-    background: white;
-  }
-  &.zerotohero-dark {
-    background: black;
-  }
   .zth-content {
     display: flex;
     flex-direction: column;

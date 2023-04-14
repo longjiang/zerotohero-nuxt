@@ -566,7 +566,7 @@ export default {
 
 .video-with-transcript-horizontal-portrait {
   .video-controls.skin-dark {
-    background: black;
+    background: $bg-color-dark-1;
   }
 }
 .video-with-transcript-horizontal-portrait {

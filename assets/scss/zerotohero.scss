@@ -1,4 +1,4 @@
-@import 'variables';
+@import "variables";
 
 @font-face {
   font-family: AndikaW;
@@ -10,9 +10,16 @@
   src: url("/fonts/Klingon-pIqaD-HaSta.ttf") format("truetype");
 }
 
-
 .zerotohero-light {
-  color: #333;
+  background: white;
+}
+.zerotohero-dark {
+  background: $bg-color-dark-1;
+}
+
+.zerotohero-light,
+.skin-light {
+  color: #555;
   .list-group-item {
     background-color: #fff;
     &:hover {
@@ -70,7 +77,6 @@ html * {
   font-display: swap;
 }
 
-
 h1,
 h2,
 h3,
@@ -101,7 +107,6 @@ h6,
 .cursor-pointer {
   cursor: pointer;
 }
-
 
 .strong {
   font-weight: bold;
@@ -758,8 +763,6 @@ button.bg-primary:focus {
   color: white;
 }
 
-
-
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
@@ -825,7 +828,7 @@ button.bg-primary:focus {
 }
 
 .input-ghost-dark {
-  background: black;
+  background: $bg-color-dark-1;
   border-radius: 0.25rem;
   border: 1px solid #cccccc44;
   color: rgba(255, 255, 255, 0.75);
@@ -1174,7 +1177,6 @@ button.bg-primary:focus {
     padding-right: 3rem;
   }
 }
-
 
 .playlist-modal-wrapper {
   padding: 0;
