@@ -575,12 +575,12 @@ export default {
   }
 }
 
-.video-controls-light .btn-video-controls {
-  color: #242424;
+.video-controls.skin-light .btn-video-controls {
+  color: #333;
 }
 
-.video-controls-dark .btn-video-controls {
-  color: #ffffff;
+.video-controls.skin-dark .btn-video-controls {
+  color: #ccc;
 }
 
 .video-controls-buttons {
