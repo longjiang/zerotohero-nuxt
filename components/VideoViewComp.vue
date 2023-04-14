@@ -267,7 +267,7 @@ export default {
           },
         };
         if (duration) {
-          data.video.duration = durationn;
+          data.video.duration = duration;
           data.video.progress = data.video.starttime / duration;
         }
         this.$store.dispatch("history/add", data); // history's ADD_HISTORY_ITEM mutation automatically checks if this item is already in the history based on it's id (e.g. zh-video-Y23x9L4)

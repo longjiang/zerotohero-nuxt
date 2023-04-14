@@ -5,10 +5,11 @@ Vue.mixin({
   computed: {
     ...mapState("settings", ["l2Settings"]),
     $l2Settings() {
+      let l2 = this.$store.state.settings.l2
       let l2SettingsOfL2 = {};
-      if (this.$l2) {
-        if (this.l2Settings && this.l2Settings[this.$l2.code])
-          l2SettingsOfL2 = this.l2Settings[this.$l2.code];
+      if (l2) {
+        if (this.l2Settings && this.l2Settings[l2.code])
+          l2SettingsOfL2 = this.l2Settings[l2.code];
       }
       return l2SettingsOfL2;
     },
@@ -54,5 +55,5 @@ Vue.mixin({
       if (code && this.$languages) return this.$languages.translate(text, code, data);
       else return text;
     },
-  }
+  },
 });

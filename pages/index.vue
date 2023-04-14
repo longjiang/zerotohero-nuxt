@@ -113,16 +113,14 @@
             <h3 class="text-white mb-2">
               {{
                 $tb(
-                  "Drastically improve your language skills by binge watching videos in the target language.",
-                  browserLanguage
+                  "Drastically improve your language skills by binge watching videos in the target language."
                 )
               }}
             </h3>
             <p class="text-white">
               {{
                 $tb(
-                  "Languages include Chinese (Mandarin and Cantonese), Japanese, English, French, German, Spanish, Korean, Russian, Italian, and 207 other languages.",
-                  browserLanguage
+                  "Languages include Chinese (Mandarin and Cantonese), Japanese, English, French, German, Spanish, Korean, Russian, Italian, and 207 other languages."
                 )
               }}
             </p>
