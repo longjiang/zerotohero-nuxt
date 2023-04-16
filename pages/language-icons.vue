@@ -8,7 +8,7 @@
   }
 </router>
 <template>
-  <div class="bg-white" style="min-height: 100vh">
+  <div style="min-height: 100vh">
     <SocialHead
       title="Faces of World Languages | Language Player"
       description="Tap on any face to learn the language! Live TV channels, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.”"

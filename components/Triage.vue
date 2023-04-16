@@ -17,7 +17,7 @@
           <b-form-select :options="l1Options" v-model="l1"></b-form-select>
         </div>
       </div>
-      <div class="row mt-3" v-if="l1 && l2">
+      <div class="row mt-4" v-if="l1 && l2">
         <div class="col-sm-12 text-center">
           <router-link
             class="btn btn-success pl-5 pr-5"
@@ -110,7 +110,7 @@ export default {
         let flagEmoji = this.languageCountryFlagEmoji(language);
         return {
           value: language,
-          text: (flagEmoji ? flagEmoji + " " : "") + this.$tb(language.name),
+          text: (flagEmoji ? flagEmoji + " " : "") + this.$tb(language.name) + ` (${this.$tb(language.code)})`,
         };
       });
 

@@ -105,7 +105,7 @@
           </Annotate>
 
           <div
-            :class="{ 'mb-0': true, transparent: hideDefinitions }"
+            :class="{ 'mb-0 text-secondary': true, transparent: hideDefinitions }"
             v-if="phraseObj && (phraseObj[$l1.code] || phraseObj.en)"
           >
             {{ phraseObj[$l1.code] || phraseObj.en }}
@@ -190,6 +190,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/variables.scss";
+.zerotohero-dark {
+  .hide-defs {
+    background-color: $bg-color-dark-1;
+  }
+}
+.zerotohero-light {
+  .hide-defs {
+    background-color: $bg-color-light-1;
+  }
+}
+
 .phrasebook-phrase-images {
   height: 3rem;
   white-space: nowrap;
@@ -214,7 +226,7 @@ export default {
 
 .saved-button {
   position: absolute !important;
-  top: -8px;
+  top: -7px;
   font-size: 1.3em;
 }
 
@@ -240,5 +252,6 @@ export default {
   z-index: 2;
   top: calc(env(safe-area-inset-top) + 5rem);
   text-align: center;
+  
 }
 </style>
