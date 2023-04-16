@@ -129,12 +129,14 @@ const Dictionary = {
       });
     return words;
   },
-  findPhrases(word) {
+  findPhrases(word, limit = 50) {
     if (word) {
       if (!word.phrases || word.phrases.length === 0) {
         let phrases = []
-        for (let w of this.words) {
+        for (let i = this.words.length - 1; i >= 0; i--) {
+          const w = this.words[i];
           if (w.head.length > word.head.length && w.head.includes(word.head)) phrases.push(w)
+          if (phrases.length >= limit) break
         }
         word.phrases = phrases.sort((a, b) => a.head.length - b.head.length).sort((a, b) => b.weight - a.weight)
         return word.phrases
