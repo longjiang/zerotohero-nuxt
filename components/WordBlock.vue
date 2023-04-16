@@ -140,7 +140,7 @@ export default {
         this.savedWord?.definitions?.[0] || this.words?.[0]?.definitions?.[0];
       let quickGloss = definition
         ?.replace(/\s*\(.*\)/, "")
-        ?.split(/[,;]\s*/)[0]
+        ?.split(/[，；,;]\s*/)[0]
         ?.replace(/^.*\./, "");
       if (quickGloss && quickGloss.length < 20) return quickGloss;
     },
