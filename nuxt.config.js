@@ -202,7 +202,11 @@ export default {
   bootstrapVue: {
     components: ['BForm', 'BSpinner', 'BCard', 'BFormInput', 'BFormFile', 'BFormGroup', 'BFormSelect', 'BFormTextarea', 'BFormSelectOption', 'BButton', 'BProgress', 'BTable',
       'BDropdown', 'BDropdownItem', 'BFormCheckbox', 'BFormCheckboxGroup', 'BFormRadio', 'BButtonGroup', 'BInputGroup', 'BInputGroupAppend', 'BInputGroupText', 'BDropdownDivider', 'BProgressBar', 'BModal'],
-    directives: ['VBModal']
+    directives: ['VBModal'],
+    bootstrapVue: {
+      bootstrapCSS: false, // We want to override the default bootstrap css
+      bootstrapVueCSS: false // We want to override the default bootstrap vue css
+    }
   },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
