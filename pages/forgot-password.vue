@@ -29,7 +29,7 @@
             </div>
             <div class="reset-form" v-if="!emailSent">
               <b-form @submit.prevent="onSubmit">
-                <p class="mb-3">Enter your email to recover your password:</p>
+                <p class="mb-3 text-dark">{{ $tb('Enter your email to recover your password:') }}</p>
                 <div v-if="message" class="alert alert-danger mt-2">
                   {{ message }}
                 </div>
@@ -38,7 +38,7 @@
                     id="email"
                     v-model="form.email"
                     type="email"
-                    placeholder="Email"
+                    :placeholder="$tb('Email')"
                     required
                   ></b-form-input>
                 </b-form-group>
@@ -49,7 +49,7 @@
                   variant="success"
                   v-if="!emailSending"
                 >
-                  Continue
+                  {{ $tb('Continue') }}
                 </b-button>
                 <div class="text-center" v-else>
                   <Loader
@@ -63,10 +63,10 @@
               <div class="alert alert-success">
                 <h5 class="mb-3">
                   <i class="fas fa-check mr-1"></i>
-                  Password reset email on its way
+                  {{ $tb('Password reset email on its way') }}
                 </h5>
                 <p>
-                  We're sending a password reset email which can take up to a minute to arrive. Please check your spam inbox just to make sure.
+                  {{ $tb("We're sending a password reset email which can take up to a minute to arrive. Please check your spam inbox just to make sure.") }}
                 </p>
               </div>
             </div>

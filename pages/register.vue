@@ -32,7 +32,7 @@
                   id="first_name"
                   v-model="form.first_name"
                   type="text"
-                  placeholder="First Name"
+                  :placeholder="$tb('First Name')"
                   required
                   style="flex: 1"
                   class="mr-1"
@@ -41,7 +41,7 @@
                   id="last_name"
                   v-model="form.last_name"
                   type="text"
-                  placeholder="Last Name"
+                  :placeholder="$tb('Last Name')"
                   required
                   style="flex: 1"
                   class="ml-1"
@@ -52,7 +52,7 @@
                   id="email"
                   v-model="form.email"
                   type="email"
-                  placeholder="Email"
+                  :placeholder="$tb('Email')"
                   required
                 ></b-form-input>
               </b-form-group>
@@ -62,14 +62,14 @@
                   id="password"
                   type="password"
                   v-model="form.password"
-                  placeholder="Password"
+                  :placeholder="$tb('Password')"
                   required
                 ></b-form-input>
               </b-form-group>
 
               <b-button class="d-block w-100" type="submit" variant="success">
                 <b-spinner small v-if="loading" />
-                <span v-else>Sign Up</span>
+                <span v-else>{{ $tb('Sign Up') }}</span>
               </b-button>
               <div class="mt-3 text-center">
                 <router-link
@@ -78,7 +78,7 @@
                     query: { redirect: $route.query.redirect },
                   }"
                 >
-                  I have an account
+                  {{ $tb('I have an account, log me in.') }}
                   <i class="fas fa-chevron-right ml-1"></i>
                 </router-link>
               </div>
