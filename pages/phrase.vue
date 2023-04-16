@@ -68,7 +68,7 @@
               <b-dropdown
                 size="sm"
                 :items="words"
-                text="Disambiguation"
+                :text="$t('Disambiguation')"
                 menu-class="disambiguation-dropdown"
                 variant="gray"
               >

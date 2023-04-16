@@ -127,7 +127,7 @@
                   size="sm"
                   variant="primary"
                   :items="words"
-                  text="Disambiguation"
+                  :text="$t('Disambiguation')"
                   menu-class="disambiguation-dropdown"
                 >
                   <b-dropdown-item

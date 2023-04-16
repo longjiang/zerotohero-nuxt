@@ -151,8 +151,8 @@
           <i v-if="skin === 'dark'" class="fa fa-moon"></i>
           <i v-if="skin === 'light'" class="fa fa-sun"></i>
         </span>
-        <span v-if="skin === 'dark'">{{ $tb("Dark Mode") }}</span>
-        <span v-if="skin === 'light'">{{ $tb("Light Mode") }}</span>
+        <span v-if="skin === 'dark'">{{ $tb("Dark Mode On") }}</span>
+        <span v-if="skin === 'light'">{{ $tb("Dark Mode Off") }}</span>
       </button>
       <button
         v-if="userIsAdmin"

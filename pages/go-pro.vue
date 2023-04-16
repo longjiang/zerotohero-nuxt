@@ -46,7 +46,7 @@
                     <div v-if="native">
                       <div class="pt-4 pb-5">
                         <PurchaseiOS :type="type" :test="test" :plan="selectedPlan.name" v-if="selectedPlan.name === 'lifetime'" />
-                        <div v-else class="alert alert-warning" style="max-width: 33rem; margin: 0 auto;">⚠️ {{ $tb('Only the lifetime plan is available as an in-app purchase.') }}</div>  
+                        <div v-else class="alert alert-warning" style="max-width: 15.5rem; margin: 0 auto;">⚠️ {{ $tb('Only the lifetime plan is available as an in-app purchase.') }}</div>
                       </div>
                     </div>
                     <div v-else>

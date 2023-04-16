@@ -27,6 +27,7 @@
             v-if="variant === 'side-bar'"
             class="mt-5"
             style="margin-left: 1.25rem"
+            :skin="$skin"
           />
           <div :class="{ 'main-nav-items': true }">
             <template

@@ -1,45 +1,17 @@
 <template>
-  <div class="screen pt-5 pb-5">
+  <div :class="`screen skin-${$skin} pt-5 pb-5`">
     <div class="text-center">
-      <Logo :forcePro="true" />
+      <Logo :forcePro="true" :skin="$skin" />
       <div class="mt-3" />
       <div>
-        <p class="text-white mb-1 strong" style="font-size: 1.2em">
+        <p class="mb-1 strong" style="font-size: 1.2em">
           <template v-if="message">{{ message }}</template>
           <template v-else>{{
             $t("See complete subtitles with Pro.")
           }}</template>
         </p>
       </div>
-      <div class="mt-3" />
-      <!-- <div class="text-white pl-5">
-        <span v-if="sale">
-          <del style="opacity: 0.5">
-            <sup style="font-size: 1rem">$</sup>
-            <span style="font-size: 1.7rem; font-weight: bold">89</span>
-          </del>
-          <span>
-            <sup style="font-size: 1rem">$</sup>
-            <span style="font-size: 2.2rem; font-weight: bold">44</span>
-            <b style="position: relative; bottom: 0.9rem">.50</b>
-          </span>
-          <sup style="font-size: 1rem" class="text-success">
-            <b>/ {{ $t('lifetime') }}</b><br/>
-          </sup>
-        </span>
-        <span v-else>
-          <sup style="font-size: 1rem">$</sup>
-          <span style="font-size: 2.2rem; font-weight: bold">89</span>
-          <sup style="font-size: 1rem" class="text-success">
-            <b>/ {{ $t('lifetime') }}</b>
-          </sup>
-        </span>
-      </div>
-      <div class="mt-1" />
-      <div class="strong text-white mb-2" style="font-size: 0.85em">{{ $t('Pay once, enjoy forever!') }}</div>
-       -->
-      <div class="mt-4" />
-      <div>
+      <div class="mt-4">
         <router-link class="btn btn-success pl-3 pr-3" :to="{ name: 'go-pro' }"
           >🚀 {{ $t("Upgrade to Pro") }}</router-link
         >
@@ -55,6 +27,9 @@ export default {
     message: {
       type: String,
     },
+    skin: {
+      type: String,
+    }
   },
   data() {
     return {
@@ -67,13 +42,23 @@ export default {
 };
 </script>
 
-<style scoped>
-.screen {
+<style lang="scss" scoped>
+@import "@/assets/scss/variables.scss";
+.screen.skin-dark {
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(0, 0, 0, 1) 33%,
-    rgba(0, 0, 0, 1) 100%
+    rgba($bg-color-dark-1, 0) 0%,
+    rgba($bg-color-dark-1, 1) 33%,
+    rgba($bg-color-dark-1, 1) 100%
+  );
+  width: 100%;
+}
+.screen.skin-light {
+  background: linear-gradient(
+    to bottom,
+    rgba($bg-color-light-1, 0) 0%,
+    rgba($bg-color-light-1, 1) 33%,
+    rgba($bg-color-light-1, 1) 100%
   );
   width: 100%;
 }

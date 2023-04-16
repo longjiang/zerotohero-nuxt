@@ -16,18 +16,6 @@
             )
           }}
         </li>
-        <!-- <li>
-          <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          {{
-            $tb(
-              "Read books, web pages or your own text with a popup dictionary"
-            )
-          }}
-        </li>
-        <li>
-          <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          {{ $tb("Watch live TV in the target language") }}
-        </li> -->
         <li>
           <i class="fa-solid fa-lock text-warning mr-1"></i>
           {{
@@ -43,7 +31,7 @@
       </ul>
     </div>
     <div class="mb-3 bg-white pricing-card pricing-card-pro">
-      <div class="badge-money-back text-center">
+      <div class="badge-money-back text-center" v-if="!isNativePlatform">
         <span>
           <b style="font-size: 1.3em">{{ $tb('14 day') }}</b>
           <br />
@@ -65,18 +53,6 @@
             )
           }}
         </li>
-        <!-- <li>
-          <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          {{
-            $tb(
-              "Read books, web pages or your own text with a popup dictionary"
-            )
-          }}
-        </li>
-        <li>
-          <i class="fa-solid fa-circle-check text-success mr-1"></i>
-          {{ $tb("Watch live TV in the target language") }}
-        </li> -->
         <li>
           <i class="fa-solid fa-circle-check text-success mr-1"></i>
           {{
@@ -121,6 +97,7 @@ export default {
   padding: 2rem 2rem 1rem 2rem;
   border-radius: 1.5rem;
   box-shadow: 0 0 40px #00000078;
+  color: #555;
   li {
     margin: 0.5rem 0;
     text-indent: -0.7rem;
