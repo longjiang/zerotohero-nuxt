@@ -9,12 +9,10 @@
           <b-form-select :options="l2Options" v-model="l2"></b-form-select>
         </div>
       </div>
-      <div class="row mt-3" v-if="l2 && l1Options.length > 1">
+      <div class="row mt-3" v-if="l2">
         <div class="col-sm-12">
           <div class="mb-2">
-            {{
-              $tb("What is your mother tongue (first/native language)?")
-            }}
+            {{ $tb("What is your mother tongue (first/native language)?") }}
           </div>
           <b-form-select :options="l1Options" v-model="l1"></b-form-select>
         </div>
@@ -33,14 +31,12 @@
           </router-link>
         </div>
       </div>
-      <div class="mt-2 text-right">
-        <u>
-          <router-link to="/language-map" class="link-unstyled text-secondary">
-            <i class="fa-solid fa-earth-asia mr-2"></i>
-            {{ $tb("See more languages on a map") }}
-            <i class="fa-solid fa-chevron-right ml-2"></i>
-          </router-link>
-        </u>
+      <div class="mt-3 text-right">
+        <router-link to="/language-map">
+          <i class="fa-solid fa-earth-asia mr-2"></i>
+          {{ $tb("See more languages on a map") }}
+          <i class="fa-solid fa-chevron-right ml-2"></i>
+        </router-link>
       </div>
     </div>
   </div>
@@ -49,7 +45,10 @@
 <script>
 export default {
   data() {
-    return { l1: undefined, l2: undefined };
+    return {
+      l1: undefined, // Object
+      l2: undefined  // Object
+    };
   },
   mounted() {},
   computed: {
@@ -74,7 +73,11 @@ export default {
         })
         .sort((a, b) => a.text.localeCompare(b.text));
       let commonOptions = options
-        .filter((o) => 'zh en ja hi fr ko de es ur ru ta ar th it yue pt te bn fa ins hak nan lzh och wuu'.split(' ').includes(o.value.code))
+        .filter((o) =>
+          "zh en ja hi fr ko de es ur ru ta ar th it yue pt te bn fa ins hak nan lzh och wuu"
+            .split(" ")
+            .includes(o.value.code)
+        )
         .map((o) =>
           Object.assign(Object.assign({}, o), { text: this.$tb(o.text) })
         );
@@ -86,28 +89,37 @@ export default {
       ];
     },
     l1Options() {
+      // Get the value of l2 from the component data
       let l2 = this.l2;
+
+      // Filter the supported L1 languages based on whether they are included
+      // in the commonLangs list and have a dictionary for the given L2 language
       let supportedL1s = this.$languages.l1s.filter(
         (language) =>
           this.$languages.commonLangs.includes(language.code) &&
           language.dictionaries?.[l2["iso639-3"]]
       );
+
+      // Map the supported L1 languages to an array of objects with 'value' and 'text' properties
       let options = supportedL1s.map((language) => {
         return {
           value: language,
           text: this.$tb(language.name),
         };
       });
+
+      // If there's only one L1 option, automatically set l1 to that option
       if (options.length === 1) this.l1 = options[0].value;
-      // If only one l1 is possible, use that
-      else this.l1 = undefined;
+      // If multiple L1 options are available, set l1 to browser's language
+      else if (options.length > 1 && this.$browserLanguage) {
+        let browserLanguage = this.$languages.getSmart(this.$browserLanguage);
+        if (browserLanguage) this.l1 = browserLanguage
+      } else this.l1 = undefined;
       return options;
     },
   },
-  methods: {
-  },
+  methods: {},
 };
 </script>
 
-<style>
-</style>
+<style></style>
