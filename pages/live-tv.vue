@@ -21,7 +21,7 @@
           <div
             :class="{
               'live-video-column': true,
-              'col-sm-12 pl-0 pr-0': portrait,
+              'col-sm-12': portrait,
               'col-sm-7 col-md-8': !portrait,
             }"
           >
@@ -35,7 +35,6 @@
                 :key="`live-video-${currentChannel.url}`"
                 ref="liveVideo"
               />
-              
             </div>
           </div>
           <div
@@ -46,13 +45,16 @@
             }"
           >
             <b-input-group
-              :class="`${portrait ? 'mt-3' : ''} mb-3 input-group-ghost-dark`"
+              :class="`${portrait ? 'mt-3' : ''} mb-3`"
             >
               <b-form-input
                 v-model="keyword"
                 @compositionend.prevent.stop="() => false"
-                :placeholder="$t('Filter {num} channels...', {num: this.channels ? this.channels.length : ''})"
-                class="input-ghost-dark"
+                :placeholder="
+                  $t('Filter {num} channels...', {
+                    num: this.channels ? this.channels.length : '',
+                  })
+                "
               />
             </b-input-group>
             <div v-if="channels" class="tabs text-center channel-category-tabs">
@@ -61,7 +63,8 @@
                 :key="`live-tv-cat-tab-featured`"
                 :class="{
                   'btn mr-1': true,
-                  'btn-ghost-dark-no-bg text-white': !featured,
+                  'btn-dark': !featured && $skin === 'dark',
+                  'btn-light': !featured && $skin === 'light',
                   'btn-success': featured,
                 }"
                 @click="
@@ -77,7 +80,8 @@
                 :key="`live-tv-cat-tab-all`"
                 :class="{
                   'btn mr-1': true,
-                  'btn-ghost-dark-no-bg text-white': !all,
+                  'btn-dark': $skin === 'dark',
+                  'btn-light': $skin === 'light',
                   'btn-success': all,
                 }"
                 @click="
@@ -87,14 +91,15 @@
                   featured = false;
                 "
               >
-                {{ $t('All') }}
+                {{ $t("All") }}
               </button>
               <button
                 v-for="c in countries"
                 :key="`live-tv-cat-tab-${c}`"
                 :class="{
                   'btn mr-1': true,
-                  'btn-ghost-dark-no-bg text-white': country !== c,
+                  'btn-dark': $skin === 'dark',
+                  'btn-light': $skin === 'light',
                   'btn-success': country === c,
                 }"
                 @click="
@@ -110,8 +115,9 @@
                 v-for="cat in categories"
                 :key="`live-tv-cat-tab-${cat}`"
                 :class="{
-                  'btn btn-ghost-dark-no-bg mr-1': true,
-                  'text-white': category !== cat,
+                  'btn mr-1': true,
+                  'btn-dark': $skin === 'dark',
+                  'btn-light': $skin === 'light',
                   'btn-success text-white': category === cat,
                 }"
                 @click="
@@ -131,7 +137,6 @@
               }"
             >
               <b-button
-                variant="ghost-dark-no-bg"
                 size="sm"
                 :class="{
                   'channel-button': true,
@@ -148,18 +153,7 @@
                   :alt="channel.name"
                   @error="logoLoadError(channel)"
                 />
-                <div
-                  style="
-                    display: inline-block;
-                    width: 4rem;
-                    line-height: 2rem;
-                    text-align: center;
-                    font-size: 1.5em;
-                    opacity: 0.5;
-                    margin-right: 0.5rem;
-                  "
-                  v-else
-                >
+                <div class="channel-logo-placeholder" v-else>
                   <i class="fa fa-tv"></i>
                 </div>
                 <span>{{ channel.name }}</span>
@@ -301,8 +295,9 @@ export default {
   async mounted() {
     if (typeof window !== "undefined")
       window.addEventListener("resize", this.onResize);
-    if (!this.channels) this.loadChannels()
-    if(/^((?!chrome|android).)*safari/i.test(navigator?.userAgent)) this.isSafari = true
+    if (!this.channels) this.loadChannels();
+    if (/^((?!chrome|android).)*safari/i.test(navigator?.userAgent))
+      this.isSafari = true;
   },
   methods: {
     async loadChannels() {
@@ -404,6 +399,7 @@ export default {
     position: sticky;
     top: 0;
     z-index: 1;
+    width: 100%;
   }
 }
 .channel-button {
@@ -431,5 +427,15 @@ export default {
   .channel-button:nth-child(even) {
     margin-right: 0;
   }
+}
+
+.channel-logo-placeholder {
+  display: inline-block;
+  width: 4rem;
+  line-height: 2rem;
+  text-align: center;
+  font-size: 1.5em;
+  opacity: 0.5;
+  margin-right: 0.5rem;
 }
 </style>
