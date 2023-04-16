@@ -28,7 +28,7 @@
           :placeholder="$t('URL of a YouTube video or playlist...')"
         />
       </b-input-group>
-      <div class="mt-4" style="color: #aaa">
+      <div class="mt-4">
         <p>
           {{
             $t(
@@ -41,7 +41,7 @@
           path="You can also do this with a bookmarklet: (1) drag this {0} bookmarklet to your bookmarks bar; (2) navigate to a YouTube video page, and click on the bookmarklet to directly import that video into Language Player."
           tag="p"
         >
-          <a :href="bookmarklet" class="btn btn-small btn-ghost-dark">
+          <a :href="bookmarklet" class="btn btn-small btn-primary ml-1 mr-1">
             {{ $t("Open in Language Player") }}
           </a>
         </i18n>

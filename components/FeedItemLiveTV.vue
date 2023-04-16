@@ -1,13 +1,13 @@
 <template>
-  <div :class="`feed-item feed-item-video feed-item-${skin}`">
+  <div :class="`feed-item feed-item-video skin-${$skin}`">
     <div class="top-part pt-4 pr-4 pl-4 pb-2">
-      <div class="show-type-wrapper small text-success">
+      <div class="show-type-wrapper small">
         <span class="show-type-icon">
           <i class="fas fa-satellite-dish"></i>
         </span>
         <span class="show-type ml-1">{{ $t('Live TV') }}</span>
       </div>
-      <router-link :to="to" class="text-white">
+      <router-link :to="to">
         <h5 class="show-title mt-1">
           {{ channel.name }}
         </h5>

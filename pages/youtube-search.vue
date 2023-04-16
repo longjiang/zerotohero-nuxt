@@ -29,7 +29,7 @@
       </h4>
       <SimpleSearch
         :placeholder="$t('Search {stats} {l2} videos', {stats: stats && stats[$l2.code] ? stats[$l2.code].allVideos : '', l2: $t($l2.name) })"
-        skin="dark"
+        :skin="$skin"
         :action="
           (url) => {
             let path = `/${$l1.code}/${

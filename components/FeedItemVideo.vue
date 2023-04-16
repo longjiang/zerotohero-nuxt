@@ -1,7 +1,7 @@
 <template>
-  <div :class="`feed-item feed-item-video feed-item-${skin}`">
+  <div :class="`feed-item feed-item-video skin-${$skin}`">
     <div class="top-part pt-4 pr-4 pl-4 pb-3">
-      <div class="show-type-wrapper small text-success" v-if="show">
+      <div class="show-type-wrapper small text-secondary" v-if="show">
         <span class="show-type-icon">
           <i :class="show.icon"></i>
         </span>
@@ -18,7 +18,7 @@
             id: video.tv_show ? video.tv_show.id : video.talk.id,
           },
         }"
-        class="text-white"
+        class="text-inherit"
       >
         <h5 class="show-title mt-1 mb-0">
           {{ show.show.title }}
@@ -199,6 +199,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .youtube-title {
   font-weight: bold;
   font-size: 1rem;

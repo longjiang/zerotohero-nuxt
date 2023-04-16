@@ -100,7 +100,6 @@ export default {
 }
 
 .loader-bg {
-  background: black;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
 }

@@ -30,17 +30,17 @@
             <FeedItemVideo
               v-if="item.type === 'video'"
               :video="item.video"
-              skin="dark"
+              :skin="$skin"
             />
             <FeedItemWord
               v-if="item.type === 'word'"
               :savedWord="item.word"
-              skin="dark"
+              :skin="$skin"
             />
             <FeedItemLiveTV
               v-if="item.type === 'live-tv'"
               :channel="item.channel"
-              skin="dark"
+              :skin="$skin"
             />
           </div>
         </div>
@@ -369,12 +369,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .feed-item-wrapper {
   overflow: hidden;
   padding: 0.5rem;
-  .feed-item {
-    background-color: #222;
+  :deep(.feed-item) {
     height: 100%;
+    border-radius: 0.25rem;
+    &.skin-light {
+      background-color: $bg-color-light-3;
+      color: $text-color-on-light;
+    }
+    &.skin-dark {
+      background-color: $bg-color-dark-3;
+    }
   }
 }
 </style>

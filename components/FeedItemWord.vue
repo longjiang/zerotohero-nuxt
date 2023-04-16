@@ -1,5 +1,5 @@
 <template>
-  <div :class="`feed-item feed-item-word feed-item-${skin}`">
+  <div :class="`feed-item feed-item-word skin-${$skin}`">
     <div
       class="word-info pt-4 pl-4 pr-4 pb-3"
       v-if="word"
