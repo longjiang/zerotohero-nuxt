@@ -98,7 +98,6 @@
           </span>
           <span
             class="statistics-item"
-            style="color: #aaa"
             v-if="
               (showDate || $adminMode) &&
               video.date &&
@@ -735,6 +734,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .youtube-video-card-wrapper.skin-dark {
   .youtube-thumbnail-wrapper {
     box-shadow: 0 -1px 1px #ffffff69;
@@ -743,6 +743,19 @@ export default {
 .youtube-video-card-wrapper.skin-light {
   .youtube-thumbnail-wrapper {
     box-shadow: 0 -1px 1px #00000069;
+  }
+}
+
+
+.youtube-video-card-wrapper.skin-dark {
+  .statistics {
+    color: darken($text-color-on-dark, 50%);
+  }
+}
+
+.youtube-video-card-wrapper.skin-light {
+  .statistics {
+    color: lighten($text-color-on-light, 50%);
   }
 }
 
@@ -849,10 +862,10 @@ export default {
   left: 0.5rem;
 }
 .statistics {
-  opacity: 0.5;
   font-size: 0.8em;
   margin-top: 0.25rem;
 }
+
 
 .statistics-item + .statistics-item::before {
   content: "·";

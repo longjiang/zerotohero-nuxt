@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="`level-select skin-${$skin}`">
     <div class="container">
       <div class="row">
         <div
@@ -59,6 +59,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/variables.scss";
 .level-btn-wrapper {
   padding: 0.25rem;
 }
@@ -79,8 +80,7 @@ export default {
   opacity: 0.99;
   cursor: pointer;
   &.level-btn-selected {
-    border: 2px solid white;
-    background: none;
+    border: 2px solid $primary-color;
   }
   &.level-btn-faded {
     opacity: 0.5;

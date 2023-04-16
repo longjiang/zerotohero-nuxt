@@ -25,7 +25,7 @@ a {
 }
 
 .zerotohero-light {
-  background: white;
+  background: $bg-color-light-1;
 }
 .zerotohero-dark {
   background: $bg-color-dark-1;
@@ -35,31 +35,31 @@ a {
 .skin-light {
   color: #555;
   .list-group-item {
-    background-color: #fff;
+    background-color: $bg-color-light-1;
     &:hover {
-      background-color: #eee;
+      background-color: $bg-color-light-3;
     }
   }
   .bg-accent {
-    background-color: #fff;
+    background-color: $bg-color-light-1;
   }
 }
 
 .skin-dark hr {
-  border-color: #444;
+  border-color: $bg-color-dark-4;
 }
 
 .zerotohero-dark,
 .skin-dark {
-  color: #ddd;
+  color: $bg-color-light-2;
   .list-group-item {
-    background-color: #333;
+    background-color: $bg-color-dark-3;
     &:hover {
-      background-color: #444;
+      background-color: $bg-color-dark-3;
     }
   }
   .bg-accent {
-    background-color: #333;
+    background-color: $bg-color-dark-3;
   }
 }
 
@@ -715,13 +715,13 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
 
 .zerotohero-dark {
   .text-contrast {
-    color: white;
+    color: $text-color-on-dark;
   }
 }
 
 .zerotohero-light {
   .text-contrast {
-    color: #444;
+    color: $text-color-on-light;
   }
 }
 

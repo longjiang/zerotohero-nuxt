@@ -177,6 +177,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/variables.scss";
 .deck1,
 .deck2,
 .deck3 {
@@ -280,9 +281,20 @@ export default {
 }
 
 .statistics {
-  opacity: 0.5;
   font-size: 0.8em;
   margin-top: 0.25rem;
+}
+
+.tv-show-card.skin-dark {
+  .statistics {
+    color: darken($text-color-on-dark, 50%);
+  }
+}
+
+.tv-show-card.skin-light {
+  .statistics {
+    color: lighten($text-color-on-light, 50%);
+  }
 }
 
 .statistics span + span::before {
