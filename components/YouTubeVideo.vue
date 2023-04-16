@@ -19,11 +19,17 @@
         v-if="!posterOnly && !autoplay && !loading"
       ></div>
     </div>
+    <div v-if="!isScriptLoaded" class="placeholder-message">
+      <div class="placeholder-message-text">
+        <i18n path="If this video doesn't load, it means your connection to YouTube may be blocked. You may need a {0}." >
+            <a href="https://www.example.com/vpn-guide">{{ $t('VPN') }}</a>
+        </i18n>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import $ from "jquery";
 import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
 import Vue from "vue";
@@ -90,6 +96,7 @@ export default {
       duration: undefined,
       loading: false,
       randomSeeked: false,
+      isScriptLoaded: false,
     };
   },
   computed: {
@@ -244,10 +251,21 @@ export default {
         });
       };
       if(document) {
-        const script = document.createElement('script');
-        script.src = 'https://www.youtube.com/iframe_api';
-        document.head.appendChild(script);
+        // Load the YouTube API script  if it hasn't already been loaded
+        if (!this.isScriptLoaded) {
+          this.loadYouTubeAPIScript();
+        } else {
+          window.onYouTubePlayerAPIReady();
+        }
       }
+    },
+    loadYouTubeAPIScript() {
+      const script = document.createElement("script");
+      script.src = "https://www.youtube.com/iframe_api";
+      script.addEventListener("load", () => {
+        this.isScriptLoaded = true;
+      });
+      document.head.appendChild(script);
     },
     async reportIfVideoUnavailableUponAutoload(youtube_id) {
       if (!this.autoload) return;
@@ -372,5 +390,21 @@ export default {
     height: 100px;
     position: absolute;
   }
+}
+.placeholder-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 1rem;
 }
 </style>

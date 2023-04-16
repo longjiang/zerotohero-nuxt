@@ -1953,3 +1953,5 @@ Save all the above words so they will be highlighted in the video.,请保存以�
 Dark Mode,深色模式,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 Light Mode,浅色模式,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 Collapse,叠起,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+"If this video doesn't load, it means your connection to YouTube may be blocked. You may need a {0}.",如果视频无法加载，可能是因为您无法连接到 YouTube。你可能需要“{0}”。,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+VPN,科学上网,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
