@@ -1,25 +1,33 @@
 <template>
-  <div class="identical-languages" v-if="$l2.identicalLangs && $l2.code !== 'zh'">
-    For more content, also try:
+  <div
+    class="identical-languages"
+    v-if="$l2.identicalLangs && $l2.code !== 'zh'"
+  >
     <client-only>
-      <span v-if="$l2.identicalLangs">
-        <span
-          v-for="(lang, index) of $l2.identicalLangs"
-          :key="`identical-lang-${index}`"
-          class="identical-language-item"
-        >
-          &nbsp;
-          <router-link
-            class="link-unstyled identical-language-item-name"
-            :to="{ name: routeName, params: { l1: $l1.code, l2: lang.code } }"
+      <i18n path="For more content, also try: {0}.">
+        <span>
+          <span
+            v-for="(identicalLangCode, index) of $l2.identicalLangs"
+            :key="`identical-lang-${index}`"
+            class="identical-language-item"
           >
-            <b style="text-decoration: underline">{{ lang.name }}</b>
-            ({{ lang.code }})
-          </router-link>
+            &nbsp;
+            <router-link
+              class="link-unstyled identical-language-item-name"
+              :to="{
+                name: routeName,
+                params: { l1: $l1.code, l2: identicalLangCode },
+              }"
+            >
+              <b style="text-decoration: underline">{{
+                $t(langName(identicalLangCode))
+              }}</b>
+              ({{ identicalLangCode }})
+            </router-link>
+          </span>
         </span>
-      </span>
+      </i18n>
     </client-only>
-    .
   </div>
 </template>
 
@@ -28,6 +36,12 @@ export default {
   props: {
     routeName: {
       type: String,
+    },
+  },
+  methods: {
+    langName(code) {
+      let language = this.$languages.getSmart(code);
+      return language?.name;
     },
   },
 };
@@ -42,7 +56,6 @@ export default {
 .identical-languages {
   text-align: center;
   padding: 2rem;
-  font-size: 1.3em;
   border-radius: 0.5rem;
   background: rgba(37, 36, 44, 0.651);
   .identical-language-item-name {

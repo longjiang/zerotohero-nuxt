@@ -150,7 +150,7 @@
                       v-if="row.l2.identicalLangs"
                       class="identical-lang-codes"
                     >
-                      {{ row.l2.identicalLangs.map((l) => l.code).join(", ") }}
+                      {{ row.l2.identicalLangs.join(", ") }}
                     </span>
                   </td>
                   <td class="text-center">
