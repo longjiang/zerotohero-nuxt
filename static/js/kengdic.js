@@ -6,8 +6,10 @@ importScripts("../vendor/localforage/localforage.js")
 const Dictionary = {
   file:
     "https://server.chinesezerotohero.com/data/kengdic/kengdic_2011.tsv.txt",
-  wiktionaryFile:
-    "https://server.chinesezerotohero.com/data/wiktionary-csv/kor-eng.csv.txt",
+  wiktionaryFiles: {
+    eng: "https://server.chinesezerotohero.com/data/wiktionary-csv/kor-eng.csv.txt",
+    zho: "https://server.chinesezerotohero.com/data/wiktionary-csv/kor-zho.csv.txt",
+  },
   words: [],
   name: "kengdic",
   hangulRegex: /[\u1100-\u11FF\u302E\u302F\u3131-\u318E\u3200-\u321E\u3260-\u327E\uA960-\uA97C\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uFFA0-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]+/,
@@ -16,19 +18,24 @@ const Dictionary = {
   credit() {
     return `The Korean dictionary is provided by <a href="https://github.com/garfieldnate/kengdic">kengdic</a> created by Joe Speigle, which is freely available from its GitHub project page. Korean conjugation made possible with <a href="https://github.com/max-christian/korean_conjugation">max-christian/korean_conjugation</a>.`;
   },
-  async load() {
-    let [kengdicData, wiktionaryData] = await Promise.all([
+  async load({ l1 = undefined, l2 = undefined } = {}) {
+    let promises = [
       this.loadSmart('kengdic', this.file),
-      this.loadSmart('wiktionary-kor-eng', this.wiktionaryFile)
-    ]);
-    let words = await this.loadKengdic(kengdicData);
-    let wiktionaryWords = await this.loadWiktionary(wiktionaryData);
+      this.loadSmart(`wiktionary-kor-${l1}`, this.wiktionaryFiles[l1])
+    ];
+    
+    let [kengdicData, wiktionaryData] = await Promise.all(promises);
+    
+    let words = kengdicData ? await this.loadKengdic(kengdicData) : [];
+    let wiktionaryWords = wiktionaryData ? await this.loadWiktionary(wiktionaryData) : [];
     wiktionaryWords = wiktionaryWords.map((word, index) => {
       word.id = String(300000 + index);
       return word;
     });
-    words = words.concat(wiktionaryWords);
-    this.words = this.uniqueByValues(words, ["bare", "hanja", "pos"]);
+    words = [...wiktionaryWords, ...words];
+    this.words = words
+    // this.words = this.uniqueByValues(words, ["bare", "hanja", "pos"]); // This seems to be removing too many necessary words
+    words = null
     kengdicData = null
     wiktionaryData = null
     axios.get("https://py.zerotohero.ca/start-open-korean-text.php"); // Call index.php to make sure the java open-korean-text process is running (Dreamhost kills it from time to time)
@@ -88,7 +95,7 @@ const Dictionary = {
     let parsed = Papa.parse(data, { header: true });
     let words = parsed.data;
     words = words
-      .filter(w => w.word.length > 0) // filter empty rows
+      .filter(w => w.word?.length > 0) // filter empty rows
       .map(item => {
         item.word = item.word.replace(/^\-/, '')
         item.bare = item.word;
