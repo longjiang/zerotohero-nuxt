@@ -22,8 +22,13 @@
     <div v-if="!isScriptLoaded" class="placeholder-message">
       <div class="placeholder-message-text">
         <i18n path="If this video doesn't load, it means your connection to YouTube may be blocked. You may need a {0}." >
-            <a href="https://www.example.com/vpn-guide">{{ $t('VPN') }}</a>
+            <a href="https://www.baidu.com/s?wd=%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%20vpn&pn=20&oq=%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%20vpn">{{ $t('VPN') }}</a>
         </i18n>
+        <div>
+          <a v-for="vpn in vpns" :href="vpn.url" target="_blank" class="vpn-link">
+            {{ vpn.name }}
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -97,6 +102,32 @@ export default {
       loading: false,
       randomSeeked: false,
       isScriptLoaded: false,
+      vpns: [
+        {
+          name: "Astrill VPN",
+          url: "https://www.astrill.com/",
+        },
+        {
+          name: "ExpressVPN",
+          url: "https://www.expressvpn.com/",
+        },
+        {
+          name: "NordVPN",
+          url: "https://nordvpn.com/",
+        },
+        {
+          name: "Surfshark",
+          url: "https://surfshark.com/",
+        },
+        {
+          name: "CyberGhost",
+          url: "https://www.cyberghostvpn.com/",
+        },
+        {
+          name: "VyprVPN",
+          url: "https://www.vyprvpn.com/",
+        }
+      ]
     };
   },
   computed: {
@@ -406,5 +437,12 @@ export default {
   font-weight: bold;
   text-align: center;
   padding: 1rem;
+}
+.vpn-link {
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin: 0 0.5rem;
+  display: inline-block;
 }
 </style>
