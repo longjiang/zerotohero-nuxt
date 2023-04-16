@@ -10,22 +10,6 @@
 <template>
   <div>
     <div class="container pb-5">
-      <!-- <div class="row mb-3">
-          <div class="col-sm-12">
-            <b-form-input
-              v-model="term"
-              @compositionend.prevent.stop="() => false"
-              @keyup.enter="
-                $router.push({
-                  name: 'youtube-search',
-                  params: { term: term.trim() },
-                })
-              "
-              placeholder="Search"
-              class="input-ghost-dark"
-            />
-          </div>
-        </div> -->
       <div
         :class="{
           'loader text-center': true,
@@ -290,9 +274,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/variables.scss";
 .category-btn-wrapper {
   padding: 0.25rem;
 }
+
 
 .category-btn {
   color: white;
@@ -305,6 +291,10 @@ export default {
   display: block;
   text-align: left;
   text-shadow: 0 0 6px #000000;
+  background-color: $bg-color-dark-2;
+  &:hover {
+    background-color: $bg-color-dark-3;
+  }
 }
 
 @media screen and (min-width: 480px) {

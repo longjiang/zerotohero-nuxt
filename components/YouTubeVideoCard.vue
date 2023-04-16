@@ -749,13 +749,13 @@ export default {
 
 .youtube-video-card-wrapper.skin-dark {
   .statistics {
-    color: darken($text-color-on-dark, 50%);
+    color: darken($text-color-on-dark, 33%);
   }
 }
 
 .youtube-video-card-wrapper.skin-light {
   .statistics {
-    color: lighten($text-color-on-light, 50%);
+    color: lighten($text-color-on-light, 33%);
   }
 }
 

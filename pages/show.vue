@@ -149,7 +149,7 @@
               <template v-if="videos && videos.length > 0">
                 <LazyYouTubeVideoList
                   ref="youtubeVideoList"
-                  skin="dark"
+                  :skin="$skin"
                   :videos="videos"
                   :checkSubs="false"
                   :checkSaved="false"

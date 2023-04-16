@@ -1,5 +1,5 @@
 <template>
-  <div :class="`shows skin-${$skin}`">
+  <div :class="`shows skin-${$skin}`">{{ skin }}
     <SocialHead
       v-if="shows && shows[0]"
       :title="`Learn ${$l2.name} with ${routeTitles[routeType]} | Language Player`"
@@ -564,7 +564,7 @@ export default {
   cursor: pointer;
 }
 
-.skin-dark {
+.shows.skin-dark {
   .filter-dropdown {
     color: white;
   }

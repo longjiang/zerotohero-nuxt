@@ -287,13 +287,13 @@ export default {
 
 .tv-show-card.skin-dark {
   .statistics {
-    color: darken($text-color-on-dark, 50%);
+    color: darken($text-color-on-dark, 33%);
   }
 }
 
 .tv-show-card.skin-light {
   .statistics {
-    color: lighten($text-color-on-light, 50%);
+    color: lighten($text-color-on-light, 33%);
   }
 }
 
