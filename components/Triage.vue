@@ -43,11 +43,12 @@
 </template>
 
 <script>
+import { country } from "@/lib/utils/countries";
 export default {
   data() {
     return {
       l1: undefined, // Object
-      l2: undefined  // Object
+      l2: undefined, // Object
     };
   },
   mounted() {},
@@ -61,26 +62,30 @@ export default {
       }
     },
     l2Options() {
-      let options = this.$languages.l1s
-        .filter((language) =>
-          this.$languages.commonLangs.includes(language.code)
-        )
+      let allLanguages = this.$languages.l1s.filter((language) =>
+        this.$languages.commonLangs.includes(language.code)
+      );
+      let commonCodes = "zh en ja ko th fr de es pt it ru bn hi ins te ur ta ar fa yue hak nan lzh och wuu"
+          .split(" ")
+      let commonLanguages = commonCodes.map(code => {
+          return allLanguages.find(language => language.code === code);
+        }).filter(language => language !== undefined);
+      let options = allLanguages
+        .sort((a, b) => a.name.localeCompare(b.name))
         .map((language) => {
+          let flagEmoji = this.languageCountryFlagEmoji(language);
           return {
             value: language,
-            text: language.name,
+            text: (flagEmoji ? flagEmoji + " " : "") + language.name + ` (${ language.code })`,
           };
         })
-        .sort((a, b) => a.text.localeCompare(b.text));
-      let commonOptions = options
-        .filter((o) =>
-          "zh en ja hi fr ko de es ur ru ta ar th it yue pt te bn fa ins hak nan lzh och wuu"
-            .split(" ")
-            .includes(o.value.code)
-        )
-        .map((o) =>
-          Object.assign(Object.assign({}, o), { text: this.$tb(o.text) })
-        );
+      let commonOptions = commonLanguages.map((language) => {
+        let flagEmoji = this.languageCountryFlagEmoji(language);
+        return {
+          value: language,
+          text: (flagEmoji ? flagEmoji + " " : "") + this.$tb(language.name) + ` (${ language.code })`,
+        };
+      });
       return [
         ...commonOptions,
         { text: "------------------------" },
@@ -102,9 +107,10 @@ export default {
 
       // Map the supported L1 languages to an array of objects with 'value' and 'text' properties
       let options = supportedL1s.map((language) => {
+        let flagEmoji = this.languageCountryFlagEmoji(language);
         return {
           value: language,
-          text: this.$tb(language.name),
+          text: (flagEmoji ? flagEmoji + " " : "") + this.$tb(language.name),
         };
       });
 
@@ -113,12 +119,19 @@ export default {
       // If multiple L1 options are available, set l1 to browser's language
       else if (options.length > 1 && this.$browserLanguage) {
         let browserLanguage = this.$languages.getSmart(this.$browserLanguage);
-        if (browserLanguage) this.l1 = browserLanguage
+        if (browserLanguage) this.l1 = browserLanguage;
       } else this.l1 = undefined;
       return options;
     },
   },
-  methods: {},
+  methods: {
+    languageCountryFlagEmoji(language) {
+      let typicalCountryCode = this.$languages.countryCode(language);
+      let typicalCountry = country(typicalCountryCode);
+      if (typicalCountry) return typicalCountry.emoji;
+      else return "";
+    },
+  },
 };
 </script>
 
