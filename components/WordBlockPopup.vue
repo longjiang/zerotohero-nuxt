@@ -20,9 +20,6 @@
     >
       <i class="fa fa-times"></i>
     </button>
-    <div v-if="loading === true">
-      <Loader :sticky="true" message="Looking up the dictionary..." />
-    </div>
     <div v-if="token?.lemmas && token.lemmas.length > 0 && token.lemmas[0] !== text" class="word-block-lemma">
       <b>Lemmatized:</b> {{ text }} → {{ token.lemmas.join(', ') }} <template v-if="token.pos">({{ token.pos.toLowerCase() }})</template>
       <hr/>
@@ -183,6 +180,9 @@
           :showSpeak="false"
         />
       </div>
+    </div>
+    <div v-if="loading === true">
+      <Loader :sticky="true" message="Looking up the dictionary..." />
     </div>
     <div
       v-if="words && words.length === 0 && loading === false"

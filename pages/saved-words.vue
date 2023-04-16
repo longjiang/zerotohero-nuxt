@@ -316,9 +316,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "@/assets/scss/variables.scss";
+
 .zerotohero-dark {
   .hide-defs {
-    background: #000;
+    background: $bg-color-dark-1;
   }
 }
 .zerotohero-light {

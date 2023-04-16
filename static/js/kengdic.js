@@ -10,6 +10,7 @@ const Dictionary = {
     eng: "https://server.chinesezerotohero.com/data/wiktionary-csv/kor-eng.csv.txt",
     zho: "https://server.chinesezerotohero.com/data/wiktionary-csv/kor-zho.csv.txt",
   },
+  version: "2.16.1",
   words: [],
   name: "kengdic",
   hangulRegex: /[\u1100-\u11FF\u302E\u302F\u3131-\u318E\u3200-\u321E\u3260-\u327E\uA960-\uA97C\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uFFA0-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]+/,
@@ -20,11 +21,15 @@ const Dictionary = {
   },
   async load({ l1 = undefined, l2 = undefined } = {}) {
     let promises = [
-      this.loadSmart('kengdic', this.file),
       this.loadSmart(`wiktionary-kor-${l1}`, this.wiktionaryFiles[l1])
     ];
     
-    let [kengdicData, wiktionaryData] = await Promise.all(promises);
+    if (l1 === 'eng') promises.unshift(this.loadSmart('kengdic', this.file));
+    
+    let results = await Promise.all(promises);
+    
+    // If l1 is 'eng', results will have two elements, otherwise it will have one element
+    let [kengdicData, wiktionaryData] = l1 === 'eng' ? results : [undefined, results[0]];
     
     let words = kengdicData ? await this.loadKengdic(kengdicData) : [];
     let wiktionaryWords = wiktionaryData ? await this.loadWiktionary(wiktionaryData) : [];
@@ -35,7 +40,7 @@ const Dictionary = {
     words = [...wiktionaryWords, ...words];
     this.words = words
     // this.words = this.uniqueByValues(words, ["bare", "hanja", "pos"]); // This seems to be removing too many necessary words
-    words = null
+    // words = null
     kengdicData = null
     wiktionaryData = null
     axios.get("https://py.zerotohero.ca/start-open-korean-text.php"); // Call index.php to make sure the java open-korean-text process is running (Dreamhost kills it from time to time)
@@ -316,15 +321,17 @@ const Dictionary = {
       console.log(tag, { message: 'Something happened in setting up the request that triggered an Error' + error.message, status: error.status, error });
     }
   },
-  lookupFuzzy(text, limit = 30) {
+  lookupFuzzy(text, limit = 30, quick = false) {
     let words = [];
-    for (let word of this.words) {
-      let search = word.bare;
-      if (search && search.length > 0) {
-        let distance = FastestLevenshtein.distance(search, text);
-        let max = Math.max(text.length, search.length);
-        let similarity = (max - distance) / max;
-        words.push(Object.assign({ score: similarity }, word));
+    if (!quick) {
+      for (let word of this.words) {
+        let search = word.bare;
+        if (search && search.length > 0) {
+          let distance = FastestLevenshtein.distance(search, text);
+          let max = Math.max(text.length, search.length);
+          let similarity = (max - distance) / max;
+          words.push(Object.assign({ score: similarity }, word));
+        }
       }
     }
     words = words.sort((a, b) => b.score - a.score);
