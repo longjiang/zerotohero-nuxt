@@ -93,7 +93,6 @@
               </router-link>
               <RecommendedMessage class="mt-2" />
             </h3>
-            
             <MediaSearchResults
               v-bind="{
                 sort: 'recommended',
@@ -102,7 +101,8 @@
                 includeTVShows: false,
                 showNoVideosMessage: true,
                 showSearchBar: false,
-                infiniteScroll: false
+                infiniteScroll: false,
+                excludeKids: true,
               }"
               @videosLoaded="onVideosLoaded"
               ref="videos"

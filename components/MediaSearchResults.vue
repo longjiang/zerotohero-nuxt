@@ -122,6 +122,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    excludeKids: {
+      type: Boolean,
+      default: false,
+    },
     showLatestIfKeywordMissing: {
       default: false,
     },
@@ -248,6 +252,10 @@ export default {
       }
       if (this.kidsOnly) {
         filters.push('filter[made_for_kids][eq]=1')
+      }
+      if (this.excludeKids) {
+        filters.push('filter[made_for_kids][eq]=0')
+        filters.push('filter[tags][ncontains]=kids')
       }
       let limit = this.perPage;
       filters = filters.join("&");
