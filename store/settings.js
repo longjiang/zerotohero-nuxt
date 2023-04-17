@@ -49,6 +49,7 @@ export const defaultTransientSettings = {
   l2: undefined, // L2 language object
   dictionary: undefined,
   dictionaryName: undefined,
+  fullscreen: false, // Whether or not the user is in the browser's fullscreen mode
   settingsLoaded: false,
 };
 
@@ -148,6 +149,9 @@ export const mutations = {
   SET_DICTIONARY_NAME(state, dictionaryName) {
     state.dictionaryName = dictionaryName;
   },
+  SET_FULLSCREEN(state, fullscreen) {
+    state.fullscreen = fullscreen;
+  },
   SET_GENERAL_SETTINGS(state, generalSettings) {
     for (let property in generalSettings) {
       if (property in defaultGeneralSettings) {
@@ -215,6 +219,9 @@ export const actions = {
   },
   setDictionaryName({ commit }, dictionaryName) {
     commit("SET_DICTIONARY_NAME", dictionaryName);
+  },
+  setFullscreen({ dispatch, commit }, fullscreen) {
+    commit("SET_FULLSCREEN", fullscreen);
   },
   setGeneralSettings({ dispatch, commit }, generalSettings) {
     commit("SET_GENERAL_SETTINGS", generalSettings);

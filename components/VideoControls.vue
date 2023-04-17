@@ -118,13 +118,13 @@
         v-if="showFullscreenModeToggle"
         :class="{
           'btn-video-controls btn-video-controls-fullscreen-mode text-center': true,
-          'btn-video-controls-active': isFullscreen === true,
+          'btn-video-controls-active': fullscreen === true,
         }"
-        @click="$emit('fullscreen', !isFullscreen)"
+        @click="$emit('fullscreen', !fullscreen)"
         :title="$t('Fullscreen')"
       >
-        <i class="fa-solid fa-expand" v-if="!isFullscreen"></i>
-        <i class="fa-solid fa-times" v-if="isFullscreen"></i>
+        <i class="fa-solid fa-expand" v-if="!fullscreen"></i>
+        <i class="fa-solid fa-times" v-if="fullscreen"></i>
       </button>
       <button
         :class="{
@@ -333,7 +333,7 @@ export default {
     show: {
       type: Object,
     },
-    isFullscreen: {
+    fullscreen: {
       default: false,
     },
     showTranscriptModeToggle: {

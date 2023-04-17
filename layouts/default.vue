@@ -5,7 +5,7 @@
     <client-only>
       <!-- Main nav - side bar on wide screen, bottom bar on small screen /-->
       <Nav
-        v-if="$route.params.l1 && $route.params.l2 && l1 && l2"
+        v-if="!fullscreen && $route.params.l1 && $route.params.l2 && l1 && l2"
         class="zth-main-nav-wrapper"
         :l1="l1"
         :l2="l2"
@@ -104,10 +104,11 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["l2Settings", "l1", "l2"]),
+    ...mapState("settings", ["l2Settings", "l1", "l2", "fullscreen"]),
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
     showTopBar() {
+      if (this.fullscreen) return false;
       if (this.$route.meta && this.$route.meta.layout === "full") return false;
       else
         return (

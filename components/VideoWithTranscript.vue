@@ -41,22 +41,22 @@
           v-if="showControls && (video.youtube_id || video.url)"
           ref="videoControls"
           v-bind="{
-            video,
-            paused,
-            mode,
-            skin,
-            show,
-            showType,
-            largeEpisodeCount,
+            duration,
             episodes,
-            showLineList,
+            fullscreen,
+            initialTime: starttime ? starttime : 0,
+            largeEpisodeCount,
+            mode,
+            paused,
+            show,
+            showCollapse: mode === 'transcript',
             showFullscreenToggle,
             showInfoButton,
+            showLineList,
             showOpenButton,
-            showCollapse: mode === 'transcript',
-            duration,
-            isFullscreen,
-            initialTime: starttime ? starttime : 0,
+            showType,
+            skin,
+            video,
           }"
           @previous="$emit('previous')"
           @next="$emit('next')"
@@ -289,6 +289,7 @@
 
 import Vue from "vue";
 import { timeout } from "@/lib/utils";
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -399,7 +400,6 @@ export default {
       duration: undefined,
       enableTranslationEditing: false,
       mode: this.initialMode,
-      isFullscreen: false,
       neverPlayed: true,
       paused: true,
       repeatMode: false,
@@ -414,6 +414,7 @@ export default {
     };
   },
   computed: {
+  ...mapState("settings", ["fullscreen"]),
     startTimeOrLineIndex() {
       let starttime = 0;
       if (this.starttime) starttime = this.starttime;
@@ -451,7 +452,7 @@ export default {
       }
     },
     size() {
-      if (this.isFullscreen) return "fullscreen";
+      if (this.fullscreen) return "fullscreen";
       else return this.initialSize;
     },
     episodeIndex() {
@@ -716,7 +717,7 @@ export default {
       this.$emit("updateLayout", this.mode);
     },
     onFullscreen(fullscreen) {
-      if (fullscreen !== this.isFullscreen) {
+      if (fullscreen !== this.fullscreen) {
         if (fullscreen) {
           this.requestFullscreen();
           this.mode = "subtitles";
@@ -758,12 +759,13 @@ export default {
       }
     },
     updateFullscreenState() {
-      this.isFullscreen = !!(
+      const fullscreen = !!(
         document.fullscreenElement ||
         document.webkitFullscreenElement ||
         document.mozFullScreenElement ||
         document.msFullscreenElement
       );
+      this.$store.dispatch("settings/setFullscreen", fullscreen);
     },
   },
 };
