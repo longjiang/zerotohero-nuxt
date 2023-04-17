@@ -51,9 +51,9 @@
         :to="`/${$l1.code}/${$l2.code}/phrase/search/${text.trim()}`"
       >
         <span class="suggestion-not-found">
-          Look up “
-          <b data-level="outside">{{ text }}</b>
-          ” as a phrase
+          <i18n path="Look up “{0}” as a phrase">
+            <b data-level="outside">{{ text }}</b>
+          </i18n>
         </span>
       </router-link>
       <a
