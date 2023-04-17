@@ -4,7 +4,7 @@
       :style="{
         backgroundImage:
           posterOnly || (!autoplay && !loading)
-            ? `url(https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg)`
+            ? `url(https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg)`
             : 'none',
         'background-repeat': 'no-repeat',
         'background-size': 'cover',

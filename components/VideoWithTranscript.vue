@@ -66,7 +66,7 @@
           showLineList,
           showOpenButton,
           showType,
-          skin,
+          skin: showSubsAndControlsAsOverlay ? 'dark' : skin,
           video,
         }"
         @previous="$emit('previous')"
@@ -184,7 +184,7 @@
           notes: video.notes,
           collapsed,
           startLineIndex,
-          skin,
+          skin: showSubsAndControlsAsOverlay ? 'dark' : skin,
           textSize,
           landscape: aspect === 'landscape',
           stopLineIndex,
@@ -832,7 +832,7 @@ export default {
       right: 0;
       background: rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(2px);
-      padding: 1rem;
+      padding: 0.5rem 1rem;
       box-sizing: border-box;
       overflow: hidden;
     }
@@ -846,8 +846,16 @@ export default {
         opacity: 1;
       }
       transition: opacity 0.3s;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(2px);
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.8) 100%
+      );
+      :deep(.video-controls-time),
+      :deep(.btn-video-controls) {
+        text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+        color: white;
+      }
     }
   }
 }

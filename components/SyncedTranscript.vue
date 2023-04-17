@@ -4,6 +4,7 @@
       'synced-transcript': true,
       'synced-transcript-multi-line': !single,
       'synced-transcript-single-line': single,
+      [`skin-${$skin}`]: true,
     }"
   >
     <client-only>
@@ -100,16 +101,13 @@
 import Helper from "@/lib/helper";
 import Vue from "vue";
 
-import { NON_PRO_MAX_LINES, POPULAR_LANGS } from "@/lib/config";
-import { timeout } from "@/lib/utils/timeout";
-const CURRENT_LINE_STARTED_TOLERANCE = 1; // seconds
+import { NON_PRO_MAX_LINES } from "@/lib/config";
 const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
-
 
 export default {
   props: {
     skin: {
-      default: "light",
+      default: null,
     },
     sticky: {
       default: false,
@@ -794,6 +792,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .synced-transcript {
   .transcript-title {
     font-weight: bold;
@@ -803,6 +802,18 @@ export default {
   &.synced-transcript-multi-line {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  &.skin-dark {
+    .transcript-line {
+      color: $bg-color-light-2;
+    }
+  }
+
+  &.skin-light {
+    .transcript-line {
+      color: $bg-color-dark-2;
+    }
   }
 }
 .transcript-wrapper {
