@@ -866,6 +866,11 @@ export default {
 
 /* Not wide display */
 .zerotohero-not-wide {
+  .video-with-transcript:not(.size-mini) {
+    .video-wrapper {
+      margin: 0 auto;
+    }
+  }
   .video-wrapper {
     max-width: calc(
       (
@@ -873,7 +878,6 @@ export default {
             2.9rem - 4.9rem
         ) * 16 / 9
     );
-    margin: 0 auto;
   }
   .video-with-transcript.size-fullscreen {
     .video-wrapper {

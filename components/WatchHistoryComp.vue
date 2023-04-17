@@ -251,7 +251,7 @@ export default {
 }
 
 .col-compact {
-  padding: 0.5rem;
+  padding: 0 0.5rem;
   :deep(.media-body) {
     font-size: 0.9em;
   }
