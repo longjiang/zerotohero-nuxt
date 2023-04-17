@@ -750,11 +750,10 @@ export default {
         let token = this.tokenized[batchId][index];
         if (typeof token === "object") {
           html += `<WordBlock v-bind="wordBlockAttributes(${batchId},${index})">${token.text}</WordBlock>`;
+        } else if (token.match(/^\s+$/)){
+          html += token
         } else {
-          html += `<span class="word-block-unknown"><span class="word-block-segment">${token.replace(
-            /\s/,
-            "&nbsp;"
-          )}</span></span>`;
+          html += `<span class="word-block-unknown"><span class="word-block-segment">${token}</span></span>`;
         }
       }
       return html;
