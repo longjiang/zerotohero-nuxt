@@ -780,6 +780,8 @@ export default {
       } else if (docEl.msRequestFullscreen) {
         // IE/Edge
         docEl.msRequestFullscreen();
+      } else {
+        this.$store.dispatch("settings/setFullscreen", true);
       }
     },
     exitFullscreen() {
@@ -794,6 +796,8 @@ export default {
       } else if (document.msExitFullscreen) {
         // IE/Edge
         document.msExitFullscreen();
+      } else {
+        this.$store.dispatch("settings/setFullscreen", false);
       }
     },
     updateFullscreenState() {
