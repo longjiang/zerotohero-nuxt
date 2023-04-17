@@ -142,7 +142,7 @@ export default {
         "zerotohero-with-mini-player":
           this.overlayPlayerYouTubeId && this.overlayPlayerMinimized,
         "zerotohero-with-nav":
-          this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2,
+          !this.fullscreen && this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2,
           [`route-${this.$route.name}`]: true,
         [`zerotohero-${this.$skin}`]: true,
       }
