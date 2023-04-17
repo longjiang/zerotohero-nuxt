@@ -43,13 +43,6 @@
         fullscreen: mode === 'subtitles',
       }"
     >
-      <div
-        v-if="type === 'youtube'"
-        :class="{ 'loader text-center': true, 'd-none': video }"
-        style="padding-top: 30vh; padding-bottom: 30vh"
-      >
-        <Loader :sticky="true" message="Preparing video and transcript..." />
-      </div>
       <component
         :is="currentComponent"
         v-bind="{
@@ -65,6 +58,13 @@
         @onUpdateLayout="onYouTubeUpdateLayout"
         @videoLoaded="onVideoLoaded"
       />
+      <div
+        v-if="type === 'youtube'"
+        :class="{ 'loader text-center': true, 'd-none': video }"
+        style="padding-top: 30vh; padding-bottom: 30vh"
+      >
+        <Loader :sticky="true" message="Preparing video and transcript..." />
+      </div>
     </div>
   </div>
 </template>

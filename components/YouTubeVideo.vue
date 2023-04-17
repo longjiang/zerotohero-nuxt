@@ -228,8 +228,8 @@ export default {
       };
       window.onYouTubePlayerAPIReady = () => {
         this.player = new YT.Player(id, {
-          height: "390",
-          width: "640",
+          height: screen.height,
+          width: screen.width,
           videoId: this.video.youtube_id,
           playerVars,
           events: {
