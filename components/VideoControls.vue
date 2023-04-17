@@ -596,7 +596,7 @@ export default {
     color: #333;
   }
   :deep(.vue-slider-rail) {
-    background-color: rgba($bg-color-light-1, 0.3);
+    background-color: rgba(black, 0.3);
   }
 }
 
@@ -606,7 +606,7 @@ export default {
   }
   .video-controls-progress {
     :deep(.vue-slider-rail) {
-      background-color: rgba($bg-color-dark-1, 0.3);
+      background-color: rgba(black, 0.3);
     }
   }
 }
