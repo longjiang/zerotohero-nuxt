@@ -46,9 +46,9 @@
       <div class="site-top-bar-right">
         <client-only>
           <span v-if="!$route.params.l1 && !$route.params.l2">
-            <router-link to="/go-pro" v-if="!pro" class="mr-2">
+            <!-- <router-link to="/go-pro" v-if="!pro" class="mr-2">
               🚀 {{ $tb("Go Pro") }}
-            </router-link>
+            </router-link> -->
             <span
               to="/profile"
               class="mr-1"
