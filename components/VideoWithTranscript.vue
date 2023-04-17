@@ -10,7 +10,7 @@
   >
     <div
       :class="{
-        'video-wrapper video-column col-sm-12 p-0': true,
+        'video-wrapper col-sm-12 p-0': true,
         'order-2': aspect === 'landscape' && $l2.direction === 'rtl',
       }"
       :key="`video-${type}-${video.youtube_id}`"
@@ -132,10 +132,11 @@
         />
       </div>
     </div>
-    <div class="video-transcript-column">
+    <div class="video-transcript-wrapper">
       <!-- this is necessary for updating the transcript upon srt drop -->
       <div class="d-none">{{ transcriptKey }}</div>
 
+      <!-- if the video has no subs, allow the user to add subs -->
       <div class="pl-4 pr-4" v-if="video && !video.subs_l2">
         <VideoAdmin
           :showVideoDetails="true"
@@ -775,7 +776,7 @@ export default {
 /* Mini mode */
 .video-with-transcript.size-mini {
   display: flex;
-  .video-column {
+  .video-wrapper {
     height: 5rem;
     width: 8.88rem;
     max-width: 8.88rem;
@@ -795,7 +796,7 @@ export default {
       }
     }
   }
-  .video-transcript-column {
+  .video-transcript-wrapper {
     flex: 1;
     display: flex;
     align-items: center;
@@ -813,13 +814,6 @@ export default {
   border: 2px dashed #ccc;
 }
 
-/* Video wrapper */
-.video-wrapper {
-  max-width: calc((100vh - 3rem - env(safe-area-inset-top) - 12rem) * 16 / 9);
-  margin: 0 auto;
-  position: sticky;
-  top: calc(env(safe-area-inset-top, 0) + 2.7rem);
-}
 
 /* Not wide display */
 .zerotohero-not-wide {
@@ -838,10 +832,19 @@ export default {
 
 /* Transcript mode */
 .video-with-transcript.mode-transcript {
-  .video-column {
+  .video-wrapper {
     position: sticky;
-    top: 0;
     z-index: 2;
+  }
+  &.size-fullscreen {
+    .video-wrapper {
+      top: env(safe-area-inset-top, 0);
+    }
+  }
+  &.size-regular {
+    .video-wrapper {
+      top: calc(env(safe-area-inset-top, 0) + 2.7rem); // 2.7rem for the site top bar
+    }
   }
 }
 
@@ -852,10 +855,10 @@ export default {
     100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)
   );
   flex-direction: column;
-  .video-column {
+  .video-wrapper {
     flex: 0;
   }
-  .video-transcript-column {
+  .video-transcript-wrapper {
     flex: 1;
     :deep(.synced-transcript) {
       height: 100%;
@@ -873,8 +876,8 @@ export default {
 /* Landscape aspect */
 .video-with-transcript.mode-transcript.aspect-landscape {
   display: flex;
-  .video-column,
-  .video-transcript-column {
+  .video-wrapper,
+  .video-transcript-wrapper {
     flex: 1;
   }
 }
@@ -883,14 +886,14 @@ export default {
 .video-with-transcript.mode-transcript.aspect-portrait {
   display: flex;
   flex-direction: column;
-  .video-column,
-  .video-transcript-column {
+  .video-wrapper,
+  .video-transcript-wrapper {
     flex: 1;
   }
 }
 
 /* Video transcript column */
-.video-transcript-column {
+.video-transcript-wrapper {
   width: 100%;
 }
 
