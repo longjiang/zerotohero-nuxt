@@ -93,7 +93,7 @@
                   <i class="fas fa-paper-plane"></i>
                   {{ $t("Shareable via link:") }}
                 </div>
-                <div class="share-banner-url border-gray rounded p-2 bg-white">
+                <div :class="`share-banner-url border-gray rounded p-2`">
                   <span>{{ shareURL }}</span>
                 </div>
                 <b-button
@@ -154,10 +154,19 @@
           <ul>
             <li>
               {{
-                $t("Look for {l2} music lyrics on Google.", { l2: $t($l2.name) })
+                $t("Look for {l2} music lyrics on Google.", {
+                  l2: $t($l2.name),
+                })
               }}
             </li>
-            <li v-html="$t('Read various {l2} documents directly on the “Books” page.', { l2: $t($l2.name) })" />
+            <li
+              v-html="
+                $t(
+                  'Read various {l2} documents directly on the “Books” page.',
+                  { l2: $t($l2.name) }
+                )
+              "
+            />
           </ul>
         </div>
       </div>
@@ -450,6 +459,27 @@ export default {
 </script>
 
 <style lang="scss">
+@import "~@/assets/scss/variables.scss";
+.zerotohero-light {
+  .share-banner {
+    background-color: rgba($primary-color, 0.5);
+    color: #107525;
+    .share-banner-url {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+  }
+}
+.zerotohero-dark {
+  .share-banner {
+    // dark green background
+    background-color: rgba($primary-color, 0.2);
+    color: #ccc;
+    .share-banner-url {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #ccc;
+    }
+  }
+}
 .copy-btn {
   position: absolute;
   bottom: 0.75rem;
@@ -458,19 +488,6 @@ export default {
   font-size: 1.2rem;
   &:hover {
     color: #444;
-  }
-}
-.zerotohero-dark {
-  .share-banner {
-    // dark green background
-    background-color: #04442b;
-  }
-}
-// Do the same for light theme
-.zerotohero-light {
-  .share-banner {
-    // light green background
-    background-color: #96ddb3;
   }
 }
 

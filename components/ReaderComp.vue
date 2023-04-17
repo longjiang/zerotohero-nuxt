@@ -70,32 +70,36 @@
         </div>
         <div class="reader-editor">
           <div class="mt-3 mb-3">
-            <button
+            <b-button
               v-if="!fullscreen"
               @click="toggleFullscreen"
+              :variant="$skin"
               class="reader-button"
             >
               <i class="fa fa-expand" />
-            </button>
-            <button
+              {{ $t("Fullscreen") }}
+            </b-button>
+            <b-button
               v-if="fullscreen"
               @click="toggleFullscreen"
+              :variant="$skin"
               class="reader-button"
             >
               <i class="fa fa-times" />
-            </button>
-            <button
+              {{ $t("Close") }}
+            </b-button>
+            <b-button
               v-if="!addTranslation"
               @click="addTranslation = !addTranslation"
               :class="{
                 'reader-button': true,
                 'reader-button-active': addTranslation,
               }"
-              style="font-size: 0.9em"
+              :variant="$skin"
             >
               <i class="fas fa-keyboard"></i>
               {{ $t("Enter Translation") }}
-            </button>
+            </b-button>
           </div>
           <div class="d-flex">
             <textarea
@@ -368,7 +372,9 @@ export default {
 
 .reader-button {
   border: none;
-  background: none;
+  &:not(:hover) {
+    background: none;
+  }
   display: inline-block;
   margin: 0;
   border-radius: 0.2rem;

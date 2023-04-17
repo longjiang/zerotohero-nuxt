@@ -8,12 +8,12 @@
             v-if="videosFiltered && videosFiltered.length > 0"
           >
             <button
-              :class="`btn text-success bg-none btn-md p-0 ${
+              :class="`btn text-danger bg-none btn-md p-0 ${
                 skin === 'light' ? 'text-secondary' : ''
               }`"
-              @click.stop.prevent="$store.dispatch('history/removeAll')"
+              @click.stop.prevent="clearHistoryWithConfirmation"
             >
-              <i class="fas fa-times mr-1"></i>
+              <i class="fas fa-trash mr-1"></i>
               {{ $t('Clear History') }}
             </button>
           </div>
@@ -224,6 +224,11 @@ export default {
     emitHasWatchHistory() {
       if (this.itemsFiltered && this.itemsFiltered.length > 0)
         this.$emit("hasWatchHistory");
+    },
+    clearHistoryWithConfirmation() {
+      if (confirm('Are you sure you want to clear history?')) {
+        this.$store.dispatch('history/removeAll');
+      }
     },
   },
 };

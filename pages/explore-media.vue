@@ -49,7 +49,7 @@
               :showClear="false"
               :limit="4"
               :showLanguage="false"
-              :showRemove="false"
+              :showRemove="true"
               :showPlayButton="false"
               @hasWatchHistory="onHasWatchHistory"
             />

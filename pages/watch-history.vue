@@ -13,7 +13,6 @@
       <div class="row pb-5">
         <div class="col-sm-12">
           <WatchHistoryComp
-            skin="dark"
             class="mt-3"
             :l2="$l2"
             :limit="50"
