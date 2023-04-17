@@ -18,6 +18,7 @@
         class="youtube-icon"
         v-if="!posterOnly && !autoplay && !loading"
       ></div>
+      <div class="youtube-screen-blocker" @click="togglePaused"></div>
     </div>
     <div v-if="!isScriptLoaded" class="placeholder-message">
       <div class="placeholder-message-text">
@@ -444,5 +445,12 @@ export default {
   font-size: 0.8rem;
   margin: 0 0.5rem;
   display: inline-block;
+}
+.youtube-screen-blocker {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 </style>

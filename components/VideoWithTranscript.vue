@@ -8,7 +8,7 @@
       [`mode-${mode}`]: true,
       [`aspect-${aspect}`]: true,
     }"
-    @mouseenter="hovering = true"
+    @mouseenter="resetHoverTimeout"
     @mouseleave="hovering = false"
     @mousemove="resetHoverTimeout"
     @touchstart="resetHoverTimeout"
