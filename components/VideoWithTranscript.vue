@@ -10,123 +10,126 @@
   >
     <div
       :class="{
-        'video-column col-sm-12 p-0': true,
+        'video-wrapper video-column col-sm-12 p-0': true,
         'order-2': aspect === 'landscape' && $l2.direction === 'rtl',
       }"
+      :key="`video-${type}-${video.youtube_id}`"
     >
-      <div class="video-wrapper" :key="`video-${type}-${video.youtube_id}`">
-        <LazyVideo
-          ref="video"
-          :class="{ 'd-none': collapsed }"
-          v-bind="{
-            type,
-            speed,
-            cc,
-            autoload,
-            autoplay,
-            startAtRandomTime,
-            video,
-            controls: false,
-            starttime: startTimeOrLineIndex,
+      <LazyVideo
+        ref="video"
+        :class="{ 'd-none': collapsed }"
+        v-bind="{
+          type,
+          speed,
+          cc,
+          autoload,
+          autoplay,
+          startAtRandomTime,
+          video,
+          controls: false,
+          starttime: startTimeOrLineIndex,
+        }"
+        @paused="onPaused"
+        @updateVideo="onUpdateVideo"
+        @currentTime="onCurrentTime"
+        @ended="onEnded"
+        @duration="onDuration"
+        @videoUnavailable="onVideoUnavailable"
+        @l1TranscriptLoaded="onL1TranscriptLoaded"
+      />
+      <LazyVideoControls
+        v-if="showControls && (video.youtube_id || video.url)"
+        ref="videoControls"
+        v-bind="{
+          duration,
+          episodes,
+          fullscreen,
+          initialTime: starttime ? starttime : 0,
+          largeEpisodeCount,
+          mode,
+          paused,
+          show,
+          showCollapse: mode === 'transcript',
+          showFullscreenToggle,
+          showInfoButton,
+          showLineList,
+          showOpenButton,
+          showType,
+          skin,
+          video,
+        }"
+        @previous="$emit('previous')"
+        @next="$emit('next')"
+        @goToLine="goToLine"
+        @play="play"
+        @pause="pause"
+        @rewind="rewind"
+        @seek="seek"
+        @open="onOpen"
+        @updateCollapsed="(c) => (this.collapsed = c)"
+        @updateAudioMode="(a) => (this.audioMode = a)"
+        @updateSpeed="(s) => (speed = s)"
+        @toggleTranscriptMode="toggleTranscriptMode"
+        @updateSmoothScroll="(r) => (this.useSmoothScroll = r)"
+        @updateAutoPause="(r) => (this.autoPause = r)"
+        @updateRepeatMode="(r) => (this.repeatMode = r)"
+        @fullscreen="onFullscreen"
+        @goToPreviousLine="
+          $refs.transcript ? $refs.transcript.goToPreviousLine() : null
+        "
+        @goToNextLine="
+          $refs.transcript ? $refs.transcript.goToNextLine() : null
+        "
+      />
+
+      <div
+        class="video-info video-info-top pl-3 pt-4"
+        v-if="
+          aspect === 'landscape' && size !== 'mini' && mode === 'transcript'
+        "
+      >
+        <h3
+          v-if="video.title"
+          :class="{
+            h4: video.title.length > 30,
+            h5: video.title.length > 60,
           }"
-          @paused="onPaused"
-          @updateVideo="onUpdateVideo"
-          @currentTime="onCurrentTime"
-          @ended="onEnded"
-          @duration="onDuration"
-          @videoUnavailable="onVideoUnavailable"
-          @l1TranscriptLoaded="onL1TranscriptLoaded"
-        />
-        <LazyVideoControls
-          v-if="showControls && (video.youtube_id || video.url)"
-          ref="videoControls"
-          v-bind="{
-            duration,
-            episodes,
-            fullscreen,
-            initialTime: starttime ? starttime : 0,
-            largeEpisodeCount,
-            mode,
-            paused,
-            show,
-            showCollapse: mode === 'transcript',
-            showFullscreenToggle,
-            showInfoButton,
-            showLineList,
-            showOpenButton,
-            showType,
-            skin,
-            video,
-          }"
-          @previous="$emit('previous')"
-          @next="$emit('next')"
-          @goToLine="goToLine"
-          @play="play"
-          @pause="pause"
-          @rewind="rewind"
-          @seek="seek"
-          @open="onOpen"
-          @updateCollapsed="(c) => (this.collapsed = c)"
-          @updateAudioMode="(a) => (this.audioMode = a)"
-          @updateSpeed="(s) => (speed = s)"
-          @toggleTranscriptMode="toggleTranscriptMode"
-          @updateSmoothScroll="(r) => (this.useSmoothScroll = r)"
-          @updateAutoPause="(r) => (this.autoPause = r)"
-          @updateRepeatMode="(r) => (this.repeatMode = r)"
-          @fullscreen="onFullscreen"
-          @goToPreviousLine="
-            $refs.transcript ? $refs.transcript.goToPreviousLine() : null
-          "
-          @goToNextLine="
-            $refs.transcript ? $refs.transcript.goToNextLine() : null
-          "
-        />
-        <div v-if="aspect === 'landscape' && size !== 'mini'" class="pl-3 pt-4">
-          <div class="video-info video-info-top" v-if="mode === 'transcript'">
-            <h3
-              v-if="video.title"
-              :class="{
-                h4: video.title.length > 30,
-                h5: video.title.length > 60,
-              }"
-              style="line-height: 1.5"
+          style="line-height: 1.5"
+        >
+          <span v-if="video" :key="`video-title-${video.title}`">
+            <Annotate
+              :phonetics="false"
+              :buttons="true"
+              v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
+              :showLoading="false"
             >
-              <span v-if="video" :key="`video-title-${video.title}`">
-                <Annotate
-                  :phonetics="false"
-                  :buttons="true"
-                  v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
-                  :showLoading="false"
-                >
-                  <span>{{ video.title }}</span>
-                </Annotate>
-                <span v-else>{{ video.title }}</span>
-              </span>
-            </h3>
-            <VideoAdmin
-              v-if="type === 'youtube'"
-              :showVideoDetails="true"
-              :showTextEditing="true"
-              :video="video"
-              ref="videoAdmin1"
-              @showSubsEditing="onShowSubsEditing"
-              @updateTranslation="onUpdateTranslation"
-              @updateOriginalText="onUpdateOriginalText"
-              @enableTranslationEditing="onEnableTranslationEditing"
-              @updateTranscript="onUpdateTranscript"
-            />
-            <EpisodeNav
-              v-if="episodes"
-              :video="video"
-              :episodes="episodes"
-              :showType="showType"
-              :skin="skin"
-              :show="show"
-              :largeEpisodeCount="largeEpisodeCount"
-              class="mt-3"
-            />
-          </div>
-        </div>
+              <span>{{ video.title }}</span>
+            </Annotate>
+            <span v-else>{{ video.title }}</span>
+          </span>
+        </h3>
+        <VideoAdmin
+          v-if="type === 'youtube'"
+          :showVideoDetails="true"
+          :showTextEditing="true"
+          :video="video"
+          ref="videoAdmin1"
+          @showSubsEditing="onShowSubsEditing"
+          @updateTranslation="onUpdateTranslation"
+          @updateOriginalText="onUpdateOriginalText"
+          @enableTranslationEditing="onEnableTranslationEditing"
+          @updateTranscript="onUpdateTranscript"
+        />
+        <EpisodeNav
+          v-if="episodes"
+          :video="video"
+          :episodes="episodes"
+          :showType="showType"
+          :skin="skin"
+          :show="show"
+          :largeEpisodeCount="largeEpisodeCount"
+          class="mt-3"
+        />
       </div>
     </div>
     <div class="video-transcript-column">
@@ -250,7 +253,6 @@
 </template>
 
 <script>
-
 /**
  * VideoWithTranscript component has different layout variants based on size, mode, and aspect.
  *
@@ -272,7 +274,7 @@
  * 1. Regular size:
  *   a. Landscape aspect:
  *     - In transcript mode: Video on the left, scrolling transcript on the right
- *     - In subtitles mode: Video filling the entire container, current line overlaying the video near the bottom
+ *     - In subtitles mode: Video filling the entire container, video controls and the current line of the transcript overlaying the video near the bottom
  *   b. Portrait aspect:
  *     - In transcript mode: Video on top, scrolling transcript below the video
  *     - In subtitles mode: Video on top, current line of transcript below the video
@@ -285,7 +287,6 @@
  * 3. Mini size:
  *   - Displays video as a mini bar at the bottom of the app, regardless of mode and aspect
  */
-
 
 import Vue from "vue";
 import { timeout } from "@/lib/utils";
@@ -342,7 +343,7 @@ export default {
     initialSize: {
       type: String,
       default: "regular", // or 'fullscreen' or 'mini'
-    }, 
+    },
     highlight: {
       type: Array,
     },
@@ -414,7 +415,7 @@ export default {
     };
   },
   computed: {
-  ...mapState("settings", ["fullscreen"]),
+    ...mapState("settings", ["fullscreen"]),
     startTimeOrLineIndex() {
       let starttime = 0;
       if (this.starttime) starttime = this.starttime;
@@ -439,7 +440,7 @@ export default {
      */
     aspect() {
       // If forcePortrait is true, return 'portrait' (forcing portrait mode)
-      if (this.forcePortrait) return 'portrait';
+      if (this.forcePortrait) return "portrait";
 
       // If the process is running in a browser and viewport dimensions are available
       if (process.browser && this.viewportWidth && this.viewportHeight) {
@@ -721,8 +722,7 @@ export default {
         if (fullscreen) {
           this.requestFullscreen();
           this.mode = "subtitles";
-        }
-        else {
+        } else {
           this.exitFullscreen();
           this.mode = this.$store.state.settings.mode;
         }
