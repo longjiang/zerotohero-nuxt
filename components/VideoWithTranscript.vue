@@ -717,8 +717,14 @@ export default {
     },
     onFullscreen(fullscreen) {
       if (fullscreen !== this.isFullscreen) {
-        if (fullscreen) this.requestFullscreen();
-        else this.exitFullscreen();
+        if (fullscreen) {
+          this.requestFullscreen();
+          this.mode = "subtitles";
+        }
+        else {
+          this.exitFullscreen();
+          this.mode = this.$store.state.settings.mode;
+        }
       }
     },
     requestFullscreen() {
