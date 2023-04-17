@@ -1,7 +1,7 @@
 <template>
   <div class="paginator">
     <router-link
-      class="paginator-previous mr-2 btn btn-small mb-1"
+      :class="`paginator-previous mr-2 btn btn-xs btn-${$skin} mb-1`"
       :to="{ path: previousPath, query: $route.query }"
       title="Previous word"
       v-if="previous"
@@ -37,7 +37,7 @@
       </component>
     </b>
     <router-link
-      class="paginator-next ml-2 btn btn-small mb-1"
+      :class="`paginator-previous ml-2 btn btn-xs btn-${$skin} mb-1`"
       :to="{ path: nextPath, query: $route.query }"
       title="Next word"
       v-if="next"

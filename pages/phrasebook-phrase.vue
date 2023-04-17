@@ -6,7 +6,7 @@
 </router>
 <template>
   <container-query :query="query" v-model="params">
-    <div :class="{ 'bg-white': !wide }">
+    <div>
       <SocialHead :title="title" :description="description" />
       <div :class="{ container: !wide }">
         <div :class="{ row: !wide, 'content-panes': wide }">
@@ -35,7 +35,7 @@
                 class="mr-2"
               />
               <Paginator
-                class="mb-4 d-inline-block"
+                class="d-inline-block"
                 ref="paginator"
                 :items="phrasebook.phrases"
                 :findCurrent="findCurrent"
@@ -128,7 +128,7 @@
                   :items="words"
                   :text="$t('Disambiguation')"
                   menu-class="disambiguation-dropdown"
-                  variant="gray"
+                  variant="primary"
                 >
                   <b-dropdown-item
                     v-for="w in words"

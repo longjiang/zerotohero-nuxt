@@ -13,7 +13,11 @@
           v-if="!checking && (isEmpty(tables) || tables.length === 0)"
           class="pl-4 pr-4 text-center"
         >
-          The word “{{ word.head }}” seems to only take on one form.
+          {{
+            $t("The word “{word}” seems to only take on one form.", {
+              word: word.head,
+            })
+          }}
         </div>
         <div
           class="col-sm-12 form-table"

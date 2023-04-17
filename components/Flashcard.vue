@@ -9,9 +9,11 @@
   >
     <div class="front" v-if="active">
       <slot name="front"></slot>
+      <span class="flip-prompt"><i class="fa-solid fa-rotate"></i> {{ 'Flip Flashcard' }}</span>
     </div>
     <div class="back">
       <slot name="back"></slot>
+      <span class="flip-prompt invisible"><i class="fa-solid fa-rotate"></i> {{ 'Flip Flashcard' }}</span>
     </div>
   </div>
 </template>
@@ -45,6 +47,9 @@ export default {
       background-color: #ffffff;
       border: 1px solid #dddddd;
     }
+    .flip-prompt {
+      color: #ddd;
+    }
   }
   &.skin-dark {
     filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.33));
@@ -53,12 +58,19 @@ export default {
       background-color: #222;
       border: 1px solid #444;
     }
+    .flip-prompt {
+      color: #777;
+    }
   }
 }
 .flashcard {
   position: relative;
   width: 100%;
   margin-bottom: 1rem;
+  .flip-prompt {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
 }
 
 .flashcard .front,
@@ -68,6 +80,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   height: auto;
   width: 100%;
   padding: 20px;

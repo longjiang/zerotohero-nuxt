@@ -27,7 +27,7 @@
         <router-link
           v-if="compareWith"
           :to="`/${$l1.code}/${$l2.code}/compare/${$dictionaryName}/${compareWith.id},${word.id}`"
-          class="btn btn-small"
+          :class="`btn btn-sm btn-no-bg mr-0`"
           style="margin-bottom: 0.4rem"
         >
           <i class="fas fa-adjust"></i>
@@ -38,7 +38,7 @@
           :title="word.definitions ? filterDefinitions(word).join(',') : ''"
         >
           <span
-            :class="{ 'wordlist-item-word ml-1': true, transparent: hideWord }"
+            :class="{ 'wordlist-item-word': true, transparent: hideWord }"
             :data-level="skin !== 'dark' ? getLevel(word) : undefined"
           >
             <span v-if="$l2.code === 'de' && word.gender">
