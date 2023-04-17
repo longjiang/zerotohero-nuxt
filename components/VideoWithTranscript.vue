@@ -8,6 +8,8 @@
       [`mode-${mode}`]: true,
       [`aspect-${aspect}`]: true,
     }"
+    @mouseenter="hovering = true"
+    @mouseleave="hovering = false"
   >
     <div
       :class="{
@@ -43,6 +45,7 @@
         :class="{
           'video-controls': true,
           overlay: showSubsAndControlsAsOverlay,
+          hovering
         }"
         ref="videoControls"
         v-bind="{
@@ -411,6 +414,7 @@ export default {
       currentTime: 0,
       duration: undefined,
       enableTranslationEditing: false,
+      hovering: false, // If the mouse is hovering over the video
       mode: this.initialMode,
       neverPlayed: true,
       paused: true,
@@ -796,12 +800,25 @@ export default {
   &.overlay {
     // height should be calculated based on the video aspect ratio 16/9
     height: calc(100% * 9 / 16);
+      margin: 0 auto;
+    &.size-fullscreen {
+      // Width should be set so that when the height is calculated it will not exceed the viewport height
+      max-width: calc(100vh * 16 / 9);
+    }
+    &.size-regular {
+      // Width should be set so that when the height is calculated it will not exceed the viewport height
+      max-width: calc((100vh - 2.9rem) * 16 / 9);
+    }
     .video-transcript-wrapper {
       position: absolute;
       top: 0; // to make room for the controls
       left: 0;
       right: 0;
-      background-color: rgba(0, 0, 0, 0.6);
+      background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 1) 100%
+      );
       padding: 1rem;
       box-sizing: border-box;
       overflow: hidden;
@@ -812,22 +829,16 @@ export default {
       left: 0;
       right: 0;
       opacity: 0;
+      &.hovering {
+        opacity: 1;
+      }
       transition: opacity 0.3s;
-      background-color: rgba(0, 0, 0, 0.6);
       // background is gradient from transparent to black
       background: linear-gradient(
         to bottom,
         rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.6) 33%,
         rgba(0, 0, 0, 0.6) 100%
       );
-    }
-
-    &:hover,
-    &:focus-within {
-      .video-controls {
-        opacity: 1;
-      }
     }
   }
 }

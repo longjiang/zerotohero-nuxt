@@ -84,8 +84,8 @@
         @click="$emit('goToPreviousLine')"
         :title="$t('Previous Line')"
       >
-        <i v-if="mode === 'subtitles'" class="fas fa-arrow-up"></i>
-        <i v-else class="fas fa-chevron-left"></i>
+        <i v-if="mode === 'transcript'" class="fas fa-arrow-up"></i>
+        <i v-else class="fas fa-arrow-left"></i>
       </button>
       <button
         :class="{
@@ -102,8 +102,8 @@
         @click="$emit('goToNextLine')"
         :title="$t('Next Line')"
       >
-        <i v-if="mode === 'subtitles'" class="fas fa-arrow-down"></i>
-        <i v-else class="fas fa-chevron-right"></i>
+        <i v-if="mode === 'transcript'" class="fas fa-arrow-down"></i>
+        <i v-else class="fas fa-arrow-right"></i>
       </button>
       <button
         v-if="episodes"
