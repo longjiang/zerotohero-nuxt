@@ -3,6 +3,7 @@
     :class="{
       'video-with-transcript': true,
       'text-auto-size': useAutoTextSize,
+      overlay: showSubsAndControlsAsOverlay,
       [`size-${size}`]: true,
       [`mode-${mode}`]: true,
       [`aspect-${aspect}`]: true,
@@ -39,6 +40,10 @@
       />
       <LazyVideoControls
         v-if="showControls && (video.youtube_id || video.url)"
+        :class="{
+          'video-controls': true,
+          overlay: showSubsAndControlsAsOverlay,
+        }"
         ref="videoControls"
         v-bind="{
           duration,
@@ -132,7 +137,12 @@
         />
       </div>
     </div>
-    <div class="video-transcript-wrapper">
+    <div
+      :class="{
+        'video-transcript-wrapper': true,
+        overlay: showSubsAndControlsAsOverlay,
+      }"
+    >
       <!-- this is necessary for updating the transcript upon srt drop -->
       <div class="d-none">{{ transcriptKey }}</div>
 
@@ -417,6 +427,13 @@ export default {
   },
   computed: {
     ...mapState("settings", ["fullscreen"]),
+    /**
+     * Determines if the transcript and controls should overlay the video.
+     * @returns {Boolean} true if the aspect is landscape and mode is subtitles, false otherwise.
+     */
+    showSubsAndControlsAsOverlay() {
+      return this.aspect === "landscape" && this.mode === "subtitles";
+    },
     startTimeOrLineIndex() {
       let starttime = 0;
       if (this.starttime) starttime = this.starttime;
@@ -773,6 +790,48 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.video-with-transcript {
+  position: relative;
+  /* overlay mode, when controls and subtitles overlay the video */
+  &.overlay {
+    // height should be calculated based on the video aspect ratio 16/9
+    height: calc(100% * 9 / 16);
+    .video-transcript-wrapper {
+      position: absolute;
+      top: 0; // to make room for the controls
+      left: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 1rem;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+    .video-controls {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      opacity: 0;
+      transition: opacity 0.3s;
+      background-color: rgba(0, 0, 0, 0.6);
+      // background is gradient from transparent to black
+      background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.6) 33%,
+        rgba(0, 0, 0, 0.6) 100%
+      );
+    }
+
+    &:hover,
+    &:focus-within {
+      .video-controls {
+        opacity: 1;
+      }
+    }
+  }
+}
+
 /* Mini mode */
 .video-with-transcript.size-mini {
   display: flex;
@@ -814,7 +873,6 @@ export default {
   border: 2px dashed #ccc;
 }
 
-
 /* Not wide display */
 .zerotohero-not-wide {
   .video-wrapper {
@@ -835,6 +893,7 @@ export default {
   .video-wrapper {
     position: sticky;
     z-index: 2;
+    height: 100%; // otherwise this is too tall for sticky to work
   }
   &.size-fullscreen {
     .video-wrapper {
@@ -843,13 +902,15 @@ export default {
   }
   &.size-regular {
     .video-wrapper {
-      top: calc(env(safe-area-inset-top, 0) + 2.7rem); // 2.7rem for the site top bar
+      top: calc(
+        env(safe-area-inset-top, 0) + 2.7rem
+      ); // 2.7rem for the site top bar
     }
   }
 }
 
 /* Subtitles mode */
-.video-with-transcript.mode-subtitles.text-auto-size {
+.video-with-transcript:not(.overlay).mode-subtitles.text-auto-size {
   display: flex;
   height: calc(
     100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)
