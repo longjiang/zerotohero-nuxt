@@ -31,7 +31,7 @@
       </ul>
     </div>
     <div class="mb-3 bg-white pricing-card pricing-card-pro">
-      <div class="badge-money-back text-center" v-if="!isNativePlatform">
+      <div class="badge-money-back text-center" v-if="!native">
         <span>
           <b style="font-size: 1.3em">{{ $tb('14 day') }}</b>
           <br />
