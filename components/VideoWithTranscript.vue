@@ -10,6 +10,9 @@
     }"
     @mouseenter="hovering = true"
     @mouseleave="hovering = false"
+    @mousemove="resetHoverTimeout"
+    @touchstart="resetHoverTimeout"
+    @touchend="resetHoverTimeout"
   >
     <div
       :class="{
@@ -415,6 +418,7 @@ export default {
       duration: undefined,
       enableTranslationEditing: false,
       hovering: false, // If the mouse is hovering over the video
+      hoverTimeout: null, // Timeout for hiding the video controls
       mode: this.initialMode,
       neverPlayed: true,
       paused: true,
@@ -560,6 +564,14 @@ export default {
     },
   },
   methods: {
+    resetHoverTimeout() {
+      clearTimeout(this.hoverTimeout);
+      this.hovering = true;
+
+      this.hoverTimeout = setTimeout(() => {
+        this.hovering = false;
+      }, 3000);
+    },
     onUpdateVideo(video) {
       this.$emit("updateVideo", video);
     },
@@ -818,11 +830,8 @@ export default {
       top: 0; // to make room for the controls
       left: 0;
       right: 0;
-      background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 1) 100%
-      );
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(2px);
       padding: 1rem;
       box-sizing: border-box;
       overflow: hidden;
@@ -837,12 +846,8 @@ export default {
         opacity: 1;
       }
       transition: opacity 0.3s;
-      // background is gradient from transparent to black
-      background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.6) 100%
-      );
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(2px);
     }
   }
 }
