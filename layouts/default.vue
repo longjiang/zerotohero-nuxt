@@ -1,5 +1,5 @@
 <template>
-  <div id="zerotohero" :class="classes">
+  <div id="zerotohero" :class="classes" :fullscreen="fullscreen">
     <FeedbackButton />
     <HydrationNotice v-if="$route.path === '/'" />
     <client-only>
@@ -143,7 +143,7 @@ export default {
           this.overlayPlayerYouTubeId && this.overlayPlayerMinimized,
         "zerotohero-with-nav":
           !this.fullscreen && this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2,
-          [`route-${this.$route.name}`]: true,
+        [`route-${this.$route.name}`]: true,
         [`zerotohero-${this.$skin}`]: true,
       }
       return Object.assign(classes, this.l2SettingsClasses);
@@ -246,7 +246,6 @@ export default {
         let l2SettingsClasses = {};
         if (this.$l2Settings) {
           l2SettingsClasses = {
-            "zerotohero-with-nav": true,
             "show-pinyin": this.$l2Settings.showPinyin,
             "show-pinyin-for-saved":
               !this.$l2Settings.showPinyin && this.l2 && this.l2.han,
@@ -260,7 +259,6 @@ export default {
           }
           l2SettingsClasses[`zerotohero-zoom-${this.$l2Settings.zoomLevel}`] = true;
         }
-        l2SettingsClasses['zerotohero-with-nav'] = true;
         l2SettingsClasses[`l1-${this.l1.code}`] = true;
         l2SettingsClasses[`l2-${this.l2.code}`] = true;
         if (this.l2.han) l2SettingsClasses["l2-zh"] = true;
