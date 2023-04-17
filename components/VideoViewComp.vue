@@ -2,7 +2,7 @@
   <div
     :class="{
       'video-view': true,
-      'video-view-minimized': layout === 'mini',
+      'video-view-minimized': size === 'mini',
       [`skin-${$skin}`]: true,
     }"
   >
@@ -20,17 +20,17 @@
       description="Study the transcript of this video with a popup dictionary"
     />
     <div
-      :class="`toggle-wrapper ${layout !== 'mini' ? 'maximized' : 'minimized'}`"
-      v-if="layout === 'mini'"
+      :class="`toggle-wrapper ${size !== 'mini' ? 'maximized' : 'minimized'}`"
+      v-if="size === 'mini'"
     >
       <router-link
         :class="`btn btn-unstyled ${
-          layout !== 'mini' ? 'btn-maximize-toggle' : 'btn-minimize-toggle'
+          size !== 'mini' ? 'btn-maximize-toggle' : 'btn-minimize-toggle'
         }`"
         :to="minimizeToggleRouterLinkTo"
       >
-        <i class="fas fa-chevron-down" v-if="layout !== 'mini'"></i>
-        <i class="fas fa-chevron-up" v-if="layout === 'mini'"></i>
+        <i class="fas fa-chevron-down" v-if="size !== 'mini'"></i>
+        <i class="fas fa-chevron-up" v-if="size === 'mini'"></i>
       </router-link>
       <b-button variant="unstyled" class="btn-close" @click="close">
         <i class="fa fa-times"></i>
@@ -40,7 +40,7 @@
       :class="{
         'video-view-content': true,
         'video-view-landscape': landscape,
-        fullscreen: layout === 'vertical',
+        fullscreen: mode === 'subtitles',
       }"
     >
       <div
@@ -57,7 +57,7 @@
           lesson,
           mini,
           skin: $skin,
-          initialLayout: layout,
+          initialMode: mode,
           landscape,
           starttime,
         }"
@@ -72,7 +72,6 @@
 <script>
 import DateHelper from "@/lib/date-helper";
 import Helper from "@/lib/helper";
-import { mapState } from "vuex";
 
 export default {
   props: {
@@ -95,7 +94,7 @@ export default {
   data() {
     return {
       currentTime: 0,
-      initialLayout: this.$adminMode ? "horizontal" : "vertical",
+      initialMode: this.$adminMode ? "transcript" : "subtitles",
       mountedDone: false,
       starttime: 0,
       video: undefined,
@@ -155,8 +154,11 @@ export default {
     minimizeToggleRouterLinkTo() {
       return this.mini ? this.maximizeVideoTo : this.minimizeVideoTo;
     },
-    layout() {
-      return this.mini ? "mini" : this.initialLayout;
+    size() {
+      return this.mini ? "mini" : "regular";
+    },
+    mode() {
+      return this.initialMode;
     },
     currentTimeInSeconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
@@ -174,11 +176,11 @@ export default {
   },
   mounted() {
     if (typeof this.$store.state.settings !== "undefined") {
-      this.initialLayout = this.$store.state.settings.layout;
+      this.initialMode = this.$store.state.settings.mode;
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("settings")) {
-        this.initialLayout = this.$store.state.settings.layout;
+        this.initialMode = this.$store.state.settings.mode;
       }
     });
   },
@@ -197,7 +199,7 @@ export default {
       this.$emit("close", { type: this.type, youtube_id: this.youtube_id });
     },
     onYouTubeUpdateLayout(layout) {
-      this.initialLayout = layout;
+      this.initialMode = layout;
     },
     updateCurrentTimeQueryString(currentTime) {
       if (typeof window !== "undefined") {

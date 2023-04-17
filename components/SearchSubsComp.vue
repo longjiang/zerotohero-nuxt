@@ -172,7 +172,7 @@
           autoplay: navigated,
           episodes: hits.map((h) => h.video),
           forcePro: true,
-          initialLayout: 'vertical',
+          initialMode: 'subtitles',
           show: currentHit.show,
           showInfoButton: true,
           showAnimation: !reels,

@@ -1,16 +1,17 @@
 <template>
   <div
-    :class="`video-with-transcript video-with-transcript-${layout} ${
-      layout === 'horizontal'
-        ? 'video-with-transcript-horizontal-' +
-          (landscape ? 'landscape' : 'portrait')
-        : ''
-    } ${useAutoTextSize ? 'video-with-transcript-auto-size' : ''}`"
+    :class="{
+      'video-with-transcript': true,
+      'text-auto-size': useAutoTextSize,
+      [`size-${size}`]: true,
+      [`mode-${mode}`]: true,
+      [`aspect-${aspect}`]: true,
+    }"
   >
     <div
       :class="{
         'video-column col-sm-12 p-0': true,
-        'order-2': landscape && $l2.direction === 'rtl',
+        'order-2': aspect === 'landscape' && $l2.direction === 'rtl',
       }"
     >
       <div class="video-wrapper" :key="`video-${type}-${video.youtube_id}`">
@@ -42,7 +43,7 @@
           v-bind="{
             video,
             paused,
-            layout,
+            mode,
             skin,
             show,
             showType,
@@ -52,7 +53,7 @@
             showFullscreenToggle,
             showInfoButton,
             showOpenButton,
-            showCollapse: layout === 'horizontal',
+            showCollapse: mode === 'transcript',
             duration,
             isFullscreen,
             initialTime: starttime ? starttime : 0,
@@ -80,8 +81,8 @@
             $refs.transcript ? $refs.transcript.goToNextLine() : null
           "
         />
-        <div v-if="landscape" class="pl-3 pt-4">
-          <div class="video-info video-info-top" v-if="layout === 'horizontal'">
+        <div v-if="aspect === 'landscape'" class="pl-3 pt-4">
+          <div class="video-info video-info-top" v-if="mode === 'transcript'">
             <h3
               v-if="video.title"
               :class="{
@@ -148,13 +149,13 @@
       <SyncedTranscript
         v-if="video.subs_l2 && video.subs_l2.length > 0"
         ref="transcript"
-        :class="{ 'd-none': layout === 'mini' }"
+        :class="{ 'd-none': size === 'mini' }"
         :key="`transcript-${type}-${video.youtube_id}-${transcriptKey}`"
         v-bind="{
           lines: video.subs_l2 || [],
           parallellines: video.subs_l1 || [],
           starttime: startTimeOrLineIndex,
-          single: ['vertical', 'mini'].includes(layout),
+          single: mode === 'subtitles' || size === 'mini',
           showAnimation,
           showSubsEditing,
           enableTranslationEditing,
@@ -165,7 +166,7 @@
           startLineIndex,
           skin,
           textSize,
-          landscape,
+          landscape: aspect === 'landscape',
           stopLineIndex,
           forcePro,
           autoPause,
@@ -179,7 +180,7 @@
         @speechEnd="onSpeechEnd"
         @updateTranslation="onUpdateTranslation"
       />
-      <div class="video-info video-info-bottom" v-if="layout === 'horizontal'">
+      <div class="video-info video-info-bottom" v-if="mode === 'transcript'">
         <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
           <Loader :sticky="true" message="Loading subtitles..." />
         </div>
@@ -249,6 +250,43 @@
 </template>
 
 <script>
+
+/**
+ * VideoWithTranscript component has different layout variants based on size, mode, and aspect.
+ *
+ * Size variants:
+ * - 'regular': default size, takes up a portion of the screen
+ * - 'fullscreen': takes up the entire screen, hiding SiteTopBar and Nav bar
+ * - 'mini': displays the video as a mini bar at the bottom of the app
+ *
+ * Mode variants:
+ * - 'transcript': displays multiple lines of transcript
+ * - 'subtitles': displays only the current line of transcript
+ *
+ * Aspect variants:
+ * - 'landscape': for desktop monitors or rotated phones
+ * - 'portrait': for phones or tablets in the vertical orientation
+ *
+ * Layout rules:
+ *
+ * 1. Regular size:
+ *   a. Landscape aspect:
+ *     - In transcript mode: Video on the left, scrolling transcript on the right
+ *     - In subtitles mode: Video filling the entire container, current line overlaying the video near the bottom
+ *   b. Portrait aspect:
+ *     - In transcript mode: Video on top, scrolling transcript below the video
+ *     - In subtitles mode: Video on top, current line of transcript below the video
+ *
+ * 2. Fullscreen size:
+ *   - Hides SiteTopBar and Nav bar
+ *   - Enforces subtitles mode
+ *   - Does not force screen rotation, allows users to rotate as desired
+ *
+ * 3. Mini size:
+ *   - Displays video as a mini bar at the bottom of the app, regardless of mode and aspect
+ */
+
+
 import Vue from "vue";
 import { timeout } from "@/lib/utils";
 
@@ -296,10 +334,14 @@ export default {
     largeEpisodeCount: {
       type: Number, // Mannually set the number of episode displayed in the episode navigator
     },
-    initialLayout: {
+    initialMode: {
       type: String,
-      default: "horizontal", // or 'vertical', 'mini'
+      default: "transcript", // or 'subtitles'
     },
+    initialSize: {
+      type: String,
+      default: "regular", // or 'fullscreen' or 'mini'
+    }, 
     highlight: {
       type: Array,
     },
@@ -356,7 +398,8 @@ export default {
       currentTime: 0,
       duration: undefined,
       enableTranslationEditing: false,
-      layout: this.initialLayout,
+      mode: this.initialMode,
+      size: this.initialSize,
       isFullscreen: false,
       neverPlayed: true,
       paused: true,
@@ -390,13 +433,22 @@ export default {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
     },
-    landscape() {
-      if (this.layout === "horizontal" && !this.collapsed) {
-        if (this.forcePortrait) return false;
-        if (process.browser && this.viewportWidth && this.viewportHeight) {
-          let landscape = this.viewportWidth > this.viewportHeight;
-          return landscape;
-        }
+    /**
+     * Whether the video is in portrait mode or landscape mode
+     * @returns {String} "portrait" or "landscape"
+     */
+    aspect() {
+      // If forcePortrait is true, return 'portrait' (forcing portrait mode)
+      if (this.forcePortrait) return 'portrait';
+
+      // If the process is running in a browser and viewport dimensions are available
+      if (process.browser && this.viewportWidth && this.viewportHeight) {
+        // Return "landscape" if the viewport width is greater than its height, otherwise return "portrait"
+        if (this.viewportWidth > this.viewportHeight) return "landscape";
+        else return "portrait";
+      } else {
+        // If viewport dimensions are not available, default to "landscape"
+        return "landscape";
       }
     },
     episodeIndex() {
@@ -423,17 +475,27 @@ export default {
         this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
       }
     });
-    const fullscreenEvents = ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'];
-    fullscreenEvents.forEach(event => {
+    const fullscreenEvents = [
+      "fullscreenchange",
+      "webkitfullscreenchange",
+      "mozfullscreenchange",
+      "MSFullscreenChange",
+    ];
+    fullscreenEvents.forEach((event) => {
       document.addEventListener(event, this.updateFullscreenState);
     });
     this.updateFullscreenState();
   },
   beforeDestroy() {
-    this.unsubscribe()
+    this.unsubscribe();
     window.removeEventListener("resize", this.updateLayout);
-    const fullscreenEvents = ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'];
-    fullscreenEvents.forEach(event => {
+    const fullscreenEvents = [
+      "fullscreenchange",
+      "webkitfullscreenchange",
+      "mozfullscreenchange",
+      "MSFullscreenChange",
+    ];
+    fullscreenEvents.forEach((event) => {
       document.removeEventListener(event, this.updateFullscreenState);
     });
   },
@@ -462,8 +524,8 @@ export default {
         this.rewind();
       }
     },
-    initialLayout() {
-      this.layout = this.initialLayout;
+    initialMode() {
+      this.mode = this.initialMode;
     },
   },
   methods: {
@@ -480,7 +542,7 @@ export default {
     onCurrentTime(currentTime) {
       if (this.neverPlayed) {
         this.neverPlayed = false;
-        if (this.layout !== "vertical" && this.$refs["transcript"])
+        if (this.mode !== "subtitles" && this.$refs["transcript"])
           this.$refs["transcript"].scrollTo(
             this.$refs.transcript.currentLineIndex
           );
@@ -644,11 +706,11 @@ export default {
       if (this.$refs.transcript) this.$refs.transcript.goToNextLine();
     },
     toggleTranscriptMode() {
-      this.layout = this.layout === "horizontal" ? "vertical" : "horizontal";
+      this.mode = this.mode === "transcript" ? "subtitles" : "transcript";
       this.$store.dispatch("settings/setGeneralSettings", {
-        layout: this.layout,
+        mode: this.mode,
       });
-      this.$emit("updateLayout", this.layout);
+      this.$emit("updateLayout", this.mode);
     },
     onFullscreen(fullscreen) {
       if (fullscreen !== this.isFullscreen) {
@@ -675,23 +737,32 @@ export default {
     exitFullscreen() {
       if (document.exitFullscreen) {
         document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) { // Firefox
+      } else if (document.mozCancelFullScreen) {
+        // Firefox
         document.mozCancelFullScreen();
-      } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+      } else if (document.webkitExitFullscreen) {
+        // Chrome, Safari and Opera
         document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) { // IE/Edge
+      } else if (document.msExitFullscreen) {
+        // IE/Edge
         document.msExitFullscreen();
       }
     },
     updateFullscreenState() {
-      this.isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+      this.isFullscreen = !!(
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement
+      );
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-.video-with-transcript-mini {
+/* Mini mode */
+.video-with-transcript.size-mini {
   display: flex;
   .video-column {
     height: 5rem;
@@ -726,10 +797,12 @@ export default {
   }
 }
 
+/* Drag and drop */
 .subs-drop.drop.over {
   border: 2px dashed #ccc;
 }
 
+/* Video wrapper */
 .video-wrapper {
   max-width: calc((100vh - 3rem - env(safe-area-inset-top) - 12rem) * 16 / 9);
   margin: 0 auto;
@@ -737,13 +810,14 @@ export default {
   top: calc(env(safe-area-inset-top, 0) + 2.7rem);
 }
 
+/* Not wide display */
 .zerotohero-not-wide {
   .video-wrapper {
     max-width: calc(
       (100vh - 3rem - env(safe-area-inset-top) - 12rem - 4.625rem) * 16 / 9
     );
   }
-  .video-with-transcript-vertical.video-with-transcript-auto-size {
+  .video-with-transcript.mode-subtitles.text-auto-size {
     height: calc(
       100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom) -
         4.75rem
@@ -751,7 +825,8 @@ export default {
   }
 }
 
-.video-with-transcript-horizontal {
+/* Transcript mode */
+.video-with-transcript.mode-transcript {
   .video-column {
     position: sticky;
     top: 0;
@@ -759,7 +834,8 @@ export default {
   }
 }
 
-.video-with-transcript-vertical.video-with-transcript-auto-size {
+/* Subtitles mode */
+.video-with-transcript.mode-subtitles.text-auto-size {
   display: flex;
   height: calc(
     100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)
@@ -783,18 +859,8 @@ export default {
   }
 }
 
-#zerotohero {
-  .video-with-transcript-horizontal .video-column {
-    top: calc(env(safe-area-inset-top, 0) + 2.7rem);
-  }
-}
-
-.video-info {
-  padding-left: 0.667rem;
-  padding-right: 0.667rem;
-}
-
-.video-with-transcript-horizontal-landscape {
+/* Landscape aspect */
+.video-with-transcript.mode-transcript.aspect-landscape {
   display: flex;
   .video-column,
   .video-transcript-column {
@@ -802,12 +868,24 @@ export default {
   }
 }
 
+/* Portrait aspect */
+.video-with-transcript.mode-transcript.aspect-portrait {
+  display: flex;
+  flex-direction: column;
+  .video-column,
+  .video-transcript-column {
+    flex: 1;
+  }
+}
+
+/* Video transcript column */
 .video-transcript-column {
   width: 100%;
 }
 
+/* Video info */
 .video-info {
-  padding-left: 1rem;
-  padding-right: 1rem;
+  padding-left: 0.667rem;
+  padding-right: 0.667rem;
 }
 </style>

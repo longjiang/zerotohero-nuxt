@@ -20,7 +20,7 @@
       autoload: true,
       autoplay: false,
       forcePortrait: false,
-      initialLayout,
+      initialMode,
     }"
     :key="`transcript-${video.youtube_id}`"
     @ended="updateEnded"
@@ -58,8 +58,8 @@ export default {
       default: false,
       required: false,
     },
-    initialLayout: {
-      default: "vertical",
+    initialMode: {
+      default: "subtitles",
     },
     landscape: {
       default: false,

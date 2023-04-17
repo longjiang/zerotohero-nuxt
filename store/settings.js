@@ -57,7 +57,7 @@ export const defaultGeneralSettings = {
   adminMode: false,
   skin: "dark",
   preferredCategories: [],
-  layout: "vertical", // or 'horizontal'
+  mode: "subtitles", // or 'transcript'
   autoPause: false,
   speed: 1,
   hideWord: false, // as used in the <HideDefs> component

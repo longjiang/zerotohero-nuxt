@@ -63,7 +63,7 @@
         v-if="showTranscriptModeToggle"
         :class="{
           'btn-video-controls btn-video-controls-transcript-mode text-center': true,
-          'btn-video-controls-active': layout === 'horizontal',
+          'btn-video-controls-active': mode === 'transcript',
         }"
         @click="toggleTranscriptMode"
         :title="$t('Trasncript Mode')"
@@ -84,7 +84,7 @@
         @click="$emit('goToPreviousLine')"
         :title="$t('Previous Line')"
       >
-        <i v-if="layout === 'horizontal'" class="fas fa-arrow-up"></i>
+        <i v-if="mode === 'subtitles'" class="fas fa-arrow-up"></i>
         <i v-else class="fas fa-chevron-left"></i>
       </button>
       <button
@@ -102,7 +102,7 @@
         @click="$emit('goToNextLine')"
         :title="$t('Next Line')"
       >
-        <i v-if="layout === 'horizontal'" class="fas fa-arrow-down"></i>
+        <i v-if="mode === 'subtitles'" class="fas fa-arrow-down"></i>
         <i v-else class="fas fa-chevron-right"></i>
       </button>
       <button
@@ -324,8 +324,8 @@ export default {
     paused: {
       default: true,
     },
-    layout: {
-      default: "horizontal",
+    mode: {
+      default: "subtitles",
     },
     skin: {
       default: "dark",
@@ -582,12 +582,10 @@ export default {
   padding-right: 0.5rem;
 }
 
-.video-with-transcript-horizontal-portrait {
+.video-with-transcript.mode-transcript.aspect-portrait {
   .video-controls.skin-dark {
     background: $bg-color-dark-1;
   }
-}
-.video-with-transcript-horizontal-portrait {
   .video-controls.skin-light {
     background: white;
   }
