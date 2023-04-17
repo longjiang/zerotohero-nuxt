@@ -21,6 +21,7 @@
       autoplay: false,
       forcePortrait: false,
       initialMode,
+      initialSize: this.mini ? 'mini' : 'regular',
     }"
     :key="`transcript-${video.youtube_id}`"
     @ended="updateEnded"

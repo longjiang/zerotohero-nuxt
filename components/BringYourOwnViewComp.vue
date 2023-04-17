@@ -15,6 +15,7 @@
       autoplay: false,
       forcePortrait: false,
       initialMode,
+      initialSize: this.mini ? 'mini' : 'regular',
     }"
     :key="`transcript-bring-your-own`"
     @ended="updateEnded"

@@ -399,7 +399,6 @@ export default {
       duration: undefined,
       enableTranslationEditing: false,
       mode: this.initialMode,
-      size: this.initialSize,
       isFullscreen: false,
       neverPlayed: true,
       paused: true,
@@ -450,6 +449,10 @@ export default {
         // If viewport dimensions are not available, default to "landscape"
         return "landscape";
       }
+    },
+    size() {
+      if (this.isFullscreen) return "fullscreen";
+      else return this.initialSize;
     },
     episodeIndex() {
       return this.episodes.findIndex(
@@ -774,13 +777,13 @@ export default {
       top: 0.7rem;
       left: 9.5rem;
       .video-controls-progress,
-      .btn-video-controls-previous-line,
-      .btn-video-controls-next-line,
-      .btn-video-controls-rewind,
-      .btn-video-controls-info,
-      .btn-video-controls-speed,
-      .btn-video-controls-fullscreen {
+      .btn-video-controls {
         display: none !important;
+      }
+      .btn-video-controls-previous,
+      .btn-video-controls-play,
+      .btn-video-controls-next {
+        display: block !important;
       }
     }
   }
