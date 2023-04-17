@@ -812,7 +812,7 @@ export default {
 
   &.skin-light {
     .transcript-line {
-      color: $bg-color-dark-2;
+      color: $bg-color-dark-4;
     }
   }
 }

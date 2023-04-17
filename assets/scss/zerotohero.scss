@@ -709,6 +709,25 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
     font-size: calc(1rem * 1.25 * 1.25 * 1.25 * 1.25);
   }
 }
+.zerotohero-zoom-5 {
+  .transcript-line-both .word-block-segment,
+  .speech-content .word-block-segment {
+    font-size: calc(1rem * 1.25 * 1.25 * 1.25 * 1.25 * 1.25);
+  }
+}
+.zerotohero-zoom-6 {
+  .transcript-line-both .word-block-segment,
+  .speech-content .word-block-segment {
+    font-size: calc(1rem * 1.25 * 1.25 * 1.25 * 1.25 * 1.25 * 1.25);
+  }
+}
+.zerotohero-zoom-7 {
+  .transcript-line-both .word-block-segment,
+  .speech-content .word-block-segment {
+    font-size: calc(1rem * 1.25 * 1.25 * 1.25 * 1.25 * 1.25 * 1.25 * 1.25);
+  }
+}
+
 .text-primary {
   color: $primary-color !important;
 }

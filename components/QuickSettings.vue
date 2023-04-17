@@ -133,7 +133,7 @@
       </button>
       <button
         class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
-        @click="zoomLevel = zoomLevel ? Math.min(zoomLevel + 1, 4) : 1"
+        @click="zoomLevel = zoomLevel ? Math.min(zoomLevel + 1, 7) : 1"
       >
         <span class="annotation-setting-icon">T</span>
         {{ $tb("Bigger text") }}
