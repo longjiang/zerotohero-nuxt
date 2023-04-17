@@ -81,7 +81,7 @@
             $refs.transcript ? $refs.transcript.goToNextLine() : null
           "
         />
-        <div v-if="aspect === 'landscape'" class="pl-3 pt-4">
+        <div v-if="aspect === 'landscape' && size !== 'mini'" class="pl-3 pt-4">
           <div class="video-info video-info-top" v-if="mode === 'transcript'">
             <h3
               v-if="video.title"
