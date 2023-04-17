@@ -68,7 +68,7 @@
           @updateCollapsed="(c) => (this.collapsed = c)"
           @updateAudioMode="(a) => (this.audioMode = a)"
           @updateSpeed="(s) => (speed = s)"
-          @toggleFullscreenMode="toggleFullscreenMode"
+          @toggleTranscriptMode="toggleTranscriptMode"
           @updateSmoothScroll="(r) => (this.useSmoothScroll = r)"
           @updateAutoPause="(r) => (this.autoPause = r)"
           @updateRepeatMode="(r) => (this.repeatMode = r)"
@@ -643,7 +643,7 @@ export default {
     goToNextLine() {
       if (this.$refs.transcript) this.$refs.transcript.goToNextLine();
     },
-    toggleFullscreenMode() {
+    toggleTranscriptMode() {
       this.layout = this.layout === "horizontal" ? "vertical" : "horizontal";
       this.$store.dispatch("settings/setGeneralSettings", {
         layout: this.layout,

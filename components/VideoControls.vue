@@ -66,7 +66,7 @@
           'btn-video-controls-active': layout === 'horizontal',
         }"
         @click="toggleTranscriptMode"
-        :title="layout === $t('Full screen')"
+        :title="$t('Trasncript Mode')"
       >
         <i class="fa-solid fa-align-left"></i>
       </button>
