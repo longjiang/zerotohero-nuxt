@@ -45,7 +45,7 @@
         :class="{
           'video-controls': true,
           overlay: showSubsAndControlsAsOverlay,
-          hovering
+          hovering,
         }"
         ref="videoControls"
         v-bind="{
@@ -91,7 +91,7 @@
       />
 
       <div
-        class="video-info video-info-top pl-3 pt-4"
+        class="video-info video-info-side pl-3 pt-4"
         v-if="
           aspect === 'landscape' && size !== 'mini' && mode === 'transcript'
         "
@@ -436,7 +436,11 @@ export default {
      * @returns {Boolean} true if the aspect is landscape and mode is subtitles, false otherwise.
      */
     showSubsAndControlsAsOverlay() {
-      return this.aspect === "landscape" && this.mode === "subtitles";
+      return (
+        this.aspect === "landscape" &&
+        this.mode === "subtitles" &&
+        this.size !== "mini"
+      );
     },
     startTimeOrLineIndex() {
       let starttime = 0;
@@ -800,7 +804,7 @@ export default {
   &.overlay {
     // height should be calculated based on the video aspect ratio 16/9
     height: calc(100% * 9 / 16);
-      margin: 0 auto;
+    margin: 0 auto;
     &.size-fullscreen {
       // Width should be set so that when the height is calculated it will not exceed the viewport height
       max-width: calc(100vh * 16 / 9);
@@ -843,6 +847,30 @@ export default {
   }
 }
 
+/* Not wide display */
+.zerotohero-not-wide {
+  .video-wrapper {
+    max-width: calc(
+      (
+          100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) -
+            2.9rem - 4.9rem
+        ) * 16 / 9
+    );
+    margin: 0 auto;
+  }
+  .video-with-transcript.size-fullscreen {
+    .video-wrapper {
+      max-width: calc(
+        (100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)) * 16 /
+          9
+      );
+    }
+  }
+  .video-info-side {
+    display: none;
+  }
+}
+
 /* Mini mode */
 .video-with-transcript.size-mini {
   display: flex;
@@ -882,21 +910,6 @@ export default {
 /* Drag and drop */
 .subs-drop.drop.over {
   border: 2px dashed #ccc;
-}
-
-/* Not wide display */
-.zerotohero-not-wide {
-  .video-wrapper {
-    max-width: calc(
-      (100vh - 3rem - env(safe-area-inset-top) - 12rem - 4.625rem) * 16 / 9
-    );
-  }
-  .video-with-transcript.mode-subtitles.text-auto-size {
-    height: calc(
-      100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom) -
-        4.75rem
-    );
-  }
 }
 
 /* Transcript mode */

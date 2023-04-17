@@ -226,7 +226,6 @@
                 :showImages="false"
                 :showCollocations="false"
                 :showExamples="false"
-                class="mt-4"
                 ref="phrase"
               />
               <SimilarPhrases
