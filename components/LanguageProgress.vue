@@ -106,7 +106,7 @@
             $tb(
               "Typically, {l1} speakers need {num} hours from {level} to {goal}.",
               {
-                l1: $tb(l1.name),
+                l1: $tb($l1.name),
                 num: Math.round(hoursNeeded),
                 level: levelText,
                 goal: goalText,
@@ -164,10 +164,6 @@ import { LEVELS } from "~/lib/utils/language-levels";
 
 export default {
   props: {
-    l1: {
-      type: Object,
-      required: false,
-    },
     l2: {
       type: Object,
       required: true,

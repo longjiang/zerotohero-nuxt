@@ -21,7 +21,6 @@
               <span class="language-name">{{ $tb(l2Progress.language.name) }}</span>
             </div>
             <LanguageProgress
-              :l1="$languages.getSmart(getL1Code(l2Progress.language))"
               :l2="l2Progress.language"
             />
           </router-link>

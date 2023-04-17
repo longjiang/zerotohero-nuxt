@@ -10,8 +10,9 @@ export const romanizationOffByDefault = [
   "vi",
 ];
 
-export const getDefaultL2Settings = (l2) => {
-  let l2SettingsOfL2 = defaultL2Settings;
+export const getDefaultL2Settings = (l1, l2) => {
+  let l2SettingsOfL2 = Object.assign({}, defaultL2Settings);
+  l2SettingsOfL2.l1 = l1.code;
   if (
     (l2.scripts &&
       l2.scripts[0] &&
@@ -23,6 +24,7 @@ export const getDefaultL2Settings = (l2) => {
   return l2SettingsOfL2;
 };
 
+// These settings are language specific and saved to storage
 export const defaultL2Settings = {
   l1: "en", // the L1 the user used last time when they studied this language
   showDefinition: false,
@@ -41,15 +43,16 @@ export const defaultL2Settings = {
   zoomLevel: 0,
 };
 
+// These settings are not saved to storage
 export const defaultTransientSettings = {
   l1: undefined, // L1 language object
   l2: undefined, // L2 language object
   dictionary: undefined,
   dictionaryName: undefined,
   settingsLoaded: false,
-  l2Settings: {}, // keyed by language
-}
+};
 
+// These settings are saved to storage
 export const defaultGeneralSettings = {
   adminMode: false,
   skin: "dark",
@@ -62,6 +65,7 @@ export const defaultGeneralSettings = {
   hideDefinitions: false, // as used in the <HideDefs> component
   subsSearchLimit: true,
   openAIToken: undefined,
+  l2Settings: {}, // keyed by language
 };
 
 export const state = () => {
@@ -119,7 +123,7 @@ export const mutations = {
     state.l2 = l2;
     // Make sure to initialize a default l2Settings if not present
     if (!state.l2Settings[l2.code]) {
-      state.l2Settings[l2.code] = getDefaultL2Settings(l2);
+      state.l2Settings[l2.code] = getDefaultL2Settings(l1, l2);
     }
   },
   // This assumes that SET_L1_L2 has already been called
@@ -131,7 +135,7 @@ export const mutations = {
       }
     }
     if (!state.l2Settings[l2.code]) {
-      state.l2Settings[l2.code] = getDefaultL2Settings(l2);
+      state.l2Settings[l2.code] = getDefaultL2Settings(l1, l2);
     }
     // Remember the L1 the user picked, so next time when switching L2, this L1 is used.
     if (state.l2Settings[l2.code]) state.l2Settings[l2.code].l1 = l1.code;
