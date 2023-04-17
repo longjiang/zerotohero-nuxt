@@ -27,8 +27,8 @@
     <template v-else>
       <span
         class="word-block-segment"
-        v-for="segment in mappedPronunciation"
-        :key="`word-block-segment-${segment.surface}`"
+        v-for="(segment, index) in mappedPronunciation"
+        :key="`word-block-segment-${segment.surface}-${index}`"
         ><span
           class="word-block-definition"
           v-if="showDefinition"

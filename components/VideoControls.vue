@@ -50,7 +50,7 @@
       >
         <i class="fa-solid fa-folder-open"></i>
       </button>
-      <button
+      <!-- <button
         :class="{
           'btn-video-controls btn-video-controls-rewind text-center': true,
         }"
@@ -58,6 +58,17 @@
         :title="$t('Rewind to Beginning')"
       >
         <i class="fas fa-undo"></i>
+      </button> -->
+      <button
+        v-if="showTranscriptModeToggle"
+        :class="{
+          'btn-video-controls btn-video-controls-transcript-mode text-center': true,
+          'btn-video-controls-active': layout === 'horizontal',
+        }"
+        @click="toggleTranscriptMode"
+        :title="layout === $t('Full screen')"
+      >
+        <i class="fa-solid fa-align-left"></i>
       </button>
       <button
         v-if="episodes"
@@ -104,19 +115,20 @@
         <i class="fas fa-step-forward"></i>
       </button>
       <button
-        v-if="showFullscreenToggle"
+        v-if="showFullscreenModeToggle"
         :class="{
-          'btn-video-controls btn-video-controls-fullscreen text-center': true,
-          'btn-video-controls-active': layout === 'horizontal',
+          'btn-video-controls btn-video-controls-fullscreen-mode text-center': true,
+          'btn-video-controls-active': isFullscreen === true,
         }"
-        @click="toggleFullscreenMode"
-        :title="layout === $t('Show Transcript & Quizzes')"
+        @click="$emit('fullscreen', !isFullscreen)"
+        :title="$t('Fullscreen')"
       >
-        <i class="fa-solid fa-align-left"></i>
+        <i class="fa-solid fa-expand" v-if="!isFullscreen"></i>
+        <i class="fa-solid fa-times" v-if="isFullscreen"></i>
       </button>
       <button
         :class="{
-          'btn-video-controls btn-video-controls-fullscreen text-center': true,
+          'btn-video-controls btn-video-controls-transcript-mode text-center': true,
         }"
         @click="showSettingsModal"
         :title="$t('More Options')"
@@ -321,7 +333,13 @@ export default {
     show: {
       type: Object,
     },
-    showFullscreenToggle: {
+    isFullscreen: {
+      default: false,
+    },
+    showTranscriptModeToggle: {
+      default: true,
+    },
+    showFullscreenModeToggle: {
       default: true,
     },
     showLineList: {
@@ -514,8 +532,8 @@ export default {
       this.collapsed = !this.collapsed;
       this.$emit("updateCollapsed", this.collapsed);
     },
-    toggleFullscreenMode() {
-      this.$emit("toggleFullscreenMode");
+    toggleTranscriptMode() {
+      this.$emit("toggleTranscriptMode");
     },
     goToLine(line) {
       this.$emit("goToLine", line);

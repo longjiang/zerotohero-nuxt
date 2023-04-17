@@ -54,6 +54,7 @@
             showOpenButton,
             showCollapse: layout === 'horizontal',
             duration,
+            isFullscreen,
             initialTime: starttime ? starttime : 0,
           }"
           @previous="$emit('previous')"
@@ -71,6 +72,7 @@
           @updateSmoothScroll="(r) => (this.useSmoothScroll = r)"
           @updateAutoPause="(r) => (this.autoPause = r)"
           @updateRepeatMode="(r) => (this.repeatMode = r)"
+          @fullscreen="onFullscreen"
           @goToPreviousLine="
             $refs.transcript ? $refs.transcript.goToPreviousLine() : null
           "
@@ -253,7 +255,7 @@ import { timeout } from "@/lib/utils";
 export default {
   props: {
     skin: {
-      default: 'dark',
+      default: "dark",
     },
     type: {
       type: String,
@@ -355,6 +357,7 @@ export default {
       duration: undefined,
       enableTranslationEditing: false,
       layout: this.initialLayout,
+      isFullscreen: false,
       neverPlayed: true,
       paused: true,
       repeatMode: false,
@@ -410,9 +413,6 @@ export default {
       window.addEventListener("resize", this.updateLayout);
     }
   },
-  destroyed() {
-    window.removeEventListener("resize", this.updateLayout);
-  },
   async mounted() {
     this.updateLayout();
     if (typeof this.$store.state.settings !== "undefined") {
@@ -422,6 +422,19 @@ export default {
       if (mutation.type === "settings/LOAD_SETTINGS") {
         this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
       }
+    });
+    const fullscreenEvents = ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'];
+    fullscreenEvents.forEach(event => {
+      document.addEventListener(event, this.updateFullscreenState);
+    });
+    this.updateFullscreenState();
+  },
+  beforeDestroy() {
+    this.unsubscribe()
+    window.removeEventListener("resize", this.updateLayout);
+    const fullscreenEvents = ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'];
+    fullscreenEvents.forEach(event => {
+      document.removeEventListener(event, this.updateFullscreenState);
     });
   },
   async updated() {
@@ -636,6 +649,42 @@ export default {
         layout: this.layout,
       });
       this.$emit("updateLayout", this.layout);
+    },
+    onFullscreen(fullscreen) {
+      if (fullscreen !== this.isFullscreen) {
+        if (fullscreen) this.requestFullscreen();
+        else this.exitFullscreen();
+      }
+    },
+    requestFullscreen() {
+      const docEl = document.documentElement;
+
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen();
+      } else if (docEl.mozRequestFullScreen) {
+        // Firefox
+        docEl.mozRequestFullScreen();
+      } else if (docEl.webkitRequestFullscreen) {
+        // Chrome, Safari and Opera
+        docEl.webkitRequestFullscreen();
+      } else if (docEl.msRequestFullscreen) {
+        // IE/Edge
+        docEl.msRequestFullscreen();
+      }
+    },
+    exitFullscreen() {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) { // Firefox
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { // IE/Edge
+        document.msExitFullscreen();
+      }
+    },
+    updateFullscreenState() {
+      this.isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
     },
   },
 };
