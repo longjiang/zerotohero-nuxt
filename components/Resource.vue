@@ -1,5 +1,5 @@
 <template>
-  <div class="resource media rounded shadow">
+  <div :class="`resource media rounded shadow skin-${$skin}`">
     <router-link :to="resource.url" v-if="internal" class="link-unstyled">
       <img :src="resource.thumbnail" v-if="showThumbnail" class="resource-thumbnail img-fluid" />
       <div class="media-body">
@@ -59,11 +59,21 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "~@/assets/scss/variables.scss";
+
 .resource {
   min-width: 15rem;
   max-width: 480px;
   flex: 1;
+  &.skin-light {
+    background-color: #fff;
+    border: 1px solid #ddd;
+  }
+  &.skin-dark {
+    background-color: $bg-color-dark-2;
+    border: 1px solid $bg-color-dark-3;
+  }
 }
 .resource-thumbnail {
   width: 100%;

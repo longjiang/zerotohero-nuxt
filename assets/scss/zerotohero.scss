@@ -354,7 +354,7 @@ h6,
 [data-level="Pre-A1"],
 [data-hover-level="Pre-A1"]:hover,
 [data-hover-level="Pre-A1"].saved {
-  color: #b51700 !important;
+  color: $color-pre-a1 !important;
 }
 
 .levelA1,
@@ -362,7 +362,7 @@ h6,
 [data-level="A1"],
 [data-hover-level="A1"]:hover,
 [data-hover-level="A1"].saved {
-  color: #0076ba !important;
+  color: $color-a1 !important;
 }
 
 .levelA2,
@@ -370,7 +370,7 @@ h6,
 [data-level="A2"],
 [data-hover-level="A2"]:hover,
 [data-hover-level="A2"].saved {
-  color: #00882b !important;
+  color: $color-a2 !important;
 }
 
 .levelB1,
@@ -378,7 +378,7 @@ h6,
 [data-level="B1"],
 [data-hover-level="B1"]:hover,
 [data-hover-level="B1"].saved {
-  color: #6a348a !important;
+  color: $color-b1 !important;
 }
 
 .levelB2,
@@ -386,7 +386,7 @@ h6,
 [data-level="B2"],
 [data-hover-level="B2"]:hover,
 [data-hover-level="B2"].saved {
-  color: #5b0516 !important;
+  color: $color-b2 !important;
 }
 
 .levelC1,
@@ -394,7 +394,7 @@ h6,
 [data-level="C1"],
 [data-hover-level="C1"]:hover,
 [data-hover-level="C1"].saved {
-  color: #011b3c !important;
+  color: $color-c1 !important;
 }
 
 .levelC2,
@@ -402,7 +402,7 @@ h6,
 [data-level="C2"],
 [data-hover-level="C2"]:hover,
 [data-hover-level="C2"].saved {
-  color: #9cc4c1 !important;
+  color: $color-c2 !important;
 }
 
 .leveloutside,
@@ -423,42 +423,42 @@ h6,
 [data-bg-level="PreA1"],
 [data-bg-level="Pre-A1"],
 [data-bg-level="1"] {
-  background-color: #b51700 !important;
+  background-color: $color-pre-a1 !important;
   color: white !important;
 }
 
 .bg-levelA1,
 [data-bg-level="A1"],
 [data-bg-level="2"] {
-  background-color: #0076ba !important;
+  background-color: $color-a1 !important;
   color: white !important;
 }
 
 .bg-levelA2,
 [data-bg-level="A2"],
 [data-bg-level="3"] {
-  background-color: #00882b !important;
+  background-color: $color-a2 !important;
   color: white !important;
 }
 
 .bg-levelB1,
 [data-bg-level="B1"],
 [data-bg-level="4"] {
-  background-color: #6a348a !important;
+  background-color: $color-b1 !important;
   color: white !important;
 }
 
 .bg-levelB2,
 [data-bg-level="B2"],
 [data-bg-level="5"] {
-  background-color: #5b0516 !important;
+  background-color: $color-b2 !important;
   color: white !important;
 }
 
 .bg-levelC1,
 [data-bg-level="C1"],
 [data-bg-level="6"] {
-  background-color: #011b3c !important;
+  background-color: $color-c1 !important;
   color: white !important;
 }
 
@@ -497,7 +497,7 @@ h6,
 .l2-zh [data-hover-level="1"]:hover,
 .l2-zh [data-hover-level="1"].saved,
 .l2-zh .show-level-1 [data-hover-level="1"].sticky:not(.seen) {
-  color: #f8b51e !important;
+  color: $color-hsk-1 !important;
 }
 
 .l2-zh .level2,
@@ -505,7 +505,7 @@ h6,
 .l2-zh [data-hover-level="2"]:hover,
 .l2-zh [data-hover-level="2"].saved,
 .l2-zh .show-level-2 [data-hover-level="2"].sticky:not(.seen) {
-  color: #267f94 !important;
+  color: $color-hsk-2 !important;
 }
 
 .l2-zh .level3,
@@ -513,7 +513,7 @@ h6,
 .l2-zh [data-hover-level="3"]:hover,
 .l2-zh [data-hover-level="3"].saved,
 .l2-zh .show-level-3 [data-hover-level="3"].sticky:not(.seen) {
-  color: #fd4f1c !important;
+  color: $color-hsk-3 !important;
 }
 
 .l2-zh .level4,
@@ -521,7 +521,7 @@ h6,
 .l2-zh [data-hover-level="4"]:hover,
 .l2-zh [data-hover-level="4"].saved,
 .l2-zh .show-level-4 [data-hover-level="4"].sticky:not(.seen) {
-  color: #bb1718 !important;
+  color: $color-hsk-4 !important;
 }
 
 .l2-zh .level5,
@@ -529,7 +529,7 @@ h6,
 .l2-zh [data-hover-level="5"]:hover,
 .l2-zh [data-hover-level="5"].saved,
 .l2-zh .show-level-5 [data-hover-level="5"].sticky:not(.seen) {
-  color: #1b3e76 !important;
+  color: $color-hsk-5 !important;
 }
 
 .l2-zh .level6,
@@ -537,7 +537,7 @@ h6,
 .l2-zh [data-hover-level="6"]:hover,
 .l2-zh [data-hover-level="6"].saved,
 .l2-zh .show-level-6 [data-hover-level="6"].sticky:not(.seen) {
-  color: #6a3669 !important;
+  color: $color-hsk-6 !important;
 }
 
 .l2-zh .level7-9,
@@ -560,37 +560,37 @@ h6,
 
 .l2-zh .bg-level1,
 .l2-zh [data-bg-level="1"] {
-  background-color: #f8b51e !important;
+  background-color: $color-hsk-1 !important;
   color: white !important;
 }
 
 .l2-zh .bg-level2,
 .l2-zh [data-bg-level="2"] {
-  background-color: #267f94 !important;
+  background-color: $color-hsk-2 !important;
   color: white !important;
 }
 
 .l2-zh .bg-level3,
 .l2-zh [data-bg-level="3"] {
-  background-color: #fd4f1c !important;
+  background-color: $color-hsk-3 !important;
   color: white !important;
 }
 
 .l2-zh .bg-level4,
 .l2-zh [data-bg-level="4"] {
-  background-color: #bb1718 !important;
+  background-color: $color-hsk-4 !important;
   color: white !important;
 }
 
 .l2-zh .bg-level5,
 .l2-zh [data-bg-level="5"] {
-  background-color: #1b3e76 !important;
+  background-color: $color-hsk-5 !important;
   color: white !important;
 }
 
 .l2-zh .bg-level6,
 .l2-zh [data-bg-level="6"] {
-  background-color: #6a3669 !important;
+  background-color: $color-hsk-6 !important;
   color: white !important;
 }
 

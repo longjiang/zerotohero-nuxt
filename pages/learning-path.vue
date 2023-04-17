@@ -476,48 +476,49 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~@/assets/scss/variables.scss";
 .l2-zh {
   .learning-path {
     .level {
       &[data-learning-path-level="1"] {
-        border-left-color: #f8b51e;
+        border-left-color: $color-hsk-1;
         &::before {
-          border-color: #f8b51e;
+          border-color: $color-hsk-1;
         }
       }
 
       &[data-learning-path-level="2"] {
-        border-left-color: #267f94;
+        border-left-color: $color-hsk-2;
         &::before {
-          border-color: #267f94;
+          border-color: $color-hsk-2;
         }
       }
 
       &[data-learning-path-level="3"] {
-        border-left-color: #fd4f1c;
+        border-left-color: $color-hsk-3;
         &::before {
-          border-color: #fd4f1c;
+          border-color: $color-hsk-3;
         }
       }
 
       &[data-learning-path-level="4"] {
-        border-left-color: #bb1718;
+        border-left-color: $color-hsk-4;
         &::before {
-          border-color: #bb1718;
+          border-color: $color-hsk-4;
         }
       }
 
       &[data-learning-path-level="5"] {
-        border-left-color: #1b3e76;
+        border-left-color: $color-hsk-5;
         &::before {
-          border-color: #1b3e76;
+          border-color: $color-hsk-5;
         }
       }
 
       &[data-learning-path-level="6"] {
-        border-left-color: #6a3669;
+        border-left-color: $color-hsk-6;
         &::before {
-          border-color: #6a3669;
+          border-color: $color-hsk-6;
         }
       }
     }
@@ -545,55 +546,55 @@ export default {
     }
 
     &[data-learning-path-level="1"] {
-      border-left-color: #b51700;
+      border-left-color: $color-pre-a1;
       &::before {
-        border-color: #b51700;
+        border-color: $color-pre-a1;
       }
     }
 
     &[data-learning-path-level="2"] {
-      border-left-color: #0076ba;
+      border-left-color: $color-a1;
       &::before {
-        border-color: #0076ba;
+        border-color: $color-a1;
       }
     }
 
     &[data-learning-path-level="3"] {
-      border-left-color: #00882b;
+      border-left-color: $color-a2;
       &::before {
-        border-color: #00882b;
+        border-color: $color-a2;
       }
     }
 
     &[data-learning-path-level="4"] {
-      border-left-color: #6a348a;
+      border-left-color: $color-b1;
       &::before {
-        border-color: #6a348a;
+        border-color: $color-b1;
       }
     }
 
     &[data-learning-path-level="5"] {
-      border-left-color: #5b0516;
+      border-left-color: $color-b2;
       &::before {
-        border-color: #5b0516;
+        border-color: $color-b2;
       }
     }
 
     &[data-learning-path-level="6"] {
-      border-left-color: #011b3c;
+      border-left-color: $color-c1;
       &::before {
-        border-color: #011b3c;
+        border-color: $color-c1;
       }
     }
 
     &[data-learning-path-level="7"] {
-      border-left-color: #0f575c;
+      border-left-color: $color-c2;
       &::before {
-        border-color: #0f575c;
+        border-color: $color-c2;
       }
       &::after {
         content: "";
-        border-top: 2rem solid #0f575c;
+        border-top: 2rem solid $color-c2;
         border-left: 1rem solid transparent;
         border-right: 1rem solid transparent;
         display: block;
