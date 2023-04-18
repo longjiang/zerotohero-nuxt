@@ -149,9 +149,13 @@
         'video-transcript-wrapper': true,
         overlay: useOverlay,
       }"
+      ref="videoTranscriptWrapper"
+      style="top: 0"
     >
       <!-- this is necessary for updating the transcript upon srt drop -->
       <div class="d-none">{{ transcriptKey }}</div>
+      
+      <div :class="{ 'drag-handle': true, 'd-none': !useOverlay }" @mousedown="handleMouseDown"><i class="fa-solid fa-grip-vertical"></i></div>
 
       <!-- if the video has no subs, allow the user to add subs -->
       <div class="pl-4 pr-4" v-if="video && !video.subs_l2">
@@ -812,6 +816,43 @@ export default {
       );
       this.$store.dispatch("settings/setFullscreen", fullscreen);
     },
+    handleMouseDown(e) {
+      const videoWithTranscript = this.$el;
+      const videoTranscriptWrapper = this.$refs.videoTranscriptWrapper;
+      console.log({videoTranscriptWrapper})
+      e.preventDefault();
+      const startY = e.clientY;
+      const startTop = parseInt(videoTranscriptWrapper.style.top, 10);
+
+      function handleMouseMove(e) {
+        e.preventDefault();
+        const mouseY = e.clientY;
+        const deltaY = mouseY - startY;
+        let newTop = startTop + deltaY;
+
+        // Constrain within the container
+        const containerHeight = videoWithTranscript.offsetHeight;
+        const wrapperHeight = videoTranscriptWrapper.offsetHeight;
+        const minTop = 0;
+        const maxTop = containerHeight - wrapperHeight;
+
+        if (newTop < minTop) {
+          newTop = minTop;
+        } else if (newTop > maxTop) {
+          newTop = maxTop;
+        }
+
+        videoTranscriptWrapper.style.top = `${newTop}px`;
+      }
+
+      function handleMouseUp() {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      }
+
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    }
   },
 };
 </script>
@@ -838,7 +879,6 @@ export default {
       left: 0;
       right: 0;
       // background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(2px);
       padding: 0.5rem 1rem;
       box-sizing: border-box;
       overflow: hidden;
@@ -847,6 +887,25 @@ export default {
         1px -1px 0 #000,
         -1px 1px 0 #000,
         1px 1px 0 #000;
+      .drag-handle {
+        width: 3rem;
+        height: calc(100% - 1rem);
+        position: absolute;
+        left: 1rem;
+        cursor: move;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      &:hover,
+      &:focus-within {
+        .drag-handle {
+          opacity: 0.5;
+        }
+      }
     }
     .video-controls {
       position: absolute;
