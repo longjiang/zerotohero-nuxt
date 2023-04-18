@@ -32,6 +32,22 @@ const Dictionary = {
   server: "https://server.chinesezerotohero.com/",
   l1: undefined,
   l2: undefined,
+  l2_mappings: {
+    "hrv": "hbs", // Serbian uses Serbo-Croatian
+    "nor": "nob", // Default Norwegian to Bokmål (which is supplemented with Nynorsk)
+    "srp": "hbs", // Croatian uses Serbo-Croatian
+    "bos": "hbs", // Bosnian uses Serbo-Croatian
+    "cnr": "hbs", // Montenegrin uses Serbo-Croatian
+    "run": "kin", // Rundi uses Rwanda-Rundi
+    "hbo": "heb", // Ancient Hebrew uses Hebrew
+    "grc": "ell", // Ancient Greek uses Greek
+    "hmn": "mww", // Hmong uses white Hmong
+    "prs": "fas", // Dari uses Persian
+    "arb": "ara", // Modern Standard Arabic uses Arabic
+    "zsm": "msa", // Standard Malaysian uses Malaysian
+    "lvs": "lav", // Standard Latvian uses Latvian
+    "ekk": "est", // Standard Estonian uses Estonian
+  },
   tokenizationByServer: [
     "ara", // tokenized and lemmatized by qalsadi
     "ast", // tokenized and lemmatized by simplemma
@@ -158,21 +174,12 @@ const Dictionary = {
   },
   dictionaryFile({ l1 = undefined, l2 = undefined } = {}) {
     if (l1 && l2) {
-      l2 = l2
-        .replace("hrv", "hbs") // Serbian uses Serbo-Croatian
-        .replace("nor", "nob") // Default Norwegian to Bokmål (which is supplemented with Nynorsk)
-        .replace("srp", "hbs") // Croatian uses Serbo-Croatian
-        .replace("bos", "hbs") // Bosnian uses Serbo-Croatian
-        .replace("cnr", "hbs") // Montenegrin uses Serbo-Croatian
-        .replace("run", "kin") // Rundi uses Rwanda-Rundi
-        .replace("hbo", "heb") // Ancient Hebrew uses Hebrew
-        .replace("grc", "ell") // Ancient Greek uses Greek
-        .replace("hmn", "mww") // Hmong uses white Hmong
-        .replace("prs", "fas") // Dari uses Persian
-        .replace("arb", "ara") // Modern Standard Arabic uses Arabic
-        .replace("zsm", "msa") // Standard Malaysian uses Malaysian
-        .replace("lvs", "lav") // Standard Latvian uses Latvian
-        .replace("ekk", "est"); // Standard Estonian uses Estonian
+      for (const key in this.l2_mappings) {
+        if (l2 === key) {
+          l2 = mappings[key];
+          break;
+        }
+      }
       let filename = `${this.server}data/wiktionary-csv/${l2}-${l1}.csv.txt`;
       return filename;
     }

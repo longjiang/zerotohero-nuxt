@@ -21,7 +21,7 @@
       <i class="fa fa-times"></i>
     </button>
     <div v-if="token?.lemmas && token.lemmas.length > 0 && token.lemmas[0] !== text" class="word-block-lemma">
-      <b>Lemmatized:</b> {{ text }} → {{ token.lemmas.join(', ') }} <template v-if="token.pos">({{ token.pos.toLowerCase() }})</template>
+      <b>{{ $t('Lemmatized:') }}</b> {{ text }} → {{ token.lemmas.join(', ') }} <template v-if="token.pos">({{ token.pos.toLowerCase() }})</template>
       <hr/>
     </div>
     <div
