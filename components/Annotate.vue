@@ -231,7 +231,6 @@ import { mapState } from "vuex";
 import { getClient } from "iframe-translator";
 import SmartQuotes from "smartquotes";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
-import DOMPurify from "dompurify";
 
 export default {
   components: {
@@ -751,8 +750,8 @@ export default {
         let token = this.tokenized[batchId][index];
         if (typeof token === "object") {
           html += `<WordBlock v-bind="wordBlockAttributes(${batchId},${index})">${token.text}</WordBlock>`;
-        } else if (token.match(/^\s+$/)) {
-          html += token;
+        } else if (token.match(/^\s+$/)){
+          html += token
         } else {
           html += `<span class="word-block-unknown"><span class="word-block-segment">${token}</span></span>`;
         }
@@ -761,22 +760,13 @@ export default {
     },
     wordBlockAttributes(batchId, index) {
       let token = this.tokenized[batchId][index];
-      if (token.candidates) {
-        for (let candidates of token.candidates) {
-          candidates.definitions = candidates.definitions.map((d) => {
-            return DOMPurify.sanitize(d);
-          });
-        }
-      }
       let text = token.text;
       let context = {
         text: this.text,
         youtube_id: this.youtube_id,
         starttime: this.starttime,
       }; // { text, starttime = undefined, youtube_id = undefined}
-      let transliterationprop = token.pronunciation
-        ? token.pronunciation
-        : tr(text).replace(/"/g, "");
+      let transliterationprop = token.pronunciation ? token.pronunciation : tr(text).replace(/"/g, "")
       let attrs = {
         transliterationprop,
         ref: "word-block",
@@ -837,7 +827,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~/assets/scss/variables";
+@import '~/assets/scss/variables';
 .annotate-translation {
   font-size: 0.8em;
   opacity: 0.7;
