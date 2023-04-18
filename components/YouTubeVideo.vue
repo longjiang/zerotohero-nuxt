@@ -228,6 +228,7 @@ export default {
         id,
       };
       window.onYouTubePlayerAPIReady = () => {
+        if (!YT) return
         this.player = new YT.Player(id, {
           height: screen.height,
           width: screen.width,

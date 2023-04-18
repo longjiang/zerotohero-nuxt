@@ -2,6 +2,7 @@ importScripts("../vendor/korean_conjugation/html/korean/hangeul.js");
 importScripts("../vendor/korean_conjugation/html/korean/conjugator.js");
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
 importScripts("../vendor/localforage/localforage.js")
+importScripts("../vendor/fuzzy-search/FuzzySearch.js")
 
 const Dictionary = {
   file:
@@ -325,20 +326,16 @@ const Dictionary = {
   },
   lookupFuzzy(text, limit = 30, quick = false) {
     let words = [];
-    if (!quick) {
-      for (let word of this.words) {
-        let search = word.bare;
-        if (search && search.length > 0) {
-          let distance = FastestLevenshtein.distance(search, text);
-          let max = Math.max(text.length, search.length);
-          let similarity = (max - distance) / max;
-          words.push(Object.assign({ score: similarity }, word));
-        }
-      }
-    }
-    words = words.sort((a, b) => b.score - a.score);
-    words = this.uniqueByValue(words, "id").slice(0, limit);
-    return words;
+    // Initialize a FuzzySearch instance.
+    const searcher = new FuzzySearch(this.words, ['bare'], {
+      caseSensitive: false,
+      sort: true,
+    });
+
+    // Perform a fuzzy search.
+    const searchTerm = text;
+    words = searcher.search(searchTerm).slice(0, limit);
+    return words.map(word => Object.assign({ score: 1 }, word));
   },
   lookupMultiple(text) {
     let lookForHadaVerbs = false
