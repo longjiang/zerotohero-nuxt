@@ -582,12 +582,15 @@ export default {
   padding-right: 0.5rem;
 }
 
-.video-with-transcript.mode-transcript.aspect-portrait:not(.size-mini) {
-  .video-controls.skin-dark {
-    background: $bg-color-dark-1;
-  }
-  .video-controls.skin-light {
-    background: white;
+.video-with-transcript.mode-transcript:not(.size-mini) {
+  &.aspect-portrait,
+  &.collapsed {
+    .video-controls.skin-dark {
+      background: $bg-color-dark-1;
+    }
+    .video-controls.skin-light {
+      background: white;
+    }
   }
 }
 

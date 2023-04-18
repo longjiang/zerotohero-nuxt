@@ -67,7 +67,7 @@
           showLineList,
           showOpenButton,
           showType,
-          skin: useOverlay ? 'dark' : skin,
+          skin: useOverlay ? 'dark' : $skin,
           video,
         }"
         @previous="$emit('previous')"
@@ -97,7 +97,7 @@
       <div
         class="video-info video-info-side pl-3 pt-4"
         v-if="
-          aspect === 'landscape' && size !== 'mini' && mode === 'transcript'
+          aspect === 'landscape' && size !== 'mini' && mode === 'transcript' && !collapsed
         "
       >
         <h3
