@@ -74,12 +74,15 @@ export default {
     };
   },
   async mounted() {
-    let augmentedDefinitions = [];
-    for (let definition of Helper.unique(this.definitions)) {
-      if (typeof definition === "string") definition = { text: definition };
-      definition.html = await this.definitionHtml(definition.text);
-      augmentedDefinitions.push(definition);
-    }
+    let augmentedDefinitions = this.definitions;
+    // augmentedDefinitions = this.parseCircleNumbersInDefinitions(augmentedDefinitions)
+    augmentedDefinitions = await Promise.all(
+      Helper.unique(augmentedDefinitions).map(async (definition) => {
+        if (typeof definition === "string") definition = { text: definition };
+        definition.html = await this.definitionHtml(definition.text);
+        return definition;
+      })
+    );
     this.augmentedDefinitions = augmentedDefinitions;
   },
   methods: {
