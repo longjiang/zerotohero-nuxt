@@ -278,6 +278,7 @@ export default {
     margin: 0 auto;
     .transcript-line-l2 {
       padding-left: 1.5rem;
+      line-height: 1.25;
       :deep(.annotated) {
         text-align: center !important;
       }

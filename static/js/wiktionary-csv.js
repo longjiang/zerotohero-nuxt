@@ -33,28 +33,36 @@ const Dictionary = {
   l1: undefined,
   l2: undefined,
   tokenizationByServer: [
-    "ast", // tokenized and lemmatized by simplemma
     "ara", // tokenized and lemmatized by qalsadi
+    "ast", // tokenized and lemmatized by simplemma
     "bul", // tokenized and lemmatized by simplemma
     "cat", // tokenized and lemmatized by simplemma
     "ces", // tokenized and lemmatized by simplemma
     "cym", // tokenized and lemmatized by simplemma
     "dan", // tokenized and lemmatized by simplemma
+    "deu", // tokenized and lemmatized by simplemma
     "ell", // tokenized and lemmatized by simplemma
+    "eng", // tokenized and lemmatized by simplemma
     "enm", // tokenized and lemmatized by simplemma
     "est", // tokenized and lemmatized by simplemma
     "fas", // tokenized and lemmatized by hazm
     "fin", // tokenized and lemmatized by simplemma
+    "fra", // tokenized and lemmatized by simplemma
+    "fra", // tokenized and lemmatized by simplemma
     "gla", // tokenized and lemmatized by simplemma
     "gle", // tokenized and lemmatized by simplemma
     "glg", // tokenized and lemmatized by simplemma
     "glv", // tokenized and lemmatized by simplemma
     "hbs", // tokenized and lemmatized by simplemma
+    "hin", // tokenized and lemmatized by simplemma
     "hun", // tokenized and lemmatized by simplemma
     "hye", // tokenized and lemmatized by simplemma
     "ind", // tokenized and lemmatized by simplemma
     "isl", // tokenized and lemmatized by simplemma
+    "ita", // tokenized and lemmatized by simplemma
+    "ita", // tokenized and lemmatized by simplemma
     "kat", // tokenized and lemmatized by simplemma
+    "lat", // tokenized and lemmatized by simplemma
     "lav", // tokenized and lemmatized by simplemma
     "lit", // tokenized and lemmatized by simplemma
     "ltz", // tokenized and lemmatized by simplemma
@@ -64,11 +72,14 @@ const Dictionary = {
     "nno", // tokenized and lemmatized by simplemma
     "nob", // tokenized and lemmatized by simplemma
     "pol", // tokenized and lemmatized by simplemma
+    "por", // tokenized and lemmatized by simplemma
+    "por", // tokenized and lemmatized by simplemma
     "ron", // tokenized and lemmatized by simplemma
     "rus", // tokenized and lemmatized by simplemma
     "slk", // tokenized and lemmatized by simplemma
     "slv", // tokenized and lemmatized by simplemma
     "sme", // tokenized and lemmatized by simplemma
+    "spa", // tokenized and lemmatized by simplemma
     "sqi", // tokenized and lemmatized by simplemma
     "swa", // tokenized and lemmatized by simplemma
     "swe", // tokenized and lemmatized by simplemma
@@ -76,24 +87,10 @@ const Dictionary = {
     "tur", // tokenized and lemmatized by simplemma
     "tur", // tokenized and lemmatized by zeyrek
     "ukr", // tokenized and lemmatized by simplemma
-    "deu", // tokenized and lemmatized by simplemma
-    // "eng", // tokenized and lemmatized by simplemma
-    // "fra", // tokenized and lemmatized by simplemma
-    // "hin", // tokenized and lemmatized by simplemma
-    // "ita", // tokenized and lemmatized by simplemma
-    // "lat", // tokenized and lemmatized by simplemma
-    // "por", // tokenized and lemmatized by simplemma
-    // "spa", // tokenized and lemmatized by simplemma
-    // "hrv", // tokenized and lemmatized by spacy
-    // "deu", // dictionary large enough, lemmatization done locally
-    // "eng", // dictionary large enough, lemmatization done locally
-    // "fra", // dictionary large enough, lemmatization done locally
-    // "ita", // dictionary large enough, lemmatization done locally
-    // "jpn", // tokenized and lemmatized by spacy
-    // "kor", // tokenized and lemmatized by spacy
-    // "por", // dictionary large enough, lemmatization done locally
-    // "spa" // dictionary large enough, lemmatization done locally
-    // "zho", // tokenized and lemmatized by spacy
+    // "hrv", // tokenized and lemmatized by spacy // too slow
+    // "jpn", // tokenized and lemmatized by spacy // too slow
+    // "kor", // tokenized and lemmatized by spacy // too slow
+    // "zho", // tokenized and lemmatized by spacy // too slow
   ],
   lemmatizationTableLangs: {
     // Languages that can be lemmatized by https://github.com/michmech/lemmatization-lists
@@ -311,6 +308,7 @@ const Dictionary = {
     return "l" + lemma;
   },
   buildInflectionIndex() {
+    if (this.l2 === 'lat') return; // Latin has too many words for this
     for (let word of this.words) {
       for (let definition of word.definitions) {
         let lemma = this.lemmaFromDefinition(definition);
@@ -328,6 +326,7 @@ const Dictionary = {
         }
       }
     }
+
     for (let form in this.inflectionIndex) {
       this.inflectionIndex[form] = this.uniqueByValue(
         this.inflectionIndex[form],
@@ -853,9 +852,8 @@ const Dictionary = {
       // Lemmatize-simple
       let tokens = [];
       text = text.replace(/-/g, "- ");
-      let url = `${PYTHON_SERVER}lemmatize-simple?lang=${
-        this.l2
-      }&text=${encodeURIComponent(text)}`;
+      let url = `${PYTHON_SERVER}lemmatize-simple?lang=${this.l2
+        }&text=${encodeURIComponent(text)}`;
       let tokenized = await this.proxy(url);
       for (let token of tokenized) {
         if (!token) {
@@ -1011,9 +1009,8 @@ const Dictionary = {
   // json or plain text only, and returns object
   async proxy(url, cacheLife = -1, encoding = false) {
     try {
-      let proxyURL = `${PROXY_SERVER}scrape2.php?cache_life=${cacheLife}${
-        encoding ? "&encoding=" + encoding : ""
-      }&url=${encodeURIComponent(url)}`;
+      let proxyURL = `${PROXY_SERVER}scrape2.php?cache_life=${cacheLife}${encoding ? "&encoding=" + encoding : ""
+        }&url=${encodeURIComponent(url)}`;
       let response = await axios.get(proxyURL);
       if (response.data) {
         return response.data;
