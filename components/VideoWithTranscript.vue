@@ -3,7 +3,8 @@
     :class="{
       'video-with-transcript': true,
       'text-auto-size': useAutoTextSize,
-      overlay: showSubsAndControlsAsOverlay,
+      overlay: useOverlay,
+      collapsed,
       [`size-${size}`]: true,
       [`mode-${mode}`]: true,
       [`aspect-${aspect}`]: true,
@@ -47,7 +48,7 @@
         v-if="showControls && (video.youtube_id || video.url)"
         :class="{
           'video-controls': true,
-          overlay: showSubsAndControlsAsOverlay,
+          overlay: useOverlay,
           hovering,
         }"
         ref="videoControls"
@@ -66,7 +67,7 @@
           showLineList,
           showOpenButton,
           showType,
-          skin: showSubsAndControlsAsOverlay ? 'dark' : skin,
+          skin: useOverlay ? 'dark' : skin,
           video,
         }"
         @previous="$emit('previous')"
@@ -146,7 +147,7 @@
     <div
       :class="{
         'video-transcript-wrapper': true,
-        overlay: showSubsAndControlsAsOverlay,
+        overlay: useOverlay,
       }"
     >
       <!-- this is necessary for updating the transcript upon srt drop -->
@@ -184,7 +185,7 @@
           notes: video.notes,
           collapsed,
           startLineIndex,
-          skin: showSubsAndControlsAsOverlay ? 'dark' : skin,
+          skin: useOverlay ? 'dark' : skin,
           textSize,
           landscape: aspect === 'landscape',
           stopLineIndex,
@@ -291,6 +292,7 @@
  * 1. Regular size:
  *   a. Landscape aspect:
  *     - In transcript mode: Video on the left, scrolling transcript on the right
+ *        - If the video is collapsed, the transcript is displayed below the video
  *     - In subtitles mode: Video filling the entire container, video controls and the current line of the transcript overlaying the video near the bottom
  *   b. Portrait aspect:
  *     - In transcript mode: Video on top, scrolling transcript below the video
@@ -439,11 +441,12 @@ export default {
      * Determines if the transcript and controls should overlay the video.
      * @returns {Boolean} true if the aspect is landscape and mode is subtitles, false otherwise.
      */
-    showSubsAndControlsAsOverlay() {
+    useOverlay() {
       return (
         this.aspect === "landscape" &&
         this.mode === "subtitles" &&
-        this.size !== "mini"
+        this.size !== "mini" &&
+        !this.collapsed
       );
     },
     startTimeOrLineIndex() {
@@ -980,7 +983,7 @@ export default {
 }
 
 /* Landscape aspect */
-.video-with-transcript.mode-transcript.aspect-landscape {
+.video-with-transcript.mode-transcript.aspect-landscape:not(.collapsed) {
   display: flex;
   .video-wrapper,
   .video-transcript-wrapper {
