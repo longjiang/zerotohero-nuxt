@@ -1,6 +1,7 @@
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
 importScripts("../vendor/localforage/localforage.js");
 importScripts("../vendor/hash-string/hash-string.min.js");
+importScripts("../vendor/fuzzy-search/FuzzySearch.js");
 
 const PYTHON_SERVER = "https://python.zerotohero.ca/";
 
@@ -19,6 +20,7 @@ const Dictionary = {
   lemmaIndex: {}, // lemmas keyed by their inflectional forms, available to all languages
   cache: {},
   tables: [],
+  searcher: null,
   indexDbVerByLang: {
     fra: 2,
     eng: 5,
@@ -212,6 +214,10 @@ const Dictionary = {
       }
       this.words = words;
       this.createIndices();
+      this.searcher = new FuzzySearch(this.words, ["search"], {
+        caseSensitive: false,
+        sort: true,
+      });
       if (this.l2 === "eng" && this.l1 !== "eng") this.loadEnglishLemmatizer(); // Our strategy of finding lemmas based on the word 'of' in the definition obviously doesn't work for definitions not in English
       console.log("Wiktionary: loaded.");
       return this;
@@ -468,51 +474,64 @@ const Dictionary = {
     if (!this.accentCritical) text = this.stripAccents(text);
     text = text.toLowerCase();
     let uniqueWords = new Set();
-    
-    (this.searchIndex[text] || []).forEach(word => {
+
+    (this.searchIndex[text] || []).forEach((word) => {
       uniqueWords.add(word);
     });
-  
-    this.lemmatizeIfAble(text).forEach(word => {
+
+    this.lemmatizeIfAble(text).forEach((word) => {
       uniqueWords.add(word);
     });
-  
-    let words = Array.from(uniqueWords).map(word => {
+
+    let words = Array.from(uniqueWords).map((word) => {
       return { score: 1, w: word };
     });
-  
+
     if (!quick) {
-      if (words.length === 0 && this.words.length < 200000) {
-        for (let word of this.words) {
-          let search = word.search ? word.search : undefined;
-          if (search) {
-            let distance = FastestLevenshtein.distance(search, text);
-            if (this.l2 === "tur" && text.startsWith(search))
-              distance = distance / 2;
-            let max = Math.max(text.length, search.length);
-            let similarity = (max - distance) / max;
-            words.push({ score: similarity, w: word });
-          }
-        }
-        words = words.sort((a, b) => b.score - a.score);
-      }
-  
-      let lemmaWords = []
-  
+      // if (words.length === 0 && this.words.length < 200000) {
+      //   for (let word of this.words) {
+      //     let search = word.search ? word.search : undefined;
+      //     if (search) {
+      //       let distance = FastestLevenshtein.distance(search, text);
+      //       if (this.l2 === "tur" && text.startsWith(search))
+      //         distance = distance / 2;
+      //       let max = Math.max(text.length, search.length);
+      //       let similarity = (max - distance) / max;
+      //       words.push({ score: similarity, w: word });
+      //     }
+      //   }
+      //   words = words.sort((a, b) => b.score - a.score);
+      // }      
+
+      // Perform a fuzzy search.
+      wordsFromFuzzySearch = this.searcher.search(text).slice(0, limit);
+      words = words.concat(
+        wordsFromFuzzySearch.map((w) => {
+          return { w, score: 0.5 };
+        })
+      );
+
+      let lemmaWords = [];
+
       for (let word of words.slice(0, 10)) {
-        let lemmas = this.inflectionIndex[word.w.head.toLowerCase()]
-        if (lemmas) lemmaWords = lemmaWords.concat(lemmas.map(w => { return { w, score: 1.1 } }))
+        let lemmas = this.inflectionIndex[word.w.head.toLowerCase()];
+        if (lemmas)
+          lemmaWords = lemmaWords.concat(
+            lemmas.map((w) => {
+              return { w, score: 1.1 };
+            })
+          );
       }
-      words = [...lemmaWords, ...words]
-  
+      words = [...lemmaWords, ...words];
+
       words = words.sort((a, b) => b.score - a.score);
       words = words.slice(0, limit);
-      words.forEach(w => {
-        this.addPhrasesToWord(w.w)
+      words.forEach((w) => {
+        this.addPhrasesToWord(w.w);
       });
     }
     words = words.slice(0, limit);
-    return words.map(w => w.w);
+    return words.map((w) => w.w);
   },
   /**
    *  https://blog.adriaan.io/make-a-javascript-array-with-objects-unique-by-its-nested-key.html
@@ -969,7 +988,7 @@ const Dictionary = {
         let candidates = [];
         for (let lemma of lemmas) {
           candidates = candidates.concat(this.lookupMultiple(lemma.word));
-          if (lemma !== "Unk")
+          if (lemma.lemma !== "Unk")
             candidates = candidates.concat(
               this.lookupMultiple(lemma.lemma).map((w) => {
                 w.morphology = lemma.morphemes.join(", ").toLowerCase();
@@ -980,7 +999,7 @@ const Dictionary = {
         candidates = this.uniqueByValue(candidates, "id");
         tokens.push({
           text: lemmas[0].word,
-          lemmas: lemmas.map((l) => l.lemma),
+          lemmas: lemmas.filter(l => l.lemma !== "Unk").map((l) => l.lemma),
           candidates,
           pos: lemmas[0].pos,
         });

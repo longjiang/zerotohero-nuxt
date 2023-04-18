@@ -61,10 +61,12 @@ export default {
       var player = new ogv.OGVPlayer();
 
       // Now treat it just like a video or audio element
-      this.$refs.player.appendChild(player);
-      player.src = url;
-      player.play();
-      player = null
+      if(this.$refs.player) {
+        this.$refs.player.appendChild(player);
+        player.src = url;
+        player.play();
+        player = null
+      }
     },
     playAudio(url) {
       let audio = new Audio(url);
