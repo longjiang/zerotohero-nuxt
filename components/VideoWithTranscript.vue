@@ -837,11 +837,16 @@ export default {
       top: 0; // to make room for the controls
       left: 0;
       right: 0;
-      background: rgba(0, 0, 0, 0.6);
+      // background: rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(2px);
       padding: 0.5rem 1rem;
       box-sizing: border-box;
       overflow: hidden;
+      text-shadow:
+        -1px -1px 0 #000,
+        1px -1px 0 #000,
+        -1px 1px 0 #000,
+        1px 1px 0 #000;
     }
     .video-controls {
       position: absolute;
