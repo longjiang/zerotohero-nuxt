@@ -350,12 +350,13 @@ const Dictionary = {
   },
   parseDictionaryCSV(data) {
     console.log("Wiktionary: parsing words from CSV...");
-    let parsed = Papa.parse(data, { header: true });
+    let parsed = Papa.parse(data, { header: true, delimiter: "," });
     let words = parsed.data;
     let hasStems = parsed.meta.fields.includes("stems");
     let hasPhrases = parsed.meta.fields.includes("phrases");
+    console.log({data, words})
     words = words
-      .filter((w) => w.word.length > 0) // filter empty rows
+      .filter((w) => w.word?.length > 0) // filter empty rows
       .map((item) => this.augmentCSVRow(item, !hasStems, !hasPhrases));
     return words;
   },
