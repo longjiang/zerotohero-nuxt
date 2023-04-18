@@ -39,6 +39,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/variables.scss";
 .flashcard {
   &.skin-light {
     filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.33));
@@ -48,7 +49,7 @@ export default {
       border: 1px solid #dddddd;
     }
     .flip-prompt {
-      color: #ddd;
+      color: $bg-color-light-4;
     }
   }
   &.skin-dark {

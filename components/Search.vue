@@ -128,7 +128,9 @@ export default {
       type: Function,
       default: function (entry) {
         if (entry) {
-          return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$store.state.settings.dictionaryName}/${entry.id}`;
+          const queryString = this.$route.fullPath.split('?')[1];
+          const baseHref = `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$store.state.settings.dictionaryName}/${entry.id}`;
+          return queryString ? `${baseHref}?${queryString}` : baseHref;
         }
       },
     },
