@@ -87,11 +87,9 @@
         class="suggestion"
         v-if="suggestions.length === 0 && type === 'generic'"
       >
-        <span class="suggestion-not-found">
-          Search for
+        <i18n path="Search for {0} ..." class="suggestion-not-found">
           <b>“{{ text }}”</b>
-          ...
-        </span>
+        </i18n>
       </div>
     </div>
   </div>
