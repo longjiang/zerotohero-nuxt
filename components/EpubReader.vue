@@ -2,47 +2,21 @@
   <div class="epub-reader">
     <input type="file" @change="openEpub" accept=".epub" />
     <div v-if="book" ref="book">
-      <b-modal
-        ref="tocModal"
-        :title="$t('Table of Contents')"
-        :hide-footer="true"
-        size="md"
-      >
+      <b-modal ref="tocModal" :title="$t('Table of Contents')" :hide-footer="true" size="md">
         <div class="toc-container">
-          <TocItem
-            v-for="(item, index) in toc"
-            :key="index"
-            :item="item"
-            @load-chapter="loadChapter"
-          />
+          <TocItem v-for="(item, index) in toc" :key="index" :item="item" @load-chapter="loadChapter" />
         </div>
       </b-modal>
-      <img
-        v-if="coverUrl && !coverTapped"
-        :src="coverUrl"
-        alt=""
-        class="book-cover"
-        @click="coverTapped = true"
-      />
-      <TextWithSpeechBar
-        class="mt-3"
-        v-if="currentChapterHTML && coverTapped"
-        v-bind="{
-          showTocButton: true,
-          hasPreviousChapter,
-          hasNextChapter,
-          html: currentChapterHTML,
-          page,
-          key: `text-with-speech-bar-${epubFileName}-${currentChapterHref}-${page}`,
-        }"
-        ref="reader"
-        @showTOC="onShowTOC"
-        @previousPage="onPreviousPage"
-        @nextPage="onNextPage"
-        @goToPage="onGoToPage"
-        @nextChapter="nextChapter"
-        @previousChapter="previousChapter"
-      />
+      <img v-if="coverUrl && !coverTapped" :src="coverUrl" alt="" class="book-cover" @click="coverTapped = true" />
+      <TextWithSpeechBar class="mt-3" v-if="currentChapterHTML && coverTapped" v-bind="{
+        showTocButton: true,
+        hasPreviousChapter,
+        hasNextChapter,
+        html: currentChapterHTML,
+        page,
+        key: `text-with-speech-bar-${epubFileName}-${currentChapterHref}-${page}`,
+      }" ref="reader" @showTOC="onShowTOC" @previousPage="onPreviousPage" @nextPage="onNextPage" @goToPage="onGoToPage"
+        @nextChapter="nextChapter" @previousChapter="previousChapter" />
     </div>
   </div>
 </template>
@@ -138,14 +112,31 @@ export default {
         console.error("Error loading book:", error);
       }
     },
+
+    // Load a specific chapter in an ePub document.
+
     async loadChapter(href) {
       this.currentChapterHref = href;
-
       const cleanHref = href.split("#")[0];
-
       let spine = await this.book.loaded.spine;
       let tocHrefs = this.toc.map((item) => item.href);
 
+      let { startIndex, endIndex } = this.getStartAndEndSpineIndexes(
+        spine,
+        cleanHref,
+        tocHrefs
+      );
+
+      let chapterHTML = await this.getFilteredChapterHTML(spine, tocHrefs, startIndex, endIndex);
+
+      this.currentChapterHTML = chapterHTML;
+      this.page = 1;
+      this.$refs.tocModal.hide();
+      this.updateChapterNavigation();
+      if (window) window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+
+    getStartAndEndSpineIndexes(spine, cleanHref, tocHrefs) {
       let startIndex = spine.items.findIndex((item) => item.href === cleanHref);
       let endIndex = spine.items.findIndex(
         (item, index) =>
@@ -154,32 +145,34 @@ export default {
       );
 
       endIndex = endIndex === -1 ? spine.items.length : endIndex;
+      return { startIndex, endIndex };
+    },
 
+    async getFilteredChapterHTML(spine, tocHrefs, startIndex, endIndex) {
       let chapterHTML = "";
+
       for (let i = startIndex; i < endIndex; i++) {
         let item = spine.get(spine.items[i].href);
         let contents = await item.load(this.book.load.bind(this.book));
-
-        const currentHref = tocHrefs.find((href) => href.startsWith(item.href));
-        const currentTocIndex = tocHrefs.findIndex(
-          (tocHref) => tocHref === currentHref
-        );
-
         let filteredContents = contents.innerHTML;
 
-        if (currentHref) {
-          const startIndex =
-            currentHref.indexOf("#") !== -1 ? currentHref.split("#")[1] : null;
-          const endIndex =
-            currentTocIndex + 1 < tocHrefs.length
-              ? tocHrefs[currentTocIndex + 1].split("#")[1]
-              : null;
+        const { currentHref, currentTocIndex } = this.getCurrentHrefAndIndex(
+          tocHrefs,
+          item.href
+        );
 
-          if (startIndex || endIndex) {
+        if (currentHref) {
+          const { startFragmentId, endFragmentId } = this.getStartAndEndFragmentIds(
+            currentHref,
+            currentTocIndex,
+            tocHrefs
+          );
+
+          if (startFragmentId || endFragmentId) {
             filteredContents = this.filterContentsByFragment(
               contents.innerHTML,
-              startIndex,
-              endIndex
+              startFragmentId,
+              endFragmentId
             );
           }
         }
@@ -187,12 +180,29 @@ export default {
         chapterHTML += this.updateImageURLs(filteredContents);
       }
 
-      this.currentChapterHTML = chapterHTML;
-      this.page = 1;
-      this.$refs.tocModal.hide();
-      this.updateChapterNavigation();
-      if (window) window.scrollTo({ top: 0, behavior: "smooth" });
+      return chapterHTML;
     },
+
+    getCurrentHrefAndIndex(tocHrefs, itemHref) {
+      const currentHref = tocHrefs.find((href) => href.startsWith(itemHref));
+      const currentTocIndex = tocHrefs.findIndex(
+        (tocHref) => tocHref === currentHref
+      );
+
+      return { currentHref, currentTocIndex };
+    },
+
+    getStartAndEndFragmentIds(currentHref, currentTocIndex, tocHrefs) {
+      const startFragmentId =
+        currentHref.indexOf("#") !== -1 ? currentHref.split("#")[1] : null;
+      const endFragmentId =
+        currentTocIndex + 1 < tocHrefs.length
+          ? tocHrefs[currentTocIndex + 1].split("#")[1]
+          : null;
+
+      return { startFragmentId, endFragmentId };
+    },
+    
     filterContentsByFragment(contents, startFragment, endFragment) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(contents, "text/html");
