@@ -35,7 +35,7 @@
           'btn-video-controls btn-video-controls-info text-center': true,
         }"
         @click="showInfoModal"
-        :title="$t('More Info')"
+        :title="$t(show ? 'Episodes' : 'More Info' ) + ' (' + (show ? 'E': 'I') + ')'"
       >
         <i class="fa-regular fa-rectangle-history" v-if="show"></i>
         <i class="fa-solid fa-circle-info" v-else></i>
@@ -45,8 +45,8 @@
         :class="{
           'btn-video-controls btn-video-controls-open text-center': true,
         }"
-        @click="$emit('open')"
-        :title="$t('Open Another Video...')"
+        @click="open()"
+        :title="$t('Open Another Video...') + ' (O)'"
       >
         <i class="fa-solid fa-folder-open"></i>
       </button>
@@ -66,7 +66,7 @@
           'btn-video-controls-active': mode === 'transcript',
         }"
         @click="toggleTranscriptMode"
-        :title="$t('Trasncript Mode')"
+        :title="$t('Trasncript Mode') + ' (T)'"
       >
         <i class="fa-solid fa-align-left"></i>
       </button>
@@ -74,15 +74,15 @@
         v-if="episodes"
         :disabled="!previousEpisode"
         class="btn-video-controls btn-video-controls-previous text-center"
-        @click="$emit('previous')"
-        :title="$t('Previous Video')"
+        @click="previous()"
+        :title="$t('Previous Video') + ' (⇧←)'"
       >
         <i class="fas fa-step-backward"></i>
       </button>
       <button
         class="btn-video-controls btn-video-controls-previous-line text-center"
-        @click="$emit('goToPreviousLine')"
-        :title="$t('Previous Line')"
+        @click="goToPreviousLine()"
+        :title="$t('Previous Line') + ' (←)'"
       >
         <i v-if="mode === 'transcript'" class="fas fa-arrow-up"></i>
         <i v-else class="fas fa-arrow-left"></i>
@@ -91,15 +91,15 @@
         :class="{
           'btn-video-controls btn-video-controls-play play-pause text-center': true,
         }"
-        @click="paused ? play() : pause()"
-        :title="paused ? $t('Play') : $t('Pause')"
+        @click="togglePaused()"
+        :title="(paused ? $t('Play') : $t('Pause'))  + ' (' + $t('SPACE BAR') + ')'"
       >
         <i v-if="paused" class="fas fa-play text-success"></i>
         <i v-else class="fas fa-pause text-success"></i>
       </button>
       <button
         class="btn-video-controls btn-video-controls-next-line text-center"
-        @click="$emit('goToNextLine')"
+        @click="goToNextLine()"
         :title="$t('Next Line')"
       >
         <i v-if="mode === 'transcript'" class="fas fa-arrow-down"></i>
@@ -109,8 +109,8 @@
         v-if="episodes"
         :disabled="!nextEpisode"
         class="btn-video-controls btn-video-controls-next text-center"
-        @click="$emit('next')"
-        :title="$t('Next Video')"
+        @click="next()"
+        :title="$t('Next Video' + ' (⇧→)')"
       >
         <i class="fas fa-step-forward"></i>
       </button>
@@ -120,8 +120,8 @@
           'btn-video-controls btn-video-controls-fullscreen-mode text-center': true,
           'btn-video-controls-active': fullscreen === true,
         }"
-        @click="$emit('fullscreen', !fullscreen)"
-        :title="$t('Fullscreen')"
+        @click="toggleFullscreen()"
+        :title="$t('Fullscreen') + ' (F)'"
       >
         <i class="fa-solid fa-expand" v-if="!fullscreen"></i>
         <i class="fa-solid fa-times" v-if="fullscreen"></i>
@@ -267,7 +267,7 @@
           <span class="settings-icon">
             <i class="fas fa-tachometer-alt"></i>
           </span>
-          <span>{{ $t("{speed}x Speed", { speed }) }}</span>
+          <span>{{ $t("Playback Speed: {speed}x", { speed }) }} (M)</span>
         </button>
       </div>
       <hr />
@@ -418,6 +418,12 @@ export default {
       }
     });
   },
+  mounted() {
+    this.bindKeys();
+  },
+  beforeDestroy() {
+    this.unbindKeys();
+  },
   watch: {
     initialTime() {
       this.currentTime = this.initialTime; // so that the progress bar updates at the start
@@ -445,6 +451,81 @@ export default {
     },
   },
   methods: {
+    bindKeys() {
+      window.addEventListener("keydown", this.handleKeydown);
+    },
+    unbindKeys() {
+      window.removeEventListener("keydown", this.handleKeydown);
+    },
+    handleKeydown(e) {
+      {
+        if (
+          !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
+          !e.metaKey &&
+          !e.target.getAttribute("contenteditable")
+        ) {
+          if (["KeyI", "KeyE"].includes(e.code)) {
+            this.showInfoModal();
+            return false;
+          }
+          if (e.code === "KeyT") {
+            this.toggleTranscriptMode();
+            return false;
+          }
+          if (e.code === "KeyM") {
+            this.toggleSpeed();
+            return false;
+          }
+          if (e.code === "ArrowLeft" && e.shiftKey) {
+            this.previous();
+            return false;
+          }
+          if (e.code === "ArrowRight" && e.shiftKey) {
+            this.next();
+            return false;
+          }
+          if (e.code === "Space") {
+            this.togglePaused()
+            e.preventDefault(); // Prevent the default spacebar behavior
+            return false;
+          }
+          if (["ArrowUp", "ArrowLeft"].includes(e.code)) {
+            this.goToPreviousLine();
+            return false;
+          }
+          if (["ArrowDown", "ArrowRight"].includes(e.code)) {
+            this.goToNextLine();
+            return false;
+          }
+          if (["KeyR"].includes(e.code)) {
+            this.rewind();
+            return false;
+          }
+          if (["KeyF"].includes(e.code)) {
+            this.toggleFullscreen();
+            return false;
+          }
+        }
+      };
+    },
+    open() {
+      this.$emit('open')
+    },
+    previous() {
+      this.$emit('previous')
+    },
+    next() {
+      this.$emit('next')
+    },
+    goToPreviousLine() {
+      this.$emit('goToPreviousLine')
+    },
+    goToNextLine() {
+      this.$emit('goToNextLine')
+    },
+    toggleFullscreen() {
+      this.$emit('fullscreen', !this.fullscreen)
+    },
     toHHMMSS(duration) {
       return toHHMMSS(duration);
     },
@@ -480,6 +561,9 @@ export default {
         speed: this.speed,
       });
       this.$emit("updateSpeed", this.speed);
+    },
+    togglePaused() {
+      this.paused ? this.play() : this.pause();
     },
     toggleRepeatMode() {
       this.repeatMode = !this.repeatMode;

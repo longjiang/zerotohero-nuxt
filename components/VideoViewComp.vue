@@ -221,37 +221,6 @@ export default {
         }
       }
     },
-    bindKeys() {
-      window.onkeydown = (e) => {
-        if (
-          !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
-          !e.metaKey &&
-          !e.target.getAttribute("contenteditable")
-        ) {
-          if (e.code === "KeyM") {
-            if (this.$refs.youtube && this.$refs.youtube.$refs.videoControls)
-              this.$refs.youtube.$refs.videoControls.toggleSpeed();
-            return false;
-          }
-          if (e.code === "Space") {
-            this.$refs.youtube ? this.$refs.youtube.togglePaused() : "";
-            return false;
-          }
-          if (["ArrowUp", "ArrowLeft"].includes(e.code)) {
-            this.$refs.youtube.$refs.transcript.goToPreviousLine();
-            return false;
-          }
-          if (["ArrowDown", "ArrowRight"].includes(e.code)) {
-            this.$refs.youtube.$refs.transcript.goToNextLine();
-            return false;
-          }
-          if (["KeyR"].includes(e.code)) {
-            this.$refs.youtube.$refs.transcript.rewind();
-            return false;
-          }
-        }
-      };
-    },
     saveHistory({ type, video, duration }) {
       if (type === "youtube" && video && video.youtube_id) {
         console.log(`YouTube View: Saving history...`);
@@ -275,15 +244,6 @@ export default {
         this.$store.dispatch("history/add", data); // history's ADD_HISTORY_ITEM mutation automatically checks if this item is already in the history based on it's id (e.g. zh-video-Y23x9L4)
       }
     },
-    unbindKeys() {
-      window.onkeydown = null;
-    },
-  },
-  activated() {
-    this.bindKeys();
-  },
-  deactivated() {
-    this.unbindKeys();
   },
 };
 </script>

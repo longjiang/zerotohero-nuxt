@@ -451,19 +451,6 @@ export default {
   beforeDestroy() {
     this.unsubscribeSettings();
   },
-  destroyed() {
-    if (this.keyboard) this.unbindKeys();
-  },
-  unmounted() {
-    if (this.keyboard) this.unbindKeys();
-  },
-  deactivated() {
-    if (this.keyboard) this.unbindKeys();
-  },
-  updated() {
-    if (this.keyboard) this.unbindKeys();
-    if (this.keyboard) this.bindKeys();
-  },
   methods: {
     async onVideoUnavailable(youtube_id) {
       let video = this.currentHit.video;
@@ -857,77 +844,6 @@ export default {
     },
     toggleFullscreen() {
       if (this.hits.length > 0) this.fullscreen = !this.fullscreen;
-    },
-    bindKeys() {
-      document.addEventListener("keydown", this.keydown);
-    },
-    unbindKeys() {
-      document.removeEventListener("keydown", this.keydown);
-    },
-    keydown(e) {
-      if (
-        !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
-        !e.metaKey &&
-        !e.repeat &&
-        !e.target.getAttribute("contenteditable") &&
-        this.$refs[`youtube-${this.hitIndex}`]
-      ) {
-        if (e.code == "ArrowLeft" && e.shiftKey) {
-          this.goToPrevHit();
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "KeyM") {
-          this.toggleSpeed();
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "ArrowRight" && e.shiftKey) {
-          this.goToNextHit();
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "KeyD") {
-          this.goToNextHit();
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "ArrowUp" || (e.code == "ArrowLeft" && !e.shiftKey)) {
-          this.goToPreviousLine();
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "ArrowDown" || (e.code == "ArrowRight" && !e.shiftKey)) {
-          this.goToNextLine();
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "KeyR") {
-          this.rewind();
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "Space") {
-          this.togglePaused();
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "KeyF") {
-          if (this.fullscreenToggle) this.toggleFullscreen();
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "Escape") {
-          if (this.fullscreenToggle) this.fullscreen = false;
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "KeyI") {
-          this.reels = !this.reels;
-          e.preventDefault();
-          return false;
-        }
-      }
     },
   },
 };
