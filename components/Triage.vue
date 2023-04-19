@@ -76,7 +76,7 @@ export default {
           let flagEmoji = this.languageCountryFlagEmoji(language);
           return {
             value: language,
-            text: (flagEmoji ? flagEmoji + " " : "") + language.name + ` (${ language.code })`,
+            text: (flagEmoji ? flagEmoji + " " : "") + language.name + ' - ' + language.vernacularName + ` (${ language.code })`,
           };
         })
       let commonOptions = commonLanguages.map((language) => {
