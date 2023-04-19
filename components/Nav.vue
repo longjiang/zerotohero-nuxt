@@ -190,7 +190,6 @@ export default {
     };
   },
   mounted() {
-    this.bindKeys();
     if (this.$route.meta.collapseNav)
       this.collapsed = this.$route.meta.collapseNav;
     this.$emit("collapsed", this.collapsed);
@@ -217,9 +216,6 @@ export default {
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
     this.unsubscribe();
-  },
-  unmounted() {
-    this.unbindKeys();
   },
   watch: {
     $route() {
@@ -524,7 +520,6 @@ export default {
               icon: "fa fa-search",
               title: "Dictionary",
               show: this.hasFeature("dictionary"),
-              shortcut: (e) => e.code === "KeyD" && e.metaKey && e.shiftKey,
             },
             {
               name: "phrasebooks",
@@ -573,7 +568,6 @@ export default {
                   icon: "fas fa-search",
                   title: "Look Up Phrases",
                   show: false,
-                  shortcut: (e) => e.code === "KeyP" && e.metaKey && e.shiftKey,
                 },
                 {
                   name: "minimal-pairs",
@@ -672,7 +666,6 @@ export default {
               icon: "fas fa-list-ul",
               title: "Grammar",
               show: this.hasFeature("grammar"),
-              shortcut: (e) => e.code === "KeyG" && e.metaKey && e.shiftKey,
             },
             {
               name: "noun-cases",
@@ -1069,7 +1062,6 @@ export default {
                   name: "settings",
                   icon: "fas fa-cog",
                   title: "Settings",
-                  shortcut: (e) => e.code === "KeyS" && e.metaKey && e.shiftKey,
                   show: true,
                 },
               ],
@@ -1253,39 +1245,6 @@ export default {
         return path;
       } else {
         return false;
-      }
-    },
-    bindKeys() {
-      window.addEventListener("keydown", this.keydown);
-      for (let item of this.menu) {
-        if (item.shortcut) this.shortcuts.push(item);
-        if (item.children) {
-          for (let child of item.children) {
-            if (child.shortcut) this.shortcuts.push(child);
-          }
-        }
-      }
-    },
-    unbindKeys() {
-      window.removeEventListener("keydown", this.keydown);
-    },
-
-    keydown(e) {
-      if (!["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase())) {
-        for (let shortcutItem of this.shortcuts) {
-          if (shortcutItem.shortcut(e)) {
-            let last = this.last(shortcutItem);
-            this.$router.push(
-              last
-                ? {
-                    path: last,
-                  }
-                : { name: this.nameOfSelfOrFirstChild(shortcutItem) }
-            );
-            e.preventDefault();
-            return false;
-          }
-        }
       }
     },
   },

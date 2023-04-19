@@ -133,13 +133,6 @@
                   <i class="fa fa-cards-blank mr-1"></i>
                   {{ $t("Flashcards") }}
                 </router-link>
-                <router-link
-                  v-if="words.length > 0"
-                  class="btn btn-gray btn-sm m-1"
-                  :to="`/${$l1.code}/${$l2.code}/learn-interactive/${method}/${argsProp}`"
-                >
-                  Learn (Legacy)
-                </router-link>
               </div>
             </div>
             <div

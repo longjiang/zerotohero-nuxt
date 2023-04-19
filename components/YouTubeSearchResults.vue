@@ -111,12 +111,6 @@ export default {
   async mounted() {
     this.videos = await this.getVideos();
   },
-  activated() {
-    this.bindKeys();
-  },
-  deactivated() {
-    this.unbindKeys();
-  },
   watch: {
     async term() {
       this.videos = await this.getVideos();
@@ -167,9 +161,6 @@ export default {
           Number(this.start) + this.perPage
         }`,
       });
-    },
-    unbindKeys() {
-      window.onkeydown = null;
     },
     async forceRefresh() {
       this.videos = await this.getVideos({ forceRefresh: true });

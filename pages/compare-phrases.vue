@@ -189,13 +189,6 @@ export default {
     },
   },
   methods: {
-    bindKeys() {
-      window.addEventListener("keydown", this.keydown);
-    },
-    unbindKeys() {
-      window.removeEventListener("keydown", this.keydown);
-    },
-
     keydown(e) {
       if (
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
@@ -220,12 +213,6 @@ export default {
         }
       }
     },
-  },
-  activated() {
-    this.bindKeys();
-  },
-  deactivated() {
-    this.unbindKeys();
   },
 };
 </script>

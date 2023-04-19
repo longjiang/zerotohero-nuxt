@@ -306,41 +306,6 @@ export default {
         this.renderSearchSubs = true;
       });
     },
-    unbindKeys() {
-      window.onkeydown = null;
-    },
-    bindKeys() {
-      window.onkeydown = (e) => {
-        if (
-          !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
-          !e.metaKey
-        ) {
-          if (e.keyCode == 36) {
-            // home
-            document
-              .getElementById("main")
-              .scrollIntoView({ behavior: "smooth" });
-            // this.$refs.searchCompare.focusOnSearch()
-            e.preventDefault();
-            return false;
-          }
-          if (e.keyCode == 35) {
-            // end
-            document
-              .getElementById("compare-search-subs")
-              .scrollIntoView({ behavior: "smooth" });
-            e.preventDefault();
-            return false;
-          }
-        }
-      };
-    },
-  },
-  activated() {
-    this.bindKeys();
-  },
-  deactivated() {
-    this.unbindKeys();
   },
 };
 </script>

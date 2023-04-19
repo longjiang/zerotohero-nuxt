@@ -12,7 +12,6 @@
         'dictionary-wide': wide,
       }"
       :key="`entry-${entryKey}`"
-      @keydown="keydown"
     >
       <SocialHead :title="title" :description="description" :image="image" />
       <client-only>
@@ -326,7 +325,6 @@ export default {
     // Begin tasks previously run on server
     this.loadEntry();
     this.dictionarySize = await this.getDictionarySize();
-    this.bindKeys();
     // End tasks previously run on server
     if (
       this.$route.name === "dictionary" &&
@@ -362,9 +360,6 @@ export default {
   },
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();
-  },
-  destroyed() {
-    this.unbindKeys();
   },
   methods: {
     async getDictionarySize() {
@@ -441,78 +436,6 @@ export default {
         this.$router.push({
           path: `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$store.state.settings.dictionaryName}/${randomId}`,
         });
-      }
-    },
-
-    bindKeys() {
-      if (typeof window !== "undefined" && !this.keysBound) {
-        this.keysBound = true; // bind only once!
-        window.addEventListener("keydown", this.keydown);
-      }
-    },
-    unbindKeys() {
-      if (typeof window !== "undefined")
-        window.removeEventListener("keydown", this.keydown);
-    },
-    keydown(e) {
-      if (
-        !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
-        !e.metaKey &&
-        !e.repeat &&
-        !e.target.getAttribute("contenteditable")
-      ) {
-        if (e.code == "Home") {
-          document
-            .getElementById("main")
-            .scrollIntoView({ behavior: "smooth" });
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "End") {
-          document
-            .getElementById("search-subs")
-            .scrollIntoView({ behavior: "smooth" });
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "KeyN") {
-          if (this.$refs.dictionaryEntry.$refs.entryHeader.nextPath) {
-            this.$router.push(
-              this.$refs.dictionaryEntry.$refs.entryHeader.nextPath
-            );
-          }
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "KeyP") {
-          if (this.$refs.dictionaryEntry.$refs.entryHeader.prevPath) {
-            this.$router.push(
-              this.$refs.dictionaryEntry.$refs.entryHeader.prevPath
-            );
-          }
-          e.preventDefault();
-          return false;
-        }
-        if (e.code == "KeyS") {
-          let hit = this.$refs.dictionaryEntry.$refs.searchSubs.currentHit;
-          if (hit.saved) {
-            console.log(
-              "Dictionary: Key S - removing hit",
-              this.$refs.dictionaryEntry.$refs.searchSubs.terms,
-              hit
-            );
-            this.$refs.dictionaryEntry.$refs.searchSubs.removeSavedHit(hit);
-          } else {
-            console.log(
-              "Dictionary: Key S - saving hit",
-              this.$refs.dictionaryEntry.$refs.searchSubs.terms,
-              hit
-            );
-            this.$refs.dictionaryEntry.$refs.searchSubs.saveHit(hit);
-          }
-          e.preventDefault();
-          return false;
-        }
       }
     },
   },
