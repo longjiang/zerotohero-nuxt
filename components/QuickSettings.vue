@@ -13,7 +13,7 @@
       "use-serif": $l2Settings.useSerif,
       [`zerotohero-zoom-${$l2Settings.zoomLevel}`]: true,
     }'>
-      <Annotate class="text-center" :useZoom="true"><span>例は</span></Annotate>
+      <Annotate class="text-center" :useZoom="true"><span>{{ $l2.vernacularName || 'Example' }}</span></Annotate>
       <div class="translation-line text-center">{{ $t('Example Translation') }}</div>
     </div>
     <div class="text-size">
@@ -46,7 +46,7 @@
       <Toggle v-model="showDefinition" label="Show Definition">
         <i class="fa-solid fa-circle-info"></i>
       </Toggle>
-      <Toggle v-if="$l2.han" v-model="useTraditional" :label="useTraditional ? 'Traditional' : 'Simplified'">
+      <Toggle v-if="$l2.han" v-model="useTraditional" :label="useTraditional ? 'Show Traditional' : 'Show Simplified'">
         <span>
           <span v-if="useTraditional">繁</span>
           <span v-if="!useTraditional">简</span>
@@ -83,8 +83,7 @@
       <hr />
       <div :class="`annotation-setting-toggle`">
         <router-link :to="{ name: 'settings' }" class="text-success">
-          <i class="fa-solid fa-gears annotation-setting-icon"></i>
-          {{ $tb("More Settings") }}
+          <i class="fa-solid fa-gears annotation-setting-icon"></i>{{ $tb("More Settings") }}
           <i class="fa-solid fa-chevron-right"></i>
         </router-link>
       </div>
@@ -239,7 +238,6 @@ export default {
 }
 
 .annotation-setting-toggle {
-  margin: 0 0.2rem;
   cursor: pointer;
 }
 
@@ -248,7 +246,8 @@ export default {
 }
 
 .annotation-setting-icon {
-  width: 2rem;
+  width: 1.5rem;
+  margin-right: 10px;
   text-align: center;
   display: inline-block;
 }

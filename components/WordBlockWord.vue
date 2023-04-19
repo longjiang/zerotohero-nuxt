@@ -1,55 +1,31 @@
 <template>
   <span :class="wordBlockClasses">
     <template v-if="!mappedPronunciation">
-      <span class="word-block-segment">
+      <span class="word-block-segment" :class="{ 'use-zoom': useZoom }">
         <span class="word-block-pinyin" v-if="phonetics">
           {{ phonetics }}
         </span>
-        <span
-          class="word-block-definition"
-          v-if="showDefinition"
-          v-html="definition"
-        ></span>
         <span :class="wordBlockTextClasses">
           {{ text }}
-        </span> </span
-      ><span class="word-block-text-byeonggi-wrapper">
-        <span
-          v-if="hanja"
-          class="word-block-text-byeonggi d-inline-block"
-          v-html="hanja"
-        />
+        </span>
+        <span class="word-block-definition" v-if="showDefinition">{{ definition || "..." }}</span></span><span
+        class="word-block-text-byeonggi-wrapper">
+        <span v-if="hanja" class="word-block-text-byeonggi d-inline-block" v-html="hanja" />
         <span v-if="saved && definition" class="word-block-text-quick-gloss">
           {{ definition }}
         </span>
       </span>
     </template>
     <template v-else>
-      <span
-        class="word-block-segment"
-        :class="{ 'use-zoom': useZoom }"
-        v-for="(segment, index) in mappedPronunciation"
-        :key="`word-block-segment-${segment.surface}-${index}`"
-        ><span
-          class="word-block-pinyin"
-          v-if="segment.type === 'kanji' && phonetics"
-          >{{ segment.reading }}</span
-        ><span
-          class="word-block-definition"
-          v-if="showDefinition && index === 0"
-          v-html="definition"
-        ></span
-        ><span :class="wordBlockTextClasses">
-          {{ segment.surface }}</span
-        > </span
-      ><span class="word-block-text-byeonggi-wrapper">
-        <span
-          v-if="hanja"
-          class="word-block-text-byeonggi d-inline-block"
-          v-html="hanja"
-        />
+      <span class="word-block-segment" :class="{ 'use-zoom': useZoom }" v-for="(segment, index) in mappedPronunciation"
+        :key="`word-block-segment-${segment.surface}-${index}`"><span class="word-block-pinyin"
+          v-if="segment.type === 'kanji' && phonetics">{{ segment.reading }}</span></span><span
+        :class="wordBlockTextClasses">
+        {{ segment.surface }}</span><span class="word-block-definition" v-if="showDefinition && index === 0">{{
+          definition || "..." }}</span><span class="word-block-text-byeonggi-wrapper">
+        <span v-if="hanja" class="word-block-text-byeonggi d-inline-block" v-html="hanja" />
         <span v-if="saved && definition" class="word-block-text-quick-gloss">
-          {{ definition }}
+          {{ definition || "*" }}
         </span>
       </span>
     </template>
@@ -130,6 +106,7 @@ export default {
 
 <style lang="scss" scoped>
 .zerotohero-dark {
+
   .word-block,
   .word-block-unknown {
     &.animate {
@@ -139,6 +116,7 @@ export default {
 }
 
 .zerotohero-light {
+
   .word-block,
   .word-block-unknown {
     &.animate {
@@ -151,6 +129,7 @@ export default {
   // text-decoration: underline;
   background-color: rgba(255, 226, 129, 0.137);
 }
+
 .word-block-text-byeonggi {
   color: rgba(143, 158, 172, 0.8);
   font-size: 6em;
@@ -167,6 +146,7 @@ export default {
     animation-duration: 2s;
     animation-timing-function: ease-in-out;
   }
+
   &.saved.animate {
     animation-name: shinesaved;
   }
@@ -180,9 +160,11 @@ export default {
   0% {
     color: inherit;
   }
+
   10% {
     color: #54ff7c;
   }
+
   100% {
     color: inherit;
   }
@@ -192,9 +174,11 @@ export default {
   0% {
     color: inherit;
   }
+
   10% {
     color: #00d031;
   }
+
   100% {
     color: inherit;
   }
@@ -240,6 +224,7 @@ export default {
     margin: 0;
     position: relative;
     text-indent: 0;
+
     .word-block-segment {
       display: inline-block;
     }
@@ -292,10 +277,16 @@ export default {
 
 /* Line style */
 
-.word-block-pinyin {
-  font-size: 0.8rem;
-  margin: 0 0.2rem;
+.word-block-pinyin,
+.word-block-definition {
+  line-height: 1;
   opacity: 0.7;
+  margin: 0 0.1rem 0 0.1rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: none;
 }
 
 .word-block.saved {
@@ -303,16 +294,6 @@ export default {
     opacity: 1;
     font-weight: normal;
   }
-}
-
-.word-block-definition {
-  display: none;
-  font-size: 0.8rem;
-  margin-top: 0.2rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  opacity: 0.7;
 }
 
 // Turn this off until we can have this set in options

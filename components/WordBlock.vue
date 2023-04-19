@@ -144,7 +144,10 @@ export default {
       let quickGloss = definition
         ?.replace(/\s*\(.*\)/, "")
         ?.split(/[，；,;]\s*/)[0]
-        ?.replace(/^.*\./, "");
+        ?.replace(/^.*\./, "")
+        ?.replace(/^to /, "")
+        ?.replace(/^see .*/, "")
+        ?.replace(/^variant .*/, "");
       if (quickGloss && quickGloss.length < 20) return quickGloss;
     },
     savedTransliteration() {
