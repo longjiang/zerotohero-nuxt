@@ -168,9 +168,6 @@ export default {
   async fetch() {
     this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
   },
-  destroyed() {
-    this.unbindKeys();
-  },
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();
   },
