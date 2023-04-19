@@ -17,6 +17,7 @@
                 :variant="$skin"
                 @click="$emit('showTOC')"
                 v-if="showTocButton"
+                :title="$t('Table of Contents') + ' (C)'"
               >
                 <i class="fas fa-bars"></i>
               </b-button>
@@ -24,10 +25,11 @@
                 :variant="$skin"
                 right
                 :text="$t('Voice')"
+                :title="$t('Voice') + ': ' + voices[voice].name"
                 style="flex: 1"
               >
                 <template #button-content>
-                  <i class="fa-solid fa-lips" :title="$t('Voice')"></i>
+                  <i class="fa-solid fa-lips"></i>
                 </template>
                 <b-dropdown-item
                   v-for="(voice, index) in voices"
@@ -41,11 +43,12 @@
                 v-if="showTocButton"
                 :disabled="!hasPreviousChapter"
                 :variant="$skin"
-                @click="$emit('nextChapter')"
+                @click="$emit('prevChapter')"
+                :title="$t('Previous Chapter') + ' (⇧ + ←)'"
               >
                 <i class="fas fa-step-backward"></i>
               </b-button>
-              <b-button :variant="$skin" @click="previous()">
+              <b-button :variant="$skin" @click="previous()" :title="$t('Previous Sentence') + ' (↑)'">
                 <i class="fas fa-arrow-up"></i>
               </b-button>
               <b-button
@@ -53,6 +56,7 @@
                 :variant="$skin"
                 v-if="!speaking"
                 @click="play()"
+                :title="$t('Play') + ` (${$t('SPACE BAR')})`"
               >
                 <i class="fas fa-play"></i>
               </b-button>
@@ -61,10 +65,11 @@
                 :variant="$skin"
                 v-if="speaking"
                 @click="pause()"
+                :title="$t('Pause') + ` (${$t('SPACE BAR')})`"
               >
                 <i class="fas fa-pause"></i>
               </b-button>
-              <b-button :variant="$skin" @click="next()">
+              <b-button :variant="$skin" @click="next()" :title="$t('Next Sentence') + ' (↓)'">
                 <i class="fas fa-arrow-down"></i>
               </b-button>
               <b-button
@@ -72,17 +77,18 @@
                 :disabled="!hasNextChapter"
                 :variant="$skin"
                 @click="$emit('nextChapter')"
+                :title="$t('Next Chapter') + ' (⇧ + →)'"
               >
                 <i class="fas fa-step-forward"></i>
               </b-button>
-              <b-button :variant="$skin" @click="toggleSpeed">
+              <b-button :variant="$skin" @click="toggleSpeed" :title="$t('Playback Speed: {speed}x', { speed }) + ' (M)'">
                 <span>{{ speed }}x</span>
               </b-button>
             </template>
             <b-button
               :variant="$skin"
               @click="translateAll()"
-              :title="$t('Translate')"
+              :title="$t('Translate') + ' (T)'"
             >
               <i class="fas fa-language"></i>
             </b-button>
@@ -145,9 +151,10 @@
       >
         <b-button
           v-if="showTocButton"
-          :disabled="!hasPreviousChapter"
           class="mr-1"
+          :disabled="!hasPreviousChapter"
           :variant="$skin"
+          :title="$t('Previous Chapter') + ' (⇧ + ←)'"
           @click="$emit('previousChapter')"
         >
           <i class="fas fa-step-backward"></i>
@@ -155,6 +162,7 @@
         <b-button
           v-if="Number(page) > 1"
           :variant="$skin"
+          :title="$t('Previous Page') + ' (←)'"
           @click="$emit('previousPage')"
         >
           <i class="fas fa-arrow-left"></i>
@@ -170,6 +178,7 @@
           v-if="Number(page) < pageCount"
           :variant="$skin"
           @click="$emit('nextPage')"
+          :title="$t('Next Page') + ' (→)'"
         >
           <i class="fas fa-arrow-right"></i>
         </b-button>
@@ -178,6 +187,7 @@
           :disabled="!hasNextChapter"
           :variant="$skin"
           @click="$emit('nextChapter')"
+          :title="$t('Next Chapter') + ' (⇧ + →)'"
         >
           <i class="fas fa-step-forward"></i>
         </b-button>
@@ -304,6 +314,10 @@ export default {
   },
   mounted() {
     this.getVoices();
+    this.bindKeys();
+  },
+  beforeDestroy() {
+    this.unbindKeys();
   },
   watch: {
     current() {
@@ -332,6 +346,72 @@ export default {
     },
   },
   methods: {
+    bindKeys() {
+      window.addEventListener("keydown", this.handleKeydown);
+    },
+    unbindKeys() {
+      window.removeEventListener("keydown", this.handleKeydown);
+    },
+    handleKeydown(e) {
+      {
+        if (
+          !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
+          !e.metaKey &&
+          !e.target.getAttribute("contenteditable")
+        ) {
+          if (["KeyC"].includes(e.code)) {
+            this.$emit("showTOC");
+            return false;
+          }
+          if (["ArrowLeft"].includes(e.code) && e.shiftKey) {
+            this.$emit("previousChapter");
+            return false;
+          }
+          if (["ArrowRight"].includes(e.code) && e.shiftKey) {
+            this.$emit("nextChapter");
+            return false;
+          }
+          if (["ArrowLeft"].includes(e.code)) {
+            this.$emit("previousPage");
+            return false;
+          }
+          if (["ArrowRight"].includes(e.code)) {
+            this.$emit("nextPage");
+            return false;
+          }
+          if (["ArrowUp"].includes(e.code)) {
+            this.previous();
+            e.preventDefault();
+            return false;
+          }
+          if (["ArrowDown"].includes(e.code)) {
+            this.next();
+            e.preventDefault();
+            return false;
+          }
+          if (e.code === "Space") {
+            this.togglePlay();
+            e.preventDefault(); // Prevent the default spacebar behavior
+            return false;
+          }
+          if (["KeyM"].includes(e.code)) {
+            this.toggleSpeed();
+            return false;
+          }
+          if (["KeyT"].includes(e.code)) {
+            this.translateAll();
+            return false;
+          }
+        }
+      }
+    },
+    togglePlay() {
+      if (this.speaking) {
+        this.pause();
+      } else {
+        this.play();
+      }
+    },
     onTranslationSentenceClick(e) {
       if (this.current > 0) {
         let translationSentences = Array.from(
@@ -392,6 +472,11 @@ export default {
     },
     augmentHtml(html) {
       let dom = parse(html);
+
+      // Remove ruby tags
+      let rtTags = dom.querySelectorAll("rt");
+      rtTags.forEach(rt => rt.remove());
+
       let as = dom.querySelectorAll("a");
       as.forEach((a) => {
         let bookLinkHtml = a
@@ -543,6 +628,15 @@ export default {
         this.pause();
         this.play();
       }
+      this.scrollToCurrentSentence()
+    },
+    scrollToCurrentSentence() {
+      this.$nextTick(() => {
+        const currentSentence = this.$el.querySelector('.sentence.current');
+        if (currentSentence) {
+          currentSentence.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
     },
     next() {
       if (this.current + 1 < this.getSentences().length) {
@@ -551,6 +645,7 @@ export default {
           this.pause();
           this.play();
         }
+        this.scrollToCurrentSentence()
       }
     },
   },
@@ -622,12 +717,6 @@ export default {
   max-width: 100%;
   object-fit: contain;
   height: auto;
-}
-
-.annotated-line {
-  :deep(.annotate-translation) {
-    color: #444;
-  }
 }
 
 .translation-line {

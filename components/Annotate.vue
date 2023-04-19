@@ -24,7 +24,7 @@
           'd-none': showLoading && !annotated,
           annotated,
           'text-right': dir() === 'rtl',
-          'add-pinyin': $l2Settings && $l2Settings.showPinyin,
+          'add-pinyin': $l2Settings && ($l2Settings.showPinyin || $l2Settings.showDefinition),
           phonetics,
           fullscreen: fullscreenMode,
           'with-buttons': buttons,
@@ -119,9 +119,6 @@
               style="min-width: 6rem"
               :data-level="row.level"
             >
-              <!-- <Annotate>
-                
-              </Annotate> -->
               <span
                 v-html="highlightMultiple(row.structure, row.words, row.book)"
               />
@@ -989,6 +986,10 @@ export default {
   position: relative;
   bottom: 0.1rem;
   margin-right: 0.1rem;
+}
+
+.add-pinyin .word-block-segment {
+  margin-bottom: 25%;
 }
 
 .grammar-table-row {

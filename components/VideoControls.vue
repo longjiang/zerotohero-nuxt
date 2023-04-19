@@ -75,7 +75,7 @@
         :disabled="!previousEpisode"
         class="btn-video-controls btn-video-controls-previous text-center"
         @click="previous()"
-        :title="$t('Previous Video') + ' (⇧←)'"
+        :title="$t('Previous Video') + ' (⇧ + ←)'"
       >
         <i class="fas fa-step-backward"></i>
       </button>
@@ -110,7 +110,7 @@
         :disabled="!nextEpisode"
         class="btn-video-controls btn-video-controls-next text-center"
         @click="next()"
-        :title="$t('Next Video' + ' (⇧→)')"
+        :title="$t('Next Video' + ' (⇧ + →)')"
       >
         <i class="fas fa-step-forward"></i>
       </button>
