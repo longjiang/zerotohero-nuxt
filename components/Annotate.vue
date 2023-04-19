@@ -4,7 +4,6 @@
       :class="{
         'annotate-wrapper': true,
         'annotate-with-translation': showTranslation && translationData,
-        'use-zoom': useZoom,
       }"
       v-observe-visibility="{
         callback: visibilityChanged,
@@ -773,6 +772,7 @@ export default {
         explore: this.explore,
         context,
         token,
+        useZoom: this.useZoom,
         quizMode: this.quizMode,
       };
       if (token.mappedPronunciation)

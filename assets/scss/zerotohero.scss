@@ -1,9 +1,9 @@
 // Import variables
-@import './variables';
+@import "./variables";
 
 // Import Bootstrap and Bootstrap-Vue styles
-@import '~bootstrap/scss/bootstrap';
-@import '~bootstrap-vue/src/index.scss';
+@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap-vue/src/index.scss";
 
 // Override the link color to our primary color (green)
 a {
@@ -678,59 +678,44 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
 }
 
 .zerotohero-zoom-0 {
-  .transcript-line-both .word-block-segment,
-  .speech-content .word-block-segment,
-  .annotate-slot {
+  .use-zoom {
     // No change
   }
 }
 
 .zerotohero-zoom-1 {
-  .transcript-line-both .word-block-segment,
-  .speech-content .word-block-segment ,
-  .annotate-slot {
+  .use-zoom {
     font-size: calc(1rem * 1.25);
   }
 }
 
 .zerotohero-zoom-2 {
-  .transcript-line-both .word-block-segment,
-  .speech-content .word-block-segment,
-  .annotate-slot {
+  .use-zoom {
     font-size: calc(1rem * 1.25 * 1.25);
   }
 }
 .zerotohero-zoom-3 {
-  .transcript-line-both .word-block-segment,
-  .speech-content .word-block-segment,
-  .annotate-slot {
+  .use-zoom {
     font-size: calc(1rem * 1.25 * 1.25 * 1.25);
   }
 }
 .zerotohero-zoom-4 {
-  .transcript-line-both .word-block-segment,
-  .speech-content .word-block-segment {
+  .use-zoom {
     font-size: calc(1rem * 1.25 * 1.25 * 1.25 * 1.25);
   }
 }
 .zerotohero-zoom-5 {
-  .transcript-line-both .word-block-segment,
-  .speech-content .word-block-segment,
-  .annotate-slot {
+  .use-zoom {
     font-size: calc(1rem * 1.25 * 1.25 * 1.25 * 1.25 * 1.25);
   }
 }
 .zerotohero-zoom-6 {
-  .transcript-line-both .word-block-segment,
-  .speech-content .word-block-segment,
-  .annotate-slot {
+  .use-zoom {
     font-size: calc(1rem * 1.25 * 1.25 * 1.25 * 1.25 * 1.25 * 1.25);
   }
 }
 .zerotohero-zoom-7 {
-  .transcript-line-both .word-block-segment,
-  .speech-content .word-block-segment,
-  .annotate-slot {
+  .use-zoom {
     font-size: calc(1rem * 1.25 * 1.25 * 1.25 * 1.25 * 1.25 * 1.25 * 1.25);
   }
 }

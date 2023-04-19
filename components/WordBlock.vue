@@ -93,6 +93,9 @@ export default {
     mappedPronunciation: {
       type: Array, //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
     },
+    useZoom: {
+      default: false,
+    },
     context: {
       type: Object,
       default() {
@@ -246,6 +249,7 @@ export default {
         definition,
         text: this.transform(text),
         hanja,
+        useZoom: this.useZoom,
       };
       if (this.mappedPronunciation) {
         if (

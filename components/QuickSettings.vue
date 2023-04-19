@@ -1,19 +1,32 @@
 <template>
   <div :class="`annotation-settings annotation-settings-${variant}`">
+    <div class="bg-gray rounded" :class='{
+      "show-pinyin": $l2Settings.showPinyin,
+      "show-pinyin-for-saved":
+        !$l2Settings.showPinyin && l2 && l2.han,
+      "show-simplified": !$l2Settings.useTraditional,
+      "show-traditional": $l2Settings.useTraditional,
+      "show-definition": $l2Settings.showDefinition,
+      "show-translation": $l2Settings.showTranslation,
+      "show-quick-gloss": $l2Settings.showQuickGloss,
+      "show-byeonggi": $l2Settings.showByeonggi,
+      "use-serif": $l2Settings.useSerif,
+      [`zerotohero-zoom-${$l2Settings.zoomLevel}`]: true,
+    }'>
+      <Annotate class="text-center" :useZoom="true"><span>本は</span></Annotate>
+    </div>
     <div class="quick-settings-language-specific" v-if="$l1 && $l2">
       <Toggle v-model="quizMode" label="Quiz Mode">
         <i class="far fa-rocket-launch"></i>
       </Toggle>
       <Toggle v-model="autoPronounce" label="Auto Pronounce">
-          <i class="fa fa-volume-up"></i>
+        <i class="fa fa-volume-up"></i>
       </Toggle>
       <Toggle v-model="showDefinition" label="Show Definition">
-          <i class="fa-solid fa-circle-info"></i>
+        <i class="fa-solid fa-circle-info"></i>
       </Toggle>
       <Toggle v-model="showPinyin" label="Show Phonetics">
-        <span
-          style="font-size: 0.8em; font-weight: bold"
-        >
+        <span style="font-size: 0.8em; font-weight: bold">
           <ruby v-if="$l2.han" style="position: relative; bottom: -0.1rem">
             拼
             <rt>pīn</rt>
@@ -22,11 +35,9 @@
             假
             <rt>か</rt>
           </ruby>
-          <ruby
-            v-else-if="
-              $l2.scripts && $l2.scripts[0] && $l2.scripts[0].script === 'Arab'
-            "
-          >
+          <ruby v-else-if="
+            $l2.scripts && $l2.scripts[0] && $l2.scripts[0].script === 'Arab'
+          ">
             نص
             <rt>naṣṣ</rt>
           </ruby>
@@ -45,24 +56,21 @@
       <Toggle v-model="showQuickGloss" label="Show Quick Gloss">
         <i class="fas fa-text-size"></i>
       </Toggle>
-      <Toggle v-if="['ko', 'vi'].includes($l2.code)" v-model="showByeonggi" :label="{ko: 'Hanja', vi: 'Han Tự'}[$l2.code]">
+      <Toggle v-if="['ko', 'vi'].includes($l2.code)" v-model="showByeonggi"
+        :label="{ ko: 'Hanja', vi: 'Han Tự' }[$l2.code]">
         <span>
-          <span>{{ {ko: '자', vi: 'Tự'}[$l2.code] }}</span>
+          <span>{{ { ko: '자', vi: 'Tự' }[$l2.code] }}</span>
           <small style="font-size: 0.5em">字</small>
         </span>
       </Toggle>
 
-      <button
-        class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
-        @click="zoomLevel = zoomLevel ? Math.max(zoomLevel - 1, 0) : 0"
-      >
+      <button class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
+        @click="zoomLevel = zoomLevel ? Math.max(zoomLevel - 1, 0) : 0">
         <span class="annotation-setting-icon">ᴛ</span>
         {{ $tb("Smaller text") }}
       </button>
-      <button
-        class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
-        @click="zoomLevel = zoomLevel ? Math.min(zoomLevel + 1, 7) : 1"
-      >
+      <button class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
+        @click="zoomLevel = zoomLevel ? Math.min(zoomLevel + 1, 7) : 1">
         <span class="annotation-setting-icon">T</span>
         {{ $tb("Bigger text") }}
       </button>
@@ -70,10 +78,9 @@
     </div>
     <div class="quick-settings-general">
       <Toggle v-model="darkMode" label="Dark Mode">
-          <i class="fa fa-moon"></i>
+        <i class="fa fa-moon"></i>
       </Toggle>
-      <Toggle 
-        v-if="userIsAdmin" v-model="adminMode" label="Admin Mode">
+      <Toggle v-if="userIsAdmin" v-model="adminMode" label="Admin Mode">
         <i class="fa fa-wrench"></i>
       </Toggle>
       <hr />
@@ -198,9 +205,11 @@ export default {
 </script>
 <style lang="scss">
 @import "~@/assets/scss/variables.scss";
+
 .toggle-wrapper {
   margin: 0.25rem 0;
 }
+
 .translated-line {
   color: #aaa;
   font-style: italic;

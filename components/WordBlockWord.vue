@@ -27,6 +27,7 @@
     <template v-else>
       <span
         class="word-block-segment"
+        :class="{ 'use-zoom': useZoom }"
         v-for="(segment, index) in mappedPronunciation"
         :key="`word-block-segment-${segment.surface}-${index}`"
         ><span
@@ -92,6 +93,9 @@ export default {
     },
     mappedPronunciation: {
       type: Array, //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
+    },
+    useZoom: {
+      default: false,
     },
   },
   computed: {
