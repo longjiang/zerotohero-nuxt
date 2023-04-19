@@ -1,41 +1,17 @@
 <template>
   <div :class="`annotation-settings annotation-settings-${variant}`">
     <div class="quick-settings-language-specific" v-if="$l1 && $l2">
-      <button
-        :class="{
-          'btn btn-unstyled d-block p-0 annotation-setting-toggle': true,
-          'annotation-setting-toggle-active text-success': quizMode,
-        }"
-        @click="quizMode = !quizMode"
-        title="Toggle Quiz Mode"
-      >
-        <span class="annotation-setting-icon">
-          <i class="far fa-rocket-launch"></i>
-        </span>
-        <span v-if="quizMode">{{ $tb("Quiz Mode On") }}</span>
-        <span v-if="!quizMode">{{ $tb("Quiz Mode Off") }}</span>
-      </button>
-      <button
-        @click="autoPronounce = !autoPronounce"
-        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
-          autoPronounce ? 'annotation-setting-toggle-active' : ''
-        }`"
-      >
-        <span class="annotation-setting-icon">
-          <i class="fa fa-volume-up" v-if="autoPronounce"></i>
-          <i class="fas fa-volume-mute" v-else></i>
-        </span>
-        <span v-if="autoPronounce">{{ $tb("Auto pronounce words") }}</span>
-        <span v-else>{{ $tb("Do not auto pronounce words") }}</span>
-      </button>
-      <button
-        @click="showPinyin = !showPinyin"
-        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
-          showPinyin ? 'text-success' : ''
-        }`"
-      >
+      <Toggle v-model="quizMode" label="Quiz Mode">
+        <i class="far fa-rocket-launch"></i>
+      </Toggle>
+      <Toggle v-model="autoPronounce" label="Auto Pronounce">
+          <i class="fa fa-volume-up"></i>
+      </Toggle>
+      <Toggle v-model="showDefinition" label="Show Definition">
+          <i class="fa-solid fa-circle-info"></i>
+      </Toggle>
+      <Toggle v-model="showPinyin" label="Show Phonetics">
         <span
-          class="annotation-setting-icon"
           style="font-size: 0.8em; font-weight: bold"
         >
           <ruby v-if="$l2.han" style="position: relative; bottom: -0.1rem">
@@ -56,73 +32,25 @@
           </ruby>
           <span v-else>[pʰ]</span>
         </span>
-        {{ $tb(showPinyin ? "Phonetics on" : "Phonetics off") }}
-      </button>
-      <button
-        v-if="$l2.han"
-        @click="useTraditional = !useTraditional"
-        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
-          useTraditional ? 'text-success' : ''
-        }`"
-      >
-        <span class="annotation-setting-icon">
+      </Toggle>
+      <Toggle v-if="$l2.han" v-model="useTraditional" :label="useTraditional ? 'Traditional' : 'Simplified'">
+        <span>
           <span v-if="useTraditional">繁</span>
           <span v-if="!useTraditional">简</span>
         </span>
-        {{
-          $tb(
-            useTraditional ? "Traditional characters" : "Simplified characters"
-          )
-        }}
-      </button>
-      <button
-        @click="showTranslation = !showTranslation"
-        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
-          showTranslation ? 'text-success' : ''
-        }`"
-      >
-        <span class="annotation-setting-icon">
-          <i class="fas fa-language"></i>
-        </span>
-        {{ $tb(showTranslation ? "Translation on" : "Translation off") }}
-      </button>
-      <button
-        @click="showQuickGloss = !showQuickGloss"
-        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
-          showQuickGloss ? 'text-success' : ''
-        }`"
-      >
-        <span class="annotation-setting-icon">
-          <i class="fas fa-text-size"></i>
-        </span>
-        {{ $tb(showQuickGloss ? "Quick Gloss on" : "Quick Gloss off") }}
-      </button>
-      <button
-        v-if="$l2.code === 'ko'"
-        @click="showByeonggi = !showByeonggi"
-        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
-          showByeonggi ? 'text-success' : ''
-        }`"
-      >
-        <span class="annotation-setting-icon">
-          자
+      </Toggle>
+      <Toggle v-model="showTranslation" label="Translation">
+        <i class="fas fa-language"></i>
+      </Toggle>
+      <Toggle v-model="showQuickGloss" label="Show Quick Gloss">
+        <i class="fas fa-text-size"></i>
+      </Toggle>
+      <Toggle v-if="['ko', 'vi'].includes($l2.code)" v-model="showByeonggi" :label="{ko: 'Hanja', vi: 'Han Tự'}[$l2.code]">
+        <span>
+          <span>{{ {ko: '자', vi: 'Tự'}[$l2.code] }}</span>
           <small style="font-size: 0.5em">字</small>
         </span>
-        {{ $tb(showByeonggi ? "Hanja On" : "Hanja Off") }}
-      </button>
-      <button
-        v-if="$l2.code === 'vi'"
-        @click="showByeonggi = !showByeonggi"
-        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
-          showByeonggi ? 'text-success' : ''
-        }`"
-      >
-        <span class="annotation-setting-icon">
-          Tự
-          <small style="font-size: 0.5em">字</small>
-        </span>
-        {{ $tb(showByeonggi ? "Han Tự On" : "Han Tự Off") }}
-      </button>
+      </Toggle>
 
       <button
         class="btn btn-unstyled d-block p-0 annotation-setting-toggle"
@@ -141,31 +69,13 @@
       <hr />
     </div>
     <div class="quick-settings-general">
-      <button
-        @click="skin = skin === 'light' ? 'dark' : 'light'"
-        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
-          skin === 'dark' ? 'annotation-setting-toggle-active' : ''
-        }`"
-      >
-        <span class="annotation-setting-icon">
-          <i v-if="skin === 'dark'" class="fa fa-moon"></i>
-          <i v-if="skin === 'light'" class="fa fa-sun"></i>
-        </span>
-        <span v-if="skin === 'dark'">{{ $tb("Dark Mode On") }}</span>
-        <span v-if="skin === 'light'">{{ $tb("Dark Mode Off") }}</span>
-      </button>
-      <button
-        v-if="userIsAdmin"
-        @click="adminMode = !adminMode"
-        :class="`btn btn-unstyled d-block p-0 annotation-setting-toggle ${
-          adminMode ? 'annotation-setting-toggle-active' : ''
-        }`"
-      >
-        <span class="annotation-setting-icon">
-          <i class="fa fa-wrench"></i>
-        </span>
-        <span>{{ $tb("Admin Mode") }}</span>
-      </button>
+      <Toggle v-model="darkMode" label="Dark Mode">
+          <i class="fa fa-moon"></i>
+      </Toggle>
+      <Toggle 
+        v-if="userIsAdmin" v-model="adminMode" label="Admin Mode">
+        <i class="fa fa-wrench"></i>
+      </Toggle>
       <hr />
       <div :class="`annotation-setting-toggle`">
         <router-link :to="{ name: 'settings' }" class="text-success">
@@ -222,6 +132,7 @@ export default {
       {
         unsubscribe: null,
         onceAdmin: false,
+        darkMode: true,
       },
       defaultGeneralSettings,
       defaultL2Settings
@@ -278,12 +189,18 @@ export default {
     $l2() {
       this.loadSettings();
     },
+    darkMode() {
+      this.skin = this.darkMode ? "dark" : "light";
+    },
     // More watchers are set up in setupWatchers()
   },
 };
 </script>
 <style lang="scss">
 @import "~@/assets/scss/variables.scss";
+.toggle-wrapper {
+  margin: 0.25rem 0;
+}
 .translated-line {
   color: #aaa;
   font-style: italic;
