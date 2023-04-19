@@ -127,13 +127,26 @@ export default {
         tocHrefs
       );
 
-      let chapterHTML = await this.getFilteredChapterHTML(spine, tocHrefs, startIndex, endIndex);
+      let concatenatedChapterHTML = await this.getConcatenatedChapterHTML(spine, startIndex, endIndex);
+      let chapterHTML = this.getFilteredChapterHTML(concatenatedChapterHTML, spine, startIndex, tocHrefs);
 
       this.currentChapterHTML = chapterHTML;
       this.page = 1;
       this.$refs.tocModal.hide();
       this.updateChapterNavigation();
       if (window) window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+
+    async getConcatenatedChapterHTML(spine, startIndex, endIndex) {
+      let chapterHTML = "";
+
+      for (let i = startIndex; i < endIndex; i++) {
+        let item = spine.get(spine.items[i].href);
+        let contents = await item.load(this.book.load.bind(this.book));
+        chapterHTML += contents.innerHTML;
+      }
+
+      return chapterHTML;
     },
 
     getStartAndEndSpineIndexes(spine, cleanHref, tocHrefs) {
@@ -148,39 +161,30 @@ export default {
       return { startIndex, endIndex };
     },
 
-    async getFilteredChapterHTML(spine, tocHrefs, startIndex, endIndex) {
-      let chapterHTML = "";
 
-      for (let i = startIndex; i < endIndex; i++) {
-        let item = spine.get(spine.items[i].href);
-        let contents = await item.load(this.book.load.bind(this.book));
-        let filteredContents = contents.innerHTML;
+    getFilteredChapterHTML(concatenatedChapterHTML, spine, startIndex, tocHrefs) {
+      const { currentHref, currentTocIndex } = this.getCurrentHrefAndIndex(
+        tocHrefs,
+        spine.items[startIndex].href
+      );
 
-        const { currentHref, currentTocIndex } = this.getCurrentHrefAndIndex(
-          tocHrefs,
-          item.href
+      if (currentHref) {
+        const { startFragmentId, endFragmentId } = this.getStartAndEndFragmentIds(
+          currentHref,
+          currentTocIndex,
+          tocHrefs
         );
 
-        if (currentHref) {
-          const { startFragmentId, endFragmentId } = this.getStartAndEndFragmentIds(
-            currentHref,
-            currentTocIndex,
-            tocHrefs
+        if (startFragmentId || endFragmentId) {
+          concatenatedChapterHTML = this.filterContentsByFragment(
+            concatenatedChapterHTML,
+            startFragmentId,
+            endFragmentId
           );
-
-          if (startFragmentId || endFragmentId) {
-            filteredContents = this.filterContentsByFragment(
-              contents.innerHTML,
-              startFragmentId,
-              endFragmentId
-            );
-          }
         }
-
-        chapterHTML += this.updateImageURLs(filteredContents);
       }
 
-      return chapterHTML;
+      return this.updateImageURLs(concatenatedChapterHTML);
     },
 
     getCurrentHrefAndIndex(tocHrefs, itemHref) {
@@ -202,13 +206,13 @@ export default {
 
       return { startFragmentId, endFragmentId };
     },
-    
-    filterContentsByFragment(contents, startFragment, endFragment) {
+
+    filterContentsByFragment(contents, startFragmentId, endFragmentId) {
       const parser = new DOMParser();
       const doc = parser.parseFromString(contents, "text/html");
 
-      const startElement = doc.getElementById(startFragment);
-      const endElement = doc.getElementById(endFragment);
+      const startElement = doc.getElementById(startFragmentId);
+      const endElement = doc.getElementById(endFragmentId);
 
       if (startElement && endElement) {
         const allElements = Array.from(
