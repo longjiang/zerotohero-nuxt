@@ -2,14 +2,14 @@
   <span :class="wordBlockClasses">
     <template v-if="!mappedPronunciation">
       <span class="word-block-segment" :class="{ 'use-zoom': useZoom }">
-        <span class="word-block-pinyin" v-if="phonetics">
-          {{ phonetics }}
-        </span>
         <span
           class="word-block-definition"
           v-if="showDefinition"
           v-html="definition || '&nbsp;'"
         ></span>
+        <span class="word-block-pinyin" v-if="phonetics">
+          {{ phonetics }}
+        </span>
         <span :class="wordBlockTextClasses">
           {{ text }}
         </span> </span
@@ -26,15 +26,15 @@
     </template>
     <template v-else>
       <span
+          class="word-block-definition"
+          v-if="showDefinition"
+          v-html="definition || '&nbsp;'"
+        ></span>
+      <span
         class="word-block-segment"
         :class="{ 'use-zoom': useZoom }"
         v-for="(segment, index) in mappedPronunciation"
         :key="`word-block-segment-${segment.surface}-${index}`"
-        ><span
-          class="word-block-definition"
-          v-if="showDefinition && index === 0"
-          v-html="definition || '&nbsp;'"
-        ></span
         ><span
           class="word-block-pinyin"
           v-if="phonetics"
