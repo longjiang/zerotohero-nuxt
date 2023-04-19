@@ -2,14 +2,14 @@
   <span :class="wordBlockClasses">
     <template v-if="!mappedPronunciation">
       <span class="word-block-segment">
+        <span class="word-block-pinyin" v-if="phonetics">
+          {{ phonetics }}
+        </span>
         <span
           class="word-block-definition"
           v-if="showDefinition"
           v-html="definition"
         ></span>
-        <span class="word-block-pinyin" v-if="phonetics">
-          {{ phonetics }}
-        </span>
         <span :class="wordBlockTextClasses">
           {{ text }}
         </span> </span
@@ -30,14 +30,14 @@
         v-for="(segment, index) in mappedPronunciation"
         :key="`word-block-segment-${segment.surface}-${index}`"
         ><span
-          class="word-block-definition"
-          v-if="showDefinition"
-          v-html="definition"
-        ></span
-        ><span
           class="word-block-pinyin"
           v-if="segment.type === 'kanji' && phonetics"
           >{{ segment.reading }}</span
+        ><span
+          class="word-block-definition"
+          v-if="showDefinition && index === 0"
+          v-html="definition"
+        ></span
         ><span :class="wordBlockTextClasses">
           {{ segment.surface }}</span
         > </span
@@ -147,9 +147,6 @@ export default {
   // text-decoration: underline;
   background-color: rgba(255, 226, 129, 0.137);
 }
-.word-block-definition {
-  color: #aaa;
-}
 .word-block-text-byeonggi {
   color: rgba(143, 158, 172, 0.8);
   font-size: 6em;
@@ -251,7 +248,6 @@ export default {
 
     .word-block-pinyin {
       position: relative;
-      bottom: -0.3rem;
     }
 
     /* Hide by default */
@@ -307,14 +303,12 @@ export default {
 
 .word-block-definition {
   display: none;
-  font-size: 0.7em;
-  font-style: italic;
-  margin-top: 0.5em;
-  max-width: 6rem;
-  margin: 0 0.5em 0.2em 0.5em;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  opacity: 0.7;
 }
 
 // Turn this off until we can have this set in options
