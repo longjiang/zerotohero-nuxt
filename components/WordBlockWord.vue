@@ -8,7 +8,7 @@
         <span
           class="word-block-definition"
           v-if="showDefinition"
-          v-html="definition"
+          v-html="definition || '...'"
         ></span>
         <span :class="wordBlockTextClasses">
           {{ text }}
@@ -37,7 +37,7 @@
         ><span
           class="word-block-definition"
           v-if="showDefinition && index === 0"
-          v-html="definition"
+          v-html="definition || '...'"
         ></span
         ><span :class="wordBlockTextClasses">
           {{ segment.surface }}</span
@@ -241,10 +241,13 @@ export default {
   }
 }
 
+.word-block {
+  text-align: center;
+}
+
 .add-pinyin {
   .word-block {
     display: inline-block;
-    text-align: center;
     margin: 0;
     position: relative;
     text-indent: 0;
