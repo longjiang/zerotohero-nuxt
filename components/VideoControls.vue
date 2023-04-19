@@ -246,22 +246,15 @@
       modal-class="safe-padding-top mt-4"
       size="sm"
     >
-      <div>
-        <button
-          :class="{
-            'btn btn-unstyled text-center d-block p-0': true,
-            'text-success': collapsed,
-          }"
-          @click="toggleCollapsed"
-          :title="$t('Collapse Video')"
-        >
-          <span class="settings-icon">
-            <i class="fas fa-caret-square-up" v-if="!collapsed"></i>
-            <i class="fas fa-caret-square-down" v-if="collapsed"></i>
-          </span>
-          <span>{{ $t("Collapse Video") }}</span>
-        </button>
-      </div>
+      <Toggle v-model="collapsed" label="Collapse Video">
+        <i class="fas fa-caret-square-up"></i>
+      </Toggle>
+      <Toggle v-model="autoPause" label="Auto-Pause">
+        <i class="fas fa-hand"></i>
+      </Toggle>
+      <Toggle v-model="useSmoothScroll" label="Smooth Scrolling">
+        <i class="fas fa-up-down"></i>
+      </Toggle>
       <div>
         <button
           :class="{
@@ -275,32 +268,6 @@
             <i class="fas fa-tachometer-alt"></i>
           </span>
           <span>{{ $t("{speed}x Speed", { speed }) }}</span>
-        </button>
-      </div>
-      <div>
-        <button
-          :class="{
-            'btn btn-unstyled text-center d-block p-0': true,
-            'text-success': autoPause,
-          }"
-          @click="toggleAutoPause"
-          title="Toggle Auto-Pause"
-        >
-          <span class="settings-icon"><i class="fas fa-hand"></i></span>
-          <span>{{ $t("Auto-Pause") }}</span>
-        </button>
-      </div>
-      <div>
-        <button
-          :class="{
-            'btn btn-unstyled text-center d-block p-0': true,
-            'text-success': useSmoothScroll,
-          }"
-          @click="toggleSmoothScrolling"
-          title="Toggle Smooth Scrolling"
-        >
-          <span class="settings-icon"><i class="fas fa-up-down"></i></span>
-          <span>{{ $t("Smooth Scrolling") }}</span>
         </button>
       </div>
       <hr />
@@ -461,6 +428,21 @@ export default {
     currentPercentage(newPercentage) {
       this.progressPercentage = newPercentage;
     },
+    collapsed() {
+      this.$emit("updateCollapsed", this.collapsed);
+    },
+    autoPause() {
+      this.$store.dispatch("settings/setGeneralSettings", {
+        autoPause: this.autoPause,
+      });
+      this.$emit("updateAutoPause", this.autoPause);
+    },
+    useSmoothScroll() {
+      this.$store.dispatch("settings/setGeneralSettings", {
+        useSmoothScroll: this.useSmoothScroll,
+      });
+      this.$emit("updateSmoothScroll", this.useSmoothScroll);
+    },
   },
   methods: {
     toHHMMSS(duration) {
@@ -503,34 +485,9 @@ export default {
       this.repeatMode = !this.repeatMode;
       this.$emit("updateRepeatMode", this.repeatMode);
     },
-    toggleAutoPause() {
-      this.autoPause = !this.autoPause;
-      this.$store.dispatch("settings/setGeneralSettings", {
-        autoPause: this.autoPause,
-      });
-      this.$emit("updateAutoPause", this.autoPause);
-    },
-    toggleSmoothScrolling() {
-      this.useSmoothScroll = !this.useSmoothScroll;
-      this.$store.dispatch("settings/setGeneralSettings", {
-        useSmoothScroll: this.useSmoothScroll,
-      });
-      this.$emit("updateSmoothScroll", this.useSmoothScroll);
-    },
-    toggleSmoothScroll() {
-      this.useSmoothScroll = !this.useSmoothScroll;
-      this.$store.dispatch("settings/setGeneralSettings", {
-        useSmoothScroll: this.useSmoothScroll,
-      });
-      this.$emit("updateUseSmoothScroll", this.useSmoothScroll);
-    },
     toggleAudioMode() {
       this.audioMode = !this.audioMode;
       this.$emit("updateAudioMode", this.audioMode);
-    },
-    toggleCollapsed() {
-      this.collapsed = !this.collapsed;
-      this.$emit("updateCollapsed", this.collapsed);
     },
     toggleTranscriptMode() {
       this.$emit("toggleTranscriptMode");

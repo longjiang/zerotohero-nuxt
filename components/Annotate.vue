@@ -957,7 +957,7 @@ export default {
       color: black;
     }
     .annotator-button {
-      width: 2rem;
+      width: 1.5rem;
       text-align: center;
       margin-right: 0.5rem;
       display: inline-block;
