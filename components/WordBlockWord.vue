@@ -5,27 +5,51 @@
         <span class="word-block-pinyin" v-if="phonetics">
           {{ phonetics }}
         </span>
+        <span
+          class="word-block-definition"
+          v-if="showDefinition"
+          v-html="definition"
+        ></span>
         <span :class="wordBlockTextClasses">
           {{ text }}
-        </span>
-        <span class="word-block-definition" v-if="showDefinition">{{ definition || "..." }}</span></span><span
-        class="word-block-text-byeonggi-wrapper">
-        <span v-if="hanja" class="word-block-text-byeonggi d-inline-block" v-html="hanja" />
+        </span> </span
+      ><span class="word-block-text-byeonggi-wrapper">
+        <span
+          v-if="hanja"
+          class="word-block-text-byeonggi d-inline-block"
+          v-html="hanja"
+        />
         <span v-if="saved && definition" class="word-block-text-quick-gloss">
           {{ definition }}
         </span>
       </span>
     </template>
     <template v-else>
-      <span class="word-block-segment" :class="{ 'use-zoom': useZoom }" v-for="(segment, index) in mappedPronunciation"
-        :key="`word-block-segment-${segment.surface}-${index}`"><span class="word-block-pinyin"
-          v-if="segment.type === 'kanji' && phonetics">{{ segment.reading }}</span></span><span
-        :class="wordBlockTextClasses">
-        {{ segment.surface }}</span><span class="word-block-definition" v-if="showDefinition && index === 0">{{
-          definition || "..." }}</span><span class="word-block-text-byeonggi-wrapper">
-        <span v-if="hanja" class="word-block-text-byeonggi d-inline-block" v-html="hanja" />
+      <span
+        class="word-block-segment"
+        :class="{ 'use-zoom': useZoom }"
+        v-for="(segment, index) in mappedPronunciation"
+        :key="`word-block-segment-${segment.surface}-${index}`"
+        ><span
+          class="word-block-pinyin"
+          v-if="segment.type === 'kanji' && phonetics"
+          >{{ segment.reading }}</span
+        ><span
+          class="word-block-definition"
+          v-if="showDefinition && index === 0"
+          v-html="definition"
+        ></span
+        ><span :class="wordBlockTextClasses">
+          {{ segment.surface }}</span
+        > </span
+      ><span class="word-block-text-byeonggi-wrapper">
+        <span
+          v-if="hanja"
+          class="word-block-text-byeonggi d-inline-block"
+          v-html="hanja"
+        />
         <span v-if="saved && definition" class="word-block-text-quick-gloss">
-          {{ definition || "*" }}
+          {{ definition }}
         </span>
       </span>
     </template>
