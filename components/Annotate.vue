@@ -40,7 +40,7 @@
           </b-button>
         </div>
         <div class="annotate-except-buttons" style="width: 100%">
-          <div :class="{ 'annotate-slot': true }" v-if="!annotated">
+          <div :class="{ 'use-zoom': useZoom, 'annotate-slot': true }" v-if="!annotated">
             <slot></slot>
           </div>
           <div v-if="textMode && annotated">
