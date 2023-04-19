@@ -8,7 +8,7 @@
         <span
           class="word-block-definition"
           v-if="showDefinition"
-          v-html="definition || '...'"
+          v-html="definition || '&nbsp;'"
         ></span>
         <span :class="wordBlockTextClasses">
           {{ text }}
@@ -31,14 +31,15 @@
         v-for="(segment, index) in mappedPronunciation"
         :key="`word-block-segment-${segment.surface}-${index}`"
         ><span
-          class="word-block-pinyin"
-          v-if="segment.type === 'kanji' && phonetics"
-          >{{ segment.reading }}</span
-        ><span
           class="word-block-definition"
           v-if="showDefinition && index === 0"
-          v-html="definition || '...'"
+          v-html="definition || '&nbsp;'"
         ></span
+        ><span
+          class="word-block-pinyin"
+          v-if="phonetics"
+          :class="{transparent: segment.type !== 'kanji'}"
+          >{{ segment.reading || "&nbsp;" }}</span
         ><span :class="wordBlockTextClasses">
           {{ segment.surface }}</span
         > </span
@@ -258,7 +259,6 @@ export default {
 
     .word-block-pinyin,
     .word-block-text-byeonggi-wrapper {
-      line-height: 1;
       text-indent: 0;
     }
 
@@ -304,9 +304,13 @@ export default {
 
 /* Line style */
 
+.word-block-segment {
+  line-height: 1;
+}
+
 .word-block-pinyin,
 .word-block-definition {
-  line-height: 1;
+  line-height: 1.25;
   opacity: 0.7;
   margin: 0 0.1rem 0 0.1rem;
   font-size: 0.8rem;
