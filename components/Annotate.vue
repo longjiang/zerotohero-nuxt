@@ -591,7 +591,6 @@ export default {
       this.hideMenuModal();
     },
     async visibilityChanged(isVisible) {
-      if (this.delay) await Helper.timeout(this.delay);
       if (isVisible) {
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
         if (this.showGrammar) {
