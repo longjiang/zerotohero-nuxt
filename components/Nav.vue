@@ -468,6 +468,12 @@ export default {
               show: true,
             },
             {
+              name: "bookshelf",
+              title: "Bookshelf",
+              icon: "fas fa-book-reader",
+              show: this.$auth?.loggedIn,
+            },
+            {
               name: "gutenberg",
               show: false,
             },

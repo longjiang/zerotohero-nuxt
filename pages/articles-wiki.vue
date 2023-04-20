@@ -33,20 +33,19 @@
         </div>
       </template>
       <template v-if="articles && articles.length === 0">
-        <div class="jumbotron shadow rounded bg-white text-center">
+        <div class="p-5 bg-accent shadow rounded text-center">
           <h5>
-            We don’t have any articles in the {{ $l2.name }} Learning Wiki yet.
+            {{ $t('We currently do not have any blog articles on {l2}.', { l2: $t($l2.name) }) }}
           </h5>
           <p class="lead mb-3">
-            To add the first article in the Wiki, please contact us so we can
-            create an account for you.
+            {{ $t('We warmly welcome your contributions. If you would like to submit an article, please contact us. Thank you for your support!') }}
           </p>
           <div class="text-center">
             <router-link
               :to="`/${$l1.code}/${$l2.code}/contact-us`"
               class="btn btn-success"
             >
-              Contact Us
+              {{ $t('Contact Us') }}
             </router-link>
           </div>
         </div>

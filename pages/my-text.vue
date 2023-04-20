@@ -6,39 +6,26 @@
 </router>
 <template>
   <div class="main pb-5">
-    <SocialHead
-      :title="`My ${$l2.name} Text | Language Player`"
-      :description="`Read ${$l2.name} text with phonetic annotation dictionary lookup. Save new words for review.`"
-    />
+    <SocialHead :title="`My ${$l2.name} Text | Language Player`"
+      :description="`Read ${$l2.name} text with phonetic annotation dictionary lookup. Save new words for review.`" />
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
           <div v-if="loaded">
             <div v-if="savedtexts.length > 0">
               <h4 class="mb-4 text-center">{{ $t('My Texts') }}</h4>
-              <div
-                v-for="savedText in savedtexts"
-                :key="savedText.id"
-                class="mb-4"
-              >
+              <div v-for="savedText in savedtexts" :key="savedText.id" class="mb-4">
                 <TextCard :text="savedText" @removed="onTextRemoved" />
               </div>
             </div>
-            <div
-              v-else
-              class="text-center"
-              style="
-                font-size: 1.2em;
-                min-height: calc(100vh - 30rem);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              "
-            >
-              <div
-                v-if="!$auth.loggedIn"
-                class="text-center alert-success p-3 pb-4 rounded mt-4 w-100"
-              >
+            <div v-else class="text-center" style="
+                    font-size: 1.2em;
+                    min-height: calc(100vh - 30rem);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  ">
+              <div v-if="!$auth.loggedIn" class="text-center alert-success p-3 pb-4 rounded mt-4 w-100">
                 <p>{{ $t("To create new texts, please login.") }}</p>
                 <router-link :to="{ name: 'login' }" class="btn btn-success">
                   {{ $t("Login") }}
@@ -47,10 +34,8 @@
               </div>
               <div v-else>
                 <p>
-                  <i18n
-                    path="This tool will annotate {l2} text with {transliteration} and a popup dictionary."
-                    class="text-center mb-4"
-                  >
+                  <i18n path="This tool will annotate {l2} text with {transliteration} and a popup dictionary."
+                    class="text-center mb-4">
                     <template #l2>{{ $t($l2.name) }}</template>
                     <template #transliteration>
                       <span v-if="$hasFeature('transliteration')">
@@ -71,27 +56,24 @@
                 <p>
                   {{
                     $t(
-                      'To get started, tap on the "New Text" button (bottom-right corner) to create a new Text.'
+                      'To get started, create a new Text.'
                     )
                   }}
                 </p>
               </div>
             </div>
-            <b-button
-              v-if="$auth.loggedIn"
-              class="new-button"
-              variant="success"
-              @click="newText"
-            >
-              <span v-if="!creating">
-                <i class="fas fa-plus mr-1"></i>
-                {{ $t("New Text") }}
-              </span>
-              <span v-else>
-                <i class="fas fa-sync-alt"></i>
-                {{ $t("Creating...") }}
-              </span>
-            </b-button>
+            <div class="mt-5 text-center">
+              <b-button v-if="$auth.loggedIn" class="new-button" variant="success" @click="newText">
+                <span v-if="!creating">
+                  <i class="fas fa-plus mr-1"></i>
+                  {{ $t("New Text") }}
+                </span>
+                <span v-else>
+                  <i class="fas fa-sync-alt"></i>
+                  {{ $t("Creating...") }}
+                </span>
+              </b-button>
+            </div>
           </div>
           <div class="text-center mt-5 mb-5" v-else>
             <Loader :sticky="true" :message="$t('Loading your text...')" />
@@ -169,16 +151,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.new-button {
-  position: fixed;
-  right: 1rem;
-  bottom: 1rem;
-}
+.new-button {}
+
 .zerotohero-with-mini-player {
   .new-button {
     bottom: 6rem;
   }
 }
+
 .zerotohero-not-wide {
   .new-button {
     bottom: 6rem;

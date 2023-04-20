@@ -118,7 +118,7 @@ export default {
 
 <style lang="scss" scoped>
 .contact-block {
-  background: #ffffff;
+  background: #ffffff16;
   border-radius: 0.5rem;
   box-shadow: 0px 5px 20px rgb(0 0 0 / 25%);
   height: 100%;
