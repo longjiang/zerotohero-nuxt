@@ -989,7 +989,7 @@ export default {
 }
 
 .add-pinyin .word-block-segment {
-  margin-bottom: 25%;
+  margin-bottom: 0.25em;
 }
 
 .grammar-table-row {

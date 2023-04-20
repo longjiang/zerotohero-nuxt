@@ -213,7 +213,11 @@ export default {
     },
     marked() {
       let text = this.textThrottled || this.text;
-      let marked = Marked(text.replace(/^ {4,}/gm, "")) || text; // 4 spaces in a row would emit <code>!
+      let augmentedText = text.replace(/^ {4,}/gm, ""); // remove 4+ spaces, which in markdown is a code block
+      Marked.setOptions({
+        breaks: true
+      });
+      let marked = Marked(augmentedText) || text;
       return marked;
     },
     externalTranslateUrl() {
