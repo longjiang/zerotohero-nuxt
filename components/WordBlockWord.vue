@@ -304,21 +304,26 @@ export default {
 
 /* Line style */
 
-.word-block-segment {
-  line-height: 1;
+.show-pinyin .word-block-segment  .word-block-text,
+.show-definition .word-block-segment .word-block-text {
+  position: relative;
+  top: -0.1em;
 }
 
-.word-block-pinyin,
+.word-block-segment .word-block-pinyin,
 .word-block-definition {
-  line-height: 1.25;
   opacity: 0.7;
-  margin: 0 0.1rem 0 0.1rem;
+  margin: 0 0.1rem -0 0.1rem;
   font-size: 0.8rem;
+  line-height: 1.25;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: none;
+  position: relative;
+  bottom: -0.25em;
 }
+
 
 .word-block.saved {
   .word-block-pinyin {

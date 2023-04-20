@@ -123,7 +123,7 @@
             )
           }}
         </li>
-        <li>{{ $t("Tap on any word below for a popup dictionary.") }}</li>
+        <li>{{ $t("Tap on any word for a popup dictionary.") }}</li>
         <li>
           {{
             $t('Tap on the three dots "..." next to each line for translation.')
