@@ -106,7 +106,7 @@
           v-for="(line, lineIndex) of lines"
           :key="`chapter-line-${lineIndex}`"
         >
-          <!-- <Annotate
+          <Annotate
             class="annotated-line"
             tag="div"
             :foreign="foreign"
@@ -119,9 +119,9 @@
             @translation="onTranslation($event, lineIndex)"
             @translationLoading="onTranslationLoading($event, lineIndex)"
             @sentenceClick="onSentenceClick"
-          > -->
+          >
             <div v-html="line.trim()" />
-          <!-- </Annotate> -->
+          </Annotate>
           <div
             v-if="translation || translationLoading"
             class="translation-line"
@@ -372,11 +372,19 @@ export default {
             return false;
           }
           if (["ArrowLeft"].includes(e.code)) {
-            this.$emit("previousPage");
+            if (Number(this.page) > 1) {
+              this.$emit("previousPage");
+            } else {
+              this.$emit("previousChapter");
+            }
             return false;
           }
           if (["ArrowRight"].includes(e.code)) {
-            this.$emit("nextPage");
+            if (Number(this.page) < this.pageCount) {
+              this.$emit("nextPage");
+            } else {
+              this.$emit("nextChapter");
+            }
             return false;
           }
           if (["ArrowUp"].includes(e.code)) {
