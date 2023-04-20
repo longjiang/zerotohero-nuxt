@@ -8,7 +8,7 @@
   }
 </router>
 <template>
-  <div class="bg-white" style="min-height: 100vh">
+  <div style="min-height: 100vh">
     <SocialHead
       title="Phonological Features | Language Player"
       description="Input IPA symbols, output phonological features."

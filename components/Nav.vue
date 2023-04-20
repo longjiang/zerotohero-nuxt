@@ -708,7 +708,14 @@ export default {
                   icon: "fas fa-folder",
                   show: true,
                 },
-
+                {
+                  name: "tutoring-lesson",
+                  show: false,
+                },
+                {
+                  name: "phonological-features",
+                  show: false,
+                },
                 {
                   name: "keyboard",
                   icon: "fas fa-keyboard",

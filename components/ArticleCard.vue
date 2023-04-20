@@ -1,5 +1,5 @@
 <template>
-  <article class="updown article media">
+  <article :class="`updown article media skin-${$skin}`">
     <img
       v-if="article.thumbnail && article.thumbnail.startsWith('http')"
       :src="article.thumbnail"

@@ -15,97 +15,63 @@
 </router>
 <template>
   <div class="main">
-    <div class="container pt-5 pb-5">
-      <SocialHead
-        v-if="lesson && images && images[0]"
-        :title="`${level(lesson.level)} ${$l2.name} Lesson Kit: “${
-          lesson.name
-        }” | Language Player`"
-        :description="`Topic focus: ${lesson.subjects.replace(/<.*?>/gi, '')}`"
-        :image="images[0].src"
-      />
+    <div class="container pb-5">
+      <SocialHead v-if="lesson && images && images[0]" :title="`${level(lesson.level)} ${$l2.name} Lesson Kit: “${lesson.name
+        }” | Language Player`" :description="`Topic focus: ${lesson.subjects.replace(/<.*?>/gi, '')}`"
+        :image="images[0].src" />
       <div class="row">
         <div class="col-sm-12">
-          <h6>
-            <router-link
-              class="link-unstyled"
-              :to="`/${$l1.code}/${$l2.code}/tutoring/`"
-            >
+          <h6 class="text-center">
+            <router-link class="link-unstyled" :to="`/${$l1.code}/${$l2.code}/tutoring/`">
               {{ $l2.name }} Tutoring Kit
             </router-link>
             /
-            <router-link
-              class="link-unstyled"
-              :to="`/${$l1.code}/${$l2.code}/tutoring/${lesson.level}`"
-              v-if="lesson"
-            >
+            <router-link class="link-unstyled" :to="`/${$l1.code}/${$l2.code}/tutoring/${lesson.level}`" v-if="lesson">
               <span :data-level="level(lesson.level).replace('-', '')">
                 {{ level(lesson.level) }} Level
               </span>
             </router-link>
-            <div style="float: right">
-              <router-link
-                v-if="Number(id) > 1"
-                :to="{
-                  name: 'tutoring-lesson',
-                  params: { id: Number(id) - 1 },
-                }"
-                class="btn btn-sm btn-gray mb-1"
-              >
-                <i class="fa fa-chevron-left"></i>
-              </router-link>
-              <router-link
-                :to="{
-                  name: 'tutoring-lesson',
-                  params: { id: Number(id) + 1 },
-                }"
-                class="btn btn-sm btn-gray mb-1"
-              >
-                <i class="fa fa-chevron-right"></i>
-              </router-link>
-            </div>
           </h6>
-          <hr />
-          <h3
-            class="text-center"
-            style="
-              margin-top: 2rem;
-              margin-bottom: 0;
-              text-transform: uppercase;
-            "
-            v-if="lesson"
-          >
+          <div class="nav-btns mb-3 text-center">
+            <router-link v-if="Number(id) > 1" :to="{
+              name: 'tutoring-lesson',
+              params: { id: Number(id) - 1 },
+            }" :class="`btn btn-sm btn-${$skin}`">
+              <i class="fa fa-chevron-left"></i> {{ $t('Previous') }}
+            </router-link>
+            <router-link :to="{
+              name: 'tutoring-lesson',
+              params: { id: Number(id) + 1 },
+            }" :class="`btn btn-sm btn-${$skin}`">
+              {{ $t('Next') }} <i class="fa fa-chevron-right"></i> 
+            </router-link>
+          </div>
+          <h2 class="text-left" style="
+                margin-top: 2rem;
+                margin-bottom: 0;
+                text-transform: uppercase;
+              " v-if="lesson">
             {{ lesson.name }}
-          </h3>
+          </h2>
         </div>
         <div class="col-sm-12 col-xl-6" v-if="lesson">
           <div class="lesson-section">
             <h4>Topic Focus</h4>
-            <div v-html="lesson.subjects"></div>
+            <div v-html="removeInlineStylesFromString(lesson.subjects)"></div>
             <h6 class="mt-5 mb-4">Vocabulary focus:</h6>
-            <div v-html="lesson.vocabulary"></div>
+            <div v-html="removeInlineStylesFromString(lesson.vocabulary)"></div>
           </div>
           <div class="lesson-section">
             <h4>Free Talk</h4>
-            <div v-html="lesson.free_talk"></div>
+            <div v-html="removeInlineStylesFromString(lesson.free_talk)"></div>
             <p>
               • Describe one of the pictures to your tutor, and ask him or her
               to guess which picture you are talking about.
             </p>
-            <div
-              class="image-wall"
-              :key="`web-images-${lesson.name}`"
-              v-cloak
-              v-if="images && images.length > 0"
-            >
-              <img
-                alt
-                class="image-wall-image"
-                v-for="(image, index) in images"
-                :key="`web-images-${lesson.name}-${index}`"
-                :src="`${imageProxy}?${image.src}`"
-                @click="goto(image.url)"
-              />
+            <div class="image-wall" :key="`web-images-${lesson.name}`" v-cloak v-if="images && images.length > 0">
+              <img alt class="image-wall-image" v-for="(image, index) in images"
+                :key="`web-images-${lesson.name}-${index}`" :src="`${imageProxy}?${image.src}`"
+                @click="goto(image.url)" />
             </div>
           </div>
         </div>
@@ -114,22 +80,11 @@
             <div class="lesson-section" v-if="lesson.youtubeVideos">
               <h4>Watch and Learn</h4>
               <p>Watch any one of the videos and study the subtitles:</p>
-              <LazyYouTubeVideoList
-                v-if="lesson.youtubeVideos.length > 0"
-                :videos="lesson.youtubeVideos"
-                :showProgress="true"
-                :showPlayButton="true"
-              />
-              <LazyYouTubeSearchResults
-                v-if="lesson.youtubeVideos.length === 0"
-                :term="`${$l2.name} ${lesson.name}`"
-                :start="0"
-                :hideVideosWithoutSubs="true"
-                :showPaginator="false"
-                :showProgress="true"
-                :showPlayButton="true"
-                :showBadges="true"
-              />
+              <LazyYouTubeVideoList v-if="lesson.youtubeVideos.length > 0" :videos="lesson.youtubeVideos"
+                :showProgress="true" :showPlayButton="true" />
+              <LazyYouTubeSearchResults v-if="lesson.youtubeVideos.length === 0" :term="`${$l2.name} ${lesson.name}`"
+                :start="0" :hideVideosWithoutSubs="true" :showPaginator="false" :showProgress="true"
+                :showPlayButton="true" :showBadges="true" />
             </div>
             <div class="lesson-section">
               <h4>Read Together</h4>
@@ -141,13 +96,10 @@
                 </a>
                 for word lookup.
               </p>
-              <div v-if="!lesson.readings" v-html="lesson.reading"></div>
+              <div v-if="!lesson.readings" v-html="removeInlineStylesFromString(lesson.reading)"></div>
               <div v-else>
-                <div
-                  v-for="(reading, index) in lesson.readings"
-                  class="reading-card rounded shadow p-3 mb-4"
-                  :key="`lesson-readings-${index}`"
-                >
+                <div v-for="(reading, index) in lesson.readings" class="reading-card rounded shadow p-3 mb-4"
+                  :key="`lesson-readings-${index}`">
                   <a class="link-unstyled" :href="reading.url" target="_blank">
                     <h6>{{ reading.title }}</h6>
                     <div>
@@ -163,7 +115,7 @@
                 Complete the following task as homework, and go over with your
                 tutor at the next session.
               </p>
-              <div v-html="lesson.writing"></div>
+              <div v-html="removeInlineStylesFromString(lesson.writing)"></div>
             </div>
           </div>
         </div>
@@ -202,7 +154,7 @@
 import WordPhotos from "@/lib/word-photos";
 import Config from "@/lib/config";
 import Helper from "@/lib/helper";
-import axios from "axios";
+import { removeInlineStylesFromString } from "@/lib/utils";
 
 export default {
   props: ["id"],
@@ -239,6 +191,9 @@ export default {
     }
   },
   methods: {
+    removeInlineStylesFromString(...args) {
+      return removeInlineStylesFromString(...args);
+    },
     async getImages(term) {
       let images = await WordPhotos.getGoogleImages({
         term: `${this.$l2.name} + ${term}`,
@@ -261,6 +216,7 @@ export default {
     opacity: 0.5;
   }
 }
+
 .topics-heading {
   margin-top: 1rem;
   font-weight: 700;
@@ -270,18 +226,22 @@ export default {
   padding-bottom: 1rem;
   margin-bottom: 1rem;
 }
+
 .lesson-section {
   margin-top: 2.5rem;
+
   h4 {
     border-bottom: 1px solid #ddd;
     padding-bottom: 1rem;
     margin-bottom: 1rem;
   }
 }
+
 .image-wall {
   display: flex;
   flex-wrap: wrap;
 }
+
 .image-wall-image {
   object-fit: cover;
   flex: 1;
@@ -292,6 +252,7 @@ export default {
   margin: 0.2rem;
   max-width: 10rem;
 }
+
 .image-wall-image:last-child {
   flex: 0;
 }

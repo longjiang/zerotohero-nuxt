@@ -102,7 +102,7 @@ export default {
       default: false,
     },
     skin: {
-      default: "light",
+      default: null,
     },
     variant: {
       type: String,
@@ -149,7 +149,7 @@ export default {
         "language-list-3-cols": this.variant === "list" && this.params.lg,
         "language-list-4-cols": this.variant === "list" && this.params.xl,
       };
-      classes[`language-list-${this.skin}`] = true;
+      classes[`language-list-${this.$skin}`] = true;
       classes[`language-list-${this.variant}`] = true;
       return classes;
     },

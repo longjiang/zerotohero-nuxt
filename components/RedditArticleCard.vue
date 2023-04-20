@@ -1,5 +1,5 @@
 <template>
-  <article class="updown article">
+  <article :class="`updown article skin-${$skin}`">
     <div class="updown-head">
       <i class="fa fa-arrow-up" />
       <div>{{ article.ups }}</div>
@@ -57,7 +57,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .updown {
   display: flex;
 }
@@ -66,10 +66,14 @@ export default {
   flex: 0;
   text-align: center;
   padding: 1rem;
-  background: #fff0ec;
+  background: #ff370011;
 }
 
 .updown-body {
   flex: 1;
+}
+
+.media-body {
+  background: #ffffff11;
 }
 </style>

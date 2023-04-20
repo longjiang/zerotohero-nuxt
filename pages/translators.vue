@@ -8,11 +8,9 @@
   }
 </router>
 <template>
-  <div class="bg-white" style="min-height: 100vh">
-    <SocialHead
-      title="Compare AI Translators | Language Player"
-      description="Check the availability of online translators for any given language."
-    />
+  <div style="min-height: 100vh">
+    <SocialHead title="Compare AI Translators | Language Player"
+      description="Check the availability of online translators for any given language." />
     <SiteTopBar />
 
     <div class="container" v-if="translators">
@@ -29,11 +27,8 @@
           </p>
 
           <b-input-group class="mt-5 mb-3 input-group-ghost-dark">
-            <b-form-input
-              v-model="keyword"
-              @compositionend.prevent.stop="() => false"
-              :placeholder="$t('Filter by language or country')"
-            />
+            <b-form-input v-model="keyword" @compositionend.prevent.stop="() => false"
+              :placeholder="$t('Filter by language or country')" />
             <b-input-group-append>
               <b-button variant="gray">
                 <i class="fas fa-filter"></i>
@@ -46,57 +41,43 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-12 pl-0 pr-0">
-          <table
-            class="table table-responsive"
-            style="margin: 0 auto; max-width: 55rem"
-          >
-            <thead style="position: sticky; top: 0; background: #eee">
-              <tr>
-                <th>{{ $t('Language (Code)') }}</th>
-                <th
-                  v-for="(t, i) in filteredTranslators"
-                  :key="`translator-header-${i}`"
-                >
-                  {{ t.name.replace(" Translate", "") }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(lang, index) in filteredLangs" :key="`lang-${index}`">
-                <th style="width: 19rem">
-                  <LanguageList
-                    :langs="[lang]"
-                    :singleColumn="true"
-                    :showCode="true"
-                  />
-                </th>
-                <td
-                  v-for="(t, i) in filteredTranslators"
-                  :key="`translator-${index}-${i}`"
-                >
-                  <span v-if="t.langs && t.langs.includes(lang.code)">
-                    <a
-                      target="_blank"
-                      style="color: rgb(177 140 129)"
-                      :href="
+          <div class="table-responsive">
+            <table class="table" style="margin: 0 auto; max-width: 55rem">
+              <thead>
+                <tr>
+                  <th>{{ $t('Language (Code)') }}</th>
+                  <th v-for="(t, i) in filteredTranslators" :key="`translator-header-${i}`">
+                    {{ t.name.replace(" Translate", "") }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(lang, index) in filteredLangs" :key="`lang-${index}`">
+                  <th style="width: 19rem">
+                    <LanguageList :langs="[lang]" :singleColumn="true" :showCode="true" />
+                  </th>
+                  <td v-for="(t, i) in filteredTranslators" :key="`translator-${index}-${i}`">
+                    <span v-if="t.langs && t.langs.includes(lang.code)">
+                      <a target="_blank" :href="
                         t.url
                           ? t.url(
-                              `I want to learn ${lang.name}.`,
-                              t.code(lang),
-                              t.code(english)
-                            )
+                            `I want to learn ${lang.name}.`,
+                            t.code(lang),
+                            t.code(english)
+                          )
                           : t.home
-                          ? t.home
-                          : undefined
-                      "
-                    >
-                      {{ t.name.replace(" Translate", "") }}
-                    </a>
-                  </span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                            ? t.home
+                            : undefined
+                      ">
+                        {{ t.name.replace(" Translate", "") }}
+                      </a>
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
         </div>
       </div>
       <div class="row mt-5 mb-5">
@@ -104,12 +85,8 @@
           <h4 class="mb-3">{{ $t('World Language Map') }}</h4>
           <router-link to="/language-map">
             <div>
-              <img
-                src="/img/thumbnail-language-map-2.jpg"
-                alt="World Language Map"
-                class="rounded shadow img-fluid"
-                style="max-width: 40rem"
-              />
+              <img src="/img/thumbnail-language-map-2.jpg" alt="World Language Map" class="rounded shadow img-fluid"
+                style="max-width: 40rem" />
             </div>
           </router-link>
         </div>
@@ -219,12 +196,14 @@ export default {
 <style lang="scss" scoped>
 .lang-item {
   height: 100%;
+
   .lang-item-logo {
     width: 5rem;
     height: 5rem;
     object-fit: cover;
     border-radius: 100%;
   }
+
   :deep(.lang-item-code) {
     display: inline-block;
     background-color: rgb(241, 241, 241);

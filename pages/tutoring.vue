@@ -15,10 +15,8 @@
 </router>
 <template>
   <div class="main pt-5 pb-5">
-    <SocialHead
-      :title="`Tutoring Kit | Language Player`"
-      :description="`A resource kit to help you get most out of your ${$l2.name} tutoring lessons, including topics for descussion and activities!`"
-    />
+    <SocialHead :title="`Tutoring Kit | Language Player`"
+      :description="`A resource kit to help you get most out of your ${$l2.name} tutoring lessons, including topics for descussion and activities!`" />
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
@@ -55,53 +53,25 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="tabs text-center">
-            <router-link
-              :to="`/${$l1.code}/${$l2.code}/tutoring/`"
-              class="link-unstyled tab bg-dark"
-            >
+            <router-link :to="`/${$l1.code}/${$l2.code}/tutoring/`" class="link-unstyled tab bg-dark text-white">
               All
             </router-link>
             <template v-if="$l2.code === 'zh'">
-              <router-link
-                v-for="n in 7"
-                :key="`level-tab-${n}`"
-                :to="`/${$l1.code}/${$l2.code}/tutoring/${n}`"
-                class="tab link-unstyled"
-                :data-bg-level="n < 7 ? n : 'outside'"
-              >
+              <router-link v-for="n in 7" :key="`level-tab-${n}`" :to="`/${$l1.code}/${$l2.code}/tutoring/${n}`"
+                class="tab link-unstyled" :data-bg-level="n < 7 ? n : 'outside'">
                 {{ getLevel(n, $l2).name }}
               </router-link>
             </template>
             <template v-else>
-              <router-link
-                v-for="n in 7"
-                :key="`level-tab-${n}`"
-                :to="`/${$l1.code}/${$l2.code}/tutoring/${n}`"
-                class="tab link-unstyled"
-                :data-bg-level="getLevel(n, $l2).name.replace('-', '')"
-              >
+              <router-link v-for="n in 7" :key="`level-tab-${n}`" :to="`/${$l1.code}/${$l2.code}/tutoring/${n}`"
+                class="tab link-unstyled" :data-bg-level="n">
                 {{ getLevel(n, $l2).name }}
               </router-link>
             </template>
-            <div
-              v-if="$l2.code === 'zh'"
-              style="height: 0.5rem"
-              :class="level ? `bg-level${level}` : `bg-dark`"
-            ></div>
-            <div
-              v-else
-              style="height: 0.5rem"
-              :class="
-                level
-                  ? `bg-level${getLevel(level, $l2).name.replace('-', '')}`
-                  : `bg-dark`
-              "
-            ></div>
+            <div v-if="$l2.code === 'zh'" style="height: 0.5rem" :class="level ? `bg-level${level}` : `bg-dark`"></div>
+            <div v-else style="height: 0.5rem" :data-bg-level="level" :class="{'bg-dark': !level}"></div>
           </div>
-          <table
-            v-if="lessons && lessons.length > 0"
-            class="table table-responsive lessons-table"
-          >
+          <table v-if="lessons && lessons.length > 0" class="table table-responsive lessons-table">
             <thead>
               <tr>
                 <th class="text-center">ID</th>
@@ -112,21 +82,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="row in lessons"
-                :class="{
-                  'lessons-table-row': true,
-                  hidden: !(level === undefined || row.level === level),
-                }"
-                @click="goto(row.id)"
-              >
+              <tr v-for="row in lessons" :class="{
+                'lessons-table-row': true,
+                hidden: !(level === undefined || row.level === level),
+              }" @click="goto(row.id)">
                 <td class="text-center">{{ row.id }}</td>
                 <td>{{ row.name }}</td>
-                <td v-html="row.reading || ''"></td>
-                <td
-                  v-html="row.free_talk || '' + '<p>• Describe a picture</p>'"
-                ></td>
-                <td v-html="row.writing || ''"></td>
+                <td v-html="removeInlineStylesFromString(row.reading) || ''"></td>
+                <td v-html="removeInlineStylesFromString(row.free_talk) || '' + '<p>• Describe a picture</p>'"></td>
+                <td v-html="removeInlineStylesFromString(row.writing) || ''"></td>
               </tr>
             </tbody>
           </table>
@@ -138,7 +102,7 @@
 
 <script>
 import Helper from "@/lib/helper";
-import Config from "@/lib/config";
+import { removeInlineStylesFromString } from "@/lib/utils";
 
 export default {
   props: ["level"],
@@ -154,6 +118,7 @@ export default {
       `items/tutoring_kit?fields=id,name,reading,free_talk,writing,level`
     );
     this.lessons = response.data.data || [];
+
   },
   methods: {
     getLevel(...args) {
@@ -164,15 +129,27 @@ export default {
         path: `/${this.$l1.code}/${this.$l2.code}/tutoring/lesson/${id}`,
       });
     },
+    removeInlineStylesFromString(...args) {
+      return removeInlineStylesFromString(...args);
+    },
   },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .lessons-table-row {
   cursor: pointer;
 }
-.lessons-table-row:hover {
-  background-color: #eee;
+
+.zerotohero-dark {
+  .lessons-table-row:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.zerotohero-light {
+  .lessons-table-row:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 }
 </style>

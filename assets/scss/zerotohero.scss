@@ -33,7 +33,10 @@ a {
 
 .zerotohero-light,
 .skin-light {
-  color: #555;
+  color: $bg-color-dark-4;
+  .table {
+    color: $bg-color-dark-4;
+  }
   .list-group-item {
     background-color: $bg-color-light-1;
     &:hover {
@@ -52,6 +55,9 @@ a {
 .zerotohero-dark,
 .skin-dark {
   color: $bg-color-light-2;
+  .table {
+    color: $bg-color-light-2;
+  }
   .list-group-item {
     background-color: $bg-color-dark-3;
     &:hover {
@@ -875,13 +881,24 @@ button.bg-primary:focus {
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.2);
   border-radius: 0.3rem;
   overflow: hidden;
-}
 
-.article-title {
-  border-bottom: 1px solid #ececec;
-  padding-bottom: 0.5rem;
-  margin-bottom: 1rem;
-  color: $primary-color;
+  .article-title {
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    color: $primary-color;
+  }
+
+  &.skin-light {
+    .article-title {
+      border-bottom: 1px solid $bg-color-light-4;
+    }
+  }
+
+  &.skin-dark {
+    .article-title {
+      border-bottom: 1px solid $bg-color-dark-4;
+    }
+  }
 }
 
 .article-list-item .article-body {
