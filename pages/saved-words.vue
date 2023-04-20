@@ -30,7 +30,7 @@
               @click="importButtonClick()"
             >
               <i class="fa fa-upload mr-1"></i>
-              {{ $t("Import") }}
+              {{ $t("Import") }} (CSV)
             </button>
             <button
               class="btn btn-sm text-secondary"

@@ -1,26 +1,12 @@
 <template>
   <div>
-    <SocialHead
-      v-if="grammar"
-      :title="`${$l2.name} Grammar Cheatsheet | Language Player`"
-      :description="`${grammar
-        .slice(0, 10)
-        .map((g) => g.structure + ' (' + g.english + ')')
-        .join(' | ')}`"
-    />
-    <div
-      class="d-flex"
-      style="margin: 0 auto 3rem auto"
-      v-if="grammar && grammar.length > 0"
-      v-cloak
-    >
+    <SocialHead v-if="grammar" :title="`${$l2.name} Grammar Cheatsheet | Language Player`" :description="`${grammar
+      .slice(0, 10)
+      .map((g) => g.structure + ' (' + g.english + ')')
+      .join(' | ')}`" />
+    <div class="d-flex" style="margin: 0 auto 3rem auto" v-if="grammar && grammar.length > 0" v-cloak>
       <div class="input-group" style="flex: 1">
-        <input
-          v-model="search"
-          type="text"
-          class="form-control lookup"
-          :placeholder="$t('Filter by keywords')"
-        />
+        <input v-model="search" type="text" class="form-control lookup" :placeholder="$t('Filter by keywords')" />
         <div class="input-group-append">
           <button class="btn btn-success lookup-button" type="button">
             <i class="glyphicon glyphicon-filter"></i>
@@ -28,94 +14,67 @@
           </button>
         </div>
       </div>
-      <a
-        :href="csvSource"
-        class="ml-2 btn btn-success"
-        :download="`Language Player ${$l2.name} Grammar Chart.csv`"
-      >
+      <a :href="csvSource" class="ml-2 btn btn-success" :download="`Language Player ${$l2.name} Grammar Chart.csv`">
         <i class="fa fa-download mr-1" />
         {{ $t('Download CSV') }}
       </a>
     </div>
     <div class="tabs text-center">
       <span class="mr-2">{{ l2LevelKey.toUpperCase() }}</span>
-      <button
-        v-for="(l, n) in filteredLevels"
-        class="tab text-dark"
-        :data-bg-level="n"
-        @click="level = n"
-        :key="`grammar-tab-level-${n}`"
-      >
+      <button v-for="(l, n) in filteredLevels" class="tab text-dark" :data-bg-level="n" @click="level = Number(n)"
+        :key="`grammar-tab-level-${n}`">
         {{ l[l2LevelKey] || l.cefr }}
       </button>
       <button @click="level = undefined" class="tab text-light bg-dark">
         {{ $t('All') }}
       </button>
-      <div
-        style="height: 0.5rem"
-        :data-bg-level="level"
-        :class="{ 'bg-dark': level ? false : true }"
-      ></div>
+      <div style="height: 0.5rem" :data-bg-level="level" :class="{ 'bg-dark': level ? false : true }"></div>
     </div>
-    <table
-      v-if="grammar && grammar.length > 0"
-      class="table table-responsive grammar-table"
-    >
-      <thead>
-        <tr>
-          <th class="text-center">{{ $t('Grammar') }}</th>
-          <th>{{ $t('Structure') }}</th>
-          <th>{{ $t('Translation') }}</th>
-          <th style="min-width: 20rem">{{ $t('Example') }}</th>
-          <th>{{ $t('Example Translation') }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="(row) in grammarFiltered"
-          :key="`grammar-${$l2.code}-row-${row.id}`"
-          :class="{
+    <div class="table-responsive">
+      <table v-if="grammar && grammar.length > 0" :class="`table grammar-table skin-${$skin}`">
+        <thead>
+          <tr>
+            <th class="text-center">{{ $t('Grammar') }}</th>
+            <th>{{ $t('Structure') }}</th>
+            <th>{{ $t('Translation') }}</th>
+            <th style="min-width: 20rem">{{ $t('Example') }}</th>
+            <th>{{ $t('Example Translation') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(row) in grammarFiltered" :key="`grammar-${$l2.code}-row-${row.id}`" :class="{
             'grammar-table-row': true,
-          }"
-          @click="grammarRowClick(row)"
-        >
-          <td class="text-center align-middle">
-            <span>
-              <a
-                v-if="row.url !== ''"
-                :href="`${row.url}`"
-                class="btn btn-secondary"
-                style="white-space: nowrap"
-              >
-                <i class="glyphicon glyphicon-facetime-video"></i>
-                {{ row.code }}
-              </a>
-              <span v-else>{{ row.code }}</span>
-            </span>
-          </td>
-          <td class="align-middle">
-            <Annotate>
-              <span
-                v-html="highlightMultiple(row.structure, row.words, row.book)"
-              />
-            </Annotate>
-          </td>
-          <td class="align-middle">
-            <span>{{ row.english }}</span>
-          </td>
-          <td class="align-middle">
-            <Annotate>
-              <span
-                v-html="highlightMultiple(row.example, row.words, row.book)"
-              />
-            </Annotate>
-          </td>
-          <td class="align-middle">
-            <span>{{ row.exampleTranslation }}</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          }" @click="grammarRowClick(row)">
+            <td class="text-center align-middle">
+              <span>
+                <a v-if="row.url !== ''" :href="`${row.url}`" class="btn btn-secondary" style="white-space: nowrap">
+                  <i class="glyphicon glyphicon-facetime-video"></i>
+                  {{ row.code }}
+                </a>
+                <span v-else>{{ row.code }}</span>
+              </span>
+            </td>
+            <td class="align-middle">
+              <Annotate>
+                <span v-html="highlightMultiple(row.structure, row.words, row.book)" />
+              </Annotate>
+            </td>
+            <td class="align-middle">
+              <span>{{ row.english }}</span>
+            </td>
+            <td class="align-middle">
+              <Annotate>
+                <span v-html="highlightMultiple(row.example, row.words, row.book)" />
+              </Annotate>
+            </td>
+            <td class="align-middle">
+              <span>{{ row.exampleTranslation }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
   </div>
 </template>
 
@@ -192,11 +151,20 @@ export default {
 
 <style lang="scss" scoped>
 .grammar-table {
-  color: #666;
-
-  .grammar-table-row:hover {
-    background-color: #f1f1f1;
+  .grammar-table-row {
     cursor: pointer;
+  }
+
+  &.skin-dark {
+    .grammar-table-row:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  &.skin-light {
+    .grammar-table-row:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
   }
 }
 
