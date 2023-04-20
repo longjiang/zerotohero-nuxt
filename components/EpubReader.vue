@@ -128,7 +128,7 @@ export default {
       );
 
       let concatenatedChapterHTML = await this.getConcatenatedChapterHTML(spine, startIndex, endIndex);
-      let chapterHTML = this.getFilteredChapterHTML(concatenatedChapterHTML, spine, startIndex, tocHrefs);
+      let chapterHTML = this.getFilteredChapterHTML(concatenatedChapterHTML, this.currentChapterHref, tocHrefs);
 
       this.currentChapterHTML = chapterHTML;
       this.page = 1;
@@ -162,18 +162,14 @@ export default {
     },
 
 
-    getFilteredChapterHTML(concatenatedChapterHTML, spine, startIndex, tocHrefs) {
-      const { currentHref, currentTocIndex } = this.getCurrentHrefAndIndex(
-        tocHrefs,
-        spine.items[startIndex].href
-      );
+    getFilteredChapterHTML(concatenatedChapterHTML, currentHref, tocHrefs) {
 
       if (currentHref) {
         const { startFragmentId, endFragmentId } = this.getStartAndEndFragmentIds(
           currentHref,
-          currentTocIndex,
           tocHrefs
         );
+
 
         if (startFragmentId || endFragmentId) {
           concatenatedChapterHTML = this.filterContentsByFragment(
@@ -196,9 +192,11 @@ export default {
       return { currentHref, currentTocIndex };
     },
 
-    getStartAndEndFragmentIds(currentHref, currentTocIndex, tocHrefs) {
+    getStartAndEndFragmentIds(currentHref, tocHrefs) {
+
       const startFragmentId =
         currentHref.indexOf("#") !== -1 ? currentHref.split("#")[1] : null;
+      const currentTocIndex = tocHrefs.findIndex((tocHref) => tocHref === currentHref);
       const endFragmentId =
         currentTocIndex + 1 < tocHrefs.length
           ? tocHrefs[currentTocIndex + 1].split("#")[1]
@@ -214,40 +212,40 @@ export default {
       const startElement = doc.getElementById(startFragmentId);
       const endElement = doc.getElementById(endFragmentId);
 
-      if (startElement && endElement) {
-        const allElements = Array.from(
-          doc.body.querySelectorAll(`#${startElement.id} ~ *`)
-        );
-        const elementsBetween = this.getElementsBetweenIds(
-          startElement,
-          endElement
-        );
+      const newContainer = doc.createElement("div");
+      newContainer.className = "main";
 
-        let elementsToRemove = [];
-
-        for (const el of allElements) {
-          if (!elementsBetween.includes(el)) {
-            let notAncestor =
-              !el.contains(startElement) && !el.contains(endElement);
-            if (notAncestor) {
-              elementsToRemove.push(el);
-            }
-          }
+      if (startElement) {
+        let elementsBetween;
+        if (endElement) {
+          elementsBetween = this.getElementsBetweenIds(startElement, endElement);
+        } else {
+          elementsBetween = this.getElementsBetweenIds(startElement);
         }
 
-        for (const el of elementsToRemove) {
-          el.remove();
+        for (const el of elementsBetween) {
+          newContainer.appendChild(el.cloneNode(true));
         }
       }
 
       const serializer = new XMLSerializer();
-      return serializer.serializeToString(doc.body);
+      const newContents = serializer.serializeToString(newContainer);
+
+      return newContents;
     },
 
+
+
+
     getElementsBetweenIds(startElement, endElement) {
-      const allElements = startElement.parentNode.querySelectorAll(
-        `:is(#${startElement.id}) ~ :not(#${endElement.id})`
-      );
+      let selector
+      if (endElement) {
+        selector = `:is(#${startElement.id}) ~ :not(#${endElement.id})`
+      }
+      else {
+        selector = `:is(#${startElement.id}) ~ *`
+      }
+      const allElements = startElement.parentNode.querySelectorAll(selector);
 
       const elementsBetween = Array.from(allElements).filter(
         (el) =>
@@ -259,6 +257,7 @@ export default {
 
       return elementsBetween;
     },
+
     updateImageURLs(chapterHTML) {
       // Load the chapter HTML into a DOMParser
       const parser = new DOMParser();

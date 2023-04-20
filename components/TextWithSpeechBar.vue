@@ -106,7 +106,7 @@
           v-for="(line, lineIndex) of lines"
           :key="`chapter-line-${lineIndex}`"
         >
-          <Annotate
+          <!-- <Annotate
             class="annotated-line"
             tag="div"
             :foreign="foreign"
@@ -119,9 +119,9 @@
             @translation="onTranslation($event, lineIndex)"
             @translationLoading="onTranslationLoading($event, lineIndex)"
             @sentenceClick="onSentenceClick"
-          >
+          > -->
             <div v-html="line.trim()" />
-          </Annotate>
+          <!-- </Annotate> -->
           <div
             v-if="translation || translationLoading"
             class="translation-line"
