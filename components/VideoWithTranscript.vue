@@ -153,7 +153,7 @@
         overlay: useOverlay,
       }"
       ref="videoTranscriptWrapper"
-      style="top: 0"
+      :style="`top: ${videoHeightWithoutControls * overlayTranscriptVerticalPercentage / 100}px`"
     >
       <!-- this is necessary for updating the transcript upon srt drop -->
       <div class="d-none">{{ transcriptKey }}</div>
@@ -446,6 +446,8 @@ export default {
       videoInfoKey: 0,
       viewportHeight: undefined,
       viewportWidth: undefined,
+      videoHeightWithoutControls: undefined,
+      overlayTranscriptVerticalPercentage: 0.75,
     };
   },
   computed: {
@@ -757,6 +759,7 @@ export default {
     updateLayout() {
       this.viewportWidth = this.$el.clientWidth;
       this.viewportHeight = window.innerHeight;
+      this.videoHeightWithoutControls = this.getVideoHeightWithoutControls();
     },
     goToPreviousLine() {
       if (this.$refs.transcript) this.$refs.transcript.goToPreviousLine();
@@ -825,39 +828,47 @@ export default {
       );
       this.$store.dispatch("settings/setFullscreen", fullscreen);
     },
+
+    getVideoHeightWithoutControls() {
+      const video = this.$refs.video.$el;
+      const videoControls = this.$refs.videoControls.$el;
+      return video.offsetHeight - videoControls.offsetHeight;
+    },
+
+    
     handleMouseDown(e) {
-      const videoWithTranscript = this.$el;
       const videoTranscriptWrapper = this.$refs.videoTranscriptWrapper;
-      console.log({ videoTranscriptWrapper });
       e.preventDefault();
       const startY = e.clientY;
-      const startTop = parseInt(videoTranscriptWrapper.style.top, 10);
+      const startTop = parseFloat(videoTranscriptWrapper.style.top) || 0;
 
-      function handleMouseMove(e) {
+      const handleMouseMove = (e) => {
         e.preventDefault();
         const mouseY = e.clientY;
         const deltaY = mouseY - startY;
         let newTop = startTop + deltaY;
 
+        // Convert to percentage
+        const videoHeight = this.getVideoHeightWithoutControls();
+        const transcriptHeight = this.$refs.videoTranscriptWrapper.offsetHeight;
+        let newTopPercentage = (newTop / videoHeight) * 100;
+        let maxNewTopPercentage = (videoHeight - transcriptHeight) / videoHeight * 100;
+
         // Constrain within the container
-        const containerHeight = videoWithTranscript.offsetHeight;
-        const wrapperHeight = videoTranscriptWrapper.offsetHeight;
-        const minTop = 0;
-        const maxTop = containerHeight - wrapperHeight;
-
-        if (newTop < minTop) {
-          newTop = minTop;
-        } else if (newTop > maxTop) {
-          newTop = maxTop;
+        if (newTopPercentage < 0) {
+          newTopPercentage = 0;
+        } else if (newTopPercentage > maxNewTopPercentage) {
+          newTopPercentage = maxNewTopPercentage;
         }
+        this.overlayTranscriptVerticalPercentage = newTopPercentage;
 
-        videoTranscriptWrapper.style.top = `${newTop}px`;
-      }
+        // videoTranscriptWrapper.style.top = `${newTopPercentage}%`;
+      };
 
-      function handleMouseUp() {
+      const handleMouseUp = () => {
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
-      }
+      };
 
       document.addEventListener("mousemove", handleMouseMove);
       document.addEventListener("mouseup", handleMouseUp);
@@ -866,6 +877,7 @@ export default {
       document.addEventListener("touchend", handleMouseUp);
       document.addEventListener("touchcancel", handleMouseUp);
     },
+
     handleTouchStart(e) {
       if (e.touches.length === 1) {
         const touch = e.touches[0];
