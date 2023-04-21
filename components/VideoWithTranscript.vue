@@ -97,7 +97,10 @@
       <div
         class="video-info video-info-side pl-3 pt-4"
         v-if="
-          aspect === 'landscape' && size !== 'mini' && mode === 'transcript' && !collapsed
+          aspect === 'landscape' &&
+          size !== 'mini' &&
+          mode === 'transcript' &&
+          !collapsed
         "
       >
         <h3
@@ -154,8 +157,14 @@
     >
       <!-- this is necessary for updating the transcript upon srt drop -->
       <div class="d-none">{{ transcriptKey }}</div>
-      
-      <div :class="{ 'drag-handle': true, 'd-none': !useOverlay }" @mousedown="handleMouseDown"><i class="fa-solid fa-grip-vertical"></i></div>
+
+      <div
+        :class="{ 'drag-handle': true, 'd-none': !useOverlay }"
+        @mousedown="handleMouseDown"
+        @touchstart="handleTouchStart"
+      >
+        <i class="fa-solid fa-grip-vertical"></i>
+      </div>
 
       <!-- if the video has no subs, allow the user to add subs -->
       <div class="pl-4 pr-4" v-if="video && !video.subs_l2">
@@ -819,7 +828,7 @@ export default {
     handleMouseDown(e) {
       const videoWithTranscript = this.$el;
       const videoTranscriptWrapper = this.$refs.videoTranscriptWrapper;
-      console.log({videoTranscriptWrapper})
+      console.log({ videoTranscriptWrapper });
       e.preventDefault();
       const startY = e.clientY;
       const startTop = parseInt(videoTranscriptWrapper.style.top, 10);
@@ -846,13 +855,30 @@ export default {
       }
 
       function handleMouseUp() {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
       }
 
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-    }
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      // Add touch event listeners
+      document.addEventListener("touchmove", handleMouseMove);
+      document.addEventListener("touchend", handleMouseUp);
+      document.addEventListener("touchcancel", handleMouseUp);
+    },
+    handleTouchStart(e) {
+      if (e.touches.length === 1) {
+        const touch = e.touches[0];
+        const mouseEvent = this.convertTouchEvent(touch);
+        this.handleMouseDown(mouseEvent);
+      }
+    },
+    convertTouchEvent(touch) {
+      return {
+        preventDefault: () => touch.preventDefault(),
+        clientY: touch.clientY,
+      };
+    },
   },
 };
 </script>
@@ -860,19 +886,23 @@ export default {
 <style lang="scss" scoped>
 .video-with-transcript {
   position: relative;
+
   /* overlay mode, when controls and subtitles overlay the video */
   &.overlay {
     // height should be calculated based on the video aspect ratio 16/9
     height: calc(100% * 9 / 16);
     margin: 0 auto;
+
     &.size-fullscreen {
       // Width should be set so that when the height is calculated it will not exceed the viewport height
       max-width: calc(100vh * 16 / 9);
     }
+
     &.size-regular {
       // Width should be set so that when the height is calculated it will not exceed the viewport height
       max-width: calc((100vh - 2.9rem) * 16 / 9);
     }
+
     .video-transcript-wrapper {
       position: absolute;
       top: 0; // to make room for the controls
@@ -882,11 +912,9 @@ export default {
       padding: 0.5rem 1rem;
       box-sizing: border-box;
       overflow: hidden;
-      text-shadow:
-        -1px -1px 0 #000,
-        1px -1px 0 #000,
-        -1px 1px 0 #000,
+      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
         1px 1px 0 #000;
+
       .drag-handle {
         width: 3rem;
         height: calc(100% - 1rem);
@@ -900,6 +928,7 @@ export default {
         opacity: 0;
         transition: opacity 0.3s;
       }
+
       &:hover,
       &:focus-within {
         .drag-handle {
@@ -907,21 +936,25 @@ export default {
         }
       }
     }
+
     .video-controls {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
       opacity: 0;
+
       &.hovering {
         opacity: 1;
       }
+
       transition: opacity 0.3s;
       background: linear-gradient(
         to bottom,
         rgba(0, 0, 0, 0) 0%,
         rgba(0, 0, 0, 0.8) 100%
       );
+
       :deep(.video-controls-time),
       :deep(.btn-video-controls) {
         text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
@@ -938,6 +971,7 @@ export default {
       margin: 0 auto;
     }
   }
+
   .video-wrapper {
     max-width: calc(
       (
@@ -946,6 +980,7 @@ export default {
         ) * 16 / 9
     );
   }
+
   .video-with-transcript.size-fullscreen {
     .video-wrapper {
       max-width: calc(
@@ -954,6 +989,7 @@ export default {
       );
     }
   }
+
   .video-info-side {
     display: none;
   }
@@ -962,19 +998,23 @@ export default {
 /* Mini mode */
 .video-with-transcript.size-mini {
   display: flex;
+
   .video-wrapper {
     height: 5rem;
     width: 8.88rem;
     max-width: 8.88rem;
     margin-right: 5rem;
+
     :deep(.video-controls) {
       position: absolute;
       top: 0.7rem;
       left: 9.5rem;
+
       .video-controls-progress,
       .btn-video-controls {
         display: none !important;
       }
+
       .btn-video-controls-previous,
       .btn-video-controls-play,
       .btn-video-controls-next {
@@ -982,13 +1022,16 @@ export default {
       }
     }
   }
+
   .video-transcript-wrapper {
     flex: 1;
     display: flex;
     align-items: center;
+
     .synced-transcript {
       width: 100%;
     }
+
     .video-info {
       display: none;
     }
@@ -1007,11 +1050,13 @@ export default {
     z-index: 2;
     height: 100%; // otherwise this is too tall for sticky to work
   }
+
   &.size-fullscreen {
     .video-wrapper {
       top: env(safe-area-inset-top, 0);
     }
   }
+
   &.size-regular {
     .video-wrapper {
       top: calc(
@@ -1028,17 +1073,22 @@ export default {
     100vh - 3rem - env(safe-area-inset-top) - env(safe-area-inset-bottom)
   );
   flex-direction: column;
+
   .video-wrapper {
     flex: 0;
   }
+
   .video-transcript-wrapper {
     flex: 1;
+
     :deep(.synced-transcript) {
       height: 100%;
     }
+
     :deep(.transcript-wrapper) {
       height: 100%;
     }
+
     :deep(.transcript-line) {
       height: 100%;
       overflow: hidden;
@@ -1049,6 +1099,7 @@ export default {
 /* Landscape aspect */
 .video-with-transcript.mode-transcript.aspect-landscape:not(.collapsed) {
   display: flex;
+
   .video-wrapper,
   .video-transcript-wrapper {
     flex: 1;
@@ -1059,6 +1110,7 @@ export default {
 .video-with-transcript.mode-transcript.aspect-portrait {
   display: flex;
   flex-direction: column;
+
   .video-wrapper,
   .video-transcript-wrapper {
     flex: 1;
