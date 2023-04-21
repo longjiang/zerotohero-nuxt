@@ -354,7 +354,6 @@ const Dictionary = {
     let words = parsed.data;
     let hasStems = parsed.meta.fields.includes("stems");
     let hasPhrases = parsed.meta.fields.includes("phrases");
-    console.log({data, words})
     words = words
       .filter((w) => w.word?.length > 0) // filter empty rows
       .map((item) => this.augmentCSVRow(item, !hasStems, !hasPhrases));

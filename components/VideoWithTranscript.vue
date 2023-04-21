@@ -830,9 +830,11 @@ export default {
     },
 
     getVideoHeightWithoutControls() {
-      const video = this.$refs.video.$el;
-      const videoControls = this.$refs.videoControls.$el;
-      return video.offsetHeight - videoControls.offsetHeight;
+      if (this.$refs.video) {
+        const video = this.$refs.video.$el;
+        const videoControls = this.$refs.videoControls.$el;
+        return video.offsetHeight - videoControls.offsetHeight;
+      }
     },
 
     
