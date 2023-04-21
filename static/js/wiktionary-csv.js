@@ -9,7 +9,7 @@ const PROXY_SERVER = "https://server.chinesezerotohero.com/";
 
 const Dictionary = {
   name: "wiktionary-csv",
-  version: "2.2.4.2",
+  version: "2.17.1",
   file: undefined,
   dictionary: undefined,
   words: [],
