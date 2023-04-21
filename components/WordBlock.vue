@@ -580,7 +580,7 @@ export default {
               return true;
           });
         }
-        if (hasImageWorthyWords) {
+        if ((this.words && this.words.length === 0) || hasImageWorthyWords) {
           this.loadingImages = true;
           this.loadImages();
         }
