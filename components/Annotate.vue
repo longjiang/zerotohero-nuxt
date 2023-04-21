@@ -31,13 +31,12 @@
         }"
       >
         <div class="annotator-buttons" v-if="!empty() && buttons">
-          <b-button
+          <div
             class="annotator-menu-toggle"
-            variant="unstyled"
             @click="showMenuModal"
           >
-            <i class="fas fa-ellipsis-v"></i>
-          </b-button>
+            <i class="fa-regular fa-circle-ellipsis"></i>
+          </div>
         </div>
         <div class="annotate-except-buttons" style="width: 100%">
           <div :class="{ 'use-zoom': useZoom, 'annotate-slot': true }" v-if="!annotated">
@@ -903,7 +902,7 @@ export default {
   min-width: 61.8%;
   width: 100%;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   flex-direction: row;
 
   .annotate-template {
@@ -931,19 +930,7 @@ export default {
   border-radius: 0.2rem;
   background: none;
   border: none;
-  color: #ddd;
-}
-
-.show > .annotator-menu-toggle {
-  background-color: #545b62;
-  color: white;
-}
-
-.skin-dark,
-.widget-dark {
-  .annotator-menu-toggle {
-    color: #ffffff55;
-  }
+  opacity: 0.5;
 }
 
 .annotate-menu-modal {

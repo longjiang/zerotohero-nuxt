@@ -163,7 +163,7 @@
         @mousedown="handleMouseDown"
         @touchstart="handleTouchStart"
       >
-        <i class="fa-solid fa-grip-vertical"></i>
+        <i class="fa-solid fa-arrows-up-down"></i>
       </div>
 
       <!-- if the video has no subs, allow the user to add subs -->
@@ -905,9 +905,14 @@ export default {
 
     .video-transcript-wrapper {
       position: absolute;
+      display: inline-block;
       top: 0; // to make room for the controls
-      left: 0;
-      right: 0;
+      // left: 0;
+      // right: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: 100%;
       // background: rgba(0, 0, 0, 0.6);
       padding: 0.5rem 1rem;
       box-sizing: border-box;
@@ -916,7 +921,7 @@ export default {
         1px 1px 0 #000;
 
       .drag-handle {
-        width: 3rem;
+        width: 2rem;
         height: calc(100% - 1rem);
         position: absolute;
         left: 1rem;
@@ -925,16 +930,10 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        opacity: 0;
+        opacity: 0.5;
         transition: opacity 0.3s;
       }
 
-      &:hover,
-      &:focus-within {
-        .drag-handle {
-          opacity: 0.5;
-        }
-      }
     }
 
     .video-controls {
@@ -1023,19 +1022,6 @@ export default {
     }
   }
 
-  .video-transcript-wrapper {
-    flex: 1;
-    display: flex;
-    align-items: center;
-
-    .synced-transcript {
-      width: 100%;
-    }
-
-    .video-info {
-      display: none;
-    }
-  }
 }
 
 /* Drag and drop */
