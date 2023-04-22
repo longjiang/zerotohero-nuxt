@@ -142,12 +142,14 @@ export default {
       let definition =
         this.savedWord?.definitions?.[0] || this.words?.[0]?.definitions?.[0];
       let quickGloss = definition
-        ?.replace(/\s*\(.*\)/, "")
-        ?.split(/[，；,;]\s*/)[0]
+        ?.replace(/\s*\(.*?\)/, "")
+        ?.replace(/\s*\（.*?）/, "")
+        ?.replace(/\s*.*?：/, "")
         ?.replace(/^.*\./, "")
         ?.replace(/^to /, "")
         ?.replace(/^see .*/, "")
-        ?.replace(/^variant .*/, "");
+        ?.replace(/^variant .*/, "")
+        ?.split(/[，；,;]\s*/)[0]
       if (quickGloss && quickGloss.length < 20) return quickGloss;
     },
     savedTransliteration() {

@@ -104,6 +104,9 @@ export default {
         let navigation = await this.book.loaded.navigation;
         this.toc = navigation.toc;
         this.coverUrl = await this.book.coverUrl();
+        if (!this.coverUrl) {
+          this.coverTapped = true;
+        }
         if (this.toc.length > 0) {
           let firstChapter = this.toc[0];
           this.loadChapter(firstChapter.href);
@@ -247,11 +250,16 @@ export default {
       }
       const allElements = startElement.parentNode.querySelectorAll(selector);
 
-      const elementsBetween = Array.from(allElements).filter(
-        (el) =>
-          el.compareDocumentPosition(endElement) &
-          Node.DOCUMENT_POSITION_FOLLOWING
-      );
+      let elementsBetween = Array.from(allElements)
+      
+      if (endElement) {
+        elementsBetween = elementsBetween
+        .filter(
+          (el) =>
+            el.compareDocumentPosition(endElement) &
+            Node.DOCUMENT_POSITION_PRECEDING
+        );
+      }
 
       elementsBetween.unshift(startElement);
 
