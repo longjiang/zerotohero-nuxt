@@ -1,6 +1,11 @@
 <template>
   <div class="epub-reader">
-    <input type="file" @change="openEpub" accept=".epub" />
+    <label for="epub-upload" class="d-block">
+      {{
+        $t("Choose an ebook (.epub) to open:")
+      }}
+    </label>
+    <input type="file" id="epub-upload" @change="openEpub" accept=".epub" />
     <div v-if="book" ref="book">
       <b-modal ref="tocModal" :title="$t('Table of Contents')" :hide-footer="true" size="md">
         <div class="toc-container">
