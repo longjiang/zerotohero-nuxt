@@ -53,7 +53,7 @@ export default {
 
   .toggle-icon {
     margin-right: 10px;
-    width: 1.5rem;
+    width: 1.75rem;
     cursor: pointer;
     margin-bottom: 0;
     text-align: center;

@@ -40,17 +40,17 @@
           </div>
         </div>
       </div>
-      <div class="text-center mt-3">
-        <b-button variant="success" size="small" @click="getStats(true)">
+      <div class="text-center mt-3" v-if="$adminMode">
+        <b-button :variant="$skin" size="sm" @click="getStats(true)">
           <i class="fas fa-sync mr-1"></i>
-          Refresh
+          {{ $tb('Refresh') }}
         </b-button>
       </div>
-      <table class="mt-4 table">
+      <table :class="`mt-4 table table-${$skin}`">
         <thead>
           <tr>
-            <th>Language</th>
-            <th>Video Count</th>
+            <th>{{ $tb('Language') }}</th>
+            <th>{{ $tb('Video Count') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -65,7 +65,7 @@
                   params: { l1: 'en', l2: row.language.code },
                 }"
               >
-                {{ row.language.name }}
+                {{ $tb(row.language.name) }}
                 <small>({{ row.language.code }}, #{{ row.language.id }})</small>
               </router-link>
             </td>

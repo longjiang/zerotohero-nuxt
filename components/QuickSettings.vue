@@ -59,10 +59,9 @@
         <i class="fas fa-text-size"></i>
       </Toggle>
       <Toggle v-if="['ko', 'vi'].includes($l2.code)" v-model="showByeonggi"
-        :label="{ ko: 'Hanja', vi: 'Han Tự' }[$l2.code]">
+        :label="{ ko: 'Show Hanja', vi: 'Show Han Tự' }[$l2.code]">
         <span>
-          <span>{{ { ko: '자', vi: 'Tự' }[$l2.code] }}</span>
-          <small style="font-size: 0.5em">字</small>
+          <span>{{ { ko: '자', vi: 'Tự' }[$l2.code] }}</span><small style="font-size: 0.5em">字</small>
         </span>
       </Toggle>
       <hr />

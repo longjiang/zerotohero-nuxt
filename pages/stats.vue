@@ -8,7 +8,7 @@
   }
 </router>
 <template>
-  <div class="bg-white" style="min-height: 100vh">
+  <div style="min-height: 100vh">
     <SocialHead
       title="Stats | Language Player"
       description="How many videos we have for each language.”"
@@ -17,7 +17,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5">
-          <h4 class="text-center mb-4">Language Player Video Stats by Language</h4>
+          <h4 class="text-center mb-4">{{ $tb('Language Player Video Stats by Language') }}</h4>
           <StatsComp />
         </div>
       </div>
