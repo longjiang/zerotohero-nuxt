@@ -205,7 +205,7 @@
 </template>
 <script>
 import Vue from "vue";
-import { unique } from "@/lib/utils";
+import { unique, mutuallyExclusive } from "@/lib/utils";
 
 export default {
   props: {
@@ -346,7 +346,7 @@ export default {
       allSearchTerms = unique([this.context.form, ...allSearchTerms]);
     }
     this.allSearchTerms = allSearchTerms;
-    this.selectedSearchTerms = this.allSearchTerms.slice(0, 3);
+    this.selectedSearchTerms = mutuallyExclusive(this.allSearchTerms).slice(0, 3);
     this.searchTermsWatcherActivated = true;
     let dictionary = await this.$getDictionary();
     if (dictionary.findPhrases) {
