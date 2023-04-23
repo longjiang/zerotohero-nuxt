@@ -1,7 +1,10 @@
+// @/static/js/wiktionary-csv.js
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
 importScripts("../vendor/localforage/localforage.js");
 importScripts("../vendor/hash-string/hash-string.min.js");
 importScripts("../vendor/fuzzy-search/FuzzySearch.js");
+importScripts("../js/dictionary-utils.js");
+
 
 const PYTHON_SERVER = "https://python.zerotohero.ca/";
 
@@ -360,7 +363,7 @@ const Dictionary = {
     return words;
   },
   augmentCSVRow(item, findStems = false, findPhrases = false) {
-    let bare = !this.accentCritical ? this.stripAccents(item.word) : item.word;
+    let bare = !this.accentCritical ? DictionaryUtils.stripAccents(item.word) : item.word;
     item.search = bare.toLowerCase();
     if (this.l2.agglutinative) item.search = item.search.replace(/^-/, "");
     item.head = item.word;
@@ -434,7 +437,7 @@ const Dictionary = {
     if (words && words[0]) return words[0];
   },
   lookupMultiple(text, ignoreAccents = false) {
-    if (ignoreAccents && !this.accentCritical) text = this.stripAccents(text);
+    if (ignoreAccents && !this.accentCritical) text = DictionaryUtils.stripAccents(text);
     let type = ignoreAccents ? "search" : "head";
     let words = this[type + "Index"][text.toLowerCase()];
     return words || [];
@@ -477,7 +480,7 @@ const Dictionary = {
     return lemmaWords;
   },
   lookupFuzzy(text, limit = 30, quick = false) {
-    if (!this.accentCritical) text = this.stripAccents(text);
+    if (!this.accentCritical) text = DictionaryUtils.stripAccents(text);
     text = text.toLowerCase();
     let uniqueWords = new Set();
 
@@ -601,7 +604,7 @@ const Dictionary = {
     let m = definition.match(/(.* of )([^\s\.]+)$/);
     if (m) {
       let lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
-      if (this.l2 === "lat") lemma = this.stripAccents(lemma);
+      if (this.l2 === "lat") lemma = DictionaryUtils.stripAccents(lemma);
       return {
         lemma,
         morphology: m,
@@ -678,7 +681,7 @@ const Dictionary = {
   },
   subdictFromText(text) {
     let search = text.toLowerCase();
-    if (!this.accentCritical) search = this.stripAccents(search);
+    if (!this.accentCritical) search = DictionaryUtils.stripAccents(search);
     let subdictFilterFunction = (row) => {
       if (this.accentCritical) {
         return text.includes(row.head) || search.includes(row.head);
@@ -707,7 +710,7 @@ const Dictionary = {
     let firstSeen = false;
     let matchedIndex, matchEndIndex, matchedText;
     let search = text.toLowerCase();
-    if (!this.accentCritical) search = this.stripAccents(search);
+    if (!this.accentCritical) search = DictionaryUtils.stripAccents(search);
     let matches = [];
     for (let word of this.words) {
       let matched = false;
@@ -1086,17 +1089,6 @@ const Dictionary = {
     } else {
       return [text];
     }
-  },
-  // https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
-  stripAccents(str) {
-    str = str
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "") // Accents
-      .replace(/[\u0600-\u0620\u064b-\u0655]/g, "") // Arabic diacritics
-      .replace(/[\u0559-\u055F]/g, ""); // Armenian diacritics
-    if (["he", "hbo", "iw"].includes(this.l2))
-      str = this.stripHebrewVowels(str);
-    return str;
   },
   stemWordsWithScores(word, score = undefined) {
     let stemWords = this.inflectionIndex[word.head];
