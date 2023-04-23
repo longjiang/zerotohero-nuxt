@@ -94,7 +94,7 @@
                   : ""
               }}:
             </span>
-            {{ word.definitions ? filterDefinitions(word).join(", ") : "" }}
+            {{ wordDefinition(word) }}
           </span>
           <span
             :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
@@ -217,6 +217,14 @@ export default {
     },
   },
   methods: {
+    wordDefinition(word) {
+      // word.definitions ? filterDefinitions(word).join(", ") : ""
+      let definitions = this.filterDefinitions(word);
+      if (definitions) {
+        return definitions.join('; ');
+      }
+      return ""
+    },
     filterDefinitions(word) {
       if (!word.definitions) return;
       let definitions = word.definitions;
@@ -259,6 +267,13 @@ export default {
 @import "~@/assets/scss/variables.scss";
 .word-type {
   opacity: 0.7;
+}
+
+.wordlist-item {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .wordlist.skin-light {
