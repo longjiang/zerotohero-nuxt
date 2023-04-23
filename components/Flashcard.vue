@@ -9,11 +9,11 @@
   >
     <div class="front" v-if="active">
       <slot name="front"></slot>
-      <span class="flip-prompt"><i class="fa-solid fa-rotate"></i> {{ 'Flip Flashcard' }}</span>
+      <span class="flip-prompt"><i class="fa-solid fa-rotate"></i> {{ $t('Flip Flashcard') }}</span>
     </div>
     <div class="back">
       <slot name="back"></slot>
-      <span class="flip-prompt invisible"><i class="fa-solid fa-rotate"></i> {{ 'Flip Flashcard' }}</span>
+      <span class="flip-prompt invisible"><i class="fa-solid fa-rotate"></i> {{ $t('Flip Flashcard') }}</span>
     </div>
   </div>
 </template>
