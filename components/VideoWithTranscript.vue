@@ -327,7 +327,7 @@ import { mapState } from "vuex";
 export default {
   props: {
     skin: {
-      default: "dark",
+      default: null,
     },
     type: {
       type: String,

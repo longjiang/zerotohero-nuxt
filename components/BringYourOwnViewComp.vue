@@ -2,12 +2,12 @@
 <template>
   <LazyVideoWithTranscript
     ref="video"
-    skin="dark"
     v-bind="{
       type: 'bring-your-own',
       video,
       starttime,
       startLineIndex,
+      skin,
       useAutoTextSize: true,
       showInfoButton: false,
       showOpenButton: true,

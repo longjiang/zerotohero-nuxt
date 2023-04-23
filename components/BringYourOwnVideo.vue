@@ -48,7 +48,7 @@
 export default {
   props: {
     skin: {
-      default: 'dark',
+      default: null,
     },
     video: {
       type: Object,
