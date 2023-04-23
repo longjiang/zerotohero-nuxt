@@ -565,9 +565,6 @@ export default {
     async searchSubsAndProcessHits() {
       this.checking = true;
       let terms = this.terms;
-      if (this.context?.form) {
-        terms = unique([this.context.form, ...terms]);
-      }
       let mustIncludeYouTubeId = this.context?.youtube_id;
       let hits = await this.$subs.searchSubs({
         terms,

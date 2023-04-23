@@ -28,7 +28,7 @@
             :terms="selectedSearchTerms"
             :tvShow="tvShow"
             :exact="exact"
-            :context="entry?.saved?.context"
+            :context="context"
           />
         </template>
       </Widget>
@@ -205,7 +205,7 @@
 </template>
 <script>
 import Vue from "vue";
-import Helper from "@/lib/helper";
+import { unique } from "@/lib/utils";
 
 export default {
   props: {
@@ -252,6 +252,9 @@ export default {
     };
   },
   computed: {
+    context() {
+      return this.entry?.saved?.context
+    },
     sections() {
       return [
         {
@@ -338,7 +341,11 @@ export default {
     },
   },
   async mounted() {
-    this.allSearchTerms = await this.getSearchTerms();
+    let allSearchTerms = await this.getSearchTerms();
+    if (this.context?.form) {
+      allSearchTerms = unique([this.context.form, ...allSearchTerms]);
+    }
+    this.allSearchTerms = allSearchTerms;
     this.selectedSearchTerms = this.allSearchTerms.slice(0, 3);
     this.searchTermsWatcherActivated = true;
     let dictionary = await this.$getDictionary();
@@ -361,14 +368,14 @@ export default {
     },
     async getSearchTerms() {
       if (this.$dictionaryName === "hsk-cedict") {
-        return Helper.unique([this.entry.simplified, this.entry.traditional]);
+        return unique([this.entry.simplified, this.entry.traditional]);
       }
       if (this.exact && this.exactPhrase) return [this.exactPhrase];
       let terms;
       if (this.$dictionaryName === "edict") {
         terms = [this.entry.head];
         terms.push(this.entry.kana);
-        terms = Helper.unique(terms);
+        terms = unique(terms);
       }
       let forms =
         (await (await this.$getDictionary()).wordForms(this.entry)) || [];
@@ -384,7 +391,7 @@ export default {
         terms = terms.map((t) => t.replace(/'/gi, ""));
       }
       terms = [this.entry.head].concat(terms);
-      terms = Helper.unique(terms);
+      terms = unique(terms);
       let optimalLength = this.entry.head.length - 1;
       terms = terms.sort(
         (a, b) =>
