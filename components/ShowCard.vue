@@ -3,40 +3,28 @@
     <div class="deck3"></div>
     <div class="deck2"></div>
     <div class="deck1"></div>
-    <div
-      :class="{
-        'tv-show-card media': true,
-        'tv-show-card-hidden': show.hidden,
-        [`skin-${$skin}`]: true,
-      }"
-    >
-      <router-link
-        class="youtube-thumbnail-wrapper aspect-wrapper d-block"
-        :to="{
+    <div :class="{
+      'tv-show-card media': true,
+      'tv-show-card-hidden': show.hidden,
+      [`skin-${$skin}`]: true,
+    }">
+      <router-link class="youtube-thumbnail-wrapper aspect-wrapper d-block" :to="$adminMode ? {
+          name: 'show',
+          params: { type: slug, id: show.id }
+        } : {
           name: 'video-view',
           params: { type: 'youtube', youtube_id: show.youtube_id },
-        }"
-      >
-        <img
-          :src="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
-          class="youtube-thumbnail aspect"
-        />
+        }">
+        <img :src="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`" class="youtube-thumbnail aspect" />
       </router-link>
       <div class="tv-show-card-title">
-        <router-link
-          :to="{
+        <router-link :to="{
             name: 'video-view',
             params: { type: 'youtube', youtube_id: show.youtube_id },
-          }"
-          class="link-unstyled"
-        >
+          }" class="link-unstyled">
           <h6 class="mb-0">
             {{ show.title }}
-            <span
-              v-if="show.level"
-              :data-bg-level="levels[show.level].level"
-              class="level-tag"
-            >
+            <span v-if="show.level" :data-bg-level="levels[show.level].level" class="level-tag">
               {{ levels[show.level].name }}
             </span>
           </h6>
@@ -47,14 +35,10 @@
             {{ formatK(show.avg_views) }}
           </span>
           <span v-if="show.locale">
-            <img
-              v-if="country"
-              :alt="`Flag of ${country.name}`"
+            <img v-if="country" :alt="`Flag of ${country.name}`"
               :title="`Flag of ${country.name} (${country.alpha2Code})`"
-              :src="`/vendor/flag-svgs/${country.alpha2Code}.svg`"
-              class="flag-icon mr-1"
-              style="width: 1rem; position: relative; bottom: 0.1rem"
-            />
+              :src="`/vendor/flag-svgs/${country.alpha2Code}.svg`" class="flag-icon mr-1"
+              style="width: 1rem; position: relative; bottom: 0.1rem" />
             {{ localeDescription }}
           </span>
           <span v-if="show.category">
@@ -62,30 +46,16 @@
           </span>
         </div>
         <div v-if="$adminMode">
-          <b-button
-            v-if="$adminMode"
-            size="sm"
-            class="admin-hide-button"
-            @click.stop.prevent="toggle(show, 'hidden')"
-          >
+          <b-button v-if="$adminMode" size="sm" class="admin-hide-button" @click.stop.prevent="toggle(show, 'hidden')">
             <i class="far fa-eye" v-if="show.hidden"></i>
             <i class="far fa-eye-slash" v-else></i>
           </b-button>
-          <b-button
-            v-if="$adminMode"
-            size="sm"
-            class="admin-audiobook-button"
-            @click.stop.prevent="toggle(show, 'audiobook')"
-          >
+          <b-button v-if="$adminMode" size="sm" class="admin-audiobook-button"
+            @click.stop.prevent="toggle(show, 'audiobook')">
             <i class="fa fa-microphone" v-if="show.audiobook"></i>
             <i class="fa fa-microphone-slash" v-else></i>
           </b-button>
-          <b-button
-            v-if="$adminMode"
-            size="sm"
-            class="admin-remove-button"
-            @click.stop.prevent="remove(show)"
-          >
+          <b-button v-if="$adminMode" size="sm" class="admin-remove-button" @click.stop.prevent="remove(show)">
             <i class="fa fa-trash"></i>
           </b-button>
         </div>
@@ -178,6 +148,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/variables.scss";
+
 .deck1,
 .deck2,
 .deck3 {
@@ -189,6 +160,7 @@ export default {
 }
 
 .skin-dark {
+
   .deck1,
   .deck2,
   .deck3 {
@@ -200,6 +172,7 @@ export default {
 
 
 .skin-light {
+
   .deck1,
   .deck2,
   .deck3 {
@@ -210,60 +183,76 @@ export default {
 }
 
 .col-compact {
+
   .deck1,
   .deck2,
   .deck3 {
     left: 0.5rem;
     width: calc(100% - 1rem);
   }
+
   .deck1 {
     top: 0;
   }
+
   .deck2 {
     top: -0.5rem;
   }
+
   .deck3 {
     top: -1rem;
   }
 }
+
 .deck1 {
   top: -0.5rem;
   transform: scale(0.95);
 }
+
 .deck2 {
   top: -1rem;
   transform: scale(0.9);
   opacity: 0.66;
 }
+
 .deck3 {
   top: -1.4rem;
   transform: scale(0.85);
   opacity: 0.33;
 }
+
 .col-compact {
   padding: 0.5rem;
+
   :deep(.media-body) {
     font-size: 0.9em;
   }
 }
+
 .show-tag {
   font-size: 0.8em;
   color: #888;
 }
+
 .show-tags {
   line-height: 1;
 }
+
 .tv-show-card {
   position: relative;
   height: 100%;
+
   &.tv-show-card-hidden {
     opacity: 0.3;
   }
+
   .youtube-thumbnail {
     border-radius: 0.25rem;
   }
+
   .tv-show-card-title {
     padding-top: 0.5rem;
+
     a {
       z-index: 1;
       width: 100%;
@@ -297,7 +286,7 @@ export default {
   }
 }
 
-.statistics span + span::before {
+.statistics span+span::before {
   content: " · ";
   margin: 0 0.25rem;
 }
