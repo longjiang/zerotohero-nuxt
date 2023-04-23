@@ -17,7 +17,7 @@
       ref="choose-search-terms-modal"
       centered
       hide-footer
-      :title="$t('Choose search terms')"
+      :title="$t('Choose Search Terms')"
       body-class="choose-search-terms-modal"
       modal-class="safe-padding-top mt-4"
       @hide="onModalHide"

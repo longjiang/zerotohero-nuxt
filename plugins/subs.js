@@ -227,6 +227,7 @@ export default ({ app }, inject) => {
       for (let video of videos) {
         let matchedHits = hits.filter(hit => hit.video === video);
         let matchedLineIndexes = matchedHits.map(hit => Number(hit.lineIndex));
+        if (!video.subs_l2) continue;
         let keptIndexes = video.subs_l2
           .map((l, i) => i)
           .filter(i => {

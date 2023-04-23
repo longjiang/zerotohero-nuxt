@@ -4,7 +4,7 @@
     @mouseover="autocycle ? cycleFlags() : undefined"
     @mouseleave="autocycle ? stopCycling() : undefined"
   >
-    <div class="country-name" v-if="country">{{ country.name }}</div>
+    <div class="country-name" v-if="country">{{ $tb(country.name) }}</div>
     <img
       v-if="country"
       :alt="`Flag of ${country.name}`"
