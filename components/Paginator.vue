@@ -85,15 +85,20 @@ export default {
       window.removeEventListener("keydown", this.handleKeydown);
     },
     handleKeydown(e) {
-      if (e.code == "KeyN") {
-        this.$router.push({ path: this.previousPath, query: this.$route.query });
-        e.preventDefault();
-        return false;
-      }
-      if (e.code == "KeyP") {
-        this.$router.push({ path: this.nextPath, query: this.$route.query });
-        e.preventDefault();
-        return false;
+      if (
+        !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
+        !e.metaKey
+      ) {
+        if (e.code == "KeyN") {
+          this.$router.push({ path: this.previousPath, query: this.$route.query });
+          e.preventDefault();
+          return false;
+        }
+        if (e.code == "KeyP") {
+          this.$router.push({ path: this.nextPath, query: this.$route.query });
+          e.preventDefault();
+          return false;
+        }
       }
     }
   }

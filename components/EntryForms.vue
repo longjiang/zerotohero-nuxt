@@ -1,6 +1,6 @@
 <template>
   <Widget id="entry-morphology">
-    <template #title>Word forms of “{{ word.head }}”</template>
+    <template #title>{{ $t('Word forms of “{word}”', { word: word.head }) }}</template>
     <template #body>
       <div class="row">
         <div
