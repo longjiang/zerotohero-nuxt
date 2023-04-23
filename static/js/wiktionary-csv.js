@@ -5,10 +5,7 @@ importScripts("../vendor/hash-string/hash-string.min.js");
 importScripts("../vendor/fuzzy-search/FuzzySearch.js");
 importScripts("../js/dictionary-utils.js");
 
-
 const PYTHON_SERVER = "https://python.zerotohero.ca/";
-
-const PROXY_SERVER = "https://server.chinesezerotohero.com/";
 
 const Dictionary = {
   name: "wiktionary-csv",
@@ -412,7 +409,7 @@ const Dictionary = {
     let url = `${PYTHON_SERVER}transliterate-persian?text=${encodeURIComponent(
       text
     )}`;
-    let transliteration = await this.proxy(url, -1);
+    let transliteration = await DictionaryUtils.proxy(url, -1);
     return transliteration;
   },
   hasHan(text) {
@@ -573,19 +570,10 @@ const Dictionary = {
     let strings = words
       .map((word) => word.search)
       .concat(words.map((word) => word.head));
-    return this.unique(strings);
+    return DictionaryUtils.unique(strings);
   },
   formTable() {
     return this.tables;
-  },
-  // https://stackoverflow.com/questions/38613654/javascript-find-unique-objects-in-array-based-on-multiple-properties
-  uniqueByValues(arr, keyProps) {
-    const kvArray = arr.map((entry) => {
-      const key = keyProps.map((k) => entry[k]).join("|");
-      return [key, entry];
-    });
-    const map = new Map(kvArray);
-    return Array.from(map.values());
   },
   wordForms(word) {
     let forms = [
@@ -596,7 +584,7 @@ const Dictionary = {
       },
     ];
     if (this.l2 !== "vie") forms = forms.concat(this.findForms(word));
-    forms = this.uniqueByValues(forms, ["table", "field", "form"]);
+    forms = DictionaryUtils.uniqueByValues(forms, ["table", "field", "form"]);
     return forms;
   },
   lemmaFromDefinition(definition) {
@@ -798,14 +786,6 @@ const Dictionary = {
     let tokenized = this.tokenizeRecursively(text, subdict);
     return tokenized;
   },
-  // https://stackoverflow.com/questions/175739/how-can-i-check-if-a-string-is-a-valid-number
-  isNumeric(str) {
-    if (typeof str != "string") return false; // we only process strings!
-    return (
-      !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
-      !isNaN(parseFloat(str))
-    ); // ...and ensure strings of whitespace fail
-  },
   splitByReg(text, reg) {
     let words = text
       .replace(reg, "!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!")
@@ -836,7 +816,7 @@ const Dictionary = {
         let lemmas = this.englishLemmatizer.lemmas(word);
         if (lemmas && lemmas.length === 1) token.pos = lemmas[0][1];
         lemmas = [[word, "inflected"]].concat(lemmas);
-        let forms = this.unique(lemmas.map((l) => l[0]));
+        let forms = DictionaryUtils.unique(lemmas.map((l) => l[0]));
 
         for (let form of forms) {
           let candidates = this.lookupMultiple(form);
@@ -864,7 +844,7 @@ const Dictionary = {
       text = text.replace(/-/g, "- ");
       let url = `${PYTHON_SERVER}lemmatize-simple?lang=${this.l2
         }&text=${encodeURIComponent(text)}`;
-      let tokenized = await this.proxy(url);
+      let tokenized = await DictionaryUtils.proxy(url);
       for (let token of tokenized) {
         if (!token) {
           tokens.push(" ");
@@ -906,7 +886,7 @@ const Dictionary = {
     let url = `${PYTHON_SERVER}lemmatize-persian?text=${encodeURIComponent(
       text
     )}`;
-    let tokens = await this.proxy(url);
+    let tokens = await DictionaryUtils.proxy(url);
     tokens = tokens.map((token) => {
       const lemmaWithStem = token.lemma;
       const parts = lemmaWithStem.split("#");
@@ -947,7 +927,7 @@ const Dictionary = {
     let url = `${PYTHON_SERVER}lemmatize-arabic?text=${encodeURIComponent(
       text
     )}`;
-    let tokenized = await this.proxy(url);
+    let tokenized = await DictionaryUtils.proxy(url);
     let tokens = [];
     for (let lemmas of tokenized) {
       if (!lemmas[0]) {
@@ -957,7 +937,7 @@ const Dictionary = {
         tokens.push(" ");
       } else if (
         ["all"].includes(lemmas[0].pos) &&
-        this.isNumeric(lemmas[0].word)
+        DictionaryUtils.isNumeric(lemmas[0].word)
       ) {
         tokens.push(lemmas[0].word);
         tokens.push(" ");
@@ -984,7 +964,7 @@ const Dictionary = {
     let url = `${PYTHON_SERVER}lemmatize-turkish?text=${encodeURIComponent(
       text
     )}`;
-    let tokenized = await this.proxy(url);
+    let tokenized = await DictionaryUtils.proxy(url);
     let tokens = [];
     for (let lemmas of tokenized) {
       if (!lemmas[0]) {
@@ -1016,28 +996,10 @@ const Dictionary = {
     }
     return tokens;
   },
-  // json or plain text only, and returns object
-  async proxy(url, cacheLife = -1, encoding = false) {
-    try {
-      let proxyURL = `${PROXY_SERVER}scrape2.php?cache_life=${cacheLife}${encoding ? "&encoding=" + encoding : ""
-        }&url=${encodeURIComponent(url)}`;
-      let response = await axios.get(proxyURL);
-      if (response.data) {
-        return response.data;
-      }
-    } catch (err) {
-      console.log(`Cannot get ${url}`);
-    }
-    return false;
-  },
-  isThai(text) {
-    let match = text.match(/[\u0E00-\u0E7F]+/g);
-    return match;
-  },
   tokenizeRecursively(text, subdict) {
     const longest = subdict.longest(text);
     if (this.l2 === "tha") {
-      const isThai = subdict.isThai(text);
+      const isThai = DictionaryUtils.isThai(text);
       if (!isThai) {
         return [text];
       }
@@ -1114,26 +1076,11 @@ const Dictionary = {
       return mapped;
     } else return [];
   },
-  unique(a) {
-    return a.filter((item, i, ar) => ar.indexOf(item) === i);
-  },
-  //https://stackoverflow.com/questions/2532218/pick-random-property-from-a-javascript-object
-  randomProperty(obj) {
-    var keys = Object.keys(obj);
-    return obj[keys[(keys.length * Math.random()) << 0]];
-  },
   random() {
-    return this.randomProperty(this.words);
+    return DictionaryUtils.randomProperty(this.words);
   },
   // Called from <EntryForms> and <WordBlock> components for Russian words
   accent(text) {
-    return text.replace(/'/g, "́");
-  },
-
-  /*
-  * https://gist.github.com/yakovsh/345a71d841871cc3d375
-  /* @shimondoodkin suggested even a much shorter way to do this */
-  stripHebrewVowels(rawString) {
-    return rawString.replace(/[\u0591-\u05C7]/g, "");
+    return DictionaryUtils.accent(text);
   },
 };
