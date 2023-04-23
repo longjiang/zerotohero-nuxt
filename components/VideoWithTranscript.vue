@@ -214,7 +214,7 @@
         @speechEnd="onSpeechEnd"
         @updateTranslation="onUpdateTranslation"
       />
-      <div class="video-info video-info-bottom" v-if="mode === 'transcript'">
+      <div class="video-info video-info-bottom" v-if="mode === 'transcript' && size !== 'mini'">
         <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
           <Loader :sticky="true" message="Loading subtitles..." />
         </div>
