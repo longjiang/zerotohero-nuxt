@@ -3,11 +3,7 @@
     <div v-if="!openAIToken">
       <h5>{{ $t("ChatGPT Settings") }}</h5>
       <p>{{ $t("Enter your ChatGPT API token:") }}</p>
-      <b-form-input
-        type="password"
-        v-model="openAIToken"
-        :lazy="true"
-      ></b-form-input>
+      <b-form-input type="password" v-model="openAIToken" :lazy="true"></b-form-input>
       <i18n path="Get your ChatGPT API token {0}." class="mt-1 small" tag="p">
         <a href="https://platform.openai.com/account/api-keys" target="_blank">
           {{ $t("here") }}
@@ -27,43 +23,26 @@
             {{ errorMessage }}
           </div>
         </div>
-        <div
-          v-if="message.sender === 'bot' && typeof message.text === 'string'"
-          class="d-flex"
-        >
+        <div v-if="message.sender === 'bot' && typeof message.text === 'string'" class="d-flex">
           <span style="flex: 0 0 1.5rem">{{ $t("A:") }}</span>
           <div style="flex: 1">
-            <div
-              v-for="(line, index) in message.text.split('\n')"
-              :key="`gpt-respnose-${index}`"
-              class="mb-2"
-            >
-              <Annotate
-                :buttons="true"
-                :showTranslation="true"
-                :showLoading="false"
-              >
+            <div v-for="(line, index) in message.text.split('\n')" :key="`gpt-respnose-${index}`" class="mb-2">
+              <Annotate :buttons="true" :showTranslation="true" :showLoading="false">
                 <span>{{ line }}</span>
               </Annotate>
             </div>
             <div class="text-right">
-              <span
-                @click="resendMessage(messages[index - 1])"
-                class="btn btn-unstyled text-success mr-2"
-              >
+              <span @click="resendMessage(messages[index - 1])" class="btn btn-unstyled text-success mr-2">
                 <i class="fa fa-sync mr-1"></i>
                 {{ $t("Regenerate") }}
               </span>
-              <router-link
-                :to="{
-                  name: 'reader',
-                  params: {
-                    method: 'md',
-                    arg: message.text.replace('\n', '\n\n'),
-                  },
-                }"
-                class="text-success"
-              >
+              <router-link :to="{
+                name: 'reader',
+                params: {
+                  method: 'md',
+                  arg: message.text.replace('\n', '\n\n'),
+                },
+              }" class="text-success">
                 <i class="fa fa-book-open mr-1"></i>
                 {{ $t("Open in Reader") }}
                 <i class="fa fa-chevron-right ml-1"></i>
@@ -76,12 +55,7 @@
         <Loader :sticky="true" message="Getting response from ChatGPT..." />
       </div>
       <h6 v-if="!initialMessages[0]">{{ $t("Ask ChatGPT:") }}</h6>
-      <input
-        type="text"
-        v-model="newMessage"
-        @keydown.enter="sendMessage(newMessage)"
-        v-if="!initialMessages[0]"
-      />
+      <input type="text" v-model="newMessage" @keydown.enter="sendMessage(newMessage)" v-if="!initialMessages[0]" />
     </div>
   </div>
 </template>
@@ -175,6 +149,20 @@ export default {
         }
       }
     },
+    async getCompletionWithCache(prompt, useCache = true) {
+      // Check if the response is already cached and useCache is true
+      if (useCache && this.$store.state.chatGPTCache.cache[prompt]) {
+        console.log("Using cached response");
+        return this.$store.state.chatGPTCache.cache[prompt];
+      }
+
+      // If not, fetch the response from ChatGPT
+      const response = await this.getCompletion(prompt); // Assuming getCompletion is the function that calls ChatGPT API
+
+      // Save the response in the cache before returning it
+      this.$store.dispatch("chatGPTCache/cacheChatGPTResponse", { prompt, response });
+      return response;
+    },
     async resendMessage(message) {
       if (!this.openai) return;
 
@@ -186,7 +174,7 @@ export default {
 
       if (botMessage) {
         Vue.set(botMessage, "text", "");
-        let newBotMessage = await this.getCompletion(message.text);
+        let newBotMessage = await this.getCompletionWithCache(message.text, false);
         Vue.set(this.messages, messageIndex + 1, newBotMessage);
       }
     },
@@ -200,7 +188,7 @@ export default {
       this.messages.push(message);
       this.newMessage = "";
 
-      let botMessage = await this.getCompletion(message.text);
+      let botMessage = await this.getCompletionWithCache(message.text);
       this.messages.push(botMessage);
     },
   },
