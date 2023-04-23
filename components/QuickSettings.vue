@@ -111,9 +111,9 @@ export const defaultL2Settings = {
 
 export const defaultGeneralSettings = {
   adminMode: false,
-  skin: "dark",
+  skin: null, // 'light' or 'dark'
   preferredCategories: [],
-  layout: "vertical", // or 'horizontal'
+  layout: null, // 'vercial', 'horizontal'
   autoPause: false,
   speed: 1,
   hideWord: false, // as used in the <HideDefs> component
@@ -190,6 +190,9 @@ export default {
   watch: {
     $l2() {
       this.loadSettings();
+    },
+    skin() {
+      this.darkMode = this.skin === "dark";
     },
     darkMode() {
       this.skin = this.darkMode ? "dark" : "light";
