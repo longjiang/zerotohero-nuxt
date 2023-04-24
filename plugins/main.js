@@ -9,6 +9,7 @@ import VueMq from 'vue-mq'
 import VueSmoothScroll from 'vue2-smooth-scroll'
 import Languages from '@/lib/languages'
 import AsyncComputed from 'vue-async-computed'
+import TokenizerFactory from '@/lib/tokenizer-factory'
 import { ModalPlugin } from 'bootstrap-vue'
 
 Vue.use(ModalPlugin)
@@ -103,6 +104,26 @@ export default async ({ app, store, route }, inject) => {
         return dictionary
       }
       */
+    }
+  })
+
+  inject('tokenizers', {})
+
+  inject('getTokenizer', () => {
+    if (store.state.settings.l1 && store.state.settings.l2) {
+      const l1 = store.state.settings.l1
+      const l2 = store.state.settings.l2
+      const l1Code = l1["iso639-3"]
+      const l2Code = l2["iso639-3"] || l2["glottologId"]
+      if (process.client) {
+        if (app.$tokenizers[l1Code + '-' + l2Code]) {
+          return app.$tokenizers[l1Code + '-' + l2Code]
+        } else {
+          let tokenizer = TokenizerFactory.createTokenizer(l1, l2)
+          app.$tokenizers[l1Code + '-' + l2Code] = tokenizer
+          return tokenizer
+        }
+      }
     }
   })
   

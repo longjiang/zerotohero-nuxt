@@ -7,7 +7,9 @@
   <div class="main">
     <div class="container pt-5 pb-5">
       <div class="row">
-        <div class="col-sm-12"></div>
+        <div class="col-sm-12">
+          <b-button @click="testTokenizer">Tokenize</b-button>
+        </div>
       </div>
     </div>
   </div>
@@ -15,11 +17,15 @@
 
 <script>
 export default {
-  computed: {},
-  mounted() {
-    this.detectCircularReferences(this.$l2);
-  },
   methods: {
+    async testTokenizer() {
+      const tokenizer = this.$getTokenizer();
+      console.log('testing tokenizer', {tokenizer});
+      if (tokenizer.tokenize) {
+        let tokens = await tokenizer.tokenize("Hello, world!")
+        console.log({tokens});
+      }   
+    },
     detectCircularReferences(obj, path = []) {
       if (typeof obj !== "object" || obj === null) {
         return;

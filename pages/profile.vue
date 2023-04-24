@@ -110,7 +110,7 @@
               </h5>
             </div>
           </div>
-          <LanguageGoal :$l1="$l1" :$l2="$l2" />
+          <LanguageGoal />
           <div class="row mt-3">
             <div class="col-sm-12">
               <LanguageProgress

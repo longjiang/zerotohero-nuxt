@@ -30,10 +30,6 @@ import Helper from "@/lib/helper";
 import { LEVELS } from "~/lib/utils/language-levels";
 
 export default {
-  props: {
-    $l1: Object,
-    $l2: Object,
-  },
   computed: {
     time() {
       return this.$store.state.progress.progressLoaded

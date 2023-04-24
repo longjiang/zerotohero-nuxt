@@ -1,4 +1,7 @@
+import TokenizerFactory from '@/lib/tokenizer-factory'
+
 export default async function ({ error, route, app, store, params, i18n }) {
+  console.log('🍎 Language Switch: Checking languages...')
   if (params.l1 && params.l2) {
     if (store.state.settings.l1 && store.state.settings.l1.code === params.l1 && store.state.settings.l2 && store.state.settings.l2.code === params.l2) {
       return
