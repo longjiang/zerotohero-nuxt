@@ -716,28 +716,11 @@ export default {
 
       return node;
     },
-    tokenizationType(l2) {
-      let tokenizationType = "integral"; // default
-      if (l2.continua) {
-        tokenizationType = "continua";
-      } else if (
-        (l2.scripts && l2.scripts[0] && l2.scripts[0].script === "Arab") ||
-        ["hu", "et"].includes(l2.code)
-      ) {
-        tokenizationType = "integral";
-      } else if (["de", "gsw", "no", "hy", "vi"].includes(l2.code)) {
-        tokenizationType = "agglutenative";
-      } else if (l2.agglutinative && l2.wiktionary && l2.wiktionary > 2000) {
-        tokenizationType = "agglutenative";
-      }
-      return tokenizationType;
-    },
     async tokenize(text, batchId) {
       let html = "";
-      let dictionary = await this.$getDictionary();
-      let tokens = await dictionary.tokenize(
+      let tokenizer = await this.$getTokenizer();
+      let tokens = await tokenizer.tokenize(
         text,
-        this.tokenizationType(this.$l2)
       );
       this.tokenized[batchId] = tokens;
       for (let index in this.tokenized[batchId]) {

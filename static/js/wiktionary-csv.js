@@ -48,66 +48,6 @@ const Dictionary = {
     "lvs": "lav", // Standard Latvian uses Latvian
     "ekk": "est", // Standard Estonian uses Estonian
   },
-  tokenizationByServer: [
-    "ara", // tokenized and lemmatized by qalsadi
-    "ast", // tokenized and lemmatized by simplemma
-    "bul", // tokenized and lemmatized by simplemma
-    "cat", // tokenized and lemmatized by simplemma
-    "ces", // tokenized and lemmatized by simplemma
-    "cym", // tokenized and lemmatized by simplemma
-    "dan", // tokenized and lemmatized by simplemma
-    "deu", // tokenized and lemmatized by simplemma
-    "ell", // tokenized and lemmatized by simplemma
-    "eng", // tokenized and lemmatized by simplemma
-    "enm", // tokenized and lemmatized by simplemma
-    "est", // tokenized and lemmatized by simplemma
-    "fas", // tokenized and lemmatized by hazm
-    "fin", // tokenized and lemmatized by simplemma
-    "fra", // tokenized and lemmatized by simplemma
-    "fra", // tokenized and lemmatized by simplemma
-    "gla", // tokenized and lemmatized by simplemma
-    "gle", // tokenized and lemmatized by simplemma
-    "glg", // tokenized and lemmatized by simplemma
-    "glv", // tokenized and lemmatized by simplemma
-    "hbs", // tokenized and lemmatized by simplemma
-    "hin", // tokenized and lemmatized by simplemma
-    "hun", // tokenized and lemmatized by simplemma
-    "hye", // tokenized and lemmatized by simplemma
-    "ind", // tokenized and lemmatized by simplemma
-    "isl", // tokenized and lemmatized by simplemma
-    "ita", // tokenized and lemmatized by simplemma
-    "ita", // tokenized and lemmatized by simplemma
-    "kat", // tokenized and lemmatized by simplemma
-    "lat", // tokenized and lemmatized by simplemma
-    "lav", // tokenized and lemmatized by simplemma
-    "lit", // tokenized and lemmatized by simplemma
-    "ltz", // tokenized and lemmatized by simplemma
-    "mkd", // tokenized and lemmatized by simplemma
-    "msa", // tokenized and lemmatized by simplemma
-    "nld", // tokenized and lemmatized by simplemma
-    "nno", // tokenized and lemmatized by simplemma
-    "nob", // tokenized and lemmatized by simplemma
-    "pol", // tokenized and lemmatized by simplemma
-    "por", // tokenized and lemmatized by simplemma
-    "por", // tokenized and lemmatized by simplemma
-    "ron", // tokenized and lemmatized by simplemma
-    "rus", // tokenized and lemmatized by simplemma
-    "slk", // tokenized and lemmatized by simplemma
-    "slv", // tokenized and lemmatized by simplemma
-    "sme", // tokenized and lemmatized by simplemma
-    "spa", // tokenized and lemmatized by simplemma
-    "sqi", // tokenized and lemmatized by simplemma
-    "swa", // tokenized and lemmatized by simplemma
-    "swe", // tokenized and lemmatized by simplemma
-    "tgl", // tokenized and lemmatized by simplemma
-    "tur", // tokenized and lemmatized by simplemma
-    "tur", // tokenized and lemmatized by zeyrek
-    "ukr", // tokenized and lemmatized by simplemma
-    // "hrv", // tokenized and lemmatized by spacy // too slow
-    // "jpn", // tokenized and lemmatized by spacy // too slow
-    // "kor", // tokenized and lemmatized by spacy // too slow
-    // "zho", // tokenized and lemmatized by spacy // too slow
-  ],
   lemmatizationTableLangs: {
     // Languages that can be lemmatized by https://github.com/michmech/lemmatization-lists
     // cat: 'ca',
@@ -403,9 +343,6 @@ const Dictionary = {
    */
   async romanizePersian(text) {
     if (this.l2 !== "fas") return;
-    // text = text.trim();
-    // let row = this.romanizations.find(r => r.persian === text);
-    // if (row) return row.roman;
     let url = `${PYTHON_SERVER}transliterate-persian?text=${encodeURIComponent(
       text
     )}`;
@@ -494,20 +431,6 @@ const Dictionary = {
     });
 
     if (!quick) {
-      // if (words.length === 0 && this.words.length < 200000) {
-      //   for (let word of this.words) {
-      //     let search = word.search ? word.search : undefined;
-      //     if (search) {
-      //       let distance = FastestLevenshtein.distance(search, text);
-      //       if (this.l2 === "tur" && text.startsWith(search))
-      //         distance = distance / 2;
-      //       let max = Math.max(text.length, search.length);
-      //       let similarity = (max - distance) / max;
-      //       words.push({ score: similarity, w: word });
-      //     }
-      //   }
-      //   words = words.sort((a, b) => b.score - a.score);
-      // }      
 
       // Perform a fuzzy search.
       wordsFromFuzzySearch = this.searcher.search(text).slice(0, limit);
@@ -744,48 +667,6 @@ const Dictionary = {
       text: matchedText,
     };
   },
-  tokenize(text, tokenizationType = "integral") {
-    if (this.tokenizationCache[text]) return this.tokenizationCache[text];
-    else {
-      let tokenized = [];
-      if (this.tokenizationByServer.includes(this.l2))
-        tokenized = this.tokenizeFromServer(text);
-      else if (this.l2 === "eng" && this.l1 !== "eng")
-        tokenized = this.tokenizeEnglish(text);
-      else {
-        switch (tokenizationType) {
-          // tokenizationType passed in from <Annotate>
-          case "integral":
-            tokenized = this.tokenizeIntegral(text);
-            break;
-          case "agglutenative":
-          case "continua":
-            tokenized = this.tokenizeContinua(text);
-            break;
-          default:
-        }
-      }
-      this.tokenizationCache[text] = tokenized;
-      return tokenized;
-    }
-  },
-  tokenizeIntegral(text) {
-    const tokens = text.match(/[\p{L}\p{M}]+|[^\p{L}\p{M}\s]+|\s+/gu);
-    const labeledTokens = tokens.map((tokenString) => {
-      let isWord = /^[\p{L}\p{M}]+$/u.test(tokenString);
-      if (isWord) {
-        return { text: tokenString };
-      } else {
-        return tokenString;
-      }
-    });
-    return labeledTokens;
-  },
-  tokenizeContinua(text) {
-    let subdict = this.subdictFromText(text);
-    let tokenized = this.tokenizeRecursively(text, subdict);
-    return tokenized;
-  },
   splitByReg(text, reg) {
     let words = text
       .replace(reg, "!!!BREAKWORKD!!!$1!!!BREAKWORKD!!!")
@@ -799,104 +680,9 @@ const Dictionary = {
       ["m", "s", "t", "ll", "d", "re", "ain", "don"].includes(word)
     );
   },
-  // For Non-English L1 only
-  tokenizeEnglish(text) {
-    if (!this.englishLemmatizer) return [];
-    text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
-    tokenized = [];
-    let segs = this.splitByReg(text, /([a-zA-Z0-9]+)/gi);
-    let reg = new RegExp(`.*([a-z0-9]+).*`);
-    for (let seg of segs) {
-      let word = seg.toLowerCase();
-      if (reg.test(word) && !this.isEnglishPartialClitic(word)) {
-        let token = {
-          text: seg,
-          candidates: [],
-        };
-        let lemmas = this.englishLemmatizer.lemmas(word);
-        if (lemmas && lemmas.length === 1) token.pos = lemmas[0][1];
-        lemmas = [[word, "inflected"]].concat(lemmas);
-        let forms = DictionaryUtils.unique(lemmas.map((l) => l[0]));
-
-        for (let form of forms) {
-          let candidates = this.lookupMultiple(form);
-          if (candidates.length > 0) {
-            found = true;
-            token.candidates = token.candidates.concat(candidates);
-          }
-        }
-        token.candidates = this.uniqueByValue(token.candidates, "id");
-        tokenized.push(token);
-      } else {
-        tokenized.push(seg);
-      }
-    }
-    return tokenized;
-  },
-  async tokenizeFromServer(text) {
-    let final = [];
-    if (this.l2 === "tur") final = this.tokenizeTurkish(text);
-    else if (this.l2 === "ara") final = this.tokenizeArabic(text);
-    else if (this.l2 === "fas") final = this.tokenizePersian(text);
-    else {
-      // Lemmatize-simple
-      let tokens = [];
-      text = text.replace(/-/g, "- ");
-      let url = `${PYTHON_SERVER}lemmatize-simple?lang=${this.l2
-        }&text=${encodeURIComponent(text)}`;
-      let tokenized = await DictionaryUtils.proxy(url);
-      for (let token of tokenized) {
-        if (!token) {
-          tokens.push(" ");
-        } else if (["PUNCT"].includes(token.pos)) {
-          tokens.push(token.word);
-        } else {
-          tokens.push(token);
-        }
-      }
-      for (let index in tokens) {
-        let token = tokens[index];
-        if (typeof token === "object") {
-          let candidates = this.lookupMultiple(token.word);
-          if (token.lemma && token.lemma !== token.word) {
-            let lemmas = this.lookupMultiple(token.lemma);
-            candidates = [...lemmas, ...candidates];
-          }
-          final.push({
-            text: token.word,
-            lemmas: [token.lemma],
-            pos: token.pos,
-            candidates,
-          });
-        } else {
-          final.push(token);
-        }
-        final.push(" ");
-      }
-    }
-    this.tokenizationCache[text] = final;
-    return final;
-  },
   getLemmas(text) {
     let lemmas = this.inflectionIndex[text];
     return lemmas;
-  },
-  async tokenizePersian(text) {
-    text = text.replace(/-/g, "- ");
-    let url = `${PYTHON_SERVER}lemmatize-persian?text=${encodeURIComponent(
-      text
-    )}`;
-    let tokens = await DictionaryUtils.proxy(url);
-    tokens = tokens.map((token) => {
-      const lemmaWithStem = token.lemma;
-      const parts = lemmaWithStem.split("#");
-      const lemma = parts[0];
-      const stem = parts.length > 1 ? parts[1] : null;
-      token.lemma = lemma;
-      token.stem = stem;
-      return token;
-    });
-    return this.lookupFromTokens(tokens);
   },
   lookupFromTokens(tokens) {
     let final = [];
@@ -921,136 +707,6 @@ const Dictionary = {
       }
     }
     return final;
-  },
-  async tokenizeArabic(text) {
-    text = text.replace(/-/g, "- ");
-    let url = `${PYTHON_SERVER}lemmatize-arabic?text=${encodeURIComponent(
-      text
-    )}`;
-    let tokenized = await DictionaryUtils.proxy(url);
-    let tokens = [];
-    for (let lemmas of tokenized) {
-      if (!lemmas[0]) {
-        tokens.push(" ");
-      } else if (["punc"].includes(lemmas[0].pos)) {
-        tokens.push(lemmas[0].word);
-        tokens.push(" ");
-      } else if (
-        ["all"].includes(lemmas[0].pos) &&
-        DictionaryUtils.isNumeric(lemmas[0].word)
-      ) {
-        tokens.push(lemmas[0].word);
-        tokens.push(" ");
-      } else {
-        let candidates = [];
-        for (let lemma of lemmas) {
-          candidates = candidates.concat(this.lookupMultiple(lemma.word));
-          candidates = candidates.concat(this.lookupMultiple(lemma.lemma));
-        }
-        candidates = this.uniqueByValue(candidates, "id");
-        tokens.push({
-          text: lemmas[0].word,
-          lemmas: lemmas.map((l) => l.lemma),
-          candidates,
-          pos: lemmas[0].pos,
-        });
-        tokens.push(" ");
-      }
-    }
-    return tokens;
-  },
-  async tokenizeTurkish(text) {
-    text = text.replace(/-/g, "- ");
-    let url = `${PYTHON_SERVER}lemmatize-turkish?text=${encodeURIComponent(
-      text
-    )}`;
-    let tokenized = await DictionaryUtils.proxy(url);
-    let tokens = [];
-    for (let lemmas of tokenized) {
-      if (!lemmas[0]) {
-        tokens.push(" ");
-      } else if (["Punc"].includes(lemmas[0].pos)) {
-        tokens.push(lemmas[0].word);
-        tokens.push(" ");
-      } else {
-        let candidates = [];
-        for (let lemma of lemmas) {
-          candidates = candidates.concat(this.lookupMultiple(lemma.word));
-          if (lemma.lemma !== "Unk")
-            candidates = candidates.concat(
-              this.lookupMultiple(lemma.lemma).map((w) => {
-                w.morphology = lemma.morphemes.join(", ").toLowerCase();
-                return w;
-              })
-            );
-        }
-        candidates = this.uniqueByValue(candidates, "id");
-        tokens.push({
-          text: lemmas[0].word,
-          lemmas: lemmas.filter(l => l.lemma !== "Unk").map((l) => l.lemma),
-          candidates,
-          pos: lemmas[0].pos,
-        });
-        tokens.push(" ");
-      }
-    }
-    return tokens;
-  },
-  tokenizeRecursively(text, subdict) {
-    const longest = subdict.longest(text);
-    if (this.l2 === "tha") {
-      const isThai = DictionaryUtils.isThai(text);
-      if (!isThai) {
-        return [text];
-      }
-    }
-    if (longest.matches.length > 0) {
-      for (let word of longest.matches) {
-        longest.matches = this.stemWordsWithScores(word, 1)
-          .map((w) => w.w)
-          .concat(longest.matches);
-        // longest.matches = longest.matches.concat(this.phrasesWithScores(word, 1)) // This is very slow
-      }
-      let result = [];
-      /*
-      result = [
-        '我',
-        {
-          text: '是'
-          candidates: [{...}, {...}, {...}
-        ],
-        '中国人。'
-      ]
-      */
-      for (let textFragment of text.split(longest.text)) {
-        result.push(textFragment); // '我'
-        result.push({
-          text: longest.text,
-          candidates: longest.matches,
-        });
-      }
-      result = result.filter((item) => {
-        if (typeof item === "string") {
-          return item !== "";
-        } else {
-          return item.text !== "";
-        }
-      });
-      result.pop(); // last item is always useless, remove it
-      var tokens = [];
-      for (let item of result) {
-        if (typeof item === "string" && item !== text) {
-          for (let token of this.tokenizeRecursively(item, subdict)) {
-            tokens.push(token);
-          }
-        } else {
-          tokens.push(item);
-        }
-      }
-      return tokens;
-    } else {
-      return [text];
-    }
   },
   stemWordsWithScores(word, score = undefined) {
     let stemWords = this.inflectionIndex[word.head];
