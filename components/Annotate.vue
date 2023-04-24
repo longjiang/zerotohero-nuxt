@@ -1,26 +1,16 @@
 <template>
   <div>
-    <div
-      :class="{
-        'annotate-wrapper': true,
-        'annotate-with-translation': showTranslation && translationData,
-      }"
-      v-observe-visibility="{
-        callback: visibilityChanged,
-        once: true,
-      }"
-    >
+    <div :class="{
+      'annotate-wrapper': true,
+      'annotate-with-translation': showTranslation && translationData,
+    }" v-observe-visibility="{
+    callback: visibilityChanged,
+    once: true,
+  }">
       <div class="text-center" v-if="showLoading && !annotated">
-        <beat-loader
-          class="d-inline-block"
-          color="#28a745"
-          size="5px"
-        ></beat-loader>
+        <beat-loader class="d-inline-block" color="#28a745" size="5px"></beat-loader>
       </div>
-      <component
-        :is="tag"
-        :dir="dir()"
-        :class="{
+      <component :is="tag" :dir="dir()" :class="{
           'd-none': showLoading && !annotated,
           annotated,
           'text-right': dir() === 'rtl',
@@ -28,13 +18,9 @@
           phonetics,
           fullscreen: fullscreenMode,
           'with-buttons': buttons,
-        }"
-      >
+        }">
         <div class="annotator-buttons" v-if="!empty() && buttons">
-          <div
-            class="annotator-menu-toggle"
-            @click="showMenuModal"
-          >
+          <div class="annotator-menu-toggle" @click="showMenuModal">
             <i class="fa-regular fa-circle-ellipsis"></i>
           </div>
         </div>
@@ -43,94 +29,42 @@
             <slot></slot>
           </div>
           <div v-if="textMode && annotated">
-            <input
-              :class="{
+            <input :class="{
                 'annotate-input': true,
-              }"
-              @select="select"
-              @blur="annotateInputBlur"
-              @click.stop="dummyFunction"
-              :value="text"
-              style="width: calc(100% - 2rem)"
-            />
+              }" @select="select" @blur="annotateInputBlur" @click.stop="dummyFunction" :value="text"
+              style="width: calc(100% - 2rem)" />
           </div>
           <template v-if="annotated && !textMode">
-            <v-runtime-template
-              v-for="(template, index) of annotatedSlots"
-              :key="`annotate-template-${index}`"
-              :template="template"
-              class="annotate-template"
-              ref="run-time-template"
-            />
-            <span
-              v-if="matchedGrammar.length > 0"
-              @click="showGrammarModal"
-              class="annotate-grammar-button"
-            >
+            <v-runtime-template v-for="(template, index) of annotatedSlots" :key="`annotate-template-${index}`"
+              :template="template" class="annotate-template" ref="run-time-template" />
+            <span v-if="matchedGrammar.length > 0" @click="showGrammarModal" class="annotate-grammar-button">
               {{ $t("G") }}
             </span>
           </template>
         </div>
       </component>
-      <div
-        class="annotate-translation"
-        v-if="showTranslation && (translationLoading || translationData)"
-      >
-        <beat-loader
-          class="d-inline-block"
-          v-if="translationLoading"
-          color="#28a745"
-          size="5px"
-        ></beat-loader>
-        <div
-          v-else
-          v-html="translationHtml(translationData ? translationData : '')"
-        />
+      <div class="annotate-translation" v-if="showTranslation && (translationLoading || translationData)">
+        <beat-loader class="d-inline-block" v-if="translationLoading" color="#28a745" size="5px"></beat-loader>
+        <div v-else v-html="translationHtml(translationData ? translationData : '')" />
       </div>
     </div>
-    <b-modal
-      ref="grammar-modal"
-      size="md"
-      centered
-      hide-footer
-      :title="$t('Grammar Notes')"
-      modal-class="safe-padding-top mt-4"
-      :body-class="`grammar-modal-wrapper l2-${$l2.code}`"
-    >
-      <table
-        class="table table-responsive grammar-table w-100 mb-0"
-        style="font-size: 0.9em"
-      >
+    <b-modal ref="grammar-modal" size="md" centered hide-footer :title="$t('Grammar Notes')"
+      modal-class="safe-padding-top mt-4" :body-class="`grammar-modal-wrapper l2-${$l2.code}`">
+      <table class="table table-responsive grammar-table w-100 mb-0" style="font-size: 0.9em">
         <tbody>
-          <tr
-            v-for="row in matchedGrammar"
-            :key="`annotate-grammar-${row.id}`"
-            class="grammar-table-row"
-            @click="
-              $router.push({ name: 'grammar-view', params: { id: row.id } })
-            "
-          >
+          <tr v-for="row in matchedGrammar" :key="`annotate-grammar-${row.id}`" class="grammar-table-row" @click="$router.push({ name: 'grammar-view', params: { id: row.id } })
+            ">
             <td class="align-left align-middle" style="min-width: 7rem">
               {{ $t(l2LevelName) }} {{ row.code }}
             </td>
-            <td
-              class="align-left align-middle font-weight-bold"
-              style="min-width: 6rem"
-              :data-level="row.level"
-            >
-              <span
-                v-html="highlightMultiple(row.structure, row.words, row.book)"
-              />
+            <td class="align-left align-middle font-weight-bold" style="min-width: 6rem" :data-level="row.level">
+              <span v-html="highlightMultiple(row.structure, row.words, row.book)" />
             </td>
             <td class="align-left align-middle w-100" style="min-width: 6rem">
               <span>{{ row.english }}</span>
             </td>
             <td class="align-right align-middle text-right">
-              <router-link
-                class="text-success"
-                v-if="row"
-                :to="{ name: 'grammar-view', params: { id: row.id } }"
-              >
+              <router-link class="text-success" v-if="row" :to="{ name: 'grammar-view', params: { id: row.id } }">
                 <i class="fas fa-chevron-right ml-1" />
               </router-link>
             </td>
@@ -138,69 +72,39 @@
         </tbody>
       </table>
     </b-modal>
-    <b-modal
-      ref="annotate-menu-modal"
-      size="sm"
-      centered
-      hide-footer
-      :title="$t('Annotated Text')"
-      modal-class="safe-padding-top mt-4"
-      body-class="annotate-menu-modal-wrapper"
-    >
+    <b-modal ref="annotate-menu-modal" size="sm" centered hide-footer :title="$t('Annotated Text')"
+      modal-class="safe-padding-top mt-4" body-class="annotate-menu-modal-wrapper">
       <div class="annotate-menu-modal">
         <div class="annotate-menu-modal-item">
-          <Saved
-            :item="phraseItem(text, translationData)"
-            store="savedPhrases"
-            icon="bookmark"
-            class="annotator-button focus-exclude"
-            title="Save Phrase"
-            ref="savePhrase"
-          />
+          <Saved :item="phraseItem(text, translationData)" store="savedPhrases" icon="bookmark"
+            class="annotator-button focus-exclude" title="Save Phrase" ref="savePhrase" />
           <span @click.stop.prevent="saveAsPhraseClick">
             {{ $t(phraseSaved ? "Remove Phrase" : "Save as Phrase") }}
           </span>
         </div>
         <div class="annotate-menu-modal-item">
-          <Speak
-            :text="text"
-            class="annotator-button"
-            title="Speak"
-            ref="speak"
-          />
+          <Speak :text="text" class="annotator-button" title="Speak" ref="speak" />
           <span @click="readAloud">{{ $t("Read Aloud") }}</span>
         </div>
 
         <div class="annotate-menu-modal-item">
-          <span
-            class="annotator-button annotator-translate focus-exclude"
-            title="Translate Inline"
-            @click="translateClick"
-            ref="translation"
-          >
+          <span class="annotator-button annotator-translate focus-exclude" title="Translate Inline"
+            @click="translateClick" ref="translation">
             <i class="fas fa-language"></i>
           </span>
           <span @click="translateClick">{{ $t("Get Translation") }}</span>
         </div>
         <div class="annotate-menu-modal-item">
-          <span
-            :class="{
-              'annotator-button annotator-text-mode focus-exclude': true,
-              active: textMode,
-            }"
-            title="Edit"
-            @click="editClick"
-          >
+          <span :class="{
+            'annotator-button annotator-text-mode focus-exclude': true,
+            active: textMode,
+          }" title="Edit" @click="editClick">
             <i class="fas fa-edit"></i>
           </span>
           <span @click="editClick">{{ $t("Edit Text") }}</span>
         </div>
         <div class="annotate-menu-modal-item">
-          <span
-            @click="copyClick"
-            title="Copy"
-            class="annotator-button annotator-copy focus-exclude"
-          >
+          <span @click="copyClick" title="Copy" class="annotator-button annotator-copy focus-exclude">
             <i class="fas fa-copy"></i>
           </span>
           <span @click="copyClick">{{ $t("Copy Text") }}</span>
@@ -224,6 +128,7 @@ import { breakSentences } from "@/lib/utils/string";
 import { transliterate as tr } from "transliteration";
 import { mapState } from "vuex";
 import { getClient } from "iframe-translator";
+import { uniqueByValue } from "@/lib/utils/array";
 import SmartQuotes from "smartquotes";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 
@@ -733,9 +638,26 @@ export default {
       }
       return html;
     },
+
+    async addCandidatesToToken(token) {
+      const dictionary = await this.$getDictionary();
+      let candidates = await dictionary.lookupMultiple(token.text);
+      for (let lemma of token.lemmas) {
+        if (lemma && lemma !== token.text) {
+          candidates = candidates.concat(await dictionary.lookupMultiple(lemma));
+        }
+      }
+      token.candidates = uniqueByValue(candidates, 'id');
+      return token;
+    },
+
     wordBlockAttributes(batchId, index) {
+      
       let token = this.tokenized[batchId][index];
       let text = token.text;
+      if (!token.candidates) {
+        this.addCandidatesToToken(token);
+      }
       let context = {
         text: this.text,
         youtube_id: this.youtube_id,
@@ -756,7 +678,6 @@ export default {
       };
       if (token.mappedPronunciation)
         attrs.mappedPronunciation = token.mappedPronunciation;
-      if (this.text === "（") console.log({ attrs });
       return attrs;
     },
     convertToSentencesRecursive(node) {
@@ -804,6 +725,7 @@ export default {
 
 <style lang="scss">
 @import '~/assets/scss/variables';
+
 .annotate-translation {
   font-size: 0.8em;
   opacity: 0.7;
@@ -817,7 +739,7 @@ export default {
   color: $primary-color;
 }
 
-.sentence + .sentence {
+.sentence+.sentence {
   margin-left: 0.1em;
 }
 
@@ -826,15 +748,15 @@ export default {
     margin-right: 0;
   }
 
-  .sentence + .highlight {
+  .sentence+.highlight {
     margin-left: 0;
   }
 
-  .highlight + .sentence {
+  .highlight+.sentence {
     margin-left: 0;
   }
 
-  .sentence + .sentence {
+  .sentence+.sentence {
     margin-left: 0;
   }
 }
@@ -900,6 +822,7 @@ export default {
     padding: 0 0 0 0.5rem;
     order: 2;
   }
+
   &[dir="rtl"] {
     .annotator-buttons {
       padding: 0 0.5rem 0 0;
@@ -920,9 +843,11 @@ export default {
   .annotate-menu-modal-item {
     padding: 0.15rem 0;
     cursor: pointer;
+
     &:hover {
       color: black;
     }
+
     .annotator-button {
       width: 1.5rem;
       text-align: center;
@@ -966,6 +891,7 @@ export default {
   td {
     border: none;
   }
+
   &:hover {
     background-color: #efefef;
     cursor: pointer;
@@ -974,30 +900,37 @@ export default {
 
 .zerotohero-zoom-1 {
   .annotate-wrapper.use-zoom {
+
     .annotate-slot,
     .word-block-segment {
       font-size: calc(1rem * 1.25);
     }
   }
 }
+
 .zerotohero-zoom-2 {
   .annotate-wrapper.use-zoom {
+
     .annotate-slot,
     .word-block-segment {
       font-size: calc(1rem * 1.25 * 1.25);
     }
   }
 }
+
 .zerotohero-zoom-3 {
   .annotate-wrapper.use-zoom {
+
     .annotate-slot,
     .word-block-segment {
       font-size: calc(1rem * 1.25 * 1.25 * 1.25);
     }
   }
 }
+
 .zerotohero-zoom-4 {
   .annotate-wrapper.use-zoom {
+
     .annotate-slot,
     .word-block-segment {
       font-size: calc(1rem * 1.25 * 1.25 * 1.25 * 1.25);
