@@ -27,7 +27,7 @@
               <Logo skin="light" />
             </div>
             <b-form @submit.prevent="onSubmit" v-if="show">
-              <div class="d-flex mb-3">
+              <div class="d-flex mb-3" style="gap: 0.5rem">
                 <b-form-input
                   id="first_name"
                   v-model="form.first_name"
@@ -35,7 +35,6 @@
                   :placeholder="$tb('First Name')"
                   required
                   style="flex: 1"
-                  class="mr-1"
                 ></b-form-input>
                 <b-form-input
                   id="last_name"
@@ -43,8 +42,10 @@
                   type="text"
                   :placeholder="$tb('Last Name')"
                   required
-                  style="flex: 1"
-                  class="ml-1"
+                  :style="{
+                    flex: 1,
+                    order: ['ko', 'ja', 'zh'].includes($browserLanguage) ? -1 : 1
+                  }"
                 ></b-form-input>
               </div>
               <b-form-group id="input-group-1" label-for="email">

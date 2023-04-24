@@ -245,6 +245,11 @@ export default {
             "filter[channel_id][eq]=" +
               encodeURIComponent(this.keyword.replace("channel:", ""))
           );
+        if (this.keyword.startsWith("locale:"))
+          filters.push(
+            "filter[locale][contains]=" +
+              encodeURIComponent(this.keyword.replace("locale:", ""))
+          );
         else
           filters.push(
             "filter[title][contains]=" + encodeURIComponent(this.keyword)
