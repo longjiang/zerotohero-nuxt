@@ -90,9 +90,6 @@ export default {
     quizMode: {
       default: false,
     },
-    mappedPronunciation: {
-      type: Array, //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
-    },
     useZoom: {
       default: false,
     },
@@ -223,8 +220,7 @@ export default {
       let definition = this.quickGloss;
       let phonetics = false;
       if (this.$l2Settings.showPinyin) {
-        if (this.mappedPronunciation) phonetics = true;
-        else if (this.phonetics && this.transliteration) {
+        if (this.phonetics && this.transliteration) {
           phonetics = this.savedTransliteration || this.transliteration;
         }
       }
@@ -256,7 +252,7 @@ export default {
         hanja,
         useZoom: this.useZoom,
       };
-      if (this.mappedPronunciation) {
+      if (this.$l2 === 'ja') {
         if (
           this.text &&
           this.savedWord &&
@@ -268,7 +264,7 @@ export default {
             this.savedWord.kana
           );
         } else {
-          attributes.mappedPronunciation = this.mappedPronunciation;
+          if (typeof wanakana !== "undefined") attributes.mappedPronunciation = mapKana(token.word, wanakana.toHiragana(token.pronunciation)) //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
         }
       }
       if (this.popup) {
