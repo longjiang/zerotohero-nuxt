@@ -1,43 +1,21 @@
 <template>
-  <v-popover
-    :open="open"
-    placement="top"
-    ref="popover"
-    :popoverInnerClass="`tooltip-inner popover-inner skin-${$skin}`"
-    :popoverArrowClass="`tooltip-arrow popover-arrow skin-${$skin}`"
-  >
-    <div
-      v-on="popup ? { click: wordBlockClick } : {}"
-      v-observe-visibility="visibilityChanged"
-      @mouseenter="wordblockHover = true"
-      @mouseleave="wordblockHover = false"
-    >
-      <WordBlockQuiz
-        v-if="
-          (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
-        "
-        v-bind="attributes"
-      />
+  <v-popover :open="open" placement="top" ref="popover" :popoverInnerClass="`tooltip-inner popover-inner skin-${$skin}`"
+    :popoverArrowClass="`tooltip-arrow popover-arrow skin-${$skin}`">
+    <div v-on="popup ? { click: wordBlockClick } : {}" v-observe-visibility="visibilityChanged"
+      @mouseenter="wordblockHover = true" @mouseleave="wordblockHover = false">
+      <WordBlockQuiz v-if="(this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
+        " v-bind="attributes" />
       <WordBlockWord v-else v-bind="attributes" />
     </div>
 
     <template slot="popover">
-      <div
-        v-if="
-          (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
-        "
-        class="popover-inner-hover-area"
-      >
+      <div v-if="(this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
+        " class="popover-inner-hover-area">
         {{ $t("Tap to show answer.") }}
       </div>
-      <div
-        @mouseenter="tooltipHover = true"
-        @mouseleave="tooltipHover = false"
-        v-else-if="open"
-        class="popover-inner-hover-area"
-      >
-        <WordBlockPopup
-          v-bind="{
+      <div @mouseenter="tooltipHover = true" @mouseleave="tooltipHover = false" v-else-if="open"
+        class="popover-inner-hover-area">
+        <WordBlockPopup v-bind="{
             text,
             token,
             words,
@@ -47,10 +25,7 @@
             context,
             transliterationprop,
             phraseObj: phraseItem(text),
-          }"
-          ref="popup"
-          v-if="open"
-        />
+          }" ref="popup" v-if="open" />
       </div>
     </template>
   </v-popover>
@@ -252,7 +227,7 @@ export default {
         hanja,
         useZoom: this.useZoom,
       };
-      if (this.$l2 === 'ja') {
+      if (this.$l2.code === 'ja') {
         if (
           this.text &&
           this.savedWord &&
@@ -264,7 +239,11 @@ export default {
             this.savedWord.kana
           );
         } else {
-          if (typeof wanakana !== "undefined") attributes.mappedPronunciation = mapKana(token.word, wanakana.toHiragana(token.pronunciation)) //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
+          if (typeof wanakana !== "undefined") {
+            const pronunciation = this.token.pronunciation
+            console.log({pronunciation})
+            attributes.mappedPronunciation = mapKana(this.token.text, wanakana.toHiragana(pronunciation))
+          } //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
         }
       }
       if (this.popup) {
@@ -446,7 +425,7 @@ export default {
           } else if (this.token.candidates[0].pronunciation) {
             transliteration =
               this.token.candidates[0].pronunciation.split(",")[
-                this.$l2.code === "vi" ? 1 : 0
+              this.$l2.code === "vi" ? 1 : 0
               ];
           }
         }
@@ -643,16 +622,16 @@ export default {
       if (!quick) {
         words = words
           ? words.sort((a, b) => {
-              let asaved = this.$store.getters["savedWords/has"]({
-                id: a.id,
-                l2: this.$l2.code,
-              });
-              let bsaved = this.$store.getters["savedWords/has"]({
-                id: b.id,
-                l2: this.$l2.code,
-              });
-              return asaved === bsaved ? 0 : asaved ? -1 : 1;
-            })
+            let asaved = this.$store.getters["savedWords/has"]({
+              id: a.id,
+              l2: this.$l2.code,
+            });
+            let bsaved = this.$store.getters["savedWords/has"]({
+              id: b.id,
+              l2: this.$l2.code,
+            });
+            return asaved === bsaved ? 0 : asaved ? -1 : 1;
+          })
           : [];
         if (dictionary.getLemmas) {
           let allLemmas = [];
