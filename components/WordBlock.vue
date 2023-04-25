@@ -190,30 +190,15 @@ export default {
         } else return this.token.candidates[0];
       }
     },
+
     attributes() {
       let word = this.savedWord || this.words?.[0];
       let definition = this.quickGloss;
-      let phonetics = false;
-      if (this.$l2Settings.showPinyin) {
-        if (this.phonetics && this.transliteration) {
-          phonetics = this.savedTransliteration || this.transliteration;
-        }
-      }
-      let text = this.text;
-      if (this.$l2.han && word) {
-        if (word.simplified === text || word.traditional === text)
-          text = this.$l2Settings.useTraditional
-            ? word.traditional
-            : word.simplified;
-        else {
-          text = this.$l2Settings.useTraditional
-            ? tify(this.text)
-            : sify(this.text);
-          if (this.$l2Settings.showPinyin) phonetics = this.transliterationprop;
-        }
-      }
-      let hanja =
-        this.$l2Settings.showByeonggi && this.hanja ? this.hanja : undefined;
+      let phonetics = this.getPhonetics(word, this.text);
+      let text = this.$l2.han ? this.getWordText(word, this.text) : this.text;
+      let hanja = this.$l2Settings.showByeonggi && this.hanja ? this.hanja : undefined;
+      let mappedPronunciation = this.$l2.code === "ja" ? this.getMappedPronunciation(word, this.text) : undefined;
+
       let attributes = {
         popup: this.popup,
         sticky: this.sticky,
@@ -227,32 +212,20 @@ export default {
         hanja,
         useZoom: this.useZoom,
       };
-      if (this.$l2.code === 'ja') {
-        if (
-          this.text &&
-          this.savedWord &&
-          this.savedWord.kana &&
-          typeof mapKana !== "undefined"
-        ) {
-          attributes.mappedPronunciation = mapKana(
-            this.text,
-            this.savedWord.kana
-          );
-        } else {
-          if (typeof wanakana !== "undefined") {
-            const pronunciation = this.token.pronunciation
-            console.log({pronunciation})
-            attributes.mappedPronunciation = mapKana(this.token.text, wanakana.toHiragana(pronunciation))
-          } //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
-        }
+
+      if (mappedPronunciation) {
+        attributes.mappedPronunciation = mappedPronunciation;
       }
+
       if (this.popup) {
         attributes["data-hover-level"] = "outside";
       }
+
       if (word) {
         if (word.rank) attributes["data-rank"] = word.rank;
         if (word.weight) attributes["data-weight"] = word.weight;
       }
+
       return attributes;
     },
     hard() {
@@ -329,6 +302,30 @@ export default {
     },
   },
   methods: {
+    getWordText(word, text) {
+      if (word) {
+        return this.$l2Settings.useTraditional ? word.traditional : word.simplified;
+      } else {
+        return this.$l2Settings.useTraditional ? tify(text) : sify(text);
+      }
+    },
+    getPhonetics() {
+      if (this.$l2Settings.showPinyin && this.phonetics && this.transliteration) {
+        return this.savedTransliteration || this.transliteration;
+      }
+      if (this.$l2Settings.showPinyin) return this.transliterationprop;
+      return false;
+    },
+    getMappedPronunciation() {
+      if (this.text && this.savedWord && this.savedWord.kana && typeof mapKana !== "undefined") {
+        return mapKana(this.text, this.savedWord.kana);
+      } else {
+        if (typeof wanakana !== "undefined") {
+          const pronunciation = this.token.pronunciation;
+          return mapKana(this.token.text, wanakana.toHiragana(pronunciation));
+        }
+      }
+    },
     phraseItem(phrase, translation = undefined) {
       if (typeof phrase !== "undefined") {
         let phraseItem = {
