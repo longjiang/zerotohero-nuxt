@@ -206,8 +206,8 @@ const Dictionary = {
         for (let w of this.words) {
           if (w.kanji.length > word.kanji.length && w.kanji.includes(word.kanji)) phrases.push(w)
         }
-        word.phrases = phrases.sort((a, b) => a.kanji.length - b.kanji.length).sort((a, b) => b.weight - a.weight)
-        return word.phrases
+        phrases = phrases.sort((a, b) => a.kanji.length - b.kanji.length).sort((a, b) => b.weight - a.weight)
+        return phrases
       } else {
         return word.phrases
       }

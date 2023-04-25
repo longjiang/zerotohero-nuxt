@@ -139,8 +139,8 @@ const Dictionary = {
           if (w.head.length > word.head.length && w.head.includes(word.head)) phrases.push(w)
           if (phrases.length >= limit) break
         }
-        word.phrases = phrases.sort((a, b) => a.head.length - b.head.length).sort((a, b) => b.weight - a.weight)
-        return word.phrases
+        phrases.sort((a, b) => a.head.length - b.head.length).sort((a, b) => b.weight - a.weight)
+        return phrases
       } else {
         return word.phrases
       }

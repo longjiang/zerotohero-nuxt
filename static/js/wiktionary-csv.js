@@ -243,7 +243,6 @@ const Dictionary = {
     if (head && word && word.head !== head) {
       word = this.lookup(head);
     }
-    this.addPhrasesToWord(word);
     return word;
   },
   getPhraseIndex(head) {
@@ -319,6 +318,15 @@ const Dictionary = {
     }
     return item;
   },
+  findPhrases(word, limit = 50) {
+    if (word) {
+      if (!word.phrases || word.phrases.length === 0) {
+          return this.getPhraseIndex(word.head) || [];
+      } else {
+        return word.phrases
+      }
+    }
+  },
   async loadLemmatizationTable(langCode) {
     let res = await axios.get(
       `${this.server}data/lemmatization-lists/lemmatization-${langCode}.txt`
@@ -358,13 +366,6 @@ const Dictionary = {
     return /^[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+$/.test(
       text
     );
-  },
-  addPhrasesToWord(word) {
-    if (word) {
-      if (!word.phrases || word.phrases.length === 0) {
-        word.phrases = this.getPhraseIndex(word.head) || [];
-      }
-    }
   },
   lookup(text) {
     let words = this.searchIndex[text.toLowerCase()];
@@ -455,9 +456,6 @@ const Dictionary = {
 
       words = words.sort((a, b) => b.score - a.score);
       words = words.slice(0, limit);
-      words.forEach((w) => {
-        this.addPhrasesToWord(w.w);
-      });
     }
     words = words.slice(0, limit);
     return words.map((w) => w.w);
@@ -644,7 +642,6 @@ const Dictionary = {
         }
       }
       if (matched) {
-        this.addPhrasesToWord(word);
         matches.push({
           word,
           matchedIndex,
