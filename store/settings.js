@@ -49,6 +49,7 @@ export const defaultTransientSettings = {
   l2: undefined, // L2 language object
   dictionary: undefined,
   dictionaryName: undefined,
+  tokenizers: {}, // keyed by language, e.g. "eng"
   fullscreen: false, // Whether or not the user is in the browser's fullscreen mode
   settingsLoaded: false,
 };
@@ -151,6 +152,9 @@ export const mutations = {
   },
   SET_FULLSCREEN(state, fullscreen) {
     state.fullscreen = fullscreen;
+  },
+  SET_TOKENIZER(state, { l2Code, tokenizer }) {
+    state.tokenizers[l2Code] = tokenizer;
   },
   SET_GENERAL_SETTINGS(state, generalSettings) {
     for (let property in generalSettings) {

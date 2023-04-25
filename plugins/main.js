@@ -107,27 +107,23 @@ export default async ({ app, store, route }, inject) => {
     }
   })
 
-  inject('tokenizers', {})
+  app.tokenizers = {}
 
-  inject('getTokenizer', async () => {
+  inject("getTokenizer", async () => {
     if (store.state.settings.l1 && store.state.settings.l2) {
-      const l1 = store.state.settings.l1
-      const l2 = store.state.settings.l2
-      const l1Code = l1["iso639-3"]
-      const l2Code = l2["iso639-3"] || l2["glottologId"]
-      if (process.client) {
-        if (app.$tokenizers[l1Code + '-' + l2Code]) {
-          return app.$tokenizers[l1Code + '-' + l2Code]
-        } else {
-          let dictionary = await app.$getDictionary()
-          let words = await dictionary.getWords()
-          let tokenizer = TokenizerFactory.createTokenizer(l1, l2, words)
-          app.$tokenizers[l1Code + '-' + l2Code] = tokenizer
-          return tokenizer
-        }
+      const l2 = store.state.settings.l2;
+      const l2Code = l2["iso639-3"] || l2["glottologId"];
+  
+      if (!store.state.settings.tokenizers[l2Code]) {
+        const dictionary = await app.$getDictionary();
+        const words = await dictionary.getWords();
+        const tokenizer = TokenizerFactory.createTokenizer(l2, words);
+        store.commit("settings/SET_TOKENIZER", { l2Code, tokenizer });
       }
+      
+      return store.state.settings.tokenizers[l2Code];
     }
-  })
+  });
   
   inject('getGrammar', async () => {
     if (store.state.settings.l1 && store.state.settings.l2 && store.state.settings.dictionaryName) {
