@@ -19,7 +19,7 @@
 export default {
   methods: {
     async testTokenizer() {
-      const tokenizer = this.$getTokenizer();
+      const tokenizer = await this.$getTokenizer();
       console.log('testing tokenizer', {tokenizer});
       if (tokenizer.tokenize) {
         let tokens = await tokenizer.tokenize("Hello, world!")

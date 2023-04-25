@@ -109,7 +109,7 @@ export default async ({ app, store, route }, inject) => {
 
   inject('tokenizers', {})
 
-  inject('getTokenizer', () => {
+  inject('getTokenizer', async () => {
     if (store.state.settings.l1 && store.state.settings.l2) {
       const l1 = store.state.settings.l1
       const l2 = store.state.settings.l2
@@ -119,7 +119,9 @@ export default async ({ app, store, route }, inject) => {
         if (app.$tokenizers[l1Code + '-' + l2Code]) {
           return app.$tokenizers[l1Code + '-' + l2Code]
         } else {
-          let tokenizer = TokenizerFactory.createTokenizer(l1, l2)
+          let dictionary = await app.$getDictionary()
+          let words = await dictionary.getWords()
+          let tokenizer = TokenizerFactory.createTokenizer(l1, l2, words)
           app.$tokenizers[l1Code + '-' + l2Code] = tokenizer
           return tokenizer
         }
