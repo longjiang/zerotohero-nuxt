@@ -152,10 +152,13 @@ export default {
       }
       if (pos) return pos.replace(/\-.*/, "").replace(/\s/g, "-");
     },
+    word() {
+      return this.savedWord || this.words?.[0];
+    },
     hanja() {
       if (["ko", "vi"].includes(this.$l2.code)) {
         let hanja = "";
-        if (this.saved) hanja = this.saved.firstWord?.hanja;
+        if (this.word) hanja = this.word.hanja;
         else if (
           this.token &&
           this.token.candidates &&
@@ -192,7 +195,7 @@ export default {
     },
 
     attributes() {
-      let word = this.savedWord || this.words?.[0];
+      let word = this.word;
       let definition = this.quickGloss;
       let phonetics = this.getPhonetics(word, this.text);
       let text = this.$l2.han ? this.getWordText(word, this.text) : this.text;
