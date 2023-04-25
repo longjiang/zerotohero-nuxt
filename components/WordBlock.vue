@@ -158,7 +158,7 @@ export default {
     hanja() {
       if (["ko", "vi"].includes(this.$l2.code)) {
         let hanja = "";
-        if (this.word) hanja = this.word.hanja;
+        if (this.savedWord) hanja = this.savedWord.hanja;
         else if (
           this.token &&
           this.token.candidates &&
