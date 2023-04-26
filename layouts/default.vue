@@ -206,10 +206,24 @@ export default {
     if (this.l2 && this.l2.code === "my") {
       head.script.push({
         src: "/vendor/myanmar-tools/zawgyi_converter.min.js",
+        hid: 'zawgyi_converter',
         body: true,
       });
       head.script.push({
         src: "/vendor/myanmar-tools/zawgyi_detector.min.js",
+        hid: 'zawgyi_detector',
+        body: true,
+      });
+    }
+    if (this.l2 && this.l2.code === "ko") {
+      head.script.push({
+        hid: "hangeul",
+        src: "/vendor/korean_conjugation/html/korean/conjugator.js",
+        body: true,
+      });
+      head.script.push({
+        hid: "hangeul",
+        src: "/vendor/korean_conjugation/html/korean/hangeul.js",
         body: true,
       });
     }
