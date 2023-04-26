@@ -10,6 +10,7 @@ import VueSmoothScroll from 'vue2-smooth-scroll'
 import Languages from '@/lib/languages'
 import AsyncComputed from 'vue-async-computed'
 import TokenizerFactory from '@/lib/tokenizer-factory'
+import InflectorFactory from '@/lib/inflector-factory'
 import { ModalPlugin } from 'bootstrap-vue'
 
 Vue.use(ModalPlugin)
@@ -107,8 +108,6 @@ export default async ({ app, store, route }, inject) => {
     }
   })
 
-  app.tokenizers = {}
-
   inject("getTokenizer", async () => {
     if (store.state.settings.l1 && store.state.settings.l2) {
       const l2 = store.state.settings.l2;
@@ -122,6 +121,20 @@ export default async ({ app, store, route }, inject) => {
       }
       
       return store.state.settings.tokenizers[l2Code];
+    }
+  });
+
+  inject("getInflector", async () => {
+    if (store.state.settings.l1 && store.state.settings.l2) {
+      const l2 = store.state.settings.l2;
+      const l2Code = l2["iso639-3"] || l2["glottologId"];
+  
+      if (!store.state.settings.inflectors[l2Code]) {
+        const inflector = InflectorFactory.createInflector(l2);
+        store.commit("settings/SET_INFLECTOR", { l2Code, inflector });
+      }
+      
+      return store.state.settings.inflectors[l2Code];
     }
   });
   

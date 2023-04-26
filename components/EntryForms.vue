@@ -116,13 +116,9 @@ export default {
     async getTables() {
       // https://www.consolelog.io/group-by-in-javascript/
       this.checking = true;
-      let forms = await (await this.$getDictionary()).wordForms(this.word);
+      let inflector = await this.$getInflector();
+      let forms = await inflector.inflect(this.word.head);
       forms = forms.filter((form) => form.table !== "head");
-      for (let form of forms) {
-        form.form = await (await this.$getDictionary()).accent(form.form);
-        form.field = await (await this.$getDictionary()).stylize(form.field);
-        form.table = await (await this.$getDictionary()).stylize(form.table);
-      }
       this.tables = Helper.groupArrayBy(forms, "table");
       this.checking = false;
     },

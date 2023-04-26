@@ -50,6 +50,7 @@ export const defaultTransientSettings = {
   dictionary: undefined,
   dictionaryName: undefined,
   tokenizers: {}, // keyed by language, e.g. "eng"
+  inflectors: {}, // keyed by language, e.g. "eng"
   fullscreen: false, // Whether or not the user is in the browser's fullscreen mode
   settingsLoaded: false,
 };
@@ -155,6 +156,9 @@ export const mutations = {
   },
   SET_TOKENIZER(state, { l2Code, tokenizer }) {
     state.tokenizers[l2Code] = tokenizer;
+  },
+  SET_INFLECTOR(state, { l2Code, inflector }) {
+    state.inflectors[l2Code] = inflector;
   },
   SET_GENERAL_SETTINGS(state, generalSettings) {
     for (let property in generalSettings) {
