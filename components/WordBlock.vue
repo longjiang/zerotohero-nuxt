@@ -319,10 +319,11 @@ export default {
       return false;
     },
     getMappedPronunciation() {
-      if (this.text && this.savedWord && this.savedWord.kana && typeof mapKana !== "undefined") {
-        return mapKana(this.text, this.savedWord.kana);
-      } else {
-        if (typeof wanakana !== "undefined") {
+      if (this.token && typeof mapKana !== "undefined" && typeof wanakana !== "undefined") {
+        // If the word is saved, use the saved pronunciation
+        if (this.savedWord && this.savedWord.head === this.text) {
+          return mapKana(this.text, this.savedWord.kana);
+        } else {
           const pronunciation = this.token.pronunciation;
           return mapKana(this.token.text, wanakana.toHiragana(pronunciation));
         }

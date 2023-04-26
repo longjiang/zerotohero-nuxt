@@ -276,6 +276,7 @@ export default {
         l2SettingsClasses[`l2-${this.l2.code}`] = true;
         if (this.l2.han) l2SettingsClasses["l2-zh"] = true;
         this.l2SettingsClasses = l2SettingsClasses;
+        this.classes
       }
     },
     updateOverlayPlayerProps() {
