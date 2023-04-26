@@ -138,9 +138,9 @@ export default {
     async update() {
       this.updating = true;
       this.examples = undefined;
-      let dictionary = await this.$getDictionary();
+      let inflector = await this.$getInflector();
       let forms = this.word
-        ? (await dictionary.wordForms(this.word)).map((form) =>
+        ? (await inflector.inflect(this.word.head)).map((form) =>
             form.form.replace(/'/g, "")
           )
         : [];
