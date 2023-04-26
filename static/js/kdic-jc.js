@@ -1,6 +1,6 @@
 // importScripts('../vendor/kuromoji/kuromoji.js')
 importScripts('../vendor/wanakana/wanakana.min.js')
-importScripts('../vendor/jpconjugations.js')
+importScripts('../vendor/jp-conjugations/dist/jp-conjugations.js')
 importScripts('../vendor/localforage/localforage.js')
 importScripts("../vendor/hash-string/hash-string.min.js")
 importScripts("../js/map-kana.js")
