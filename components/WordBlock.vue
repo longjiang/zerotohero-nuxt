@@ -160,18 +160,17 @@ export default {
         let hanja = "";
         if (this.savedWord) hanja = this.savedWord.hanja;
         else if (
-          this.token &&
-          this.token.candidates &&
-          this.token.candidates[0]
+          this.words &&
+          this.words[0]
         ) {
-          let head = this.token.candidates[0].head;
+          let head = this.words[0].head;
           let bannedEndings = "이히하고가기는은도의로를";
           let bannedWords = ["지난", "진자", "가야", "주시", "거야", "위해"];
           if (
             !bannedWords.includes(head) &&
             !bannedEndings.includes(head.charAt(head.length - 1))
           ) {
-            let hanjas = this.token.candidates.map((c) => c.hanja);
+            let hanjas = this.words.map((c) => c.hanja);
             if (this.$l2.code !== "vi") hanjas = unique(hanjas || []); // Vietnamese Han Tu is wiktionary CSV file has incorrect homophones
             if (hanjas.length === 1 && hanjas[0] && !hanjas[0].includes(",")) {
               hanja = hanjas[0];

@@ -67,8 +67,7 @@
   </div>
 </template>
 
-<script lang="javascript">
-import Vue from "vue";
+<script>
 import Config from "@/lib/config";
 import smoothscroll from "smoothscroll-polyfill";
 import Helper from "@/lib/helper";
