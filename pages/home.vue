@@ -54,29 +54,12 @@ export default {
     },
   },
   mounted() {
-    let name = "explore-media";
-    if (this.$l1.code === "en" && this.$l2.code === "zh")
-      name = "courses";
-    if (this.$l1.code === "zh" && this.$l2.code === "en")
-      name = "courses";
-    this.$router.push({ name });
+    this.$router.push({ name: "explore-media" });
   },
   methods: {
     hasDashboardUpdate(hasDashboard) {
       if (hasDashboard && hasDashboard.includes("items")) {
         this.hasDashboard = true;
-      }
-    },
-    redirectToCourses() {
-      if (
-        this.$l1 &&
-        this.$route.params.l1 === this.$l1.code &&
-        this.$l2 &&
-        this.$route.params.l2 === this.$l2.code
-      ) {
-        if (this.$hasFeature("courses")) {
-          this.$router.push({ name: "courses" });
-        }
       }
     },
     hasTalks() {
