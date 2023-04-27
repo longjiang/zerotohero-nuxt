@@ -111,15 +111,15 @@ const Dictionary = {
         ` Persian transliteration is made possible with <a href="https://github.com/PasaOpasen/PersianG2P/tree/master/transform%20dict">PasaOpasen/PersianG2P</a>.`;
     return credit;
   },
-  dictionaryFile({ l1 = undefined, l2 = undefined } = {}) {
-    if (l1 && l2) {
-      for (const key in this.l2_mappings) {
-        if (l2 === key) {
-          l2 = mappings[key];
+  dictionaryFile({ l1Code = undefined, l2Code = undefined } = {}) {
+    if (l1Code && l2Code) {
+      for (const key in this.l2Code_mappings) {
+        if (l2Code === key) {
+          l2Code = mappings[key];
           break;
         }
       }
-      let filename = `${this.server}data/wiktionary-csv/${l2}-${l1}.csv.txt`;
+      let filename = `${this.server}data/wiktionary-csv/${l2Code}-${l1Code}.csv.txt`;
       return filename;
     }
   },
@@ -133,22 +133,22 @@ const Dictionary = {
       const l1Code = l1['iso639-3']
       const l2Code = l2['iso639-3']
       this.accentCritical = this.isAccentCritical();
-      this.file = this.dictionaryFile({ l1: l1Code, l2: l2Code });
+      this.file = this.dictionaryFile({ l1Code, l2Code });
       let words = await this.loadWords(this.file);
       if (this.lemmatizationTableLangs[l2Code]) {
         this.lemmatization = await this.loadLemmatizationTable(
           this.lemmatizationTableLangs[l2Code]
         );
       }
-      let supplementalLang = this.supplementalLangs[l2Code];
-      if (l1Code === "eng" && supplementalLang) {
+      let supplementalLangCode = this.supplementalLangs[l2Code];
+      if (l1Code === "eng" && supplementalLangCode) {
         // Append indonesian words to malay dictionary so we get more words
         let supplWords = await this.loadWords(
-          this.dictionaryFile({ l1: l1Code, l2: supplementalLang })
+          this.dictionaryFile({ l1Code, l2Code: supplementalLangCode })
         );
         for (let w of supplWords) {
-          w.id = supplementalLang + "-" + w.id;
-          w.supplementalLang = supplementalLang;
+          w.id = supplementalLangCode + "-" + w.id;
+          w.supplementalLang = supplementalLangCode;
         }
         words = words.concat(supplWords);
         words = words.sort((a, b) => {
@@ -164,7 +164,7 @@ const Dictionary = {
         sort: true,
       });
       if (l2Code === "eng" && l1Code !== "eng") this.loadEnglishLemmatizer(); // Our strategy of finding lemmas based on the word 'of' in the definition obviously doesn't work for definitions not in English
-      this.tokenizer = TokenizerFactory.createTokenizer({ 'iso639-3': l2Code }, this.words)
+      this.tokenizer = TokenizerFactory.createTokenizer(l2, this.words)
       console.log("Wiktionary: loaded.");
       return this;
     }
@@ -216,6 +216,7 @@ const Dictionary = {
   },
   createIndices() {
     console.log("Wiktionary: Indexing...");
+    const l1Code = this.l1['iso639-3']
     for (let word of this.words) {
       for (let indexType of ["head", "search"]) {
         if (!Array.isArray(this[indexType + "Index"][word[indexType]]))

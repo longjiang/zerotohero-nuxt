@@ -1,4 +1,6 @@
 importScripts("../vendor/localforage/localforage.js")
+importScripts("../js/dictionary-utils.js");
+importScripts("../js/tokenizers/base-tokenizer.js");
 
 /**
  * @file Converts pinyin tone numbers to tone marks.
@@ -197,11 +199,11 @@ const Dictionary = {
     distrubuted under the condition <a href="http://hakka.dict.edu.tw/hakkadict/qa.htm">citation, no modification, no commercial use</a>. `
   },
   dictionaryFile({
-    l1 = undefined,
-    l2 = undefined
+    l1Code = undefined,
+    l2Code = undefined
   } = {}) {
-    if (l1 && l2) {
-      return `${this.server}/${this.files[l2]}`
+    if (l1Code && l2Code) {
+      return `${this.server}/${this.files[l2Code]}`
     }
   },
   async loadSmart(name, file) {
@@ -228,8 +230,10 @@ const Dictionary = {
     l2 = undefined
   } = {}) {
     if (l1 && l2) {
-      this.file = this.dictionaryFile({ l1, l2 })
-      let data = await this.loadSmart(`dialect-dict-${l1}-${l2}`, this.file)
+      const l1Code = l1['iso639-3']
+      const l2Code = l2['iso639-3']
+      this.file = this.dictionaryFile({ l1Code, l2Code })
+      let data = await this.loadSmart(`dialect-dict-${l1Code}-${l2Code}`, this.file)
       let sorted = data.sort((a, b) =>
         a.traditional && b.traditional ? a.traditional.length - b.traditional.length : 0
       )
@@ -255,6 +259,7 @@ const Dictionary = {
         words.push(word)
       }
       this.words = words
+      this.tokenizer = new BaseTokenizer(l2, words)
       return this
     }
   },
@@ -481,14 +486,19 @@ const Dictionary = {
       text: matches && matches.length > 0 ? matches[0][tradOrSimp] : ''
     }
   },
-  tokenize(text) {
-    this.tokenizationCache[text] = this.tokenizationCache[text] || this.tokenizeRecursively(
-      text,
-      this.subdictFromText(text),
-      this.isTraditional(text)
-    )
-    return this.tokenizationCache[text]
+  
+  async tokenize(text) {
+    return await this.tokenizer.tokenizeWithCache(text)
   },
+  
+  // tokenize(text) {
+  //   this.tokenizationCache[text] = this.tokenizationCache[text] || this.tokenizeRecursively(
+  //     text,
+  //     this.subdictFromText(text),
+  //     this.isTraditional(text)
+  //   )
+  //   return this.tokenizationCache[text]
+  // },
   tokenizeRecursively(text, subdict, traditional = false) {
     const isChinese = subdict.isChinese(text)
     if (!isChinese) {
