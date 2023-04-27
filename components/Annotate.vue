@@ -624,7 +624,6 @@ export default {
     async tokenize(text, batchId) {
       let html = "";
       let tokenizer = await this.$getTokenizer();
-      console.log("☎️ Annotate tokenizing");
       let tokens = await tokenizer.tokenizeWithCache(
         text,
       );

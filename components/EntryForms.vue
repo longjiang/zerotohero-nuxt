@@ -1,6 +1,8 @@
 <template>
   <Widget id="entry-morphology">
-    <template #title>{{ $t('Word forms of “{word}”', { word: word.head }) }}</template>
+    <template #title>{{
+      $t("Word forms of “{word}”", { word: word.head })
+    }}</template>
     <template #body>
       <div class="row">
         <div
@@ -59,19 +61,14 @@
                     {{ row.field }}
                   </td>
                   <td class="pt-1 pb-1">
-                    <Annotate
-                      :buttons="false"
-                      :disableAnnotation="$l2.code === 'ko'"
-                    >
-                      <b :data-level="word.level || 'outside'">
-                        {{ row.form || "n/a"
-                        }}{{
-                          row.field && row.field.startsWith("imperative")
-                            ? "!"
-                            : ""
-                        }}
-                      </b>
-                    </Annotate>
+                    <b :data-level="word.level || 'outside'">
+                      {{ row.form || "n/a"
+                      }}{{
+                        row.field && row.field.startsWith("imperative")
+                          ? "!"
+                          : ""
+                      }}
+                    </b>
                   </td>
                 </tr>
               </tbody>
