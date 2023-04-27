@@ -1,7 +1,4 @@
-import { PYTHON_SERVER } from "@/lib/utils/servers";
-import { proxy } from "@/lib/utils/proxy";
-import { isChinese } from "@/lib/utils/string";
-import BaseTokenizer from "@/lib/tokenizers/base-tokenizer";
+importScripts('../js/tokenizers/base-tokenizer.js')
 
 class ChineseTokenizer extends BaseTokenizer {
   async tokenize(text) {
@@ -31,5 +28,3 @@ class ChineseTokenizer extends BaseTokenizer {
     return tokens;
   }
 }
-
-export default ChineseTokenizer; // Export the ChineseTokenizer class

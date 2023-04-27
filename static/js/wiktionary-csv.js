@@ -4,8 +4,7 @@ importScripts("../vendor/localforage/localforage.js");
 importScripts("../vendor/hash-string/hash-string.min.js");
 importScripts("../vendor/fuzzy-search/FuzzySearch.js");
 importScripts("../js/dictionary-utils.js");
-
-const PYTHON_SERVER = "https://python.zerotohero.ca/";
+importScripts("../js/tokenizers/tokenizer-factory.js");
 
 const Dictionary = {
   name: "wiktionary-csv",
@@ -163,10 +162,17 @@ const Dictionary = {
         sort: true,
       });
       if (this.l2 === "eng" && this.l1 !== "eng") this.loadEnglishLemmatizer(); // Our strategy of finding lemmas based on the word 'of' in the definition obviously doesn't work for definitions not in English
+      this.tokenizer = TokenizerFactory.createTokenizer({ 'iso639-3': l2 }, this.words)
       console.log("Wiktionary: loaded.");
       return this;
     }
   },
+
+
+  async tokenize(text) {
+    return await this.tokenizer.tokenizeWithCache(text)
+  },
+  
   // For Non-English users
   async loadEnglishLemmatizer() {
     console.log('Loading English lemmatizer "javascript-lemmatizer"...');
@@ -344,18 +350,6 @@ const Dictionary = {
       }
       return table;
     }
-  },
-  /**
-   * Romanize Persian text
-   * @param {String} text
-   */
-  async romanizePersian(text) {
-    if (this.l2 !== "fas") return;
-    let url = `${PYTHON_SERVER}transliterate-persian?text=${encodeURIComponent(
-      text
-    )}`;
-    let transliteration = await DictionaryUtils.proxy(url, -1);
-    return transliteration;
   },
   hasHan(text) {
     return text.match(

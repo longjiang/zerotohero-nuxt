@@ -1,8 +1,6 @@
-import { PYTHON_SERVER } from "@/lib/utils/servers"
-import { proxy } from "@/lib/utils/proxy"
-import BaseTokenizer from "@/lib/tokenizers/base-tokenizer";
+importScripts('../js/tokenizers/base-tokenizer.js')
 
-class SimpleLemmaTokenizer extends BaseTokenizer {
+class SimplemmaTokenizer extends BaseTokenizer {
   
   async tokenize(text) {
     let tokens = [];
@@ -18,10 +16,7 @@ class SimpleLemmaTokenizer extends BaseTokenizer {
       } else {
         tokens.push(this.normalizeToken(token));
       }
-      tokens.push(" ");
     }
-    return tokens;
+    return this.recoverSpaces(tokens, text);
   }
 }
-
-export default SimpleLemmaTokenizer; // Export the SimpleLemmaTokenizer class

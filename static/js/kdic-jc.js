@@ -4,10 +4,8 @@ importScripts('../vendor/jp-conjugations/dist/jp-conjugations.js')
 importScripts('../vendor/localforage/localforage.js')
 importScripts("../vendor/hash-string/hash-string.min.js")
 importScripts("../js/map-kana.js")
-
-const PYTHON_SERVER = 'https://python.zerotohero.ca/'
-
-const PROXY_SERVER = 'https://server.chinesezerotohero.com/'
+importScripts("../js/dictionary-utils.js")
+importScripts("../js/tokenizers/japanese-tokenizer.js")
 
 const Dictionary = {
   file: 'https://server.chinesezerotohero.com/data/kdic-jc/kdic-jc.tsv.txt',
@@ -30,6 +28,7 @@ const Dictionary = {
     let words = await this.loadEdict(edictData)
     this.words = this.uniqueByValues(words, ["id"]);
     words = null
+    this.tokenizer = new JapaneseTokenizer()
     return this
   },
   async loadEdict(csv) {
@@ -297,26 +296,12 @@ const Dictionary = {
       text: matches && matches.length > 0 ? matches[0].head : ''
     }
   },
-  // json or plain text only, and returns object
-  async proxy(url, cacheLife = -1, encoding = false) {
-    try {
-      let proxyURL = `${PROXY_SERVER}scrape2.php?cache_life=${cacheLife}${encoding ? "&encoding=" + encoding : ""
-        }&url=${encodeURIComponent(url)}`;
-      let response = await axios.get(proxyURL);
-      if (response.data) {
-        return response.data;
-      }
-    } catch (err) {
-      console.log(`Cannot get ${url}`);
-    }
-    return false;
-  },
   async tokenizeJapanese(text) {
     text = text.replace(/-/g, "- ");
     let url = `${PYTHON_SERVER}lemmatize-japanese?text=${encodeURIComponent(
       text
     )}`;
-    let tokenized = await this.proxy(url);
+    let tokenized = await proxy(url);
     let tokens = [];
     for (let token of tokenized) {
       if (!token) {
@@ -344,35 +329,40 @@ const Dictionary = {
     const japaneseRegex = /^[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}\p{Punctuation}\p{Symbol}]+$/ug
     return japaneseRegex.test(text)
   },
+
   async tokenize(text) {
-    if (this.tokenizationCache[text]) return this.tokenizationCache[text]
-    let tokenized = await this.tokenizeJapanese(text);
-    let final = []
-    for (let index in tokenized) {
-      let token = tokenized[index]
-      let candidates = this.lookupMultiple(
-        token.word
-      );
-      if (token.lemma && token.lemma !== token.word) {
-        candidates = candidates.concat(
-          this.lookupMultiple(
-            token.lemma
-          )
-        );
-      }
-      let mappedPronunciation = mapKana(token.word, wanakana.toHiragana(token.pronunciation))
-      final.push({
-        text: token.word,
-        candidates,
-        pos: token.pos,
-        pronunciation: wanakana.toHiragana(token.pronunciation),
-        mappedPronunciation
-      })
-      if (!this.isJapanese(token.word)) final.push(" ")
-    }
-    this.tokenizationCache[text] = final
-    return final
+    return await this.tokenizer.tokenizeWithCache(text)
   },
+  
+  // async tokenize(text) {
+  //   if (this.tokenizationCache[text]) return this.tokenizationCache[text]
+  //   let tokenized = await this.tokenizeJapanese(text);
+  //   let final = []
+  //   for (let index in tokenized) {
+  //     let token = tokenized[index]
+  //     let candidates = this.lookupMultiple(
+  //       token.word
+  //     );
+  //     if (token.lemma && token.lemma !== token.word) {
+  //       candidates = candidates.concat(
+  //         this.lookupMultiple(
+  //           token.lemma
+  //         )
+  //       );
+  //     }
+  //     let mappedPronunciation = mapKana(token.word, wanakana.toHiragana(token.pronunciation))
+  //     final.push({
+  //       text: token.word,
+  //       candidates,
+  //       pos: token.pos,
+  //       pronunciation: wanakana.toHiragana(token.pronunciation),
+  //       mappedPronunciation
+  //     })
+  //     if (!this.isJapanese(token.word)) final.push(" ")
+  //   }
+  //   this.tokenizationCache[text] = final
+  //   return final
+  // },
   transliterate(text) {
     return wanakana.toRomaji(text)
   }

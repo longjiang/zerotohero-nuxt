@@ -1,7 +1,4 @@
-// persian-tokenizer.js
-import { PYTHON_SERVER } from "@/lib/utils/servers";
-import { proxy } from "@/lib/utils/proxy";
-import BaseTokenizer from "@/lib/tokenizers/base-tokenizer";
+importScripts('../js/tokenizers/base-tokenizer.js')
 
 class PersianTokenizer extends BaseTokenizer {
   async tokenize(text) {
@@ -22,5 +19,3 @@ class PersianTokenizer extends BaseTokenizer {
     return tokens
   }
 }
-
-export default PersianTokenizer; // Export the PersianTokenizer class

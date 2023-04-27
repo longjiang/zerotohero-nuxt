@@ -108,29 +108,6 @@ export default async ({ app, store, route }, inject) => {
     }
   })
 
-  inject("getTokenizer", async () => {
-    if (store.state.settings.l1 && store.state.settings.l2) {
-      const l2 = store.state.settings.l2;
-      const l2Code = l2["iso639-3"] || l2["glottologId"];
-  
-      if (!store.state.settings.tokenizers[l2Code]) {
-        const tokenizerPromise = new Promise(async (resolve, reject) => {
-          try {
-            const dictionary = await app.$getDictionary();
-            const words = await dictionary.getWords();
-            const tokenizer = TokenizerFactory.createTokenizer(l2, words);
-            resolve(tokenizer);
-          } catch (error) {
-            reject(error);
-          }
-        });
-        store.commit("settings/SET_TOKENIZER", { l2Code, tokenizer: tokenizerPromise });
-      }
-      
-      return await store.state.settings.tokenizers[l2Code];
-    }
-  });
-
   inject("getInflector", async () => {
     if (store.state.settings.l1 && store.state.settings.l2) {
       const l2 = store.state.settings.l2;

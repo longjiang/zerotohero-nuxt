@@ -1,8 +1,5 @@
-import { PYTHON_SERVER } from "@/lib/utils/servers"
-import { proxy } from "@/lib/utils/proxy"
-import BaseTokenizer from "@/lib/tokenizers/base-tokenizer";
+importScripts('../js/tokenizers/base-tokenizer.js')
 
-// turkish-tokenizer.js
 class TurkishTokenizer extends BaseTokenizer {
   
   async tokenize(text) {
@@ -32,5 +29,3 @@ class TurkishTokenizer extends BaseTokenizer {
   }
   
 }
-
-export default TurkishTokenizer; // Export the TurkishTokenizer class

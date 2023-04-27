@@ -1,8 +1,6 @@
 importScripts("../vendor/localforage/localforage.js")
-
-const PYTHON_SERVER = 'https://python.zerotohero.ca/'
-
-const PROXY_SERVER = 'https://server.chinesezerotohero.com/'
+importScripts("../js/tokenizers/chinese-tokenizer.js")
+importScripts("../js/dictionary-utils.js")
 
 const Dictionary = {
   file: undefined,
@@ -37,6 +35,7 @@ const Dictionary = {
     this.characters = characters
     this.newHSK = newHSK
     this.createIndices()
+    this.tokenizer = new ChineseTokenizer()
   },
   compileHSKStandardCourseWords(word) {
     let { book, lesson, dialog } = word
@@ -115,20 +114,6 @@ const Dictionary = {
   },
   getWords() {
     return this.words
-  },
-  // json or plain text only, and returns object
-  async proxy(url, cacheLife = -1, encoding = false) {
-    try {
-      let proxyURL = `${PROXY_SERVER}scrape2.php?cache_life=${cacheLife}${encoding ? "&encoding=" + encoding : ""
-        }&url=${encodeURIComponent(url)}`;
-      let response = await axios.get(proxyURL);
-      if (response.data) {
-        return response.data;
-      }
-    } catch (err) {
-      console.log(`Cannot get ${url}`);
-    }
-    return false;
   },
   findPhrases(word) {
     if (word) {
@@ -526,11 +511,11 @@ const Dictionary = {
     let url = `${PYTHON_SERVER}lemmatize-chinese?text=${encodeURIComponent(
       text
     )}`;
-    let tokenized = await this.proxy(url);
+    let tokenized = await proxy(url);
     // check if the tokenized is an array and not a string
     if (!tokenized || typeof tokenized === 'string') {
       // try again without caching
-      tokenized = await this.proxy(url, 0);
+      tokenized = await proxy(url, 0);
       if (!tokenized || typeof tokenized === 'string') {
         return
       }
@@ -588,42 +573,47 @@ const Dictionary = {
     })
     return candidates
   },
+
   async tokenize(text) {
-    if (this.tokenizationCache[text]) return this.tokenizationCache[text]
-    let tokenized = await this.tokenizeChinese(text);
-    if (!tokenized) return this.tokenizeLocally(text);
-    let final = []
-    for (let index in tokenized) {
-      let token = tokenized[index]
-      if (typeof token === 'object' && this.isChinese(token.word)) {
-        let candidates = this.lookupMultiple(
-          token.word
-        );
-        if (token.lemma && token.lemma !== token.word) {
-          candidates = candidates.concat(
-            this.lookupMultiple(
-              token.lemma
-            )
-          );
-        }
-        if (candidates.length === 0 && token.word) {
-          candidates = this.getWordsWithinText(token.word)
-        }
-        candidates = this.sortCandidatesInText(candidates, text)
-        final.push({
-          text: token.word,
-          candidates,
-          pos: token.pos,
-          pronunciation: token.pronunciation
-        })
-        if (token.word && !this.isChinese(token.word)) final.push(" ")
-      } else {
-        final.push(token.word || token) // string
-      }
-    }
-    this.tokenizationCache[text] = final
-    return final
+    return await this.tokenizer.tokenizeWithCache(text)
   },
+
+  // async tokenize(text) {
+  //   if (this.tokenizationCache[text]) return this.tokenizationCache[text]
+  //   let tokenized = await this.tokenizeChinese(text);
+  //   if (!tokenized) return this.tokenizeLocally(text);
+  //   let final = []
+  //   for (let index in tokenized) {
+  //     let token = tokenized[index]
+  //     if (typeof token === 'object' && this.isChinese(token.word)) {
+  //       let candidates = this.lookupMultiple(
+  //         token.word
+  //       );
+  //       if (token.lemma && token.lemma !== token.word) {
+  //         candidates = candidates.concat(
+  //           this.lookupMultiple(
+  //             token.lemma
+  //           )
+  //         );
+  //       }
+  //       if (candidates.length === 0 && token.word) {
+  //         candidates = this.getWordsWithinText(token.word)
+  //       }
+  //       candidates = this.sortCandidatesInText(candidates, text)
+  //       final.push({
+  //         text: token.word,
+  //         candidates,
+  //         pos: token.pos,
+  //         pronunciation: token.pronunciation
+  //       })
+  //       if (token.word && !this.isChinese(token.word)) final.push(" ")
+  //     } else {
+  //       final.push(token.word || token) // string
+  //     }
+  //   }
+  //   this.tokenizationCache[text] = final
+  //   return final
+  // },
   subdict(data) {
     let newDict = Object.assign({}, this)
     return Object.assign(newDict, { words: data })

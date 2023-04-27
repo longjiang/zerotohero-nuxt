@@ -1,6 +1,4 @@
-import { PYTHON_SERVER } from "@/lib/utils/servers";
-import { proxy } from "@/lib/utils/proxy";
-import BaseTokenizer from "@/lib/tokenizers/base-tokenizer";
+importScripts('../js/tokenizers/base-tokenizer.js')
 
 // arabic-tokenizer.js
 class ArabicTokenizer extends BaseTokenizer {
@@ -37,5 +35,3 @@ class ArabicTokenizer extends BaseTokenizer {
     return tokens;
   }
 }
-
-export default ArabicTokenizer; // Export the ArabicTokenizer class

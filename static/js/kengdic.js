@@ -3,6 +3,7 @@ importScripts("../vendor/korean_conjugation/html/korean/conjugator.js");
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
 importScripts("../vendor/localforage/localforage.js")
 importScripts("../vendor/fuzzy-search/FuzzySearch.js")
+importScripts("../js/tokenizers/korean-tokenizer.js")
 
 const Dictionary = {
   file:
@@ -45,6 +46,7 @@ const Dictionary = {
     kengdicData = null
     wiktionaryData = null
     axios.get("https://py.zerotohero.ca/start-open-korean-text.php"); // Call index.php to make sure the java open-korean-text process is running (Dreamhost kills it from time to time)
+    this.tokenizer = new KoreanTokenizer();
     return this;
   },
   async loadSmart(name, file) {
@@ -371,39 +373,45 @@ const Dictionary = {
   hasHangul(text) {
     let hasHangul = text.includes;
   },
+
+
   async tokenize(text) {
-    let cached = this.tokenizationCache[text]
-    if (cached) return cached;
-    let t = [];
-    let lastPosition = 0;
-    let tokenized;
-    let isHangul = this.isHangul(text);
-    if (isHangul) tokenized = await this.tokenizeWithOpenKoreanText(text);
-    if (tokenized) {
-      for (let index in tokenized) {
-        let token = tokenized[index];
-        if (token.offset > lastPosition) {
-          t.push(" ");
-          lastPosition = token.offset;
-        }
-        let candidates = this.lookupMultiple(token.text);
-        if (token.stem && token.stem !== token.text) {
-          candidates = candidates.concat(this.lookupMultiple(token.stem));
-        }
-        t.push({
-          text: token.text,
-          candidates,
-          pos: token.pos
-        });
-        lastPosition = lastPosition + token.length;
-      }
-      if (lastPosition < text.length) t.push(" ");
-      this.tokenizationCache[text] = t;
-      return t;
-    } else {
-      return this.tokenizeBySplitting(text);
-    }
+    return await this.tokenizer.tokenizeWithCache(text)
   },
+  
+  // async tokenize(text) {
+  //   let cached = this.tokenizationCache[text]
+  //   if (cached) return cached;
+  //   let t = [];
+  //   let lastPosition = 0;
+  //   let tokenized;
+  //   let isHangul = this.isHangul(text);
+  //   if (isHangul) tokenized = await this.tokenizeWithOpenKoreanText(text);
+  //   if (tokenized) {
+  //     for (let index in tokenized) {
+  //       let token = tokenized[index];
+  //       if (token.offset > lastPosition) {
+  //         t.push(" ");
+  //         lastPosition = token.offset;
+  //       }
+  //       let candidates = this.lookupMultiple(token.text);
+  //       if (token.stem && token.stem !== token.text) {
+  //         candidates = candidates.concat(this.lookupMultiple(token.stem));
+  //       }
+  //       t.push({
+  //         text: token.text,
+  //         candidates,
+  //         pos: token.pos
+  //       });
+  //       lastPosition = lastPosition + token.length;
+  //     }
+  //     if (lastPosition < text.length) t.push(" ");
+  //     this.tokenizationCache[text] = t;
+  //     return t;
+  //   } else {
+  //     return this.tokenizeBySplitting(text);
+  //   }
+  // },
   async tokenizeBySplitting(text) {
     let t = [];
     let segs = text.split(/\s+/);

@@ -1,7 +1,4 @@
-import { proxy } from "@/lib/utils/proxy";
-import { isHangul } from "@/lib/utils/string";
-import BaseTokenizer from "@/lib/tokenizers/base-tokenizer";
-
+importScripts('../js/tokenizers/base-tokenizer.js')
 
 class KoreanTokenizer extends BaseTokenizer {
   async tokenize(text) {
@@ -46,5 +43,3 @@ class KoreanTokenizer extends BaseTokenizer {
     return tokens;
   }
 }
-
-export default KoreanTokenizer; // Export the KoreanTokenizer class
