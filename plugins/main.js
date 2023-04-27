@@ -114,13 +114,20 @@ export default async ({ app, store, route }, inject) => {
       const l2Code = l2["iso639-3"] || l2["glottologId"];
   
       if (!store.state.settings.tokenizers[l2Code]) {
-        const dictionary = await app.$getDictionary();
-        const words = await dictionary.getWords();
-        const tokenizer = TokenizerFactory.createTokenizer(l2, words);
-        store.commit("settings/SET_TOKENIZER", { l2Code, tokenizer });
+        const tokenizerPromise = new Promise(async (resolve, reject) => {
+          try {
+            const dictionary = await app.$getDictionary();
+            const words = await dictionary.getWords();
+            const tokenizer = TokenizerFactory.createTokenizer(l2, words);
+            resolve(tokenizer);
+          } catch (error) {
+            reject(error);
+          }
+        });
+        store.commit("settings/SET_TOKENIZER", { l2Code, tokenizer: tokenizerPromise });
       }
       
-      return store.state.settings.tokenizers[l2Code];
+      return await store.state.settings.tokenizers[l2Code];
     }
   });
 
