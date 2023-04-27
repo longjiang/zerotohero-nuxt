@@ -20,7 +20,7 @@ const InflectorFactory = {
       }
     }
     importScripts('../js/inflectors/base-inflector.js');
-    const BaseInflectorClass = self['BaseInflector'];
+    const BaseInflectorClass = BaseInflector;
     return new BaseInflectorClass(l2);
   },
 };

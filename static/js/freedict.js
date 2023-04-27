@@ -2,6 +2,7 @@ importScripts('../vendor/javascript-lemmatizer/js/lemmatizer.js')
 importScripts("../vendor/localforage/localforage.js")
 importScripts('../js/dictionary-utils.js')
 importScripts("../js/tokenizers/tokenizer-factory.js");
+importScripts("../js/inflectors/inflector-factory.js")
 
 const Dictionary = {
   name: 'freedict',
@@ -43,8 +44,11 @@ const Dictionary = {
 
   async tokenize(text) {
     const tokens = await this.tokenizer.tokenizeWithCache(text)
-    console.log({tokens})
     return tokens
+  },
+
+  async inflect(text) {
+    return await this.inflector.inflectWithCache(text)
   },
 
   // tokenize(text) {
@@ -99,6 +103,7 @@ const Dictionary = {
     await this.loadWords()
     await this.loadConjugations()
     this.tokenizer = TokenizerFactory.createTokenizer(l2, this.words)
+    this.inflector = InflectorFactory.createInflector(this.l2)
     return this
   },
   dictionaryFile({l1Code, l2Code}) {

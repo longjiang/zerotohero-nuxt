@@ -1,5 +1,6 @@
-import BaseInflector from './base-inflector';
-import { uniqueByValue } from '@/lib/utils';
+importScripts('../js/inflectors/base-inflector.js')
+importScripts('../vendor/korean_conjugation/html/korean/hangeul.js')
+importScripts('../vendor/korean_conjugation/html/korean/conjugator.js')
 
 // Loaded via script tag in default.vue: /static/vendor/korean_conjugation/html/korean/conjugator.js')
 // Loaded via script tag in default.vue: /static/vendor/korean_conjugation/html/korean/hangeul.js')
@@ -65,6 +66,3 @@ class KoreanInflector extends BaseInflector {
     return forms;
   }
 }
-
-
-export default KoreanInflector;

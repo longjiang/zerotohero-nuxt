@@ -214,18 +214,6 @@ export default {
         body: true,
       });
     }
-    if (this.l2 && this.l2.code === "ko") {
-      head.script.push({
-        hid: "hangeul",
-        src: "/vendor/korean_conjugation/html/korean/conjugator.js",
-        body: true,
-      });
-      head.script.push({
-        hid: "hangeul",
-        src: "/vendor/korean_conjugation/html/korean/hangeul.js",
-        body: true,
-      });
-    }
     return head;
   },
   watch: {

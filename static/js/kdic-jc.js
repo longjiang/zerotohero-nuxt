@@ -1,27 +1,31 @@
 // importScripts('../vendor/kuromoji/kuromoji.js')
 importScripts('../vendor/wanakana/wanakana.min.js')
-importScripts('../vendor/jp-conjugations/dist/jp-conjugations.js')
 importScripts('../vendor/localforage/localforage.js')
 importScripts("../vendor/hash-string/hash-string.min.js")
 importScripts("../js/map-kana.js")
 importScripts("../js/dictionary-utils.js")
 importScripts("../js/tokenizers/japanese-tokenizer.js")
+importScripts("../js/inflectors/inflector-factory.js")
 
 const Dictionary = {
   file: 'https://server.chinesezerotohero.com/data/kdic-jc/kdic-jc.tsv.txt',
   words: [],
   tokenizationCache: {},
   name: 'edict',
+  l1: undefined,
+  l2: undefined,
   // tokenizer: undefined,
   credit() {
     return '日汉词典来自StarDict格式的<a href="https://github.com/a0726h77/stardict-dict-ja" target="_blank">kdic-jc</a>。'
   },
-  async load() {
+  async load({ l1 = undefined, l2 = undefined } = {}) {
     // this.tokenizer = await new Promise(resolve => {
     //   kuromoji.builder({ dicPath: `https://server.chinesezerotohero.com/data/kuromoji/` }).build((err, tokenizer) => {
     //     resolve(tokenizer)
     //   })
     // })
+    this.l1 = l1
+    this.l2 = l2
     let [edictData] = await Promise.all([
       this.loadSmart('kdic-jc', this.file),
     ]);
@@ -58,6 +62,7 @@ const Dictionary = {
       if (word.id) words.push(word)
     }
     words = words.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
+    this.inflector = InflectorFactory.createInflector(this.l2)
     return words
   },
   // https://stackoverflow.com/questions/38613654/javascript-find-unique-objects-in-array-based-on-multiple-properties
@@ -332,6 +337,10 @@ const Dictionary = {
 
   async tokenize(text) {
     return await this.tokenizer.tokenizeWithCache(text)
+  },
+
+  async inflect(text) {
+    return await this.inflector.inflectWithCache(text)
   },
   
   // async tokenize(text) {

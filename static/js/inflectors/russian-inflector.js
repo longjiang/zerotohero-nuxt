@@ -1,7 +1,6 @@
 // @/lib/inflectors/russian-inflector.js
 
-import BaseInflector from './base-inflector';
-import Papa from 'papaparse';
+importScripts('../js/inflectors/base-inflector.js')
 
 class RussianInflector extends BaseInflector {
 
@@ -153,5 +152,3 @@ class RussianInflector extends BaseInflector {
     return text.replace(/'/g, '́')
   }
 }
-
-export default RussianInflector;

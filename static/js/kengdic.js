@@ -5,6 +5,7 @@ importScripts("../vendor/localforage/localforage.js")
 importScripts("../vendor/fuzzy-search/FuzzySearch.js")
 importScripts('../js/dictionary-utils.js')
 importScripts("../js/tokenizers/korean-tokenizer.js")
+importScripts("../js/inflectors/inflector-factory.js")
 
 const Dictionary = {
   file:
@@ -16,6 +17,8 @@ const Dictionary = {
   version: "2.16.1",
   words: [],
   name: "kengdic",
+  l1: undefined,
+  l2: undefined,
   hangulRegex: /[\u1100-\u11FF\u302E\u302F\u3131-\u318E\u3200-\u321E\u3260-\u327E\uA960-\uA97C\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uFFA0-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]+/,
   nonHangulRegex: /[^\u1100-\u11FF\u302E\u302F\u3131-\u318E\u3200-\u321E\u3260-\u327E\uA960-\uA97C\uAC00-\uD7A3\uD7B0-\uD7C6\uD7CB-\uD7FB\uFFA0-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC]+/,
   tokenizationCache: {},
@@ -23,16 +26,19 @@ const Dictionary = {
     return `The Korean dictionary is provided by <a href="https://github.com/garfieldnate/kengdic">kengdic</a> created by Joe Speigle, which is freely available from its GitHub project page. Korean conjugation made possible with <a href="https://github.com/max-christian/korean_conjugation">max-christian/korean_conjugation</a>.`;
   },
   async load({ l1 = undefined, l2 = undefined } = {}) {
+    this.l1 = l1
+    this.l2 = l2
+    const l1Code = l1['iso639-3']
     let promises = [
-      this.loadSmart(`wiktionary-kor-${l1}`, this.wiktionaryFiles[l1])
+      this.loadSmart(`wiktionary-kor-${l1Code}`, this.wiktionaryFiles[l1Code])
     ];
     
-    if (l1 === 'eng') promises.unshift(this.loadSmart('kengdic', this.file));
+    if (l1Code === 'eng') promises.unshift(this.loadSmart('kengdic', this.file));
     
     let results = await Promise.all(promises);
     
-    // If l1 is 'eng', results will have two elements, otherwise it will have one element
-    let [kengdicData, wiktionaryData] = l1 === 'eng' ? results : [undefined, results[0]];
+    // If l1Code is 'eng', results will have two elements, otherwise it will have one element
+    let [kengdicData, wiktionaryData] = l1Code === 'eng' ? results : [undefined, results[0]];
     
     let words = kengdicData ? await this.loadKengdic(kengdicData) : [];
     let wiktionaryWords = wiktionaryData ? await this.loadWiktionary(wiktionaryData) : [];
@@ -48,6 +54,7 @@ const Dictionary = {
     wiktionaryData = null
     axios.get("https://py.zerotohero.ca/start-open-korean-text.php"); // Call index.php to make sure the java open-korean-text process is running (Dreamhost kills it from time to time)
     this.tokenizer = new KoreanTokenizer();
+    this.inflector = InflectorFactory.createInflector(this.l2)
     return this;
   },
   async loadSmart(name, file) {
@@ -375,9 +382,12 @@ const Dictionary = {
     let hasHangul = text.includes;
   },
 
-
   async tokenize(text) {
     return await this.tokenizer.tokenizeWithCache(text)
+  },
+
+  async inflect(text) {
+    return await this.inflector.inflectWithCache(text)
   },
   
   // async tokenize(text) {
