@@ -1,6 +1,7 @@
 importScripts('../vendor/localforage/localforage.js')
 importScripts('../js/dictionary-utils.js')
 importScripts('../js/tokenizers/russian-tokenizer.js')
+importScripts("../js/inflectors/inflector-factory.js")
 
 const Dictionary = {
   words: [],
@@ -8,6 +9,8 @@ const Dictionary = {
   index: {},
   cache: {},
   tokenizationCache: {},
+  l1: undefined,
+  l2: undefined,
   tables: [
     // 'categories_words2', // not sure what this does
     // 'expressions_words', // not sure what this does
@@ -57,6 +60,24 @@ const Dictionary = {
   ],
   credit() {
     return 'The Russian dictionary is provided by <a href="https://en.openrussian.org/about">OpenRussian.org</a>, which is freely distribtued.'
+  },
+  async load({ l1 = undefined, l2 = undefined } = {}) {
+    this.l1 = l1
+    this.l2 = l2
+    await this.loadWords()
+    let promises = []
+    for (let table of this.tables.filter(
+      table => table.name !== 'declensions'
+    )) {
+      promises.push(this.loadTable(table.name))
+    }
+    await Promise.all(promises)
+    await this.loadDeclensions()
+    // promises.push(this.merge())
+    this.createIndex()    
+    this.tokenizer = new RussianTokenizer()
+    this.inflector = InflectorFactory.createInflector(this.l2)
+    return this
   },
   async loadSmart(name) {
     const server = 'https://server.chinesezerotohero.com/'
@@ -142,21 +163,6 @@ const Dictionary = {
       this.words[row.id] = row
     }
   },
-  async load() {
-    await this.loadWords()
-    let promises = []
-    for (let table of this.tables.filter(
-      table => table.name !== 'declensions'
-    )) {
-      promises.push(this.loadTable(table.name))
-    }
-    await Promise.all(promises)
-    await this.loadDeclensions()
-    // promises.push(this.merge())
-    this.createIndex()    
-    this.tokenizer = new RussianTokenizer()
-    return this
-  },
   async tokenize(text) {
     return await this.tokenizer.tokenizeWithCache(text)
   },
@@ -222,6 +228,11 @@ const Dictionary = {
     let words = this.words.filter(word => word && word.bare.toLowerCase() === text.toLowerCase())
     return words
   },
+
+  async inflect(text) {
+    return await this.inflector.inflectWithCache(text)
+  },
+
   createIndex() {
     console.log('Indexing...')
 

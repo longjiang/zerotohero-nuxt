@@ -31,44 +31,44 @@ class RussianInflector extends BaseInflector {
   }
 
   loadWordsIndex(wordsIndexUrl) {
-    return new Promise((resolve, reject) => {
-      Papa.parse(wordsIndexUrl, {
-        download: true,
-        delimiter: '\t',
-        header: true,
-        complete: (results) => {
-          results.data.forEach(row => {
-            this.wordsIndex[row.id] = row.bare;
-          });
-          resolve();
-        },
-        error: (err) => {
-          console.error('Error loading words index:', err);
-          reject(err);
-        }
-      });
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await axios.get(wordsIndexUrl);
+        const data = Papa.parse(response.data, {
+          delimiter: '\t',
+          header: true
+        });
+  
+        data.data.forEach(row => {
+          this.wordsIndex[row.id] = row.bare;
+        });
+        resolve();
+      } catch (err) {
+        console.error('Error loading words index:', err);
+        reject(err);
+      }
     });
   }
-
+  
   loadTable(url, propertyName) {
-    return new Promise((resolve, reject) => {
-      Papa.parse(url, {
-        download: true,
-        delimiter: '\t',
-        header: true,
-        complete: (results) => {
-          results.data.forEach(row => {
-            this[propertyName][row.word_id] = row;
-          });
-          resolve();
-        },
-        error: (err) => {
-          console.error(`Error loading ${propertyName}:`, err);
-          reject(err);
-        }
-      });
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await axios.get(url);
+        const data = Papa.parse(response.data, {
+          delimiter: '\t',
+          header: true
+        });
+  
+        data.data.forEach(row => {
+          this[propertyName][row.word_id] = row;
+        });
+        resolve();
+      } catch (err) {
+        console.error(`Error loading ${propertyName}:`, err);
+        reject(err);
+      }
     });
-  }
+  }  
 
   async inflect(word) {
     await this.loadData;
@@ -87,7 +87,7 @@ class RussianInflector extends BaseInflector {
 
       if (formData) {
         Object.entries(formData).forEach(([field, form]) => {
-          if (field !== 'word_id' && form) {
+          if (field !== 'word_id' && field !== 'id' && form) {
             // If the field is an id, look up the word in the words index
             if (field.includes('id')) {
               form = this.wordsIndex[form];
@@ -145,7 +145,7 @@ class RussianInflector extends BaseInflector {
       past_n: 'past tense (neuter)',
       past_pl: 'past tense (plural)'
     }
-    return stylize[name]
+    return stylize[name] || name;
   }
 
   renderAccent(text) {
