@@ -91,3 +91,11 @@ const randomProperty = (obj) => {
   var keys = Object.keys(obj);
   return obj[keys[(keys.length * Math.random()) << 0]];
 };
+
+
+const randomArrayItem = (array, start = 0, length = false) => {
+  length = length || array.length
+  array = array.slice(start, length)
+  let index = Math.floor(Math.random() * array.length)
+  return array[index]
+}
