@@ -76,6 +76,7 @@
         @play="play"
         @pause="pause"
         @rewind="rewind"
+        @fastforward="fastfowrard"
         @seek="seek"
         @open="onOpen"
         @updateCollapsed="(c) => (this.collapsed = c)"
@@ -675,12 +676,23 @@ export default {
       }
     },
 
-    rewind() {
-      if (this.video.subs_l2[this.startLineIndex]) {
-        let starttime = this.video.subs_l2[this.startLineIndex].starttime;
-        this.seek(starttime);
-      } else if (this.$refs.transcript) this.$refs.transcript.rewind();
+    rewind(seconds) {
+      // If seconds is not defined, rewind to the beginning of the current line
+      if (!seconds) {
+        if (this.video.subs_l2[this.startLineIndex]) {
+          let starttime = this.video.subs_l2[this.startLineIndex].starttime;
+          this.seek(starttime);
+        } else if (this.$refs.transcript) this.$refs.transcript.rewind();
+      } else {
+        // Otherwise rewind by the specified number of seconds
+        this.seek(Math.max(0, this.currentTime - seconds));
+      }
     },
+    
+    fastfowrard(seconds) {
+      this.seek(Math.min(this.duration, this.currentTime + seconds));
+    },
+
     seek(starttime) {
       this.$refs.video.seek(starttime);
     },

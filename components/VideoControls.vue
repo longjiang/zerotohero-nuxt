@@ -50,15 +50,6 @@
       >
         <i class="fa-solid fa-folder-open"></i>
       </button>
-      <!-- <button
-        :class="{
-          'btn-video-controls btn-video-controls-rewind text-center': true,
-        }"
-        @click="rewind"
-        :title="$t('Rewind to Beginning')"
-      >
-        <i class="fas fa-undo"></i>
-      </button> -->
       <button
         v-if="showTranscriptModeToggle"
         :class="{
@@ -278,7 +269,7 @@
 
 <script>
 import { toHHMMSS } from "@/lib/date-helper";
-import { shuffle, safeShuffle, uniqueByValue } from "@/lib/utils/array";
+import { shuffle, uniqueByValue } from "@/lib/utils/array";
 
 export default {
   props: {
@@ -489,16 +480,24 @@ export default {
             e.preventDefault(); // Prevent the default spacebar behavior
             return false;
           }
-          if (["ArrowUp", "ArrowLeft"].includes(e.code)) {
+          if (["ArrowUp"].includes(e.code)) {
             this.goToPreviousLine();
             return false;
           }
-          if (["ArrowDown", "ArrowRight"].includes(e.code)) {
+          if (["ArrowDown"].includes(e.code)) {
             this.goToNextLine();
             return false;
           }
+          if (["ArrowLeft"].includes(e.code)) {
+            this.$adminMode ? this.rewind(2) : this.goToPreviousLine();
+            return false;
+          }
+          if (["ArrowRight"].includes(e.code)) {
+            this.$adminMode ? this.fastforward(2) : this.goToNextLine();
+            return false;
+          }
           if (["KeyR"].includes(e.code)) {
-            this.rewind();
+            this.rewind(2);
             return false;
           }
           if (["KeyF"].includes(e.code)) {
@@ -579,8 +578,13 @@ export default {
     goToLine(line) {
       this.$emit("goToLine", line);
     },
-    rewind() {
-      this.$emit("rewind");
+    rewind(seconds) {
+      // if seconds is not provided, rewind to the start
+      this.$emit("rewind", seconds);
+    },
+    fastforward(seconds) {
+      // if seconds is not provided, ignore
+      if (seconds) this.$emit("fastforward", seconds);
     },
     getSortedLines() {
       if (this.video && this.video.subs_l2) {
