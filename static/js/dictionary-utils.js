@@ -52,6 +52,20 @@ const isHangul = (text) => {
   return isHangul;
 };
 
+
+const isTraditional= (text) => {
+  let matchedSimplified = []
+  let matchedTraditional = []
+  for (let row of this.words) {
+    if (text.includes(row.simplified)) matchedSimplified.push(row.simplified)
+    if (text.includes(row.traditional))
+      matchedTraditional.push(row.traditional)
+  }
+  const trad = this.unique(matchedTraditional).length
+  const simp = this.unique(matchedSimplified).length
+  return trad > simp
+}
+
 // https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
 const stripAccents = (str) => {
   str = str
@@ -98,4 +112,8 @@ const randomArrayItem = (array, start = 0, length = false) => {
   array = array.slice(start, length)
   let index = Math.floor(Math.random() * array.length)
   return array[index]
+}
+
+const removeTones = (pinyin) => {
+  return pinyin.replace(/\d+/g, '')
 }

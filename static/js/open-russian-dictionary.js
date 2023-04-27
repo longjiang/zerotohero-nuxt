@@ -3,7 +3,7 @@ importScripts('../js/dictionary-utils.js')
 importScripts('../js/tokenizers/russian-tokenizer.js')
 importScripts("../js/inflectors/inflector-factory.js")
 
-class Dictionary {
+class RussianDictionary {
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     this.words = [];
     this.l1 = l1;

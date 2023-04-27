@@ -179,25 +179,70 @@ var pinyinify = function (str) {
   return res
 }
 
-const Dictionary = {
-  file: undefined,
-  server: 'https://server.chinesezerotohero.com/data',
-  files: {
-    yue: 'cc-canto/cccanto-webdist.csv.txt',
-    hak: 'dict-hakka/dict-hakka.csv.txt',
-    nan: 'dict-twblg/dict-twblg.csv.txt'
-  },
-  words: [],
-  version: '1.1.3',
-  name: 'dialect-dict',
-  tokenizationCache: {},
+class ChineseDialectDictionary {
+  
+  constructor({ l1 = undefined, l2 = undefined } = {}) {
+    this.l1 = l1;
+    this.l2 = l2;
+    this.file = undefined;
+    this.server = 'https://server.chinesezerotohero.com/data';
+    this.files = {
+      yue: 'cc-canto/cccanto-webdist.csv.txt',
+      hak: 'dict-hakka/dict-hakka.csv.txt',
+      nan: 'dict-twblg/dict-twblg.csv.txt',
+    };
+    this.words = [];
+    this.version = '1.1.3';
+    this.name = this.constructor.name;
+  }
+
+  static async load({ l1 = undefined, l2 = undefined } = {}) {
+    const instance = new ChineseDialectDictionary({l1, l2});
+    await instance.loadWords();
+    instance.tokenizer = new BaseTokenizer(l2, instance.words)
+    return instance;
+  }
+
+  async loadWords() {
+    const l1Code = this.l1['iso639-3']
+    const l2Code = this.l2['iso639-3']
+    this.file = this.dictionaryFile({ l1Code, l2Code })
+    let data = await this.loadSmart(`dialect-dict-${l1Code}-${l2Code}`, this.file)
+    let sorted = data.sort((a, b) =>
+      a.traditional && b.traditional ? a.traditional.length - b.traditional.length : 0
+    )
+    let words = []
+    for (let [index, row] of sorted.entries()) {
+      let definitions = row.english ? row.english.split('/').map(d => d.trim()) : row.definitions ? row.definitions.split('|').map(d => d.trim()) : []
+      let word = {
+        id: index.toString(),
+        head: row.traditional,
+        bare: row.traditional,
+        pinyin: row.pinyin ? this.parsePinyin(row.pinyin) : '',
+        accented: row.traditional,
+        pronunciation: row.pronunciation || row.jyutping,
+        definitions,
+        search: removeTones(((row.pronunciation || row.jyutping) + row.pinyin).replace(/ /g, '')),
+        cjk: {
+          canonical: row.traditional && row.traditional !== 'NULL' ? row.traditional : undefined,
+          phonetics: row.pronunciation || row.jyutping
+        },
+        traditional: row.traditional,
+        simplified: row.simplified,
+      }
+      words.push(word)
+    }
+    this.words = words
+  }
+
   credit() {
     return `The Cantonese dictionary is provided by <a href="http://cantonese.org/download.html">cc-canto</a> dict, 
     open-source and distribtued under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 license</a>. 
     The Hakka and Min Nan dictionaries are provided by <a href="https://github.com/g0v/moedict-data-hakka">g0v/moedict-data-hakka</a> 
     and <a href="https://github.com/g0v/moedict-data-twblg">g0v/moedict-data-twblg</a>, 
     distrubuted under the condition <a href="http://hakka.dict.edu.tw/hakkadict/qa.htm">citation, no modification, no commercial use</a>. `
-  },
+  }
+
   dictionaryFile({
     l1Code = undefined,
     l2Code = undefined
@@ -205,7 +250,8 @@ const Dictionary = {
     if (l1Code && l2Code) {
       return `${this.server}/${this.files[l2Code]}`
     }
-  },
+  }
+
   async loadSmart(name, file) {
     let data = await localforage.getItem(name)
     if (!data) {
@@ -224,49 +270,14 @@ const Dictionary = {
       })
       return results.data
     }
-  },
-  async load({
-    l1 = undefined,
-    l2 = undefined
-  } = {}) {
-    if (l1 && l2) {
-      const l1Code = l1['iso639-3']
-      const l2Code = l2['iso639-3']
-      this.file = this.dictionaryFile({ l1Code, l2Code })
-      let data = await this.loadSmart(`dialect-dict-${l1Code}-${l2Code}`, this.file)
-      let sorted = data.sort((a, b) =>
-        a.traditional && b.traditional ? a.traditional.length - b.traditional.length : 0
-      )
-      let words = []
-      for (let [index, row] of sorted.entries()) {
-        let definitions = row.english ? row.english.split('/').map(d => d.trim()) : row.definitions ? row.definitions.split('|').map(d => d.trim()) : []
-        let word = {
-          id: index.toString(),
-          head: row.traditional,
-          bare: row.traditional,
-          pinyin: row.pinyin ? this.parsePinyin(row.pinyin) : '',
-          accented: row.traditional,
-          pronunciation: row.pronunciation || row.jyutping,
-          definitions,
-          search: this.removeTones(((row.pronunciation || row.jyutping) + row.pinyin).replace(/ /g, '')),
-          cjk: {
-            canonical: row.traditional && row.traditional !== 'NULL' ? row.traditional : undefined,
-            phonetics: row.pronunciation || row.jyutping
-          },
-          traditional: row.traditional,
-          simplified: row.simplified,
-        }
-        words.push(word)
-      }
-      this.words = words
-      this.tokenizer = new BaseTokenizer(l2, words)
-      return this
-    }
-  },
+  }
+
+
   parsePinyin(pinyin) {
     return pinyinify(pinyin.replace(/u:/gi, 'ü')) // use the pinyinify library to parse tones
       .replace(/\d/g, '') // pinyinify does not handle 'r5', we remove all digits
-  },
+  }
+
   lookupPinyinFuzzy(jyutping) {
     let words = this.words.filter(
       row =>
@@ -274,36 +285,14 @@ const Dictionary = {
         this.removeTones(jyutping).replace(/ /g, '')
     )
     return words
-  },
-  removeTones(pinyin) {
-    return pinyin.replace(/\d+/g, '')
-  },
-  wordForms(word) {
-    let forms = [{
-      table: 'head',
-      field: 'head',
-      form: word.bare
-    }]
-    return forms
-  },
-  stylize(name) {
-    return name
-  },
-  accent(text) {
-    return text
-  },
+  }
+
   lookupByDef(text, limit = 30) {
     text = text.toLowerCase()
     let results = this.words.filter(row => row.english && row.english.toLowerCase().includes(text)).slice(0, limit)
     return results
-  },
-  unique(array) {
-    var uniqueArray = []
-    for (let i in array) {
-      if (!uniqueArray.includes(array[i])) uniqueArray.push(array[i])
-    }
-    return uniqueArray
-  },
+  }
+
   /**
    * Get a word by ID.
    * @param {*} id the word's id
@@ -317,35 +306,31 @@ const Dictionary = {
       word = this.lookup(head)
     }
     return word
-  },
+  }
+
   getSize() {
     return this.words.length
-  },
-  isChinese(text) {
-    if (this.matchChinese(text)) return true
-  },
-  matchChinese(text) {
-    if (!text) return false
-    return text.match(
-      // eslint-disable-next-line no-irregular-whitespace
-      /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g
-    )
-  },
+  }
+
   isRoman(text) {
     return text.match(/\w+/) ? true : false
-  },
+  }
+
   randomArrayItem(array, start = 0, length = false) {
     length = length || array.length
     array = array.slice(start, length)
     let index = Math.floor(Math.random() * array.length)
     return array[index]
-  },
+  }
+
   random() {
     return this.randomArrayItem(this.words)
-  },
+  }
+
   lookupByCharacter(char) {
     return this.words.filter(row => row.traditional && row.traditional.includes(char))
-  },
+  }
+
   uniqueByValue(array, key) {
     let flags = []
     let unique = []
@@ -356,11 +341,13 @@ const Dictionary = {
       unique.push(array[i])
     }
     return unique
-  },
+  }
+
   lookupMultiple(text) {
     let results = this.lookupSimplified(text).concat(this.lookupTraditional(text))
     return this.uniqueByValue(results, 'id')
-  },
+  }
+
   lookupSimplified(simplified, pinyin = false) {
     const candidates = this.words
       .filter(row => {
@@ -371,19 +358,23 @@ const Dictionary = {
         return pinyinMatch && row.simplified === simplified
       })
     return candidates
-  },
+  }
+
   lookupTraditional(traditional, pinyin = false) {
     const candidates = this.words
       .filter(row => row.traditional === traditional)
     return candidates
-  },
+  }
+
   lookup(text) {
     let word = this.words.find(word => word && (word.simplified === text || word.traditional === text))
     return word
-  },
+  }
+
   getWords() {
     return this.words
-  },
+  }
+
   getWordsThatContain(text) {
     let words = this.words.filter(w => (w.simplified && w.simplified.includes(text)) || (w.traditional && w.traditional.includes(text)))
     let strings = this.unique(
@@ -392,7 +383,8 @@ const Dictionary = {
         .concat(words.map((word) => word.traditional))
     )
     return strings
-  },
+  }
+
   lookupByPattern(pattern) {
     // pattern like '～体'
     var results = []
@@ -404,7 +396,8 @@ const Dictionary = {
       results = this.words.filter(word => word.pronunciation.includes(pattern))
     }
     return results
-  },
+  }
+
   lookupFuzzy(text, limit = false) {
     let results = []
     if (this.isChinese(text)) {
@@ -436,113 +429,9 @@ const Dictionary = {
       })
       return results
     }
-  },
-  subdict(data) {
-    let newDict = Object.assign({}, this)
-    return Object.assign(newDict, { words: data })
-  },
-  isTraditional(text) {
-    let matchedSimplified = []
-    let matchedTraditional = []
-    for (let row of this.words) {
-      if (text.includes(row.simplified)) matchedSimplified.push(row.simplified)
-      if (text.includes(row.traditional))
-        matchedTraditional.push(row.traditional)
-    }
-    const trad = this.unique(matchedTraditional).length
-    const simp = this.unique(matchedSimplified).length
-    return trad > simp
-  },
-  subdictFromText(text) {
-    let subict = this.subdict(
-      this.words.filter(function (row) {
-        return text.includes(row.simplified) || text.includes(row.traditional)
-      })
-    )
-    return subict
-  },
-  /* Returns the longest word in the dictionary that is inside `text` */
-  longest(text, traditional = false) {
-    // Only return the *first* seen word and those the same as it
-    let first = false
-    const tradOrSimp = traditional ? 'traditional' : 'simplified'
-    let matches = this.words
-      .filter(row => this.isChinese(row.simplified))
-      .filter(function (row) {
-        if (first) {
-          return row[tradOrSimp] === first
-        } else {
-          if (text.includes(row[tradOrSimp])) {
-            first = row[tradOrSimp]
-            return true
-          }
-        }
-      })
-      .sort((a, b) => {
-        return b.weight - a.weight
-      })
-    return {
-      matches: matches,
-      text: matches && matches.length > 0 ? matches[0][tradOrSimp] : ''
-    }
-  },
+  }
   
   async tokenize(text) {
     return await this.tokenizer.tokenizeWithCache(text)
-  },
-  
-  // tokenize(text) {
-  //   this.tokenizationCache[text] = this.tokenizationCache[text] || this.tokenizeRecursively(
-  //     text,
-  //     this.subdictFromText(text),
-  //     this.isTraditional(text)
-  //   )
-  //   return this.tokenizationCache[text]
-  // },
-  tokenizeRecursively(text, subdict, traditional = false) {
-    const isChinese = subdict.isChinese(text)
-    if (!isChinese) {
-      return [text]
-    }
-    const longest = subdict.longest(text, traditional)
-    if (longest.matches.length > 0) {
-      let result = []
-      /* 
-      result = [
-        '我', 
-        {
-          text: '是'
-          candidates: [{...}, {...}, {...}
-        ],
-        '中国人。'
-      ]
-      */
-      for (let textFragment of text.split(longest.text)) {
-        result.push(textFragment) // '我'
-        result.push({
-          text: longest.text,
-          candidates: longest.matches
-        })
-      }
-      result = result.filter(item => item !== '')
-      result.pop() // last item is always useless, remove it
-      var tokens = []
-      for (let item of result) {
-        if (typeof item === 'string') {
-          for (let token of this.tokenizeRecursively(
-            item,
-            subdict,
-            traditional
-          )) {
-            tokens.push(token)
-          }
-        } else {
-          tokens.push(item)
-        }
-      }
-      return tokens
-    } else {
-      return [text]
-    }
   }
 }

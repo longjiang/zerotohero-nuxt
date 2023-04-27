@@ -3,7 +3,15 @@ importScripts('../vendor/axios/axios.min.js')
 importScripts("../vendor/localforage/localforage.js")
 
 let ready = false;
+let Dictionary;
 let dictionaryInstance;
+
+function kebabToPascalCase(str) {
+  return str
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join('');
+}
 
 onmessage = async function (e) {
   const id = e.data[0];
@@ -14,11 +22,15 @@ onmessage = async function (e) {
     let options = args[1];
     importScripts(`../js/${moduleName}.js?v=2.2.4.2`);
 
-    dictionaryInstance = new Dictionary(options);
+    const className = kebabToPascalCase(moduleName);
+    Dictionary = eval(className);
+
+    dictionaryInstance = await Dictionary.load(options);
     ready = true;
     this.postMessage([1, "load", "ready"]);
   } else if (method === "dictionaryMethods") {
-    this.postMessage([id, "dictionaryMethods", Object.getOwnPropertyNames(Dictionary.prototype)]);
+    let methods = Object.getOwnPropertyNames(Dictionary.prototype);
+    this.postMessage([id, "dictionaryMethods", methods]);
   } else {
     if (typeof dictionaryInstance[method] !== "undefined") {
       let data = await dictionaryInstance[method](...args);
