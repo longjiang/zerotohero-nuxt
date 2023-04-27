@@ -9,7 +9,6 @@ import VueMq from 'vue-mq'
 import VueSmoothScroll from 'vue2-smooth-scroll'
 import Languages from '@/lib/languages'
 import AsyncComputed from 'vue-async-computed'
-import TokenizerFactory from '@/lib/tokenizer-factory'
 import InflectorFactory from '@/lib/inflector-factory'
 import { ModalPlugin } from 'bootstrap-vue'
 
