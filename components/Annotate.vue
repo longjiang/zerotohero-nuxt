@@ -642,9 +642,11 @@ export default {
     async addCandidatesToToken(token) {
       const dictionary = await this.$getDictionary();
       let candidates = await dictionary.lookupMultiple(token.text);
-      for (let lemma of token.lemmas) {
-        if (lemma.lemma && lemma.lemma !== token.text) {
-          candidates = candidates.concat(await dictionary.lookupMultiple(lemma.lemma));
+      if (token.lemmas) {
+        for (let lemma of token.lemmas) {
+          if (lemma.lemma && lemma.lemma !== token.text) {
+            candidates = candidates.concat(await dictionary.lookupMultiple(lemma.lemma));
+          }
         }
       }
       token.candidates = uniqueByValue(candidates, 'id');

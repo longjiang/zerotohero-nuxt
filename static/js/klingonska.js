@@ -1,5 +1,7 @@
 importScripts('../vendor/javascript-lemmatizer/js/lemmatizer.js')
 importScripts("../vendor/localforage/localforage.js")
+importScripts("../js/dictionary-utils.js");
+importScripts("../js/tokenizers/base-tokenizer.js");
 
 const Dictionary = {
   name: 'klingonska',
@@ -81,18 +83,19 @@ const Dictionary = {
     })
     return words
   },
-  dictionaryFile(options) {
+  dictionaryFile() {
     let filename = 'https://server.chinesezerotohero.com/data/klingonska/dict.zdb.txt'
     return filename
   },
-  load(options) {
+  load({ l1, l2 }) {
     console.log('Loading Klingonska...')
-    this.l1 = options.l1
-    this.l2 = options.l2
-    this.file = this.dictionaryFile(options)
+    this.l1 = l1
+    this.l2 = l2
+    this.file = this.dictionaryFile()
     return new Promise(async resolve => {
       let promises = [this.loadWords()]
       await Promise.all(promises)
+      this.tokenizer = new BaseTokenizer(l2, this.words)
       resolve(this)
     })
   },
@@ -203,14 +206,22 @@ const Dictionary = {
       text: matches && matches.length > 0 ? matches[0].head : ''
     }
   },
-  tokenize(text) {
-    if (this.tokenizationCache[text]) return this.tokenizationCache[text];
-    else {
-      let tokenized = this.tokenizeIntegral(text);
-      this.tokenizationCache[text] = tokenized;
-      return tokenized;
-    }
+  
+  async tokenize(text) {
+    const tokens = await this.tokenizer.tokenizeWithCache(text)
+    console.log({ tokens })
+    return tokens
   },
+
+  // tokenize(text) {
+  //   if (this.tokenizationCache[text]) return this.tokenizationCache[text];
+  //   else {
+  //     let tokenized = this.tokenizeIntegral(text);
+  //     this.tokenizationCache[text] = tokenized;
+  //     return tokenized;
+  //   }
+  // },
+
   tokenizeIntegral(text) {
     const tokens = text.match(/\p{L}+|[^\p{L}\s]+|\s+/gu);
     const labeledTokens = tokens.map(tokenString => {
@@ -223,6 +234,7 @@ const Dictionary = {
     });
     return labeledTokens
   },
+  
   lookupFuzzy(text, limit = 30) {
     // text = 'abcde'
     text = text.replace('ʼ', '\'').toLowerCase()
