@@ -1,7 +1,5 @@
-// @/lib/inflectors/japanese-inflector.js
-import jpConjugation from 'jp-conjugation';
-
-import BaseInflector from './base-inflector';
+importScripts('../vendor/jp-conjugations/dist/jp-conjugations.js')
+importScripts('../js/inflectors/base-inflector.js')
 
 class JapaneseInflector extends BaseInflector {
   // Inflect a word and return the inflection table
@@ -11,8 +9,7 @@ class JapaneseInflector extends BaseInflector {
       field: 'head',
       form: word
     }];
-    console.log('🕹️', word);
-    let jpForms = jpConjugation.conjugate(word);
+    let jpForms = JPConjugations.conjugate(word);
     forms = forms.concat(jpForms.map(f => {
       return {
         table: 'conjugation',
@@ -24,5 +21,3 @@ class JapaneseInflector extends BaseInflector {
     return forms;
   }
 }
-
-export default JapaneseInflector;

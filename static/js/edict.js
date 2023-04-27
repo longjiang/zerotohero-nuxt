@@ -1,11 +1,11 @@
 // importScripts('../vendor/kuromoji/kuromoji.js')
 importScripts('../vendor/wanakana/wanakana.min.js')
-importScripts('../vendor/jp-conjugations/dist/jp-conjugations.js')
 importScripts('../vendor/localforage/localforage.js')
 importScripts("../vendor/hash-string/hash-string.min.js")
 importScripts("../js/map-kana.js")
 importScripts("../js/dictionary-utils.js")
 importScripts("../js/tokenizers/japanese-tokenizer.js")
+importScripts("../js/inflectors/inflector-factory.js")
 
 const Dictionary = {
   file: 'https://server.chinesezerotohero.com/data/edict/edict.tsv.txt',
@@ -13,6 +13,8 @@ const Dictionary = {
   words: [],
   tokenizationCache: {},
   name: 'edict',
+  l1: undefined,
+  l2: undefined,
   // tokenizer: undefined,
   credit() {
     return 'The Japanese dictionary is provided by <a href="http://www.edrdg.org/jmdict/edict.html">EDICT</a>, open-source and distribtued under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 license</a>.'
@@ -111,12 +113,14 @@ const Dictionary = {
     "vt": "transitive verb",
     "vz": "Ichidan verb - zuru verb (alternative form of -jiru verbs)"
   },
-  async load() {
+  async load({ l1 = undefined, l2 = undefined } = {}) {
     // this.tokenizer = await new Promise(resolve => {
     //   kuromoji.builder({ dicPath: `https://server.chinesezerotohero.com/data/kuromoji/` }).build((err, tokenizer) => {
     //     resolve(tokenizer)
     //   })
     // })
+    this.l1 = l1
+    this.l2 = l2
     let [edictData, wiktionaryData] = await Promise.all([
       this.loadSmart('edict', this.file),
       this.loadSmart('wiktionary-jpn-eng', this.wiktionaryFile)
@@ -132,6 +136,7 @@ const Dictionary = {
     words = null
     wiktionaryData = null
     this.tokenizer = new JapaneseTokenizer()
+    this.inflector = InflectorFactory.createInflector(this.l2)
     return this
   },
 
@@ -470,6 +475,10 @@ const Dictionary = {
 
   async tokenize(text) {
     return await this.tokenizer.tokenizeWithCache(text)
+  },
+
+  async inflect(text) {
+    return await this.inflector.inflectWithCache(text)
   },
 
   // async tokenize(text) {

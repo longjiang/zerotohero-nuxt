@@ -113,8 +113,8 @@ export default {
     async getTables() {
       // https://www.consolelog.io/group-by-in-javascript/
       this.checking = true;
-      let inflector = await this.$getInflector();
-      let forms = await inflector.inflect(this.word.head);
+      let dictionary = await this.$getDictionary();
+      let forms = await dictionary.inflect(this.word.head);
       forms = forms.filter((form) => form.table !== "head");
       this.tables = Helper.groupArrayBy(forms, "table");
       this.checking = false;

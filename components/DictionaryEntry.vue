@@ -377,8 +377,8 @@ export default {
         terms.push(this.entry.kana);
         terms = unique(terms);
       }
-      let inflector = await this.$getInflector();
-      let forms = await inflector.inflect(this.entry.head) || [];
+      let dictionary = await this.$getDictionary();
+      let forms = await dictionary.inflect(this.entry.head) || [];
       let entryIsLemma = !forms.find((f) => f.table === "lemma");
       if (!entryIsLemma) {
         forms = [forms[0]];

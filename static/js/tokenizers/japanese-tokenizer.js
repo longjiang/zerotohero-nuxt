@@ -1,6 +1,5 @@
 importScripts('../js/tokenizers/base-tokenizer.js')
 
-
 class JapaneseTokenizer extends BaseTokenizer {
 
   async tokenize(text) {

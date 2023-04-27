@@ -95,8 +95,8 @@ export default {
   },
   methods: {
     async allForms() {
-      let inflector = await this.$getInflector();
-      let wordForms = await inflector.inflect(this.word.head) || [];
+      let dictionary = await this.$getDictionary();
+      let wordForms = await dictionary.inflect(this.word.head) || [];
       wordForms = wordForms.filter((form) => form !== "");
       wordForms = [this.word.head].concat(
         wordForms.map((form) => form.form.replace(/'/g, ""))

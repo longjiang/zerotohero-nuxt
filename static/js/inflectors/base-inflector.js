@@ -26,5 +26,3 @@ class BaseInflector {
     }];
   }
 }
-
-export default BaseInflector;

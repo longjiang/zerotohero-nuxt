@@ -1,12 +1,4 @@
-// @/lib/inflector-factory.js
-import BaseInflector from "@/lib/inflectors/base-inflector";
-import JapaneseInflector from "@/lib/inflectors/japanese-inflector";
-import KoreanInflector from "@/lib/inflectors/korean-inflector";
-import RussianInflector from "@/lib/inflectors/russian-inflector";
-// import EnglishInflector from "@/lib/inflectors/english-inflector";
-// import FrenchInflector from "@/lib/inflectors/french-inflector";
-
-export default {
+const InflectorFactory = {
   inflectors: {
     JapaneseInflector: ["jpn"],
     KoreanInflector: ["kor"],
@@ -15,21 +7,20 @@ export default {
     // FrenchInflector: ["fra"],
   },
   createInflector(l2) {
-    const inflectorMapping = {
-      JapaneseInflector,
-      KoreanInflector,
-      RussianInflector,
-      // EnglishInflector,
-      // FrenchInflector,
-    };
     // pick the right inflector for the language
     let languageCode = l2["iso639-3"] || l2["glottologId"];
     for (let inflector in this.inflectors) {
       if (this.inflectors[inflector].includes(languageCode)) {
-        const InflectorClass = inflectorMapping[inflector];
+        const inflectorFile = `../js/inflectors/${inflector.replace('Inflector', '').toLowerCase()}-inflector.js`;
+        // Load the required tokenizer file using importScripts
+        importScripts(inflectorFile);
+        // Initialize the tokenizer class
+        const InflectorClass = eval(inflector); // Access the tokenizer class from the global scope
         return new InflectorClass(l2);
       }
     }
-    return new BaseInflector(l2);
+    importScripts('../js/inflectors/base-inflector.js');
+    const BaseInflectorClass = self['BaseInflector'];
+    return new BaseInflectorClass(l2);
   },
 };
