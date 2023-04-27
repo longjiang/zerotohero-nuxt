@@ -105,7 +105,7 @@ const Dictionary = {
   accentCriticalLangs: ["tur", "vie", "fra"], // Languages that should not strip accents when searching
   credit() {
     let credit = `The dictionary is provided by <a href="https://en.wiktionary.org/wiki/Wiktionary:Main_Page">Wiktionary</a>, which is freely distribtued under the <a href="https://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike License</a>. The dictionary is parsed by <a href="https://github.com/tatuylonen/wiktextract">wiktextract</a>.`;
-    if (this.l2 === "fas")
+    if (this.l2['iso639-3'] === "fas")
       credit =
         credit +
         ` Persian transliteration is made possible with <a href="https://github.com/PasaOpasen/PersianG2P/tree/master/transform%20dict">PasaOpasen/PersianG2P</a>.`;
@@ -124,25 +124,27 @@ const Dictionary = {
     }
   },
   isAccentCritical() {
-    return this.accentCriticalLangs.includes(this.l2);
+    return this.accentCriticalLangs.includes(this.l2['iso639-3']);
   },
   async load({ l1 = undefined, l2 = undefined } = {}) {
     if (l1 && l2) {
       this.l1 = l1;
       this.l2 = l2;
+      const l1Code = l1['iso639-3']
+      const l2Code = l2['iso639-3']
       this.accentCritical = this.isAccentCritical();
-      this.file = this.dictionaryFile({ l1, l2 });
+      this.file = this.dictionaryFile({ l1: l1Code, l2: l2Code });
       let words = await this.loadWords(this.file);
-      if (this.lemmatizationTableLangs[this.l2]) {
+      if (this.lemmatizationTableLangs[l2Code]) {
         this.lemmatization = await this.loadLemmatizationTable(
-          this.lemmatizationTableLangs[this.l2]
+          this.lemmatizationTableLangs[l2Code]
         );
       }
-      let supplementalLang = this.supplementalLangs[l2];
-      if (l1 === "eng" && supplementalLang) {
+      let supplementalLang = this.supplementalLangs[l2Code];
+      if (l1Code === "eng" && supplementalLang) {
         // Append indonesian words to malay dictionary so we get more words
         let supplWords = await this.loadWords(
-          this.dictionaryFile({ l1, l2: supplementalLang })
+          this.dictionaryFile({ l1: l1Code, l2: supplementalLang })
         );
         for (let w of supplWords) {
           w.id = supplementalLang + "-" + w.id;
@@ -161,8 +163,8 @@ const Dictionary = {
         caseSensitive: false,
         sort: true,
       });
-      if (this.l2 === "eng" && this.l1 !== "eng") this.loadEnglishLemmatizer(); // Our strategy of finding lemmas based on the word 'of' in the definition obviously doesn't work for definitions not in English
-      this.tokenizer = TokenizerFactory.createTokenizer({ 'iso639-3': l2 }, this.words)
+      if (l2Code === "eng" && l1Code !== "eng") this.loadEnglishLemmatizer(); // Our strategy of finding lemmas based on the word 'of' in the definition obviously doesn't work for definitions not in English
+      this.tokenizer = TokenizerFactory.createTokenizer({ 'iso639-3': l2Code }, this.words)
       console.log("Wiktionary: loaded.");
       return this;
     }
@@ -181,9 +183,11 @@ const Dictionary = {
   },
   async loadWords(file) {
     let data;
-    let indexedDBKey = `wiktionary-${this.l2}-${this.l1}`;
-    if (this.indexDbVerByLang[this.l2])
-      indexedDBKey += "-v" + this.indexDbVerByLang[this.l2]; // Force refresh a dictionary when it's outdated
+    const l1Code = this.l1['iso639-3']
+    const l2Code = this.l2['iso639-3']
+    let indexedDBKey = `wiktionary-${l2Code}-${l1Code}`;
+    if (this.indexDbVerByLang[l2Code])
+      indexedDBKey += "-v" + this.indexDbVerByLang[l2Code]; // Force refresh a dictionary when it's outdated
     data = await localforage.getItem(indexedDBKey);
     if (data) {
       console.log(
@@ -225,7 +229,7 @@ const Dictionary = {
         }
       }
     }
-    if (this.l1 === "eng") this.buildInflectionIndex(); // this only works for English because we're looking for definitions with the word 'of' to guess the inflection
+    if (l1Code === "eng") this.buildInflectionIndex(); // this only works for English because we're looking for definitions with the word 'of' to guess the inflection
     for (let key in this.phraseIndex) {
       this.phraseIndex[key] = this.phraseIndex[key].sort(
         (a, b) => a.head.length - b.head.length
@@ -260,7 +264,7 @@ const Dictionary = {
     return "l" + lemma;
   },
   buildInflectionIndex() {
-    if (this.l2 === 'lat') return; // Latin has too many words for this
+    if (this.l2['iso639-3'] === 'lat') return; // Latin has too many words for this
     for (let word of this.words) {
       for (let definition of word.definitions) {
         let lemma = this.lemmaFromDefinition(definition);
@@ -393,7 +397,7 @@ const Dictionary = {
   lemmatizeIfAble(text) {
     let lemmaWords = [];
     let lemmas;
-    if (this.lemmatizationTableLangs[this.l2])
+    if (this.lemmatizationTableLangs[this.l2['iso639-3']])
       lemmas = this.lemmatization[text];
     if (lemmas) {
       for (let lemma of lemmas) {
@@ -498,7 +502,7 @@ const Dictionary = {
         form: word.head,
       },
     ];
-    if (this.l2 !== "vie") forms = forms.concat(this.findForms(word));
+    if (this.l2['iso639-3'] !== "vie") forms = forms.concat(this.findForms(word));
     forms = DictionaryUtils.uniqueByValues(forms, ["table", "field", "form"]);
     return forms;
   },
@@ -507,7 +511,7 @@ const Dictionary = {
     let m = definition.match(/(.* of )([^\s\.]+)$/);
     if (m) {
       let lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
-      if (this.l2 === "lat") lemma = DictionaryUtils.stripAccents(lemma);
+      if (this.l2['iso639-3'] === "lat") lemma = DictionaryUtils.stripAccents(lemma);
       return {
         lemma,
         morphology: m,
@@ -644,7 +648,7 @@ const Dictionary = {
       }
     }
     // Turkish words should only find matches at the beginning of each word
-    if (this.l2 === "tur") {
+    if (this.l2['iso639-3'] === "tur") {
       matches = matches.sort((a, b) => {
         return a.matchedIndex - b.matchedIndex;
       });
@@ -667,7 +671,7 @@ const Dictionary = {
   },
   isEnglishPartialClitic(word) {
     return (
-      this.l1 === "eng" &&
+      this.l1['iso639-3'] === "eng" &&
       ["m", "s", "t", "ll", "d", "re", "ain", "don"].includes(word)
     );
   },

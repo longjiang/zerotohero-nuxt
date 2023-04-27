@@ -36,7 +36,7 @@ const Dictionary = {
     return words.split('!!!BREAKWORKD!!!')
   },
   isEnglishPartialClitic(word) {
-    return this.l1 === 'eng' && ['m', 's', 't', 'll', 'd', 're', 'ain', 'don'].includes(word)
+    return this.l1['iso639-3'] === 'eng' && ['m', 's', 't', 'll', 'd', 're', 'ain', 'don'].includes(word)
   },
   tokenize(text) {
     if (this.tokenizationCache[text]) return this.tokenizationCache[text]
@@ -94,11 +94,11 @@ const Dictionary = {
     return filename
   },
   async loadWords() {
-    let data = await this.loadSmart(`freedict-${this.l1}-${this.l2}`, this.file)
+    let data = await this.loadSmart(`freedict-${this.l1['iso639-3']}-${this.l2['iso639-3']}`, this.file)
     this.words = this.parseDictionary(data)
   },
   async loadConjugations() {
-    if (this.l2 === 'fra') {
+    if (this.l2['iso639-3'] === 'fra') {
       console.log('Loading French conjugations from "french-verbs-lefff"...')
       let res = await axios.get(`${this.server}data/french-verbs-lefff/conjugations.json.txt`)
       if (res && res.data) {
@@ -227,7 +227,7 @@ const Dictionary = {
       field: 'head',
       form: word.head
     }]
-    if (this.l2 === 'fra') {
+    if (this.l2['iso639-3'] === 'fra') {
       let fields = {
         0: 'je',
         1: 'tu',
