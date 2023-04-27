@@ -1,5 +1,5 @@
 <template>
-  <div :class="`shows skin-${$skin}`">{{ skin }}
+  <div :class="`shows skin-${$skin}`">
     <SocialHead
       v-if="shows && shows[0]"
       :title="`Learn ${$l2.name} with ${routeTitles[routeType]} | Language Player`"

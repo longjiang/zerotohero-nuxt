@@ -623,8 +623,8 @@ export default {
     },
     async tokenize(text, batchId) {
       let html = "";
-      let tokenizer = await this.$getTokenizer();
-      let tokens = await tokenizer.tokenizeWithCache(
+      let dictionary = await this.$getDictionary();
+      let tokens = await dictionary.tokenize(
         text,
       );
       this.tokenized[batchId] = tokens;
