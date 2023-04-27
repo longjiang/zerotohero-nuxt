@@ -310,7 +310,7 @@ const Dictionary = {
     return words;
   },
   augmentCSVRow(item, findStems = false, findPhrases = false) {
-    let bare = !this.accentCritical ? DictionaryUtils.stripAccents(item.word) : item.word;
+    let bare = !this.accentCritical ? stripAccents(item.word) : item.word;
     item.search = bare.toLowerCase();
     if (this.l2.agglutinative) item.search = item.search.replace(/^-/, "");
     item.head = item.word;
@@ -371,7 +371,7 @@ const Dictionary = {
     if (words && words[0]) return words[0];
   },
   lookupMultiple(text, ignoreAccents = false) {
-    if (ignoreAccents && !this.accentCritical) text = DictionaryUtils.stripAccents(text);
+    if (ignoreAccents && !this.accentCritical) text = stripAccents(text);
     let type = ignoreAccents ? "search" : "head";
     let words = this[type + "Index"][text.toLowerCase()];
     return words || [];
@@ -414,7 +414,7 @@ const Dictionary = {
     return lemmaWords;
   },
   lookupFuzzy(text, limit = 30, quick = false) {
-    if (!this.accentCritical) text = DictionaryUtils.stripAccents(text);
+    if (!this.accentCritical) text = stripAccents(text);
     text = text.toLowerCase();
     let uniqueWords = new Set();
 
@@ -490,7 +490,7 @@ const Dictionary = {
     let strings = words
       .map((word) => word.search)
       .concat(words.map((word) => word.head));
-    return DictionaryUtils.unique(strings);
+    return unique(strings);
   },
   formTable() {
     return this.tables;
@@ -504,7 +504,7 @@ const Dictionary = {
       },
     ];
     if (this.l2['iso639-3'] !== "vie") forms = forms.concat(this.findForms(word));
-    forms = DictionaryUtils.uniqueByValues(forms, ["table", "field", "form"]);
+    forms = uniqueByValues(forms, ["table", "field", "form"]);
     return forms;
   },
   lemmaFromDefinition(definition) {
@@ -512,7 +512,7 @@ const Dictionary = {
     let m = definition.match(/(.* of )([^\s\.]+)$/);
     if (m) {
       let lemma = m[2].replace(/\u200e/g, ""); // Left-to-Right Mark
-      if (this.l2['iso639-3'] === "lat") lemma = DictionaryUtils.stripAccents(lemma);
+      if (this.l2['iso639-3'] === "lat") lemma = stripAccents(lemma);
       return {
         lemma,
         morphology: m,
@@ -589,7 +589,7 @@ const Dictionary = {
   },
   subdictFromText(text) {
     let search = text.toLowerCase();
-    if (!this.accentCritical) search = DictionaryUtils.stripAccents(search);
+    if (!this.accentCritical) search = stripAccents(search);
     let subdictFilterFunction = (row) => {
       if (this.accentCritical) {
         return text.includes(row.head) || search.includes(row.head);
@@ -618,7 +618,7 @@ const Dictionary = {
     let firstSeen = false;
     let matchedIndex, matchEndIndex, matchedText;
     let search = text.toLowerCase();
-    if (!this.accentCritical) search = DictionaryUtils.stripAccents(search);
+    if (!this.accentCritical) search = stripAccents(search);
     let matches = [];
     for (let word of this.words) {
       let matched = false;
@@ -729,10 +729,10 @@ const Dictionary = {
     } else return [];
   },
   random() {
-    return DictionaryUtils.randomProperty(this.words);
+    return randomProperty(this.words);
   },
   // Called from <EntryForms> and <WordBlock> components for Russian words
   accent(text) {
-    return DictionaryUtils.accent(text);
+    return accent(text);
   },
 };

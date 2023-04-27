@@ -9,7 +9,6 @@ import VueMq from 'vue-mq'
 import VueSmoothScroll from 'vue2-smooth-scroll'
 import Languages from '@/lib/languages'
 import AsyncComputed from 'vue-async-computed'
-import InflectorFactory from '@/lib/inflector-factory'
 import { ModalPlugin } from 'bootstrap-vue'
 
 Vue.use(ModalPlugin)
@@ -106,20 +105,6 @@ export default async ({ app, store, route }, inject) => {
       */
     }
   })
-
-  inject("getInflector", async () => {
-    if (store.state.settings.l1 && store.state.settings.l2) {
-      const l2 = store.state.settings.l2;
-      const l2Code = l2["iso639-3"] || l2["glottologId"];
-  
-      if (!store.state.settings.inflectors[l2Code]) {
-        const inflector = InflectorFactory.createInflector(l2);
-        store.commit("settings/SET_INFLECTOR", { l2Code, inflector });
-      }
-      
-      return store.state.settings.inflectors[l2Code];
-    }
-  });
   
   inject('getGrammar', async () => {
     if (store.state.settings.l1 && store.state.settings.l2 && store.state.settings.dictionaryName) {

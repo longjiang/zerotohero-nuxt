@@ -18,7 +18,7 @@ class ArabicTokenizer extends BaseTokenizer {
         tokens.push(" ");
       } else if (
         ["all"].includes(lemmas[0].pos) &&
-        DictionaryUtils.isNumeric(lemmas[0].word)
+        isNumeric(lemmas[0].word)
       ) {
         tokens.push(lemmas[0].word);
         tokens.push(" ");

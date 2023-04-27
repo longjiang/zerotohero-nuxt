@@ -1,5 +1,5 @@
 importScripts("../vendor/localforage/localforage.js")
-importScripts("../js/dictionary-utils.js");
+importScripts('../js/dictionary-utils.js')
 importScripts("../js/tokenizers/base-tokenizer.js");
 
 /**

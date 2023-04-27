@@ -1,5 +1,3 @@
-importScripts('../js/tokenizers/tokenizer-utils.js')
-
 class BaseTokenizer {
   constructor(l2, words = []) {
     this.l2 = l2;

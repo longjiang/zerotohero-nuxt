@@ -3,6 +3,7 @@ importScripts("../vendor/korean_conjugation/html/korean/conjugator.js");
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
 importScripts("../vendor/localforage/localforage.js")
 importScripts("../vendor/fuzzy-search/FuzzySearch.js")
+importScripts('../js/dictionary-utils.js')
 importScripts("../js/tokenizers/korean-tokenizer.js")
 
 const Dictionary = {

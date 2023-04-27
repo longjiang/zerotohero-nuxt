@@ -1,4 +1,5 @@
 importScripts('../vendor/localforage/localforage.js')
+importScripts('../js/dictionary-utils.js')
 importScripts('../js/tokenizers/russian-tokenizer.js')
 
 const Dictionary = {

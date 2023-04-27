@@ -1,5 +1,7 @@
 importScripts('../vendor/javascript-lemmatizer/js/lemmatizer.js')
 importScripts("../vendor/localforage/localforage.js")
+importScripts('../js/dictionary-utils.js')
+importScripts("../js/tokenizers/tokenizer-factory.js");
 
 const Dictionary = {
   name: 'freedict',
@@ -38,64 +40,76 @@ const Dictionary = {
   isEnglishPartialClitic(word) {
     return this.l1['iso639-3'] === 'eng' && ['m', 's', 't', 'll', 'd', 're', 'ain', 'don'].includes(word)
   },
-  tokenize(text) {
-    if (this.tokenizationCache[text]) return this.tokenizationCache[text]
-    text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
-    tokenized = [];
-    let segs = this.splitByReg(text, /([a-zA-Z0-9]+)/gi);
-    var lemmatizer = new Lemmatizer();
-    let reg = new RegExp(
-      `.*([a-z0-9]+).*`
-    );
-    for (let seg of segs) {
-      let word = seg.toLowerCase();
-      if (
-        reg.test(word) && !this.isEnglishPartialClitic(word)
-      ) {
-        let token = {
-          text: seg,
-          candidates: [],
-        };
-        let lemmas = lemmatizer.lemmas(word);
-        if (lemmas && lemmas.length === 1) token.pos = lemmas[0][1]
-        lemmas = [[word, "inflected"]].concat(lemmas);
-        let found = false;
-        let forms = this.unique(lemmas.map(l => l[0]))
 
-        for (let form of forms) {
-          let candidates = this.lookupMultiple(form);
-          if (candidates.length > 0) {
-            found = true;
-            token.candidates = token.candidates.concat(candidates);
-          }
-        }
-        token.candidates = this.uniqueByValue(token.candidates, "id");
-        tokenized.push(token);
-      } else {
-        tokenized.push(seg);
-      }
-    }
-    this.tokenizationCache[text] = tokenized
-    return tokenized
+  async tokenize(text) {
+    const tokens = await this.tokenizer.tokenizeWithCache(text)
+    console.log({tokens})
+    return tokens
   },
-  async load(options) {
+
+  // tokenize(text) {
+  //   if (this.tokenizationCache[text]) return this.tokenizationCache[text]
+  //   text = text.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // strip accents e.g. résumé -> resume
+  //   tokenized = [];
+  //   let segs = this.splitByReg(text, /([a-zA-Z0-9]+)/gi);
+  //   var lemmatizer = new Lemmatizer();
+  //   let reg = new RegExp(
+  //     `.*([a-z0-9]+).*`
+  //   );
+  //   for (let seg of segs) {
+  //     let word = seg.toLowerCase();
+  //     if (
+  //       reg.test(word) && !this.isEnglishPartialClitic(word)
+  //     ) {
+  //       let token = {
+  //         text: seg,
+  //         candidates: [],
+  //       };
+  //       let lemmas = lemmatizer.lemmas(word);
+  //       if (lemmas && lemmas.length === 1) token.pos = lemmas[0][1]
+  //       lemmas = [[word, "inflected"]].concat(lemmas);
+  //       let found = false;
+  //       let forms = this.unique(lemmas.map(l => l[0]))
+
+  //       for (let form of forms) {
+  //         let candidates = this.lookupMultiple(form);
+  //         if (candidates.length > 0) {
+  //           found = true;
+  //           token.candidates = token.candidates.concat(candidates);
+  //         }
+  //       }
+  //       token.candidates = this.uniqueByValue(token.candidates, "id");
+  //       tokenized.push(token);
+  //     } else {
+  //       tokenized.push(seg);
+  //     }
+  //   }
+  //   this.tokenizationCache[text] = tokenized
+  //   return tokenized
+  // },
+  async load({l1, l2}) {
     console.log('Loading FreeDict...')
-    this.l1 = options.l1
-    this.l2 = options.l2
+    this.l1 = l1
+    this.l2 = l2
+    let l1Code = l1['iso639-3']
+    let l2Code = l2['iso639-3']
     // let server = 'http://hsk-server.local:8888/'
     // let server = 'https://server.chinesezerotohero.com/'
-    this.file = this.dictionaryFile(options)
+    this.file = this.dictionaryFile({l1Code, l2Code})
     await this.loadWords()
     await this.loadConjugations()
+    this.tokenizer = TokenizerFactory.createTokenizer(l2, this.words)
     return this
   },
-  dictionaryFile(options) {
-    let filename = `${this.server}data/freedict/${options.l2}-${options.l1}.dict.txt`
+  dictionaryFile({l1Code, l2Code}) {
+    let filename = `${this.server}data/freedict/${l2Code}-${l1Code}.dict.txt`
     return filename
   },
   async loadWords() {
     let data = await this.loadSmart(`freedict-${this.l1['iso639-3']}-${this.l2['iso639-3']}`, this.file)
-    this.words = this.parseDictionary(data)
+    let words = this.parseDictionary(data)
+    this.words = words
+
   },
   async loadConjugations() {
     if (this.l2['iso639-3'] === 'fra') {
@@ -174,7 +188,7 @@ const Dictionary = {
   get(id, head) {
     let word
     word = this.words[id];
-    if (head && word.head !== head) {
+    if (word && head && word.head !== head) {
       word = this.lookup(head)
     }
     return word
