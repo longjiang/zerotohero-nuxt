@@ -95,7 +95,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     const l1Code = this.l1['iso639-3']
     const l2Code = this.l2['iso639-3']
     const file = this.dictionaryFile({ l1Code, l2Code });
-    let words = await this.loadWords(file);
+    let words = await this.loadWords(`wiktionary-${l2Code}-${l1Code}`, file);
     words = await this.loadSupplementalWords(words);
     words = words.sort((a, b) => {
       if (a.head && b.head) {
@@ -121,7 +121,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     if (supplementalLangCode) {
       // Append indonesian words to malay dictionary so we get more words
       const file = this.dictionaryFile({ l1Code, l2Code: supplementalLangCode })
-      let supplWords = await this.loadWords(file);
+      let supplWords = await this.loadWords(`wiktionary-${supplementalLangCode}-${l1Code}`, file);
       for (let w of supplWords) {
         w.id = supplementalLangCode + "-" + w.id;
         w.supplementalLang = supplementalLangCode;
@@ -131,32 +131,41 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     return words;
   }
 
-  async loadWords(file) {
-    let data;
+  async loadWords(indexedDBKey, file) {
     const l1Code = this.l1['iso639-3']
     const l2Code = this.l2['iso639-3']
-    let indexedDBKey = `wiktionary-${l2Code}-${l1Code}`;
-    if (this.indexDbVerByLang[l2Code])
-      indexedDBKey += "-v" + this.indexDbVerByLang[l2Code]; // Force refresh a dictionary when it's outdated
-    data = await localforage.getItem(indexedDBKey);
-    if (data) {
-      console.log(
-        `Wiktionary: data loaded from local indexedDB via localforage, key '${indexedDBKey}'`
-      );
-    } else {
-      console.log(`Wiktionary: loading ${file}`);
-      let res = await axios.get(file);
-      data = res.data;
-      res = null;
-    }
-    if (!data) return [];
-    localforage.setItem(indexedDBKey, data);
-    let words = this.parseDictionaryCSV(data);
-    words.forEach((word) => {
-      word.id = "w" + hash(word.head + word.definitions[0]);
-    });
+    let words = await this.loadDictionaryData(indexedDBKey, file);
+    words = this.normalizeDictionaryData(words);
     console.log(`Wiktionary: ${file} loaded.`);
     return words;
+  }
+
+  normalizeDictionaryData(words) {
+    console.log("Wiktionary: Normalizing dictionary data...");
+    words = words.filter((w) => w.word?.length > 0) // filter empty rows
+    words.forEach((item) => this.normalizeWord(item));
+    return words;
+  }
+
+  normalizeWord(item) {
+    let bare = !isAccentCritical(this.l2) ? stripAccents(item.word) : item.word;
+    item.search = bare.toLowerCase();
+    if (this.l2.agglutinative) item.search = item.search.replace(/^-/, "");
+    item.head = item.word;
+    delete item.word;
+    delete item.stems;
+    delete item.phrases;
+    item.wiktionary = true;
+    item.definitions = item.definitions ? item.definitions.split("|") : [];
+    item.id = "w" + hash(item.head + item.definitions[0]);
+
+    if (item.han) {
+      item.cjk = {
+        canonical: item.han,
+        pronunciation: item.head,
+      };
+      item.hanja = item.han;
+    }
   }
 
   createIndices() {
@@ -196,39 +205,6 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     let w = "@" + head;
     if (!this.phraseIndex[w]) this.phraseIndex[w] = [];
     return this.phraseIndex[w];
-  }
-
-  parseDictionaryCSV(data) {
-    console.log("Wiktionary: parsing words from CSV...");
-    let parsed = Papa.parse(data, { header: true, delimiter: "," });
-    let words = parsed.data;
-    let hasStems = parsed.meta.fields.includes("stems");
-    let hasPhrases = parsed.meta.fields.includes("phrases");
-    words = words
-      .filter((w) => w.word?.length > 0) // filter empty rows
-      .map((item) => this.augmentCSVRow(item, !hasStems, !hasPhrases));
-    return words;
-  }
-
-  augmentCSVRow(item, findStems = false, findPhrases = false) {
-    let bare = !isAccentCritical(this.l2) ? stripAccents(item.word) : item.word;
-    item.search = bare.toLowerCase();
-    if (this.l2.agglutinative) item.search = item.search.replace(/^-/, "");
-    item.head = item.word;
-    delete item.word;
-    delete item.stems;
-    delete item.phrases;
-    item.wiktionary = true;
-    item.definitions = item.definitions ? item.definitions.split("|") : [];
-
-    if (item.han) {
-      item.cjk = {
-        canonical: item.han,
-        pronunciation: item.head,
-      };
-      item.hanja = item.han;
-    }
-    return item;
   }
 
   findPhrases(word, limit = 50) {

@@ -11,6 +11,7 @@ class BaseDictionary {
     this.name = this.constructor.name;
     this.version = null;
     this.tokenizer = null;
+    this.indexDbVerByLang = {}
   }
 
   static async load({ l1 = undefined, l2 = undefined } = {}) {
@@ -47,6 +48,10 @@ class BaseDictionary {
    * @returns {Array} - An array of dictionary entries parsed from the fetched data.
    */
   async loadDictionaryData(name, file) {
+    const l2Code = this.l2['iso639-3']
+    if (this.indexDbVerByLang[l2Code])
+      name += "-v" + this.indexDbVerByLang[l2Code]; // Force refresh a dictionary when it's outdated
+
     // Try to get data from local storage
     let data = await localforage.getItem(name);
 
