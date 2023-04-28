@@ -98,6 +98,11 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     const file = this.dictionaryFile({ l1Code, l2Code });
     let words = await this.loadWords(file);
     words = await this.loadSupplementalWords(words);
+    words = words.sort((a, b) => {
+      if (a.head && b.head) {
+        return b.head.length - a.head.length;
+      }
+    });
     this.words = words;
     this.createIndices();
     this.searcher = new FuzzySearch(this.words, ["search"], {
@@ -122,12 +127,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
         w.id = supplementalLangCode + "-" + w.id;
         w.supplementalLang = supplementalLangCode;
       }
-      words = words.concat(supplWords);
-      words = words.sort((a, b) => {
-        if (a.head && b.head) {
-          return b.head.length - a.head.length;
-        }
-      });
+      words = [...words, ...supplWords];
     }
     return words;
   }
@@ -153,14 +153,8 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     if (!data) return [];
     localforage.setItem(indexedDBKey, data);
     let words = this.parseDictionaryCSV(data);
-    words = words.sort((a, b) => {
-      if (a.head && b.head) {
-        return b.head.length - a.head.length;
-      }
-    });
-    words = words.map((word, index) => {
+    words.forEach((word) => {
       word.id = "w" + hash(word.head + word.definitions[0]);
-      return word;
     });
     console.log(`Wiktionary: ${file} loaded.`);
     return words;
@@ -177,8 +171,12 @@ class WiktionaryCsvDictionary extends BaseDictionary {
           this[indexType + "Index"][word[indexType]].concat(word);
       }
       if (/[\s'.\-]/.test(word.head)) {
-        for (let w of word.head.split(/[\s']/)) {
-          this.addToPhraseIndex(w, word);
+        let words = word.head.split(/[\s'.\-]/);
+        // We don't want to index phrases that are too long
+        if (words.length < 4) {
+          for (let w of words) {
+            this.addToPhraseIndex(w, word);
+          }
         }
       }
     }
@@ -237,12 +235,13 @@ class WiktionaryCsvDictionary extends BaseDictionary {
   findPhrases(word, limit = 50) {
     if (word) {
       if (!word.phrases || word.phrases.length === 0) {
-          return this.getPhraseIndex(word.head) || [];
+        const phrases = this.getPhraseIndex(word.head) || [];
+        return phrases.slice(0, limit);
       } else {
-        return word.phrases
+        return word.phrases.slice(0, limit);
       }
     }
-  }
+  }  
 
   lookup(text) {
     let words = this.searchIndex[text.toLowerCase()];
@@ -297,26 +296,9 @@ class WiktionaryCsvDictionary extends BaseDictionary {
       );
 
       words = words.sort((a, b) => b.score - a.score);
-      words = words.slice(0, limit);
     }
     words = words.slice(0, limit);
     return words.map((w) => w.w);
   }
   
-
-  /**
-   * Find phrases that contain a word
-   * @param {Object} word the word
-   * @param {Number} score (optional) the score
-   * @returns {Array} An array of phrases each wrapped in an object { w: word, score: score }
-   */
-  phrasesWithScores(word, score = undefined) {
-    let phraseObjs = this.getPhraseIndex(word.head);
-    if (phraseObjs) {
-      let mapped = phraseObjs.map((w) => {
-        return { w, score };
-      });
-      return mapped;
-    } else return [];
-  }
 };
