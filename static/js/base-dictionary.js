@@ -11,7 +11,10 @@ class BaseDictionary {
   }
 
   static async load({ l1 = undefined, l2 = undefined } = {}) {
-    throw new Error('load() method must be implemented in the subclass');
+    const instance = new this({ l1, l2 });
+    await instance.loadWords();
+    instance.tokenizer = TokenizerFactory.createTokenizer(l2, instance.words);
+    return instance;
   }
 
   async tokenize(text) {

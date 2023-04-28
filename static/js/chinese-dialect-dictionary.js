@@ -1,6 +1,6 @@
 importScripts("../vendor/localforage/localforage.js")
 importScripts('../js/base-dictionary.js')
-importScripts("../js/tokenizers/base-tokenizer.js");
+importScripts("../js/tokenizers/tokenizer-factory.js");
 importScripts("../vendor/pinyinify/pinyinify.js");
 class ChineseDialectDictionary extends BaseDictionary {
   
@@ -12,13 +12,6 @@ class ChineseDialectDictionary extends BaseDictionary {
       nan: 'dict-twblg/dict-twblg.csv.txt',
     };
     this.version = '1.1.3';
-  }
-
-  static async load({ l1 = undefined, l2 = undefined } = {}) {
-    const instance = new ChineseDialectDictionary({l1, l2});
-    await instance.loadWords();
-    instance.tokenizer = new BaseTokenizer(l2, instance.words)
-    return instance;
   }
 
   async loadWords() {
@@ -198,7 +191,7 @@ class ChineseDialectDictionary extends BaseDictionary {
 
   lookupFuzzy(text, limit = false) {
     let results = []
-    if (this.isChinese(text)) {
+    if (isChinese(text)) {
       let reg = new RegExp(text, 'gi')
       results = this.words
         .filter(

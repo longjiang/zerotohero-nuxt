@@ -5,7 +5,7 @@ const TokenizerFactory = {
     PersianTokenizer: ["fas"], // tokenized and lemmatized by zeyrek
     JapaneseTokenizer: ["jpn"], // tokenized and lemmatized by MeCab
     KoreanTokenizer: ["kor"], // tokenized and lemmatized by Open Korean Text
-    ChineseTokenizer: ["cdo", "cjy", "cnp", "cpx", "csp", "czo", "gan", "hak", "hsn", "ltc", "lzh", "mnp", "nan", "och", "wuu", "yue", "zha", "zho"], // tokenized and lemmatized by jieba
+    ChineseTokenizer: ["zho"], // tokenized and lemmatized by jieba
     SimplemmaTokenizer: ['ast', 'bul', 'cat', 'ces', 'cym', 'dan', 'deu', 'ell', 'eng', 'enm', 'est', 'fin', 'fra', 'fra', 'gla', 'gle', 'glg', 'glv', 'hbs', 'hin', 'hun', 'hye', 'ind', 'isl', 'ita', 'ita', 'kat', 'lat', 'lav', 'lit', 'ltz', 'mkd', 'msa', 'nld', 'nno', 'nob', 'pol', 'por', 'por', 'ron', 'rus', 'slk', 'slv', 'sme', 'spa', 'sqi', 'swa', 'swe', 'tgl', 'tur', 'ukr'], // tokenized and lemmatized by simplemma-tokenizer.js
     RussianTokenizer: ["rus"], // tokenized and lemmatized by pymorphy2
     SpacyTokenizer: [
