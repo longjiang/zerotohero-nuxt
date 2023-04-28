@@ -196,16 +196,14 @@ export default {
     },
     async route() {
       if (this.method) {
+        const dictionary = await this.$getDictionary();
         if (this.method === "hsk" && this.argsProp) {
           this.args = this.$route.params.argsProp.split(",");
-          this.words = await (
-            await this.$getDictionary()
-          ).getByBookLessonDialog(this.args[0], this.args[1], this.args[2]); // this.args[2] (i.e. the dialog or part) can be undefined, which will return the entire lesson rather than just that dialog or part
+          this.words = await dictionary.getByBookLessonDialog(this.args[0], this.args[1], this.args[2]); // this.args[2] (i.e. the dialog or part) can be undefined, which will return the entire lesson rather than just that dialog or part
           return;
         }
         if (this.method === "adhoc" && this.argsProp) {
           this.args = this.$route.params.argsProp.split(",");
-          let dictionary = await this.$getDictionary();
           let words = [];
           for (let word of this.args) {
             let r = await dictionary.lookup(word);

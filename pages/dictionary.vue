@@ -372,10 +372,10 @@ export default {
     async loadEntry() {
       let method = this.$route.params.method;
       let args = this.$route.params.args;
+      const dictionary = await this.$getDictionary();
       if (method && args) {
         if (method === this.$store.state.settings.dictionaryName) {
           if (args !== "random") {
-            let dictionary = await this.$getDictionary();
             if (dictionary) {
               this.entry = await dictionary.get(args);
               if (process.server) {
@@ -387,13 +387,11 @@ export default {
             }
           }
         } else if (method === "hsk") {
-          this.entry = await (await this.$getDictionary()).getByHSKId(args);
+          this.entry = await dictionary.getByHSKId(args);
         }
       }
       if (this.entry) {
-        this.words = await (
-          await this.$getDictionary()
-        ).lookupMultiple(this.entry.head, true);
+        this.words = await dictionary.lookupMultiple(this.entry.head, true);
       }
     },
     async updateWords() {
@@ -406,8 +404,9 @@ export default {
         let savedWords = this.$store.state.savedWords.savedWords[this.$l2.code];
         let currentSavedWord = savedWords.find((w) => w.id === this.entry.id);
         if (currentSavedWord) {
+          const dictionary = await this.$getDictionary();
           for (let savedWord of savedWords) {
-            let word = await (await this.$getDictionary()).get(savedWord.id);
+            let word = await dictionary.get(savedWord.id);
             if (word) {
               sW.push(word);
             }
@@ -430,7 +429,8 @@ export default {
       );
     },
     async random() {
-      let randomEntry = await (await this.$getDictionary()).random();
+      const dictionary = await this.$getDictionary();
+      let randomEntry = await dictionary.random();
       if (randomEntry) {
         let randomId = randomEntry.id;
         this.$router.push({

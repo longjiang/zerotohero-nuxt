@@ -119,9 +119,8 @@ export default {
     };
   },
   async created() {
-    this.books = await (
-      await this.$getDictionary()
-    ).getHSKStandardCourseWords();
+    const dictionary = await this.$getDictionary();
+    this.books = dictionary.getHSKStandardCourseWords();
   },
   methods: {
     toggleBook(bookIndex) {

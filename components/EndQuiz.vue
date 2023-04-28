@@ -108,8 +108,9 @@ export default {
     },
     async generateReview() {
       let reviewItems = [];
+      const dictionary = await this.$getDictionary();
       for (let savedWord of this.savedWords[this.$l2.code]) {
-        let word = await (await this.$getDictionary()).get(savedWord.id);
+        let word = await dictionary.get(savedWord.id);
         if (word) {
           reviewItems = reviewItems.concat(
             await this.reviewItemsForWord(word, savedWord.forms)

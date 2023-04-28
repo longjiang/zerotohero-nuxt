@@ -86,7 +86,8 @@ export default {
     };
   },
   async mounted() {
-    let newHSK = await (await this.$getDictionary()).getNewHSK();
+    const dictionary = await this.$getDictionary();
+    let newHSK = await dictionary.getNewHSK();
     this.newHSK = newHSK;
     this.ready = true;
   },

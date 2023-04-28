@@ -624,9 +624,7 @@ export default {
     async tokenize(text, batchId) {
       let html = "";
       let dictionary = await this.$getDictionary();
-      let tokens = await dictionary.tokenize(
-        text,
-      );
+      let tokens = await dictionary.tokenize(text);
       this.tokenized[batchId] = tokens;
       for (let index in this.tokenized[batchId]) {
         let token = this.tokenized[batchId][index];

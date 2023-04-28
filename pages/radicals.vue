@@ -84,10 +84,9 @@ export default {
     for (let radical of radicals) {
       let characters = await (await this.$getHanzi()).searchByRadical(radical);
       let hskCharacters = [];
+      const dictionary = await this.$getDictionary();
       for (let character of characters) {
-        let c = await (
-          await this.$getDictionary()
-        ).lookupHSKChar(character.character);
+        let c = dictionary.lookupHSKChar(character.character);
         let d = c ? Object.assign(c, character) : character;
         if (!d.hsk) d.hsk = "7";
         hskCharacters.push(d);

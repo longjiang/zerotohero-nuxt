@@ -83,10 +83,11 @@ export default {
         this.$store.state.savedWords.savedWords &&
         this.$store.state.savedWords.savedWords[this.$l2.code]
       ) {
+        const dictionary = await this.$getDictionary();
         for (let savedWord of this.$store.state.savedWords.savedWords[
           this.$l2.code
         ]) {
-          let word = await (await this.$getDictionary()).get(savedWord.id);
+          let word = await dictionary.get(savedWord.id);
           if (word) {
             sW.push(word);
           }
@@ -103,9 +104,8 @@ export default {
           return;
         } else if (this.method == "hsk" && this.$route.params.args) {
           this.args = this.$route.params.args.split(",");
-          this.words = await (
-            await this.$getDictionary()
-          ).getByBookLessonDialog(this.args[0], this.args[1], this.args[2]);
+          const dictionary = await this.$getDictionary();
+          this.words = await dictionary.getByBookLessonDialog(this.args[0], this.args[1], this.args[2]);
           return;
         }
       } else {

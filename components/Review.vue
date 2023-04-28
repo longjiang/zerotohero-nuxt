@@ -139,6 +139,7 @@ export default {
     async findSimilarWords(text) {
       let words = [];
       let savedWords = this.savedWords[this.$l2.code] || [];
+      const dictionary = await this.$getDictionary();
       if (savedWords.length > 1) {
         savedWords = savedWords.map((s) =>
           Object.assign(
@@ -156,11 +157,12 @@ export default {
           .sort((a, b) => a.distance - b.distance)
           .slice(0, 2);
         for (let w of savedWords) {
-          let word = await (await this.$getDictionary()).get(w.id);
+          let word = await dictionary.get(w.id);
           words.push(word);
         }
       } else {
-        words = await (await this.$getDictionary()).lookupFuzzy(text);
+        const dictionary = await this.$getDictionary();
+        words = await dictionary.lookupFuzzy(text);
         words = words.sort(
           (a, b) =>
             distance(a.head, text) -
@@ -178,7 +180,7 @@ export default {
       let similarWords = await this.findSimilarWords(form);
       if (similarWords.length < 2) {
         for (let i of [1, 2]) {
-          let randomWord = await (await this.$getDictionary()).random();
+          let randomWord = await dictionary.random();
           similarWords.push(randomWord);
         }
       }

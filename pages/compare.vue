@@ -259,35 +259,28 @@ export default {
       bId = [args[3], args[4], args[5]].join(",");
     }
     if (method && args) {
+      const dictionary = await this.$getDictionary();
       if (method === "hsk") {
-        this.a = await (await this.$getDictionary()).getByHSKId(aId);
-        this.b = await (await this.$getDictionary()).getByHSKId(bId);
+        this.a = await dictionary.getByHSKId(aId);
+        this.b = await dictionary.getByHSKId(bId);
       } else if (method === "bare") {
-        let resultsA = await (await this.$getDictionary()).lookupbare(aId);
+        let resultsA = await dictionary.lookupbare(aId);
         this.a = resultsA[0];
-        let resultsB = await (await this.$getDictionary()).lookupbare(bId);
+        let resultsB = await dictionary.lookupbare(bId);
         this.b = resultsB[0];
       } else if (method === "simplified") {
-        let resultsA = await (
-          await this.$getDictionary()
-        ).lookupSimplified(args[0]);
+        let resultsA = await dictionary.lookupSimplified(args[0]);
         this.a = resultsA[0];
-        let resultsB = await (
-          await this.$getDictionary()
-        ).lookupSimplified(args[1]);
+        let resultsB = await dictionary.lookupSimplified(args[1]);
         this.b = resultsB[0];
       } else if (method === "traditional") {
-        let resultsA = await (
-          await this.$getDictionary()
-        ).lookupTraditional(args[0]);
+        let resultsA = await dictionary.lookupTraditional(args[0]);
         this.a = resultsA[0];
-        let resultsB = await (
-          await this.$getDictionary()
-        ).lookupTraditional(args[1]);
+        let resultsB = await dictionary.lookupTraditional(args[1]);
         this.b = resultsB[0];
       } else {
-        this.a = await (await this.$getDictionary()).get(aId);
-        this.b = await (await this.$getDictionary()).get(bId);
+        this.a = await dictionary.get(aId);
+        this.b = await dictionary.get(bId);
       }
     }
     this.aImages = await WordPhotos.getGoogleImages({

@@ -112,7 +112,8 @@ export default {
     },
     async annotate() {
       if (this.$dictionaryName === 'ecdict') {
-        await (await this.$getDictionary()).addFrequencyToPhrases()
+        const dictionary = await this.$getDictionary();
+        await dictionary.addFrequencyToPhrases()
       }
       if (this.text) {
         for (let line of this.textLines) {
@@ -130,7 +131,8 @@ export default {
       if (this.$l2.continua) {
         annotatedHtml = ''
         dictionaryTemplate = ''
-        let tokenized = await (await this.$getDictionary()).tokenize(text)
+        const dictionary = await this.$getDictionary();
+        let tokenized = await dictionary.tokenize(text)
         this.tokenized[batchId] = tokenized
         for (let index = 0; index < this.tokenized[batchId].length; index++) {
           let item = this.tokenized[batchId][index]
@@ -161,7 +163,8 @@ export default {
             lemmas = [[word, 'inflected']].concat(lemmas)
             let found = false
             for (let lemma of lemmas) {
-              let candidates = await (await this.$getDictionary()).lookupMultiple(lemma[0])
+              const dictionary = await this.$getDictionary();
+              let candidates = await dictionary.lookupMultiple(lemma[0])
               if (candidates.length > 0) {
                 let token = {
                   text: seg,
@@ -191,7 +194,8 @@ export default {
             annotatedHtml += `<span>${item}</span>`
           }
         }
-        let phrases = await (await this.$getDictionary()).findPhrases(text)
+        const dictionary = await this.$getDictionary();
+        let phrases = await dictionary.findPhrases(text)
         this.phrases[batchId] = phrases
         for (let index = 0; index < this.phrases[batchId].length; index++) {
           let phrase = this.phrases[batchId][index]

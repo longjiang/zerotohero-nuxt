@@ -263,13 +263,12 @@ export default {
     },
     async updateWords() {
       let sW = [];
+      const dictionary = await this.$getDictionary();
       if (this.savedWords) {
         let savedWords = this.$store.state.savedWords.savedWords[this.$l2.code];
         if (savedWords && savedWords.length > 0) {
           for (let savedWord of savedWords) {
-            let word = await (
-              await this.$getDictionary()
-            ).get(savedWord.id, savedWord.forms[0]);
+            let word = await dictionary.get(savedWord.id, savedWord.forms[0]);
             if (word) {
               let r = Object.assign({}, savedWord);
               r.word = word;

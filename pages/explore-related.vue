@@ -103,7 +103,8 @@ export default {
   },
   async fetch() {
     if (this.arg) {
-      let word = await (await this.$getDictionary()).get(this.arg);
+      const dictionary = await this.$getDictionary();
+      let word = await dictionary.get(this.arg);
       let related = [word];
       let data = await SketchEngine.thesaurus({
         l2: this.$l2,
@@ -111,9 +112,7 @@ export default {
       });
       if (data && data.Words) {
         for (let Word of data.Words) {
-          let words = await (
-            await this.$getDictionary()
-          ).lookupSimplified(Word.word);
+          let words = await dictionary.lookupSimplified(Word.word);
           if (words.length > 0) {
             let word = words[0];
             if (word.hsk === "") word.hsk = "outside";

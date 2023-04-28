@@ -87,9 +87,8 @@ export default {
   },
   methods: {
     async getWord(term) {
-      let words = await (
-        await this.$getDictionary()
-      ).lookupMultiple(term, true);
+      const dictionary = await this.$getDictionary();
+      let words = dictionary.lookupMultiple(term, true);
       if (words && words.length > 0) {
         return words[0];
       }

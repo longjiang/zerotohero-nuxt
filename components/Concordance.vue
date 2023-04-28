@@ -139,11 +139,11 @@ export default {
       this.updating = true;
       this.examples = undefined;
       let dictionary = await this.$getDictionary();
-      let forms = this.word
-        ? (await dictionary.inflect(this.word.head)).map((form) =>
-            form.form.replace(/'/g, "")
-          )
-        : [];
+      let forms = []
+      if (this.word) {
+        forms = await dictionary.inflect(this.word.head)
+        forms = forms.map((form) => form.form.replace(/'/g, ""))
+      }
       this.words = [this.term].concat(forms);
       let examples = await SketchEngine.concordance({
         term: this.term,

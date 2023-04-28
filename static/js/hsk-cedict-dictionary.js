@@ -347,7 +347,7 @@ const Dictionary = {
   lookupByCharacter(char) {
     return this.words.filter(row => row.simplified.includes(char))
   },
-  lookupPinyinFuzzy(pinyin) {
+  lookupByPronunciation(pinyin) {
     return this.words.filter(
       row =>
         this.removeTones(row.pinyin).replace(/ /g, '') ===

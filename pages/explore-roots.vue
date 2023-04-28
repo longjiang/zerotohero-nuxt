@@ -144,10 +144,9 @@ export default {
   },
   async mounted() {
     let rootsAugmented = [];
+    const dictionary = await this.$getDictionary();
     for (let root of this.roots) {
-      let words = await (
-        await this.$getDictionary()
-      ).lookupSimplified(root.pattern.replace(/～/g, ""));
+      let words = await dictionary.lookupSimplified(root.pattern.replace(/～/g, ""));
       root.word = words[0];
       rootsAugmented.push(root);
     }
@@ -155,7 +154,8 @@ export default {
   },
   async fetch() {
     if (this.arg) {
-      let words = await (await this.$getDictionary()).lookupByPattern(this.arg);
+      const dictionary = await this.$getDictionary();
+      let words = await dictionary.lookupByPattern(this.arg);
       let rootWords = words
         .sort((a, b) => a.simplified.length - b.simplified.length)
         .sort((a, b) => a.hsk - b.hsk);

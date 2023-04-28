@@ -71,20 +71,21 @@ export default {
   },
   methods: {
     async getExamples() {
-      this.examples = (await (await this.$getDictionary()).lookupByCharacter(
+      let dictionary = await this.$getDictionary()
+      let examples = await dictionary.lookupByCharacter(
         this.character.character
-      )).filter(example => example.hsk !== 'outside' && !example.definitions[0].startsWith('surname') && !example.definitions[0].startsWith('variant') ).sort((a, b) => b.weight - a.weight)
+      )
+      this.examples = examples.filter(example => example.hsk !== 'outside' && !example.definitions[0].startsWith('surname') && !example.definitions[0].startsWith('variant') ).sort((a, b) => b.weight - a.weight)
     },
     async getPartExamples(part) {
       part.getting = true
       part.characters = await (await this.$getHanzi()).searchByRadical(
         part.character
       )
+      let dictionary = await this.$getDictionary()
       for (let character of part.characters.slice(0, 1)) {
         character.examples = []
-        character.examples = await (await this.$getDictionary()).lookupByCharacter(
-          character.character
-        )
+        character.examples = await dictionary.lookupByCharacter(character.character)
         part.getting = false
         this.charKey++
       }

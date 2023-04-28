@@ -32,7 +32,7 @@ onmessage = async function (e) {
     let methods = Object.getOwnPropertyNames(Dictionary.prototype);
     this.postMessage([id, "dictionaryMethods", methods]);
   } else {
-    if (typeof dictionaryInstance[method] !== "undefined") {
+    if (dictionaryInstance && typeof dictionaryInstance[method] !== "undefined") {
       let data = await dictionaryInstance[method](...args);
       this.postMessage([id, method, data]);
     } else {
