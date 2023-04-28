@@ -13,6 +13,15 @@ function kebabToPascalCase(str) {
     .join('');
 }
 
+function getAllMethodNames(obj) {
+  let methods = new Set();
+  while (obj = Object.getPrototypeOf(obj)) {
+    let keys = Object.getOwnPropertyNames(obj);
+    keys.forEach(k => methods.add(k));
+  }
+  return methods;
+}
+
 onmessage = async function (e) {
   const id = e.data[0];
   const method = e.data[1];
@@ -29,7 +38,7 @@ onmessage = async function (e) {
     ready = true;
     this.postMessage([1, "load", "ready"]);
   } else if (method === "dictionaryMethods") {
-    let methods = Object.getOwnPropertyNames(Dictionary.prototype);
+    let methods = getAllMethodNames(Dictionary.prototype);
     this.postMessage([id, "dictionaryMethods", methods]);
   } else {
     if (dictionaryInstance && typeof dictionaryInstance[method] !== "undefined") {

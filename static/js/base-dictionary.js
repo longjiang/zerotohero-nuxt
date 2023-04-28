@@ -8,21 +8,74 @@ class BaseDictionary {
     this.words = [];
     this.name = this.constructor.name;
     this.version = null;
+    this.tokenizer = null;
   }
 
   static async load({ l1 = undefined, l2 = undefined } = {}) {
     const instance = new this({ l1, l2 });
-    await instance.loadWords();
+    await instance.loadData();
     instance.tokenizer = TokenizerFactory.createTokenizer(l2, instance.words);
     return instance;
+  }
+
+  loadData() {
+    throw new Error('loadData() method must be implemented in the subclass');
   }
 
   async tokenize(text) {
     return await this.tokenizer.tokenizeWithCache(text);
   }
 
+  
+  dictionaryFile({
+    l1Code = undefined,
+    l2Code = undefined
+  } = {}) {
+    throw new Error('dictionaryFile() method must be implemented in the subclass');
+  }
+
+  /**
+   * This method tries to load dictionary data from local storage first.
+   * If it is not available, it fetches the data from a remote server,
+   * stores it in local storage for future use, and then returns the data.
+   *
+   * @param {string} name - The name of the dictionary used as a key in local storage.
+   * @param {string} file - The URL of the remote file containing the dictionary data.
+   * @returns {Array} - An array of dictionary entries parsed from the fetched data.
+   */
+  async loadDictionaryData(name, file) {
+    // Try to get data from local storage
+    let data = await localforage.getItem(name);
+
+    if (!data) {
+      // If data is not found in local storage, fetch it from the remote server
+      console.log(`${this.name}: requesting '${file}' . . .`);
+      let response = await axios.get(file);
+      data = response.data;
+
+      // Store the fetched data in local storage for future use
+      localforage.setItem(name, data);
+      response = null;
+    } else {
+      console.log(`${this.name}: dictionary '${name}' loaded from local indexedDB via localforage`);
+    }
+
+    // If data is available, parse it using Papa Parse and return the parsed data
+    if (data) {
+      let results = Papa.parse(data, {
+        header: true,
+        delimiter: ','
+      });
+      return results.data;
+    }
+  }
+
   lookupMultiple(text) {
     throw new Error('lookupMultiple() method must be implemented in the subclass');
+  }
+
+  lookupFuzzy(text, limit = 30, quick = false) {
+    throw new Error('lookupFuzzy() method must be implemented in the subclass');
   }
 
   // Override this method for CJK languages only
@@ -52,7 +105,7 @@ class BaseDictionary {
   }
 
   random() {
-    throw new Error('random() method must be implemented in the subclass');
+    return randomProperty(this.words);
   }
 
   lookupByPattern(pattern) {
@@ -62,9 +115,9 @@ class BaseDictionary {
   lookup(keyword) {
     throw new Error('lookup() method must be implemented in the subclass');
   }
-
+  
   getWords() {
-    throw new Error('getWords() method must be implemented in the subclass');
+    return this.words;
   }
 
   getSize() {
@@ -75,7 +128,57 @@ class BaseDictionary {
     throw new Error('findPhrases() method must be implemented in the subclass');
   }
 
-  get(wordId) {
-    throw new Error('get() method must be implemented in the subclass');
+  /**
+   * Get a word by ID. This is called from various components.
+   * @param {*} id the word's id
+   * @param {*} head (optional) the head of the word to check if matches the word retrieved; if mismatched, we'll look for a matching word instead.
+   * @returns
+   */
+  get(id, head) {
+    let word;
+    word = this.words.find((w) => w.id === id);
+    if (head && word && word.head !== head) {
+      word = this.lookup(head);
+    }
+    return word;
+  }
+
+
+  
+  lookupFromTokens(tokens) {
+    let final = [];
+    for (let index in tokens) {
+      let token = tokens[index];
+      if (typeof token === "object") {
+        let candidates = this.lookupMultiple(token.word);
+        if (token.lemma && token.lemma !== token.word) {
+          candidates = candidates.concat(this.lookupMultiple(token.lemma));
+        }
+        final.push({
+          text: token.word,
+          candidates,
+          lemmas: [token.lemma],
+          pos: token.pos,
+          stem: token.stem,
+          pronunciation: token.pronunciation,
+        });
+        final.push(" ");
+      } else {
+        final.push(token.word || token); // string
+      }
+    }
+    return final;
+  }
+
+
+  // Called from <SearchSubComp> to look for exclusion terms.
+  getWordsThatContain(text) {
+    let words = this.words.filter(
+      (w) => w.head.includes(text) || w.search.includes(text)
+    );
+    let strings = words
+      .map((word) => word.search)
+      .concat(words.map((word) => word.head));
+    return unique(strings);
   }
 }

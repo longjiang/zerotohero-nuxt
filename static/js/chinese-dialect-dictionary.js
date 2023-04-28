@@ -14,11 +14,11 @@ class ChineseDialectDictionary extends BaseDictionary {
     this.version = '1.1.3';
   }
 
-  async loadWords() {
+  async loadData() {
     const l1Code = this.l1['iso639-3']
     const l2Code = this.l2['iso639-3']
     const file = this.dictionaryFile({ l1Code, l2Code })
-    let data = await this.loadSmart(`dialect-dict-${l1Code}-${l2Code}`, file)
+    let data = await this.loadDictionaryData(`dialect-dict-${l1Code}-${l2Code}`, file)
     let sorted = data.sort((a, b) =>
       a.traditional && b.traditional ? a.traditional.length - b.traditional.length : 0
     )
@@ -60,26 +60,6 @@ class ChineseDialectDictionary extends BaseDictionary {
   } = {}) {
     if (l1Code && l2Code) {
       return `${SERVER}data/${this.files[l2Code]}`
-    }
-  }
-
-  async loadSmart(name, file) {
-    let data = await localforage.getItem(name)
-    if (!data) {
-      console.log(`Dialect Dict: requesting '${file}' . . .`)
-      let response = await axios.get(file)
-      data = response.data
-      localforage.setItem(name, data)
-      response = null
-    } else {
-      console.log(`Dialect Dict: dictionary '${name}' loaded from local indexedDB via localforage`)
-    }
-    if (data) {
-      let results = Papa.parse(data, {
-        header: true,
-        delimiter: ','
-      })
-      return results.data
     }
   }
 
@@ -220,9 +200,5 @@ class ChineseDialectDictionary extends BaseDictionary {
       })
       return results
     }
-  }
-  
-  async tokenize(text) {
-    return await this.tokenizer.tokenizeWithCache(text)
   }
 }
