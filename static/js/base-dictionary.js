@@ -1,3 +1,5 @@
+importScripts("../vendor/localforage/localforage.js")
+importScripts("../vendor/hash-string/hash-string.min.js");
 importScripts('../js/dictionary-utils.js')
 importScripts("../js/tokenizers/tokenizer-factory.js");
 importScripts("../js/inflectors/inflector-factory.js");
@@ -27,7 +29,8 @@ class BaseDictionary {
   }
 
   async tokenize(text) {
-    return await this.tokenizer.tokenizeWithCache(text);
+    const tokens = await this.tokenizer.tokenize(text);
+    return tokens
   }
 
   
@@ -36,6 +39,14 @@ class BaseDictionary {
     l2Code = undefined
   } = {}) {
     throw new Error('dictionaryFile() method must be implemented in the subclass');
+  }
+
+  async loadAndNormalizeDictionaryData(indexedDBKey, file) {
+    let words = await this.loadDictionaryData(indexedDBKey, file);
+    console.log(`${this.name}: Normalizing dictionary data...`);
+    words.forEach((item) => this.normalizeWord(item));
+    console.log(`${this.name}: ${file} loaded.`);
+    return words;
   }
 
   /**
@@ -76,6 +87,10 @@ class BaseDictionary {
       });
       return results.data;
     }
+  }
+
+  normalizeWord(item) {
+    throw new Error('normalizeWord() method must be implemented in the subclass');
   }
 
   lookupMultiple(text) {

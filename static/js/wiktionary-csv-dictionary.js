@@ -1,7 +1,5 @@
 // @/static/js/wiktionary-csv.js
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
-importScripts("../vendor/localforage/localforage.js");
-importScripts("../vendor/hash-string/hash-string.min.js");
 importScripts("../vendor/fuzzy-search/FuzzySearch.js");
 importScripts("../js/base-dictionary.js");
 
@@ -95,8 +93,9 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     const l1Code = this.l1['iso639-3']
     const l2Code = this.l2['iso639-3']
     const file = this.dictionaryFile({ l1Code, l2Code });
-    let words = await this.loadWords(`wiktionary-${l2Code}-${l1Code}`, file);
+    let words = await this.loadAndNormalizeDictionaryData(`wiktionary-${l2Code}-${l1Code}`, file);
     words = await this.loadSupplementalWords(words);
+    words = words.filter((w) => w.word?.length > 0) // filter empty rows
     words = words.sort((a, b) => {
       if (a.head && b.head) {
         return b.head.length - a.head.length;
@@ -111,7 +110,6 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     // this.tokenizer = TokenizerFactory.createTokenizer(this.l2, this.words)
     console.log("Wiktionary: loaded.");
     return this;
-
   }
 
   async loadSupplementalWords(words) {
@@ -128,22 +126,6 @@ class WiktionaryCsvDictionary extends BaseDictionary {
       }
       words = [...words, ...supplWords];
     }
-    return words;
-  }
-
-  async loadWords(indexedDBKey, file) {
-    const l1Code = this.l1['iso639-3']
-    const l2Code = this.l2['iso639-3']
-    let words = await this.loadDictionaryData(indexedDBKey, file);
-    words = this.normalizeDictionaryData(words);
-    console.log(`Wiktionary: ${file} loaded.`);
-    return words;
-  }
-
-  normalizeDictionaryData(words) {
-    console.log("Wiktionary: Normalizing dictionary data...");
-    words = words.filter((w) => w.word?.length > 0) // filter empty rows
-    words.forEach((item) => this.normalizeWord(item));
     return words;
   }
 

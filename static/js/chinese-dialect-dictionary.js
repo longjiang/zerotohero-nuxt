@@ -1,6 +1,4 @@
-importScripts("../vendor/localforage/localforage.js")
 importScripts('../js/base-dictionary.js')
-importScripts("../js/tokenizers/tokenizer-factory.js");
 importScripts("../vendor/pinyinify/pinyinify.js");
 class ChineseDialectDictionary extends BaseDictionary {
   
@@ -18,32 +16,33 @@ class ChineseDialectDictionary extends BaseDictionary {
     const l1Code = this.l1['iso639-3']
     const l2Code = this.l2['iso639-3']
     const file = this.dictionaryFile({ l1Code, l2Code })
-    let data = await this.loadDictionaryData(`dialect-dict-${l1Code}-${l2Code}`, file)
-    let sorted = data.sort((a, b) =>
-      a.traditional && b.traditional ? a.traditional.length - b.traditional.length : 0
-    )
-    let words = []
-    for (let [index, row] of sorted.entries()) {
-      let definitions = row.english ? row.english.split('/').map(d => d.trim()) : row.definitions ? row.definitions.split('|').map(d => d.trim()) : []
-      let word = {
-        id: index.toString(),
-        head: row.traditional,
-        bare: row.traditional,
-        pinyin: row.pinyin ? this.parsePinyin(row.pinyin) : '',
-        accented: row.traditional,
-        pronunciation: row.pronunciation || row.jyutping,
-        definitions,
-        search: removeTones(((row.pronunciation || row.jyutping) + row.pinyin).replace(/ /g, '')),
-        cjk: {
-          canonical: row.traditional && row.traditional !== 'NULL' ? row.traditional : undefined,
-          phonetics: row.pronunciation || row.jyutping
-        },
-        traditional: row.traditional,
-        simplified: row.simplified,
-      }
-      words.push(word)
-    }
+    let words = await this.loadAndNormalizeDictionaryData(`dialect-dict-${l1Code}-${l2Code}`, file)
     this.words = words
+  }
+
+  // Normalizes the input 'row' object and modifies it in place.
+  normalizeWord(row) {
+    let definitions = row.english ? row.english.split('/').map(d => d.trim()) : row.definitions ? row.definitions.split('|').map(d => d.trim()) : [];
+
+    row.id = "d" + hash(row.traditional + definitions[0]);
+    row.head = row.traditional;
+    row.bare = row.traditional;
+    row.pinyin = row.pinyin ? this.parsePinyin(row.pinyin) : '';
+    row.accented = row.traditional;
+    row.pronunciation = row.pronunciation || row.jyutping;
+    row.definitions = definitions;
+    row.search = removeTones(((row.pronunciation || row.jyutping) + row.pinyin).replace(/ /g, ''));
+
+    row.cjk = {
+      canonical: row.traditional && row.traditional !== 'NULL' ? row.traditional : undefined,
+      phonetics: row.pronunciation || row.jyutping
+    };
+
+    row.traditional = row.traditional;
+    row.simplified = row.simplified;
+
+    // Delete unnecessary properties
+    delete row.english;
   }
 
   credit() {
@@ -82,21 +81,6 @@ class ChineseDialectDictionary extends BaseDictionary {
     text = text.toLowerCase()
     let results = this.words.filter(row => row.english && row.english.toLowerCase().includes(text)).slice(0, limit)
     return results
-  }
-
-  /**
-   * Get a word by ID.
-   * @param {*} id the word's id
-   * @param {*} head (optional) the head of the word to check if matches the word retrieved; if mismatched, we'll look for a matching word instead.
-   * @returns 
-   */
-  get(id, head) {
-    let word
-    word = this.words.find(row => row.id === id)
-    if (head && word.head !== head) {
-      word = this.lookup(head)
-    }
-    return word
   }
 
   getSize() {
