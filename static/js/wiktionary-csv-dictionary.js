@@ -4,7 +4,6 @@ importScripts("../vendor/localforage/localforage.js");
 importScripts("../vendor/hash-string/hash-string.min.js");
 importScripts("../vendor/fuzzy-search/FuzzySearch.js");
 importScripts("../js/base-dictionary.js");
-importScripts("../js/tokenizers/tokenizer-factory.js");
 
 class WiktionaryCsvDictionary extends BaseDictionary {
 

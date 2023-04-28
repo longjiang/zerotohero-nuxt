@@ -1,4 +1,6 @@
 importScripts('../js/dictionary-utils.js')
+importScripts("../js/tokenizers/tokenizer-factory.js");
+importScripts("../js/inflectors/inflector-factory.js");
 
 class BaseDictionary {
   
@@ -15,6 +17,7 @@ class BaseDictionary {
     const instance = new this({ l1, l2 });
     await instance.loadData();
     instance.tokenizer = TokenizerFactory.createTokenizer(l2, instance.words);
+    instance.inflector = InflectorFactory.createInflector(l2);
     return instance;
   }
 
@@ -83,8 +86,8 @@ class BaseDictionary {
     throw new Error('lookupByCharacter() method must be implemented in the subclass');
   }
 
-  inflect(head) {
-    throw new Error('inflect() method must be implemented in the subclass');
+  async inflect(text) {
+    return await this.inflector.inflectWithCache(text)
   }
 
   // This method should be overridden for CJK languages
