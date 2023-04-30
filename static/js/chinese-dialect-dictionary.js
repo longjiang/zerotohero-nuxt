@@ -77,12 +77,6 @@ class ChineseDialectDictionary extends BaseDictionary {
     return words
   }
 
-  lookupByDef(text, limit = 30) {
-    text = text.toLowerCase()
-    let results = this.words.filter(row => row.english && row.english.toLowerCase().includes(text)).slice(0, limit)
-    return results
-  }
-
   getSize() {
     return this.words.length
   }

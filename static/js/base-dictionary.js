@@ -13,7 +13,10 @@ class BaseDictionary {
     this.name = this.constructor.name;
     this.version = null;
     this.tokenizer = null;
-    this.indexDbVerByLang = {}
+    this.indexDbVerByLang = {};
+    this.headIndex = {};
+    this.searchIndex = {};
+    this.phraseIndex = {};
   }
 
   static async load({ l1 = undefined, l2 = undefined } = {}) {
@@ -45,6 +48,7 @@ class BaseDictionary {
     let words = await this.loadDictionaryData({name, file, delimiter});
     console.log(`${this.name}: Normalizing dictionary data...`);
     words.forEach((item) => this.normalizeWord(item));
+    words = words.filter(w => w.head);
     console.log(`${this.name}: ${file} loaded.`);
     return words;
   }
@@ -114,9 +118,20 @@ class BaseDictionary {
   lookupSimplified(simplifiedStr) {
     throw new Error('lookupSimplified() method must be implemented in the subclass');
   }
-
-  lookupByDef(definitionStr) {
-    throw new Error('lookupByDef() method must be implemented in the subclass');
+  
+  lookupByDef(text, limit = 30) {
+    text = text.toLowerCase()
+    let results = []
+    for (let word of this.words) {
+      for (let d of word.definitions) {
+        let found = d.toLowerCase().includes(text)
+        if (found) {
+          results.push(Object.assign({ score: 1 / (d.length - text.length + 1) }, word))
+        }
+      }
+    }
+    results = results.sort((a, b) => b.score - a.score)
+    return results.slice(0, limit)
   }
 
   lookupByPronunciation(pronunciationStr) {
@@ -193,6 +208,55 @@ class BaseDictionary {
     return final;
   }
 
+  createIndices() {
+    console.log(`${this.name}: Indexing...`);
+    for (let word of this.words) {
+      for (let indexType of ["head", "search"]) {
+        if (!Array.isArray(this[indexType + "Index"][word[indexType]]))
+          this[indexType + "Index"][word[indexType]] = [];
+        this[indexType + "Index"][word[indexType]] =
+          this[indexType + "Index"][word[indexType]].concat(word);
+      }
+      if (/[\s'.\-]/.test(word.head)) {
+        let words = word.head.split(/[\s'.\-]/);
+        // We don't want to index phrases that are too long
+        if (words.length < 4) {
+          for (let w of words) {
+            this.addToPhraseIndex(w, word);
+          }
+        }
+      }
+    }
+    for (let key in this.phraseIndex) {
+      this.phraseIndex[key] = this.phraseIndex[key].sort(
+        (a, b) => a.head.length - b.head.length
+      );
+    }
+  }
+
+  addToPhraseIndex(head, word) {
+    let w = "@" + head;
+    if (!this.phraseIndex[w]) this.phraseIndex[w] = [];
+    this.phraseIndex[w].push(word);
+  }
+
+  getPhraseIndex(head) {
+    let w = "@" + head;
+    if (!this.phraseIndex[w]) this.phraseIndex[w] = [];
+    return this.phraseIndex[w];
+  }
+
+  findPhrases(word, limit = 50) {
+    if (word) {
+      if (!word.phrases || word.phrases.length === 0) {
+        const phrases = this.getPhraseIndex(word.head) || [];
+        return phrases.slice(0, limit);
+      } else {
+        return word.phrases.slice(0, limit);
+      }
+    }
+  }  
+
 
   // Called from <SearchSubComp> to look for exclusion terms.
   getWordsThatContain(text) {
@@ -203,5 +267,9 @@ class BaseDictionary {
       .map((word) => word.search)
       .concat(words.map((word) => word.head));
     return unique(strings);
+  }
+
+  transliterate(text) {
+    throw new Error('transliterate() method must be implemented in the subclass');
   }
 }

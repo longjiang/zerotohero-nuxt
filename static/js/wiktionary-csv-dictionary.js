@@ -149,56 +149,6 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     }
   }
 
-  createIndices() {
-    console.log("Wiktionary: Indexing...");
-    const l1Code = this.l1['iso639-3']
-    for (let word of this.words) {
-      for (let indexType of ["head", "search"]) {
-        if (!Array.isArray(this[indexType + "Index"][word[indexType]]))
-          this[indexType + "Index"][word[indexType]] = [];
-        this[indexType + "Index"][word[indexType]] =
-          this[indexType + "Index"][word[indexType]].concat(word);
-      }
-      if (/[\s'.\-]/.test(word.head)) {
-        let words = word.head.split(/[\s'.\-]/);
-        // We don't want to index phrases that are too long
-        if (words.length < 4) {
-          for (let w of words) {
-            this.addToPhraseIndex(w, word);
-          }
-        }
-      }
-    }
-    for (let key in this.phraseIndex) {
-      this.phraseIndex[key] = this.phraseIndex[key].sort(
-        (a, b) => a.head.length - b.head.length
-      );
-    }
-  }
-
-  addToPhraseIndex(head, word) {
-    let w = "@" + head;
-    if (!this.phraseIndex[w]) this.phraseIndex[w] = [];
-    this.phraseIndex[w].push(word);
-  }
-
-  getPhraseIndex(head) {
-    let w = "@" + head;
-    if (!this.phraseIndex[w]) this.phraseIndex[w] = [];
-    return this.phraseIndex[w];
-  }
-
-  findPhrases(word, limit = 50) {
-    if (word) {
-      if (!word.phrases || word.phrases.length === 0) {
-        const phrases = this.getPhraseIndex(word.head) || [];
-        return phrases.slice(0, limit);
-      } else {
-        return word.phrases.slice(0, limit);
-      }
-    }
-  }  
-
   lookup(text) {
     let words = this.searchIndex[text.toLowerCase()];
     if (words && words[0]) return words[0];
@@ -209,23 +159,6 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     let type = ignoreAccents ? "search" : "head";
     let words = this[type + "Index"][text.toLowerCase()];
     return words || [];
-  }
-
-  lookupByDef(text, limit = 30) {
-    text = text.toLowerCase();
-    let results = [];
-    for (let word of this.words) {
-      for (let d of word.definitions) {
-        let found = d.toLowerCase().includes(text);
-        if (found) {
-          results.push(
-            Object.assign({ score: 1 / (d.length - text.length + 1) }, word)
-          );
-        }
-      }
-    }
-    results = results.sort((a, b) => b.score - a.score);
-    return results.slice(0, limit);
   }
 
   lookupFuzzy(text, limit = 30, quick = false) {
