@@ -95,7 +95,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     const file = this.dictionaryFile({ l1Code, l2Code });
     let words = await this.loadAndNormalizeDictionaryData(`wiktionary-${l2Code}-${l1Code}`, file);
     words = await this.loadSupplementalWords(words);
-    words = words.filter((w) => w.word?.length > 0) // filter empty rows
+    words = words.filter((w) => w.head?.length > 0) // filter empty rows
     words = words.sort((a, b) => {
       if (a.head && b.head) {
         return b.head.length - a.head.length;
@@ -107,7 +107,6 @@ class WiktionaryCsvDictionary extends BaseDictionary {
       caseSensitive: false,
       sort: true,
     });
-    // this.tokenizer = TokenizerFactory.createTokenizer(this.l2, this.words)
     console.log("Wiktionary: loaded.");
     return this;
   }
