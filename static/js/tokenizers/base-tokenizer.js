@@ -1,8 +1,18 @@
 class BaseTokenizer {
-  constructor(l2, words = []) {
+  constructor({ l2, words = [] }) {
     this.l2 = l2;
     this.tokenizationCache = {};
     this.words = words;
+  }
+
+  static async load({ l2, words = [] }) {
+    const instance = new this({ l2, words });
+    await instance.loadData();
+    return instance;
+  }
+
+  async loadData() {
+    // Optional. Used only for local tokenizers that need to load data.
   }
 
   async tokenizeWithCache(text) {

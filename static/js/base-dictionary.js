@@ -19,7 +19,7 @@ class BaseDictionary {
   static async load({ l1 = undefined, l2 = undefined } = {}) {
     const instance = new this({ l1, l2 });
     await instance.loadData();
-    instance.tokenizer = TokenizerFactory.createTokenizer(l2, instance.words);
+    instance.tokenizer = await TokenizerFactory.createTokenizer(l2, instance.words);
     instance.inflector = InflectorFactory.createInflector(l2);
     return instance;
   }
