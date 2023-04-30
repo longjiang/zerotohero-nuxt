@@ -93,10 +93,12 @@ class RussianInflector extends BaseInflector {
               form = this.wordsIndex[form];
               field = field.replace('_id', '');
             }
+            form = form.replace(/([,;].*)/g, ""); // Remove everything after commas and semicolons
+            // TO-DO: When there are multiple forms, add them all
             forms.push({
               table: this.tableAndFieldNames(tableName),
               field: this.tableAndFieldNames(field),
-              form: this.renderAccent(form.replace(/([,;])/g, "$1 "))
+              form: addAccentMarks(form), // (Russian) Add accent marks
             });
           }
         });
@@ -146,9 +148,5 @@ class RussianInflector extends BaseInflector {
       past_pl: 'past tense (plural)'
     }
     return stylize[name] || name;
-  }
-
-  renderAccent(text) {
-    return text.replace(/'/g, '́')
   }
 }

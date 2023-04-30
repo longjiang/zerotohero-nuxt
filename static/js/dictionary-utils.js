@@ -97,6 +97,11 @@ const stripAccents = (str) => {
   return str;
 };
 
+
+const addAccentMarks = (text) => {
+  return text.replace(/'/g, '́')
+}
+
 /*
   * https://gist.github.com/yakovsh/345a71d841871cc3d375
   /* @shimondoodkin suggested even a much shorter way to do this */

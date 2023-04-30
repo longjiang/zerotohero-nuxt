@@ -1,21 +1,43 @@
 <template>
-  <v-popover :open="open" placement="top" ref="popover" :popoverInnerClass="`tooltip-inner popover-inner skin-${$skin}`"
-    :popoverArrowClass="`tooltip-arrow popover-arrow skin-${$skin}`">
-    <div v-on="popup ? { click: wordBlockClick } : {}" v-observe-visibility="visibilityChanged"
-      @mouseenter="wordblockHover = true" @mouseleave="wordblockHover = false">
-      <WordBlockQuiz v-if="(this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
-        " v-bind="attributes" />
+  <v-popover
+    :open="open"
+    placement="top"
+    ref="popover"
+    :popoverInnerClass="`tooltip-inner popover-inner skin-${$skin}`"
+    :popoverArrowClass="`tooltip-arrow popover-arrow skin-${$skin}`"
+  >
+    <div
+      v-on="popup ? { click: wordBlockClick } : {}"
+      v-observe-visibility="visibilityChanged"
+      @mouseenter="wordblockHover = true"
+      @mouseleave="wordblockHover = false"
+    >
+      <WordBlockQuiz
+        v-if="
+          (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
+        "
+        v-bind="attributes"
+      />
       <WordBlockWord v-else v-bind="attributes" />
     </div>
 
     <template slot="popover">
-      <div v-if="(this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
-        " class="popover-inner-hover-area">
+      <div
+        v-if="
+          (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
+        "
+        class="popover-inner-hover-area"
+      >
         {{ $t("Tap to show answer.") }}
       </div>
-      <div @mouseenter="tooltipHover = true" @mouseleave="tooltipHover = false" v-else-if="open"
-        class="popover-inner-hover-area">
-        <WordBlockPopup v-bind="{
+      <div
+        @mouseenter="tooltipHover = true"
+        @mouseleave="tooltipHover = false"
+        v-else-if="open"
+        class="popover-inner-hover-area"
+      >
+        <WordBlockPopup
+          v-bind="{
             text,
             token,
             words,
@@ -25,7 +47,10 @@
             context,
             transliterationprop,
             phraseObj: phraseItem(text),
-          }" ref="popup" v-if="open" />
+          }"
+          ref="popup"
+          v-if="open"
+        />
       </div>
     </template>
   </v-popover>
@@ -121,7 +146,7 @@ export default {
         ?.replace(/^to /, "")
         ?.replace(/^see .*/, "")
         ?.replace(/^variant .*/, "")
-        ?.split(/[，；,;]\s*/)[0]
+        ?.split(/[，；,;]\s*/)[0];
       if (quickGloss && quickGloss.length < 20) return quickGloss;
     },
     savedTransliteration() {
@@ -159,10 +184,7 @@ export default {
       if (["ko", "vi"].includes(this.$l2.code)) {
         let hanja = "";
         if (this.savedWord) hanja = this.savedWord.hanja;
-        else if (
-          this.words &&
-          this.words[0]
-        ) {
+        else if (this.words && this.words[0]) {
           let head = this.words[0].head;
           let bannedEndings = "이히하고가기는은도의로를";
           let bannedWords = ["지난", "진자", "가야", "주시", "거야", "위해"];
@@ -192,44 +214,6 @@ export default {
         } else return this.token.candidates[0];
       }
     },
-
-    attributes() {
-      let word = this.word;
-      let definition = this.quickGloss;
-      let phonetics = this.getPhonetics(word, this.text);
-      let text = this.$l2.han ? this.getWordText(word, this.text) : this.text;
-      let hanja = this.$l2Settings.showByeonggi && this.hanja ? this.hanja : undefined;
-      let mappedPronunciation = this.$l2.code === "ja" ? this.getMappedPronunciation(word, this.text) : undefined;
-
-      let attributes = {
-        popup: this.popup,
-        sticky: this.sticky,
-        common: this.common,
-        seen: this.seen,
-        saved: this.savedWord || this.savedPhrase,
-        phonetics,
-        pos: this.pos,
-        definition,
-        text: this.transform(text),
-        hanja,
-        useZoom: this.useZoom,
-      };
-
-      if (mappedPronunciation) {
-        attributes.mappedPronunciation = mappedPronunciation;
-      }
-
-      if (this.popup) {
-        attributes["data-hover-level"] = "outside";
-      }
-
-      if (word) {
-        if (word.rank) attributes["data-rank"] = word.rank;
-        if (word.weight) attributes["data-weight"] = word.weight;
-      }
-
-      return attributes;
-    },
     hard() {
       if (this.highlightHardWords) {
         if (
@@ -252,6 +236,51 @@ export default {
           }
         }
       }
+    },
+  },
+  asyncComputed: {
+
+
+    async attributes() {
+      let word = this.word;
+      let definition = this.quickGloss;
+      let phonetics = this.getPhonetics(word, this.text);
+      let text = this.$l2.han ? this.getWordText(word, this.text) : this.text;
+      let hanja =
+        this.$l2Settings.showByeonggi && this.hanja ? this.hanja : undefined;
+      let mappedPronunciation =
+        this.$l2.code === "ja"
+          ? this.getMappedPronunciation(word, this.text)
+          : undefined;
+
+      let attributes = {
+        popup: this.popup,
+        sticky: this.sticky,
+        common: this.common,
+        seen: this.seen,
+        saved: this.savedWord || this.savedPhrase,
+        phonetics,
+        pos: this.pos,
+        definition,
+        text: await this.transform(text),
+        hanja,
+        useZoom: this.useZoom,
+      };
+
+      if (mappedPronunciation) {
+        attributes.mappedPronunciation = mappedPronunciation;
+      }
+
+      if (this.popup) {
+        attributes["data-hover-level"] = "outside";
+      }
+
+      if (word) {
+        if (word.rank) attributes["data-rank"] = word.rank;
+        if (word.weight) attributes["data-weight"] = word.weight;
+      }
+
+      return attributes;
     },
   },
   mounted() {
@@ -306,20 +335,30 @@ export default {
   methods: {
     getWordText(word, text) {
       if (word) {
-        return this.$l2Settings.useTraditional ? word.traditional : word.simplified;
+        return this.$l2Settings.useTraditional
+          ? word.traditional
+          : word.simplified;
       } else {
         return this.$l2Settings.useTraditional ? tify(text) : sify(text);
       }
     },
     getPhonetics() {
-      if (this.$l2Settings.showPinyin && this.phonetics && this.transliteration) {
+      if (
+        this.$l2Settings.showPinyin &&
+        this.phonetics &&
+        this.transliteration
+      ) {
         return this.savedTransliteration || this.transliteration;
       }
       if (this.$l2Settings.showPinyin) return this.transliterationprop;
       return false;
     },
     getMappedPronunciation() {
-      if (this.token && typeof mapKana !== "undefined" && typeof wanakana !== "undefined") {
+      if (
+        this.token &&
+        typeof mapKana !== "undefined" &&
+        typeof wanakana !== "undefined"
+      ) {
         // If the word is saved, use the saved pronunciation
         if (this.savedWord && this.savedWord.head === this.text) {
           return mapKana(this.text, this.savedWord.kana);
@@ -340,12 +379,12 @@ export default {
         return phraseItem;
       }
     },
-    transform(text, removeSpacing = false) {
+    async transform(text, removeSpacing = false) {
       if (typeof text === "undefined") {
         text = "";
       }
       if (this.$l2.code === "ru" && this.savedWord) {
-        let accentText = this.getRussianAccentText();
+        let accentText = await this.getRussianAccentText();
         if (accentText) return accentText;
       }
       if (this.$l2.code === "tlh" && text.trim() !== "") {
@@ -425,7 +464,7 @@ export default {
           } else if (this.token.candidates[0].pronunciation) {
             transliteration =
               this.token.candidates[0].pronunciation.split(",")[
-              this.$l2.code === "vi" ? 1 : 0
+                this.$l2.code === "vi" ? 1 : 0
               ];
           }
         }
@@ -445,21 +484,22 @@ export default {
     fixKlingonTypos(text) {
       return Klingon.fixTypos(text);
     },
-    getRussianAccentText() {
-      let forms = this.savedWord.forms.map((f) => f.form);
-      let accentLessForms = forms.map((f) => f.replace("'", ""));
+    async getRussianAccentText() {
       let search = this.text.toLowerCase();
+      const dictionary = await this.$getDictionary();
+      let forms = await dictionary.inflect(this.savedWord.head)
+      forms = forms.map(f => f.form)
+      const accentLessForms = forms.map(f => f.replace(/́/g, ""))
       let matchedIndex = accentLessForms.findIndex((f) => search === f);
       if (matchedIndex) {
         let matchedForm = forms[matchedIndex];
         if (matchedForm) {
-          let accentIndex = matchedForm.indexOf("'");
+          let accentIndex = matchedForm.indexOf('́');
           if (accentIndex >= 0) {
             let accentText =
               this.text.substring(0, accentIndex) +
-              "'" +
+              '́' +
               this.text.substring(accentIndex);
-            accentText = accentText.replace(/'/g, "́");
             return accentText;
           }
         }
@@ -622,16 +662,16 @@ export default {
       if (!quick) {
         words = words
           ? words.sort((a, b) => {
-            let asaved = this.$store.getters["savedWords/has"]({
-              id: a.id,
-              l2: this.$l2.code,
-            });
-            let bsaved = this.$store.getters["savedWords/has"]({
-              id: b.id,
-              l2: this.$l2.code,
-            });
-            return asaved === bsaved ? 0 : asaved ? -1 : 1;
-          })
+              let asaved = this.$store.getters["savedWords/has"]({
+                id: a.id,
+                l2: this.$l2.code,
+              });
+              let bsaved = this.$store.getters["savedWords/has"]({
+                id: b.id,
+                l2: this.$l2.code,
+              });
+              return asaved === bsaved ? 0 : asaved ? -1 : 1;
+            })
           : [];
         if (dictionary.getLemmas) {
           let allLemmas = [];
