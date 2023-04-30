@@ -19,7 +19,7 @@ const TokenizerFactory = {
     ]
   },
  
-  async createTokenizer(l2, words = []) {
+  async createTokenizer({l2, words = []}) {
     // pick the right tokenizer for the language
     let languageCode = l2["iso639-3"] || l2["glottologId"];
     for (let tokenizer in this.tokenizers) {

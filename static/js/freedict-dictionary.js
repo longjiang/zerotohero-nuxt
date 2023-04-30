@@ -102,7 +102,7 @@ const Dictionary = {
     this.file = this.dictionaryFile({l1Code, l2Code})
     await this.loadWords()
     await this.loadConjugations()
-    this.tokenizer = await TokenizerFactory.createTokenizer(l2, this.words)
+    this.tokenizer = await TokenizerFactory.createTokenizer({l2, words: this.words})
     this.inflector = InflectorFactory.createInflector(this.l2)
     return this
   },

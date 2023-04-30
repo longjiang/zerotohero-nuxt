@@ -19,7 +19,7 @@ class BaseDictionary {
   static async load({ l1 = undefined, l2 = undefined } = {}) {
     const instance = new this({ l1, l2 });
     await instance.loadData();
-    instance.tokenizer = await TokenizerFactory.createTokenizer(l2, instance.words);
+    instance.tokenizer = await TokenizerFactory.createTokenizer({l2, words: instance.words});
     instance.inflector = InflectorFactory.createInflector(l2);
     return instance;
   }
@@ -41,8 +41,8 @@ class BaseDictionary {
     throw new Error('dictionaryFile() method must be implemented in the subclass');
   }
 
-  async loadAndNormalizeDictionaryData(indexedDBKey, file) {
-    let words = await this.loadDictionaryData(indexedDBKey, file);
+  async loadAndNormalizeDictionaryData({name, file, delimiter = ','}) {
+    let words = await this.loadDictionaryData({name, file, delimiter});
     console.log(`${this.name}: Normalizing dictionary data...`);
     words.forEach((item) => this.normalizeWord(item));
     console.log(`${this.name}: ${file} loaded.`);
@@ -58,7 +58,7 @@ class BaseDictionary {
    * @param {string} file - The URL of the remote file containing the dictionary data.
    * @returns {Array} - An array of dictionary entries parsed from the fetched data.
    */
-  async loadDictionaryData(name, file) {
+  async loadDictionaryData({name, file, delimiter = ','}) {
     const l2Code = this.l2['iso639-3']
     if (this.indexDbVerByLang[l2Code])
       name += "-v" + this.indexDbVerByLang[l2Code]; // Force refresh a dictionary when it's outdated
@@ -83,7 +83,7 @@ class BaseDictionary {
     if (data) {
       let results = Papa.parse(data, {
         header: true,
-        delimiter: ','
+        delimiter
       });
       return results.data;
     }

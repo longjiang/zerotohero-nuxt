@@ -2,239 +2,149 @@
 importScripts('../vendor/wanakana/wanakana.min.js')
 importScripts('../vendor/localforage/localforage.js')
 importScripts("../vendor/hash-string/hash-string.min.js")
-importScripts("../js/map-kana.js")
-importScripts("../js/dictionary-utils.js")
-importScripts("../js/tokenizers/japanese-tokenizer.js")
-importScripts("../js/inflectors/inflector-factory.js")
+importScripts("../js/base-dictionary.js")
 
-const Dictionary = {
-  file: 'https://server.chinesezerotohero.com/data/edict/edict.tsv.txt',
-  wiktionaryFile: "https://server.chinesezerotohero.com/data/wiktionary-csv/jpn-eng.csv.txt",
-  words: [],
-  tokenizationCache: {},
-  name: 'edict',
-  l1: undefined,
-  l2: undefined,
-  // tokenizer: undefined,
+class EdictDictionary extends BaseDictionary  {
+  
+  constructor({ l1 = undefined, l2 = undefined } = {}) {
+    super({l1, l2});
+    this.file = 'https://server.chinesezerotohero.com/data/edict/edict.tsv.txt';
+    this.wiktionaryFile = 'https://server.chinesezerotohero.com/data/wiktionary-csv/jpn-eng.csv.txt';
+    this.posLookupTable = {
+      "adj-f": "noun or verb acting prenominally",
+      "adj-i": "adjective (keiyoushi)",
+      "adj-ix": "adjective (keiyoushi) - yoi/ii class",
+      "adj-kari": "'kari' adjective (archaic)",
+      "adj-ku": "'ku' adjective (archaic)",
+      "adj-na": "adjectival nouns or quasi-adjectives (keiyodoshi)",
+      "adj-nari": "archaic/formal form of na-adjective",
+      "adj-no": "nouns which may take the genitive case particle 'no'",
+      "adj-pn": "pre-noun adjectival (rentaishi)",
+      "adj-shiku": "'shiku' adjective (archaic)",
+      "adj-t": "'taru' adjective",
+      "adv": "adverb (fukushi)",
+      "adv-to": "adverb taking the 'to' particle",
+      "aux": "auxiliary",
+      "aux-adj": "auxiliary adjective",
+      "aux-v": "auxiliary verb",
+      "conj": "conjunction",
+      "cop": "copula",
+      "ctr": "counter",
+      "exp": "expressions (phrases, clauses, etc.)",
+      "int": "interjection (kandoushi)",
+      "n": "noun (common) (futsuumeishi)",
+      "n-adv": "adverbial noun (fukushitekimeishi)",
+      "n-pr": "proper noun",
+      "n-pref": "noun, used as a prefix",
+      "n-suf": "noun, used as a suffix",
+      "n-t": "noun (temporal) (jisoumeishi)",
+      "num": "numeric",
+      "pn": "pronoun",
+      "pref": "prefix",
+      "prt": "particle",
+      "suf": "suffix",
+      "unc": "unclassified",
+      "v-unspec": "verb unspecified",
+      "v1": "Ichidan verb",
+      "v1-s": "Ichidan verb - kureru special class",
+      "v2a-s": "Nidan verb with 'u' ending (archaic)",
+      "v2b-k": "Nidan verb (upper class) with 'bu' ending (archaic)",
+      "v2b-s": "Nidan verb (lower class) with 'bu' ending (archaic)",
+      "v2d-k": "Nidan verb (upper class) with 'dzu' ending (archaic)",
+      "v2d-s": "Nidan verb (lower class) with 'dzu' ending (archaic)",
+      "v2g-k": "Nidan verb (upper class) with 'gu' ending (archaic)",
+      "v2g-s": "Nidan verb (lower class) with 'gu' ending (archaic)",
+      "v2h-k": "Nidan verb (upper class) with 'hu/fu' ending (archaic)",
+      "v2h-s": "Nidan verb (lower class) with 'hu/fu' ending (archaic)",
+      "v2k-k": "Nidan verb (upper class) with 'ku' ending (archaic)",
+      "v2k-s": "Nidan verb (lower class) with 'ku' ending (archaic)",
+      "v2m-k": "Nidan verb (upper class) with 'mu' ending (archaic)",
+      "v2m-s": "Nidan verb (lower class) with 'mu' ending (archaic)",
+      "v2n-s": "Nidan verb (lower class) with 'nu' ending (archaic)",
+      "v2r-k": "Nidan verb (upper class) with 'ru' ending (archaic)",
+      "v2r-s": "Nidan verb (lower class) with 'ru' ending (archaic)",
+      "v2s-s": "Nidan verb (lower class) with 'su' ending (archaic)",
+      "v2t-k": "Nidan verb (upper class) with 'tsu' ending (archaic)",
+      "v2t-s": "Nidan verb (lower class) with 'tsu' ending (archaic)",
+      "v2w-s": "Nidan verb (lower class) with 'u' ending and 'we' conjugation (archaic)",
+      "v2y-k": "Nidan verb (upper class) with 'yu' ending (archaic)",
+      "v2y-s": "Nidan verb (lower class) with 'yu' ending (archaic)",
+      "v2z-s": "Nidan verb (lower class) with 'zu' ending (archaic)",
+      "v4b": "Yodan verb with 'bu' ending (archaic)",
+      "v4g": "Yodan verb with 'gu' ending (archaic)",
+      "v4h": "Yodan verb with 'hu/fu' ending (archaic)",
+      "v4k": "Yodan verb with 'ku' ending (archaic)",
+      "v4m": "Yodan verb with 'mu' ending (archaic)",
+      "v4n": "Yodan verb with 'nu' ending (archaic)",
+      "v4r": "Yodan verb with 'ru' ending (archaic)",
+      "v4s": "Yodan verb with 'su' ending (archaic)",
+      "v4t": "Yodan verb with 'tsu' ending (archaic)",
+      "v5aru": "Godan verb - -aru special class",
+      "v5b": "Godan verb with 'bu' ending",
+      "v5g": "Godan verb with 'gu' ending",
+      "v5k": "Godan verb with 'ku' ending",
+      "v5k-s": "Godan verb - Iku/Yuku special class",
+      "v5m": "Godan verb with 'mu' ending",
+      "v5n": "Godan verb with 'nu' ending",
+      "v5r": "Godan verb with 'ru' ending",
+      "v5r-i": "Godan verb with 'ru' ending (irregular verb)",
+      "v5s": "Godan verb with 'su' ending",
+      "v5t": "Godan verb with 'tsu' ending",
+      "v5u": "Godan verb with 'u' ending",
+      "v5u-s": "Godan verb with 'u' ending (special class)",
+      "v5uru": "Godan verb - Uru old class verb (old form of Eru)",
+      "vi": "intransitive verb",
+      "vk": "Kuru verb - special class",
+      "vn": "irregular nu verb",
+      "vr": "irregular ru verb, plain form ends with -ri",
+      "vs": "noun or participle which takes the aux. verb suru",
+      "vs-c": "su verb - precursor to the modern suru",
+      "vs-i": "suru verb - included",
+      "vs-s": "suru verb - special class",
+      "vt": "transitive verb",
+      "vz": "Ichidan verb - zuru verb (alternative form of -jiru verbs)"
+    }
+  }
+  
   credit() {
     return 'The Japanese dictionary is provided by <a href="http://www.edrdg.org/jmdict/edict.html">EDICT</a>, open-source and distribtued under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-ShareAlike 3.0 license</a>.'
-  },
-  posLookupTable: {
-    "adj-f": "noun or verb acting prenominally",
-    "adj-i": "adjective (keiyoushi)",
-    "adj-ix": "adjective (keiyoushi) - yoi/ii class",
-    "adj-kari": "'kari' adjective (archaic)",
-    "adj-ku": "'ku' adjective (archaic)",
-    "adj-na": "adjectival nouns or quasi-adjectives (keiyodoshi)",
-    "adj-nari": "archaic/formal form of na-adjective",
-    "adj-no": "nouns which may take the genitive case particle 'no'",
-    "adj-pn": "pre-noun adjectival (rentaishi)",
-    "adj-shiku": "'shiku' adjective (archaic)",
-    "adj-t": "'taru' adjective",
-    "adv": "adverb (fukushi)",
-    "adv-to": "adverb taking the 'to' particle",
-    "aux": "auxiliary",
-    "aux-adj": "auxiliary adjective",
-    "aux-v": "auxiliary verb",
-    "conj": "conjunction",
-    "cop": "copula",
-    "ctr": "counter",
-    "exp": "expressions (phrases, clauses, etc.)",
-    "int": "interjection (kandoushi)",
-    "n": "noun (common) (futsuumeishi)",
-    "n-adv": "adverbial noun (fukushitekimeishi)",
-    "n-pr": "proper noun",
-    "n-pref": "noun, used as a prefix",
-    "n-suf": "noun, used as a suffix",
-    "n-t": "noun (temporal) (jisoumeishi)",
-    "num": "numeric",
-    "pn": "pronoun",
-    "pref": "prefix",
-    "prt": "particle",
-    "suf": "suffix",
-    "unc": "unclassified",
-    "v-unspec": "verb unspecified",
-    "v1": "Ichidan verb",
-    "v1-s": "Ichidan verb - kureru special class",
-    "v2a-s": "Nidan verb with 'u' ending (archaic)",
-    "v2b-k": "Nidan verb (upper class) with 'bu' ending (archaic)",
-    "v2b-s": "Nidan verb (lower class) with 'bu' ending (archaic)",
-    "v2d-k": "Nidan verb (upper class) with 'dzu' ending (archaic)",
-    "v2d-s": "Nidan verb (lower class) with 'dzu' ending (archaic)",
-    "v2g-k": "Nidan verb (upper class) with 'gu' ending (archaic)",
-    "v2g-s": "Nidan verb (lower class) with 'gu' ending (archaic)",
-    "v2h-k": "Nidan verb (upper class) with 'hu/fu' ending (archaic)",
-    "v2h-s": "Nidan verb (lower class) with 'hu/fu' ending (archaic)",
-    "v2k-k": "Nidan verb (upper class) with 'ku' ending (archaic)",
-    "v2k-s": "Nidan verb (lower class) with 'ku' ending (archaic)",
-    "v2m-k": "Nidan verb (upper class) with 'mu' ending (archaic)",
-    "v2m-s": "Nidan verb (lower class) with 'mu' ending (archaic)",
-    "v2n-s": "Nidan verb (lower class) with 'nu' ending (archaic)",
-    "v2r-k": "Nidan verb (upper class) with 'ru' ending (archaic)",
-    "v2r-s": "Nidan verb (lower class) with 'ru' ending (archaic)",
-    "v2s-s": "Nidan verb (lower class) with 'su' ending (archaic)",
-    "v2t-k": "Nidan verb (upper class) with 'tsu' ending (archaic)",
-    "v2t-s": "Nidan verb (lower class) with 'tsu' ending (archaic)",
-    "v2w-s": "Nidan verb (lower class) with 'u' ending and 'we' conjugation (archaic)",
-    "v2y-k": "Nidan verb (upper class) with 'yu' ending (archaic)",
-    "v2y-s": "Nidan verb (lower class) with 'yu' ending (archaic)",
-    "v2z-s": "Nidan verb (lower class) with 'zu' ending (archaic)",
-    "v4b": "Yodan verb with 'bu' ending (archaic)",
-    "v4g": "Yodan verb with 'gu' ending (archaic)",
-    "v4h": "Yodan verb with 'hu/fu' ending (archaic)",
-    "v4k": "Yodan verb with 'ku' ending (archaic)",
-    "v4m": "Yodan verb with 'mu' ending (archaic)",
-    "v4n": "Yodan verb with 'nu' ending (archaic)",
-    "v4r": "Yodan verb with 'ru' ending (archaic)",
-    "v4s": "Yodan verb with 'su' ending (archaic)",
-    "v4t": "Yodan verb with 'tsu' ending (archaic)",
-    "v5aru": "Godan verb - -aru special class",
-    "v5b": "Godan verb with 'bu' ending",
-    "v5g": "Godan verb with 'gu' ending",
-    "v5k": "Godan verb with 'ku' ending",
-    "v5k-s": "Godan verb - Iku/Yuku special class",
-    "v5m": "Godan verb with 'mu' ending",
-    "v5n": "Godan verb with 'nu' ending",
-    "v5r": "Godan verb with 'ru' ending",
-    "v5r-i": "Godan verb with 'ru' ending (irregular verb)",
-    "v5s": "Godan verb with 'su' ending",
-    "v5t": "Godan verb with 'tsu' ending",
-    "v5u": "Godan verb with 'u' ending",
-    "v5u-s": "Godan verb with 'u' ending (special class)",
-    "v5uru": "Godan verb - Uru old class verb (old form of Eru)",
-    "vi": "intransitive verb",
-    "vk": "Kuru verb - special class",
-    "vn": "irregular nu verb",
-    "vr": "irregular ru verb, plain form ends with -ri",
-    "vs": "noun or participle which takes the aux. verb suru",
-    "vs-c": "su verb - precursor to the modern suru",
-    "vs-i": "suru verb - included",
-    "vs-s": "suru verb - special class",
-    "vt": "transitive verb",
-    "vz": "Ichidan verb - zuru verb (alternative form of -jiru verbs)"
-  },
-  async load({ l1 = undefined, l2 = undefined } = {}) {
-    // this.tokenizer = await new Promise(resolve => {
-    //   kuromoji.builder({ dicPath: `https://server.chinesezerotohero.com/data/kuromoji/` }).build((err, tokenizer) => {
-    //     resolve(tokenizer)
-    //   })
-    // })
-    this.l1 = l1
-    this.l2 = l2
-    let [edictData, wiktionaryData] = await Promise.all([
-      this.loadSmart('edict', this.file),
-      this.loadSmart('wiktionary-jpn-eng', this.wiktionaryFile)
-    ]);
-    let words = await this.loadEdict(edictData)
-    let wiktionaryWords = await this.loadWiktionary(wiktionaryData);
-    wiktionaryWords = wiktionaryWords.map((word, index) => {
-      word.id = 'w' + hash(word.head + word.definitions[0]);
-      return word;
-    });
-    words = words.concat(wiktionaryWords);
-    this.words = this.uniqueByValues(words, ["id"]);
+  }
+
+  async loadData() {
+    const l1Code = this.l1['iso639-3']
+    const l2Code = this.l2['iso639-3']
+    let words = await this.loadAndNormalizeDictionaryData({ name: `edict`, file:this.file, delimiter: "\t" })
+    let wiktionaryWords = await this.loadAndNormalizeDictionaryData({ name: `wiktionary-jpn-eng`, file: this.wiktionaryFile })
+    this.words = uniqueByValues([...words, ...wiktionaryWords], ['id'])
     words = null
-    wiktionaryData = null
-    this.tokenizer = new JapaneseTokenizer()
-    this.inflector = InflectorFactory.createInflector(this.l2)
-    return this
-  },
+    wiktionaryWords = null
+  }
 
-  async loadEdict(csv) {
-    let results = await Papa.parse(csv, {
-      header: true
-    });
-    let data = results.data
-    let sorted = data.sort((a, b) =>
-      a.kana && b.kana ? a.kana.length - b.kana.length : 0
-    )
-    let words = []
-    for (let row of sorted) {
-      if (row.kanji === 'ー') delete row.kana
-      let pos = row.english ? row.english.replace(/^\((.*?)\).*/gi, "$1").split(',')[0] : undefined
-      pos = this.posLookupTable[pos] || pos
+  // Normalizes the input 'row' object and modifies it in place.
+  normalizeWord(row) {
+    if (row.kanji === 'ー') delete row.kana;
+    let pos = row.english ? row.english.replace(/^\((.*?)\).*/gi, "$1").split(',')[0] : undefined;
+    pos = this.posLookupTable[pos] || pos;
+  
+    row.head = row.kanji || row.kana;
+    row.bare = row.kanji || row.kana;
+    row.accented = row.kanji || row.kana;
+    row.pos = pos;
+    row.definitions = row.english ? row.english.replace(/\(.*?\)/gi, '').replace('/(P)', '').split('/').filter(d => d !== '') : [];
+    row.cjk = {
+      canonical: row.kanji && row.kanji !== 'NULL' ? row.kanji : undefined,
+      phonetics: row.kana
+    };
+    row.romaji = wanakana.toRomaji(row.kana);
+  
+    // Delete unused properties
+    delete row.english;
+  }
 
-      let word = Object.assign(row, {
-        head: row.kanji || row.kana,
-        bare: row.kanji || row.kana,
-        accented: row.kanji || row.kana,
-        pos,
-        definitions: row.english ? row.english.replace(/\(.*?\)/gi, '').replace('/(P)', '').split('/').filter(d => d !== '') : [],
-        cjk: {
-          canonical: row.kanji && row.kanji !== 'NULL' ? row.kanji : undefined,
-          phonetics: row.kana
-        },
-        romaji: wanakana.toRomaji(row.kana)
-      })
-      if (word.id) words.push(word)
-    }
-    words = words.sort((a, b) => b.head && a.head ? b.head.length - a.head.length : 0)
-    return words
-  },
-  async loadWiktionary(csv) {
-    let words = this.parseDictionaryCSV(csv);
-    words = words.sort((a, b) => {
-      if (a.head && b.head) {
-        return b.head.length - a.head.length;
-      }
-    });
-    return words;
-  },
-  parseDictionaryCSV(data) {
-    console.log("Wiktionary: parsing words from CSV...");
-    let parsed = Papa.parse(data, { header: true });
-    let words = parsed.data;
-    words = words
-      .filter(w => w.word.length > 0) // filter empty rows
-      .map(item => {
-        item.word = item.word.replace(/^\-/, '')
-        item.bare = item.word;
-        item.search = item.bare.toLowerCase();
-        item.head = item.word;
-        delete item.word;
-        item.wiktionary = true;
-        item.definitions = item.definitions ? item.definitions.split("|") : [];
-        item.stems = item.stems ? item.stems.split("|") : [];
-        item.stems = this.unique(item.stems);
-        item.phrases = item.phrases ? item.phrases.split("|") : [];
-        item.kanji = item.head
-        return item;
-      });
-    return words;
-  },
-  // https://stackoverflow.com/questions/38613654/javascript-find-unique-objects-in-array-based-on-multiple-properties
-  uniqueByValues(arr, keyProps) {
-    const kvArray = arr.map(entry => {
-      const key = keyProps.map(k => entry[k]).join("|");
-      return [key, entry];
-    });
-    const map = new Map(kvArray);
-    return Array.from(map.values());
-  },
-  async loadSmart(name, file) {
-    let data = await localforage.getItem(name)
-    if (!data) {
-      console.log(`EDICT: requesting '${file}' . . .`)
-      let response = await axios.get(file)
-      data = response.data
-      localforage.setItem(name, data)
-      response = null
-    } else {
-      console.log(`EDICT: dictionary '${name}' loaded from local indexedDB via localforage`)
-    }
-    if (data) {
-      return data
-    }
-  },
-  getSize() {
-    return this.words.length
-  },
-  getWords() {
-    return this.words
-  },
+  
   getWordsThatContain(text) {
     let strings = []
-    let words = this.words.filter(w => {
+    this.words.forEach(w => {
       if (w.kanji && w.kanji.includes(text)) {
         strings.push(w.kanji)
       }
@@ -243,133 +153,32 @@ const Dictionary = {
       }
     })
     return strings
-  },
-  wordForms(word) {
-    let forms = [{
-      table: 'head',
-      field: 'head',
-      form: word.bare
-    }]
-    let jpForms = JPConjugations.conjugate(word.bare)
-    forms = forms.concat(jpForms.map(f => {
-      return {
-        table: 'conjugation',
-        field: f.name,
-        form: f.form
-      }
-    }))
-    return forms
-  },
-  stylize(name) {
-    return name
-  },
-  accent(text) {
-    return text
-  },
-  lookupByDef(text, limit = 30) {
-    text = text.toLowerCase()
-    let results = []
-    for (let word of this.words) {
-      for (let d of word.definitions) {
-        let found = d.toLowerCase().includes(text)
-        if (found) {
-          results.push(Object.assign({ score: 1 / (d.length - text.length + 1) }, word))
-        }
-      }
-    }
-    results = results.sort((a, b) => b.score - a.score)
-    return results.slice(0, limit)
-  },
+  }
+
   lookup(text) {
-    let word = this.words.find(word => word && word.head === text)
+    let word = this.words.find(word => word && (word.kanji === text || word.kana === text))
     return word
-  },
+  }
+  
   lookupMultiple(text) {
     let words = this.words.filter(word => word && (word.kanji === text || word.kana === text))
     return words
-  },
-  unique(array) {
-    var uniqueArray = []
-    for (let i in array) {
-      if (!uniqueArray.includes(array[i])) uniqueArray.push(array[i])
-    }
-    return uniqueArray
-  },
-  /**
-   * Get a word by ID.
-   * @param {*} id the word's id
-   * @param {*} head (optional) the head of the word to check if matches the word retrieved; if mismatched, we'll look for a matching word instead.
-   * @returns 
-   */
-  get(id, head) {
-    let entry = this.words.find(row => row.id === id)
-    if (head) {
-      if (!entry || entry.head !== head) {
-        entry = this.lookup(head)
-      }
-    }
-    return entry
-  },
-  isChinese(text) {
-    if (this.matchChinese(text)) return true
-  },
-  isRoman(text) {
-    return text.match(/\w+/) ? true : false
-  },
-  matchChinese(text) {
-    return text.match(
-      // eslint-disable-next-line no-irregular-whitespace
-      /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g
-    )
-  },
-  randomArrayItem(array, start = 0, length = false) {
-    length = length || array.length
-    array = array.slice(start, length)
-    let index = Math.floor(Math.random() * array.length)
-    return array[index]
-  },
-  random() {
-    return this.randomArrayItem(this.words)
-  },
+  }
+  
   lookupByCharacter(char) {
     return this.words.filter(row => row.kanji && row.kanji.includes(char))
-  },
+  }
+
   lookupKana(kana) {
     const candidates = this.words.filter(row => {
       return row.kana === kana
     })
     return candidates
-  },
-  lookupByPattern(pattern) {
-    // pattern like '～体'
-    var results = []
-    if (pattern.includes('～')) {
-      const regexPattern = '^' + pattern.replace(/～/gi, '.+') + '$'
-      const regex = new RegExp(regexPattern)
-      results = this.words.filter(word => regex.test(word.kana))
-    } else {
-      results = this.words.filter(word => word.kana.includes(pattern))
-    }
-    return results
-  },
-  sanitizeRegexString(str) {
-    // Escape special characters
-    str = str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  
-    // Remove non-alphanumeric characters
-    str = str.replace(/[^a-z0-9.-]/gi, '');
-  
-    // Remove whitespace
-    str = str.replace(/\s+/g, '');
-  
-    // Convert to lowercase
-    str = str.toLowerCase();
-  
-    return str;
-  },
+  }
+
   lookupFuzzy(text, limit = false) {
     let results = []
-    if (!this.isRoman(text)) {
+    if (!isRoman(text)) {
       try {
         let reg = new RegExp(sanitizeRegexString(text), 'gi')
         results = this.words
@@ -404,112 +213,8 @@ const Dictionary = {
       })
       return results
     }
-  },
-  subdict(data) {
-    let newDict = Object.assign({}, this)
-    return Object.assign(newDict, { words: data })
-  },
-  subdictFromText(text) {
-    return this.subdict(
-      this.words.filter(function (row) {
-        return text.includes(row.head)
-      })
-    )
-  },
-  /* Returns the longest word in the dictionary that is inside `text` */
-  longest(text) {
-    // Only return the *first* seen word and those the same as it
-    let first = false
-    let matches = this.words
-      .filter(function (word) {
-        if (first) {
-          return word.head === first
-        } else {
-          if (text.includes(word.head)) {
-            first = word.head
-            return true
-          }
-        }
-      })
-      .sort((a, b) => {
-        return b.head.length - a.head.length
-      })
-    return {
-      matches: matches,
-      text: matches && matches.length > 0 ? matches[0].head : ''
-    }
-  },
-  async tokenizeJapanese(text) {
-    text = text.replace(/-/g, "- ");
-    let url = `${PYTHON_SERVER}lemmatize-japanese?text=${encodeURIComponent(
-      text
-    )}`;
-    let tokenized = await proxy(url);
-    let tokens = [];
-    for (let token of tokenized) {
-      if (!token) {
-        tokens.push(" ");
-      } else if (["補助記号-"].includes(token.pos)) {
-        tokens.push(token.word);
-      } else {
-        tokens.push(token);
-      }
-    }
-    return tokens;
-  },
-  uniqueByValue(array, key) {
-    let flags = [];
-    let unique = [];
-    let l = array.length;
-    for (let i = 0; i < l; i++) {
-      if (flags[array[i][key]]) continue;
-      flags[array[i][key]] = true;
-      unique.push(array[i]);
-    }
-    return unique;
-  },
-  isJapanese(text) {
-    const japaneseRegex = /^[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}\p{Punctuation}\p{Symbol}]+$/ug
-    return japaneseRegex.test(text)
-  },
-
-  async tokenize(text) {
-    return await this.tokenizer.tokenizeWithCache(text)
-  },
-
-  async inflect(text) {
-    return await this.inflector.inflectWithCache(text)
-  },
-
-  // async tokenize(text) {
-  //   if (this.tokenizationCache[text]) return this.tokenizationCache[text]
-  //   let tokenized = await this.tokenizeJapanese(text);
-  //   let final = []
-  //   for (let index in tokenized) {
-  //     let token = tokenized[index]
-  //     let candidates = this.lookupMultiple(
-  //       token.word
-  //     );
-  //     if (token.lemma && token.lemma !== token.word) {
-  //       candidates = candidates.concat(
-  //         this.lookupMultiple(
-  //           token.lemma
-  //         )
-  //       );
-  //     }
-  //     let mappedPronunciation = mapKana(token.word, wanakana.toHiragana(token.pronunciation))
-  //     final.push({
-  //       text: token.word,
-  //       candidates,
-  //       pos: token.pos,
-  //       pronunciation: wanakana.toHiragana(token.pronunciation),
-  //       mappedPronunciation
-  //     })
-  //     if (!this.isJapanese(token.word)) final.push(" ")
-  //   }
-  //   this.tokenizationCache[text] = final
-  //   return final
-  // },
+  }
+  
   transliterate(text) {
     return wanakana.toRomaji(text)
   }

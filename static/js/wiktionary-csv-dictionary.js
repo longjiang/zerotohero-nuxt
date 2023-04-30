@@ -93,7 +93,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     const l1Code = this.l1['iso639-3']
     const l2Code = this.l2['iso639-3']
     const file = this.dictionaryFile({ l1Code, l2Code });
-    let words = await this.loadAndNormalizeDictionaryData(`wiktionary-${l2Code}-${l1Code}`, file);
+    let words = await this.loadAndNormalizeDictionaryData({name: `wiktionary-${l2Code}-${l1Code}`, file});
     words = await this.loadSupplementalWords(words);
     words = words.filter((w) => w.head?.length > 0) // filter empty rows
     words = words.sort((a, b) => {

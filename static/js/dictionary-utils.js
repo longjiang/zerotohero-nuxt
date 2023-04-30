@@ -38,11 +38,21 @@ const isThai = (text) => {
   return match;
 };
 
+const isRoman = (text) => {
+  return text.match(/\w+/) ? true : false
+}
+
 const isChinese = (text) => {
   return text.match(
     // eslint-disable-next-line no-irregular-whitespace
     /[\u2E80-\u2E99\u2E9B-\u2EF3\u2F00-\u2FD5\u3005\u3007\u3021-\u3029\u3038-\u303B‌​\u3400-\u4DB5\u4E00-\u9FCC\uF900-\uFA6D\uFA70-\uFAD9]+/g
   );
+};
+
+
+const isJapanese = (text) => {
+  const japaneseRegex = /^[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}\p{Punctuation}\p{Symbol}]+$/ug
+  return japaneseRegex.test(text)
 };
 
 const isHangul = (text) => {
@@ -172,4 +182,20 @@ const isEnglishPartialClitic = (word) => {
   return (
     ["m", "s", "t", "ll", "d", "re", "ain", "don"].includes(word)
   );
+}
+
+const sanitizeRegexString = (str) => {
+  // Escape special characters
+  str = str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+  // Remove non-alphanumeric characters
+  str = str.replace(/[^a-z0-9.-]/gi, '');
+
+  // Remove whitespace
+  str = str.replace(/\s+/g, '');
+
+  // Convert to lowercase
+  str = str.toLowerCase();
+
+  return str;
 }

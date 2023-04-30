@@ -16,7 +16,7 @@ class ChineseDialectDictionary extends BaseDictionary {
     const l1Code = this.l1['iso639-3']
     const l2Code = this.l2['iso639-3']
     const file = this.dictionaryFile({ l1Code, l2Code })
-    let words = await this.loadAndNormalizeDictionaryData(`dialect-dict-${l1Code}-${l2Code}`, file)
+    let words = await this.loadAndNormalizeDictionaryData({name: `dialect-dict-${l1Code}-${l2Code}`, file})
     this.words = words
   }
 
