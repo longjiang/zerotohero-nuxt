@@ -24,9 +24,11 @@ class OpenrussianDictionary extends BaseDictionary {
     if (row.accented) {
       row.accented = addAccentMarks(row.accented);
     }
-    if (row.bare) row.head = row.bare;
+    row.head = row.bare || '';
+    row.search = row.head.toLowerCase()
     delete row.audio;
     row.pos = row.type;
+    row.definitions = [];
     delete row.type
   }
   

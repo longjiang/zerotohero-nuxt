@@ -13,21 +13,22 @@ class RussianInflector extends BaseInflector {
     this.declensions = {};
     this.verbs = {};
 
+  }
+
+  async loadData() {
     const wordsIndexUrl = 'https://server.chinesezerotohero.com/data/openrussian/words-index.csv.txt';
     const adjectiveUrl = 'https://server.chinesezerotohero.com/data/openrussian/adjectives.csv.txt';
     const conjugationUrl = 'https://server.chinesezerotohero.com/data/openrussian/conjugations.csv.txt';
     const declensionUrl = 'https://server.chinesezerotohero.com/data/openrussian/declensions.csv.txt';
     const verbUrl = 'https://server.chinesezerotohero.com/data/openrussian/verbs.csv.txt';
 
-    this.loadData = (async () => {
-      await Promise.all([
-        this.loadWordsIndex(wordsIndexUrl),
-        this.loadTable(adjectiveUrl, 'adjectives'),
-        this.loadTable(conjugationUrl, 'conjugations'),
-        this.loadTable(declensionUrl, 'declensions'),
-        this.loadTable(verbUrl, 'verbs'),
-      ]);
-    })();
+    await Promise.all([
+      this.loadWordsIndex(wordsIndexUrl),
+      this.loadTable(adjectiveUrl, 'adjectives'),
+      this.loadTable(conjugationUrl, 'conjugations'),
+      this.loadTable(declensionUrl, 'declensions'),
+      this.loadTable(verbUrl, 'verbs'),
+    ]);
   }
 
   loadWordsIndex(wordsIndexUrl) {
