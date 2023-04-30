@@ -1,6 +1,7 @@
 importScripts("../vendor/localforage/localforage.js")
 importScripts("../vendor/hash-string/hash-string.min.js");
 importScripts('../js/dictionary-utils.js')
+importScripts("../vendor/fuzzy-search/FuzzySearch.js");
 importScripts("../js/tokenizers/tokenizer-factory.js");
 importScripts("../js/inflectors/inflector-factory.js");
 
@@ -17,11 +18,17 @@ class BaseDictionary {
     this.headIndex = {};
     this.searchIndex = {};
     this.phraseIndex = {};
+    this.searcher = null;
   }
 
   static async load({ l1 = undefined, l2 = undefined } = {}) {
     const instance = new this({ l1, l2 });
     await instance.loadData();
+    instance.createIndices();
+    instance.searcher = new FuzzySearch(instance.words, ["search"], {
+      caseSensitive: false,
+      sort: true,
+    });
     instance.tokenizer = await TokenizerFactory.createTokenizer({l2, words: instance.words});
     instance.inflector = InflectorFactory.createInflector(l2);
     return instance;
@@ -85,24 +92,20 @@ class BaseDictionary {
 
     // If data is available, parse it using Papa Parse and return the parsed data
     if (data) {
-      let results = Papa.parse(data, {
-        header: true,
-        delimiter
-      });
-      return results.data;
+      return this.parseDictionaryData(data);
     }
+  }
+
+  parseDictionaryData(data) { 
+    let results = Papa.parse(data, {
+      header: true,
+      delimiter
+    });
+    return results.data;
   }
 
   normalizeWord(item) {
     throw new Error('normalizeWord() method must be implemented in the subclass');
-  }
-
-  lookupMultiple(text) {
-    throw new Error('lookupMultiple() method must be implemented in the subclass');
-  }
-
-  lookupFuzzy(text, limit = 30, quick = false) {
-    throw new Error('lookupFuzzy() method must be implemented in the subclass');
   }
 
   // Override this method for CJK languages only
@@ -150,8 +153,16 @@ class BaseDictionary {
     throw new Error('lookupByPattern() method must be implemented in the subclass');
   }
 
-  lookup(keyword) {
-    throw new Error('lookup() method must be implemented in the subclass');
+  lookup(text) {
+    let words = this.searchIndex[text.toLowerCase()];
+    if (words && words[0]) return words[0];
+  }
+
+  lookupMultiple(text, ignoreAccents = false) {
+    if (ignoreAccents && !isAccentCritical(this.l2)) text = stripAccents(text);
+    let type = ignoreAccents ? "search" : "head";
+    let words = this[type + "Index"][text.toLowerCase()];
+    return words || [];
   }
   
   getWords() {
@@ -271,5 +282,34 @@ class BaseDictionary {
 
   transliterate(text) {
     throw new Error('transliterate() method must be implemented in the subclass');
+  }
+
+  lookupFuzzy(text, limit = 30, quick = false) {
+    if (!isAccentCritical(this.l2)) text = stripAccents(text);
+    text = text.toLowerCase();
+    let uniqueWords = new Set();
+
+    (this.searchIndex[text] || []).forEach((word) => {
+      uniqueWords.add(word);
+    });
+
+    let words = Array.from(uniqueWords).map((word) => {
+      return { score: 1, w: word };
+    });
+
+    if (!quick) {
+
+      // Perform a fuzzy search.
+      let wordsFromFuzzySearch = this.searcher.search(text).slice(0, limit);
+      words = words.concat(
+        wordsFromFuzzySearch.map((w) => {
+          return { w, score: 0.5 };
+        })
+      );
+
+      words = words.sort((a, b) => b.score - a.score);
+    }
+    words = words.slice(0, limit);
+    return words.map((w) => w.w);
   }
 }

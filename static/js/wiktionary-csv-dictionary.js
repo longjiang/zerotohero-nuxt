@@ -1,22 +1,12 @@
 // @/static/js/wiktionary-csv.js
 importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
-importScripts("../vendor/fuzzy-search/FuzzySearch.js");
 importScripts("../js/base-dictionary.js");
 
 class WiktionaryCsvDictionary extends BaseDictionary {
 
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     super({ l1, l2 });
-
     this.version = "2.17.1";
-    this.dictionary = undefined;
-
-    this.headIndex = {};
-    this.searchIndex = {};
-    this.phraseIndex = {};
-    this.cache = {};
-    this.tables = [];
-    this.searcher = null;
     this.indexDbVerByLang = {
       fra: 2,
       eng: 5,
@@ -102,11 +92,6 @@ class WiktionaryCsvDictionary extends BaseDictionary {
       }
     });
     this.words = words;
-    this.createIndices();
-    this.searcher = new FuzzySearch(this.words, ["search"], {
-      caseSensitive: false,
-      sort: true,
-    });
     console.log("Wiktionary: loaded.");
     return this;
   }
@@ -159,35 +144,6 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     let type = ignoreAccents ? "search" : "head";
     let words = this[type + "Index"][text.toLowerCase()];
     return words || [];
-  }
-
-  lookupFuzzy(text, limit = 30, quick = false) {
-    if (!isAccentCritical(this.l2)) text = stripAccents(text);
-    text = text.toLowerCase();
-    let uniqueWords = new Set();
-
-    (this.searchIndex[text] || []).forEach((word) => {
-      uniqueWords.add(word);
-    });
-
-    let words = Array.from(uniqueWords).map((word) => {
-      return { score: 1, w: word };
-    });
-
-    if (!quick) {
-
-      // Perform a fuzzy search.
-      let wordsFromFuzzySearch = this.searcher.search(text).slice(0, limit);
-      words = words.concat(
-        wordsFromFuzzySearch.map((w) => {
-          return { w, score: 0.5 };
-        })
-      );
-
-      words = words.sort((a, b) => b.score - a.score);
-    }
-    words = words.slice(0, limit);
-    return words.map((w) => w.w);
   }
   
 };

@@ -111,8 +111,6 @@ class EdictDictionary extends BaseDictionary  {
   }
 
   async loadData() {
-    const l1Code = this.l1['iso639-3']
-    const l2Code = this.l2['iso639-3']
     let words = await this.loadAndNormalizeDictionaryData({ name: `edict`, file:this.file, delimiter: "\t" })
     let wiktionaryWords = await this.loadAndNormalizeDictionaryData({ name: `wiktionary-jpn-eng`, file: this.wiktionaryFile })
     this.words = uniqueByValues([...words, ...wiktionaryWords], ['id'])
