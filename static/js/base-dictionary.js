@@ -30,7 +30,7 @@ class BaseDictionary {
       sort: true,
     });
     instance.tokenizer = await TokenizerFactory.createTokenizer({l2, words: instance.words});
-    instance.inflector = InflectorFactory.createInflector(l2);
+    instance.inflector = await InflectorFactory.createInflector(l2);
     return instance;
   }
 
@@ -92,11 +92,11 @@ class BaseDictionary {
 
     // If data is available, parse it using Papa Parse and return the parsed data
     if (data) {
-      return this.parseDictionaryData(data);
+      return this.parseDictionaryData({data, delimiter});
     }
   }
 
-  parseDictionaryData(data) { 
+  parseDictionaryData({data, delimiter = ','}) { 
     let results = Papa.parse(data, {
       header: true,
       delimiter

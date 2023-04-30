@@ -105,7 +105,7 @@
     </template>
 
     <template #inflections>
-      <EntryForms v-if="hasForms" class :word="entry" />
+      <EntryForms class :word="entry" />
     </template>
     <template #collocations>
       <Collocations
@@ -291,7 +291,7 @@ export default {
         {
           name: "inflections",
           title: "Inflections",
-          visible: this.hasForms,
+          visible: true,
         },
         {
           name: "related",
@@ -326,15 +326,6 @@ export default {
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
-    },
-    hasForms() {
-      return [
-        "wiktionary",
-        "kengdic",
-        "edict",
-        "openrussian",
-        "kdic-jc",
-      ].includes(this.$dictionaryName);
     },
     pronunciation() {
       return this.entry.kana || this.entry.pinyin || this.entry.pronunciation;

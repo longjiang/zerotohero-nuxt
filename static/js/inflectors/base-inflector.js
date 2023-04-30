@@ -5,6 +5,16 @@ class BaseInflector {
     this.inflectionCache = {};
   }
 
+  static async load({ l2 = undefined } = {}) {
+    const instance = new this({ l2 });
+    await instance.loadData();
+    return instance;
+  }
+
+  async loadData() {
+    // Optional. Implement this method in derived classes if you need to load data.
+  }
+
   async inflectWithCache(lemma) {
     if (this.inflectionCache[lemma]) {
       return this.inflectionCache[lemma];
