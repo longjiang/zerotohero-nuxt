@@ -37,6 +37,6 @@ const TokenizerFactory = {
     }
     importScripts('../js/tokenizers/base-tokenizer.js');
     const BaseTokenizerClass = BaseTokenizer;
-    return new BaseTokenizerClass(l2, words);
+    return new BaseTokenizerClass({ l2, words });
   },
 }

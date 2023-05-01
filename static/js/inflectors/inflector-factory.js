@@ -22,6 +22,6 @@ const InflectorFactory = {
     }
     importScripts('../js/inflectors/base-inflector.js');
     const BaseInflectorClass = BaseInflector;
-    return new BaseInflectorClass(l2);
+    return new BaseInflectorClass({l2});
   },
 };

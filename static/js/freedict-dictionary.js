@@ -14,7 +14,6 @@ class FreedictDictionary extends BaseDictionary {
     let l2Code = this.l2['iso639-3']
     let words = await this.loadAndNormalizeDictionaryData({ name: `freedict-${l1Code}-${l2Code}`, file: this.dictionaryFile({l1Code, l2Code}) })
     this.words = words
-    return this
   }
 
   dictionaryFile({l1Code, l2Code}) {
@@ -28,14 +27,8 @@ class FreedictDictionary extends BaseDictionary {
     let lines = data.split('\n')
     let words = []
     words = this.parseLines(lines)
-    words = words.sort((a, b) => {
-      if (a.head && b.head) {
-        return a.head.length - b.head.length
-      }
-    })
-    words = words.map((word, index) => {
-      word.id = index + ''; // All IDs must be strings
-      return word
+    words.forEach((word) => {
+      word.id = "f" + hash(word.head + word.definitions[0]);
     })
     return words
   }
