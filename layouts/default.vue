@@ -501,7 +501,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import "@/assets/scss/zerotohero.scss";
+
 .transition {
   transition: 0.5s all ease-in-out;
 }

@@ -37,7 +37,6 @@ export default {
     },
     meta: [
       { charset: 'utf-8' },
-      // { name: 'referrer', content: 'no-referrer'}, // Turned off because some youtube videos will not load.
       { name: 'viewport', content: 'viewport-fit=cover, width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' },
       { name: "apple-itunes-app", content: "app-id=1623985525" }
     ],
@@ -45,7 +44,9 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/img/icons/favicon.ico' },
       { rel: 'stylesheet', href: '/vendor/fontawesome-pro-6.1.1-web/css/all.min.css' },
       { rel: 'stylesheet', href: '/fonts/fonts.css' },
-      { rel: 'stylesheet', href: '/vendor/octicons/octicons.css' }
+      { rel: 'stylesheet', href: '/vendor/octicons/octicons.css' },
+      // { rel: 'stylesheet', href: '/vendor/bootstrap/bootstrap.min.css' },
+      // { rel: 'stylesheet', href: '/vendor/bootstrap-vue/bootstrap-vue.min.css' }
     ],
     script: [
       { hid: 'russian-legacy', src: '/js/russian-legacy.js', defer: true },
@@ -53,16 +54,9 @@ export default {
       { hid: 'jquery', src: '/vendor/jquery/jquery.min.js', defer: true },
       { hid: 'axios', src: '/vendor/axios/axios.min.js', defer: true },
       { hid: 'underscore', src: '/vendor/underscore/underscore.js', defer: true },
-      { hid: 'hls', src: 'https://cdn.jsdelivr.net/npm/hls.js@latest', defer: true }
+      { hid: 'hls', src: '/vendor/hls.js@1.4.0/hls.min.js', defer: true }
     ]
   },
-
-  // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-    'css-percentage-circle',
-    'video.js/dist/video-js.css',
-    '@/assets/scss/zerotohero.scss',
-  ],
 
   router: {
     middleware: [
@@ -203,10 +197,8 @@ export default {
     components: ['BForm', 'BSpinner', 'BCard', 'BFormInput', 'BFormFile', 'BFormGroup', 'BFormSelect', 'BFormTextarea', 'BFormSelectOption', 'BButton', 'BProgress', 'BTable',
       'BDropdown', 'BDropdownItem', 'BFormCheckbox', 'BFormCheckboxGroup', 'BFormRadio', 'BButtonGroup', 'BInputGroup', 'BInputGroupAppend', 'BInputGroupText', 'BDropdownDivider', 'BProgressBar', 'BModal'],
     directives: ['VBModal'],
-    bootstrapVue: {
-      bootstrapCSS: false, // We want to override the default bootstrap css
-      bootstrapVueCSS: false // We want to override the default bootstrap vue css
-    }
+    bootstrapCSS: false, // We want to override the default bootstrap css
+    bootstrapVueCSS: false // We want to override the default bootstrap vue css
   },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins

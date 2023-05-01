@@ -1,9 +1,9 @@
-// Import variables
-@import "./variables";
-
 // Import Bootstrap and Bootstrap-Vue styles
 @import "~bootstrap/scss/bootstrap";
 @import "~bootstrap-vue/src/index.scss";
+
+// Import variables
+@import "./variables";
 
 // Override the link color to our primary color (green)
 a {
