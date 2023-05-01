@@ -237,8 +237,8 @@ export default {
         config.devtool = false
       }
       config.module.rules.push({
-        test: /\.txt$/i,
-        use: 'raw-loader',
+        test: /\.csv$/i,
+        loader: 'raw-loader',
       }) // for the 'raw-loader' module that allows us to load lib/translations.csv as raw text
     },
     transpile: [
