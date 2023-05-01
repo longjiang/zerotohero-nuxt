@@ -1,7 +1,7 @@
 importScripts('../vendor/localforage/localforage.js')
 importScripts('../js/base-dictionary.js')
 
-class OpenrussianDictionary extends BaseDictionary {
+class OpenRussianDictionary extends BaseDictionary {
 
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     super({l1, l2});

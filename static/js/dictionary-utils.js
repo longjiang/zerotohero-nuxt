@@ -204,3 +204,13 @@ const sanitizeRegexString = (str) => {
 
   return str;
 }
+
+// https://www.consolelog.io/group-by-in-javascript/
+const groupArrayBy = (array, prop) => {
+  return array.reduce(function (groups, item) {
+    const val = item[prop]
+    groups[val] = groups[val] || []
+    groups[val].push(item)
+    return groups
+  }, {})
+}

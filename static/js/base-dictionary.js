@@ -173,10 +173,6 @@ class BaseDictionary {
     return this.words.length;
   }
 
-  findPhrases(wordObj) {
-    throw new Error('findPhrases() method must be implemented in the subclass');
-  }
-
   /**
    * Get a word by ID. This is called from various components.
    * @param {*} id the word's id
