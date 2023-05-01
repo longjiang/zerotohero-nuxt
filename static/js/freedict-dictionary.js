@@ -18,14 +18,14 @@ class FreedictDictionary extends BaseDictionary {
   }
 
   dictionaryFile({l1Code, l2Code}) {
-    let filename = `${this.server}data/freedict/${l2Code}-${l1Code}.dict.txt`
+    let filename = `${SERVER}data/freedict/${l2Code}-${l1Code}.dict.txt`
     return filename
   }
   
-  parseDictionaryData(text) { 
-    text = text.replace(/^[^\n]*\n/m, '') // remove title line
-    console.log('Parsing FreeDict Dictionary from ' + this.file)
-    let lines = text.split('\n')
+  parseDictionaryData({ data }) { 
+    data = data.replace(/^[^\n]*\n/m, '') // remove title line
+    console.log('Parsing FreeDict Dictionary data...')
+    let lines = data.split('\n')
     let words = []
     words = this.parseLines(lines)
     words = words.sort((a, b) => {
@@ -34,7 +34,7 @@ class FreedictDictionary extends BaseDictionary {
       }
     })
     words = words.map((word, index) => {
-      word.id = index
+      word.id = index + ''; // All IDs must be strings
       return word
     })
     return words

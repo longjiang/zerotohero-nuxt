@@ -96,7 +96,7 @@ class BaseDictionary {
     }
   }
 
-  parseDictionaryData({data, delimiter = ','}) { 
+  parseDictionaryData({ data, delimiter = ',' }) { 
     let results = Papa.parse(data, {
       header: true,
       delimiter

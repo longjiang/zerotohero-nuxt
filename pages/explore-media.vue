@@ -245,6 +245,7 @@ import { mapState } from "vuex";
 import { languageLevels, randomItemFromArray, LANGS_WITH_LEVELS, LANGS_WITH_CONTENT } from "@/lib/utils";
 
 export default {
+  name: 'explore-media', // Added to resolve Vue warn - Invalid component name: "pages/explore-media.vue"
   data() {
     return {
       videos: undefined,

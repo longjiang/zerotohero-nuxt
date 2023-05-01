@@ -230,9 +230,9 @@
 <script>
 import WordPhotos from "@/lib/word-photos";
 import { ContainerQuery } from "vue-container-query";
-import { timeout } from "@/lib/utils/timeout";
 
 export default {
+  name: "dictionary-page",  // Added to resolve Vue warn - Invalid component name: "pages/dictionary.vue"
   components: {
     ContainerQuery,
   },
@@ -376,8 +376,10 @@ export default {
       if (method && args) {
         if (method === this.$store.state.settings.dictionaryName) {
           if (args !== "random") {
+            const id = args
             if (dictionary) {
-              this.entry = await dictionary.get(args);
+              const entry = await dictionary.get(id);
+              this.entry = entry;
               if (process.server) {
                 this.images = await WordPhotos.getGoogleImages({
                   term: this.entry.head,
