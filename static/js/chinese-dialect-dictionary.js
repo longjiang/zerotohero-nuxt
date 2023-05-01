@@ -62,52 +62,17 @@ class ChineseDialectDictionary extends BaseDictionary {
     }
   }
 
-
-  parsePinyin(pinyin) {
-    return pinyinify(pinyin.replace(/u:/gi, 'ü')) // use the pinyinify library to parse tones
-      .replace(/\d/g, '') // pinyinify does not handle 'r5', we remove all digits
-  }
-
   lookupByPronunciation(jyutping) {
     let words = this.words.filter(
       row =>
-        (row.cjk.phonetics ? this.removeTones(row.cjk.phonetics).replace(/ /g, '') : '') ===
-        this.removeTones(jyutping).replace(/ /g, '')
+        (row.cjk.phonetics ? removeTones(row.cjk.phonetics).replace(/ /g, '') : '') ===
+        removeTones(jyutping).replace(/ /g, '')
     )
     return words
   }
 
-  getSize() {
-    return this.words.length
-  }
-
-  isRoman(text) {
-    return text.match(/\w+/) ? true : false
-  }
-
-  random() {
-    return randomArrayItem(this.words)
-  }
-
   lookupByCharacter(char) {
     return this.words.filter(row => row.traditional && row.traditional.includes(char))
-  }
-
-  uniqueByValue(array, key) {
-    let flags = []
-    let unique = []
-    let l = array.length
-    for (let i = 0; i < l; i++) {
-      if (flags[array[i][key]]) continue
-      flags[array[i][key]] = true
-      unique.push(array[i])
-    }
-    return unique
-  }
-
-  lookupMultiple(text) {
-    let results = this.lookupSimplified(text).concat(this.lookupTraditional(text))
-    return this.uniqueByValue(results, 'id')
   }
 
   lookupSimplified(simplified, pinyin = false) {
@@ -128,55 +93,8 @@ class ChineseDialectDictionary extends BaseDictionary {
     return candidates
   }
 
-  lookup(text) {
-    let word = this.words.find(word => word && (word.simplified === text || word.traditional === text))
-    return word
-  }
-
-  getWords() {
-    return this.words
-  }
-
-  getWordsThatContain(text) {
-    let words = this.words.filter(w => (w.simplified && w.simplified.includes(text)) || (w.traditional && w.traditional.includes(text)))
-    let strings = this.unique(
-      words
-        .map((word) => word.simplified)
-        .concat(words.map((word) => word.traditional))
-    )
-    return strings
-  }
-
-  lookupFuzzy(text, limit = false) {
-    let results = []
-    if (isChinese(text)) {
-      let reg = new RegExp(text, 'gi')
-      results = this.words
-        .filter(
-          row => reg.test(row.simplified) || reg.test(row.traditional)
-        )
-    } else {
-      text = text.toLowerCase().trim()
-      results = this.words
-        .filter(row =>
-          row.search.includes(
-            text.replace(/ /g, '')
-          )
-        )
-    }
-    if (results) {
-      results = results.sort((a, b) => b.weight - a.weight)
-        .sort((a, b) => a.simplified.length - b.simplified.length)
-      if (limit) {
-        results = results.slice(0, limit)
-      }
-      let maxWeight = Math.max(...results.map(w => w.weight))
-      let shortest = Math.min(...results.map(r => r.simplified.length))
-      results = results.map(word => {
-        let score = shortest / word.simplified.length - 0.1 + (word.weight / maxWeight * 0.1)
-        return Object.assign({ score }, word)
-      })
-      return results
-    }
+  parsePinyin(pinyin) {
+    return pinyinify(pinyin.replace(/u:/gi, 'ü')) // use the pinyinify library to parse tones
+      .replace(/\d/g, '') // pinyinify does not handle 'r5', we remove all digits
   }
 }
