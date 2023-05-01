@@ -643,7 +643,8 @@ export default {
       if (token.lemmas) {
         for (let lemma of token.lemmas) {
           if (lemma.lemma && lemma.lemma !== token.text) {
-            candidates = candidates.concat(await dictionary.lookupMultiple(lemma.lemma));
+            const lemmaCandidates = await dictionary.lookupMultiple(lemma.lemma)
+            candidates = [...candidates, ...lemmaCandidates]
           }
         }
       }

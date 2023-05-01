@@ -27,8 +27,9 @@ class KdicJcDictionary extends BaseDictionary  {
   normalizeWord(row) {
     if (row.kanji === 'ー') delete row.kana;
     row.head = row.kanji || row.kana;
-    row.bare = row.kanji || row.kana;
-    row.accented = row.kanji || row.kana;
+    row.bare = row.head;
+    row.search = row.head;
+    row.accented = row.head;
     row.pos = '';
     row.definitions = row.translation ? row.translation.split('，').filter(d => d !== '') : [];
     row.cjk = {
