@@ -26,14 +26,14 @@ class KoreanInflector extends BaseInflector {
 
   conjugate(text) {
     let forms = [];
-    let infinitive = window.conjugator.base(text, true);
-    for (let regular of window.conjugator.both_regular_and_irregular
+    let infinitive = conjugator.base(text, true);
+    for (let regular of conjugator.both_regular_and_irregular
       ? [false]
       : [true]) {
-      window.conjugator.verb_type(infinitive, regular);
-      for (let key in window.conjugator) {
-        if (window.conjugator[key].conjugation) {
-          let conjugationFunc = window.conjugator[key];
+      conjugator.verb_type(infinitive, regular);
+      for (let key in conjugator) {
+        if (conjugator[key].conjugation) {
+          let conjugationFunc = conjugator[key];
           forms.push({
             name: key.replace(/_/g, " "),
             form: conjugationFunc(infinitive, regular),
@@ -64,7 +64,7 @@ class KoreanInflector extends BaseInflector {
           };
         })
       );
-      forms = uniqueByValue(forms, "form").sort(
+      forms = uniqueByValues(forms, ["form"]).sort(
         (a, b) => a.length - b.length
       );
     }

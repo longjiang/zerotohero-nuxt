@@ -12,7 +12,7 @@ const InflectorFactory = {
     for (let inflector in this.inflectors) {
       if (this.inflectors[inflector].includes(languageCode)) {
         console.log('Initialize inflector: ', inflector);
-        const inflectorFile = `../js/inflectors/${inflector.replace('Inflector', '').toLowerCase()}-inflector.js`;
+        const inflectorFile = `../js/inflectors/${pascalToKebabCase(inflector)}.js`;
         // Load the required tokenizer file using importScripts
         importScripts(inflectorFile);
         // Initialize the tokenizer class

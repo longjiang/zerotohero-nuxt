@@ -1,7 +1,9 @@
+importScripts('../vendor/papaparse/papaparse.min.js')
+importScripts('../vendor/axios/axios.min.js')
 importScripts("../vendor/localforage/localforage.js")
 importScripts("../vendor/hash-string/hash-string.min.js");
-importScripts('../js/dictionary-utils.js')
 importScripts("../vendor/fuzzy-search/FuzzySearch.js");
+importScripts('../js/dictionary-utils.js')
 importScripts("../js/tokenizers/tokenizer-factory.js");
 importScripts("../js/inflectors/inflector-factory.js");
 

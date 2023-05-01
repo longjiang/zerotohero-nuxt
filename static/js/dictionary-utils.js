@@ -215,7 +215,6 @@ const groupArrayBy = (array, prop) => {
   }, {})
 }
 
-
 const logError = (error, tag) => {
   if (!tag) tag = 'Error'
   if (error.response) {
@@ -226,4 +225,19 @@ const logError = (error, tag) => {
   } else {
     console.log(tag, { message: 'Something happened in setting up the request that triggered an Error' + error.message, status: error.status, error });
   }
+}
+
+
+const kebabToPascalCase = (str) => {
+  return str
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join('');
+}
+
+const pascalToKebabCase = (str) => {
+  return str
+    .replace(/^(.)/, (_, c) => c.toLowerCase())
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .toLowerCase();
 }

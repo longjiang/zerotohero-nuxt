@@ -1,17 +1,7 @@
-importScripts('../vendor/papaparse/papaparse.min.js')
-importScripts('../vendor/axios/axios.min.js')
-importScripts("../vendor/localforage/localforage.js")
-
 let ready = false;
 let Dictionary;
 let dictionaryInstance;
 
-function kebabToPascalCase(str) {
-  return str
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join('');
-}
 
 function getAllMethodNames(obj) {
   let methods = new Set();
