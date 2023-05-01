@@ -1,23 +1,28 @@
 <template>
   <div class="live-video">
     <client-only>
-      <d-player
-        @play="play"
-        ref="player"
-        class="video-player-box"
-        :options="{
-          video: {
-            url,
-            type: 'hls',
-          },
-          autoplay: true
-        }"
-      ></d-player>
+      <template v-if="dPlayerLoaded">
+        <component
+          @play="play"
+          ref="player"
+          class="video-player-box"
+          :is="DPlayer"
+          :options="{
+            video: {
+              url,
+              type: 'hls',
+            },
+            autoplay: true
+          }"
+        ></component>
+      </template>
     </client-only>
   </div>
 </template>
 
 <script>
+import "vue-dplayer/dist/vue-dplayer.css";
+
 export default {
   props: {
     url: {
@@ -25,20 +30,29 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      dPlayerLoaded: false,
+      DPlayer: null,
+    };
   },
   mounted() {
-    const player = this.$refs.player?.dp;
-    if (player) {
-      player.play();
-      setTimeout(() => {
-        player.pause();
-      }, 2000);
+    if (process.client) {
+      import('vue-dplayer').then((VueDPlayer) => {
+        this.DPlayer = VueDPlayer.default;
+        this.dPlayerLoaded = true;
+        const player = this.$refs.player?.dp;
+        if (player) {
+          player.play();
+          setTimeout(() => {
+            player.pause();
+          }, 2000);
+        }
+      });
     }
   },
   methods: {
     play() {
-      console.log("play callback");
+      // Callback when video is played
     },
   },
 };
