@@ -20,10 +20,7 @@ class KengdicDictionary extends BaseDictionary {
   async loadData() {
     const l1Code = this.l1['iso639-3']
     let words = l1Code === 'eng' ? await this.loadDictionaryData({ name: `kengdic`, file: this.file }) : []; // If l1Code is 'eng', load kengdic data, otherwise load nothing
-    let wiktionaryWords = await this.loadDictionaryData({ name: `wiktionary-kor-${l1Code}`, file: this.file })
-    wiktionaryWords.forEach((item) => {
-      item.id = "w" + hash(item.head + item.definitions[0]);
-    });
+    let wiktionaryWords = await this.loadDictionaryData({ name: `wiktionary-kor-${l1Code}`, file: this.wiktionaryFiles[l1Code] })
     words.forEach(this.normalizeKengdicWord)
     wiktionaryWords.forEach(this.normalizeWiktionaryWord)
     this.words = [...words, ...wiktionaryWords];
@@ -31,21 +28,20 @@ class KengdicDictionary extends BaseDictionary {
     wiktionaryWords = null
   }
 
-
-
   normalizeWiktionaryWord(item) {
-    item.word = item.word.replace(/^\-/, '')
-    item.bare = item.word;
-    item.search = item.bare.toLowerCase();
-    item.head = item.word;
+    const head = item.word.replace(/^\-/, '')
+    item.head = head;
+    item.bare = head;
+    item.search = head.toLowerCase();
     item.definitions = item.definitions ? item.definitions.split("|") : [];
     if (item.han) {
       item.cjk = {
         canonical: item.han,
-        pronunciation: item.bare
+        pronunciation: head
       };
       item.hanja = item.han;
     }
+    item.id = "w" + hash(item.head + item.definitions[0]);
     delete item.han;
     delete item.word;
     delete item.stems
