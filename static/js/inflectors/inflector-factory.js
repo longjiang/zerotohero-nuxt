@@ -4,7 +4,7 @@ const InflectorFactory = {
     KoreanInflector: ["kor"],
     RussianInflector: ["rus"],
     FrenchInflector: ["fra"],
-    // EnglishInflector: ["eng"],
+    EnglishInflector: ["eng"],
   },
   async createInflector(l2) {
     // pick the right inflector for the language
