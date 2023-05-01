@@ -5,7 +5,7 @@ class OpenRussianDictionary extends BaseDictionary {
 
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     super({l1, l2});
-    this.file = `${SERVER}data/openrussian/words.csv.txt`
+    this.file = `${SERVER}data/openrussian/words_with_definitions.csv.txt`
   }
 
   credit() {
@@ -13,23 +13,22 @@ class OpenRussianDictionary extends BaseDictionary {
   }
 
   async loadData() {
-    const name = 'open-russian-words'
-    let words = await this.loadAndNormalizeDictionaryData({ name, file: this.file, delimiter: '\t' })
+    let words = await this.loadAndNormalizeDictionaryData({ name: 'open-russian', file: this.file })
+    words = words.filter(word => word && word.head)
     this.words = words
     words = null
   }
 
   // Normalizes the input 'row' object and modifies it in place.
   normalizeWord(row) {
-    if (row.accented) {
-      row.accented = addAccentMarks(row.accented);
+    if (row.head) {
+      if (row.accented) {
+        row.accented = addAccentMarks(row.accented);
+      }
+      row.bare = row.head
+      row.search = row.head.toLowerCase()
+      row.definitions = row.definitions.split('|')
     }
-    row.head = row.bare || '';
-    row.search = row.head.toLowerCase()
-    delete row.audio;
-    row.pos = row.type;
-    row.definitions = [];
-    delete row.type
   }
   
   lookup(text) {
