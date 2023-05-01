@@ -1,4 +1,3 @@
-// importScripts('../vendor/kuromoji/kuromoji.js')
 importScripts('../vendor/wanakana/wanakana.min.js')
 importScripts('../vendor/localforage/localforage.js')
 importScripts("../vendor/hash-string/hash-string.min.js")
@@ -8,7 +7,10 @@ class KdicJcDictionary extends BaseDictionary  {
   
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     super({l1, l2});
-    this.file = 'https://server.chinesezerotohero.com/data/edict/edict.tsv.txt';
+    this.indexDbVerByLang = {
+      jpn: '0fc5e9b',
+    };
+    this.file = 'https://server.chinesezerotohero.com/data/kdic-jc/kdic-jc.tsv.txt';
   }
   
   credit() {
