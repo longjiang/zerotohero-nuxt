@@ -16,8 +16,6 @@ class KdicJcDictionary extends BaseDictionary  {
   }
 
   async loadData() {
-    const l1Code = this.l1['iso639-3']
-    const l2Code = this.l2['iso639-3']
     let words = await this.loadAndNormalizeDictionaryData({ name: `kdic-jc`, file: this.file, delimiter: '\t' })
     this.words = words
     words = null

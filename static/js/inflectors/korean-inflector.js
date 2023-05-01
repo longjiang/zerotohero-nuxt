@@ -6,6 +6,11 @@ importScripts('../vendor/korean_conjugation/html/korean/conjugator.js')
 // Loaded via script tag in default.vue: /static/vendor/korean_conjugation/html/korean/hangeul.js')
 
 class KoreanInflector extends BaseInflector {
+  constructor() {
+    super();
+    axios.get("https://py.zerotohero.ca/start-open-korean-text.php"); // Call index.php to make sure the java open-korean-text process is running (Dreamhost kills it from time to time)
+  }
+
   // Helper function to remove duplicates and sort
   uniqueByValue(array, key) {
     const seen = new Set();

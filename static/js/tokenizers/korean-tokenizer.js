@@ -28,7 +28,8 @@ class KoreanTokenizer extends BaseTokenizer {
         if (token.pos === 'Punctuation' && !isHangul(token.text)) {
           tokens.push(token.text);
         } else {
-          token.lemmas = [token.stem || token.text];
+          token.lemmas = [];
+          if (token.stem) token.lemmas = [ { lemma: token.stem, pos: token.pos } ];
           tokens.push(this.normalizeToken(token));
         }
 
