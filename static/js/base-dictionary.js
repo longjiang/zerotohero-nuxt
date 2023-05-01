@@ -310,4 +310,8 @@ class BaseDictionary {
     words = words.slice(0, limit);
     return words.map((w) => w.w);
   }
+
+  getInflector() {
+    return this.inflector;
+  }
 }

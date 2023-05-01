@@ -4,7 +4,11 @@ const InflectorFactory = {
     KoreanInflector: ["kor"],
     RussianInflector: ["rus"],
     FrenchInflector: ["fra"],
-    CompromiseInflector: ["eng", "fra", "ita", "deu", "spa"],
+    CompromiseInflector: [
+      // Only English and German have inflectors
+      "eng",
+      "deu",
+    ],
     // NodeNlpInflector: [
     //   "ara",
     //   "zho",

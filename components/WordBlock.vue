@@ -384,7 +384,9 @@ export default {
         text = "";
       }
       if (this.$l2.code === "ru" && this.savedWord) {
-        let accentText = await this.getRussianAccentText();
+        let dictionary = await this.$getDictioary();
+        let inflector = await dictionary.getInflector()
+        let accentText = await inflector.getRussianAccentText(this.text, this.savedWord.head);
         if (accentText) return accentText;
       }
       if (this.$l2.code === "tlh" && text.trim() !== "") {
@@ -483,27 +485,6 @@ export default {
     },
     fixKlingonTypos(text) {
       return Klingon.fixTypos(text);
-    },
-    async getRussianAccentText() {
-      let search = this.text.toLowerCase();
-      const dictionary = await this.$getDictionary();
-      let forms = await dictionary.inflect(this.savedWord.head)
-      forms = forms.map(f => f.form)
-      const accentLessForms = forms.map(f => f.replace(/́/g, ""))
-      let matchedIndex = accentLessForms.findIndex((f) => search === f);
-      if (matchedIndex) {
-        let matchedForm = forms[matchedIndex];
-        if (matchedForm) {
-          let accentIndex = matchedForm.indexOf('́');
-          if (accentIndex >= 0) {
-            let accentText =
-              this.text.substring(0, accentIndex) +
-              '́' +
-              this.text.substring(accentIndex);
-            return accentText;
-          }
-        }
-      }
     },
     wordBlockClick(event) {
       if (this.quizMode) {

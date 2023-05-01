@@ -150,4 +150,27 @@ class RussianInflector extends BaseInflector {
     }
     return stylize[name] || name;
   }
+
+
+  async getAccentForm(text, head = undefined) {
+    let search = text.toLowerCase();
+    head = head || text
+    let forms = await this.inflect(head)
+    forms = forms.map(f => f.form)
+    const accentLessForms = forms.map(f => f.replace(/́/g, ""))
+    let matchedIndex = accentLessForms.findIndex((f) => search === f);
+    if (matchedIndex) {
+      let matchedForm = forms[matchedIndex];
+      if (matchedForm) {
+        let accentIndex = matchedForm.indexOf('́');
+        if (accentIndex >= 0) {
+          let accentText =
+            text.substring(0, accentIndex) +
+            '́' +
+            text.substring(accentIndex);
+          return accentText;
+        }
+      }
+    }
+  }
 }
