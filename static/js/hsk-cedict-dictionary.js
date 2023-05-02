@@ -54,6 +54,14 @@ class HskCedictDictionary extends BaseDictionary {
     });
   }
 
+  fuzzySearch(query, limit = 10) {
+    let results = this.words.filter((word) => query.includes(word.simplified) || query.includes(word.traditional));
+    results.sort((a, b) => { return query.indexOf(a.head) - query.indexOf(b.head) });
+    results.sort((a, b) => { return b.head.length - a.head.length });
+    results = results.slice(0, limit);
+    return results
+  }
+
   compileHSKStandardCourseWords(word) {
     let { book, lesson, dialog } = word;
     if (book && lesson && dialog) {

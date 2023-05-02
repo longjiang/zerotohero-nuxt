@@ -36,7 +36,7 @@ class BaseDictionary {
   }
 
   createSearcher() {
-    instance.searcher = new Fuse(instance.words, {
+    this.searcher = new Fuse(this.words, {
       keys: ["search"],
       includeScore: true,
       threshold: 0.3,
@@ -313,24 +313,16 @@ class BaseDictionary {
     return substrings;
   }
 
-  fuzzySearch(query, limit = 30) {
-    const substrings = this.findSubstrings(query, 1); // 1 is the minimum length of the word
-    const foundWords = [];
-
-    substrings.forEach((substring) => {
-      const results = this.searcher.search(substring, { limit });
-      results.forEach((result) => {
-        if (
-          !foundWords.find((word) => word.head === result.item.head)
-        ) {
-          foundWords.push(result);
-        }
-      });
-    });
-    return foundWords;
+  fuzzySearch(query, limit = 10) {
+    return this.searcher
+      .search(query, { limit })
+      .sort((a, b) =>
+        a.item.head && b.item.head ? a.item.head.length - b.item.head.length : 0
+      )
+      .map((result) => result.item);
   }
 
-  lookupFuzzy(text, limit = 30, quick = false) {
+  lookupFuzzy(text, limit = 10, quick = false) {
     if (!isAccentCritical(this.l2)) text = stripAccents(text);
     text = text.toLowerCase();
     let uniqueWords = new Set();
@@ -348,14 +340,15 @@ class BaseDictionary {
       let wordsFromFuzzySearch = this.fuzzySearch(text, limit);
       words = words.concat(
         wordsFromFuzzySearch.map((w) => {
-          return { w: w.item, score: 0.5 };
-        }).sort((a, b) => a.w.head && b.w.head ? a.w.head.length - b.w.head.length : 0)
+          return { w, score: 0.5 };
+        })
       );
 
       words = words.sort((a, b) => b.score - a.score);
     }
     words = words.slice(0, limit);
-    return words.map((w) => w.w);
+    words = words.map((w) => w.w);
+    return words;
   }
 
   getInflector() {
