@@ -6,12 +6,12 @@ class WiktionaryCsvDictionary extends BaseDictionary {
 
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     super({ l1, l2 });
-    this.version = "2.17.1";
+    this.version = "2.18.0";
     this.indexDbVerByLang = {
-      fra: 2,
-      eng: 5,
-      spa: 2,
-      est: 3,
+      fra: '2.18.0',
+      eng: '2.18.0',
+      spa: '2.18.0',
+      est: '2.18.0',
     };
     this.l2_mappings = {
       "hrv": "hbs", // Serbian uses Serbo-Croatian

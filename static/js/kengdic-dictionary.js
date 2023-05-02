@@ -10,7 +10,10 @@ class KengdicDictionary extends BaseDictionary {
       eng: "https://server.chinesezerotohero.com/data/wiktionary-csv/kor-eng.csv.txt",
       zho: "https://server.chinesezerotohero.com/data/wiktionary-csv/kor-zho.csv.txt",
     };
-    this.version = "2.16.1";
+    this.version = "2.18.1";
+    this.indexDbVerByLang = {
+      kor: "2.18.0",
+    }
   }
 
   credit() {

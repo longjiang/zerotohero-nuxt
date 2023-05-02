@@ -44,8 +44,6 @@ export default {
       default: true
     }
   },
-  computed: {
-  },
   async fetch() {
     if (this.preloaded && this.preloaded.length > 0)
       this.images = this.preloaded;
@@ -66,6 +64,7 @@ export default {
   },
   data() {
     return {
+      imageProxy,
       images: [],
     };
   },

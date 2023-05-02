@@ -187,7 +187,7 @@
 </template>
 
 <script>
-import { randomArrayItem, unique, shuffle, LANGS_WITH_CONTENT } from "@/lib/utils";
+import { randomArrayItem, unique, shuffle, uniqueByValue, LANGS_WITH_CONTENT } from "@/lib/utils";
 import { tify, sify } from "chinese-conv";
 
 export default {
