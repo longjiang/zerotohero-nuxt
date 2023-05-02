@@ -237,9 +237,9 @@ export default {
         config.devtool = false
       }
       config.module.rules.push({
-        test: /\.csv$/i,
+        test: /\.(csv|txt)$/i,
         loader: 'raw-loader',
-      }) // for the 'raw-loader' module that allows us to load lib/translations.csv as raw text
+      });
     },
     transpile: [
       'iframe-translator'
