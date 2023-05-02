@@ -149,7 +149,7 @@ import axios from "axios";
 import { SERVER } from "@/lib/utils";
 import Papa from "papaparse";
 import "leaflet/dist/leaflet.css";
-import { LANGS_WITH_CONTENT, uniqueByValue } from "@/lib/utils/servers";
+import { LANGS_WITH_CONTENT, uniqueByValue } from "@/lib/utils";
 
 export default {
   components: {

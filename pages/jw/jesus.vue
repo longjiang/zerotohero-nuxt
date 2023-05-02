@@ -24,7 +24,7 @@
 
 <script>
 import { proxy } from "@/lib/utils";
-import { WOL_BASE_URL } from "@/lib/utils";
+import { WOL_BASE_URL } from '@/lib/jw/Wol';
 import EventsIterator from '@/lib/jw/EventsIterator'
 import $ from 'jquery'
 import langData from "@/lib/jw/languages/en-US";

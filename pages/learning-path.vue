@@ -321,7 +321,7 @@
 
 <script>
 import Resource from "@/components/Resource";
-import { LEVELS, LANGS_WITH_LEVELS, l2LevelKey, languageHours, background, backgroundKeyword} from "@/lib/utils";
+import { LEVELS, LANGS_WITH_LEVELS, l2LevelKey, languageHours, background, backgroundKeyword } from "@/lib/utils";
 
 export default {
   components: {

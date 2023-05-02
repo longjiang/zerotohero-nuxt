@@ -163,7 +163,7 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
-import { specialLanguages, makeTextFile } from "@/lib/utils";
+import { SPECIAL_LANGUAGES, makeTextFile } from "@/lib/utils";
 
 export default {
   components: {
@@ -184,7 +184,7 @@ export default {
       showExportButtons: false,
       phrasesCSVHref: undefined,
       wordsCSVHref: undefined,
-      specials: specialLanguages,
+      specials: SPECIAL_LANGUAGES,
       query: {
         xs: {
           minWidth: 0,

@@ -230,7 +230,7 @@
 <script>
 import { imageProxy } from "@/lib/config";
 import Klingon from "@/lib/klingon";
-import pinyin2ipa from "@/lib/pinyin2ipa/lib";
+import pinyin2ipa from "pinyin2ipa";
 
 export default {
   props: {

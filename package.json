@@ -71,6 +71,7 @@
     "papaparse": "^5.3.0",
     "pinyin-separate": "^1.1.0",
     "pinyin-tone": "^2.1.2",
+    "pinyin2ipa": "^1.0.4",
     "sanitize-html": "^2.4.0",
     "semver": "^7.5.0",
     "smartquotes": "^2.3.2",

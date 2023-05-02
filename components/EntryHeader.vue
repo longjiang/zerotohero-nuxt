@@ -152,8 +152,7 @@
 <script>
 import Klingon from "@/lib/klingon";
 import { transliterate as tr } from "transliteration";
-import pinyin2ipa from "@/lib/pinyin2ipa/lib";
-import { mapState } from "vuex";
+import pinyin2ipa from "pinyin2ipa";
 
 export default {
   props: {
@@ -195,7 +194,7 @@ export default {
       } else if (this.$l2.code === "ja" && entry.kana) {
         return `${entry.kana} (${await dictionary.transliterate(entry.kana)})`;
       } else if (this.$l2.code === "zh") {
-        return `${entry.pronunciation} [${this.pinyin2ipa(entry.pronunciation, {
+        return `${entry.pronunciation} [${pinyin2ipa(entry.pronunciation, {
           toneMarker: "chaoletter",
         })}]`;
       } else if (entry.pronunciation) {

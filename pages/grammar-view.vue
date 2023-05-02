@@ -96,7 +96,7 @@
 
 <script>
 import Grammar from "@/lib/grammar";
-import { l2LevelName, nonCjk } from "@/lib/utils";
+import { l2LevelName } from "@/lib/utils";
 import WordPhotos from "@/lib/word-photos";
 
 export default {
@@ -120,7 +120,7 @@ export default {
     },
     term() {
       return this.grammar
-        ? this.grammar.structure.replace(/…….*/, "").replace(nonCjk, "")
+        ? this.grammar.structure.replace(/…….*/, "")
         : false;
     },
   },

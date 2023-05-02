@@ -81,7 +81,6 @@
 
 <script>
 import Dewey from "@/lib/dewey";
-import { saved } from "@/lib/utils";
 
 export default {
   data() {
@@ -121,10 +120,6 @@ export default {
     wordBlockTemplateFilter(block, textOrCandidates) {
       if (Array.isArray(textOrCandidates)) {
         const candidates = textOrCandidates;
-        for (let candidate of candidates) {
-          const isSaved = saved(candidate);
-          if (isSaved) $(block).addClass("saved");
-        }
         $(block)
           .addClass("word-block-related")
           .click(() => {
