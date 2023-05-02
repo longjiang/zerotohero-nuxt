@@ -20,7 +20,7 @@
           @focus="pause"
           @mousedown="pause"
           @mouseup="play"
-          @touchstart="pause"
+          @touchstart.passive="pause"
           @touchend="play"
         ></vue-slider>
       </client-only>

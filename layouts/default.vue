@@ -325,8 +325,8 @@ export default {
         if (!this.isAppIdle && this.l2) {
           if (!this.l2Time[this.l2.code]) this.l2Time[this.l2.code] = 0;
           this.l2Time[this.l2.code] += 1000;
-          // Log user's time on site every 60 seconds
-          if (this.l2Time[this.l2.code] % 15000 === 0) {
+          // Log user's time on site every 2 minutes
+          if (this.l2Time[this.l2.code] % 120000 === 0) {
             this.$store.dispatch("progress/setTime", {
               l2: this.l2,
               time: this.l2Time[this.l2.code],

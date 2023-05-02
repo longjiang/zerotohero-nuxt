@@ -12,7 +12,7 @@
     @mouseenter="resetHoverTimeout"
     @mouseleave="hovering = false"
     @mousemove="resetHoverTimeout"
-    @touchstart="resetHoverTimeout"
+    @touchstart.passive="resetHoverTimeout"
     @touchend="resetHoverTimeout"
   >
     <div
@@ -162,7 +162,7 @@
       <div
         :class="{ 'drag-handle': true, 'd-none': !useOverlay }"
         @mousedown="handleMouseDown"
-        @touchstart="handleTouchStart"
+        @touchstart.passive="handleTouchStart"
       >
         <i class="fa-solid fa-arrows-up-down"></i>
       </div>

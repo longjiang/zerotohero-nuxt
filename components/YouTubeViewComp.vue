@@ -1,35 +1,34 @@
-
 <template>
   <div>
     <LazyVideoWithTranscript
-    v-if="video"
-    ref="youtube"
-    v-bind="{
-      type: 'youtube',
-      video,
-      skin,
-      related,
-      starttime,
-      startLineIndex,
-      show,
-      showType,
-      episodes,
-      largeEpisodeCount,
-      useAutoTextSize: true,
-      showInfoButton: true,
-      autoload: true,
-      autoplay: false,
-      forcePortrait: false,
-      initialMode,
-      initialSize: this.mini ? 'mini' : 'regular',
-    }"
-    :key="`transcript-${video.youtube_id}`"
-    @ended="updateEnded"
-    @previous="goToPreviousEpisode"
-    @next="goToNextEpisode"
-    @currentTime="onCurrentTime"
-    @updateLayout="onUpdateLayout"
-  />
+      v-if="video"
+      ref="youtube"
+      v-bind="{
+        type: 'youtube',
+        video,
+        skin,
+        related,
+        starttime,
+        startLineIndex,
+        show,
+        showType,
+        episodes,
+        largeEpisodeCount,
+        useAutoTextSize: true,
+        showInfoButton: true,
+        autoload: true,
+        autoplay: false,
+        forcePortrait: false,
+        initialMode,
+        initialSize: this.mini ? 'mini' : 'regular',
+      }"
+      :key="`transcript-${video.youtube_id}`"
+      @ended="updateEnded"
+      @previous="goToPreviousEpisode"
+      @next="goToNextEpisode"
+      @currentTime="onCurrentTime"
+      @updateLayout="onUpdateLayout"
+    />
   </div>
 </template>
 
@@ -37,12 +36,18 @@
 import YouTube from "@/lib/youtube";
 import Vue from "vue";
 import { mapState } from "vuex";
-import { LANGS_WITH_CONTENT, queryString, shuffle, uniqueByValue, logError } from "@/lib/utils";
+import {
+  LANGS_WITH_CONTENT,
+  queryString,
+  shuffle,
+  uniqueByValue,
+  logError,
+} from "@/lib/utils";
 
 export default {
   props: {
     skin: {
-      default: 'dark',
+      default: "dark",
     },
     youtube_id: {
       type: String,
@@ -130,19 +135,23 @@ export default {
   },
   async fetch() {
     try {
-      console.log(`YouTube View (Fetch): Getting saved video...`);
-      let savedVideo, videoFromApi;
-      savedVideo = await this.getSaved();
+      const savedVideo = await this.getSaved();
+      console.log(`YouTube View: Got saved video '${savedVideo.id}'.`);
+
+      let videoFromApi;
       if (!savedVideo || (!savedVideo.channel && this.$adminMode)) {
-        console.log(
-          `YouTube View (Fetch): Getting channel information with youtube api...`
-        );
         videoFromApi = await YouTube.videoByApi(this.youtube_id);
-        if (!videoFromApi) videoFromApi = { youtube_id: this.youtube_id };
+        if (!videoFromApi) {
+          videoFromApi = { youtube_id: this.youtube_id };
+        } else {
+          console.log(
+            `YouTube View: Got video '${videoFromApi.youtube_id}' from the YouTube API.`
+          );
+        }
       }
       this.video = this.mergeVideos(savedVideo, videoFromApi);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.error("Error fetching video data:", error);
     }
   },
   watch: {
@@ -150,12 +159,8 @@ export default {
      * Called when the video is first fetched
      */
     async video() {
-      console.log(
-        "YouTube View: 📼 Video changed, getting subs and other info..."
-      );
       if (!this.extrasLoaded && typeof this.video !== "undefined") {
         this.extrasLoaded = true;
-        console.log(`YouTube View (on video change): load subs if missing...`);
         let video = await this.loadSubsIfMissing(this.video);
         this.video = video;
         this.$emit("videoLoaded", {
@@ -182,7 +187,9 @@ export default {
         if (episodeCount > limit && this.$refs.youtube)
           this.largeEpisodeCount = episodeCount;
         this.episodes = await this.getEpisodes(episodeCount, limit);
-        console.log(`YouTube View: Show "${this.show.title}" loaded with ${episodeCount} episodes.`);
+        console.log(
+          `YouTube View: Show "${this.show.title}" loaded with ${episodeCount} episodes.`
+        );
       }
     },
   },
@@ -337,7 +344,6 @@ export default {
         let missingSubsL1 = !video.subs_l1 || video.subs_l1.length === 0;
         let missingSubsL2 = !video.subs_l2 || video.subs_l2.length === 0;
         if (missingSubsL1 || missingSubsL2) {
-          console.log(`YouTube View: Getting available transcripts...`);
           video = await YouTube.getYouTubeSubsListAndAddLocale(
             video,
             this.$l1,
@@ -352,7 +358,6 @@ export default {
       }
     },
     async getTranscript(video) {
-      console.log(`YouTube View: Getting ${this.$l2.name} transcript`);
       Vue.set(video, "checkingSubs", true);
       let forceRefresh = this.$adminMode;
       let generated = false;
@@ -374,6 +379,7 @@ export default {
         );
       }
       if (subs_l2 && subs_l2.length > 0) Vue.set(video, "subs_l2", subs_l2);
+      console.log(`YouTube View: Got ${this.$l2.name} transcript (${generated ? '' : 'not'} auto-generated).`);
       Vue.set(video, "checkingSubs", false);
       return video;
     },
@@ -454,5 +460,4 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
