@@ -86,20 +86,6 @@ class KengdicDictionary extends BaseDictionary {
     return candidates;
   }
 
-  lookupFuzzy(text, limit = 30, quick = false) {
-    let words = [];
-    // Initialize a FuzzySearch instance.
-    const searcher = new FuzzySearch(this.words, ['bare'], {
-      caseSensitive: false,
-      sort: true,
-    });
-
-    // Perform a fuzzy search.
-    const searchTerm = text;
-    words = searcher.search(searchTerm).slice(0, limit);
-    return words.map(word => Object.assign({ score: 1 }, word));
-  }
-
   lookupMultiple(text) {
     let lookForHadaVerbs = false
     if (!text.endsWith('다')) lookForHadaVerbs = true
