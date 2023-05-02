@@ -136,7 +136,7 @@ export default {
   async fetch() {
     try {
       const savedVideo = await this.getSaved();
-      console.log(`YouTube View: Got saved video '${savedVideo.id}'.`);
+      if (savedVideo) console.log(`YouTube View: Got saved video '${savedVideo.id}'.`);
 
       let videoFromApi;
       if (!savedVideo || (!savedVideo.channel && this.$adminMode)) {
