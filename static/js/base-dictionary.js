@@ -1,14 +1,13 @@
-importScripts('../vendor/papaparse/papaparse.min.js')
-importScripts('../vendor/axios/axios.min.js')
-importScripts("../vendor/localforage/localforage.js")
+importScripts("../vendor/papaparse/papaparse.min.js");
+importScripts("../vendor/axios/axios.min.js");
+importScripts("../vendor/localforage/localforage.js");
 importScripts("../vendor/hash-string/hash-string.min.js");
-importScripts("../vendor/fuzzy-search/FuzzySearch.js");
-importScripts('../js/dictionary-utils.js')
+importScripts("../vendor/fuse.js@6.6.2/fuse.min.js");
+importScripts("../js/dictionary-utils.js");
 importScripts("../js/tokenizers/tokenizer-factory.js");
 importScripts("../js/inflectors/inflector-factory.js");
 
 class BaseDictionary {
-  
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     this.l1 = l1;
     this.l2 = l2;
@@ -27,37 +26,43 @@ class BaseDictionary {
     const instance = new this({ l1, l2 });
     await instance.loadData();
     instance.createIndices();
-    instance.searcher = new FuzzySearch(instance.words, ["search"], {
-      caseSensitive: false,
-      sort: true,
+    instance.createSearcher();
+    instance.tokenizer = await TokenizerFactory.createTokenizer({
+      l2,
+      words: instance.words,
     });
-    instance.tokenizer = await TokenizerFactory.createTokenizer({l2, words: instance.words});
     instance.inflector = await InflectorFactory.createInflector(l2);
     return instance;
   }
 
+  createSearcher() {
+    instance.searcher = new Fuse(instance.words, {
+      keys: ["search"],
+      includeScore: true,
+      threshold: 0.3,
+    });
+  }
+
   loadData() {
-    throw new Error('loadData() method must be implemented in the subclass');
+    throw new Error("loadData() method must be implemented in the subclass");
   }
 
   async tokenize(text) {
     const tokens = await this.tokenizer.tokenize(text);
-    return tokens
+    return tokens;
   }
 
-  
-  dictionaryFile({
-    l1Code = undefined,
-    l2Code = undefined
-  } = {}) {
-    throw new Error('dictionaryFile() method must be implemented in the subclass');
+  dictionaryFile({ l1Code = undefined, l2Code = undefined } = {}) {
+    throw new Error(
+      "dictionaryFile() method must be implemented in the subclass"
+    );
   }
 
-  async loadAndNormalizeDictionaryData({name, file, delimiter = ','}) {
-    let words = await this.loadDictionaryData({name, file, delimiter});
+  async loadAndNormalizeDictionaryData({ name, file, delimiter = "," }) {
+    let words = await this.loadDictionaryData({ name, file, delimiter });
     console.log(`${this.name}: Normalizing dictionary data...`);
     words.forEach((item) => this.normalizeWord(item));
-    words = words.filter(w => w.head);
+    words = words.filter((w) => w.head);
     console.log(`${this.name}: ${file} loaded.`);
     return words;
   }
@@ -71,8 +76,8 @@ class BaseDictionary {
    * @param {string} file - The URL of the remote file containing the dictionary data.
    * @returns {Array} - An array of dictionary entries parsed from the fetched data.
    */
-  async loadDictionaryData({name, file, delimiter = ','}) {
-    const l2Code = this.l2['iso639-3']
+  async loadDictionaryData({ name, file, delimiter = "," }) {
+    const l2Code = this.l2["iso639-3"];
     if (this.indexDbVerByLang[l2Code])
       name += "-v" + this.indexDbVerByLang[l2Code]; // Force refresh a dictionary when it's outdated
 
@@ -89,62 +94,74 @@ class BaseDictionary {
       localforage.setItem(name, data);
       response = null;
     } else {
-      console.log(`${this.name}: dictionary '${name}' loaded from local indexedDB via localforage`);
+      console.log(
+        `${this.name}: dictionary '${name}' loaded from local indexedDB via localforage`
+      );
     }
 
     // If data is available, parse it using Papa Parse and return the parsed data
     if (data) {
-      return this.parseDictionaryData({data, delimiter});
+      return this.parseDictionaryData({ data, delimiter });
     }
   }
 
-  parseDictionaryData({ data, delimiter = ',' }) { 
+  parseDictionaryData({ data, delimiter = "," }) {
     let results = Papa.parse(data, {
       header: true,
-      delimiter
+      delimiter,
     });
     return results.data;
   }
 
   normalizeWord(item) {
-    throw new Error('normalizeWord() method must be implemented in the subclass');
+    throw new Error(
+      "normalizeWord() method must be implemented in the subclass"
+    );
   }
 
   // Override this method for CJK languages only
   lookupByCharacter(characterStr) {
-    throw new Error('lookupByCharacter() method must be implemented in the subclass');
+    throw new Error(
+      "lookupByCharacter() method must be implemented in the subclass"
+    );
   }
 
   async inflect(text) {
-    return await this.inflector.inflectWithCache(text)
+    return await this.inflector.inflectWithCache(text);
   }
 
   // This method should be overridden for CJK languages
   lookupSimplified(simplifiedStr) {
-    throw new Error('lookupSimplified() method must be implemented in the subclass');
+    throw new Error(
+      "lookupSimplified() method must be implemented in the subclass"
+    );
   }
-  
+
   lookupByDef(text, limit = 30) {
-    text = text.toLowerCase()
-    let results = []
+    text = text.toLowerCase();
+    let results = [];
     for (let word of this.words) {
       for (let d of word.definitions) {
-        let found = d.toLowerCase().includes(text)
+        let found = d.toLowerCase().includes(text);
         if (found) {
-          results.push(Object.assign({ score: 1 / (d.length - text.length + 1) }, word))
+          results.push(
+            Object.assign({ score: 1 / (d.length - text.length + 1) }, word)
+          );
         }
       }
     }
-    results = results.sort((a, b) => b.score - a.score)
-    return results.slice(0, limit)
+    results = results.sort((a, b) => b.score - a.score);
+    return results.slice(0, limit);
   }
 
   lookupByPronunciation(pronunciationStr) {
-    throw new Error('lookupByPronunciation() method must be implemented in the subclass');
+    throw new Error(
+      "lookupByPronunciation() method must be implemented in the subclass"
+    );
   }
 
   credit() {
-    throw new Error('credit() method must be implemented in the subclass');
+    throw new Error("credit() method must be implemented in the subclass");
   }
 
   random() {
@@ -152,7 +169,9 @@ class BaseDictionary {
   }
 
   lookupByPattern(pattern) {
-    throw new Error('lookupByPattern() method must be implemented in the subclass');
+    throw new Error(
+      "lookupByPattern() method must be implemented in the subclass"
+    );
   }
 
   lookup(text) {
@@ -166,7 +185,7 @@ class BaseDictionary {
     let words = this[type + "Index"][text.toLowerCase()];
     return words || [];
   }
-  
+
   getWords() {
     return this.words;
   }
@@ -190,8 +209,6 @@ class BaseDictionary {
     return word;
   }
 
-
-  
   lookupFromTokens(tokens) {
     let final = [];
     for (let index in tokens) {
@@ -264,8 +281,7 @@ class BaseDictionary {
         return word.phrases.slice(0, limit);
       }
     }
-  }  
-
+  }
 
   // Called from <SearchSubComp> to look for exclusion terms.
   getWordsThatContain(text) {
@@ -279,7 +295,39 @@ class BaseDictionary {
   }
 
   transliterate(text) {
-    throw new Error('transliterate() method must be implemented in the subclass');
+    throw new Error(
+      "transliterate() method must be implemented in the subclass"
+    );
+  }
+
+  findSubstrings(query, minLength = 1) {
+    const substrings = [];
+
+    for (let i = 0; i < query.length; i++) {
+      for (let j = i + minLength; j <= query.length; j++) {
+        const substring = query.slice(i, j);
+        substrings.push(substring);
+      }
+    }
+
+    return substrings;
+  }
+
+  fuzzySearch(query, limit = 30) {
+    const substrings = this.findSubstrings(query, 1); // 1 is the minimum length of the word
+    const foundWords = [];
+
+    substrings.forEach((substring) => {
+      const results = this.searcher.search(substring, { limit });
+      results.forEach((result) => {
+        if (
+          !foundWords.find((word) => word.head === result.item.head)
+        ) {
+          foundWords.push(result);
+        }
+      });
+    });
+    return foundWords;
   }
 
   lookupFuzzy(text, limit = 30, quick = false) {
@@ -296,13 +344,12 @@ class BaseDictionary {
     });
 
     if (!quick) {
-
       // Perform a fuzzy search.
-      let wordsFromFuzzySearch = this.searcher.search(text).slice(0, limit);
+      let wordsFromFuzzySearch = this.fuzzySearch(text, limit);
       words = words.concat(
         wordsFromFuzzySearch.map((w) => {
-          return { w, score: 0.5 };
-        })
+          return { w: w.item, score: 0.5 };
+        }).sort((a, b) => a.w.head && b.w.head ? a.w.head.length - b.w.head.length : 0)
       );
 
       words = words.sort((a, b) => b.score - a.score);

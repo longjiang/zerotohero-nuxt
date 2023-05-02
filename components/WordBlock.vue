@@ -178,7 +178,13 @@ export default {
       if (pos) return pos.replace(/\-.*/, "").replace(/\s/g, "-");
     },
     word() {
-      return this.savedWord || this.words?.[0];
+      if (this.savedWord) return this.savedWord
+      else if (this.$l2.han) {
+        let firstWord = this.words?.[0];
+        if (firstWord && ((firstWord.simplified && firstWord.simplified === this.text) || (firstWord.traditional && firstWord.traditional === this.text))) {
+          return firstWord
+        }
+      }
     },
     hanja() {
       if (["ko", "vi"].includes(this.$l2.code)) {
@@ -252,7 +258,6 @@ export default {
         this.$l2.code === "ja"
           ? this.getMappedPronunciation(word, this.text)
           : undefined;
-
       let attributes = {
         popup: this.popup,
         sticky: this.sticky,
@@ -334,24 +339,25 @@ export default {
   },
   methods: {
     getWordText(word, text) {
+      let result = "";
       if (word) {
-        return this.$l2Settings.useTraditional
+        result = this.$l2Settings.useTraditional
           ? word.traditional
           : word.simplified;
       } else {
-        return this.$l2Settings.useTraditional ? tify(text) : sify(text);
+        result = this.$l2Settings.useTraditional ? tify(text) : sify(text);
       }
+      return result;
     },
     getPhonetics() {
+      let phonetics = false;
       if (
         this.$l2Settings.showPinyin &&
-        this.phonetics &&
-        this.transliteration
+        this.phonetics
       ) {
-        return this.savedTransliteration || this.transliteration;
-      }
-      if (this.$l2Settings.showPinyin) return this.transliterationprop;
-      return false;
+        phonetics = this.savedTransliteration || this.transliterationprop || this.transliteration;
+      }    
+      return phonetics;
     },
     getMappedPronunciation() {
       if (

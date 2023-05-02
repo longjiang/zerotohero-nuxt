@@ -3,7 +3,7 @@ importScripts("../js/base-dictionary.js");
 
 class HskCedictDictionary extends BaseDictionary {
   constructor({ l1 = undefined, l2 = undefined } = {}) {
-    super({l1, l2});
+    super({ l1, l2 });
     this.cedictFile = `${SERVER}/data/hsk-cedict/hsk_cedict.csv.txt`;
     this.characterFile = `${SERVER}/data/hsk-cedict/hsk_characters.csv.txt`;
     this.newHSKFile = `${SERVER}/data/hsk-cedict/new_hsk.csv.txt`;
@@ -45,6 +45,15 @@ class HskCedictDictionary extends BaseDictionary {
     this.createIndices();
   }
 
+
+  createSearcher() {
+    this.searcher = new Fuse(this.words, {
+      keys: ["simplified", "traditional"],
+      includeScore: true,
+      threshold: 0.3
+    });
+  }
+
   compileHSKStandardCourseWords(word) {
     let { book, lesson, dialog } = word;
     if (book && lesson && dialog) {
@@ -57,18 +66,30 @@ class HskCedictDictionary extends BaseDictionary {
       this.hskStandardCourseWords[book][lesson][dialog].push(word);
     }
   }
+
   getHSKStandardCourseWords() {
     return this.hskStandardCourseWords;
   }
 
   createIndices() {
-    super.createIndices();
+    console.log(`${this.name}: Indexing...`);
     for (let word of this.words) {
-      for (let indexType of ["traditional"]) {
-        if (!Array.isArray(this[indexType + "Index"][word[indexType]]))
-          this[indexType + "Index"][word[indexType]] = [];
-        this[indexType + "Index"][word[indexType]] =
-          this[indexType + "Index"][word[indexType]].concat(word);
+      // Handle simplified
+      if (!Array.isArray(this.searchIndex[word.simplified])) {
+        this.searchIndex[word.simplified] = [];
+      }
+      if (!this.searchIndex[word.simplified].includes(word)) {
+        this.searchIndex[word.simplified].push(word);
+      }
+  
+      // Handle traditional
+      if (word.simplified !== word.traditional) {
+        if (!Array.isArray(this.searchIndex[word.traditional])) {
+          this.searchIndex[word.traditional] = [];
+        }
+        if (!this.searchIndex[word.traditional].includes(word)) {
+          this.searchIndex[word.traditional].push(word);
+        }
       }
     }
   }
@@ -288,7 +309,9 @@ class HskCedictDictionary extends BaseDictionary {
       pos,
     });
 
-    const [counters, remainingDefinitions] = this.processCounters(row.definitions);
+    const [counters, remainingDefinitions] = this.processCounters(
+      row.definitions
+    );
     if (counters.length > 0) {
       row.counters = counters;
       if (!row.pos) row.pos = "noun";
