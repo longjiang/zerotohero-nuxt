@@ -63,7 +63,6 @@ export const mutations = {
     }
   },
   SET_TIME(state, { l2, time }) {
-    console.log(`⏳ Set time for ${l2.name} (${l2.code}): ${parseInt(time / 1000)} seconds`)
     if (typeof localStorage !== 'undefined') {
       if (!state.progress[l2.code]) {
         state.progress[l2.code] = {}
@@ -90,7 +89,7 @@ export const mutations = {
 export const actions = {
   load({ commit }) {
     if (!state.progressLoaded) commit('LOAD')
-    // Data from the server is loaded via directus.js's initAndGetUserData()
+    // Data from the server is loaded via directus.js's fetchOrCreateUserData()
   },
   async importFromJSON({ commit }, json) {
     commit('IMPORT_FROM_JSON', json)
@@ -136,7 +135,6 @@ export const actions = {
           let timeFromServer = progress[l2.code].time
           if (time > timeFromServer) {
             commit('SET_TIME', { l2, time })
-            console.log(`✅ New time is ${(time - timeFromServer) / 1000}s greater than time on server, pushing...`)
             dispatch('push')
           } else {
             commit('SET_TIME', { l2, time: progress[l2.code].time })
@@ -158,7 +156,6 @@ export const actions = {
     if (user && user.id && dataId && token) {
       let payload = { progress: localStorage.getItem('zthProgress') }
       let path = `items/user_data/${dataId}?fields=id`
-      console.log('🕙 Saving progress to the server...')
       await this.$directus.patch(path, payload)
         .catch(async (err) => {
           logError(err, 'progress.js: push()')

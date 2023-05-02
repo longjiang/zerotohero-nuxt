@@ -45,6 +45,8 @@ export const YOUTUBE_VIDEOS_TABLES = {
 
 export default ({ app }, inject) => {
   inject('directus', {
+    host: process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + ':' + window.location.port,
+
     tokenOptions(options = {}) {
       let token = app.$auth.strategy.token.get()
       if (token) {
@@ -53,7 +55,7 @@ export default ({ app }, inject) => {
         return options
       } else return options
     },
-    host: process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + ':' + window.location.port,
+
     /**
      * We append a cors=... query string because directus server caching seems to 'remember' cors header, causing problems when multiple doamins try ti access
      * @param {String} url 
@@ -63,22 +65,27 @@ export default ({ app }, inject) => {
       let joiner = url.includes('?') ? '&' : '?'
       return url + joiner + `cors=${this.host}`
     },
+
     async patch(path, payload) {
       let res = await axios.patch(this.appendHostCors(DIRECTUS_API_URL + path), payload, this.tokenOptions()).catch(err => logError(err))
       if (res) return res
     },
+
     async post(path, payload) {
       let res = await axios.post(this.appendHostCors(DIRECTUS_API_URL + path), payload, this.tokenOptions()).catch(err => logError(err))
       if (res) return res
     },
+
     async delete(path) {
       let res = await axios.delete(this.appendHostCors(DIRECTUS_API_URL + path), this.tokenOptions()).catch(err => logError(err))
       if (res) return res
     },
+
     async get(path, params = {}) {
       let res = await axios.get(this.appendHostCors(DIRECTUS_API_URL + path), this.tokenOptions({ params })).catch(err => logError(err))
       if (res) return res
     },
+
     /**
      * Count the number of episodes in a show
      * @param {string} showType 'tv_show' or 'talk'
@@ -94,6 +101,7 @@ export default ({ app }, inject) => {
       );
       if (data) return data
     },
+
     async getRandomEpisodeYouTubeId(langId, type) {
       let showFilter = type ? `&filter[${type}][nnull]=1` : "";
       let randBase64Char = randBase64(1);
@@ -112,12 +120,14 @@ export default ({ app }, inject) => {
         return false;
       }
     },
+
     async deleteVideo({ id, l2Id }) {
       let res = await this.delete(`${this.youtubeVideosTableName(l2Id)}/${id}`)
       if (res?.status === 204) {
         return true
       }
     },
+
     async patchVideo({ id, l2Id, payload, query }) {
       query = query ? `?${query}` : ''
       let res = await this.patch(`${this.youtubeVideosTableName(l2Id)}/${id}${query}`, payload)
@@ -126,6 +136,7 @@ export default ({ app }, inject) => {
         return data
       }
     },
+
     async getVideo({ id, l2Id }) {
       let res = await this.get(`${this.youtubeVideosTableName(l2Id)}/${id}`)
       if (res?.data?.data) {
@@ -133,6 +144,7 @@ export default ({ app }, inject) => {
         return video
       }
     },
+
     async getVideos({ l2Id, query = '' } = {}) {
       if (this.youtubeVideosTableHasOnlyOneLanguage(l2Id)) {
         // No language filter is necessary since the table only has one language
@@ -147,6 +159,7 @@ export default ({ app }, inject) => {
         return videos
       } else return []
     },
+
     async searchCaptions({ l2Id,
       tv_show,
       talk,
@@ -171,6 +184,7 @@ export default ({ app }, inject) => {
         return videos
       } else return []
     },
+
     async postVideo(video, l2, limit = false, tries = 0) {
       let lines = video.subs_l2 || [];
       if (limit) lines = lines.slice(0, limit);
@@ -207,6 +221,7 @@ export default ({ app }, inject) => {
         }
       }
     },
+
     youtubeVideosTableSuffix(langId) {
       if (!langId) throw 'Directus.youtubeVideosTableSuffix: langId is not set!'
       let suffix = ''
@@ -217,6 +232,7 @@ export default ({ app }, inject) => {
       }
       return suffix
     },
+
     youtubeVideosTableHasOnlyOneLanguage(langId) {
       if (!langId) throw 'Directus.youtubeVideosTableHasOnlyOneLanguage: langId is not set!'
       for (let key in YOUTUBE_VIDEOS_TABLES) {
@@ -225,9 +241,11 @@ export default ({ app }, inject) => {
         }
       }
     },
+    
     youtubeVideosTableName(langId) {
       return `items/youtube_videos${this.youtubeVideosTableSuffix(langId)}`
     },
+
     async checkShows(videos, langId, adminMode = false) {
       let response = await this.get(
         `items/tv_shows?filter[l2][eq]=${langId}&limit=500&timestamp=${adminMode ? Date.now() : 0
@@ -245,6 +263,7 @@ export default ({ app }, inject) => {
       }
       return videos;
     },
+
     async sendPasswordResetEmail({ email }) {
       let host = WEB_URL 
       if (process.server) host = process.env.baseUrl
@@ -258,6 +277,7 @@ export default ({ app }, inject) => {
       );
       return res && res.status === 200
     },
+
     async resetPassword({ token, password }) {
       let res = await this.post(
         `auth/password/reset`,
@@ -268,6 +288,7 @@ export default ({ app }, inject) => {
       );
       return res && res.status === 200
     },
+
     // Initialize the user data record if there isn't one
     async createNewUserDataRecord(token, payload = {}) {
       let res = await this.post(`items/user_data`, payload)
@@ -284,55 +305,79 @@ export default ({ app }, inject) => {
         return userDataId;
       }
     },
-    async initAndGetUserData() {
-      if (app.$auth && app.$auth.loggedIn) {
-        let user = app.$auth.user;
-        let token = app.$auth.strategy.token.get()
-          ? app.$auth.strategy.token.get().replace("Bearer ", "")
-          : undefined;
-        if (user) {
-          if (!token) {
-            await app.$auth.setUser(null); // Remind the user that they no longer have credentials
-            app.$toast.error(`Sorry, but you need to login again.`, {
-              position: "top-center",
-              duration: 5000,
-            });
-            app.$router.push({
-              name: "login",
-            });
-          } else {
-            document.cookie = "directus-zerotohero-session=" + token;
-            token = token.replace("Bearer ", "");
-            let userDataRes = await this.get(
-              `items/user_data?filter[owner][eq]=${user.id
-              }&timestamp=${Date.now()}`,
-              { headers: { Authorization: `Bearer ${token}` } }
-            );
-            if (userDataRes && userDataRes.data && userDataRes.data.data) {
-              if (userDataRes.data.data[0]) {
-                let { id, saved_words, saved_phrases, history, progress, settings } =
-                  userDataRes.data.data[0];
-                app.$auth.$storage.setUniversal("dataId", id);
-                app.store.dispatch("savedWords/importFromJSON", saved_words);
-                app.store.dispatch(
-                  "savedPhrases/importFromJSON",
-                  saved_phrases
-                );
-                app.store.dispatch("history/importFromJSON", history);
-                app.store.dispatch("progress/importFromJSON", progress);
-                app.store.dispatch("settings/importFromJSON", settings);
-              } else {
-                // No user data found, let's create it
-                let dataId = await this.createNewUserDataRecord(token);
-                app.$auth.$storage.setUniversal("dataId", dataId);
-              }
-            }
-          }
-        }
-      } else {
+    
+    /**
+     * Initialize and fetch the user data if they are logged in.
+     * If no user data is found, create and store it.
+     * If the user is not logged in or the token is invalid, log out and redirect.
+     */
+    async fetchOrCreateUserData() {
+      // Check if the user is logged in, return false if not
+      if (!this.isLoggedIn()) {
         return false;
       }
+
+      // Get the user's authentication token
+      const token = this.getToken();
+      // If the token is not available, log out and redirect the user
+      if (!token) {
+        this.logoutAndRedirect();
+        return;
+      }
+
+      // Fetch the user's data using the token
+      const userData = await this.fetchUserData(token);
+      // If no user data is found, create and store new user data
+      if (!userData) {
+        await this.createAndStoreUserData(token);
+      } else {
+        // If user data is found, store it in the application
+        this.storeUserData(userData);
+      }
     },
+    
+    isLoggedIn() {
+      return app.$auth && app.$auth.loggedIn && app.$auth.user;
+    },
+    
+    getToken() {
+      const token = app.$auth.strategy.token.get();
+      return token ? token.replace("Bearer ", "") : undefined;
+    },
+    
+    logoutAndRedirect() {
+      app.$auth.setUser(null);
+      app.$toast.error("Sorry, but you need to login again.", {
+        position: "top-center",
+        duration: 5000,
+      });
+      app.$router.push({ name: "login" });
+    },
+    
+    async fetchUserData(token) {
+      const user = app.$auth.user;
+      const userDataRes = await this.get(
+        `items/user_data?filter[owner][eq]=${user.id}&timestamp=${Date.now()}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    
+      return userDataRes && userDataRes.data && userDataRes.data.data && userDataRes.data.data[0];
+    },
+    
+    async createAndStoreUserData(token) {
+      const dataId = await this.createNewUserDataRecord(token);
+      app.$auth.$storage.setUniversal("dataId", dataId);
+    },
+    
+    storeUserData({ id, saved_words, saved_phrases, history, progress, settings }) {
+      app.$auth.$storage.setUniversal("dataId", id);
+      app.store.dispatch("savedWords/importFromJSON", saved_words);
+      app.store.dispatch("savedPhrases/importFromJSON", saved_phrases);
+      app.store.dispatch("history/importFromJSON", history);
+      app.store.dispatch("progress/importFromJSON", progress);
+      app.store.dispatch("settings/importFromJSON", settings);
+    },
+
     async checkSubscription() {
       let res = await this.get(
         `items/subscriptions?filter[owner][eq]=${app.$auth.user.id}&timestamp=${Date.now()}`
@@ -347,6 +392,7 @@ export default ({ app }, inject) => {
         }
       }
     },
+
     async subscriptionExpired() {
       let subscription = await this.checkSubscription()
       if (subscription) {

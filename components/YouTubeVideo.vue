@@ -20,17 +20,31 @@
       ></div>
       <div class="youtube-screen-blocker" @click="togglePaused"></div>
     </div>
-    <div v-if="!isScriptLoaded" class="placeholder-message">
-      <div class="placeholder-message-text">
-        <i18n path="If this video doesn't load, it means your connection to YouTube may be blocked. You may need a {0}." >
-            <a href="https://www.baidu.com/s?wd=%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%20vpn&pn=20&oq=%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%20vpn">{{ $t('VPN') }}</a>
-        </i18n>
-        <div>
-          <a v-for="vpn in vpns" :href="vpn.url" target="_blank" class="vpn-link">
-            {{ vpn.name }}
-          </a>
+    <div class="placeholder-message" :class="{ 'd-none': youtubeScriptLoaded }">
+      <client-only>
+        <div class="placeholder-message-text">
+          <i18n
+            path="If this video doesn't load, it means your connection to YouTube may be blocked. You may need a {0}."
+          >
+            <template v-slot:default="{ t }">
+              <a
+                href="https://www.baidu.com/s?wd=%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%20vpn&pn=20&oq=%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91%20vpn"
+                >{{ t("VPN") }}</a
+              >
+            </template>
+          </i18n>
+          <div>
+            <a
+              v-for="vpn in vpns"
+              :href="vpn.url"
+              target="_blank"
+              class="vpn-link"
+            >
+              {{ vpn.name }}
+            </a>
+          </div>
         </div>
-      </div>
+      </client-only>
     </div>
   </div>
 </template>
@@ -102,7 +116,7 @@ export default {
       duration: undefined,
       loading: false,
       randomSeeked: false,
-      isScriptLoaded: false,
+      youtubeScriptLoaded: false,
       vpns: [
         {
           name: "Astrill VPN",
@@ -127,8 +141,8 @@ export default {
         {
           name: "VyprVPN",
           url: "https://www.vyprvpn.com/",
-        }
-      ]
+        },
+      ],
     };
   },
   computed: {
@@ -189,7 +203,7 @@ export default {
         this.$adminMode
       );
       Vue.set(this.video, "subs_l1", subs_l1);
-      this.$emit('l1TranscriptLoaded')
+      this.$emit("l1TranscriptLoaded");
     },
     getDuration() {
       if (this.player) {
@@ -228,12 +242,13 @@ export default {
         id,
       };
       window.onYouTubePlayerAPIReady = () => {
-        if (!YT) return
+        if (!YT) return;
         this.player = new YT.Player(id, {
           height: screen.height,
           width: screen.width,
           videoId: this.video.youtube_id,
           playerVars,
+          debug: false,
           events: {
             onStateChange: (event) => {
               const UNSTARTED = -1;
@@ -283,9 +298,9 @@ export default {
           },
         });
       };
-      if(document) {
+      if (document) {
         // Load the YouTube API script  if it hasn't already been loaded
-        if (!this.isScriptLoaded) {
+        if (!this.youtubeScriptLoaded) {
           this.loadYouTubeAPIScript();
         } else {
           window.onYouTubePlayerAPIReady();
@@ -294,9 +309,9 @@ export default {
     },
     loadYouTubeAPIScript() {
       const script = document.createElement("script");
-      script.src = "https://www.youtube.com/iframe_api";
+      script.src = "//www.youtube.com/iframe_api";
       script.addEventListener("load", () => {
-        this.isScriptLoaded = true;
+        this.youtubeScriptLoaded = true;
       });
       document.head.appendChild(script);
     },

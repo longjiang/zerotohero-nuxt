@@ -170,20 +170,19 @@ export default {
             if (!this.show) this.setShow();
           }
         });
-        console.log(`YouTube View: All done.`);
       }
     },
     /**
      * Called when the show is loaded from this.setShow() after the shows.js store retrieves TV shows
      */
     async show() {
-      console.log("YouTube View: 📀 Show changed, getting episodes...");
       if (this.show) {
         let limit = 100;
         let episodeCount = await this.getEpisodeCount();
         if (episodeCount > limit && this.$refs.youtube)
           this.largeEpisodeCount = episodeCount;
         this.episodes = await this.getEpisodes(episodeCount, limit);
+        console.log(`YouTube View: Show "${this.show.title}" loaded with ${episodeCount} episodes.`);
       }
     },
   },
@@ -431,7 +430,6 @@ export default {
       }
     },
     setShow() {
-      console.log("YouTube View: Setting show...");
       if (this.video) {
         if (this.video.tv_show) {
           this.show = this.$store.getters["shows/tvShow"]({

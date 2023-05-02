@@ -220,7 +220,6 @@ export default {
     },
     saveHistory({ type, video, duration }) {
       if (type === "youtube" && video && video.youtube_id) {
-        console.log(`YouTube View: Saving history...`);
         let data = {
           type: "video",
           id: `${this.$l2.code}-video-${video.youtube_id}`,
@@ -239,6 +238,7 @@ export default {
           data.video.progress = data.video.starttime / duration;
         }
         this.$store.dispatch("history/add", data); // history's ADD_HISTORY_ITEM mutation automatically checks if this item is already in the history based on it's id (e.g. zh-video-Y23x9L4)
+        console.log(`Video View: YouTube video saved to watch history.`);
       }
     },
   },

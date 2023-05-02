@@ -166,14 +166,13 @@ export default {
     if (!this.$store.state.history.historyLoaded) {
       this.$store.dispatch("history/load");
     }
-    await this.$directus.initAndGetUserData(); // Make sure user data is fetched from the server
+    await this.$directus.fetchOrCreateUserData(); // Make sure user data is fetched from the server
     if (this.$auth.loggedIn) {
       await this.$store.dispatch(
         "subscriptions/checkSubscription",
         this.$auth.user.id
       );
     }
-    console.log("Default.vue: User data initialized.");
     if (this.l1 && this.l2) {
       this.loadLanguageSpecificSettings(); // Make sure this line is AFTER registering mutation event listeners above!
       this.$store.commit("settings/LOAD_SETTINGS", {
@@ -336,7 +335,6 @@ export default {
           }
         }
       }, 1000);
-      console.log("🕙 Timer started!", { loggerID: this.timeLoggerID });
     },
     stopAndRestartLoggingUserTimeOnLanguageChange() {
       clearInterval(this.timeLoggerID);
@@ -344,11 +342,6 @@ export default {
       if (this.l2) {
         this.l2Time[this.l2.code] = this.$store.getters["progress/time"](
           this.l2
-        );
-        console.log(
-          `🕙 Language changed to ${this.l2.code}, timer restarted from ${
-            this.l2Time[this.l2.code] / 1000
-          } seconds.`
         );
         this.startLoggingUserTime();
       }
