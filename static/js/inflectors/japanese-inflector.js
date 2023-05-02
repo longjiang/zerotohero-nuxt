@@ -1,4 +1,4 @@
-importScripts('../vendor/jp-conjugations/dist/jp-conjugations.js')
+importScripts('../vendor/jp-conjugations/jp-conjugations.js')
 importScripts('../js/inflectors/base-inflector.js')
 
 class JapaneseInflector extends BaseInflector {
