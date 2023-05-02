@@ -282,7 +282,7 @@ import fx from "money";
 import accounting from "accounting";
 import Sale from "@/components/Sale";
 import axios from "axios";
-import { CHINESE_ZERO_TO_HERO } from '@/lib/utils/servers'
+import { CHINESE_ZERO_TO_HERO, logError } from '@/lib/utils'
 
 export default {
   components: {
@@ -310,7 +310,7 @@ export default {
         "https://api.exchangerate.host/latest"
       );
     } catch (err) {
-      Helper.logError(err);
+      logError(err);
     }
     if (response && response.data) {
       let data = response.data;

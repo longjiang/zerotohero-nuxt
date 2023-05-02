@@ -48,7 +48,8 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import { arrayChunk } from "@/lib/utils";
+
 export default {
   computed: {
   },
@@ -90,7 +91,7 @@ export default {
       let urls = this.urls.split("\n");
       this.totalURLCount = urls.length;
       this.checkedURLCount = 0;
-      let chunks = Helper.arrayChunk(urls, Math.ceil(urls.length / this.threads));
+      let chunks = arrayChunk(urls, Math.ceil(urls.length / this.threads));
       for (let urls of chunks) {
         this.checkURLBatch(urls)
       }

@@ -240,9 +240,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import { mapState } from "vuex";
-import { languageLevels, randomItemFromArray, LANGS_WITH_LEVELS, LANGS_WITH_CONTENT } from "@/lib/utils";
+import { timeout, uniqueByValue, languageLevels, randomItemFromArray, LANGS_WITH_LEVELS, LANGS_WITH_CONTENT } from "@/lib/utils";
 
 export default {
   name: 'explore-media', // Added to resolve Vue warn - Invalid component name: "pages/explore-media.vue"
@@ -283,7 +282,7 @@ export default {
         this.loadShows();
       }
     });
-    await Helper.timeout(5000);
+    await timeout(5000);
     this.loading = false; // Incase resources fail to load, at least show them
   },
   beforeDestroy() {
@@ -474,7 +473,7 @@ export default {
         query: `sort=${sort}&${filter}&limit=${limit}&fields=${fields}&offset=${offset}`,
       });
       if (videos?.length > 0) {
-        videos = Helper.uniqueByValue(videos, "youtube_id");
+        videos = uniqueByValue(videos, "youtube_id");
       }
       return videos;
     },

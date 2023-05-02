@@ -153,10 +153,8 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
-import Helper from "@/lib/helper";
-import axios from "axios";
 import Papa from "papaparse";
+import { timeout } from "@/lib/utils";
 
 export default {
   props: {
@@ -208,7 +206,7 @@ export default {
         ["warning", "danger"].includes(v._rowVariant)
       );
       for (let video of videos) {
-        await Helper.timeout(150);
+        await timeout(150);
         this.remove(video);
         console.log(`Removing video: ${video.title}`);
       }
@@ -246,7 +244,7 @@ export default {
     async csvAll() {
       let videos = this.videosWithJSONSubs;
       for (let video of videos) {
-        await Helper.timeout(450);
+        await timeout(450);
         this.csv(video);
       }
     },

@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import { highlight } from "@/lib/utils"
 
 export default {
   props: {
@@ -90,7 +90,7 @@ export default {
   },
   methods: {
     highlight(...args) {
-      return Helper.highlight(...args)
+      return highlight(...args)
     },
     searchImageKeyupEnter(e) {
       const app = this

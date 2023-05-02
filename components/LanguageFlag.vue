@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import Helper from "@/lib/helper";
+import { timeout } from "@/lib/utils";
 export default {
   props: {
     language: {
@@ -50,7 +50,7 @@ export default {
       for (let i = 0; i < 999999; i++) {
         if (!this.cycle) break;
         this.country = this.countries[i % this.countries.length];
-        await Helper.timeout(500);
+        await timeout(500);
       }
     },
     stopCycling() {

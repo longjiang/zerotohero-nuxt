@@ -85,7 +85,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { randomArrayItem } from "@/lib/utils";
+
 export default {
   props: {
     video: {
@@ -114,7 +115,7 @@ export default {
   },
   computed: {
     randomEpisodeYouTubeId() {
-      let episode = Helper.randomArrayItem(this.episodes);
+      let episode = randomArrayItem(this.episodes);
       return episode.youtube_id;
     },
     previousEpisode() {

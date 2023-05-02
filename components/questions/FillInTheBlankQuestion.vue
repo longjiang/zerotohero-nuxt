@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import { highlight } from "@/lib/utils"
 import StrokeOrder from '@/components/StrokeOrder.vue'
 
 export default {
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     highlight(...args) {
-      return Helper.highlight(...args)
+      return highlight(...args)
     },
     fillInTheBlankHTML() {
       return `${

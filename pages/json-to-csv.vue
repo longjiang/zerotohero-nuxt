@@ -38,7 +38,8 @@
   </div>
 </template>
 <script>
-import Helper from "@/lib/helper";
+import { makeTextFile } from "@/lib/utils";
+
 export default {
   computed: {
   },
@@ -74,7 +75,7 @@ export default {
           });
         }
         let csv = Papa.unparse(arr);
-        this.href = Helper.makeTextFile(csv);
+        this.href = makeTextFile(csv);
       };
     },
   },

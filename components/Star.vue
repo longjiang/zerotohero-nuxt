@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { unique } from "@/lib/utils";
 import { mapState } from "vuex";
 
 export default {
@@ -104,7 +104,7 @@ export default {
       if (this.text) {
         wordForms.push(this.text);
       }
-      wordForms = Helper.unique(wordForms).filter(
+      wordForms = unique(wordForms).filter(
         (form) => form && form !== "" && form !== "-"
       );
       return wordForms;

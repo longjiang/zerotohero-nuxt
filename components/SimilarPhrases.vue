@@ -119,8 +119,9 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { uniqueByValue, uniqueByValues } from "@/lib/utils";
 import { ContainerQuery } from "vue-container-query";
+
 export default {
   components: {
     ContainerQuery,
@@ -277,7 +278,7 @@ export default {
       //   yousFromWiktionary = yousFromWiktionary.concat(
       //     await this.getYousFromWiktionary(false)
       //   );
-      //   yousFromWiktionary = Helper.uniqueByValue(yousFromWiktionary, "id");
+      //   yousFromWiktionary = uniqueByValue(yousFromWiktionary, "id");
       // }
       phrases = phrases.concat(yousFromWiktionary);
       return phrases;
@@ -312,7 +313,7 @@ export default {
       return [];
     },
     extractAllPhrases(phrasebooks) {
-      phrasebooks = Helper.uniqueByValue(phrasebooks, "id");
+      phrasebooks = uniqueByValue(phrasebooks, "id");
       let phrases = [];
       for (let phrasebook of phrasebooks) {
         let l2 = this.$languages.getById(phrasebook.l2.id);
@@ -336,7 +337,7 @@ export default {
           }
         }
       }
-      phrases = Helper.uniqueByValues(phrases, ["phrase", "en", "l2"]);
+      phrases = uniqueByValues(phrases, ["phrase", "en", "l2"]);
       return phrases;
     },
     normalizeTranslation(translation) {

@@ -102,7 +102,7 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
-import Helper from "@/lib/helper";
+import { groupArrayBy } from "@/lib/utils";
 
 export default {
   components: {
@@ -177,7 +177,7 @@ export default {
           return obj;
         });
       if (this.limit) history = history.slice(0, this.limit);
-      let groups = Helper.groupArrayBy(history, "date");
+      let groups = groupArrayBy(history, "date");
       groups = Object.keys(groups).map((date) => {
         return {
           date,

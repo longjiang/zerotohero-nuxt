@@ -84,9 +84,10 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
-import {distance, closest} from "fastest-levenshtein";
+import { distance } from "fastest-levenshtein";
 import { mapState } from "vuex";
+import { uniqueByValue, shuffle, speak, timeout, highlightMultiple, highlight, unique } from "@/lib/utils";
+
 export default {
   data() {
     return {
@@ -173,7 +174,7 @@ export default {
         (word) =>
           word && word.head && word.head.toLowerCase() !== text.toLowerCase()
       );
-      words = Helper.uniqueByValue(words, "head");
+      words = uniqueByValue(words, "head");
       return words;
     },
     async generateAnswers(form, word) {
@@ -200,13 +201,13 @@ export default {
         traditional: word.traditional,
         correct: true,
       });
-      return Helper.shuffle(answers);
+      return shuffle(answers);
     },
     async speak() {
       if (this.parallelLines) {
-        await Helper.speak(this.parallelLines, this.$l1, 1.1);
+        await speak(this.parallelLines, this.$l1, 1.1);
       }
-      await Helper.speak(this.line.line, this.$l2, 1);
+      await speak(this.line.line, this.$l2, 1);
     },
     async answered(answer) {
       if (answer.correct) {
@@ -217,18 +218,18 @@ export default {
         audio.play();
       } else {
         this.wrong = false;
-        await Helper.timeout(100);
+        await timeout(100);
         this.wrong = true;
       }
     },
     highlightMultiple() {
-      return Helper.highlightMultiple(...arguments);
+      return highlightMultiple(...arguments);
     },
     highlight() {
-      return Helper.highlight(...arguments);
+      return highlight(...arguments);
     },
     unique() {
-      return Helper.unique(...arguments);
+      return unique(...arguments);
     },
     updated() {
       this.showAnswer = false;

@@ -168,9 +168,9 @@
 <script>
 import Config from "@/lib/config";
 import Library from "@/lib/library";
-import Helper from "@/lib/helper";
 import { parse } from "node-html-parser";
 import sanitizeHtml from "sanitize-html";
+import { stripTags } from "@/lib/utils";
 
 export default {
   props: {
@@ -274,7 +274,7 @@ export default {
       }
     },
     stripTags(t) {
-      return Helper.stripTags(t);
+      return stripTags(t);
     },
     source(a) {
       return Library.source(a);

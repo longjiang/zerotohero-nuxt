@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { unescape, stripTags } from "@/lib/utils/string";
 
 const DIRECTUS_ADMIN_URL = 'https://directusvps.zerotohero.ca/admin/#/'
 
@@ -42,10 +42,10 @@ export default {
   },
   methods: {
     unescape(escapedHTML) {
-      return Helper.unescape(escapedHTML);
+      return unescape(escapedHTML);
     },
     stripTags(html) {
-      return Helper.stripTags(html);
+      return stripTags(html);
     },
   },
 };

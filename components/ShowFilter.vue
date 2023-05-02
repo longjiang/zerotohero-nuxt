@@ -116,8 +116,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
-import { mapState } from "vuex";
+import { timeout, unique } from "@/lib/utils";
 
 export default {
   data() {
@@ -185,7 +184,7 @@ export default {
         this.loadShows();
       }
     });
-    await Helper.timeout(1000)
+    await timeout(1000)
     this.watchersActivated = true  // Do not activate watchers until after a second to avoid constanting updating settings and pushing to the server
   },
   beforeDestroy() {
@@ -322,7 +321,7 @@ export default {
         if (this.moviesChecked && this.moviesShow) {
           if (this.moviesShow) tvShowFilter.push(this.moviesShow.id);
         }
-        return Helper.unique(tvShowFilter);
+        return unique(tvShowFilter);
       }
     },
     getTalkFilter() {
@@ -343,7 +342,7 @@ export default {
       if (this.newsChecked) {
         if (this.newsShow) talkFilter.push(this.newsShow.id);
       }
-      return Helper.unique(talkFilter);
+      return unique(talkFilter);
     },
     showModal() {
       this.$refs["show-filter-modal"].show();

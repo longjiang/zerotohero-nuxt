@@ -122,15 +122,12 @@ import wordblock from "@/components/WordBlock";
 import popupnote from "@/components/PopupNote";
 import readerlink from "@/components/ReaderLink";
 import VRuntimeTemplate from "v-runtime-template";
-import Helper from "@/lib/helper";
-import { l2LevelName } from "@/lib/utils/language-levels";
-import { breakSentences } from "@/lib/utils/string";
+import SmartQuotes from "smartquotes";
+import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 import { transliterate as tr } from "transliteration";
 import { mapState } from "vuex";
 import { getClient } from "iframe-translator";
-import { uniqueByValue } from "@/lib/utils/array";
-import SmartQuotes from "smartquotes";
-import BeatLoader from "vue-spinner/src/BeatLoader.vue";
+import { highlightMultiple, isMobile, timeout, uniqueByValue, logError, breakSentences, l2LevelName } from "@/lib/utils";
 
 export default {
   components: {
@@ -247,7 +244,7 @@ export default {
       this.tokenized = [];
       this.$refs["run-time-template"]?.[0]?.$destroy();
     } catch (err) {
-      Helper.logError(err);
+      logError(err);
     }
   },
   computed: {
@@ -284,16 +281,16 @@ export default {
       this.translationData = this.translation;
     },
     async textMode() {
-      if (Helper.isMobile() && this.textMode) {
+      if (isMobile() && this.textMode) {
         let element = this.$el.querySelector(".annotate-input");
-        await Helper.timeout(30);
+        await timeout(30);
         element.focus();
       }
     },
   },
   methods: {
     highlightMultiple(...args) {
-      return Helper.highlightMultiple(...args);
+      return highlightMultiple(...args);
     },
     showMenuModal() {
       this.$refs["annotate-menu-modal"].show();
@@ -383,9 +380,9 @@ export default {
         try {
           iframeTranslationClient.destroy();
         } catch (err) {
-          Helper.logError(err);
+          logError(err);
         }
-        Helper.logError(err);
+        logError(err);
       }
     },
     /**
@@ -421,12 +418,12 @@ export default {
             if (durationAlreadyPlayed > startFrom) {
               if (!this.animate) return;
               block.classList.add("animate");
-              await Helper.timeout(
+              await timeout(
                 (blockDuration * 1000) / this.animationSpeed
               );
             }
           }
-          await Helper.timeout(2000);
+          await timeout(2000);
           blocks.forEach((b) => b.classList.remove("animate"));
         }
       }
@@ -446,7 +443,7 @@ export default {
       }
     },
     async onMenuHide() {
-      await Helper.timeout(300);
+      await timeout(300);
       document.activeElement.blur();
     },
     hasTranslate() {
@@ -464,7 +461,7 @@ export default {
     async externalTranslateClick() {
       let text = this.text;
       let url = this.$languages.translationURL(text, this.$l1, this.$l2);
-      if (url) window.open(url, Helper.isMobile() ? "_blank" : "translate");
+      if (url) window.open(url, isMobile() ? "_blank" : "translate");
     },
     // https://stackoverflow.com/questions/2550951/what-regular-expression-do-i-need-to-check-for-some-non-latin-characters
     nonLatin() {
@@ -512,14 +509,14 @@ export default {
     async annotateInputBlur(e) {
       let newText = e.target.value;
       this.reannotate(newText);
-      await Helper.timeout(200);
+      await timeout(200);
       this.selectedText = undefined;
       this.textMode = false;
       this.$emit("textChanged", newText);
     },
     async reannotate(newText) {
       this.annotated = false;
-      await Helper.timeout(200);
+      await timeout(200);
       let node = this.$el.querySelector(".annotate-slot > *");
       if (node) {
         node.innerText = newText;

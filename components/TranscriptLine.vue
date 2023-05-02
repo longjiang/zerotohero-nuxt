@@ -87,9 +87,9 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import { ContainerQuery } from "vue-container-query";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
+import { highlightMultiple } from "@/lib/utils";
 
 export default {
   components: {
@@ -230,7 +230,7 @@ export default {
       return html;
     },
     highlightMultiple() {
-      return Helper.highlightMultiple(...arguments);
+      return highlightMultiple(...arguments);
     }
   }
 };

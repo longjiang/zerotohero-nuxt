@@ -124,7 +124,7 @@
 
 <script>
 import SketchEngine from "@/lib/sketch-engine";
-import Helper from "@/lib/helper";
+import { ucFirst } from "@/lib/utils";
 
 export default {
   props: ["text"],
@@ -140,7 +140,7 @@ export default {
       this.show = true;
     },
     ucFirst(...args) {
-      return Helper.ucFirst(...args);
+      return ucFirst(...args);
     },
   },
   async created() {

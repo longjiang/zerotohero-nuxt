@@ -30,7 +30,8 @@
 // Client height WAS 226px
 // Target height is 801px
 
-import Helper from "@/lib/helper";
+import { timeout } from "@/lib/utils";
+
 export default {
   props: {
     text: {
@@ -71,7 +72,7 @@ export default {
     },
     async testMojis() {
       for (let i = 0; i < 100; i++) {
-        await Helper.timeout(100);
+        await timeout(100);
         let sourceTextHeight = this.$refs.mockBingSourceText.clientHeight;
         sourceTextHeight = Math.max(120, sourceTextHeight);
         this.emojis += "😊<br/>";
@@ -88,7 +89,7 @@ export default {
       if (!this.pasted) {
         navigator.clipboard.writeText("");
         this.clickthrough = true;
-        await Helper.timeout(1000);
+        await timeout(1000);
         this.paste();
         this.clickthrough = false;
       }

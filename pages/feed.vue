@@ -75,10 +75,10 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import Config from "@/lib/config";
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
+import { shuffle, uniqueByValue } from "@/lib/utils";
 import axios from 'axios';
 import Papa from 'papaparse'
 
@@ -188,7 +188,7 @@ export default {
       ) {
         this.savedWords[this.$l2.code];
         let savedWordsShuffled = [...this.savedWords[this.$l2.code]];
-        this.savedWordsShuffled = Helper.shuffle(savedWordsShuffled);
+        this.savedWordsShuffled = shuffle(savedWordsShuffled);
       }
     },
     async loadLiveTV() {
@@ -207,7 +207,7 @@ export default {
       );
       if (res && res.data) {
         let channels = Papa.parse(res.data, { header: true }).data;
-        channels = Helper.uniqueByValue(channels, "url");
+        channels = uniqueByValue(channels, "url");
         channels = channels
           .filter((c) => c.url && c.url.startsWith("https://"))
           .filter((c) => c.category !== "XXX")
@@ -232,7 +232,7 @@ export default {
         channels = channels.sort((a, b) =>
           a.name.localeCompare(b.name, this.$l2.locales[0])
         );
-        this.liveTVChannels = Helper.shuffle(channels)
+        this.liveTVChannels = shuffle(channels)
       }
     },
     async loadMoreItems() {
@@ -267,7 +267,7 @@ export default {
           }
           items = items.concat(liveTVChannelItems);
         }
-        this.items = this.items.concat(Helper.shuffle(items));
+        this.items = this.items.concat(shuffle(items));
         // if (!this.heroVideo) this.loadHeroVideo();
         this.loading = false;
         return true;
@@ -325,7 +325,7 @@ export default {
       return 0;
     },
     random(array, max) {
-      let shuffled = Helper.shuffle([...array]);
+      let shuffled = shuffle([...array]);
       return shuffled.slice(0, max);
     },
     /**
@@ -356,7 +356,7 @@ export default {
           }&${filter}&limit=${limit}&fields=l2,id,title,youtube_id,tv_show.id,tv_show.title,talk.id,talk.title,talk.audiobook,date,l2&offset=${offset}`
         );
         if (response.data.data && response.data.data.length > 0) {
-          videos = Helper.uniqueByValue(response.data.data, "youtube_id");
+          videos = uniqueByValue(response.data.data, "youtube_id");
         }
 
         return videos;

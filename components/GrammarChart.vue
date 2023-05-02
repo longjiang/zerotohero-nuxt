@@ -79,9 +79,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
-import { unique } from "@/lib/utils/array";
-import { LEVELS, l2LevelKey } from "@/lib/utils/language-levels";
+import { unique, LEVELS, l2LevelKey, highlightMultiple } from "@/lib/utils";
 export default {
   data() {
     return {
@@ -138,7 +136,7 @@ export default {
   },
   methods: {
     highlightMultiple(a, b) {
-      return Helper.highlightMultiple(a, b);
+      return highlightMultiple(a, b);
     },
     grammarRowClick(row) {
       this.$router.push({

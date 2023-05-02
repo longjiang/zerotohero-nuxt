@@ -159,8 +159,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
-import { LEVELS } from "~/lib/utils/language-levels";
+import { LEVELS, languageLevels } from "~/lib/utils";
 
 export default {
   props: {
@@ -203,7 +202,7 @@ export default {
         : 0;
     },
     levels() {
-      let levels = Helper.languageLevels(this.l2);
+      let levels = languageLevels(this.l2);
       return Object.keys(levels).map((key) => {
         return {
           value: Number(key),
@@ -283,7 +282,7 @@ export default {
   },
   methods: {
     levelObj(level) {
-      return Helper.languageLevels(this.l2)[level];
+      return languageLevels(this.l2)[level];
     },
     // https://www.codegrepper.com/code-examples/javascript/javascript+duration+format
     formatDuration(time) {

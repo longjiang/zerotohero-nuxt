@@ -37,7 +37,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { normalizeCircleNumbers } from "@/lib/utils";
+
 export default {
   // layout: "test-layout",
   computed: {
@@ -66,7 +67,7 @@ export default {
     },
     normalizeNotes(text) {
       let normalized = text.replace(/[(（【［\[]*(\d+)[)）】］\]]*/g, "[$1]");
-      normalized = Helper.normalizeCircleNumbers(normalized);
+      normalized = normalizeCircleNumbers(normalized);
       return normalized;
     },
   },

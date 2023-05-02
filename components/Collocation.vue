@@ -41,7 +41,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { highlight } from "@/lib/utils/string";
+import { uniqueByValue } from "@/lib/utils/array";
 import { mapState } from "vuex";
 
 export default {
@@ -103,7 +104,7 @@ export default {
   },
   methods: {
     highlight(...args) {
-      return Helper.highlight(...args)
+      return highlight(...args)
     },
     saveLine(line) {
       this.$store.dispatch("savedCollocations/add", {
@@ -127,7 +128,7 @@ export default {
         let words = this.collocation.Words.filter((Word) => Word.cm).filter(
           (Word) => !Word.cm.match(/[。？，→]/)
         );
-        words = Helper.uniqueByValue(words, "cm").sort(
+        words = uniqueByValue(words, "cm").sort(
           (a, b) => a.cm.length - b.cm.length
         );
         this.collocation.Words = words.slice(0, 20);

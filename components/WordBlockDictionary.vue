@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import { uniqueId } from '@/lib/utils'
 
 export default {
   props: {
@@ -56,7 +56,7 @@ export default {
   data() {
     return {
       transliteration: undefined,
-      id: `wordblock-dictionary-${Helper.uniqueId()}`,
+      id: `wordblock-dictionary-${uniqueId()}`,
       candidateIndex: 0
     }
   },

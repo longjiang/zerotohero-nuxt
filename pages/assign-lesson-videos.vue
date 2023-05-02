@@ -111,8 +111,7 @@
 
 <script>
 import WordList from "@/components/WordList";
-import Helper from "@/lib/helper";
-import { parseDuration, timeStringToSeconds } from "@/lib/utils";
+import { parseDuration, timeStringToSeconds, unique, uniqueByValue } from "@/lib/utils";
 
 export default {
   props: ["level", "lesson"],
@@ -151,7 +150,7 @@ export default {
           let bMatchCount = b.matches?.length || 0;
           return bMatchCount - aMatchCount;
         });
-      videos = Helper.uniqueByValue(videos, "youtube_id");
+      videos = uniqueByValue(videos, "youtube_id");
       return videos
     },
   },
@@ -166,9 +165,9 @@ export default {
     let words = await dictionary.lookupByLesson(this.level, this.lesson);
     words = words.filter((word) => !word.oofc || !word.oofc === "");
     if (this.$l2.han && this.$l2.code !== "ja") {
-      this.words = Helper.uniqueByValue(words, "simplified");
+      this.words = uniqueByValue(words, "simplified");
     } else {
-      this.words = Helper.uniqueByValue(words, "head");
+      this.words = uniqueByValue(words, "head");
     }
     await this.getLessonVideos();
     await this.getVideos();
@@ -200,7 +199,7 @@ export default {
         let bScore = b.matches ? b.matches.length || 0 : 0;
         return bScore - aScore;
       });
-      this.lessonVideos = Helper.uniqueByValue(videos, "youtube_id");
+      this.lessonVideos = uniqueByValue(videos, "youtube_id");
       this.updateMatches();
       this.updateLessonVideos++;
       return true;
@@ -234,7 +233,7 @@ export default {
         if (videos.length === 0) {
           allWordForms = words.slice(0, 10).map((word) => word.head); // We're only using the head to make the search simpler
         }
-        allWordForms = Helper.unique(allWordForms);
+        allWordForms = unique(allWordForms);
 
         let params = {
           l2Id: this.$l2.id,
@@ -243,7 +242,7 @@ export default {
         };
         let newVideos = await this.$directus.searchCaptions(params);
         videos = videos.concat(newVideos);
-        videos = Helper.uniqueByValue(videos, "id");
+        videos = uniqueByValue(videos, "id");
 
         if (videos.length > 0) {
           videos = videos.map((video) => {
@@ -361,7 +360,7 @@ export default {
       this.matchedWords = [];
       for (let video of this.lessonVideos) {
         if (video.matches) {
-          this.matchedWords = Helper.uniqueByValue(
+          this.matchedWords = uniqueByValue(
             this.matchedWords.concat(video.matches),
             "id"
           );

@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { proxy } from "@/lib/utils";
 
 export default {
   props: {
@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     async getStats(refresh = false) {
-      let data = await Helper.proxy(
+      let data = await proxy(
         `https://directusvps.zerotohero.ca/count-all.php${
           refresh ? "?timestamp=" + Date.now() : ""
         }`,

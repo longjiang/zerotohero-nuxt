@@ -117,7 +117,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { makeTextFile } from '@/lib/utils';
+
 export default {
   props: {
     phrasebook: {
@@ -162,7 +163,7 @@ export default {
           return op;
         })
       );
-      this.csvHref = Helper.makeTextFile(csv);
+      this.csvHref = makeTextFile(csv);
     },
     visibilityChanged(isVisible) {
       if (isVisible) {

@@ -28,7 +28,8 @@
 
 <script>
 import { mapState } from "vuex";
-import Helper from "@/lib/helper";
+
+import { escapeRegExp, uniqueIgnoreCase } from "@/lib/utils";
 
 export default {
   props: {
@@ -136,7 +137,7 @@ export default {
       )
         return true;
       if (!this.$l2.continua) {
-        form = Helper.escapeRegExp(form);
+        form = escapeRegExp(form);
         let found = false;
         try {
           found =
@@ -149,7 +150,7 @@ export default {
     async reviewItemsForWord(word, wordForms) {
       let reviewItems = [];
       let forms = wordForms.filter((form) => form && form !== "-");
-      forms = Helper.uniqueIgnoreCase(forms);
+      forms = uniqueIgnoreCase(forms);
       let maxInstances = 1; // Limit to two questions about the same word
       let seen = 0;
       for (let form of forms.sort((a, b) => b.length - a.length)) {

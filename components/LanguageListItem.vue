@@ -113,7 +113,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { formatK } from "@/lib/utils";
+
 export default {
   props: {
     language: {
@@ -170,7 +171,7 @@ export default {
       if (this.$refs.flag) this.$refs.flag.stopCycling();
     },
     formatSpeakers(number) {
-      return Helper.formatK(number, 1, this.$browserLanguage);
+      return formatK(number, 1, this.$browserLanguage);
     },
     languagePath(language) {
       return `/${this.from ? this.from.code : "en"}/${

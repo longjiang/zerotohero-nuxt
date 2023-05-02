@@ -97,7 +97,7 @@
 
 <script>
 import { setTimeout } from "timers";
-import Helper from "@/lib/helper";
+import { highlight, timeout } from "@/lib/utils";
 
 export default {
   props: {
@@ -184,7 +184,7 @@ export default {
   },
   methods: {
     highlight(...args) {
-      return Helper.highlight(...args)
+      return highlight(...args)
     },
     focusOnInput() {
       this.$refs.lookup.focus();
@@ -197,7 +197,7 @@ export default {
         // Wait for composition to finish
         if (!this.preventEnter) this.act();
         else {
-          await Helper.timeout(500);
+          await timeout(500);
           this.preventEnter = false;
         }
       } else {

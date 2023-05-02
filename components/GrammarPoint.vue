@@ -3,7 +3,7 @@
     <Annotate tag="div" :copy="false" class="grammar-structure">
       <h5
         v-html="
-          Helper.highlightMultiple(
+          highlightMultiple(
             grammar.structure,
             grammar.words,
             grammar.book
@@ -15,7 +15,7 @@
     <Annotate tag="h2" class="grammar-example" :showTranslate="false">
       <span
         v-html="
-        Helper.highlightMultiple(grammar.example, grammar.words, grammar.book)
+        highlightMultiple(grammar.example, grammar.words, grammar.book)
       "
       ></span>
     </Annotate>
@@ -35,16 +35,16 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import { highlightMultiple } from "@/lib/utils";
 export default {
-  data() {
-    return {
-      Helper
-    }
-  },
   props: {
     grammar: {
       type: Object
+    }
+  },
+  methods: {
+    highlightMultiple(...args) {
+      return highlightMultiple(...args);
     }
   }
 }

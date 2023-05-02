@@ -29,7 +29,7 @@
 
 <script>
 import Decomposition from '@/components/Decomposition.vue'
-import Helper from '@/lib/helper'
+import { highlight } from "@/lib/utils";
 
 export default {
   props: ['id', 'text', 'type', 'definitions', 'hsk', 'pinyin'],
@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     highlight(...args) {
-      return Helper.highlight(...args)
+      return highlight(...args)
     },
     randomChar(word) {
       const index = Math.floor(Math.random() * word.length)

@@ -203,7 +203,7 @@
 
 <script>
 import Vue from "vue";
-import Helper, { uniqueByValue } from "@/lib/helper";
+import { groupArrayBy, arrayChunk, timeout, unique, uniqueByValue } from "@/lib/utils";
 import { Drag, Drop } from "vue-drag-drop";
 import { ContainerQuery } from "vue-container-query";
 
@@ -393,7 +393,7 @@ export default {
       );
     },
     surveyChannels() {
-      let groups = Helper.groupArrayBy(this.videos, "channel_id");
+      let groups = groupArrayBy(this.videos, "channel_id");
       let channels = [];
       for (let channel_id in groups) {
         channels.push({
@@ -409,7 +409,7 @@ export default {
       let youtube_ids = videos
         .map((v) => v.youtube_id)
         .filter((id) => !id.includes("0x"));
-      let chunks = Helper.arrayChunk(youtube_ids, 50);
+      let chunks = arrayChunk(youtube_ids, 50);
       for (let youtube_ids of chunks) {
         let filter = `filter[youtube_id][in]=${youtube_ids}`;
         let fields = `fields=id,title,channel_id,youtube_id,tv_show.*,talk.*`;
@@ -444,13 +444,13 @@ export default {
     },
     async batch(action, delay = 0) {
       let indices = Object.keys(this.$refs.youTubeVideoCard);
-      let chunks = Helper.arrayChunk(indices, 3);
+      let chunks = arrayChunk(indices, 3);
       for (let chunk of chunks) {
         let promises = [];
         for (let videoIndex of chunk) {
           promises.push(action(videoIndex));
         }
-        await Helper.timeout(delay);
+        await timeout(delay);
         await Promise.all(promises);
       }
     },
@@ -473,7 +473,7 @@ export default {
       }
     },
     async removeAllUnavailable() {
-      this.unavailableYouTubeIds = Helper.unique(this.unavailableYouTubeIds);
+      this.unavailableYouTubeIds = unique(this.unavailableYouTubeIds);
       for (let videoIndex in this.$refs.youTubeVideoCard) {
         let videoCard = this.$refs.youTubeVideoCard[videoIndex];
         if (this.unavailableYouTubeIds.includes(videoCard.video.youtube_id)) {

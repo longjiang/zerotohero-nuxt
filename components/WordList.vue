@@ -130,7 +130,7 @@
   </div>
 </template>
 <script>
-import Helper from "@/lib/helper";
+import { unique } from "@/lib/utils";
 
 export default {
   props: {
@@ -230,13 +230,13 @@ export default {
       let definitions = word.definitions;
       if (this.$l2.code === "zh")
         definitions = definitions.filter((def) => !def.startsWith("CL"));
-      definitions = Helper.unique(definitions);
+      definitions = unique(definitions);
       if (this.maxDefinitions)
         definitions = definitions.slice(0, this.maxDefinitions);
       return definitions;
     },
     unique(list) {
-      return Helper.unique(list);
+      return unique(list);
     },
     getUrl(word, index) {
       if (!word) return;

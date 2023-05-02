@@ -148,9 +148,8 @@
 import axios from "axios";
 import Config from "@/lib/config";
 import Papa from "papaparse";
-import Helper from "@/lib/helper";
 import "leaflet/dist/leaflet.css";
-import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
+import { LANGS_WITH_CONTENT, uniqueByValue } from "@/lib/utils/servers";
 
 export default {
   components: {
@@ -236,12 +235,12 @@ export default {
   },
   methods: {
     uniqueByValue() {
-      return Helper.uniqueByValue(...arguments);
+      return uniqueByValue(...arguments);
     },
     initLangs() {
       if (this.phrases) {
         let languages = this.phrases.map((p) => p.l2).filter(l2 => l2);
-        languages = Helper.uniqueByValue(languages, "id");
+        languages = uniqueByValue(languages, "id");
         languages = languages.sort((a, b) => b.speakers - a.speakers);
         this.languages = languages;
         if (this.map) {

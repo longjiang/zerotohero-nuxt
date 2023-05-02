@@ -86,7 +86,7 @@
 <script>
 import Collocation from "@/components/Collocation.vue";
 import SketchEngine from "@/lib/sketch-engine";
-import Helper from "@/lib/helper";
+import { uniqueByValue } from "@/lib/utils/array";
 
 export default {
   props: {
@@ -119,7 +119,7 @@ export default {
       });
       let colDesc = {};
       if (this.aSketch && this.bSketch) {
-        for (let g of Helper.uniqueByValue(
+        for (let g of uniqueByValue(
           (this.aSketch.Gramrels || []).concat(this.bSketch.Gramrels || []),
           "name"
         )) {

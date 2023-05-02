@@ -16,8 +16,8 @@
 </template>
 
 <script>
+import { uniqueByValue, randomArrayItem } from "@/lib/utils";
 import Search from "@/components/Search";
-import Helper from "@/lib/helper";
 
 export default {
   components: {
@@ -92,7 +92,7 @@ export default {
           preferredLanguages = preferredLanguages.filter(
             (lang) => lang.code !== this.$l2.code
           );
-        let randomLanguage = Helper.randomArrayItem(preferredLanguages);
+        let randomLanguage = randomArrayItem(preferredLanguages);
         return `/${randomLanguage.code === "en" ? "zh" : "en"}/${
           randomLanguage.code
         }/explore-media`;
@@ -122,7 +122,7 @@ export default {
         );
         filteredLanguages = filteredLanguages.concat(otherNamesMatch);
       }
-      filteredLanguages = Helper.uniqueByValue(filteredLanguages, "id");
+      filteredLanguages = uniqueByValue(filteredLanguages, "id");
       filteredLanguages = filteredLanguages
         .map((language) => {
           let codes = [

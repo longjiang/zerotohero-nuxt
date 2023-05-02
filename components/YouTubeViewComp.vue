@@ -35,11 +35,9 @@
 
 <script>
 import YouTube from "@/lib/youtube";
-import Helper from "@/lib/helper";
 import Vue from "vue";
 import { mapState } from "vuex";
-import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
-import { shuffle, uniqueByValue } from "@/lib/utils/array";
+import { LANGS_WITH_CONTENT, queryString, shuffle, uniqueByValue, logError } from "@/lib/utils";
 
 export default {
   props: {
@@ -239,7 +237,7 @@ export default {
 
         let moreVideos = await this.$directus.getVideos({
           l2Id: this.$l2.id,
-          query: Helper.queryString(postParams),
+          query: queryString(postParams),
         });
         if (moreVideos) {
           videos = [...videos, ...moreVideos];
@@ -248,7 +246,7 @@ export default {
         // Make sure this video is included in the collection
         videos = [this.video, ...videos];
       }
-      videos = Helper.uniqueByValue(videos, "youtube_id");
+      videos = uniqueByValue(videos, "youtube_id");
       if (sort === "-date") {
         videos = videos.sort((a, b) =>
           b.date ? b.date.localeCompare(a.date) : 0
@@ -351,7 +349,7 @@ export default {
         }
         return video;
       } catch (err) {
-        Helper.logError(err);
+        logError(err);
       }
     },
     async getTranscript(video) {
@@ -397,7 +395,7 @@ export default {
         }
         return video;
       } catch (err) {
-        Helper.logError(err);
+        logError(err);
       }
       return video;
     },

@@ -101,7 +101,7 @@
 import Config from "@/lib/config";
 import Frequency from "@/components/Frequency";
 import WordPhotos from "@/lib/word-photos";
-import Helper from "@/lib/helper";
+import { highlight } from "@/lib/utils";
 
 export default {
   components: {
@@ -156,7 +156,7 @@ export default {
   },
   methods: {
     highlight(a, b, c) {
-      return Helper.highlight(a, b, c);
+      return highlight(a, b, c);
     },
     remove() {
       this.removed = true;

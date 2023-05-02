@@ -243,10 +243,9 @@
 
 <script>
 import Config from "@/lib/config";
-import axios from "axios";
 import Papa from "papaparse";
-import Helper from "@/lib/helper";
 import Vue from "vue";
+import { unique, formatK } from "@/lib/utils";
 
 export default {
   data() {
@@ -301,7 +300,7 @@ export default {
     if (res && res.data) {
       let parsed = Papa.parse(res.data, { header: true });
       let rows = parsed.data;
-      let l2Codes = Helper.unique(rows.map((r) => r.l2));
+      let l2Codes = unique(rows.map((r) => r.l2));
       let analytics = [];
       for (let l2Code of l2Codes) {
         let l2Rows = rows.filter((r) => r.l2 === l2Code);
@@ -333,7 +332,7 @@ export default {
       return ["en", "lzh", "hak", "nan"].includes(l2.code) ? "zh" : "en";
     },
     formatK() {
-      return Helper.formatK(...arguments);
+      return formatK(...arguments);
     },
     infiniteScroll(isVisible) {
       if (isVisible) {

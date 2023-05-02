@@ -70,9 +70,8 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
-import Config from '@/lib/config'
-import SketchEngine from '@/lib/sketch-engine'
+import SketchEngine from '@/lib/sketch-engine';
+import { highlight, randomArrayItem } from "@/lib/utils";
 
 export default {
   props: ['id', 'word', 'type'],
@@ -109,11 +108,11 @@ export default {
   },
   methods: {
     highlight(...args) {
-      return Helper.highlight(...args)
+      return highlight(...args)
     },
     choosePhrase() {
-      this.gramrel = Helper.randomArrayItem(this.word.sketch.Gramrels)
-      this.phrase = Helper.randomArrayItem(this.gramrel.Words, 0, 5).cm
+      this.gramrel = randomArrayItem(this.word.sketch.Gramrels)
+      this.phrase = randomArrayItem(this.gramrel.Words, 0, 5).cm
       this.gramrelNameSimplified = SketchEngine.collocationDescription(
         this.word.simplified
       )[this.gramrel.name]

@@ -36,9 +36,9 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import YouTube from "@/lib/youtube";
 import Vue from "vue";
+import { timeout } from "@/lib/utils";
 
 export default {
   props: {
@@ -310,7 +310,7 @@ export default {
         this.player.getPlayerState &&
         this.player.getPlayerState() === -1
       ) {
-        await Helper.timeout(1000); // So le'ts make sure we give it a second before doing anything
+        await timeout(1000); // So le'ts make sure we give it a second before doing anything
         if (
           this.video.youtube_id === youtube_id &&
           this.player.getPlayerState() === -1

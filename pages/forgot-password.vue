@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { background, timeout } from "@/lib/utils";
 
 export default {
   props: {
@@ -96,7 +96,7 @@ export default {
   },
   computed: {
     backgroundImage() {
-      return Helper.background(this.$l2);
+      return background(this.$l2);
     },
   },
   methods: {
@@ -128,7 +128,7 @@ export default {
     },
     async shake() {
       this.shaking = true;
-      await Helper.timeout(500);
+      await timeout(500);
       this.shaking = false;
     },
   },

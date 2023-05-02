@@ -51,7 +51,7 @@
 
 <script>
 import VRuntimeTemplate from "v-runtime-template";
-import Helper from "@/lib/helper";
+import { unique } from "@/lib/utils";
 
 export default {
   components: {
@@ -77,7 +77,7 @@ export default {
     let augmentedDefinitions = this.definitions;
     // augmentedDefinitions = this.parseCircleNumbersInDefinitions(augmentedDefinitions)
     augmentedDefinitions = await Promise.all(
-      Helper.unique(augmentedDefinitions).map(async (definition) => {
+      unique(augmentedDefinitions).map(async (definition) => {
         if (typeof definition === "string") definition = { text: definition };
         definition.html = await this.definitionHtml(definition.text);
         return definition;

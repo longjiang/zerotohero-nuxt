@@ -86,7 +86,8 @@
 import YouTubeNav from "@/components/YouTubeNav";
 import YouTubeChannelCard from "@/components/YouTubeChannelCard";
 import SimpleSearch from "@/components/SimpleSearch";
-import Helper from "@/lib/helper";
+import { uniqueByValue } from "@/lib/utils/array";
+import { TOPICS } from "@/lib/utils/language-levels";
 import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
 import { mapState } from "vuex";
 
@@ -151,7 +152,7 @@ export default {
   data() {
     let topics = [
       { value: "all", text: "All" },
-      ...Object.entries(Helper.topics).map(([value, text]) => {
+      ...Object.entries(TOPICS).map(([value, text]) => {
         return { value, text };
       }),
     ];
@@ -159,10 +160,9 @@ export default {
       channels: [],
       videos: undefined,
       noMoreVideos: false,
-      topics: Helper.topics,
+      topics,
       moreVideos: 0,
       topicData: this.topic,
-      topics,
       loading: false,
       showDiscover: false,
     };
@@ -321,7 +321,7 @@ export default {
             description: channel.description,
           };
         });
-        return Helper.uniqueByValue(channels, "youtube_id");
+        return uniqueByValue(channels, "youtube_id");
       }
     },
     route() {

@@ -69,8 +69,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
-import Config from "@/lib/config";
+import { l1Code } from "@/lib/utils";
+
 export default {
   props: {
     routeType: {
@@ -130,7 +130,7 @@ export default {
       this.randomShowRandomEpisode = historyItem.episode;
     },
     l1Code() {
-      return Helper.l1Code(...arguments);
+      return l1Code(...arguments);
     },
     async loadRandomShow() {
       let randomShow = this.getRandomShow();

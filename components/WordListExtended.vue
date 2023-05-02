@@ -29,7 +29,6 @@
 </template>
 <script>
 import WordCard from '@/components/WordCard'
-import Helper from '@/lib/helper'
 
 export default {
   components: {
@@ -38,7 +37,6 @@ export default {
   data() {
     return {
       listKey: 0,
-      Helper
     }
   },
   props: {

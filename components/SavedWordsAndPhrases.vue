@@ -163,7 +163,7 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
-import Helper from "@/lib/helper";
+import { specialLanguages, makeTextFile } from "@/lib/utils";
 
 export default {
   components: {
@@ -184,7 +184,7 @@ export default {
       showExportButtons: false,
       phrasesCSVHref: undefined,
       wordsCSVHref: undefined,
-      specials: Helper.specialLanguages,
+      specials: specialLanguages,
       query: {
         xs: {
           minWidth: 0,
@@ -333,7 +333,7 @@ export default {
         }
       }
       let wordsCSV = Papa.unparse(words);
-      this.wordsCSVHref = Helper.makeTextFile(wordsCSV);
+      this.wordsCSVHref = makeTextFile(wordsCSV);
       let phrases = [];
       if (this.savedPhrasesSorted) {
         for (let savedPhrasesLang of this.savedPhrasesSorted) {
@@ -347,7 +347,7 @@ export default {
         }
       }
       let phrasesCSV = Papa.unparse(phrases);
-      this.phrasesCSVHref = Helper.makeTextFile(phrasesCSV);
+      this.phrasesCSVHref = makeTextFile(phrasesCSV);
     },
     emitHasDashboard() {
       let dashboardItems = [];

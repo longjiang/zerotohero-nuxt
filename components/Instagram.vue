@@ -36,7 +36,7 @@
             <p
               class="example-sentence-word"
               v-html="
-                Helper.highlight(entry.example, entry.simplified, entry.hsk)
+                highlight(entry.example, entry.simplified, entry.hsk)
               "
             ></p>
             <hr />
@@ -51,34 +51,23 @@
 </template>
 
 <script>
-import EntryHeader from '@/components/EntryHeader'
-import Helper from '@/lib/helper'
-import Config from '@/lib/config'
-import LanguageLogo from'@/components/LanguageLogo'
-import DefinitionsList from '@/components/DefinitionsList'
+import { imageUrl, imageProxy, highlight } from '@/lib/utils'
 
 export default {
-  components: {
-    EntryHeader,
-    LanguageLogo,
-    DefinitionsList
-  },
   props: {
     entry: {
       type: Object
     }
   },
-  computed: {
-    imageUrl() {
-      return Config.imageUrl
-    },
-    imageProxy() {
-      return Config.imageProxy
+  data() {
+    return {
+      imageUrl,
+      imageProxy
     }
   },
   methods: {
     highlight(...args) {
-      return Helper.highlight(...args)
+      return highlight(...args)
     },
   }
 }

@@ -83,8 +83,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import { mapState } from "vuex";
+import { wide, isMobile } from "@/lib/utils";
 
 export default {
   props: {
@@ -105,7 +105,7 @@ export default {
     };
   },
   mounted() {
-    this.wide = Helper.wide();
+    this.wide = wide();
   },
   computed: {
     ...mapState("settings", ["l2Settings"]),
@@ -116,7 +116,7 @@ export default {
       return $l2Settings;
     },
     isMobile() {
-      return Helper.isMobile();
+      return isMobile();
     },
     displayTitle() {
       if (

@@ -33,7 +33,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { randomInt, unique} from "@/lib/utils";
+
 export default {
   props: {
     type: {
@@ -71,9 +72,9 @@ export default {
     generateRandomIds(max, count = 500) {
       let randIds = [];
       for (let i = 0; i < count; i++) {
-        randIds.push(Helper.randomInt(max));
+        randIds.push(randomInt(max));
       }
-      return Helper.unique(randIds);
+      return unique(randIds);
     },
     async loadRandomShowsMatchingIds(ids, adminMode) {
       let response = await this.$directus.get(

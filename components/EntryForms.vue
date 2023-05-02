@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { isEmpty, ucFirst, groupArrayBy } from "@/lib/utils";
 
 export default {
   props: {
@@ -105,10 +105,10 @@ export default {
   },
   methods: {
     isEmpty(...args) {
-      return Helper.isEmpty(...args);
+      return isEmpty(...args);
     },
     ucFirst(...args) {
-      return Helper.ucFirst(...args);
+      return ucFirst(...args);
     },
     async getTables() {
       // https://www.consolelog.io/group-by-in-javascript/
@@ -116,7 +116,7 @@ export default {
       let dictionary = await this.$getDictionary();
       let forms = await dictionary.inflect(this.word.head);
       forms = forms.filter((form) => form.table !== "head");
-      this.tables = Helper.groupArrayBy(forms, "table");
+      this.tables = groupArrayBy(forms, "table");
       this.checking = false;
     },
   },

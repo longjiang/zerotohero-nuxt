@@ -102,7 +102,7 @@
 <script>
 import WordListExtended from "@/components/WordListExtended.vue";
 import EntryCharacters from "@/components/EntryCharacters.vue";
-import Helper from "@/lib/helper";
+import { highlight } from "@/lib/utils";
 
 export default {
   components: {
@@ -116,7 +116,7 @@ export default {
   },
   methods: {
     highlight(a, b, c) {
-      return Helper.highlight(a, b, c);
+      return highlight(a, b, c);
     },
     currentIndex() {
       return this.roots.findIndex((root) => root.pattern === this.arg);

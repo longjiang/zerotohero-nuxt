@@ -71,7 +71,7 @@
 
 <script>
 import DateHelper from "@/lib/date-helper";
-import Helper from "@/lib/helper";
+import { scrollToTargetAdjusted } from "@/lib/utils";
 
 export default {
   props: {
@@ -187,7 +187,7 @@ export default {
       this.duration = duration;
       if (this.layout !== "mini" && !Helper.wide()) {
         let el = this.$refs["youtube"];
-        if (el) Helper.scrollToTargetAdjusted(el.$el, 43);
+        if (el) scrollToTargetAdjusted(el.$el, 43);
       }
       this.saveHistory({ type: this.type, video, duration });
     },

@@ -36,8 +36,8 @@
 
 <script>
 import Papa from "papaparse";
-import Config from "@/lib/config";
 import axios from "axios";
+import { SERVER, logError } from "@/lib/utils";
 
 export default {
   props: {
@@ -57,10 +57,10 @@ export default {
     let res
     try {
       res = await axios.get(
-        `${Config.server}data/56-ethnic-groups/56-ethnic-groups-of-china.csv.txt`
+        `${SERVER}data/56-ethnic-groups/56-ethnic-groups-of-china.csv.txt`
       );
     } catch (err) {
-      Helper.logError(err);
+      logError(err);
     }
     if (res && res.data) {
       let parsed = Papa.parse(res.data, {

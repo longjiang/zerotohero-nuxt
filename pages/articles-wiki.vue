@@ -71,8 +71,7 @@
 import Config from "@/lib/config";
 import ArticlesList from "@/components/ArticlesList.vue";
 import ArticleCard from "@/components/ArticleCard.vue";
-import axios from "axios";
-import Helper from "@/lib/helper";
+import { unescape, stripTags } from "@/lib/utils";
 
 export default {
   components: {
@@ -90,10 +89,10 @@ export default {
   },
   methods: {
     unescape(escapedHTML) {
-      return Helper.unescape(escapedHTML);
+      return unescape(escapedHTML);
     },
     stripTags(html) {
-      return Helper.stripTags(html);
+      return stripTags(html);
     },
   },
   async fetch() {

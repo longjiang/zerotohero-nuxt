@@ -97,8 +97,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import SketchEngine from "@/lib/sketch-engine";
+import { highlightMultiple } from "@/lib/utils";
 
 export default {
   props: {
@@ -133,7 +133,7 @@ export default {
   },
   methods: {
     highlightMultiple(...args) {
-      return Helper.highlightMultiple(...args);
+      return highlightMultiple(...args);
     },
     async update() {
       this.updating = true;

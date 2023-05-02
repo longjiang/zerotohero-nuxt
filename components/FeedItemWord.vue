@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { logError, highlightMultiple, unique } from "@/lib/utils";
 import { transliterate } from "transliteration";
 
 export default {
@@ -141,7 +141,7 @@ export default {
       return transliterate(...args);
     },
     highlightMultiple(...args) {
-      return Helper.highlightMultiple(...args);
+      return highlightMultiple(...args);
     },
     async getVideo() {
       try {
@@ -158,7 +158,7 @@ export default {
           return hits[0];
         }
       } catch (err) {
-        Helper.logError(err);
+        logError(err);
       }
     },
     filterDefinitions(word) {
@@ -166,7 +166,7 @@ export default {
       let definitions = word.definitions;
       if (this.$l2.code === "zh")
         definitions = definitions.filter((def) => !def.startsWith("CL"));
-      definitions = Helper.unique(definitions);
+      definitions = unique(definitions);
       if (this.maxDefinitions)
         definitions = definitions.slice(0, this.maxDefinitions);
       return definitions;

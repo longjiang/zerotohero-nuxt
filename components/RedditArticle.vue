@@ -45,9 +45,9 @@
 
 <script>
 import Config from "@/lib/config";
-import Helper from "@/lib/helper";
 import RedditArticleCard from "@/components/RedditArticleCard";
 import axios from "axios";
+import { unescape, stripTags } from "@/lib/utils";
 
 export default {
   props: ["articleId"],
@@ -64,10 +64,10 @@ export default {
 
   methods: {
     unescape(escapedHTML) {
-      return Helper.unescape(escapedHTML);
+      return unescape(escapedHTML);
     },
     stripTags(html) {
-      return Helper.stripTags(html);
+      return stripTags(html);
     },
   },
 

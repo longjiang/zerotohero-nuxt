@@ -185,7 +185,7 @@
 
 <script>
 import Papa from "papaparse";
-import Helper from "@/lib/helper";
+import { unique } from "@/lib/utils";
 
 export default {
   /**
@@ -229,7 +229,7 @@ export default {
     },
     langs() {
       if (this.phrasesInAllLangs) {
-        return Helper.unique(
+        return unique(
           this.phrasesInAllLangs.filter((p) => p.l2).map((p) => p.l2.code)
         );
       }

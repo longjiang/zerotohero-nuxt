@@ -137,8 +137,8 @@
 </template>
 <script>
 import Marked from "marked";
-import Helper from "@/lib/helper";
 import { ContainerQuery } from "vue-container-query";
+import { unique, timeout } from "@/lib/utils";
 
 export default {
   components: {
@@ -204,7 +204,7 @@ export default {
             }
           }
         }
-        foundWordIds = Helper.unique(foundWordIds);
+        foundWordIds = unique(foundWordIds);
         return foundWordIds;
       }
     },
@@ -234,7 +234,7 @@ export default {
   watch: {
     async text() {
       let typing = this.text;
-      await Helper.timeout(1000);
+      await timeout(1000);
       if (typing === this.text) {
         this.textThrottled = this.text;
         this.$emit("readerTextChanged", this.text);
@@ -242,7 +242,7 @@ export default {
     },
     async translation() {
       let typing = this.translation;
-      await Helper.timeout(1000);
+      await timeout(1000);
       if (typing === this.translation) {
         this.$emit("readerTranslationChanged", this.translation);
       }

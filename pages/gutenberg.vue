@@ -90,9 +90,9 @@
 
 <script>
 import axios from "axios";
-import Helper from "@/lib/helper";
 import { parse } from "node-html-parser";
 import { mapState } from "vuex";
+import { proxy, logError } from "@/lib/utils";
 
 export default {
   props: {
@@ -145,7 +145,7 @@ export default {
         }
       }
       if (this.bookData.formats["text/html"]) {
-        let html = await Helper.proxy(this.bookData.formats["text/html"]);
+        let html = await proxy(this.bookData.formats["text/html"]);
         if (html) this.html = html;
       }
       this.$store.dispatch(
@@ -155,7 +155,7 @@ export default {
         })
       );
     } catch (err) {
-      Helper.logError(err);
+      logError(err);
     }
   },
   methods: {

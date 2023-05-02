@@ -49,13 +49,8 @@
   </div>
 </template>
 <script>
-import Helper from '@/lib/helper'
+
 export default {
-  data() {
-    return {
-      Helper
-    }
-  },
   props: {
     characters: {
       type: Array

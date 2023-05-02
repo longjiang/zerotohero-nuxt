@@ -414,8 +414,7 @@
 <script>
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
-import Helper from "@/lib/helper";
-import { languageLevels, formatK } from "@/lib/utils";
+import { languageLevels, formatK, TOPICS, makeTextFile, normalizeCircleNumbers, uniqueByValue, logError, timeout } from "@/lib/utils";
 import Vue from "vue";
 import SmartQuotes from "smartquotes";
 
@@ -453,7 +452,7 @@ export default {
       saving: false,
       showSubsEditing: false,
       subsUpdated: false,
-      topics: Helper.topics,
+      topics: TOPICS,
       transcriptKey: 0,
       translation: "",
       translationURL: undefined,
@@ -462,7 +461,7 @@ export default {
   },
   computed: {
     levels() {
-      return Helper.languageLevels(this.$l2);
+      return languageLevels(this.$l2);
     },
     text() {
       if (this.video.subs_l2)
@@ -471,7 +470,7 @@ export default {
           .join("\n");
     },
     originalTextHref() {
-      return Helper.makeTextFile(this.text);
+      return makeTextFile(this.text);
     },
   },
   async mounted() {
@@ -569,13 +568,13 @@ export default {
         /[(（【［\[〔]*(\d+)[)）〕】］\]]*/g,
         "[$1]"
       );
-      normalized = Helper.normalizeCircleNumbers(normalized);
+      normalized = normalizeCircleNumbers(normalized);
       normalized = SmartQuotes.string(normalized);
       return normalized;
     },
     normalizeNoteStart(line) {
       let notes = line;
-      notes = Helper.normalizeCircleNumbers(notes);
+      notes = normalizeCircleNumbers(notes);
       notes = notes
         .trim()
         .replace(/^[\d【】\[\]〔〕［］\(\)（）]+[.．、]*\s*/, "");
@@ -617,7 +616,7 @@ export default {
           this.videoInfoKey++;
         }
       } catch (err) {
-        Helper.logError(err);
+        logError(err);
       }
     },
     async saveShow(show, type) {
@@ -668,7 +667,7 @@ export default {
             prevLine = line;
           }
         }
-        this.video.subs_l2 = Helper.uniqueByValue(subs_l2, "starttime");
+        this.video.subs_l2 = uniqueByValue(subs_l2, "starttime");
         this.firstLineTime = this.video.subs_l2[0].starttime;
         this.originalText = this.text; // Update the text in the textarea
         this.transcriptKey++;
@@ -706,7 +705,7 @@ export default {
       if (data) {
         this.updating = false;
         this.subsUpdated = true;
-        await Helper.timeout(2000);
+        await timeout(2000);
         this.subsUpdated = false;
       }
     },

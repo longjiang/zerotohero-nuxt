@@ -56,13 +56,13 @@ const decompositionTemplate = {
   </div>`,
 };
 
-import Helper from "@/lib/helper";
+import { uniqueId } from "@/lib/utils";
 
 export default {
   props: ["char", "quiz"],
   data() {
     return {
-      id: "decomposition-" + Helper.uniqueId(),
+      id: "decomposition-" + uniqueId(),
     };
   },
   mounted() {

@@ -319,10 +319,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import { NON_PRO_MAX_SUBS_SEARCH_HITS } from "@/lib/config";
-import { mapState } from "vuex";
-import { unique } from "@/lib/utils/array";
+import { unique, ucFirst, timeout, highlightMultiple, iOS } from "@/lib/utils";
 
 export default {
   props: {
@@ -388,8 +386,8 @@ export default {
     },
     hits() {
       let hits = [];
-      for (let index of this[`groupIndex${Helper.ucFirst(this.sort)}`]) {
-        for (let hit of this[`groups${Helper.ucFirst(this.sort)}`][index]) {
+      for (let index of this[`groupIndex${ucFirst(this.sort)}`]) {
+        for (let hit of this[`groups${ucFirst(this.sort)}`][index]) {
           hits.push(hit);
         }
       }
@@ -456,7 +454,7 @@ export default {
       let video = this.currentHit.video;
       if (youtube_id && youtube_id !== video.youtube_id) return; // Always make sure the unavailable video is indeed what the user is looking at
       // Go to next video
-      await Helper.timeout(2000);
+      await timeout(2000);
       if (this.currentHit.video.youtube_id === youtube_id)
         this.removeCurrentHitAndGoToNext();
     },
@@ -470,7 +468,7 @@ export default {
       this.$refs["playlist-modal"].show();
     },
     async onPlaylistModalShown() {
-      await Helper.timeout(500);
+      await timeout(500);
       if (this.$refs["playlist-modal-current-item"]) {
         let ref = this.$refs["playlist-modal-current-item"][0];
         ref.scrollIntoView({ block: "center" });
@@ -614,13 +612,13 @@ export default {
       return this[name];
     },
     ucFirst() {
-      return Helper.ucFirst(...arguments);
+      return ucFirst(...arguments);
     },
     highlightMultiple(a, b, c) {
-      return Helper.highlightMultiple(a, b, c);
+      return highlightMultiple(a, b, c);
     },
     iOS() {
-      return Helper.iOS();
+      return iOS();
     },
     collectContext(hits) {
       let contextLeft = [];

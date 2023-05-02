@@ -80,8 +80,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import Dewey from "@/lib/dewey";
+import { saved } from "@/lib/utils";
 
 export default {
   data() {
@@ -122,8 +122,8 @@ export default {
       if (Array.isArray(textOrCandidates)) {
         const candidates = textOrCandidates;
         for (let candidate of candidates) {
-          const saved = Helper.saved(candidate);
-          if (saved) $(block).addClass("saved");
+          const isSaved = saved(candidate);
+          if (isSaved) $(block).addClass("saved");
         }
         $(block)
           .addClass("word-block-related")

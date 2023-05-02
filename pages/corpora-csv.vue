@@ -22,7 +22,7 @@
 </template>
 <script>
 import axios from "axios";
-import Helper from "@/lib/helper";
+import { makeTextFile } from "@/lib/utils";
 
 export default {
   data() {
@@ -62,7 +62,7 @@ export default {
           return o;
         });
         let csv = Papa.unparse(data);
-        this.href = Helper.makeTextFile(csv);
+        this.href = makeTextFile(csv);
       }
     },
   },

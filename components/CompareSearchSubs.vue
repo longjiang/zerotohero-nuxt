@@ -243,7 +243,7 @@
 
 <script>
 import SearchSubsComp from "@/components/SearchSubsComp";
-import Helper from "@/lib/helper";
+import { highlightMultiple } from "@/lib/utils";
 
 export default {
   components: {
@@ -315,7 +315,7 @@ export default {
   },
   methods: {
     highlightMultiple(...args) {
-      return Helper.highlightMultiple(...args)
+      return highlightMultiple(...args)
     },
     showPlaylistModal() {
       this.$refs["playlist-modal"].show();

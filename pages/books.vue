@@ -81,8 +81,8 @@
 
 <script>
 import { ContainerQuery } from "vue-container-query";
-import Helper from "@/lib/helper";
 import InfiniteLoading from "vue-infinite-loading";
+import { proxy, unique, queryString, logError } from "@/lib/utils";
 
 export default {
   components: {
@@ -162,8 +162,8 @@ export default {
         if (this.bookshelf) {
           params.topic = this.bookshelf;
         }
-        let data = await Helper.proxy(
-          "http://gutendex.com/books?" + Helper.queryString(params)
+        let data = await proxy(
+          "http://gutendex.com/books?" + queryString(params)
         );
         if (data && data.results) {
           let books = data.results;
@@ -174,12 +174,12 @@ export default {
           this.books.forEach(
             (b) => (bookshelves = bookshelves.concat(b.bookshelves))
           );
-          this.bookshelves = Helper.unique(bookshelves).sort((a, b) =>
+          this.bookshelves = unique(bookshelves).sort((a, b) =>
             a.localeCompare(b)
           );
         }
       } catch (err) {
-        Helper.logError(err);
+        logError(err);
       }
     },
     async loadMoreBooks($state) {
@@ -189,7 +189,7 @@ export default {
       }
 
       try {
-        let data = await Helper.proxy(this.next);
+        let data = await proxy(this.next);
 
         if (data && data.results) {
           this.books = this.books.concat(data.results);
@@ -200,7 +200,7 @@ export default {
           data.results.forEach(
             (b) => (bookshelves = bookshelves.concat(b.bookshelves))
           );
-          this.bookshelves = Helper.unique(bookshelves).sort((a, b) =>
+          this.bookshelves = unique(bookshelves).sort((a, b) =>
             a.localeCompare(b)
           );
         }
@@ -211,7 +211,7 @@ export default {
           $state.complete();
         }
       } catch (err) {
-        Helper.logError(err);
+        logError(err);
         $state.error();
       }
     },

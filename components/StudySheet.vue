@@ -50,8 +50,7 @@
 import WordBlock from '@/components/WordBlock'
 import WordBlockDictionary from '@/components/WordBlockDictionary'
 import VRuntimeTemplate from 'v-runtime-template'
-import Helper from '@/lib/helper'
-import { reject } from '@/lib/utils/language-levels'
+import { reject, splitByReg } from '@/lib/utils'
 
 export default {
   components: {
@@ -154,7 +153,7 @@ export default {
         dictionaryTemplate = ''
         text = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '') // strip accents e.g. résumé -> resume
         this.tokenized[batchId] = []
-        let segs = Helper.splitByReg(text, /([a-zA-Z0-9]+)/gi)
+        let segs = splitByReg(text, /([a-zA-Z0-9]+)/gi)
         var lemmatizer = new Lemmatizer()
         for (let seg of segs) {
           let word = seg.toLowerCase()

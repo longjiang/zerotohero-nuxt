@@ -70,7 +70,7 @@
 <script>
 import Config from "@/lib/config";
 import smoothscroll from "smoothscroll-polyfill";
-import Helper from "@/lib/helper";
+import { wide, timeout } from "@/lib/utils"
 import { mapState } from "vuex";
 import { DelayHydration } from "nuxt-delay-hydration/dist/components";
 
@@ -163,7 +163,7 @@ export default {
         );
     }
     this.subscribeToVuexMutations();
-    this.wide = Helper.wide();
+    this.wide = wide();
     smoothscroll.polyfill(); // Safari does not support smoothscroll
     if (!this.$store.state.history.historyLoaded) {
       this.$store.dispatch("history/load");
@@ -368,7 +368,7 @@ export default {
         if (deltaX < 0 && this.edgeDetected === "right") {
           this.transition = true;
           this.translateX = -1 * window.innerWidth;
-          await Helper.timeout(500);
+          await timeout(500);
           this.transition = false;
           this.$router.forward();
           this.translateX = 0;
@@ -376,7 +376,7 @@ export default {
         if (deltaX > 0 && this.edgeDetected === "left") {
           this.transition = true;
           this.translateX = window.innerWidth;
-          await Helper.timeout(500);
+          await timeout(500);
           this.transition = false;
           this.$router.back();
           this.translateX = 0;
@@ -409,7 +409,7 @@ export default {
           duration: 1000,
           iterations: 1,
         });
-        await Helper.timeout(1000);
+        await timeout(1000);
         star.style.display = "none";
       }
     },
@@ -430,7 +430,7 @@ export default {
       this.skin = skin;
     },
     onResize() {
-      this.wide = Helper.wide();
+      this.wide = wide();
     },
     updatei18n() {
       this.$i18n.locale = this.l1.code;

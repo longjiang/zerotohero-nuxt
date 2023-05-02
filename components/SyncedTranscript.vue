@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { uniqueId, timeout, speak, documentOffsetTop } from "@/lib/utils";
 import Vue from "vue";
 
 import { NON_PRO_MAX_LINES } from "@/lib/config";
@@ -182,7 +182,7 @@ export default {
   data() {
     return {
       sW: [],
-      id: Helper.uniqueId(),
+      id: uniqueId(),
       previousTime: 0,
       currentTime: 0,
       currentLine: undefined,
@@ -300,7 +300,7 @@ export default {
     async currentLine() {
       if (!this.single && !this.paused) this.scrollTo(this.currentLineIndex);
       if (!this.paused && this.showAnimation) {
-        if (this.single) await Helper.timeout(100); // wait for the element to render first
+        if (this.single) await timeout(100); // wait for the element to render first
         this.playCurrentLineAnimation(this.single ? 0.1 : 0);
       }
     },
@@ -409,7 +409,7 @@ export default {
     },
     async trasnlationLineKeydown(e) {
       if (e.key === "Enter") {
-        await Helper.timeout(100);
+        await timeout(100);
         this.trasnlationLineChanged(e);
         this.goToNextLine();
       }
@@ -609,7 +609,7 @@ export default {
         this.matchedParallelLines[this.currentLineIndex]
       ) {
         this.$emit("speechStart");
-        let englishPromise = Helper.speak(
+        let englishPromise = speak(
           this.matchedParallelLines[this.currentLineIndex],
           this.$l1,
           1.1
@@ -619,7 +619,7 @@ export default {
       if (!this.audioCancelled && !window.speechSynthesis.speaking) {
         if (this.currentLine) {
           this.$emit("speechStart");
-          let japanesePromise = Helper.speak(
+          let japanesePromise = speak(
             this.currentLine.line,
             this.$l2,
             1
@@ -707,7 +707,7 @@ export default {
         `.transcript-line[data-line-index="${lineIndex}"]`
       );
       if (el) {
-        let elementTop = Helper.documentOffsetTop(el); // distance from top of the document to the top of the element
+        let elementTop = documentOffsetTop(el); // distance from top of the document to the top of the element
         let offset = this.scrollOffset(el);
         let top = elementTop + offset;
         let scrollDistanceIsLarge = Math.abs(window.scrollY - top) > 1000;

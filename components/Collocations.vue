@@ -135,7 +135,7 @@
 
 <script>
 import SketchEngine from "@/lib/sketch-engine";
-import Helper from "@/lib/helper";
+import { highlight } from "@/lib/utils";
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
 
@@ -234,7 +234,7 @@ export default {
 
   methods: {
     highlight() {
-      return Helper.highlight(...arguments);
+      return highlight(...arguments);
     },
     saveLine(collocation) {
       this.$store.dispatch("savedCollocations/add", {

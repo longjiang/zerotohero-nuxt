@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { unescape, stripTags } from "@/lib/utils";
 
 export default {
   props: ["article"],
@@ -47,10 +47,10 @@ export default {
   },
   methods: {
     unescape(escapedHTML) {
-      return Helper.unescape(escapedHTML);
+      return unescape(escapedHTML);
     },
     stripTags(html) {
-      return Helper.stripTags(html);
+      return stripTags(html);
     },
   },
   created() {},

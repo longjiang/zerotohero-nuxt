@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { uniqueByValue } from "@/lib/utils";
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
 
@@ -175,7 +175,7 @@ export default {
       }
       languages = languages.filter((l) => l && !this.hide.includes(l.code));
       if (this.sort && languages) {
-        languages = Helper.uniqueByValue(languages, "iso639-3").sort((a, b) =>
+        languages = uniqueByValue(languages, "iso639-3").sort((a, b) =>
           this.languageName(a).localeCompare(this.languageName(b), "en")
         );
       }

@@ -16,16 +16,10 @@
 
 <script>
 import Resource from '@/components/Resource'
-import Helper from '@/lib/helper'
 
 export default {
   components: {
     Resource
-  },
-  data() {
-    return {
-      Helper
-    }
   },
   props: {
     resources: {

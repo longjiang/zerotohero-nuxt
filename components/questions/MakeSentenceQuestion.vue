@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
+import { highlight } from "@/lib/utils"
 import Config from '@/lib/config'
 
 export default {
@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     highlight(...args) {
-      return Helper.highlight(...args)
+      return highlight(...args)
     }
   },
 }
