@@ -1,4 +1,4 @@
-import Helper from '@/lib/helper'
+import { proxy, logError } from '@/lib/utils'
 
 export const state = () => {
   return {
@@ -22,7 +22,7 @@ export const actions = {
     try {
       let stats = {}
       let tableSuffix = this.$directus.youtubeVideosTableName(l2.id).replace(`items/youtube_videos`, '')
-      let data = await Helper.proxy(
+      let data = await proxy(
         `${LP_DIRECTUS8_TOOLS_URL}count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=new_videos`,
         { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
@@ -31,7 +31,7 @@ export const actions = {
 
       let music = rootGetters["shows/music"]({ l2 })
       if (music) {
-        data = await Helper.proxy(
+        data = await proxy(
           `${LP_DIRECTUS8_TOOLS_URL}count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${music.id}`,
           { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
         );
@@ -42,7 +42,7 @@ export const actions = {
 
       let movies = rootGetters["shows/movies"]({ l2 })
       if (movies) {
-        data = await Helper.proxy(
+        data = await proxy(
           `${LP_DIRECTUS8_TOOLS_URL}count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=tv_show&id=${movies.id}`,
           { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
         );
@@ -53,7 +53,7 @@ export const actions = {
 
       let news = rootGetters["shows/news"]({ l2 })
       if (news) {
-        data = await Helper.proxy(
+        data = await proxy(
           `${LP_DIRECTUS8_TOOLS_URL}count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}&type=talk&id=${news.id}`,
           { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
         );
@@ -62,7 +62,7 @@ export const actions = {
       }
 
 
-      data = await Helper.proxy(
+      data = await proxy(
         `${LP_DIRECTUS8_TOOLS_URL}count.php?table_suffix=${tableSuffix}&lang_id=${l2.id}`,
         { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
@@ -72,7 +72,7 @@ export const actions = {
 
       commit('LOAD', { l2, stats })
     } catch (err) {
-      Helper.logError(err)
+      logError(err)
     }
   },
 }

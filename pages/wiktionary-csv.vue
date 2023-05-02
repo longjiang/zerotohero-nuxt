@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import Helper from "@/lib/helper";
+import { makeTextFile } from "@/lib/helper";
 export default {
   computed: {
   },
@@ -46,12 +46,12 @@ export default {
       let dictionary = await this.$getDictionary();
       if ((await dictionary).exportCSV) {
         let csv = await (await dictionary).exportCSV();
-        this.href = Helper.makeTextFile(csv);
+        this.href = makeTextFile(csv);
       }
     },
     async languageCSVExport() {
       let csv = await this.$languages.exportCSV();
-      this.languagesHref = Helper.makeTextFile(csv);
+      this.languagesHref = makeTextFile(csv);
     },
   },
 };

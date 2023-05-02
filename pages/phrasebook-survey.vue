@@ -91,11 +91,9 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
-import axios from "axios";
 import Papa from "papaparse";
-import Helper from "@/lib/helper";
 import Vue from "vue";
+import { unique } from "@/lib/utils";
 
 export default {
   props: {
@@ -146,7 +144,7 @@ export default {
         );
         phrases = phrases.filter((p) => p.en);
         let groups = this.sortPhrases(phrases, "en");
-        this.langs = Helper.unique(phrasebooks.map((p) => p.l2));
+        this.langs = unique(phrasebooks.map((p) => p.l2));
         this.phrases = phrases;
         this.phrasebooks = phrasebooks;
         this.groups = groups.slice(0, 1000);

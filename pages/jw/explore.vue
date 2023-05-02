@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { proxyParsed, shuffle, uniqueByValue } from "@/lib/helper";
 import Wol from "@/lib/jw/Wol";
 
 export default {
@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     async processResearchGuide(url) {
-      let root = await Helper.proxyParsed(url);
+      let root = await proxyParsed(url);
       // Get random subjects
       var $rows = root.querySelectorAll(".row");
       var subject_links = [];
@@ -75,8 +75,8 @@ export default {
           this.getRandomArticles(articlesNested)
         );
       }
-      randomArticles = Helper.shuffle(
-        Helper.uniqueByValue(randomArticles, "url")
+      randomArticles = shuffle(
+        uniqueByValue(randomArticles, "url")
       );
       return { subjectsNested, randomArticles };
     },
@@ -97,7 +97,7 @@ export default {
     getRandomArticles(articlesNested) {
       let articles = this.flatten(articlesNested);
       // Get 10 random articles
-      let randomArticles = Helper.shuffle(articles);
+      let randomArticles = shuffle(articles);
 
       randomArticles = randomArticles.slice(
         0,

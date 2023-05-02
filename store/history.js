@@ -1,5 +1,4 @@
-import Helper from '@/lib/helper'
-import Config from '@/lib/config'
+import { logError, uniqueByValue } from '@/lib/helper'
 
 export const state = () => {
   return {
@@ -14,7 +13,7 @@ export const mutations = {
       try {
         history = JSON.parse(json)
       } catch (err) {
-        Helper.logError(err)
+        logError(err)
       }
       if (history) {
         state.history = history
@@ -26,7 +25,7 @@ export const mutations = {
   LOAD_HISTORY(state) {
     if (typeof localStorage !== 'undefined') {
       let history = JSON.parse(localStorage.getItem('zthHistory') || '[]')
-      history = Helper.uniqueByValue(history, 'id')
+      history = uniqueByValue(history, 'id')
       state.history = history || state.history
       state.historyLoaded = true
     }

@@ -101,8 +101,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
-import { removeInlineStylesFromString } from "@/lib/utils";
+import { removeInlineStylesFromString, level } from "@/lib/utils";
 
 export default {
   props: ["level"],
@@ -122,7 +121,7 @@ export default {
   },
   methods: {
     getLevel(...args) {
-      return Helper.level(...args);
+      return level(...args);
     },
     goto(id) {
       this.$router.push({

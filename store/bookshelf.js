@@ -1,5 +1,4 @@
-import Helper from '@/lib/helper'
-import Config from '@/lib/config'
+import { logError, uniqueByValue } from '@/lib/utils'
 
 export const state = () => {
   return {
@@ -14,7 +13,7 @@ export const mutations = {
       try {
         item = JSON.parse(json)
       } catch (err) {
-        Helper.logError(err)
+        logError(err)
       }
       if (item) {
         state.items = item
@@ -26,7 +25,7 @@ export const mutations = {
   LOAD(state) {
     if (typeof localStorage !== 'undefined') {
       let items = JSON.parse(localStorage.getItem('zthBookshelf') || '[]')
-      items = Helper.uniqueByValue(items, 'id')
+      items = uniqueByValue(items, 'id')
       state.items = items || state.items
       state.loaded = true
     }

@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { groupArrayBy, makeTextFile } from "@/lib/utils";
 import Papa from "papaparse";
 
 export default {
@@ -175,7 +175,7 @@ export default {
           : 0;
         return r;
       });
-      let groups = Helper.groupArrayBy(savedWords, "date");
+      let groups = groupArrayBy(savedWords, "date");
       groups = Object.keys(groups).map((date) => {
         return {
           date,
@@ -186,7 +186,7 @@ export default {
         return groups.sort((a, b) => b.date.localeCompare(a.date));
     },
     csvHref() {
-      return Helper.makeTextFile(this.csv);
+      return makeTextFile(this.csv);
     },
     $dictionaryName() {
       return this.$store.state.settings.dictionaryName;

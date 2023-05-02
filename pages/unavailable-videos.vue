@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import Helper from "@/lib/helper";
+import { unique, logError } from "@/lib/utils";
 
 export default {
   computed: {
@@ -47,8 +47,8 @@ export default {
   methods: {
     async resolveReports(reports) {
       let reportedYouTubeIds = reports.map((r) => r.youtube_id);
-      let reportedLanguages = Helper.unique(reports.map((r) => r.l2));
-      let dbTablesOfReportedLanguages = Helper.unique(
+      let reportedLanguages = unique(reports.map((r) => r.l2));
+      let dbTablesOfReportedLanguages = unique(
         reportedLanguages.map((l) => this.$directus.youtubeVideosTableName(l))
       );
       let videos = [];
@@ -59,7 +59,7 @@ export default {
           let res = await this.$directus.get(url);
           if (res && res.data) videos = videos.concat(res.data.data);
         } catch (err) {
-          Helper.logError(err);
+          logError(err);
         }
       }
       return videos;

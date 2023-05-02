@@ -168,9 +168,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
-import Helper from "@/lib/helper";
-import axios from "axios";
 import Papa from "papaparse";
 import Vue from "vue";
 

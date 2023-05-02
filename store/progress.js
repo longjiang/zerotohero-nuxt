@@ -1,4 +1,4 @@
-import Helper from '@/lib/helper'
+import { logError } from '@/lib/helper'
 
 export const DEFAULT_LEVEL = 1
 export const DEFAULT_WEEKLY_HOURS = 7
@@ -16,7 +16,7 @@ export const mutations = {
       try {
         progress = JSON.parse(json)
       } catch (err) {
-        Helper.logError(err)
+        logError(err)
       }
       if (progress) {
         state.progress = progress
@@ -113,7 +113,7 @@ export const actions = {
     let path = `items/user_data/${dataId}?fields=id,progress`
     let res = await this.$directus.get(path)
       .catch(async (err) => {
-        Helper.logError(err, 'progress.js: fetchProgressFromServer()')
+        logError(err, 'progress.js: fetchProgressFromServer()')
       })
     if (res && res.data && res.data.data) {
       let progress = JSON.parse(res.data.data.progress)
@@ -161,7 +161,7 @@ export const actions = {
       console.log('🕙 Saving progress to the server...')
       await this.$directus.patch(path, payload)
         .catch(async (err) => {
-          Helper.logError(err, 'progress.js: push()')
+          logError(err, 'progress.js: push()')
         })
     }
   }

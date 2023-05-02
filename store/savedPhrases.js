@@ -1,4 +1,4 @@
-import Config from '@/lib/config'
+import { logError } from "@/lib/utils"
 
 export const state = () => {
   return {
@@ -57,7 +57,7 @@ export const mutations = {
       try {
         savedPhrases = JSON.parse(json)
       } catch (err) {
-        Helper.logError(err)
+        logError(err)
       }
       if (savedPhrases) {
         state.savedPhrases = savedPhrases

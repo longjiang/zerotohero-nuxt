@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { background } from "@/lib/utils";
 export default {
   data() {
     return {
@@ -48,7 +48,7 @@ export default {
   },
   computed: {
     backgroundImage() {
-      return Helper.background(this.$l2);
+      return background(this.$l2);
     },
   },
   methods: {

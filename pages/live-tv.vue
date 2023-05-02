@@ -173,9 +173,8 @@
 
 <script>
 import axios from "axios";
-import Config from "@/lib/config";
+import { uniqueByValue, unique, escapeRegExp, SERVER } from "@/lib/utils";
 import Papa from "papaparse";
-import Helper from "@/lib/helper";
 import Vue from "vue";
 import CountryCodeLookup from "country-code-lookup";
 import { ContainerQuery } from "vue-container-query";
@@ -240,7 +239,7 @@ export default {
         if (this.keyword && this.keyword !== "")
           return (
             c.name &&
-            c.name.match(new RegExp(Helper.escapeRegExp(this.keyword), "i"))
+            c.name.match(new RegExp(escapeRegExp(this.keyword), "i"))
           );
         if (this.featured) return c.featured;
         if (this.category) return c.category === this.category;
@@ -304,11 +303,11 @@ export default {
       let code = this.$l2["iso639-3"];
       if (code === "nor") code = "nob"; // Use 'Bokmal' for Norwegian.
       let res = await axios.get(
-        `${Config.server}data/live-tv-channels/${code}.csv.txt`
+        `${SERVER}data/live-tv-channels/${code}.csv.txt`
       );
       if (res && res.data) {
         let channels = Papa.parse(res.data, { header: true }).data;
-        channels = Helper.uniqueByValue(channels, "url");
+        channels = uniqueByValue(channels, "url");
         channels = channels
           .filter((c) => c.url && c.url.startsWith("https://"))
           .filter((c) => c.category !== "XXX")
@@ -366,7 +365,7 @@ export default {
         if (!c.category) c.category = "Misc";
         return c.category;
       });
-      categories = Helper.unique(categories);
+      categories = unique(categories);
       this.categories = categories;
     },
     loadCountries() {
@@ -376,7 +375,7 @@ export default {
         else c.countries = c.countries.split("|");
         countries = countries.concat(c.countries);
       }
-      countries = Helper.unique(countries);
+      countries = unique(countries);
       this.countries = countries;
     },
     countryNameFromCode(code) {

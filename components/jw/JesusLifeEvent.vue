@@ -18,8 +18,7 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper'
-
+import { ucFirst } from "@/lib/utils";
 export default {
   data() {
     return {
@@ -43,7 +42,7 @@ export default {
       this.event.names = [];
       var eventsNames = event.title.split("; ");
       for (var eventName of eventsNames) {
-        eventName = Helper.ucFirst(eventName);
+        eventName = ucFirst(eventName);
         this.event.names.push(eventName);
       }
       this.references = event.references;

@@ -109,10 +109,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import Config from "@/lib/config";
 import Papa from "papaparse";
-import Helper from "@/lib/helper";
+import { logError, makeTextFile } from "@/lib/utils";
 
 export default {
   props: {
@@ -162,7 +160,7 @@ export default {
       }
     },
     originalTextHref() {
-      return Helper.makeTextFile(this.csv);
+      return makeTextFile(this.csv);
     },
     translationURL() {
       if (typeof this.$l2 !== "undefined") {
@@ -207,7 +205,7 @@ export default {
         });
       } catch (err) {
         this.saving = false;
-        Helper.logError(err);
+        logError(err);
       }
     },
   },

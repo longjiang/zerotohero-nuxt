@@ -2,8 +2,7 @@ import DateHelper from "@/lib/date-helper";
 import axios from 'axios'
 import SmartQuotes from "smartquotes";
 import he from "he"; // html entities
-import Helper from '@/lib/helper'
-import { logError } from '@/lib/utils/error'
+import { randBase64, proxy, escapeRegExp, logError } from '@/lib/utils'
 
 export const DIRECTUS_URL = 'https://directusvps.zerotohero.ca/'
 
@@ -89,7 +88,7 @@ export default ({ app }, inject) => {
      */
     async countShowEpisodes(showType, showId, l2Id, adminMode = false) {
       let tableSuffix = this.youtubeVideosTableName(l2Id).replace(`items/youtube_videos`, '')
-      let data = await Helper.proxy(
+      let data = await proxy(
         `${LP_DIRECTUS_TOOLS_URL}count.php?table_suffix=${tableSuffix}&lang_id=${l2Id}&type=${showType}&id=${showId}`,
         { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
@@ -97,7 +96,7 @@ export default ({ app }, inject) => {
     },
     async getRandomEpisodeYouTubeId(langId, type) {
       let showFilter = type ? `&filter[${type}][nnull]=1` : "";
-      let randBase64Char = Helper.randBase64(1);
+      let randBase64Char = randBase64(1);
       let url = `${this.youtubeVideosTableName(
         langId
       )}?filter[l2][eq]=${langId}${showFilter}&filter[youtube_id][contains]=${randBase64Char}&fields=youtube_id`;
@@ -237,7 +236,7 @@ export default ({ app }, inject) => {
       let shows = response.data?.data || [];
       let showTitles = shows.map(show => show.title);
       let regex = new RegExp(
-        showTitles.map(t => Helper.escapeRegExp(t)).join("|")
+        showTitles.map(t => escapeRegExp(t)).join("|")
       );
       for (let video of videos) {
         if (regex.test(video.title)) {

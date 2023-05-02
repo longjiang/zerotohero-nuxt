@@ -1,4 +1,4 @@
-import Helper from '@/lib/helper'
+import { logError } from '@/lib/helper'
 
 export const state = () => {
   return {
@@ -13,7 +13,7 @@ export const mutations = {
       try {
         history = JSON.parse(json)
       } catch (err) {
-        Helper.logError(err)
+        logError(err)
       }
       if (history) {
         state.fullHistory = history

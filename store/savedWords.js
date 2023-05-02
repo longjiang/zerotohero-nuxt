@@ -1,5 +1,4 @@
-import Config from '@/lib/config'
-import Helper from '@/lib/helper'
+import { groupArrayBy, logError } from '@/lib/helper'
 
 
 export const state = () => {
@@ -31,7 +30,7 @@ const parseSavedWordsCSV = (csv) => {
   for (let sW of rows) {
     sW.forms = sW.forms?.split(',') || [sW.head]
   }
-  let savedWords = Helper.groupArrayBy(rows, 'l2')
+  let savedWords = groupArrayBy(rows, 'l2')
   return savedWords
 }
 
@@ -87,7 +86,7 @@ export const mutations = {
       try {
         savedWords = JSON.parse(json)
       } catch (err) {
-        Helper.logError(err)
+        logError(err)
       }
       if (savedWords) {
         state.savedWords = savedWords

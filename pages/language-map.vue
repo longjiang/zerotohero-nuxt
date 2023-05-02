@@ -118,7 +118,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { timeout } from "@/lib/utils";
+
 export default {
   data() {
     return {
@@ -157,7 +158,7 @@ export default {
   async mounted() {
     this.$store.commit("settings/SET_L1_L2_TO_NULL");
     await this.$languages.loadFull();
-    await Helper.timeout(100);
+    await timeout(100);
     this.updateLanguages();
     if (window && window.innerWidth < 720) {
       this.hideDescription = true;

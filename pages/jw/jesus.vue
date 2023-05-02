@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { proxy } from "@/lib/utils";
 import Config from "@/lib/config";
 import EventsIterator from '@/lib/jw/EventsIterator'
 import $ from 'jquery'
@@ -72,7 +72,7 @@ export default {
     async loadSection(i) {
       // Load the section page containing the table of events
       var jesusLifeSections = this;
-      let html = await Helper.proxy(
+      let html = await proxy(
         Config.WOL_BASE_URL + this.sections[i].url.replace(/^\//, "")
       );
 

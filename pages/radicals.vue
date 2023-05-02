@@ -72,7 +72,6 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 
 export default {
   async mounted() {

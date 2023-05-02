@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { background, logError } from "@/lib/utils";
 import { PYTHON_SERVER } from "@/lib/utils/servers";
 
 export default {
@@ -112,7 +112,7 @@ export default {
   },
   computed: {
     backgroundImage() {
-      return Helper.background(this.$l2);
+      return background(this.$l2);
     },
   },
   methods: {
@@ -173,7 +173,7 @@ export default {
         }
       } catch (err) {
         this.loading = false;
-        Helper.logError(err);
+        logError(err);
         if (err.response && err.response.data) {
           let message = err.response.data.error.message;
           if (err.response.data.error.code === 204) {

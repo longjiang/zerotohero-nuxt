@@ -97,7 +97,7 @@
 
 <script>
 import Translators from "@/lib/translators";
-import Helper from "@/lib/helper";
+import { unique } from "@/lib/utils";
 export default {
   data: () => ({
     googleImagesURLs: {},
@@ -119,7 +119,7 @@ export default {
         for (let t of this.filteredTranslators) {
           if (typeof t.langs !== "undefined") langs = langs.concat(t.langs);
         }
-        langs = Helper.unique(langs);
+        langs = unique(langs);
         let languages = [];
         for (let lang of langs) {
           let language = this.$languages.getSmart(lang);

@@ -24,9 +24,8 @@
 
 <script>
 import langData from "@/lib/jw/languages/en-US";
-import Config from "@/lib/config";
-import Helper from "@/lib/helper";
 import Wol from "@/lib/jw/Wol";
+import { timeout, isInView } from "@/lib/utils";
 import $ from "jquery";
 
 export default {
@@ -95,7 +94,7 @@ export default {
   },
   async updated() {
     if (this.$refs.mediaBar && this.$refs.template && !this.initialized) {
-      await Helper.timeout(500); // so that the template is fully loaded
+      await timeout(500); // so that the template is fully loaded
       this.enhancePresentation();
       this.$refs.mediaBar.chapter = this;
       this.$refs.mediaBar.loadAudio();
@@ -503,7 +502,7 @@ export default {
       var spansOfVerse = this.getVerseSpanByNum(verseNum);
       if (spansOfVerse.length > 0) {
         var lastSpanOfVerse = spansOfVerse[spansOfVerse.length - 1];
-        if (!Helper.isInView(lastSpanOfVerse)) {
+        if (!isInView(lastSpanOfVerse)) {
           lastSpanOfVerse.scrollIntoView(false, {
             behavior: "smooth",
             // or "auto" or "instant"

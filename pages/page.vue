@@ -19,7 +19,7 @@
 
 <script>
 import Marked from "marked";
-import Config from "@/lib/config";
+import { logError } from "@/lib/utils";
 
 export default {
   props: {
@@ -45,7 +45,7 @@ export default {
         this.page = res.data.data;
       }
     } catch (err) {
-      Helper.logError(err);
+      logError(err);
     }
   },
 };

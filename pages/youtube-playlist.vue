@@ -81,7 +81,7 @@
 
 <script>
 import YouTube from "@/lib/youtube";
-import Helper from "@/lib/helper";
+import { uniqueByValue } from "@/lib/utils";
 
 export default {
   props: {
@@ -146,7 +146,7 @@ export default {
       let videos = playlistItems;
       if (videos && videos.length > 0) {
         videos = await this.checkShowsFunc(videos);
-        this.videos = Helper.uniqueByValue(videos, "youtube_id");
+        this.videos = uniqueByValue(videos, "youtube_id");
       }
       this.totalResults = totalResults;
       this.shownResults = totalResults;
@@ -163,7 +163,7 @@ export default {
         let videos = playlistItems;
         if (videos && videos.length > 0) {
           videos = await this.checkShowsFunc(videos);
-          this.videos = Helper.uniqueByValue(
+          this.videos = uniqueByValue(
             this.videos.concat(videos),
             "youtube_id"
           );

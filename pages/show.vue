@@ -187,9 +187,8 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { randomArrayItem, unique, shuffle, LANGS_WITH_CONTENT } from "@/lib/utils";
 import { tify, sify } from "chinese-conv";
-import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
 
 export default {
   props: {
@@ -222,7 +221,7 @@ export default {
   computed: {
     randomEpisodeYouTubeId() {
       if (this.videos?.length > 0) {
-        let episode = Helper.randomArrayItem(this.videos);
+        let episode = randomArrayItem(this.videos);
         return episode.youtube_id;
       }
     },
@@ -280,7 +279,7 @@ export default {
         keywords.push(tify(this.keyword));
         keywords.push(sify(this.keyword));
       }
-      keywords = Helper.unique(keywords);
+      keywords = unique(keywords);
       let videos = [];
 
       for (let keyword of keywords) {
@@ -351,10 +350,10 @@ export default {
     loadFeaturedVideo() {
       if (this.tries < 5) {
         if (this.videos && this.videos.length > 0) {
-          // Helper.shuffle mutates the original array!
+          // shuffle mutates the original array!
           let videos = [...this.videos];
           if (["Movies", "Music"].includes(this.show.title))
-            videos = Helper.shuffle(videos);
+            videos = shuffle(videos);
           this.featuredVideo = videos[0];
         }
         this.tries++;
@@ -462,7 +461,7 @@ export default {
         }`
       );
       let videos = response.data.data || [];
-      videos = Helper.uniqueByValue(videos, "youtube_id");
+      videos = uniqueByValue(videos, "youtube_id");
       if (sort === "title") {
         videos =
           videos.sort((x, y) =>

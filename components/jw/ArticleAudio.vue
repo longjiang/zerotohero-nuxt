@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import Helper from '@/lib/helper';
 import $ from "jquery";
+import { parseTime } from "@/lib/utils";
 
 export default {
   props: ["audio_data", "options"],
@@ -111,7 +111,7 @@ export default {
       }
 
       $.each(reverseMarkers, function (key, marker) {
-        var markerStartTimeSeconds = Helper.parseTime(marker.startTime);
+        var markerStartTimeSeconds = parseTime(marker.startTime);
         if (playhead > markerStartTimeSeconds) {
           // We announce the marker when we hit it
           if (audio.isBible) {
@@ -154,8 +154,8 @@ export default {
       $.each(this.markers, function (key, marker) {
         if (Number(verseNum) === Number(marker.verseNumber)) {
           audio.verseStopTime =
-            Helper.parseTime(marker.startTime) +
-            Helper.parseTime(marker.duration);
+            parseTime(marker.startTime) +
+            parseTime(marker.duration);
         }
       });
     },
@@ -166,7 +166,7 @@ export default {
       $.each(this.markers, function (key, verse) {
         // Get the start time for the verse
         if (Number(verse.verseNumber) === Number(verseNum)) {
-          verseStartTimeSeconds = Helper.parseTime(verse.startTime);
+          verseStartTimeSeconds = parseTime(verse.startTime);
           return true;
         }
       });
@@ -182,7 +182,7 @@ export default {
             "data-current-paragraph",
             paragraph.mepsParagraphId
           );
-          var paragraphStartTimeSeconds = Helper.parseTime(paragraph.startTime);
+          var paragraphStartTimeSeconds = parseTime(paragraph.startTime);
           // When the audio is loaded, advance to the first paragraph
           audio.player.currentTime = paragraphStartTimeSeconds + 0.1;
         }

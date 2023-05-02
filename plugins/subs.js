@@ -1,7 +1,7 @@
 import { sify } from "chinese-conv";
 import Papa from "papaparse";
 import he from "he"; // html entities
-import Helper from '@/lib/helper'
+import { mutuallyExclusive, uniqueByValue, characterClass, escapeRegExp } from '@/lib/utils'
 
 export default ({ app }, inject) => {
   inject('subs', {
@@ -68,7 +68,7 @@ export default ({ app }, inject) => {
       let talk = talkFilter === "all" ? "nnull" : talkFilter.join(",")
       let hits = [];
       terms = terms.filter(t => t).map(t => t.replace(/'/g, "&#39;"));
-      terms = Helper.mutuallyExclusive(terms) // So if terms are ['dièdres', 'dièdre'], we search only 'dièdre' since results of the plural will be included automatically.
+      terms = mutuallyExclusive(terms) // So if terms are ['dièdres', 'dièdre'], we search only 'dièdre' since results of the plural will be included automatically.
       let timestamp = adminMode ? Date.now() : 0;
       let params = {
         l2Id: langId,
@@ -147,7 +147,7 @@ export default ({ app }, inject) => {
           })
         );
       }
-      hits = Helper.uniqueByValue(hits, "id");
+      hits = uniqueByValue(hits, "id");
       if (limit) hits = hits.slice(0, 1000 ); // For device performance
       return hits.sort((a, b) => a.lineIndex - b.lineIndex);
     },
@@ -166,7 +166,7 @@ export default ({ app }, inject) => {
       let hits = [];
       let punctuations, punctuationsRegex, boundary, termsStr, regexStr, regex;
       if (exact) {
-        punctuations = Helper.characterClass(
+        punctuations = characterClass(
           apostrophe ? "PunctuationNoApostropheNoHyphen" : "Punctuation"
         );
         if (continua) {
@@ -174,12 +174,12 @@ export default ({ app }, inject) => {
         }
         punctuationsRegex = new RegExp(`[${punctuations}]`, "g");
         regexStr =
-          "^s*(" + terms.map(t => Helper.escapeRegExp(t)).join("|") + ")s*$";
+          "^s*(" + terms.map(t => escapeRegExp(t)).join("|") + ")s*$";
         regex = new RegExp(regexStr, "i");
       } else {
-        boundary = continua ? "" : `(^|[^${Helper.characterClass("L")}]+)`;
+        boundary = continua ? "" : `(^|[^${characterClass("L")}]+)`;
         termsStr = terms
-          .map(t => Helper.escapeRegExp(t))
+          .map(t => escapeRegExp(t))
           .join("|")
           .replace(/\\\*/g, ".+")
           .replace(/[_]/g, ".");
@@ -204,7 +204,7 @@ export default ({ app }, inject) => {
                 if (test) passed = true;
               }
             } else {
-              let excludeRegex = new RegExp(excludeTerms.map(t => Helper.escapeRegExp(t)).join("|"), "i")
+              let excludeRegex = new RegExp(excludeTerms.map(t => escapeRegExp(t)).join("|"), "i")
               let notExcluded = excludeTerms.length === 0 || !excludeRegex.test(line);
               if (mustIncludeYouTubeId === video.youtube_id) notExcluded = true // Do not use exclude terms on "must include" videos
               passed = regex.test(line)
@@ -261,7 +261,7 @@ export default ({ app }, inject) => {
           let prev = hit.video.subs_l2[hit.lineIndex - 1];
           let regex = new RegExp(
             `(${terms
-              .map(t => Helper.escapeRegExp(t))
+              .map(t => escapeRegExp(t))
               .join("|")
               .replace(/[*]/g, ".+")
               .replace(/[_]/g, ".")})(.|\n)*`,
@@ -280,7 +280,7 @@ export default ({ app }, inject) => {
           let next = hit.video.subs_l2[Number(hit.lineIndex) + 1];
           let regex = new RegExp(
             `(.|\n)*(${terms
-              .map(t => Helper.escapeRegExp(t))
+              .map(t => escapeRegExp(t))
               .join("|")
               .replace(/[*]/g, ".+")
               .replace(/[_]/g, ".")})`,

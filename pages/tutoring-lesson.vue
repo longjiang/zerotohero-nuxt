@@ -153,8 +153,7 @@
 <script>
 import WordPhotos from "@/lib/word-photos";
 import Config from "@/lib/config";
-import Helper from "@/lib/helper";
-import { removeInlineStylesFromString } from "@/lib/utils";
+import { removeInlineStylesFromString, level } from "@/lib/utils";
 
 export default {
   props: ["id"],
@@ -202,7 +201,7 @@ export default {
       return images;
     },
     level(level) {
-      return Helper.level(level, this.$l2).name;
+      return level(level, this.$l2).name;
     },
   },
   computed: {

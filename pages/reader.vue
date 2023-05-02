@@ -189,7 +189,7 @@
 
 <script>
 import ReaderComp from "@/components/ReaderComp";
-import Helper from "@/lib/helper";
+import { logError, proxy } from "@/lib/utils";
 import SAMPLE_TEXT from "@/lib/utils/sample-text";
 import { markdownToTxt } from "markdown-to-txt";
 import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from "node-html-markdown";
@@ -256,12 +256,12 @@ export default {
           this.shared = res.data.data;
         }
       } catch (err) {
-        Helper.logError(err);
+        logError(err);
       }
     } else if (method === "html-url") {
       this.baseUrl = baseUrl(this.arg);
       try {
-        let html = await Helper.proxy(arg);
+        let html = await proxy(arg);
         let dom = parse(html);
         let body = dom.querySelector("body");
         let article = dom.querySelector("article");
@@ -270,14 +270,14 @@ export default {
         html = dom.toString();
         text = NodeHtmlMarkdown.translate(html) || "";
       } catch (err) {
-        Helper.logError(err);
+        logError(err);
       }
     } else if (method === "md-url") {
       try {
-        let md = await Helper.proxy(arg);
+        let md = await proxy(arg);
         text = md || "";
       } catch (err) {
-        Helper.logError(err);
+        logError(err);
       }
     } else if (["md", "html", "txt"].includes(method)) {
       text = arg.replace(/\n+/g, "\n\n");
@@ -348,7 +348,7 @@ export default {
         }
         this.sharing = false;
       } catch (err) {
-        Helper.logError(err);
+        logError(err);
         this.sharing = false;
       }
     },

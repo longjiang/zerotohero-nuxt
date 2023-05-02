@@ -19,7 +19,7 @@ const proxy = async (
       return response.data;
     }
   } catch (err) {
-    console.log(`Helper.proxy() cannot get ${url}`);
+    console.log(`proxy() cannot get ${url}`);
   }
   return false;
 };

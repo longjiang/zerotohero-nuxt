@@ -150,7 +150,7 @@
 
 <script>
 import { ContainerQuery } from "vue-container-query";
-import Helper from "@/lib/helper";
+import { dictionaryTooLargeAndWillCauseServerCrash } from "@/lib/utils";
 
 export default {
   components: {
@@ -202,7 +202,7 @@ export default {
     if (this.dict === "dict") {
       if (
         process.server &&
-        Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
+        dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
       )
         return;
       else await this.matchPhraseToDictionaryEntries();

@@ -57,9 +57,9 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import Vue from "vue";
 import he from "he";
+import { makeTextFile, characterClass, highlight } from "@/lib/utils";
 
 export default {
   props: {
@@ -124,7 +124,7 @@ export default {
       return options;
     },
     textHref() {
-      return Helper.makeTextFile(this.text);
+      return makeTextFile(this.text);
     },
   },
   mounted() {
@@ -134,7 +134,7 @@ export default {
         this.loadShows();
       }
     });
-    this.punctuations = Helper.characterClass(
+    this.punctuations = characterClass(
       "PunctuationNoApostropheNoHyphen"
     );
     console.log(`All done. Displaying table...`);
@@ -145,7 +145,7 @@ export default {
   },
   methods: {
     highlight() {
-      return Helper.highlight(...arguments);
+      return highlight(...arguments);
     },
     toggle(index) {
       Vue.set(this.expand, index, this.expand[index] ? false : true);

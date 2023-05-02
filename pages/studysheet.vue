@@ -88,7 +88,7 @@
 <script>
 import StudySheet from "@/components/StudySheet";
 import SmartQuotes from "smartquotes";
-import Helper from "@/lib/helper";
+import { languageLevels } from "@/lib/helper";
 
 export default {
   components: {
@@ -107,7 +107,7 @@ export default {
   },
   computed: {
     levels() {
-      return Helper.languageLevels(this.$l2)
+      return languageLevels(this.$l2)
     },
     targetLevelClasses() {
       let classes = {

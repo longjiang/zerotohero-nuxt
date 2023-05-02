@@ -162,7 +162,7 @@
 
 <script>
 import WordList from "@/components/WordList";
-import Helper from "@/lib/helper";
+import { languageLevels, uniqueByValue } from "@/lib/utils";
 
 export default {
   data() {
@@ -199,7 +199,7 @@ export default {
   },
   computed: {
     levels() {
-      return Helper.languageLevels(this.$l2);
+      return languageLevels(this.$l2);
     },
     unmatchedWords() {
       return this.words.filter((word) => {
@@ -226,15 +226,15 @@ export default {
       });
     }
     this.loading = false;
-    this.lessonVideos = Helper.uniqueByValue(videos, "youtube_id");
+    this.lessonVideos = uniqueByValue(videos, "youtube_id");
     let dictionary = await this.$getDictionary();
     if (dictionary) {
       let words = await dictionary.lookupByLesson(this.level, this.lesson);
       words = words.filter((word) => !word.oofc || !word.oofc === "");
       if (this.$l2.han && this.$l2.code !== "ja") {
-        this.words = Helper.uniqueByValue(words, "simplified");
+        this.words = uniqueByValue(words, "simplified");
       } else {
-        this.words = Helper.uniqueByValue(words, "head");
+        this.words = uniqueByValue(words, "head");
       }
       this.updateMatches();
     }

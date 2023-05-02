@@ -71,7 +71,7 @@
 
 <script>
 import DateHelper from "@/lib/date-helper";
-import { scrollToTargetAdjusted } from "@/lib/utils";
+import { scrollToTargetAdjusted, wide } from "@/lib/utils";
 
 export default {
   props: {
@@ -185,7 +185,7 @@ export default {
     onVideoLoaded({ video, duration }) {
       this.video = video;
       this.duration = duration;
-      if (this.layout !== "mini" && !Helper.wide()) {
+      if (this.layout !== "mini" && !wide()) {
         let el = this.$refs["youtube"];
         if (el) scrollToTargetAdjusted(el.$el, 43);
       }

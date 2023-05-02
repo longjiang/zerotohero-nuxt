@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
+import { documentOffsetTop, elementHeight } from "@/lib/utils";
 import WordPhotos from "@/lib/word-photos";
 import { mapState } from "vuex";
 
@@ -135,8 +135,8 @@ export default {
     scrollTo(index) {
       let el = document.getElementById(`phrasebook-phrase-${index}`);
       if (el) {
-        let offsetTop = Helper.documentOffsetTop(el);
-        let elHeight = Helper.elementHeight(el);
+        let offsetTop = documentOffsetTop(el);
+        let elHeight = elementHeight(el);
         let viewportHeight =
           window.innerHeight || document.documentElement.clientHeight;
         let middle = offsetTop - viewportHeight / 2 + elHeight / 2;

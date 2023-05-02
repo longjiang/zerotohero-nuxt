@@ -11,7 +11,7 @@ class KoreanInflector extends BaseInflector {
     axios.get("https://py.zerotohero.ca/start-open-korean-text.php"); // Call index.php to make sure the java open-korean-text process is running (Dreamhost kills it from time to time)
   }
 
-  // Helper function to remove duplicates and sort
+  // Removes duplicates and sort
   uniqueByValue(array, key) {
     const seen = new Set();
     return array.filter(item => {

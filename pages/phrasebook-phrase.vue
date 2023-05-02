@@ -244,10 +244,10 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import DateHelper from "@/lib/date-helper";
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
+import { dictionaryTooLargeAndWillCauseServerCrash } from "@/lib/utils";
 
 export default {
   components: {
@@ -522,7 +522,7 @@ export default {
         this.phraseObj = phrase;
         if (
           process.server &&
-          Helper.dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
+          dictionaryTooLargeAndWillCauseServerCrash(this.$l2["iso639-3"])
         )
           return;
         else await this.matchPhraseToDictionaryEntries();

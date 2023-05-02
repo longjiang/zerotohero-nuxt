@@ -144,9 +144,9 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import Vue from "vue";
 import he from "he";
+import { characterClass, highlight, uniqueByValue } from "@/lib/utils";
 
 export default {
   props: {
@@ -180,7 +180,7 @@ export default {
         this.loadShows();
       }
     });
-    this.punctuations = Helper.characterClass(
+    this.punctuations = characterClass(
       "PunctuationNoApostropheNoHyphen"
     );
     console.log(`All done. Displaying table...`);
@@ -191,7 +191,7 @@ export default {
   },
   methods: {
     highlight() {
-      return Helper.highlight(...arguments);
+      return highlight(...arguments);
     },
     toggle(index) {
       Vue.set(this.expand, index, this.expand[index] ? false : true);
@@ -313,7 +313,7 @@ export default {
         .sort((a, b) => b.instances.length - a.instances.length);
       console.log("Groups sorted");
       console.log(`Making groups unique...`);
-      groups = Helper.uniqueByValue(groups, "phrase");
+      groups = uniqueByValue(groups, "phrase");
       console.log("Groups now unique.");
       return groups;
     },

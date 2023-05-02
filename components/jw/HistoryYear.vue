@@ -27,8 +27,8 @@
 
 <script>
 import WatchtowerIndexEventSource from "@/lib/jw/WatchtowerIndexEventSource";
-import Helper from "@/lib/helper";
 import $ from "jquery";
+import { getYearTitle } from "@/lib/utils";
 
 export default {
   data() {
@@ -49,7 +49,7 @@ export default {
   },
   computed: {
     title() {
-      return Helper.getYearTitle(this.yyyy); // like 2000 B.C.E.
+      return getYearTitle(this.yyyy); // like 2000 B.C.E.
     },
   },
   async mounted() {

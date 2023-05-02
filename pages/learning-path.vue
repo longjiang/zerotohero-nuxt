@@ -321,9 +321,7 @@
 
 <script>
 import Resource from "@/components/Resource";
-import { background, backgroundKeyword } from "@/lib/utils/background";
-import { LEVELS, LANGS_WITH_LEVELS, l2LevelKey } from "@/lib/utils";
-import Helper from "@/lib/helper";
+import { LEVELS, LANGS_WITH_LEVELS, l2LevelKey, languageHours, background, backgroundKeyword} from "@/lib/utils";
 
 export default {
   components: {
@@ -346,7 +344,7 @@ export default {
       let levels = Object.keys(LEVELS).map((key) => {
         return { number: key, ...LEVELS[key] };
       });
-      let hours = Helper.languageHours(this.$l2);
+      let hours = languageHours(this.$l2);
       for (let level in levels) {
         level = Number(level);
         levels[level].hours = hours[level + 1];

@@ -223,8 +223,9 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import { mapState } from "vuex";
+import { languageLevels, timeout } from "@/lib/utils";
+
 export default {
   computed: {
     ...mapState("savedWords", ["savedWords"]),
@@ -243,7 +244,7 @@ export default {
         : 0;
     },
     levels() {
-      let levels = Helper.languageLevels(this.$l2);
+      let levels = languageLevels(this.$l2);
       return Object.keys(levels).map((key) => {
         return {
           value: Number(key),
@@ -307,7 +308,7 @@ export default {
   },
   methods: {
     levelObj(level) {
-      return Helper.languageLevels(this.$l2)[level];
+      return languageLevels(this.$l2)[level];
     },
     async removeProgress() {
       if (
@@ -322,7 +323,7 @@ export default {
           { duration: 5000 }
         );
         this.$router.push("/");
-        await Helper.timeout(3000);
+        await timeout(3000);
         location.reload();
       } else {
         // Do nothing!

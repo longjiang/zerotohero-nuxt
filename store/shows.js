@@ -1,6 +1,5 @@
 import { CATEGORIES } from "@/lib/youtube";
-import { LANGS_WITH_CONTENT } from '@/lib/utils/servers'
-import Helper from '@/lib/helper'
+import { LANGS_WITH_CONTENT, uniqueByValue, unique } from '@/lib/utils'
 import Vue from 'vue'
 
 export const state = () => {
@@ -59,7 +58,7 @@ export const mutations = {
   ADD_EPISODES_TO_SHOW(state, { l2, collection = 'tvShows', showId, episodes, sort = '-date' }) {
     let show = state[collection][l2.code].find(s => s.id === showId)
     if (show.episodes && show.episodes.length > 0) episodes = episodes.concat(show.episodes)
-    episodes = Helper.uniqueByValue(episodes, 'youtube_id')
+    episodes = uniqueByValue(episodes, 'youtube_id')
     if (sort === "-date") {
       episodes = episodes.sort((a, b) => b.date ? b.date.localeCompare(a.date) : 0);
     } else if (sort === 'title') {
@@ -109,7 +108,7 @@ export const actions = {
 
       if (response.data.data) {
         tvShows = response.data.data
-        tvShows.forEach(show => { show.tags = Helper.unique((show.tags || '').split(',')) })
+        tvShows.forEach(show => { show.tags = unique((show.tags || '').split(',')) })
         tvShows = tvShows.sort((x, y) => {
           let sort = 0
           if (x.title && y.title)
@@ -124,7 +123,7 @@ export const actions = {
       );
       if (response.data.data) {
         talks = response.data.data
-        talks.forEach(show => { show.tags = Helper.unique((show.tags || '').split(',')) })
+        talks.forEach(show => { show.tags = unique((show.tags || '').split(',')) })
         talks = talks.sort((x, y) => {
           let sort = 0
           if (x.title && y.title)

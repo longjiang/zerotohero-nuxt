@@ -27,9 +27,9 @@
 </template>
 
 <script>
-import Helper from "@/lib/helper";
 import Wol from "@/lib/jw/Wol";
 import { WebVTTParser } from "webvtt-parser";
+import { proxy}  from "@/lib/utils";
 
 export default {
   props: {
@@ -95,7 +95,7 @@ export default {
       let fileWithSubs = video.files.find((f) => f.subtitles);
       if (fileWithSubs) {
         let url = fileWithSubs.subtitles?.url;
-        let vtt = await Helper.proxy(url);
+        let vtt = await proxy(url);
         if (vtt) {
           const parser = new WebVTTParser();
           const tree = parser.parse(vtt, "metadata");
