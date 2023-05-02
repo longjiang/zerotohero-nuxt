@@ -19,7 +19,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 import Hero from "@/components/Hero";
 import { ContainerQuery } from "vue-container-query";
 

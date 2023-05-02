@@ -1,5 +1,3 @@
-import Config from '@/lib/config'
-
 const LOCAL_KEY = 'zthSavedText'
 
 

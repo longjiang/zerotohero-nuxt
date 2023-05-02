@@ -242,7 +242,7 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
+import { SERVER } from "@/lib/utils";
 import Papa from "papaparse";
 import Vue from "vue";
 import { unique, formatK } from "@/lib/utils";
@@ -295,7 +295,7 @@ export default {
   },
   async mounted() {
     let res = await this.$directus.get(
-      `${Config.server}data/analytics/analytics-2021-09-05.csv`
+      `${SERVER}data/analytics/analytics-2021-09-05.csv`
     );
     if (res && res.data) {
       let parsed = Papa.parse(res.data, { header: true });

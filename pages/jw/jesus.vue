@@ -24,7 +24,7 @@
 
 <script>
 import { proxy } from "@/lib/utils";
-import Config from "@/lib/config";
+import { WOL_BASE_URL } from "@/lib/utils";
 import EventsIterator from '@/lib/jw/EventsIterator'
 import $ from 'jquery'
 import langData from "@/lib/jw/languages/en-US";
@@ -73,7 +73,7 @@ export default {
       // Load the section page containing the table of events
       var jesusLifeSections = this;
       let html = await proxy(
-        Config.WOL_BASE_URL + this.sections[i].url.replace(/^\//, "")
+        WOL_BASE_URL + this.sections[i].url.replace(/^\//, "")
       );
 
       // Extract the table

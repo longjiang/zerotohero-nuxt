@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 import smoothscroll from "smoothscroll-polyfill";
 import { wide, timeout } from "@/lib/utils"
 import { mapState } from "vuex";
@@ -80,7 +79,6 @@ export default {
   },
   data() {
     return {
-      Config,
       focus: false,
       loaded: false,
       wide: false,

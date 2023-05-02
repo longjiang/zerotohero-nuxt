@@ -95,7 +95,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 import ResourceList from "@/components/ResourceList";
 
 export default {
@@ -112,7 +111,6 @@ export default {
   },
   data() {
     return {
-      Config,
       resources: [],
       types: {
         av: "Audio-Visual",

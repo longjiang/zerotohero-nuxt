@@ -98,7 +98,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 import Frequency from "@/components/Frequency";
 import WordPhotos from "@/lib/word-photos";
 import { highlight } from "@/lib/utils";
@@ -135,7 +134,6 @@ export default {
   },
   data() {
     return {
-      Config,
       removed: false,
       srcs: [],
       srcIndex: 0,

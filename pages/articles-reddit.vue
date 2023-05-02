@@ -76,7 +76,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 import RedditArticlesList from "@/components/RedditArticlesList.vue";
 import RedditArticle from "@/components/RedditArticle.vue";
 
@@ -91,7 +90,6 @@ export default {
       subreddits: undefined,
       articles: [],
       articleId: undefined,
-      Config,
       key: 0,
     };
   },

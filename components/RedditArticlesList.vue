@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
+import { jsonProxy } from "@/lib/utils";
 import RedditArticleCard from "@/components/RedditArticleCard";
 import axios from 'axios'
 
@@ -33,14 +33,13 @@ export default {
   async fetch() {
     let cacheLife = 3600; // clear cache every hour
     let response = await axios.get(
-      `${Config.jsonProxy}?cache_life=${cacheLife}&url=https://www.reddit.com/${this.path}.json`
+      `${jsonProxy}?cache_life=${cacheLife}&url=https://www.reddit.com/${this.path}.json`
     );
     response = response.data
     this.articles = response.data.data.children.map((item) => item.data);
   },
   data() {
     return {
-      Config,
       articles: [],
     };
   },

@@ -24,7 +24,7 @@
 <script>
 import LanguageLogo from '@/components/LanguageLogo'
 import EnglishLogo from '@/components/EnglishLogo'
-import Config from '@/lib/config'
+import { SERVER } from '@/lib/utils'
 
 export default {
   components: {
@@ -37,7 +37,7 @@ export default {
     }
   },
   async created() {
-    this.languages = await axios.get(`${Config.server}data/languages.json`)
+    this.languages = await axios.get(`${SERVER}data/languages.json`)
     response = response.data
   }
 }

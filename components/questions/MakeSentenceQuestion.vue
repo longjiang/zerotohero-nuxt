@@ -46,14 +46,13 @@
 </template>
 
 <script>
-import { highlight } from "@/lib/utils"
-import Config from '@/lib/config'
+import { imageUrl, highlight } from "@/lib/utils"
 
 export default {
   props: ['id', 'word', 'type'],
   computed: {
     imageUrl() {
-      return Config.imageUrl
+      return imageUrl
     }
   },
   methods: {

@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
+import { jsonProxy } from "@/lib/utils";
 import RedditArticleCard from "@/components/RedditArticleCard";
 import axios from "axios";
 import { unescape, stripTags } from "@/lib/utils";
@@ -58,7 +58,6 @@ export default {
     return {
       comments: [],
       article: undefined,
-      Config,
     };
   },
 
@@ -74,7 +73,7 @@ export default {
   async fetch() {
     let cacheLife = 3600; // clear cache every hour
     let response = await axios.get(
-      `${Config.jsonProxy}?cache_life=${cacheLife}&url=https://www.reddit.com/comments/${this.articleId}/.json`
+      `${jsonProxy}?cache_life=${cacheLife}&url=https://www.reddit.com/comments/${this.articleId}/.json`
     );
     response = response.data;
     let article = response.data[0].data.children[0].data;

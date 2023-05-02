@@ -10,7 +10,7 @@
       class="image-wall-image"
       v-for="(image, index) in images.slice(0, limit)"
       :key="`web-images-${text}-${index}`"
-      :src="`${Config.imageProxy}?${image.src}`"
+      :src="`${imageProxy}?${image.src}`"
       @click="goto(image.url)"
     />
   </div>
@@ -18,7 +18,7 @@
 
 <script>
 import WordPhotos from "@/lib/word-photos";
-import Config from "@/lib/config";
+import { imageProxy } from "@/lib/utils";
 
 export default {
   props: {
@@ -66,7 +66,6 @@ export default {
   },
   data() {
     return {
-      Config,
       images: [],
     };
   },

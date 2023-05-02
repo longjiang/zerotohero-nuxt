@@ -152,8 +152,7 @@
 
 <script>
 import WordPhotos from "@/lib/word-photos";
-import Config from "@/lib/config";
-import { removeInlineStylesFromString, level } from "@/lib/utils";
+import { removeInlineStylesFromString, level, imageProxy } from "@/lib/utils";
 
 export default {
   props: ["id"],
@@ -161,7 +160,7 @@ export default {
     return {
       lesson: undefined,
       images: [],
-      imageProxy: Config.imageProxy
+      imageProxy
     };
   },
   async fetch() {

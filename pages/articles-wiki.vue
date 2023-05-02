@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 import ArticlesList from "@/components/ArticlesList.vue";
 import ArticleCard from "@/components/ArticleCard.vue";
 import { unescape, stripTags } from "@/lib/utils";
@@ -84,7 +83,6 @@ export default {
       article: undefined,
       method: undefined,
       args: undefined,
-      Config,
     };
   },
   methods: {

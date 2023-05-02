@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 import ArticleCard from "@/components/ArticleCard";
 
 export default {
@@ -30,7 +29,6 @@ export default {
   },
   data() {
     return {
-      Config,
     };
   },
 };

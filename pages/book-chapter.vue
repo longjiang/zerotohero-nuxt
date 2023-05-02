@@ -99,7 +99,7 @@
               <img
                 :src="
                   book.thumbnail
-                    ? `${Config.imageProxy}?${book.thumbnail}`
+                    ? `${imageProxy}?${book.thumbnail}`
                     : `/img/book-thumb-${Math.floor(Math.random() * 10)}.jpg`
                 "
                 alt="Book cover"
@@ -166,7 +166,7 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
+import { imageProxy } from "@/lib/config";
 import Library from "@/lib/library";
 import { parse } from "node-html-parser";
 import sanitizeHtml from "sanitize-html";
@@ -183,11 +183,11 @@ export default {
   },
   data() {
     return {
-      Config,
       book: undefined,
       chapter: undefined,
       chapterLang: undefined,
       foreign: true,
+      imageProxy
     };
   },
   computed: {

@@ -87,7 +87,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 
 export default {
   props: {
@@ -106,11 +105,6 @@ export default {
     icon: {
       default: false,
     },
-  },
-  data() {
-    return {
-      Config,
-    };
   },
   computed: {
     l2Name() {

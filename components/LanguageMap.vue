@@ -146,7 +146,7 @@
 
 <script>
 import axios from "axios";
-import Config from "@/lib/config";
+import { SERVER } from "@/lib/utils";
 import Papa from "papaparse";
 import "leaflet/dist/leaflet.css";
 import { LANGS_WITH_CONTENT, uniqueByValue } from "@/lib/utils/servers";
@@ -391,7 +391,7 @@ export default {
       return this.$languages.hasYouTube(l1, l2) || l2.code === "en";
     },
     async loadCountries() {
-      let res = await axios.get(`${Config.server}data/countries/countries.csv`);
+      let res = await axios.get(`${SERVER}data/countries/countries.csv`);
       if (res && res.data) {
         let csv = res.data;
         let parsed = Papa.parse(csv, { header: true });

@@ -3,7 +3,6 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 import VRuntimeTemplate from "v-runtime-template";
 import YouTubeVideo from "@/components/YouTubeVideo";
 import TelegramPrompt from "@/components/TelegramPrompt";

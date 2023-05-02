@@ -42,13 +42,7 @@
 </template>
 
 <script>
-import Config from "@/lib/config";
 export default {
-  data() {
-    return {
-      server: Config.server,
-    };
-  },
   methods: {
     go() {
       this.$router.push({ name: "sale" });

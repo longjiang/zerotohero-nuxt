@@ -163,7 +163,6 @@
 <script>
 import vueAwesomeCountdown from "vue-awesome-countdown";
 import Vue from "vue";
-import Config from "@/lib/config";
 Vue.use(vueAwesomeCountdown);
 
 export default {
@@ -172,7 +171,6 @@ export default {
       title: "HSK Courses at 30% Off | Chinese Zero to Hero",
       description: "Deal ends Apr 19, 2022",
       image: "/img/sale/spring-sale-2022.jpg",
-      server: Config.server,
     };
   },
 };

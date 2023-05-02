@@ -5,10 +5,10 @@
     class="mr-4 mb-4 d-inline-block link-unstyled"
   >
     <div class="logo-constructed">
-      <div class="logo-circle" :style="`background-image:url(${Config.server}img/logo-square/en.png)`">
+      <div class="logo-circle" :style="`background-image:url(${SERVER}img/logo-square/en.png)`">
         <div
           class="logo-speech-bubble"
-          :style="`background-image: url(${Config.server}img/speech-light.png)`"
+          :style="`background-image: url(${SERVER}img/speech-light.png)`"
         >
           <b>En</b>
         </div>
@@ -22,13 +22,13 @@
 </template>
 
 <script>
-import Config from '@/lib/config'
+import { SERVER } from '@/lib/utils'
 
 export default {
   props: ['language'],
   data() {
     return {
-      Config
+      SERVER
     }
   }
 }
