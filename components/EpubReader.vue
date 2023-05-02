@@ -21,7 +21,7 @@
         page,
         key: `text-with-speech-bar-${epubFileName}-${currentChapterHref}-${page}`,
       }" ref="reader" @showTOC="onShowTOC" @previousPage="onPreviousPage" @nextPage="onNextPage" @goToPage="onGoToPage"
-        @nextChapter="nextChapter" @previousChapter="previousChapter" />
+        @nextChapter="nextChapter" @prevChapter="previousChapter" />
     </div>
   </div>
 </template>
@@ -140,7 +140,7 @@ export default {
 
       this.currentChapterHTML = chapterHTML;
       this.page = 1;
-      this.$refs.tocModal.hide();
+      if (this.$refs.tocModal) this.$refs.tocModal.hide();
       this.updateChapterNavigation();
       if (window) window.scrollTo({ top: 0, behavior: "smooth" });
     },
@@ -277,15 +277,24 @@ export default {
       const doc = parser.parseFromString(chapterHTML, "text/html");
 
       // Update the image URLs
-      const images = doc.getElementsByTagName("img");
-      // Replace image src attributes with absolute URLs
-      for (let i = 0; i < images.length; i++) {
-        const img = images[i];
-        const src = img.getAttribute("src");
+      const updateImageSrc = (img, attributeName) => {
+        const src = img.getAttribute(attributeName);
         const absoluteSrc = this.book.path.resolve(src);
         const urlCache = this.book.archive.urlCache;
         const absoluteUrl = urlCache[absoluteSrc];
-        img.setAttribute("src", absoluteUrl);
+        img.setAttribute(attributeName, absoluteUrl);
+      };
+
+      // Replace img src attributes with absolute URLs
+      const imgElements = doc.getElementsByTagName("img");
+      for (let i = 0; i < imgElements.length; i++) {
+        updateImageSrc(imgElements[i], "src");
+      }
+
+      // Replace image xlink:href attributes with absolute URLs
+      const imageElements = doc.getElementsByTagName("image");
+      for (let i = 0; i < imageElements.length; i++) {
+        updateImageSrc(imageElements[i], "xlink:href");
       }
 
       // Serialize the DOM back to a string
