@@ -1,0 +1,9 @@
+l1,l2,home,courses,keyboard,bookmarklet,levels,roots,explore-topics,related,learn,grammar,noun-cases,endings,analyzer,hero-academy,music,radicals,characters
+eng,zho,TRUE,TRUE,,,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE,,,,TRUE,TRUE,TRUE,TRUE
+zho,eng,TRUE,TRUE,,,,,,,,,,,,,,,
+eng,tlh,,,TRUE,,,,,,,,,,,,,,
+eng,hin,,,,TRUE,,,,,,,,,,,,,
+eng,rus,,,,,,,,,,,TRUE,TRUE,TRUE,,,,
+eng,jpn,,,,,,,,,,TRUE,,,,,,,
+eng,kor,,,,,,,,,,TRUE,,,,,,,
+zho,jpn,,,,,,,,,,TRUE,,,,,,,

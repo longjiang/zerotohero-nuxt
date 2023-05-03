@@ -95,7 +95,7 @@ export default {
     EndingLookup
   },
   mounted() {
-    loadAllCsvsThen(files => {
+    RussianLegacy.loadAllCsvsThen(files => {
       this.files = files
     })
   },
@@ -109,7 +109,7 @@ export default {
   computed: {
     prepositionMessages() {
       // return [this.ending2]
-      return lookupPrepositions(this.preposition, this.files)
+      return RussianLegacy.lookupPrepositions(this.preposition, this.files)
     }
   }
 }

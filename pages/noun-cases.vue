@@ -48,10 +48,10 @@ export default {
     },
   },
   mounted() {
-    loadAllCsvsThen((files) => {
+    RussianLegacy.loadAllCsvsThen((files) => {
       const nounFile = files.find((file) => file.pos === "noun");
       this.types = nounFile.dataColumns;
-      this.data = formatExampleSentenceHtml(this.types, nounFile.data);
+      this.data = RussianLegacy.formatExampleSentenceHtml(this.types, nounFile.data);
       this.route();
     });
   },

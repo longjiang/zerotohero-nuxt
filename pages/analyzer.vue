@@ -78,7 +78,7 @@
 <script>
 export default {
   mounted() {
-    loadAllCsvsThen((files) => {
+    RussianLegacy.loadAllCsvsThen((files) => {
       this.files = files;
       this.adjTable = files.find((file) => file.pos === "adjective").data;
       this.nounTable = files.find((file) => file.pos === "noun").data;
@@ -95,12 +95,12 @@ export default {
   },
   methods: {
     analyze: function () {
-      let html = markCases(this.text, this.adjTable, this.nounTable);
+      let html = RussianLegacy.markCases(this.text, this.adjTable, this.nounTable);
       this.markedText = html.replace(/\n/g, "<br>");
     },
   },
   updated: function () {
-    $(".case-marked").hover(caseMarkedOver);
+    $(".case-marked").hover(RussianLegacy.caseMarkedOver);
     $(".case-marked").mouseout(function () {
       $(".popup").addClass("hidden");
     });
