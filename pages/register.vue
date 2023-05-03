@@ -150,7 +150,7 @@ export default {
               let user = response.data.data;
               this.$auth.setUser(user);
               this.$toast.success(
-                $tb('Registration successful. Welcome aboard, {name}!', {name: this.form.first_name}),
+                this.$tb('Registration successful. Welcome aboard, {name}!', {name: this.form.first_name}),
                 {
                   position: "top-center",
                   duration: 5000,
@@ -176,7 +176,7 @@ export default {
         if (err.response && err.response.data) {
           let message = err.response.data.error.message;
           if (err.response.data.error.code === 204) {
-            message = $tb('Your email {email} has already been registered, please login.', {email: this.form.email});
+            message = this.$tb('Your email {email} has already been registered, please login.', {email: this.form.email});
             this.$router.push({
               name: "login",
               params: {

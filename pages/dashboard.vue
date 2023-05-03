@@ -23,7 +23,7 @@
         style="overflow: hidden; position: relative;"
       >
         <div class="container pb-5">
-          <div :class="{ 'row mb-5': true }" >
+          <div :class="{ 'row mb-5': true }" v-show="!this.progressLoaded || hasDashboard">
             <div class="col-sm-12">
               <div :class="`home-card skin-${$skin} p-2 pt-4 pb-4`">
                 <h5 class="text-center mt-2 mb-1" v-if="$auth.user?.first_name">
@@ -36,14 +36,14 @@
                     :message="$tb('Loading your learning progress...')"
                   />
                 </div>
-                <LazyDashboard ref="dashboard" v-if="hasDashboard" />
+                <LazyDashboard ref="dashboard" />
               </div>
             </div>
           </div>
-          <div class="row mt-5">
+          <div class="row">
             <div class="col-sm-12">
               <div class="home-card p-2 pt-4 pb-4">
-                <h5 class="text-center mb-2" v-if="hasDashboard">
+                <h5 class="text-center mb-2" v-show="hasDashboard">
                   {{ $tb('Learn another language') }}
                 </h5>
                 <Triage />
@@ -113,17 +113,18 @@ export default {
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
-    ...mapState("progress", ['progressLoaded']),
+    ...mapState("progress", ['progressLoaded', 'progress']),
     background() {
       return background()
     },
     hasDashboard() {
-      return (
+      let hasDashboard = (
         this.$auth.loggedIn &&
         this.$auth.user?.first_name &&
-        this.$store.state.progress.progress &&
-        Object.keys(this.$store.state.progress.progress).length > 0
+        this.progress &&
+        Object.keys(this.progress).length > 0
       );
+      return hasDashboard
     },
     lastFullHistoryPath() {
       if (this.fullHistory) {

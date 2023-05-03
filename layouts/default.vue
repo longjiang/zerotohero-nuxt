@@ -222,7 +222,7 @@ export default {
       this.updateOverlayPlayerProps();
     },
     "$auth.user"() {
-      this.$directus.initAndGetUserData();
+      this.$directus.fetchOrCreateUserData();
     },
     '$l2Settings': {
       deep: true,
