@@ -24,7 +24,7 @@
       <div class="question-slide answer" :id="`${id}-slide-2`">
         <div>
           <img
-            :src="`${imageUrl}${word.hskId}-${word.simplified}.jpg`"
+            :src="`${IMAGE_URL}${word.hskId}-${word.simplified}.jpg`"
             class="question-image mb-4"
           />
         </div>
@@ -34,9 +34,7 @@
         <div
           class="text-center example-sentence-word mb-4"
           v-html="highlight(word.example, word.simplified, word.hsk)"
-        >
-          {{ word.example }}
-        </div>
+        ></div>
         <div class="text-center character-example-english">
           {{ word.exampleTranslation }}
         </div>
@@ -46,13 +44,13 @@
 </template>
 
 <script>
-import { imageUrl, highlight } from "@/lib/utils"
+import { IMAGE_URL, highlight } from "@/lib/utils"
 
 export default {
   props: ['id', 'word', 'type'],
-  computed: {
-    imageUrl() {
-      return imageUrl
+  data() {
+    return {
+      IMAGE_URL
     }
   },
   methods: {

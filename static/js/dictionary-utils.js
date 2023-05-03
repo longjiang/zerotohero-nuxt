@@ -12,7 +12,7 @@ const proxy = async (
 ) => {
   try {
     let proxyURL =
-      `${scrape2}?url=${encodeURIComponent(url)}&cache_life=${cacheLife}` +
+      `${SCRAPE_URL}?url=${encodeURIComponent(url)}&cache_life=${cacheLife}` +
       (encoding ? `&encoding=${encoding}` : "");
     let response = await axios.get(proxyURL, { timeout });
     if (response.data) {

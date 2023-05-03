@@ -2,15 +2,7 @@ import DateHelper from "@/lib/date-helper";
 import axios from 'axios'
 import SmartQuotes from "smartquotes";
 import he from "he"; // html entities
-import { randBase64, proxy, escapeRegExp, logError } from '@/lib/utils'
-
-export const DIRECTUS_URL = 'https://directusvps.zerotohero.ca/'
-
-export const DIRECTUS_API_URL = DIRECTUS_URL + 'zerotohero/'
-
-export const LP_DIRECTUS_TOOLS_URL = DIRECTUS_URL + 'lp-directus8-tools/'
-
-export const WEB_URL = 'https://languageplayer.io/'
+import { randBase64, proxy, escapeRegExp, logError, DIRECTUS_API_URL, LP_DIRECTUS_TOOLS_URL, WEB_URL } from '@/lib/utils'
 
 export const YOUTUBE_VIDEOS_TABLES = {
   2: [

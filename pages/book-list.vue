@@ -65,7 +65,7 @@
             <img
               :src="
                 book.thumbnail
-                  ? `${imageProxy}?${book.thumbnail}`
+                  ? `${IMAGE_PROXY}?${book.thumbnail}`
                   : `/img/book-thumb-${Math.floor(Math.random() * 10)}.jpg`
               "
               alt="Book cover"
@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { imageProxy } from "@/lib/utils";
+import { IMAGE_PROXY } from "@/lib/utils";
 import Library from "@/lib/library";
 import SimpleSearch from "@/components/SimpleSearch";
 
@@ -103,7 +103,7 @@ export default {
   },
   data() {
     return {
-      imageProxy,
+      IMAGE_PROXY,
       booklist: [],
     };
   },

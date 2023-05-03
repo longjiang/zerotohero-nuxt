@@ -10,7 +10,7 @@
         class="image-wall-image"
         v-for="(image, index) in images"
         :key="`web-images-${text}-${index}`"
-        :src="`${imageProxy}?${image.src}`"
+        :src="`${IMAGE_PROXY}?${image.src}`"
       />
     </div>
     <button
@@ -228,7 +228,7 @@
 </template>
 
 <script>
-import { imageProxy } from "@/lib/config";
+import { IMAGE_PROXY } from "@/lib/config";
 import Klingon from "@/lib/klingon";
 import pinyin2ipa from "pinyin2ipa";
 
@@ -259,7 +259,7 @@ export default {
   },
   data() {
     return {
-      imageProxy,
+      IMAGE_PROXY,
       entryClasses: { "tooltip-entry": true }, // Other classes are added upon update
     };
   },

@@ -24,7 +24,7 @@
           <div class="text-center mb-4">
             <Logo skin="light" />
           </div>
-          <h4 class="mt-5 mb-5 text-center">{{ $tb('Logging you out...') }}</h4>
+          <div class="mt-5 mb-5 text-center text-dark">{{ $tb('Logging you out...') }}</div>
         </div>
       </div>
     </div>

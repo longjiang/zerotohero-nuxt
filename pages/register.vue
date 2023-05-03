@@ -92,8 +92,7 @@
 </template>
 
 <script>
-import { background, logError } from "@/lib/utils";
-import { PYTHON_SERVER } from "@/lib/utils/servers";
+import { background, logError, PYTHON_SERVER, DIRECTUS_URL } from "@/lib/utils";
 
 export default {
   data() {
@@ -136,7 +135,7 @@ export default {
       try {
         this.loading = true;
         const res = await axios.post(
-          `https://directusvps.zerotohero.ca/zerotohero/users`,
+          `${DIRECTUS_URL}zerotohero/users`,
           this.form
         );
         if (res && res.data && res.data.public === true) {
@@ -151,7 +150,7 @@ export default {
               let user = response.data.data;
               this.$auth.setUser(user);
               this.$toast.success(
-                `Registration successful. Welcome aboard, ${this.form.first_name}!`,
+                $tb('Registration successful. Welcome aboard, {name}!', {name: this.form.first_name}),
                 {
                   position: "top-center",
                   duration: 5000,
@@ -177,11 +176,11 @@ export default {
         if (err.response && err.response.data) {
           let message = err.response.data.error.message;
           if (err.response.data.error.code === 204) {
-            message = `Your email ${this.form.email} has already been registered, please login.`;
+            message = $tb('Your email {email} has already been registered, please login.', {email: this.form.email});
             this.$router.push({
               name: "login",
               params: {
-                message: `Your email ${this.form.email} has already been registered, please login.`,
+                message,
               },
             });
           }

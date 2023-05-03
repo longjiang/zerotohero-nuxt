@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { proxy } from "@/lib/utils";
+import { proxy, DIRECTUS_URL } from "@/lib/utils";
 
 export default {
   props: {
@@ -111,7 +111,7 @@ export default {
   methods: {
     async getStats(refresh = false) {
       let data = await proxy(
-        `https://directusvps.zerotohero.ca/count-all.php${
+        `${DIRECTUS_URL}count-all.php${
           refresh ? "?timestamp=" + Date.now() : ""
         }`,
         { cacheLife: refresh ? 0 : 86400 } // cache the count for one day (86400 seconds)

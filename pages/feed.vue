@@ -77,7 +77,7 @@
 <script>
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
-import { shuffle, uniqueByValue, imageProxy } from "@/lib/utils";
+import { shuffle, uniqueByValue, IMAGE_PROXY } from "@/lib/utils";
 import axios from 'axios';
 import Papa from 'papaparse'
 
@@ -202,7 +202,7 @@ export default {
       let code = this.$l2["iso639-3"];
       if (code === "nor") code = "nob"; // Use 'Bokmal' for Norwegian.
       let res = await axios.get(
-        `${imageProxy}data/live-tv-channels/${code}.csv.txt`
+        `${IMAGE_PROXY}data/live-tv-channels/${code}.csv.txt`
       );
       if (res && res.data) {
         let channels = Papa.parse(res.data, { header: true }).data;

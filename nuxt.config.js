@@ -1,3 +1,5 @@
+import { DIRECTUS_URL } from "./lib/utils";
+
 let defaultDateTimeFormat =  {
   short: {
     year: 'numeric',
@@ -184,9 +186,9 @@ export default {
           autoFetch: false
         },
         endpoints: {
-          login: { url: 'https://directusvps.zerotohero.ca/zerotohero/auth/authenticate', method: 'post' },
-          refresh: { url: 'https://directusvps.zerotohero.ca/zerotohero/auth/refresh', method: 'post' },
-          logout: { url: 'https://directusvps.zerotohero.ca/zerotohero/auth/logout', method: 'post' },
+          login: { url: `${DIRECTUS_URL}zerotohero/auth/authenticate`, method: 'post' },
+          refresh: { url: `${DIRECTUS_URL}zerotohero/auth/refresh`, method: 'post' },
+          logout: { url: `${DIRECTUS_URL}zerotohero/auth/logout`, method: 'post' },
           user: false
         }
       }

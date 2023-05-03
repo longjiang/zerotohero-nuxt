@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import { unescape, stripTags } from "@/lib/utils/string";
+import { unescape, stripTags, DIRECTUS_URL } from "@/lib/utils";
 
-const DIRECTUS_ADMIN_URL = 'https://directusvps.zerotohero.ca/admin/#/'
+const DIRECTUS_ADMIN_URL = `${DIRECTUS_URL}admin/#/`
 
 export default {
   props: ["article", "edit", "social"],

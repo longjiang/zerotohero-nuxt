@@ -6,7 +6,7 @@
         <div
           v-if="entry.hsk && entry.hsk !== 'outside'"
           :style="
-            `background-image: url(${imageUrl}${entry.hskId}-${
+            `background-image: url(${IMAGE_URL}${entry.hskId}-${
               entry.simplified
             }.jpg)`
           "
@@ -16,7 +16,7 @@
           v-if="
             (!entry.hsk || entry.hsk === 'outside') && entry.images && entry.images.length > 0
           "
-          :style="`background-image: url(${imageProxy}?${entry.images[0].src})`"
+          :style="`background-image: url(${IMAGE_PROXY}?${entry.images[0].src})`"
           class="instagram-image"
         />
         <img src="/img/instagram-badge.png" class="instagram-badge" />
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { imageUrl, imageProxy, highlight } from '@/lib/utils'
+import { IMAGE_URL, IMAGE_PROXY, highlight } from '@/lib/utils'
 
 export default {
   props: {
@@ -61,8 +61,8 @@ export default {
   },
   data() {
     return {
-      imageUrl,
-      imageProxy
+      IMAGE_URL,
+      IMAGE_PROXY
     }
   },
   methods: {

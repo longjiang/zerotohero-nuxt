@@ -70,7 +70,7 @@
             </p>
             <div class="image-wall" :key="`web-images-${lesson.name}`" v-cloak v-if="images && images.length > 0">
               <img alt class="image-wall-image" v-for="(image, index) in images"
-                :key="`web-images-${lesson.name}-${index}`" :src="`${imageProxy}?${image.src}`"
+                :key="`web-images-${lesson.name}-${index}`" :src="`${IMAGE_PROXY}?${image.src}`"
                 @click="goto(image.url)" />
             </div>
           </div>
@@ -152,7 +152,7 @@
 
 <script>
 import WordPhotos from "@/lib/word-photos";
-import { removeInlineStylesFromString, level, imageProxy } from "@/lib/utils";
+import { removeInlineStylesFromString, level, IMAGE_PROXY } from "@/lib/utils";
 
 export default {
   props: ["id"],
@@ -160,7 +160,7 @@ export default {
     return {
       lesson: undefined,
       images: [],
-      imageProxy
+      IMAGE_PROXY
     };
   },
   async fetch() {
