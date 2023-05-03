@@ -95,6 +95,22 @@
           <i class="fa-solid fa-chevron-right"></i>
         </router-link>
       </div>
+      <div :class="`annotation-setting-toggle`">
+        <router-link
+          v-if="$auth && $auth.loggedIn && $auth.user && $auth.user.first_name"
+          to="/logout"
+          class="text-success"
+        >
+          <i class="fa-solid fa-person-to-door annotation-setting-icon"></i
+          >{{ $tb("Logout") }}
+          <i class="fa-solid fa-chevron-right"></i>
+        </router-link>
+        <router-link v-else to="/login" class="text-success">
+          <i class="fa-solid fa-right-from-bracket annotation-setting-icon"></i
+          >{{ $tb("Login") }}
+          <i class="fa-solid fa-chevron-right"></i>
+        </router-link>
+      </div>
     </div>
   </div>
 </template>
@@ -103,7 +119,7 @@
 import {
   defaultL2Settings,
   defaultGeneralSettings,
-} from "@/components/AnnotationSettings/defaults.js";
+} from "@/components/QuickSettings/defaults.js";
 
 export default {
   props: {
@@ -199,5 +215,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "@/components/AnnotationSettings/styles.scss";
+@import "@/components/QuickSettings/styles.scss";
 </style>

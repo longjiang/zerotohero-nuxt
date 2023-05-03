@@ -138,7 +138,6 @@
         :title="$t('Switch languages')"
         modal-class="safe-padding-top mt-4"
         body-class="languages-modal-wrapper"
-        @show="onLanguagesModalShown"
       >
         <div class="languages-modal">
           <div class="mb-3">

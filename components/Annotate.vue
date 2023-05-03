@@ -110,8 +110,6 @@
           <span @click="copyClick">{{ $t("Copy Text") }}</span>
         </div>
         <TranslatorLinks class="mt-2 pl-1" :text="text" />
-        <hr />
-        <QuickSettings />
       </div>
     </b-modal>
   </div>

@@ -37,19 +37,23 @@
 
 .annotation-setting-toggle {
   cursor: pointer;
+  margin: 0.25rem 0;
 }
 
 .annotation-setting-toggle-active {
   color: $primary-color;
 }
 
-.annotation-setting-icon {
-  width: 1.5rem;
-  margin-right: 10px;
-  text-align: center;
-  display: inline-block;
-}
 
 hr {
   margin: 0.5rem 0;
+}
+
+
+.annotation-setting-icon {
+  margin-right: 10px;
+  width: 1.75rem;
+  cursor: pointer;
+  margin-bottom: 0;
+  text-align: center;
 }
