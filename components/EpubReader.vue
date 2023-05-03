@@ -13,7 +13,8 @@
         </div>
       </b-modal>
       <img v-if="coverUrl && !coverTapped" :src="coverUrl" alt="" class="book-cover" @click="coverTapped = true" />
-      <TextWithSpeechBar class="mt-3" v-if="currentChapterHTML && coverTapped" v-bind="{
+      <div class="text-center mt-5 mb-5" v-if="loading" ><Loader :sticky="true" /></div>
+      <TextWithSpeechBar class="mt-3" v-if="!loading && currentChapterHTML && coverTapped" v-bind="{
         showTocButton: true,
         hasPreviousChapter,
         hasNextChapter,
@@ -36,6 +37,7 @@ export default {
   data() {
     return {
       book: null,
+      loading: false,
       toc: [],
       currentChapterHref: null,
       prevChapterHref: null,
@@ -124,6 +126,7 @@ export default {
     // Load a specific chapter in an ePub document.
 
     async loadChapter(href) {
+      this.loading = true;
       this.currentChapterHref = href;
       const cleanHref = href.split("#")[0];
       let spine = await this.book.loaded.spine;
@@ -143,6 +146,7 @@ export default {
       if (this.$refs.tocModal) this.$refs.tocModal.hide();
       this.updateChapterNavigation();
       if (window) window.scrollTo({ top: 0, behavior: "smooth" });
+      this.loading = false;
     },
 
     async getConcatenatedChapterHTML(spine, startIndex, endIndex) {
