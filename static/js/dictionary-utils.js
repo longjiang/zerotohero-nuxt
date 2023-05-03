@@ -4,7 +4,7 @@ const PYTHON_SERVER = "https://python.zerotohero.ca/";
 
 const SERVER = "https://server.chinesezerotohero.com/";
 
-const scrape2 = SERVER + "scrape2.php";
+const SCRAPE_URL = SERVER + "scrape2.php";
 
 const proxy = async (
   url,
