@@ -21,7 +21,7 @@
         }">
         <div class="annotator-buttons" v-if="!empty() && buttons">
           <div class="annotator-menu-toggle" @click="showMenuModal">
-            <i class="fa-regular fa-circle-ellipsis"></i>
+            <i class="fa-regular fa-ellipsis-v"></i>
           </div>
         </div>
         <div class="annotate-except-buttons" style="width: 100%">
@@ -805,7 +805,6 @@ export default {
   min-width: 61.8%;
   width: 100%;
   display: flex;
-  align-items: center;
   flex-direction: row;
 
   .annotate-template {
