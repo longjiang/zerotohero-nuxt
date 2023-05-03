@@ -1,27 +1,25 @@
 <template>
   <div :class="`annotation-settings annotation-settings-${variant}`">
-    <div class="bg-gray rounded p-2" :class='{
-      "show-pinyin": $l2Settings.showPinyin,
-      "show-pinyin-for-saved":
-        !$l2Settings.showPinyin && $l2 && $l2.han,
-      "show-simplified": !$l2Settings.useTraditional,
-      "show-traditional": $l2Settings.useTraditional,
-      "show-definition": $l2Settings.showDefinition,
-      "show-translation": $l2Settings.showTranslation,
-      "show-quick-gloss": $l2Settings.showQuickGloss,
-      "show-byeonggi": $l2Settings.showByeonggi,
-      "use-serif": $l2Settings.useSerif,
-      [`zerotohero-zoom-${$l2Settings.zoomLevel}`]: true,
-    }'>
-      <Annotate class="text-center" :useZoom="true"><span>{{ $l2.vernacularName || 'Example' }}</span></Annotate>
-      <div class="translation-line text-center">{{ $t('Example Translation') }}</div>
+    <div class="bg-gray rounded p-2" :class="annotationSettingsClass">
+      <Annotate class="text-center" :useZoom="true"
+        ><span>{{ $l2.vernacularName || "Example" }}</span></Annotate
+      >
+      <div class="translation-line text-center">
+        {{ $t("Example Translation") }}
+      </div>
     </div>
     <div class="text-size">
       <div class="text-size-label">
-        <div style="font-size: 0.8rem">{{ $t('Smaller') }}</div>
-        <div style="font-size: 1.2rem">{{ $t('Bigger') }}</div>
+        <div style="font-size: 0.8rem">{{ $t("Smaller") }}</div>
+        <div style="font-size: 1.2rem">{{ $t("Bigger") }}</div>
       </div>
-      <b-form-input type="range" min="0" max="7" step="1" v-model="zoomLevel"></b-form-input>
+      <b-form-input
+        type="range"
+        min="0"
+        max="7"
+        step="1"
+        v-model="zoomLevel"
+      ></b-form-input>
     </div>
     <div class="quick-settings-language-specific" v-if="$l1 && $l2">
       <Toggle v-model="showPinyin" label="Show Phonetics">
@@ -34,9 +32,11 @@
             假
             <rt>か</rt>
           </ruby>
-          <ruby v-else-if="
-            $l2.scripts && $l2.scripts[0] && $l2.scripts[0].script === 'Arab'
-          ">
+          <ruby
+            v-else-if="
+              $l2.scripts && $l2.scripts[0] && $l2.scripts[0].script === 'Arab'
+            "
+          >
             نص
             <rt>naṣṣ</rt>
           </ruby>
@@ -46,7 +46,11 @@
       <Toggle v-model="showDefinition" label="Show Definition">
         <i class="fa-solid fa-circle-info"></i>
       </Toggle>
-      <Toggle v-if="$l2.han" v-model="useTraditional" :label="useTraditional ? 'Show Traditional' : 'Show Simplified'">
+      <Toggle
+        v-if="$l2.han"
+        v-model="useTraditional"
+        :label="useTraditional ? 'Show Traditional' : 'Show Simplified'"
+      >
         <span>
           <span v-if="useTraditional">繁</span>
           <span v-if="!useTraditional">简</span>
@@ -58,10 +62,14 @@
       <Toggle v-model="showQuickGloss" label="Show Gloss for Saved">
         <i class="fas fa-text-size"></i>
       </Toggle>
-      <Toggle v-if="['ko', 'vi'].includes($l2.code)" v-model="showByeonggi"
-        :label="{ ko: 'Show Hanja', vi: 'Show Han Tự' }[$l2.code]">
+      <Toggle
+        v-if="['ko', 'vi'].includes($l2.code)"
+        v-model="showByeonggi"
+        :label="{ ko: 'Show Hanja', vi: 'Show Han Tự' }[$l2.code]"
+      >
         <span>
-          <span>{{ { ko: '자', vi: 'Tự' }[$l2.code] }}</span><small style="font-size: 0.5em">字</small>
+          <span>{{ { ko: "자", vi: "Tự" }[$l2.code] }}</span
+          ><small style="font-size: 0.5em">字</small>
         </span>
       </Toggle>
       <hr />
@@ -82,7 +90,8 @@
       <hr />
       <div :class="`annotation-setting-toggle`">
         <router-link :to="{ name: 'settings' }" class="text-success">
-          <i class="fa-solid fa-gears annotation-setting-icon"></i>{{ $tb("More Settings") }}
+          <i class="fa-solid fa-gears annotation-setting-icon"></i
+          >{{ $tb("More Settings") }}
           <i class="fa-solid fa-chevron-right"></i>
         </router-link>
       </div>
@@ -91,37 +100,10 @@
 </template>
 
 <script>
-export const defaultL2Settings = {
-  l1: "en", // the L1 the user used last time when they studied this language
-  showDefinition: false,
-  showPinyin: true,
-  useTraditional: false,
-  showTranslation: true,
-  showQuickGloss: true,
-  useSerif: false,
-  showQuiz: true,
-  showByeonggi: true,
-  tvShowFilter: "all", // By default we only search TV shows.
-  talkFilter: "all", // By default we search all talks.
-  autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
-  quizMode: false,
-  disableAnnotation: false,
-  zoomLevel: 0,
-};
-
-export const defaultGeneralSettings = {
-  adminMode: false,
-  skin: null, // 'light' or 'dark'
-  preferredCategories: [],
-  layout: null, // 'vercial', 'horizontal'
-  autoPause: false,
-  speed: 1,
-  hideWord: false, // as used in the <HideDefs> component
-  hidePhonetics: false, // as used in the <HideDefs> component
-  hideDefinitions: false, // as used in the <HideDefs> component
-  subsSearchLimit: true,
-  openAIToken: undefined,
-};
+import {
+  defaultL2Settings,
+  defaultGeneralSettings,
+} from "@/components/AnnotationSettings/defaults.js";
 
 export default {
   props: {
@@ -152,6 +134,21 @@ export default {
   computed: {
     userIsAdmin() {
       return this.$auth.user && this.$auth.user.role == 1;
+    },
+    annotationSettingsClass() {
+      return {
+        "show-pinyin": this.$l2Settings.showPinyin,
+        "show-pinyin-for-saved":
+          !this.$l2Settings.showPinyin && this.$l2 && this.$l2.han,
+        "show-simplified": !this.$l2Settings.useTraditional,
+        "show-traditional": this.$l2Settings.useTraditional,
+        "show-definition": this.$l2Settings.showDefinition,
+        "show-translation": this.$l2Settings.showTranslation,
+        "show-quick-gloss": this.$l2Settings.showQuickGloss,
+        "show-byeonggi": this.$l2Settings.showByeonggi,
+        "use-serif": this.$l2Settings.useSerif,
+        [`zerotohero-zoom-${this.$l2Settings.zoomLevel}`]: true,
+      };
     },
   },
   methods: {
@@ -202,59 +199,5 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "~@/assets/scss/variables.scss";
-
-.translation-line {
-  font-size: 0.8em;
-  color: #444;
-  display: none;
-}
-
-.show-translation .translation-line {
-  display: inherit;
-}
-
-.text-size-label {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin: 0.25rem 0 0 0;
-}
-
-.toggle-wrapper {
-  margin: 0.25rem 0;
-}
-
-.translated-line {
-  color: #aaa;
-  font-style: italic;
-  font-size: 0.8em;
-}
-
-.translated-line {
-  display: none;
-}
-
-.show-translation .translated-line {
-  display: inherit;
-}
-
-.annotation-setting-toggle {
-  cursor: pointer;
-}
-
-.annotation-setting-toggle-active {
-  color: $primary-color;
-}
-
-.annotation-setting-icon {
-  width: 1.5rem;
-  margin-right: 10px;
-  text-align: center;
-  display: inline-block;
-}
-
-hr {
-  margin: 0.5rem 0;
-}
+@import "@/components/AnnotationSettings/styles.scss";
 </style>

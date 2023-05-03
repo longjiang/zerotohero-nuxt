@@ -107,16 +107,10 @@
 </template>
 
 <script>
-import CorpusSelect from "@/components/CorpusSelect";
-import AnnotationSettings from "@/components/AnnotationSettings";
 import { mapState } from "vuex";
 import { timeout } from "@/lib/utils";
 
 export default {
-  components: {
-    CorpusSelect,
-    AnnotationSettings,
-  },
   data() {
     return {
       openAIToken: undefined,

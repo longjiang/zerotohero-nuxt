@@ -1,15 +1,17 @@
 <template>
   <container-query :query="query" v-model="params">
     <div
-      :class="`site-top-bar site-top-bar-${
-        wide ? 'wide' : 'not-wide'
-      } site-top-bar-${skin}`"
+      :class="[
+        'site-top-bar',
+        wide ? 'site-top-bar-wide' : 'site-top-bar-not-wide',
+        `site-top-bar-${skin}`,
+      ]"
     >
       <div class="site-top-bar-left">
         <b-button
           @click="$router.back()"
           variant="unstyled"
-          v-if="$route.path !== '/'"
+          v-show="$route.path !== '/'"
         >
           <i class="fas fa-arrow-left"></i>
           {{ $tb("Back") }}
@@ -20,7 +22,7 @@
           :class="{
             'logo flex-1 text-center': true,
           }"
-          v-if="!wide && $route.path !== '/'"
+          v-show="!wide && $route.path !== '/'"
         >
           <router-link
             :to="
@@ -45,26 +47,24 @@
       </div>
       <div class="site-top-bar-right">
         <client-only>
-          <span v-if="!$route.params.l1 && !$route.params.l2">
-            <!-- <router-link to="/go-pro" v-if="!pro" class="mr-2">
+          <span v-show="!$route.params.l1 && !$route.params.l2">
+            <!-- <router-link to="/go-pro" v-show="!pro" class="mr-2">
               🚀 {{ $tb("Go Pro") }}
             </router-link> -->
-            <span
-              to="/profile"
+            <router-link
+              v-if="$auth && $auth.loggedIn && $auth.user && $auth.user.first_name"
+              to="/logout"
               class="mr-1"
-              v-if="
-                $auth && $auth.loggedIn && $auth.user && $auth.user.first_name
-              "
             >
-              <router-link to="/logout">{{ $tb("Logout") }}</router-link>
-            </span>
-            <span v-else>
-              <router-link to="/login">{{ $tb("Login") }}</router-link>
-            </span>
+              {{ $tb("Logout") }}
+            </router-link>
+            <router-link v-else to="/login" class="mr-1">
+              {{ $tb("Login") }}
+            </router-link>
           </span>
         </client-only>
         <router-link
-          v-if="$route.params.l1 && $route.params.l2"
+          v-show="$route.params.l1 && $route.params.l2"
           :to="{ name: 'youtube-search' }"
           :class="`btn top-bar-buttontop btn-unstyled link-unstyled mr-1`"
           title="Search Videos"
@@ -83,7 +83,7 @@
           :class="`top-bar-buttontop ml-2`"
           variant="unstyled"
           :title="$tb('Share')"
-          v-if="canShare"
+          v-show="canShare"
           @click="share"
         >
           <i class="fas fa-share"></i>
@@ -102,21 +102,17 @@
             <LanguageFlag
               v-if="$l2 && flagCode"
               ref="flag"
-              style="
-                transform: scale(0.7);
-                margin-right: -0.5rem;
-                margin-bottom: -0.3rem;
-              "
               :key="`top-bar-flag-${$l2.code}`"
               :autocycle="false"
               :language="$l2"
-              class="ml-2"
+              class="ml-2 site-top-bar-language-flag"
             />
-            <span :class="`${!$route.params.l2 ? 'd-none' : ''} ml-1`">
-              <i
-                class="fas fa-sort-down"
-                style="position: relative; bottom: 0.2rem; opacity: 0.7"
-              ></i>
+            <span
+              :class="`${
+                !$route.params.l2 ? 'd-none' : ''
+              } ml-1 language-flag-triangle`"
+            >
+              <i class="fas fa-sort-down"></i>
             </span>
           </span>
         </div>
@@ -151,7 +147,7 @@
               {{ $t("Back to Dashboard") }}
             </router-link>
           </div>
-          <LazyDashboard class="mb-5" v-if="hasDashboard" />
+          <LazyDashboard class="mb-5" v-show="hasDashboard" />
           <div class="pb-5">
             <h5 class="text-center mb-2">
               {{ $t("Learn another language") }}
@@ -164,10 +160,7 @@
   </container-query>
 </template>
 <script>
-import { ContainerQuery } from "vue-container-query";
-import { mapState } from "vuex";
-import { Capacitor } from "@capacitor/core";
-import { Share } from "@capacitor/share";
+import { ContainerQuery, mapState, Capacitor, Share } from "@/imports";
 
 export default {
   components: { ContainerQuery },
@@ -220,21 +213,6 @@ export default {
           window.matchMedia("(display-mode: standalone)").matches)
       );
     },
-    languageMapPath() {
-      if (this.fullHistory) {
-        let historyMatches = this.fullHistory
-          .map((h) => h.path)
-          .filter((path) => {
-            if (path) {
-              let r = this.$router.resolve(path);
-              return r && r.route && ["language-map"].includes(r.route.name);
-            }
-          });
-        let path = historyMatches.pop();
-        if (path) return path;
-      }
-      return "/language-map";
-    },
     flagCode() {
       if (this.$l2) return this.$languages.countryCode(this.$l2);
     },
@@ -281,7 +259,6 @@ export default {
     hideSettingsModal() {
       this.$refs["settings-modal"].hide();
     },
-    onLanguagesModalShown() {},
     scrollToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
@@ -310,97 +287,5 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
-.flag-icon {
-  position: relative;
-  bottom: 0.1rem;
-}
-.site-top-bar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  z-index: 20;
-  line-height: 2.3;
-  position: sticky;
-  top: 0;
-  padding: calc(env(safe-area-inset-top) + 0.25rem) 0.75rem 0.25rem 0.75rem;
-  color: #777;
-  font-size: 0.875rem;
-  .btn,
-  a {
-    line-height: 2.3rem;
-  }
-  &.site-top-bar-light {
-    background-color: white;
-    .btn,
-    a {
-      color: #000000aa;
-      &:hover {
-        color: $bg-color-dark-1;
-      }
-    }
-  }
-  &.site-top-bar-dark {
-    background-color: $bg-color-dark-1;
-    .btn,
-    a {
-      color: #ffffffaa;
-      &:hover {
-        color: white;
-      }
-    }
-  }
-  .btn {
-    margin: 0 0 0 0.3rem;
-    padding: 0;
-  }
-
-  &.site-top-bar-menu-bar {
-    width: 100vw;
-    position: sticky;
-    top: 0;
-    z-index: 99;
-  }
-
-  .language-flag-and-name {
-    line-height: 1;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    display: inline-block;
-    position: relative;
-    text-align: left;
-  }
-}
-
-.zerotohero-wide {
-  .site-top-bar {
-    left: 13rem;
-  }
-  &.zerotohero-wide-collapsed {
-    .site-top-bar {
-      left: 5rem;
-      width: calc(100% - 5rem);
-    }
-  }
-  &:not(.zerotohero-with-nav) {
-    .site-top-bar {
-      left: 0;
-      width: 100%;
-    }
-  }
-}
-
-.logo {
-  height: 1.3rem;
-  border-radius: 100%;
-  &.logo-absolute-centered {
-    position: absolute;
-    left: calc(50% - 4.5rem);
-    top: calc(0.25rem + env(safe-area-inset-top));
-  }
-  span {
-    font-size: 0.9rem !important;
-  }
-}
+@import "@/components/SiteTopBar/styles.scss";
 </style>

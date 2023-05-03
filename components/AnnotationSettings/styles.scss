@@ -1,0 +1,55 @@
+@import "~@/assets/scss/variables.scss";
+
+.translation-line {
+  font-size: 0.8em;
+  color: #444;
+  display: none;
+}
+
+.show-translation .translation-line {
+  display: inherit;
+}
+
+.text-size-label {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin: 0.25rem 0 0 0;
+}
+
+.toggle-wrapper {
+  margin: 0.25rem 0;
+}
+
+.translated-line {
+  color: #aaa;
+  font-style: italic;
+  font-size: 0.8em;
+}
+
+.translated-line {
+  display: none;
+}
+
+.show-translation .translated-line {
+  display: inherit;
+}
+
+.annotation-setting-toggle {
+  cursor: pointer;
+}
+
+.annotation-setting-toggle-active {
+  color: $primary-color;
+}
+
+.annotation-setting-icon {
+  width: 1.5rem;
+  margin-right: 10px;
+  text-align: center;
+  display: inline-block;
+}
+
+hr {
+  margin: 0.5rem 0;
+}
