@@ -21,11 +21,11 @@
     <div class="gradient-backdrop"></div>
     <div class="gradient-backdrop-2"></div>
     <div
-      class="container-fluid safe-padding-top safe-padding-bottom pt-5"
+      class="container-fluid  safe-padding-bottom "
       style="overflow: hidden; position: relative"
     >
       <div class="container">
-        <div class="row">
+        <div class="row pt-5 safe-padding-top draggable-region">
           <div class="col-12 col-md-4 text-center text-sm-left mb-4">
             <Logo layout="horizontal" class="d-inline-block" />
           </div>

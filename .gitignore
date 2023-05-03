@@ -88,3 +88,6 @@ sw.*
 
 # Vim swap files
 *.swp
+
+# Electron
+dist_electron/

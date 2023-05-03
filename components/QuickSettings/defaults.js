@@ -29,3 +29,7 @@ export const defaultGeneralSettings = {
   subsSearchLimit: true,
   openAIToken: undefined,
 };
+
+export default {
+  // Your default values or settings here
+};

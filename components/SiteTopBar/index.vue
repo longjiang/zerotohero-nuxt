@@ -5,6 +5,7 @@
         'site-top-bar',
         wide ? 'site-top-bar-wide' : 'site-top-bar-not-wide',
         `site-top-bar-${skin}`,
+        'draggable-region',
       ]"
     >
       <div class="site-top-bar-left">
@@ -205,6 +206,9 @@ export default {
   },
   computed: {
     ...mapState("fullHistory", ["fullHistory"]),
+    electronClass() {
+      return this.isElectron() ? "electron-padding" : "";
+    },
     isPWA() {
       return (
         (typeof navigator !== "undefined" && navigator.standalone) ||
@@ -232,6 +236,13 @@ export default {
     },
   },
   methods: {
+    isElectron() {
+      return (
+        typeof window !== "undefined" &&
+        typeof window.process !== "undefined" &&
+        typeof window.process.versions.electron !== "undefined"
+      );
+    },
     hasDashboard() {
       return (
         this.$auth.loggedIn &&

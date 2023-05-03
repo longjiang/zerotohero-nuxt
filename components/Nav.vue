@@ -10,6 +10,7 @@
       'zth-nav-page': variant === 'page',
       'zth-nav-collapsed': collapsed,
       'zth-nav-bottom-hidden': hidden,
+      'draggable-region': variant === 'side-bar',
     }"
   >
     <div

@@ -130,7 +130,6 @@ export default {
         silentTranslationWarn: true
       }
     }],
-    '@nuxtjs/google-fonts',
     '@nuxtjs/auth-next',
     '@nuxtjs/toast',
 
