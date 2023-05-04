@@ -17,7 +17,7 @@
     <SiteTopBar />
     <div class="go-pro-wrapper container">
       <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 text-dark">
           <div>
             <Logo :forcePro="true" skin="light" class="logo" />
             <hr />

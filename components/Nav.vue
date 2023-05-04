@@ -74,7 +74,7 @@
                 (child) => child.show
               )"
               :to="last(child) || child"
-              :key="`subnav-item-${child.name || child.href}-${index}`"
+              :key="`subnav-item-${currentParent.name}-${child.name || child.href}-${index}`"
               v-slot="{ href, route, navigate, isActive, isExactActive }"
               custom
             >
