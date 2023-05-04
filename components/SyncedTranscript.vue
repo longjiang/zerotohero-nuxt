@@ -84,11 +84,8 @@
           </div>
           <template v-if="!pro">
             <YouNeedPro
-              v-if="
-                (!single && filteredLines.length < lines.length) ||
-                (single && currentLineIndex > NON_PRO_MAX_LINES)
-              "
-              style="position: absolute; bottom: 0; width: 100%"
+              v-if="showYouNeedPro"
+              class="transcript-you-need-pro"
             />
           </template>
         </client-only>
@@ -204,6 +201,15 @@ export default {
     };
   },
   computed: {
+    showYouNeedPro() {
+      let showYouNeedPro = false;
+      if (this.single) {
+        showYouNeedPro = this.currentLineIndex > NON_PRO_MAX_LINES
+      } else {
+        showYouNeedPro = this.filteredLines.length < this.lines.length
+      }
+      return showYouNeedPro
+    },
     /**
      * A map of line indices after which to show a pop quiz to the lines this quiz is based on.
      * Key is the transcript line number (starting from 0) after which the quiz is shown
@@ -818,5 +824,17 @@ export default {
 }
 .transcript-wrapper {
   position: relative;
+}
+
+.transcript-you-need-pro {
+  position: absolute;
+  bottom: 0;
+  width: 100%
+}
+
+.zerotohero-not-wide.zerotohero-with-nav {
+  .transcript-you-need-pro {
+    bottom: 4.5rem; // Make room for the bottom menu
+  }
 }
 </style>
