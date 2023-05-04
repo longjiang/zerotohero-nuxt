@@ -828,6 +828,12 @@ export default {
           children: [
             {
               icon: "fas fa-wrench",
+              title: "Quality Assurance",
+              name: "admin-quality-assurance",
+              show: this.$adminMode,
+            },
+            {
+              icon: "fas fa-wrench",
               title: "Phrase Survey",
               name: "admin-phrase-survey",
               show: this.$adminMode,
