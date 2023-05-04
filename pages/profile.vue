@@ -23,7 +23,7 @@
       <div class="container" v-else>
         <div class="row mb-3">
           <div class="col-sm-12 text-center">
-            <h4>{{ $auth.user.first_name }} {{ $auth.user.last_name }}</h4>
+            <h4>{{ formatName($auth.user.first_name, $auth.user.last_name) }}</h4>
             <div>{{ $auth.user.email }}</div>
             <hr class="mt-3 mb-3" />
             <div v-if="subscription && !pro">
@@ -224,7 +224,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { languageLevels, timeout } from "@/lib/utils";
+import { languageLevels, timeout, formatName } from "@/lib/utils";
 
 export default {
   computed: {
@@ -307,6 +307,9 @@ export default {
     },
   },
   methods: {
+    formatName(...args) {
+      return formatName(...args);
+    },
     levelObj(level) {
       return languageLevels(this.$l2)[level];
     },
