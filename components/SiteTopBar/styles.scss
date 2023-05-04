@@ -80,6 +80,12 @@
   }
 }
 
+.zerotohero-electron {
+  .site-top-bar {
+    padding-top: 1.5rem; // For electron
+  }
+}
+
 .logo {
   height: 1.3rem;
   border-radius: 100%;

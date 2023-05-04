@@ -92,6 +92,7 @@ export default {
       l2Time: {},
       timeLoggerID: undefined,
       l2SettingsClasses: {},
+      isElectron: false,
       host: process.server
         ? process.env.baseUrl
         : window.location.protocol +
@@ -140,6 +141,7 @@ export default {
           this.overlayPlayerYouTubeId && this.overlayPlayerMinimized,
         "zerotohero-with-nav":
           !this.fullscreen && this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2,
+        "zerotohero-electron": this.isElectron,
         [`route-${this.$route.name}`]: true,
         [`zerotohero-${this.$skin}`]: true,
       }
@@ -152,6 +154,7 @@ export default {
     this.updateOverlayPlayerProps();
   },
   async mounted() {
+    this.isElectron = navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
     if (this.$auth.loggedIn && this.$route.path === "/") {
       this.$router.push({ path: "/dashboard" });
     } else {

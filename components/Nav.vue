@@ -26,8 +26,7 @@
           <Logo
             layout="horizontal"
             v-if="variant === 'side-bar'"
-            class="mt-5"
-            style="margin-left: 1.25rem"
+            style="margin-left: 1.25rem; margin-top: 2.5rem;"
             :skin="$skin"
           />
           <div :class="{ 'main-nav-items': true }">
