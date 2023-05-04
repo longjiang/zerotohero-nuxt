@@ -43,6 +43,7 @@
     "deep-equal": "^2.0.5",
     "detect-file-encoding-and-language": "^2.1.0",
     "dom-serializer": "^2.0.0",
+    "dompurify": "^3.0.2",
     "epubjs": "0.3.93",
     "fast-xml-parser": "^3.19.0",
     "fastest-levenshtein": "^1.0.16",
@@ -75,7 +76,7 @@
     "pinyin-separate": "^1.1.0",
     "pinyin-tone": "^2.1.2",
     "pinyin2ipa": "^1.0.4",
-    "sanitize-html": "^2.4.0",
+    "sass-loader": "10.1.1",
     "semver": "^7.5.0",
     "smartquotes": "^2.3.2",
     "smoothscroll-polyfill": "^0.4.4",
@@ -138,7 +139,7 @@
     "eslint-plugin-vue": "^7.7.0",
     "node-sass": "npm:sass@^1.54.4",
     "raw-loader": "^4.0.2",
-    "sass": "^1.32.13",
+    "sass": "^1.62.1",
     "vue-jest": "^3.0.4"
   }
 }

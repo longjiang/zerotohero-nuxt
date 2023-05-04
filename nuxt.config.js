@@ -243,7 +243,8 @@ export default {
       });
     },
     transpile: [
-      'iframe-translator'
+      'iframe-translator',
+      'defu'
     ]
   },
   target: 'static',

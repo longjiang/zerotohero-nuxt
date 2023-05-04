@@ -169,7 +169,7 @@
 import { IMAGE_PROXY } from "@/lib/config";
 import Library from "@/lib/library";
 import { parse } from "node-html-parser";
-import sanitizeHtml from "sanitize-html";
+import DOMPurify from 'dompurify';
 import { stripTags } from "@/lib/utils";
 
 export default {
@@ -249,7 +249,7 @@ export default {
       let chapter = await Library.getChapter(url);
       if (chapter) {
         let root = parse("<div></div>");
-        root.innerHTML = sanitizeHtml(chapter.content);
+        root.innerHTML = DOMPurify.sanitize(chapter.content);
         for (let a of root.querySelectorAll("a")) {
           if (!a.getAttribute("target")) {
             let url = a.getAttribute("href");
