@@ -859,7 +859,7 @@ export default {
             {
               icon: "fas fa-ellipsis-h",
               title: `More`,
-              name: "tutoring",
+              name: "admin-break-lines",
               show: true,
               children: [
                 {
