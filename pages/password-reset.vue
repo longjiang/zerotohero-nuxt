@@ -27,9 +27,9 @@
             <b-form @submit.prevent="onSubmit" v-if="token">
               <div class="alert alert-success">
                 <i class="fas fa-check mr-1"></i>
-                Email verified.
+                {{ $tb('Email verified.') }}
               </div>
-              <p class="mb-3">Enter your new password:</p>
+              <p class="mb-3">{{ $tb('Enter your new password:') }}</p>
 
               <b-form-group id="input-group-2" label-for="password">
                 <b-form-input
@@ -47,12 +47,18 @@
                 variant="success"
                 v-if="!resetting"
               >
-                Reset Password
+                {{ $tb('Reset Password') }}
               </b-button>
               <div class="text-center" v-else>
                 <Loader :sticky="true" message="Changing your password..." />
               </div>
             </b-form>
+            <div v-else>
+              <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle mr-1"></i>
+                {{ $tb('Password reset token is missing.') }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -91,7 +97,7 @@ export default {
         let password = this.form.password;
         let reset = this.$directus.resetPassword({ token, password })
         if (reset) {
-          this.$toast.success("Your password has been reset, please login.", {
+          this.$toast.success("Your password has been updated, please login.", {
             position: "top-center",
             duration: 5000,
           });
