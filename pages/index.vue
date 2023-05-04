@@ -21,7 +21,7 @@
     <div class="gradient-backdrop"></div>
     <div class="gradient-backdrop-2"></div>
     <div
-      class="container-fluid  safe-padding-bottom "
+      class="container-fluid safe-padding-bottom"
       style="overflow: hidden; position: relative"
     >
       <div class="container">
@@ -169,73 +169,88 @@
           </div>
           <div class="col-md-6 mb-3 pl-4">
             <h3 class="text-white mb-2">
-              {{ $tb("Learn on the go with our mobile apps.") }}
+              {{ $tb("Learn anywhere with our native apps.") }}
             </h3>
             <p class="text-white">
-              {{ $tb("Available on iOS and Android.") }}
+              {{ $tb("Available on iOS, iPadOS, Android, macOS and Windows.") }}
             </p>
             <div class="row">
-              <div class="col-12 col-md-6">
-                <div>
+              <div class="col-12 col-md-6 mb-3">
+                <div class="platform-icon">
+                  <i class="fa-brands fa-app-store-ios"></i>
+                </div>
+                <div class="mt-3 text-white">
                   <a
                     href="https://apps.apple.com/us/app/zero-to-hero-languages/id1623985525"
                     target="_blank"
+                    >{{ $tb("Download on the App Store.") }}</a
                   >
-                    <img
-                      data-not-lazy
-                      src="/img/btn-ios-app.png"
-                      alt="Download on the App Store"
-                      style="width: 10rem"
-                    />
-                    <br />
-                    <br />
-                    <img
-                      src="/img/qr-ios-app-store.png"
-                      alt="QR Code"
-                      style="width: 9rem; border-radius: 0.5rem"
-                    />
-                    <p class="mt-3 text-white">
-                      <small>
-                        {{
-                          $tb(
-                            "Search for “Language Player 2” in the iOS App Store."
-                          )
-                        }}
-                      </small>
-                    </p>
-                  </a>
+                </div>
+                <p class="mt-3">
+                  {{
+                    $tb("Search for “Language Player 2” in the iOS App Store.")
+                  }}
+                </p>
+              </div>
+              <div class="col-12 col-md-6 mb-3">
+                <div>
+                  <div class="platform-icon">
+                    <i class="fa-brands fa-android"></i>
+                  </div>
+                  <div class="mt-3 text-white">
+                    <a
+                      href="https://play.google.com/store/apps/details?id=ca.zerotohero.app"
+                      target="_blank"
+                      >{{ $tb("Download on Google Play.") }}</a
+                    >
+                  </div>
+                  <p class="mt-3">
+                    {{ $tb("Or, download the Android app as an") }}
+                    <a
+                      href="https://server.chinesezerotohero.com/data/android/language-player-android-2.14.1.apk"
+                    >
+                      {{ $tb("Android Package") }} (APK) - v2.14.1
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <div class="row mt-3">
+              <div class="col-12 col-md-6">
+                <div>
+                  <div class="platform-icon">
+                    <i class="fa-brands fa-apple"></i>
+                  </div>
+                  <p class="mt-3 text-white">
+                    Download the desktop app for macOS.
+                  </p>
+                  <p class="mt-3 text-white">
+                    <a
+                      href="https://server.chinesezerotohero.com/data/electron/Language Player.dmg"
+                      >64-bit (Intel)</a
+                    >
+                    |
+                    <a
+                      href="https://server.chinesezerotohero.com/data/electron/Language Player-arm64.dmg"
+                      >ARM64 (M1/M2)</a
+                    >
+                  </p>
                 </div>
               </div>
               <div class="col-12 col-md-6">
                 <div>
-                  <a
-                    href="https://play.google.com/store/apps/details?id=ca.zerotohero.app"
-                    target="_blank"
-                  >
-                    <img
-                      data-not-lazy
-                      src="/img/btn-google-play.png"
-                      alt="Download on Google Play"
-                      style="width: 10rem"
-                    />
-                    <br />
-                    <br />
-                    <img
-                      src="/img/qr-google-play.png"
-                      alt="QR Code"
-                      style="width: 9rem; border-radius: 0.5rem"
-                    />
-                  </a>
+                  <div class="platform-icon">
+                    <i class="fa-brands fa-windows"></i>
+                  </div>
                   <p class="mt-3 text-white">
-                    <small>
-                      <i class="fa-solid fa-down mr-1"></i>
-                      {{ $tb("Or, download the Android app as an") }}
-                      <a
-                        href="https://server.chinesezerotohero.com/data/android/language-player-android-2.14.1.apk"
-                      >
-                        {{ $tb("Android Package") }} (APK) - v2.14.1
-                      </a>
-                    </small>
+                    Download the desktop app for Windows.
+                  </p>
+                  <p class="mt-3 text-white">
+                    <a
+                      href="https://server.chinesezerotohero.com/data/electron/Language Player Setup.exe"
+                      >Windows Installer (.exe)</a
+                    >
                   </p>
                 </div>
               </div>
@@ -275,9 +290,7 @@
           </div>
           <div class="col-md-4 mb-3">
             <h3 class="text-white mb-2">
-              {{
-                $tb("Interactive transcripts with English translation")
-              }}
+              {{ $tb("Interactive transcripts with English translation") }}
             </h3>
             <p class="text-white">
               {{
@@ -314,9 +327,7 @@
           <div class="col-12 mb-3 text-center">
             <h3 class="text-white mb-2">{{ $tb("Pricing Options") }}</h3>
             <p class="text-white">
-              {{
-                $tb("Get unlimited access with a lifetime Pro account.")
-              }}
+              {{ $tb("Get unlimited access with a lifetime Pro account.") }}
             </p>
           </div>
           <div class="col-12">
@@ -845,5 +856,10 @@ export default {
     position: absolute;
     left: 0;
   }
+}
+
+.platform-icon {
+  font-size: 5rem;
+  line-height: 1;
 }
 </style>
