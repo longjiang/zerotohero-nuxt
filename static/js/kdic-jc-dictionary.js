@@ -7,8 +7,9 @@ class KdicJcDictionary extends BaseDictionary  {
   
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     super({l1, l2});
-    this.indexKeys = ['search', 'kana'];
+    this.indexKeys = ['search', 'kana', 'romaji'];
     this.kanaIndex = {};
+    this.romajiIndex = {};
     this.indexDbVerByLang = {
       jpn: '0fc5e9b',
     };
@@ -81,45 +82,6 @@ class KdicJcDictionary extends BaseDictionary  {
       return row.kana === kana
     })
     return candidates
-  }
-
-  lookupFuzzy(text, limit = false) {
-    let results = []
-    if (!isRoman(text)) {
-      try {
-        let reg = new RegExp(sanitizeRegexString(text), 'gi')
-        results = this.words
-          .filter(
-            row => reg.test(row.kanji) || reg.test(row.kana)
-          )
-      } catch (err) {
-        console.log(err)
-      }
-    } else {
-      text = text.toLowerCase().trim()
-      results = this.words
-        .filter(row =>
-          row.romaji && row.romaji.includes(
-            text.replace(/ /g, '')
-          )
-        )
-    }
-    if (results) {
-      results = results
-        .sort((a, b) => {
-          return a.kana && b.kana ? a.kana.length - b.kana.length : 0
-        })
-      if (limit) {
-        results = results.slice(0, limit)
-      }
-      let shortest = Math.min(...results.map(r => r.kana ? r.kana.length : r.head ? r.head.length : 0))
-      results = results.map(word => {
-        let w = word.kana || word.head
-        let score = shortest / w.length - 0.1 * Math.min(w.replace(text, '').length, word.kanji.replace(text, '').length)
-        return Object.assign({ score }, word)
-      })
-      return results
-    }
   }
   
   transliterate(text) {

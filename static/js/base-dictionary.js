@@ -336,17 +336,15 @@ class BaseDictionary {
       return { score: 1, w: word };
     });
 
-    if (!quick) {
-      // Perform a fuzzy search.
-      let wordsFromFuzzySearch = this.fuzzySearch(text, limit);
-      words = words.concat(
-        wordsFromFuzzySearch.map((w) => {
-          return { w, score: 0.5 };
-        })
-      );
+    // Perform a fuzzy search.
+    let wordsFromFuzzySearch = this.fuzzySearch(text, limit);
+    words = words.concat(
+      wordsFromFuzzySearch.map((w) => {
+        return { w, score: 0.5 };
+      })
+    );
 
-      words = words.sort((a, b) => b.score - a.score);
-    }
+    words = words.sort((a, b) => b.score - a.score);
     words = words.slice(0, limit);
     words = words.map((w) => w.w);
     return words;
