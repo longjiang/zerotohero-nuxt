@@ -204,21 +204,18 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '~plugins/main.js',
-    '~plugins/jw.js',
-    '~plugins/directus.js',
-    '~plugins/subs.js',
-    '~/plugins/global-mixin',
-    { src: '~/plugins/vue-slider.js', mode: 'client' },
-    // { src: '~plugins/d-player.js', mode: 'client' },
-    // { src: '~/plugins/tui_editor.client.js', mode: 'client' },
-    { src: '~/plugins/stripe.js', mode: 'client' },
-    { src: '~/plugins/paypal.js', mode: 'client' },
-    { src: '~/plugins/ios-in-app-purchase.js', mode: 'client' },
-    { src: '~/plugins/pwa-update.js', mode: 'client' },
-    { src: '~/plugins/vuex-persist.js', mode: 'client' },
-    { src: '~/plugins/shared-mutations.js', mode: 'client' },
+    { src: '~/plugins/directus.js' },
+    { src: '~/plugins/global-mixin' },
     { src: '~/plugins/idle-vue.js', mode: 'client' },
+    { src: '~/plugins/ios-in-app-purchase.js', mode: 'client' },
+    { src: '~/plugins/main.js' },
+    { src: '~/plugins/paypal.js', mode: 'client' },
+    { src: '~/plugins/pwa-update.js', mode: 'client' },
+    { src: '~/plugins/shared-mutations.js', mode: 'client' },
+    { src: '~/plugins/stripe.js', mode: 'client' },
+    { src: '~/plugins/subs.js' },
+    { src: '~/plugins/vue-slider.js', mode: 'client' },
+    { src: '~/plugins/vuex-persist.js', mode: 'client' },
   ],
 
   build: {
