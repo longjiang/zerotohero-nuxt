@@ -7,6 +7,8 @@ class KdicJcDictionary extends BaseDictionary  {
   
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     super({l1, l2});
+    this.indexKeys = ['search', 'kana'];
+    this.kanaIndex = {};
     this.indexDbVerByLang = {
       jpn: '0fc5e9b',
     };
@@ -65,8 +67,9 @@ class KdicJcDictionary extends BaseDictionary  {
   
   lookupMultiple(text) {
     let words = this.searchIndex[text] || [];
-    let moreWords = this.words.filter(word => word && word.kana === text) || []
-    return [...words, ...moreWords]
+    let moreWords = this.kanaIndex[text] || []
+    let candidates = [...words, ...moreWords]
+    return candidates
   }
   
   lookupByCharacter(char) {

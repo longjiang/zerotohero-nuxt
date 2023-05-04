@@ -16,7 +16,7 @@ class BaseDictionary {
     this.version = null;
     this.tokenizer = null;
     this.indexDbVerByLang = {};
-    this.headIndex = {};
+    this.indexKeys = ['search'];
     this.searchIndex = {};
     this.phraseIndex = {};
     this.searcher = null;
@@ -39,7 +39,7 @@ class BaseDictionary {
 
   createSearcher() {
     this.searcher = new Fuse(this.words, {
-      keys: ["search"],
+      keys: this.indexKeys,
       includeScore: true,
       threshold: 0.3,
     });
@@ -238,7 +238,7 @@ class BaseDictionary {
 
   createIndices() {
     for (let word of this.words) {
-      for (let indexType of ["search"]) {
+      for (let indexType of this.indexKeys) {
         if (!Array.isArray(this[indexType + "Index"][word[indexType]]))
           this[indexType + "Index"][word[indexType]] = [];
         const index = this[indexType + "Index"][word[indexType]]
