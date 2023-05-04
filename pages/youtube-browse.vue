@@ -116,6 +116,7 @@
           showLatestIfKeywordMissing: true,
           includeTVShows: false,
           showNoVideosMessage: true,
+          perPage: 12,
           showSearchBar: false,
         }"
         @videosLoaded="onVideosLoaded"
