@@ -223,7 +223,7 @@
                     <i class="fa-brands fa-apple"></i>
                   </div>
                   <p class="mt-3 text-white">
-                    Download the desktop app for macOS.
+                    {{ $tb('Download the desktop app for macOS.') }}
                   </p>
                   <p class="mt-3 text-white">
                     <a
@@ -244,7 +244,7 @@
                     <i class="fa-brands fa-windows"></i>
                   </div>
                   <p class="mt-3 text-white">
-                    Download the desktop app for Windows.
+                    {{ $tb('Download the desktop app for Windows.') }}
                   </p>
                   <p class="mt-3 text-white">
                     <a
