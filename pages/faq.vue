@@ -105,16 +105,6 @@
               </ol>
             </div>
           </div>
-          <!-- <div
-            v-if="
-              ($l1.code === 'en' && $l2.code === 'zh') ||
-              ($l1.code === 'zh' && $l2.code === 'en')
-            "
-          >
-            <hr class="mt-5 mb-5" />
-            <FAQEnZh v-if="$l1.code === 'en' && $l2.code === 'zh'" />
-            <FAQZhEn v-if="$l1.code === 'zh' && $l2.code === 'en'" />
-          </div> -->
         </div>
       </div>
     </div>
@@ -122,17 +112,9 @@
 </template>
 
 
-<script>
-import FAQZhEn from "@/components/FAQZhEn";
-import FAQEnZh from "@/components/FAQEnZh";
+
 
 export default {
-  computed: {
-  },
-  components: {
-    FAQZhEn,
-    FAQEnZh,
-  },
 };
 </script>
 
