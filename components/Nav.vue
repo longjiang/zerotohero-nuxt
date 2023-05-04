@@ -26,7 +26,7 @@
           <Logo
             layout="horizontal"
             v-if="variant === 'side-bar'"
-            style="margin-left: 1.25rem; margin-top: 2.5rem;"
+            style="margin-left: 1.25rem; margin-top: 2.5rem"
             :skin="$skin"
           />
           <div :class="{ 'main-nav-items': true }">
@@ -648,10 +648,6 @@ export default {
                   name: "learn",
                   show: false,
                 },
-                {
-                  name: "learn-interactive",
-                  show: false,
-                },
               ],
             },
           ],
@@ -788,91 +784,6 @@ export default {
           ],
         },
         {
-          icon: "fas fa-briefcase",
-          title: "JW",
-          show: this.userIsAdmin && this.$adminMode,
-          children: [
-            {
-              name: "jw-bible",
-              title: "Bible",
-              icon: "fas fa-book",
-              show: this.userIsAdmin,
-            },
-            {
-              name: "jw-daytext",
-              title: "Daily Text",
-              icon: "fas fa-book",
-              show: this.userIsAdmin,
-            },
-            {
-              name: "jw-explore",
-              title: "Explore",
-              icon: "fas fa-book",
-              show: this.userIsAdmin,
-            },
-            {
-              name: "jw-meeting",
-              title: "Meeting",
-              icon: "fas fa-book",
-              show: this.userIsAdmin,
-            },
-            {
-              name: "jw-publications",
-              title: "Publications",
-              icon: "fas fa-book",
-              show: this.userIsAdmin,
-            },
-            {
-              name: "jw-questions",
-              title: "Questions",
-              icon: "fas fa-book",
-              show: this.userIsAdmin,
-            },
-            {
-              name: "jw-diff-view",
-              title: "Diff",
-              icon: "fas fa-book",
-              show: this.userIsAdmin,
-            },
-            {
-              name: "jw-history",
-              title: "History",
-              icon: "fas fa-book",
-              show: this.userIsAdmin,
-            },
-            {
-              name: "jw-jesus",
-              title: "Jesus' Life",
-              icon: "fas fa-book",
-              show: this.userIsAdmin,
-            },
-            {
-              name: "jw-maps",
-              title: "Maps",
-              icon: "fas fa-book",
-              show: this.userIsAdmin,
-            },
-            {
-              name: "jw-search",
-              title: "Search",
-              icon: "fas fa-book",
-              show: this.userIsAdmin,
-            },
-            {
-              name: "jw-bible-book",
-              show: false,
-            },
-            {
-              name: "jw-bible-chapter",
-              show: false,
-            },
-            {
-              name: "jw-article",
-              show: false,
-            },
-          ],
-        },
-        {
           icon: "fas fa-circle-info",
           title: "About",
           show: true,
@@ -918,80 +829,70 @@ export default {
             {
               icon: "fas fa-wrench",
               title: "Phrase Survey",
-              name: "phrase-survey",
+              name: "admin-phrase-survey",
               show: this.$adminMode,
             },
             {
               icon: "fas fa-wrench",
               title: "Text Survey",
-              name: "ngram",
+              name: "admin-ngram",
               show: this.$adminMode,
             },
             {
               icon: "fas fa-wrench",
               title: "Add Phrasebook",
-              name: "phrasebook-creator",
+              name: "admin-phrasebook-creator",
               show: this.$adminMode,
             },
             {
               icon: "fas fa-wrench",
               title: "Test",
-              name: "test",
+              name: "admin-test",
               show: this.$adminMode,
             },
             {
-              icon: "fas fa-wrench",
-              title: "Break Lines",
-              name: "break-lines",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "JSON to CSV",
-              name: "json-to-csv",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Wiktionary CSV",
-              name: "wiktionary-csv",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "DB Audit",
-              name: "db-audit",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "DB Upgrade",
-              name: "db-upgrade",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Recover Subs",
-              name: "recover-subs",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Assign Lesson Videos",
-              name: "assign-lesson-videos",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Unavailable Videos",
-              name: "unavailable-videos",
-              show: this.$adminMode,
-            },
-            {
-              icon: "fas fa-wrench",
-              title: "Analytics",
-              name: "analytics",
-              show: this.$adminMode,
+              icon: "fas fa-ellipsis-h",
+              title: `More`,
+              name: "tutoring",
+              show: true,
+              children: [
+                {
+                  icon: "fas fa-wrench",
+                  title: "Break Lines",
+                  name: "admin-break-lines",
+                  show: this.$adminMode,
+                },
+                {
+                  icon: "fas fa-wrench",
+                  title: "JSON to CSV",
+                  name: "admin-json-to-csv",
+                  show: this.$adminMode,
+                },
+                {
+                  icon: "fas fa-wrench",
+                  title: "Wiktionary CSV",
+                  name: "admin-wiktionary-csv",
+                  show: this.$adminMode,
+                },
+                {
+                  icon: "fas fa-wrench",
+                  title: "DB Audit",
+                  name: "admin-db-audit",
+                  show: this.$adminMode,
+                },
+                {
+                  icon: "fas fa-wrench",
+                  title: "Assign Lesson Videos",
+                  name: "admin-assign-lesson-videos",
+                  show: this.$adminMode,
+                },
+                {
+                  icon: "fas fa-wrench",
+                  title: "Analytics",
+                  name: "admin-analytics",
+                  show: this.$adminMode,
+                },
+              ],
             },
           ],
         },
@@ -1335,11 +1236,19 @@ export default {
 }
 
 .zth-nav-secondary.zth-nav-light {
-  background: linear-gradient($bg-color-light-1 0%, $bg-color-light-1 66%, transparent 100%);
+  background: linear-gradient(
+    $bg-color-light-1 0%,
+    $bg-color-light-1 66%,
+    transparent 100%
+  );
 }
 
 .zth-nav-secondary.zth-nav-dark {
-  background: linear-gradient($bg-color-dark-1 0%, $bg-color-dark-1 66%, transparent 100%);
+  background: linear-gradient(
+    $bg-color-dark-1 0%,
+    $bg-color-dark-1 66%,
+    transparent 100%
+  );
 }
 
 .zth-nav-menu-bar {

@@ -22,7 +22,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12 text-center pt-4">
-          <div class="error-page">
+          <div class="error-page text-dark">
             <h3 v-if="error.statusCode === 404">Route Not Found</h3>
             <h3 v-else>A {{ error.statusCode }} error has occurred.</h3>
             <p v-if="error.statusCode === 404">

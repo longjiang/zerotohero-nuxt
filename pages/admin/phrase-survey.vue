@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/phrase-survey/:start?',
+    path: '/:l1/:l2/admin/phrase-survey/:start?',
     props: true
   }
 </router>

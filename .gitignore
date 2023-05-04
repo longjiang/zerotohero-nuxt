@@ -91,3 +91,7 @@ sw.*
 
 # Electron
 dist_electron/
+
+# Package locks
+yarn.lock
+package-lock.json
