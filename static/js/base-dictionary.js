@@ -25,7 +25,9 @@ class BaseDictionary {
   static async load({ l1 = undefined, l2 = undefined } = {}) {
     const instance = new this({ l1, l2 });
     await instance.loadData();
+    console.log(`${this.name}: Indexing...`);
     instance.createIndices();
+    console.log(`${this.name}: Indexing finsed.`);
     instance.createSearcher();
     instance.tokenizer = await TokenizerFactory.createTokenizer({
       l2,
@@ -235,13 +237,12 @@ class BaseDictionary {
   }
 
   createIndices() {
-    console.log(`${this.name}: Indexing...`);
     for (let word of this.words) {
-      for (let indexType of ["head", "search"]) {
+      for (let indexType of ["search"]) {
         if (!Array.isArray(this[indexType + "Index"][word[indexType]]))
           this[indexType + "Index"][word[indexType]] = [];
-        this[indexType + "Index"][word[indexType]] =
-          this[indexType + "Index"][word[indexType]].concat(word);
+        const index = this[indexType + "Index"][word[indexType]]
+        if (!index.includes(word)) index.push(word);
       }
       if (/[\s'.\-]/.test(word.head)) {
         let words = word.head.split(/[\s'.\-]/);
@@ -263,7 +264,7 @@ class BaseDictionary {
   addToPhraseIndex(head, word) {
     let w = "@" + head;
     if (!this.phraseIndex[w]) this.phraseIndex[w] = [];
-    this.phraseIndex[w].push(word);
+    if (!this.phraseIndex[w].includes(word)) this.phraseIndex[w].push(word);
   }
 
   getPhraseIndex(head) {
