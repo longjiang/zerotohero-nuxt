@@ -353,4 +353,8 @@ class BaseDictionary {
   getInflector() {
     return this.inflector;
   }
+
+  lookupByLesson() {
+    // Only implemented for Chinese
+  }
 }

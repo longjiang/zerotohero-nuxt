@@ -380,6 +380,12 @@ export default {
                   show: true,
                 },
                 {
+                  name: "chinese-lesson-videos",
+                  icon: "fas fa-person-chalkboard",
+                  title: `Lesson Expansion Videos`,
+                  show: ["zh"].includes(this.$l2.code),
+                },
+                {
                   name: "feed",
                   icon: "fas fa-stream",
                   title: `Feed`,
@@ -709,7 +715,7 @@ export default {
                   show: false,
                 },
                 {
-                  name: "phonological-features",
+                  name: "ling-phonological-features",
                   show: false,
                 },
                 {
@@ -743,32 +749,32 @@ export default {
                   show: ["zh"].includes(this.$l2.code),
                 },
                 {
-                  name: "language-map",
+                  name: "ling-language-map",
                   title: `Map of Languages`,
                   icon: "fas fa-globe-asia",
                   show: true,
                 },
                 {
-                  name: "language-icons",
+                  name: "ling-language-icons",
                   title: "Face of the Language",
                   icon: "fas fa-user",
                   badge: this.savedWordsCount + this.savedPhrasesCount,
                   show: true,
                 },
                 {
-                  name: "phonological-features",
+                  name: "ling-phonological-features",
                   title: "Phonological Features",
                   icon: "fas fa-lips",
                   show: true,
                 },
                 {
-                  name: "compare-languages",
+                  name: "ling-compare-languages",
                   title: "Compare Languages",
                   icon: "fa-solid fa-arrow-right-arrow-left",
                   show: true,
                 },
                 {
-                  name: "translators",
+                  name: "ling-translators",
                   title: "Web Translators",
                   icon: "fas fa-language",
                   show: true,
@@ -878,6 +884,12 @@ export default {
                   icon: "fas fa-wrench",
                   title: "Assign Lesson Videos",
                   name: "admin-assign-lesson-videos",
+                  show: this.$adminMode,
+                },
+                {
+                  icon: "fas fa-wrench",
+                  title: "Check CORS",
+                  name: "check-cors",
                   show: this.$adminMode,
                 },
                 {

@@ -151,7 +151,7 @@ export default {
   components: {
     LanguageMap: () => {
       if (process.client) {
-        return import("../components/LanguageMap.vue");
+        return import("@/components/LanguageMap.vue");
       }
     },
   },

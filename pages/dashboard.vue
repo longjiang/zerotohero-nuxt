@@ -79,31 +79,31 @@ export default {
     return {
       linguisticsTools: [
         {
-          name: "language-map",
+          name: "ling-language-map",
           title: `Map of Languages`,
           icon: "fas fa-globe-asia",
           show: true,
         },
         {
-          name: "language-icons",
+          name: "ling-language-icons",
           title: "Face of the Language",
           icon: "fas fa-user",
           show: true,
         },
         {
-          name: "phonological-features",
+          name: "ling-phonological-features",
           title: "Phonological Features",
           icon: "fas fa-lips",
           show: true,
         },
         {
-          name: "compare-languages",
+          name: "ling-compare-languages",
           title: "Compare Languages",
           icon: "fa-solid fa-arrow-right-arrow-left",
           show: true,
         },
         {
-          name: "translators",
+          name: "ling-translators",
           title: "Web Translators",
           icon: "fas fa-language",
           show: true,
