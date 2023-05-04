@@ -837,4 +837,11 @@ export default {
     bottom: 4.5rem; // Make room for the bottom menu
   }
 }
+
+.video-transcript-wrapper.overlay {
+  .transcript-you-need-pro {
+    position: inherit;
+    width: 100%;
+  }
+}
 </style>
