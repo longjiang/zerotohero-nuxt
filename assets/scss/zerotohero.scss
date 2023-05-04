@@ -5,6 +5,19 @@
 // Import variables
 @import "./variables";
 
+
+
+// For Electron: allow the user to drag the window by clicking and dragging the top bar and the side menu bar
+
+.draggable-region {
+  -webkit-app-region: drag; /* This makes the region draggable */
+  button,
+  a,
+  .language-flag-and-name {
+    -webkit-app-region: no-drag;
+  }
+}
+
 // Override the link color to our primary color (green)
 a {
   color: $primary-color;

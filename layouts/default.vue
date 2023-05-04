@@ -498,16 +498,6 @@ export default {
 <style lang="scss">
 @import "@/assets/scss/zerotohero.scss";
 
-/* App.vue or any top-level component CSS */
-
-.draggable-region {
-  -webkit-app-region: drag; /* This makes the region draggable */
-  button,
-  a {
-    -webkit-app-region: no-drag;
-  }
-}
-
 .transition {
   transition: 0.5s all ease-in-out;
 }
