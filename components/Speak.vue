@@ -43,14 +43,13 @@ export default {
   },
   async mounted() {
     await this.$getDictionary();
-    this.canSpeak =
-      (this.mp3 && !this.mp3.endsWith(".flac")) ||
-      (this.text &&
-        this.$languages.hasFeature(
-          this.$l1 || this.english,
-          this.$l2,
-          "speech"
-        ));
+    const hasAudioFile = this.mp3 && !this.mp3.endsWith(".flac");
+    const english = this.$languages.getSmart("en");
+    const l1 = this.$l1 || english;
+    const l2 = this.l2 || this.$l2;
+    const hasSpeechFeature = l1 && l2 ? this.$languages.hasFeature(l1, l2, "speech") : false;
+    const canGenerateSpeech = this.text && hasSpeechFeature
+    this.canSpeak = hasAudioFile || canGenerateSpeech;
   },
   methods: {
     // https://www.npmjs.com/package/ogv
@@ -61,11 +60,11 @@ export default {
       var player = new ogv.OGVPlayer();
 
       // Now treat it just like a video or audio element
-      if(this.$refs.player) {
+      if (this.$refs.player) {
         this.$refs.player.appendChild(player);
         player.src = url;
         player.play();
-        player = null
+        player = null;
       }
     },
     playAudio(url) {
@@ -86,8 +85,9 @@ export default {
           this.playAudio(url);
         }
       } else if (this.text) {
-        if (this.$languages.hasFeature(this.$l1, this.$l2, "speech")) {
-          speak(this.text, this.$l2, speed, volume);
+        if (this.canSpeak) {
+          const l2 = this.l2 || this.$l2
+          if (l2) speak(this.text, l2, speed, volume);
         }
       }
     },

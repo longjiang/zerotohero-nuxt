@@ -383,6 +383,7 @@ export default {
       this.currentZoom = zoom;
     },
     hasDictionary(l1, l2) {
+      console.log('language map', {l1, l2})
       return (
         this.$languages.hasFeature(l1, l2, "dictionary") || l2.code === "en"
       );
