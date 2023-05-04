@@ -130,7 +130,7 @@
               showExtraSearchResults
             "
           >
-            <MediaSearchResults :keyword="keyword" />
+            <MediaSearchResults :keyword="keyword" :perPage="12" />
             <YouTubeSearchResults
               :term="keyword"
               :infinite="true"
