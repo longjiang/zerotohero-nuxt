@@ -44,7 +44,7 @@
       </div>
     </div>
     <hr style="clear: both" />
-    <h6 class="text-center">{{ $t('HSK Words with this Character') }}</h6>
+    <h6 class="text-center">{{ $t('Words with this Character') }}</h6>
     <WordList :words="examples" :highlight="character.character" collapse="4" />
   </div>
 </template>
