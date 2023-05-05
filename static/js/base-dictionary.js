@@ -181,11 +181,16 @@ class BaseDictionary {
     if (words && words[0]) return words[0];
   }
 
-  lookupMultiple(text, ignoreAccents = false) {
-    if (ignoreAccents && !isAccentCritical(this.l2)) text = stripAccents(text);
-    let type = ignoreAccents ? "search" : "head";
-    let words = this[type + "Index"][text.toLowerCase()];
-    return words || [];
+  lookupMultiple(text) {
+    let words = []
+    if (this.searchIndex) {
+      words = this.searchIndex[text.toLowerCase()] || [];
+    } else {
+      words = this.words.filter((w) => { 
+        return w.search === text.toLowerCase() || w.head === text.toLowerCase() || w.simplified === text.toLowerCase()
+      })
+    }
+    return words;
   }
 
   getWords() {
