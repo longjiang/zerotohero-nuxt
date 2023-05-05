@@ -321,7 +321,7 @@ export default {
   text-overflow: ellipsis;
   display: none;
   position: relative;
-  bottom: -0.25em;
+  // bottom: -0.25em;
 }
 
 
