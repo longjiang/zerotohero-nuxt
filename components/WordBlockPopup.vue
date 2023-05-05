@@ -375,9 +375,8 @@ $tooltip-border-dark: #474545;
 .tooltip-arrow.skin-dark {
   color: $tooltip-background-dark;
 }
-.tooltip-inner.skin-dark {
-  background: $tooltip-background-dark;
-  .tooltip-inner {
+.popover.skin-dark {
+  .tooltip-wrapper {
     background: $tooltip-background-dark;
   }
   hr {
@@ -390,14 +389,27 @@ $tooltip-border-dark: #474545;
 .tooltip-arrow.skin-light {
   color: $tooltip-background-light;
 }
-.tooltip-inner.skin-light {
-  background: $tooltip-background-light;
+.popover.skin-light {
+  .tooltip-wrapper {
+    background: $tooltip-background-light;
+  }
   .tooltip-arrow,
   .tooltip-inner {
     background: $tooltip-background-light;
   }
   .tooltip-entry + .tooltip-entry {
     border-top: 1px solid #ccc;
+  }
+}
+.popover {
+  background: none;
+  .tooltip-wrapper {
+    border-radius: 1rem;
+    box-shadow: 0 5px 20px rgba(black, 0.2);
+    overflow: hidden;
+    .tooltip-inner {
+      background: none;
+    }
   }
 }
 
@@ -426,6 +438,7 @@ $tooltip-border-dark: #474545;
   font-size: 1rem;
 }
 
+
 .tooltip {
   display: block !important;
   $height: 20rem;
@@ -433,7 +446,6 @@ $tooltip-border-dark: #474545;
   border: none;
   max-height: $height;
   max-width: $width;
-  border-radius: 1rem;
 
   &[x-placement^="top"] {
     margin-bottom: 1rem;
@@ -530,11 +542,8 @@ $tooltip-border-dark: #474545;
   }
 
   .tooltip-inner {
-    border-radius: 1rem;
     text-align: left;
     overflow-y: auto;
-    overflow-x: hidden;
-    box-shadow: 0 5px 20px rgba(black, 0.2);
     max-width: $width;
     max-height: $height;
 

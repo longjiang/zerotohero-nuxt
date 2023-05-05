@@ -226,7 +226,7 @@ export default {
       let playerVars = {
         start,
         autoplay: this.autoplay ? 1 : 0,
-        cc_load_policy: this.cc ? 1 : 0,
+        cc_load_policy: this.cc ? 1 : 0, // Setting this to "1" will cause the captions to show up in the video player by default, otherwise it will depend on the user's YouTube preferences.
         cc_lang_pref: this.$l1 ? this.$l1.code : "en",
         iv_load_policy: 0,
         showinfo: 0,

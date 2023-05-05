@@ -5,6 +5,7 @@
       ref="youtube"
       v-bind="{
         type: 'youtube',
+        cc: false,
         video,
         skin,
         related,

@@ -3,6 +3,8 @@
     :open="open"
     placement="top"
     ref="popover"
+    :popoverClass="`popover skin-${$skin}`"
+    :popoverWrapperClass="`tooltip-wrapper skin-${$skin}`"
     :popoverInnerClass="`tooltip-inner popover-inner skin-${$skin}`"
     :popoverArrowClass="`tooltip-arrow popover-arrow skin-${$skin}`"
   >

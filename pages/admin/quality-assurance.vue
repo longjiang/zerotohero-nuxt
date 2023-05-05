@@ -67,7 +67,7 @@ export default {
         "/zh/en/youtube/browse",
         "/zh/en/video-view/youtube/bBLKvPSgQ2A",
         "/zh/en/tv-shows",
-        "/zh/en/show/tv-show",
+        "/zh/en/show/tv-show/994",
         "/zh/en/settings",
         "/zh/en/set-language-level",
         "/zh/en/set-content-preferences",
