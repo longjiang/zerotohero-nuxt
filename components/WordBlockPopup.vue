@@ -401,7 +401,8 @@ $tooltip-border-dark: #474545;
     border-top: 1px solid #ccc;
   }
 }
-.popover {
+.popover.skin-dark,
+.popover.skin-light {
   background: none;
   .tooltip-wrapper {
     border-radius: 1rem;
