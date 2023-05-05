@@ -1,10 +1,10 @@
 <template>
   <div>
     <div v-if="!resources || resources.length === 0">
-      <div class="jumbotron shadow rounded bg-white">
-        <p class="lead text-center mb-3">No resource is found in this category. Why not add your own here?</p>
+      <div class="jumbotron shadow rounded bg-accent">
+        <p class="lead text-center mb-3">{{ $t('No resource found in this category. Contact us if you have any to suggest.') }}</p>
         <div class="text-center">
-          <router-link :to="`/${$l1.code}/${$l2.code}/contact-us`" class="btn btn-success">Contact Us</router-link>
+          <router-link :to="`/${$l1.code}/${$l2.code}/contact-us`" class="btn btn-success">{{ $t('Contact Us') }}</router-link>
         </div>
       </div>
     </div>

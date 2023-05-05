@@ -5,4 +5,7 @@ export default function ({ route, redirect }) {
     const newPath = path.replace('/youtube/view/', '/video-view/youtube/');
     return redirect(newPath);
   }
+  if (route.fullPath === '/zh/en/online-courses') {
+    return redirect('https://chinesezerotohero.teachable.com/');
+  }
 }
