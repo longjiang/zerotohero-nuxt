@@ -16,14 +16,28 @@
           $l2.code === 'zh' ? 'Pinyin' : $l2.name
         } subtitles.`"
       />
-      <div class="row mb-2" v-if="!kidsOnly">
-        <div class="col-sm-12 text-center">
+      <div class="row">
+        <div class="col-sm-12">
           <VideoHero
             v-if="heroVideo"
             :video="heroVideo"
             @videoUnavailable="onVideoUnavailable"
             class="mb-5"
           />
+        </div>
+      </div>
+      <div class="row mb-4">
+        <div class="col-sm-12 text-center">
+          <div v-show="kidsOnly" class="mb-2">
+            {{ $t("Only showing content made for kids.") }}
+            <router-link
+              :to="{
+                name: 'youtube-browse',
+                params: { category: 'all', level: 'all', start: 0 },
+              }"
+              >{{ $t("Clear") }}</router-link
+            >
+          </div>
           <div>
             <FilterDropdown
               v-if="categoryOptions.length > 0"
@@ -55,24 +69,24 @@
               @filter="handleSortFilter"
             />
           </div>
+          <i18n
+            path="Recommendations based on your {0}."
+            tag="div"
+            style="font-weight: normal; font-size: 0.8em; text-align: center"
+            v-if="sort === 'recommended'"
+          >
+            <router-link
+              :to="{
+                name: LANGS_WITH_LEVELS.includes(this.$l2.code)
+                  ? 'set-language-level'
+                  : 'set-content-preferences',
+              }"
+            >
+              <u>{{ $t("content preferences") }}</u>
+            </router-link>
+          </i18n>
         </div>
       </div>
-      <i18n
-        path="Recommendations based on your {0}."
-        tag="div"
-        style="font-weight: normal; font-size: 0.8em; text-align: center"
-        v-if="sort === 'recommended'"
-      >
-        <router-link
-          :to="{
-            name: LANGS_WITH_LEVELS.includes(this.$l2.code)
-              ? 'set-language-level'
-              : 'set-content-preferences',
-          }"
-        >
-          <u>{{ $t("content preferences") }}</u>
-        </router-link>
-      </i18n>
       <div
         v-if="
           $refs['tv-shows'] &&
@@ -83,7 +97,7 @@
         <h5>
           {{ $t("TV Shows") }}
         </h5>
-        <hr class="mb-4" />
+        <hr class="mb-5" />
       </div>
       <div
         v-if="!(category === 'all' && level === 'all' && kidsOnly === false)"
@@ -100,6 +114,11 @@
           }"
           ref="tv-shows"
         />
+      </div>
+      <div>
+        <h5>
+          {{ $t("Videos") }}
+        </h5>
         <hr class="mb-4" />
       </div>
       <MediaSearchResults
@@ -111,7 +130,7 @@
           kidsOnly,
           sort,
           showLatestIfKeywordMissing: true,
-          includeTVShows: false,
+          includeTVShows: true,
           showNoVideosMessage: true,
           perPage: 12,
           showSearchBar: false,
