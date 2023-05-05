@@ -14,7 +14,7 @@
       <div class="col-sm-12 text-center mb-4">
         <div>
           <FilterDropdown
-            v-if="Object.keys(categoriesFiltered).length > 0"
+            v-if="categoryOptions.length > 0"
             :items="categoryOptions"
             :selected-item="category"
             type="categories"
@@ -22,22 +22,17 @@
             default-text="All Categories"
             @filter="handleCategoryFilter"
           />
-          <span
-            v-if="levels && levels.length > 0"
-            @click="showModal('levels')"
-            class="filter-dropdown mr-2"
-          >
-            {{
-              $t(
-                level && levels.find((l) => l.numeric === level)
-                  ? levels.find((l) => l.numeric === level).name
-                  : "All Levels"
-              )
-            }}
-            <i class="fa-solid fa-caret-down"></i>
-          </span>
           <FilterDropdown
-            v-if="Object.keys(categoriesFiltered).length > 0"
+            v-if="levelOptions.length > 0"
+            :items="levelOptions"
+            :selected-item="level"
+            type="levels"
+            title="Levels"
+            default-text="All Levels"
+            @filter="handleLevelFilter"
+          />
+          <FilterDropdown
+            v-if="sortOptions.length > 0"
             :items="sortOptions"
             :selected-item="sort"
             type="sort"
@@ -145,56 +140,6 @@
         </div>
       </div>
     </div>
-
-    <b-modal
-      ref="levelsModal"
-      size="lg"
-      centered
-      hide-footer
-      modal-class="safe-padding-top mt-4"
-      body-class="dropdown-menu-modal-wrapper"
-      :title="$t('Levels')"
-    >
-      <div class="row">
-        <div class="mb-1 col-6 col-lg-4">
-          <router-link
-            :to="{
-              name: routeType,
-              params: { category, tag, level: 'all' },
-            }"
-            class="link-unstyled"
-          >
-            {{ $t("All Levels") }}
-          </router-link>
-        </div>
-        <div
-          v-for="(level, index) in levels"
-          :key="`dropdown-menu-item-level-${index}`"
-          class="mb-1 col-6 col-lg-4"
-        >
-          <router-link
-            :to="{
-              name: routeType,
-              params: { category, tag, level: level.numeric },
-            }"
-            class="link-unstyled"
-          >
-            {{
-              index === 0
-                ? level.name
-                : level.exam === "CEFR"
-                ? level.level
-                : level.name
-            }}
-            <span class="item-count">
-              ({{
-                $t("{num} shows", { num: showCountByLevel(level.numeric) })
-              }})
-            </span>
-          </router-link>
-        </div>
-      </div>
-    </b-modal>
   </div>
 </template>
 
@@ -329,6 +274,20 @@ export default {
       }
       return items;
     },
+    levelOptions() {
+      let items = [{ value: "all", text: this.$t("All Levels") }];
+      if (this.levels) {
+        let moreItems = this.levels.map((level) => ({
+          text: level.name,
+          value: level.numeric,
+          count: this.$t("{num} shows", {
+            num: this.showCountByLevel(level.numeric),
+          }),
+        }));
+        items = items.concat(moreItems);
+      }
+      return items;
+    },
     tags() {
       let tags = [];
       if (this.shows?.length > 0) {
@@ -406,11 +365,6 @@ export default {
           });
         }
         if (this.kidsOnly) shows = shows.filter((s) => s.made_for_kids);
-        // shows = shows.sort((x, y) => {
-        //   x = this.preferredCategories.includes(String(x.category));
-        //   y = this.preferredCategories.includes(String(y.category));
-        //   return x === y ? 0 : x ? -1 : 1;
-        // });
         return shows;
       }
     },
@@ -434,6 +388,13 @@ export default {
     },
     handleSortFilter(value) {
       this.sort = value;
+    },
+    handleLevelFilter(value) {
+      const to = {
+        name: this.routeType,
+        params: { category: this.category, tag: this.tag, level: value },
+      };
+      this.$router.push(to);
     },
     ucFirst(...args) {
       return ucFirst(...args);
@@ -553,11 +514,5 @@ export default {
 }
 .tag:not(.nuxt-link-exact-active):hover {
   color: rgba(40, 167, 69);
-}
-
-.item-count {
-  font-size: 0.8rem;
-  color: #888;
-  font-weight: bold;
 }
 </style>

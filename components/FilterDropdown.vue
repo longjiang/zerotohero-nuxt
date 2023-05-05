@@ -1,10 +1,7 @@
 <!-- FilterDropdown.vue -->
 <template>
   <span>
-    <span
-      @click="showModal"
-      class="filter-dropdown mr-2"
-    >
+    <span @click="showModal" class="filter-dropdown mr-2">
       {{ getDisplayText }}
       <i class="fa-solid fa-caret-down"></i>
     </span>
@@ -23,11 +20,11 @@
           :key="`dropdown-menu-item-${type}-${index}`"
           class="mb-1 col-6 col-lg-4"
         >
-          <span
-            @click="emitFilter(item.value)"
-            class="cursor-pointer"
-          >
+          <span @click="emitFilter(item.value)" class="cursor-pointer">
             {{ $t(item.text) }}
+            <span v-if="item.count" class="item-count">
+              ({{ item.count }})
+            </span>
           </span>
         </div>
       </div>
@@ -49,7 +46,9 @@ export default {
   },
   computed: {
     getDisplayText() {
-      const selectedItem = this.items.find((item) => item.value === this.selectedItem);
+      const selectedItem = this.items.find(
+        (item) => item.value === this.selectedItem
+      );
       return this.$t(selectedItem ? selectedItem.text : this.defaultText);
     },
   },
@@ -58,7 +57,7 @@ export default {
       this.$refs[`${this.type}Modal`].show();
     },
     emitFilter(value) {
-      this.$emit('filter', value);
+      this.$emit("filter", value);
       this.$refs[`${this.type}Modal`].hide();
     },
   },
@@ -68,5 +67,11 @@ export default {
 <style scoped>
 .filter-dropdown {
   cursor: pointer;
+}
+
+.item-count {
+  font-size: 0.8rem;
+  color: #888;
+  font-weight: bold;
 }
 </style>
