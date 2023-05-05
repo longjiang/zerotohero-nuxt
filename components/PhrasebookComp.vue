@@ -57,7 +57,7 @@
       >
         <div
           :class="{
-            'rounded p-4 phrasebook-card': true,
+            'rounded p-4 bg-accent phrasebook-card': true,
             'text-right': $l2.direction === 'rtl',
             'phrasebook-card-current':
               initId && (phraseObj.id || phraseIndex) + 1 == initId,
@@ -105,7 +105,7 @@
           </Annotate>
 
           <div
-            :class="{ 'mb-0 text-secondary': true, transparent: hideDefinitions }"
+            :class="{ 'mb-0': true, transparent: hideDefinitions }"
             v-if="phraseObj && (phraseObj[$l1.code] || phraseObj.en)"
           >
             {{ phraseObj[$l1.code] || phraseObj.en }}
@@ -214,7 +214,6 @@ export default {
   }
 }
 .phrasebook-card {
-  background-color: white;
   box-shadow: 0 5px 25px #55170435 !important;
   height: 100%;
 }

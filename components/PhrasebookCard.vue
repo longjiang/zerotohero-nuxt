@@ -11,13 +11,13 @@
     >
       <i class="fa-solid fa-square-list phrasebook-icon"></i>
     </router-link>
-    <div class="media-body" style="position: relative">
+    <div class="media-body bg-accent" style="position: relative">
       <router-link class="link-unstyled" :to="to">
         <h5 class="phrasebook-title">
           {{ transformPhrasebookTitle(phrasebook.title) }}
         </h5>
       </router-link>
-      <div style="color: #999" v-if="phrasebook.phrases">
+      <div style="opacity: 0.66" v-if="phrasebook.phrases">
         ({{ $t("{num} phrases", { num: phrasebook.phrases.length }) }})
       </div>
       <client-only>
@@ -144,13 +144,11 @@ export default {
     }
   }
   .media-body {
-    background: white;
     position: relative;
     width: 100%;
     flex: 1;
     text-align: center;
     .phrasebook-title {
-      color: #444;
       font-size: 1.1rem;
     }
   }

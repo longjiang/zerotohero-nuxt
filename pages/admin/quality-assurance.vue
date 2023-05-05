@@ -95,7 +95,7 @@ export default {
         "/en/zh/video-view/youtube/kqxzTZ6Jp-M",
         "/en/zh/tv-shows/all",
         "/en/zh/tv-shows",
-        "/en/zh/show/tv-show",
+        "/en/zh/show/tv-show/675",
         "/en/zh/settings",
         "/en/zh/set-language-level",
         "/en/zh/set-content-preferences",
