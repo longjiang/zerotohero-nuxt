@@ -6,6 +6,9 @@ export default function ({ route, redirect }) {
     return redirect(newPath);
   }
   if (route.fullPath === '/zh/en/online-courses') {
+    return redirect('https://m.cctalk.com/inst/stevmab3');
+  }
+  if (route.fullPath === '/en/zh/online-courses') {
     return redirect('https://chinesezerotohero.teachable.com/');
   }
 }
