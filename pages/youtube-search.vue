@@ -25,10 +25,15 @@
         />
       </div>
       <h4 class="mt-3 mb-5 text-center">
-        {{ $t('Search {l2} Content', {l2: $t($l2.name) }) }}
+        {{ $t("Search {l2} Content", { l2: $t($l2.name) }) }}
       </h4>
       <SimpleSearch
-        :placeholder="$t('Search {stats} {l2} videos', {stats: stats && stats[$l2.code] ? stats[$l2.code].allVideos : '', l2: $t($l2.name) })"
+        :placeholder="
+          $t('Search {stats} {l2} videos', {
+            stats: stats && stats[$l2.code] ? stats[$l2.code].allVideos : '',
+            l2: $t($l2.name),
+          })
+        "
         :skin="$skin"
         :action="
           (url) => {
@@ -86,6 +91,14 @@
           </b-button>
         </b-form-group>
       </client-only>
+      <div v-if="!term" class="mt-3">
+        {{ $t('Popular search terms in {l2}:', {l2: $t($l2.name)}) }} <router-link
+          v-for="topic in popularTopics"
+          :to="{ name: 'youtube-search', params: { term: topic[$l2.code], start: 0 } }"
+          class="mr-2"
+          >{{ topic[$l2.code] }}</router-link
+        >
+      </div>
       <div v-if="term">
         <div class="d-block text-right mt-3">
           <router-link
@@ -94,9 +107,7 @@
             style="color: #999"
           >
             <i class="fa fa-search mr-2"></i>
-            Search for "{{ term }}"
-            <i>inside</i>
-            videos
+            {{ $t('Search for "{term}" in video subtitles', { term }) }}
             <i class="fa fa-chevron-right ml-2"></i>
           </router-link>
         </div>
@@ -152,10 +163,21 @@
 import SimpleSearch from "@/components/SimpleSearch";
 import YouTubeSearchResults from "@/components/YouTubeSearchResults";
 import { mapState } from "vuex";
+import popularTopicsCSV from "@/static/data/languages/popular-topics.csv.txt";
+import Papa from "papaparse";
+
 export default {
   components: {
     SimpleSearch,
     YouTubeSearchResults,
+  },
+  props: {
+    term: {
+      type: String,
+    },
+    start: {
+      default: 0,
+    },
   },
   data() {
     return {
@@ -169,13 +191,13 @@ export default {
   },
   computed: {
     ...mapState("stats", ["stats"]),
-  },
-  props: {
-    term: {
-      type: String,
-    },
-    start: {
-      default: 0,
+    popularTopics() {
+      const topics = this.loadCSVString(popularTopicsCSV);
+      if (topics && topics[0][this.$l2.code]) {
+        return topics;
+      } else {
+        return [];
+      }
     },
   },
   watch: {
@@ -193,6 +215,15 @@ export default {
       if (this.term) {
         let url = decodeURIComponent(this.term);
         this.$refs.search.text = url;
+      }
+    },
+    loadCSVString(csv, header = true) {
+      if (typeof Papa !== "undefined") {
+        let r = Papa.parse(csv, {
+          header: header,
+          delimiter: ",",
+        });
+        return r.data;
       }
     },
     addAll() {
@@ -213,5 +244,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>
