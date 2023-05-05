@@ -19,7 +19,7 @@
       <div class="row">
         <div class="col-sm-12" v-if="grammar">
           <h6 class="mb-2 text-center">
-            <button class="btn btn-small mr-1" v-if="id > 1" @click="prevClick">
+            <button :class="`btn btn-sm btn-${$skin} mr-1`" v-if="id > 1" @click="prevClick">
               <i class="fa fa-caret-left" />
             </button>
             <router-link :to="{ name: 'grammar' }">
@@ -30,7 +30,7 @@
                 })
               }}
             </router-link>
-            <button class="btn btn-small" @click="nextClick">
+            <button :class="`btn btn-sm btn-${$skin}`" @click="nextClick">
               <i class="fa fa-caret-right" />
             </button>
           </h6>

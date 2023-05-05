@@ -23,7 +23,7 @@
           </p>
         </div>
       </div>
-      <div class="jumbotron pt-2 pb-2 mb-3">
+      <div class="jumbotron bg-accent pt-2 pb-2 mb-3">
         <div v-for="(item, itemIndex) in pattern.items" class="mt-4 mb-4">
           <div class="audio-media mb-2">
             <b-button @click="playItem(patternIndex, itemIndex)"
