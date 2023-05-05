@@ -24,40 +24,37 @@
             @videoUnavailable="onVideoUnavailable"
             class="mb-5"
           />
-          <span
-            v-if="Object.keys(categories).length > 0"
-            @click="showModal('categories')"
-            class="filter-dropdown mr-2"
-          >
-            {{
-              $t(
-                category && categories[category]
-                  ? categories[category]
-                  : "All Categories"
-              )
-            }}
-            <i class="fa-solid fa-caret-down"></i>
-          </span>
-          <span
-            v-if="
-              LANGS_WITH_LEVELS.includes($l2.code) &&
-              levels &&
-              levels.length > 0
-            "
-            @click="showModal('levels')"
-            class="filter-dropdown mr-2"
-          >
-            {{
-              level && levels.find((l) => l.numeric === level)
-                ? levels.find((l) => l.numeric === level).name
-                : $t("All Levels")
-            }}
-            <i class="fa-solid fa-caret-down"></i>
-          </span>
-          <span @click="showModal('sort')" class="filter-dropdown">
-            {{ $t(`${sortText[sort]}`) }}
-            <i class="fa-solid fa-caret-down"></i>
-          </span>
+          <div>
+            <FilterDropdown
+              v-if="categoryOptions.length > 0"
+              :items="categoryOptions"
+              :selected-item="category"
+              type="categories"
+              title="Categories"
+              default-text="All Categories"
+              @filter="handleCategoryFilter"
+            />
+            <FilterDropdown
+              v-if="
+                LANGS_WITH_LEVELS.includes($l2.code) && levelOptions.length > 0
+              "
+              :items="levelOptions"
+              :selected-item="level"
+              type="levels"
+              title="Levels"
+              default-text="All Levels"
+              @filter="handleLevelFilter"
+            />
+            <FilterDropdown
+              v-if="sortOptions.length > 0"
+              :items="sortOptions"
+              :selected-item="sort"
+              type="sort"
+              title="Sort"
+              default-text="Sort"
+              @filter="handleSortFilter"
+            />
+          </div>
         </div>
       </div>
       <i18n
@@ -133,109 +130,6 @@
         />
       </client-only>
     </div>
-    <b-modal
-      ref="categoriesModal"
-      size="lg"
-      centered
-      hide-footer
-      modal-class="safe-padding-top mt-4"
-      body-class="dropdown-menu-modal-wrapper"
-      :title="$t('Categories')"
-    >
-      <div class="row">
-        <div class="mb-1 col-6 col-lg-4">
-          <router-link
-            :to="{
-              name: 'youtube-browse',
-              params: { category: 'all', level, start, keyword },
-            }"
-            class="link-unstyled"
-          >
-            {{ $t("All Categories") }}
-          </router-link>
-        </div>
-        <div
-          v-for="(category, index) in categories"
-          :key="`dropdown-menu-item-category-${index}`"
-          class="mb-1 col-6 col-lg-4"
-        >
-          <router-link
-            :to="{
-              name: 'youtube-browse',
-              params: { category: index, level, start, keyword },
-            }"
-            class="link-unstyled"
-          >
-            {{ $t(category) }}
-          </router-link>
-        </div>
-      </div>
-    </b-modal>
-    <b-modal
-      ref="sortModal"
-      size="sm"
-      centered
-      hide-footer
-      modal-class="safe-padding-top mt-4"
-      body-class="dropdown-menu-modal-wrapper"
-      :title="$t('Sort')"
-    >
-      <div class="row">
-        <div
-          v-for="(text, opt) in sortText"
-          @click="sort = opt"
-          class="mb-1 col-12"
-          style="cursor: pointer"
-          :key="`sort-opt-${opt}`"
-        >
-          {{ $t(text) }}
-        </div>
-      </div>
-    </b-modal>
-    <b-modal
-      ref="levelsModal"
-      size="lg"
-      centered
-      hide-footer
-      modal-class="safe-padding-top mt-4"
-      body-class="dropdown-menu-modal-wrapper"
-      :title="$t('Levels')"
-    >
-      <div class="row">
-        <div class="mb-1 col-6 col-lg-4">
-          <router-link
-            :to="{
-              name: 'youtube-browse',
-              params: { category, level: 'all' },
-            }"
-            class="link-unstyled"
-          >
-            {{ $t("All Levels") }}
-          </router-link>
-        </div>
-        <div
-          v-for="(level, index) in levels"
-          :key="`dropdown-menu-item-level-${index}`"
-          class="mb-1 col-6 col-lg-4"
-        >
-          <router-link
-            :to="{
-              name: 'youtube-browse',
-              params: { category, level: level.numeric },
-            }"
-            class="link-unstyled"
-          >
-            {{
-              index === 0
-                ? level.name
-                : level.exam === "CEFR"
-                ? level.level
-                : level.name
-            }}
-          </router-link>
-        </div>
-      </div>
-    </b-modal>
   </div>
 </template>
 
@@ -271,19 +165,43 @@ export default {
       let langLevels = languageLevels(this.$l2);
       return [1, 2, 3, 4, 5, 6, 7].map((l) => langLevels[l]);
     },
+    categoryOptions() {
+      let items = [{ value: "all", text: this.$t("All Categories") }];
+      if (this.categories) {
+        const moreItems = Object.entries(this.categories).map(
+          ([value, text]) => ({
+            text,
+            value,
+          })
+        );
+        items = items.concat(moreItems);
+      }
+      return items;
+    },
+    levelOptions() {
+      let items = [{ value: "all", text: this.$t("All Levels") }];
+      if (this.levels) {
+        let moreItems = this.levels.map((level) => ({
+          text: level.name,
+          value: level.numeric,
+        }));
+        items = items.concat(moreItems);
+      }
+      return items;
+    },
   },
   data() {
     return {
       videos: [],
       LANGS_WITH_LEVELS,
       sort: "recommended",
-      sortText: {
-        recommended: "Sort by Recommended",
-        id: "Sort by Date Added",
-        date: "Sort by Date Uploaded",
-        views: "Sort by Views",
-        title: "Sort by Title",
-      },
+      sortOptions: [
+        { value: "recommended", text: "Sort by Recommended" },
+        { value: "id", text: "Sort by Date Added" },
+        { value: "date", text: "Sort by Date Uploaded" },
+        { value: "views", text: "Sort by Views" },
+        { value: "title", text: "Sort by Title" },
+      ],
     };
   },
   watch: {
@@ -292,6 +210,33 @@ export default {
     },
   },
   methods: {
+    handleCategoryFilter(value) {
+      this.$router.push({
+        name: "youtube-browse",
+        params: {
+          category: value,
+          level: this.level,
+          start: this.start,
+          keyword: this.keyword,
+          kidsOnly: this.kidsOnly,
+        },
+      });
+    },
+    handleLevelFilter(value) {
+      this.$router.push({
+        name: "youtube-browse",
+        params: {
+          category: this.category,
+          level: value,
+          start: this.start,
+          keyword: this.keyword,
+          kidsOnly: this.kidsOnly,
+        },
+      });
+    },
+    handleSortFilter(value) {
+      this.sort = value;
+    },
     showModal(name) {
       this.$refs[name + "Modal"]?.show();
     },

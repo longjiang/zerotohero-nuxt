@@ -23,7 +23,7 @@
             @filter="handleCategoryFilter"
           />
           <FilterDropdown
-            v-if="levelOptions.length > 0"
+            v-if="LANGS_WITH_LEVELS.includes($l2.code) && levelOptions.length > 0"
             :items="levelOptions"
             :selected-item="level"
             type="levels"
