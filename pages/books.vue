@@ -5,6 +5,10 @@
 </router>
 <template>
   <div class="main books pb-5">
+    <SocialHead
+      :title="`Browse ${$l2.name} Books | Language Player`"
+      :description="`Learn ${$l2.name} with books on Language Player.`"
+    />
     <container-query :query="query" v-model="params">
       <div class="container pb-5">
         <div class="row">

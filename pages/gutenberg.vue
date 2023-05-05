@@ -6,6 +6,10 @@
 </router>
 <template>
   <div class="main">
+    <SocialHead
+      :title="`${bookData.title} | Language Player`"
+      :description="`Read ${bookData.title} on Language Player, a free online library for ${$l2.name} learners.`"
+    />
     <div class="container pt-4 pb-5">
       <div class="row">
         <div class="col-sm-12 pt-3 pb-5" v-if="bookData && filteredHtml">
@@ -19,7 +23,7 @@
         </div>
         <div class="col-sm-12 mb-4">
           <div
-            style="border: 1px solid #ddd; border-radius: 0.5rem; padding: 1rem"
+            class="bg-accent rounded shadow p-3"
           >
             <div
               class="book-info"
@@ -67,14 +71,13 @@
                     @click="removeFromBookshelf"
                   >
                     <i class="fas fa-minus-circle"></i>
-                    Remove
+                    {{ $t('Remove from Bookshelf') }}
                   </b-button>
                 </div>
                 <div>
                   <a
                     :href="bookData.formats['text/html']"
                     target="_blank"
-                    class="text-secondary"
                   >
                     {{ $t('Read on Gutenberg') }}
                   </a>
@@ -213,13 +216,12 @@ export default {
     border-radius: 0.25rem;
   }
   .info {
-    color: black;
     .title {
       font-weight: bold;
     }
     .author {
       margin-top: 0.2rem;
-      color: #999;
+      opacity: 0.66;
       font-size: 0.9em;
     }
   }

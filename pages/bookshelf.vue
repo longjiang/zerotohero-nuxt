@@ -5,14 +5,18 @@
 </router>
 <template>
   <div class="main books pt-5 pb-5">
+    <SocialHead
+      :title="`My ${$l2.name} Bookshelf | Language Player`"
+      :description="`Learn ${$l2.name} with books from your bookshelf on Language Player.`"
+    />
     <container-query :query="query" v-model="params">
       <div class="container pb-5">
-        <div class="row mb-4 p-2">
+        <div class="row mb-4 p-2" v-show="books?.length > 0">
           <div class="col-sm-12 d-flex">
             <b-form-input
               class="mr-1 w-100"
               type="text"
-              placeholder="Search my bookshelf"
+              :placeholder="$t('Search my bookshelf')"
               v-model="search"
               :lazy="true"
             />
@@ -41,7 +45,7 @@
         <div class="row" v-if="books && books.length === 0">
           <div class="col-sm-12">
             <div class="text-center">
-              You don't have any books on your bookshelf.
+              {{ $t("You don't have any books on your bookshelf.") }} <router-link :to="{ name: 'books' }">{{ $t('Browse books') }}</router-link>
             </div>
           </div>
         </div>
