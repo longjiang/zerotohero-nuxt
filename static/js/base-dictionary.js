@@ -362,4 +362,12 @@ class BaseDictionary {
   lookupByLesson() {
     // Only implemented for Chinese
   }
+
+  getByBookLessonDialog() {
+    // Only implemented for Chinese
+  }
+
+  async getHSKStandardCourseWords() {
+    // Only implemented for Chinese
+  }
 }

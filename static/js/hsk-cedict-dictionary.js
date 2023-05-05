@@ -76,7 +76,8 @@ class HskCedictDictionary extends BaseDictionary {
   }
 
   getHSKStandardCourseWords() {
-    return this.hskStandardCourseWords;
+    const hskStandardCourseWords = this.hskStandardCourseWords
+    return hskStandardCourseWords;
   }
 
   createIndices() {

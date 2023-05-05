@@ -109,7 +109,7 @@ export default {
         "/en/zh/my-text",
         "/en/zh/lesson-videos/5",
         "/en/zh/learning-path",
-        "/en/zh/learn/hsk",
+        "/en/zh/learn/hsk/3,1,2",
         "/en/zh/grammar",
         "/en/zh/explore/levels",
         "/en/zh/explore-media",

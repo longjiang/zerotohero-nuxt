@@ -6,7 +6,7 @@
 </router>
 <template>
   <container-query :query="query" v-model="params">
-    <div :class="{ 'bg-white pt-4': !wide }">
+    <div :class="{ 'pt-4': !wide }">
       <SocialHead :title="`${$l2.name} Word List | Language Player`" />
       <div :class="{ container: !wide }" v-cloak>
         <div :class="{ row: !wide, 'content-panes': wide }">
@@ -17,7 +17,7 @@
             }"
           >
             <router-link
-              :to="{ name: 'levels' }"
+              :to="{ name: 'chinese-levels' }"
               :data-level="args[0]"
               class="mb-4 d-block text-center"
               v-if="method === 'hsk'"
