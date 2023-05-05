@@ -7,6 +7,8 @@ class WiktionaryCsvDictionary extends BaseDictionary {
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     super({ l1, l2 });
     this.version = "2.18.0";
+    this.headIndex = {};
+    this.indexKeys = ['search', 'head'];
     this.indexDbVerByLang = {
       fra: '2.18.0',
       eng: '2.18.0',
