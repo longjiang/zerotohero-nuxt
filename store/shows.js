@@ -96,14 +96,14 @@ export const levelByLexDiv = (lexDiv, minLexDivByLevel) => {
 }
 
 export const actions = {
-  async load(context, { l2, adminMode, limit = 1000 }) {
+  async load(context, { l2, forceRefresh, limit = 1000 }) {
     let tvShows = []
     let talks = []
     try {
 
       let response = await this.$directus.get(
         `items/tv_shows?filter[l2][eq]=${l2.id
-        }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
+        }${forceRefresh ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${forceRefresh ? Date.now() : 0}`
       );
 
       if (response.data.data) {
@@ -119,7 +119,7 @@ export const actions = {
 
       response = await this.$directus.get(
         `items/talks?filter[l2][eq]=${l2.id
-        }${adminMode ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${adminMode ? Date.now() : 0}`
+        }${forceRefresh ? '' : '&filter[hidden][empty]=true'}&limit=${limit}&timestamp=${forceRefresh ? Date.now() : 0}`
       );
       if (response.data.data) {
         talks = response.data.data

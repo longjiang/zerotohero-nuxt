@@ -481,7 +481,7 @@ export default {
       ) {
         this.$store.dispatch("shows/load", {
           l2: this.l2,
-          adminMode: this.$adminMode,
+          forceRefresh: this.$adminMode,
         });
       }
       if (!this.$store.state.phrasebooks.phrasebooksLoaded[this.l2.code]) {

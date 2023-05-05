@@ -23,7 +23,9 @@
             @filter="handleCategoryFilter"
           />
           <FilterDropdown
-            v-if="LANGS_WITH_LEVELS.includes($l2.code) && levelOptions.length > 0"
+            v-if="
+              LANGS_WITH_LEVELS.includes($l2.code) && levelOptions.length > 0
+            "
             :items="levelOptions"
             :selected-item="level"
             type="levels"
@@ -42,22 +44,24 @@
           />
         </div>
 
-        <i18n
-          path="Recommendations based on your {0}."
-          tag="div"
-          style="font-weight: normal; font-size: 0.8em; margin-top: 0.5rem"
-          v-if="sort === 'recommended'"
-        >
-          <router-link
-            :to="{
-              name: LANGS_WITH_LEVELS.includes(this.$l2.code)
-                ? 'set-language-level'
-                : 'set-content-preferences',
-            }"
+        <div style="font-weight: normal; font-size: 0.8em; margin-top: 0.5rem">
+          <i18n
+            path="Recommendations based on your {0}."
+            tag="span"
+            v-if="sort === 'recommended'"
           >
-            <u>{{ $t("content preferences") }}</u>
-          </router-link>
-        </i18n>
+            <router-link
+              :to="{
+                name: LANGS_WITH_LEVELS.includes(this.$l2.code)
+                  ? 'set-language-level'
+                  : 'set-content-preferences',
+              }"
+            >
+              <u>{{ $t("content preferences") }}</u>
+            </router-link>
+          </i18n>
+          <u @click="refresh" class="ml-3 text-primary cursor-pointer">{{ $t("Refresh") }}</u>
+        </div>
       </div>
       <div class="col-sm-12" v-if="showFilter">
         <b-input-group class="mb-5">
@@ -380,6 +384,13 @@ export default {
     },
   },
   methods: {
+    refresh() {
+      this.shows = undefined;
+      this.$store.dispatch("shows/load", {
+        l2: this.$l2,
+        forceRefresh: true,
+      });
+    },
     handleCategoryFilter(value) {
       this.$router.push({
         name: this.routeType,
