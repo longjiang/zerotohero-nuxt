@@ -12,38 +12,40 @@
     />
     <div class="show-filter row mt-3 mb-2" v-if="showFilter">
       <div class="col-sm-12 text-center mb-4">
-        <span
-          v-if="Object.keys(categoriesFiltered).length > 0"
-          @click="showModal('categories')"
-          class="filter-dropdown mr-2"
-        >
-          {{
-            $t(
-              category && categoriesFiltered[category]
-                ? categoriesFiltered[category]
-                : "All Categories"
-            )
-          }}
-          <i class="fa-solid fa-caret-down"></i>
-        </span>
-        <span
-          v-if="levels && levels.length > 0"
-          @click="showModal('levels')"
-          class="filter-dropdown mr-2"
-        >
-          {{
-            $t(
-              level && levels.find((l) => l.numeric === level)
-                ? levels.find((l) => l.numeric === level).name
-                : "All Levels"
-            )
-          }}
-          <i class="fa-solid fa-caret-down"></i>
-        </span>
-        <span @click="showModal('sort')" class="filter-dropdown">
-          {{ $t(`Sort by ${ucFirst(sort)}`) }}
-          <i class="fa-solid fa-caret-down"></i>
-        </span>
+        <div>
+          <FilterDropdown
+            v-if="Object.keys(categoriesFiltered).length > 0"
+            :items="categoryOptions"
+            :selected-item="category"
+            type="categories"
+            title="Categories"
+            default-text="All Categories"
+            @filter="handleCategoryFilter"
+          />
+          <span
+            v-if="levels && levels.length > 0"
+            @click="showModal('levels')"
+            class="filter-dropdown mr-2"
+          >
+            {{
+              $t(
+                level && levels.find((l) => l.numeric === level)
+                  ? levels.find((l) => l.numeric === level).name
+                  : "All Levels"
+              )
+            }}
+            <i class="fa-solid fa-caret-down"></i>
+          </span>
+          <FilterDropdown
+            v-if="Object.keys(categoriesFiltered).length > 0"
+            :items="sortOptions"
+            :selected-item="sort"
+            type="sort"
+            title="Sort"
+            default-text="Sort"
+            @filter="handleSortFilter"
+          />
+        </div>
 
         <i18n
           path="Recommendations based on your {0}."
@@ -144,72 +146,6 @@
       </div>
     </div>
 
-    <b-modal
-      ref="categoriesModal"
-      size="lg"
-      centered
-      hide-footer
-      modal-class="safe-padding-top mt-4"
-      body-class="dropdown-menu-modal-wrapper"
-      :title="$t('Categories')"
-    >
-      <div class="row">
-        <div class="mb-1 col-6 col-lg-4">
-          <router-link
-            :to="{ name: routeType, params: { category: 'all', tag, level } }"
-            class="link-unstyled"
-          >
-            {{ $t("All Categories") }}
-          </router-link>
-        </div>
-        <div
-          v-for="(category, index) in categoriesFiltered"
-          :key="`dropdown-menu-item-category-${index}`"
-          class="mb-1 col-6 col-lg-4"
-        >
-          <router-link
-            :to="{ name: routeType, params: { category: index, tag, level } }"
-            class="link-unstyled"
-          >
-            {{ $t(category) }}
-          </router-link>
-        </div>
-      </div>
-    </b-modal>
-    <b-modal
-      ref="sortModal"
-      size="sm"
-      centered
-      hide-footer
-      modal-class="safe-padding-top mt-4"
-      body-class="dropdown-menu-modal-wrapper"
-      :title="$t('Sort')"
-    >
-      <div class="row">
-        <div
-          class="mb-1 col-12"
-          @click="sort = 'recommended'"
-          style="cursor: pointer"
-        >
-          {{ $t("Sort by Recommended") }}
-        </div>
-        <div
-          class="mb-1 col-12"
-          @click="sort = 'views'"
-          style="cursor: pointer"
-        >
-          {{ $t("Sort by Views") }}
-        </div>
-        <div
-          class="mb-1 col-12"
-          @click="sort = 'title'"
-          style="cursor: pointer"
-        >
-          {{ $t("Sort by Title") }}
-        </div>
-        <!-- <div class="mb-1 col-12" @click="sort = 'date'">Sort by Date</div> -->
-      </div>
-    </b-modal>
     <b-modal
       ref="levelsModal"
       size="lg"
@@ -333,6 +269,12 @@ export default {
         talks: "YouTube Channels",
         audiobooks: "Audiobooks",
       },
+      sortOptions: [
+        { text: "Sort by Recommended", value: "recommended" },
+        { text: "Sort by Views", value: "views" },
+        { text: "Sort by Title", value: "title" },
+        // { text: "Sort by Date", value: "date" },
+      ],
     };
   },
   async fetch() {
@@ -373,6 +315,19 @@ export default {
         if (ids.includes(Number(id))) categories[id] = CATEGORIES[id];
       }
       return categories;
+    },
+    categoryOptions() {
+      let items = [{ value: "all", text: this.$t("All Categories") }];
+      if (this.categoriesFiltered) {
+        const moreItems = Object.entries(this.categoriesFiltered).map(
+          ([value, text]) => ({
+            text,
+            value,
+          })
+        );
+        items = items.concat(moreItems);
+      }
+      return items;
     },
     tags() {
       let tags = [];
@@ -471,6 +426,15 @@ export default {
     },
   },
   methods: {
+    handleCategoryFilter(value) {
+      this.$router.push({
+        name: this.routeType,
+        params: { category: value, tag: this.tag, level: this.level },
+      });
+    },
+    handleSortFilter(value) {
+      this.sort = value;
+    },
     ucFirst(...args) {
       return ucFirst(...args);
     },
