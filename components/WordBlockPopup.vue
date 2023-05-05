@@ -404,6 +404,7 @@ $tooltip-border-dark: #474545;
 .popover.skin-dark,
 .popover.skin-light {
   background: none;
+  border: none;
   .tooltip-wrapper {
     border-radius: 1rem;
     box-shadow: 0 5px 20px rgba(black, 0.2);
