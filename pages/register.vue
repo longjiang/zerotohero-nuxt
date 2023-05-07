@@ -44,7 +44,9 @@
                   required
                   :style="{
                     flex: 1,
-                    order: ['ko', 'ja', 'zh'].includes($browserLanguage) ? -1 : 1
+                    order: ['ko', 'ja', 'zh'].includes($browserLanguage)
+                      ? -1
+                      : 1,
                   }"
                 ></b-form-input>
               </div>
@@ -70,7 +72,7 @@
 
               <b-button class="d-block w-100" type="submit" variant="success">
                 <b-spinner small v-if="loading" />
-                <span v-else>{{ $tb('Sign Up') }}</span>
+                <span v-else>{{ $tb("Sign Up") }}</span>
               </b-button>
               <div class="mt-3 text-center">
                 <router-link
@@ -79,7 +81,7 @@
                     query: { redirect: $route.query.redirect },
                   }"
                 >
-                  {{ $tb('I have an account, log me in.') }}
+                  {{ $tb("I have an account, log me in.") }}
                   <i class="fas fa-chevron-right ml-1"></i>
                 </router-link>
               </div>
@@ -129,43 +131,61 @@ export default {
         `${PYTHON_SERVER}new_mailer_lite_subscriber`,
         payload
       );
-      return res
+      return res;
     },
     async onSubmit(event) {
       try {
         this.loading = true;
+
+        // Register the user in Directus
         const res = await axios.post(
           `${DIRECTUS_URL}zerotohero/users`,
           this.form
         );
-        if (res && res.data && res.data.public === true) {
-          // Directus isn't returning users for some reason, let's get it
 
-          let response = await this.$auth.loginWith("local", {
+        if (res && res.data && res.data.public === true) {
+          // Log in the user using the local strategy
+          const loginResponse = await this.$auth.loginWith("local", {
             data: this.form,
           });
-          if (response && response.data) {
-            response = await this.$directus.get(`users/me`);
-            if (response.data && response.data.data) {
-              let user = response.data.data;
+
+          if (loginResponse && loginResponse.data) {
+            // Fetch the user data from Directus
+            const userResponse = await this.$directus.get(`users/me`);
+
+            if (userResponse.data && userResponse.data.data) {
+              let user = userResponse.data.data;
               this.$auth.setUser(user);
+
+              // Show success toast message
               this.$toast.success(
-                this.$tb('Registration successful. Welcome aboard, {name}!', {name: this.form.first_name}),
+                this.$tb("Registration successful. Welcome aboard, {name}!", {
+                  name: this.form.first_name,
+                }),
                 {
                   position: "top-center",
                   duration: 5000,
                 }
               );
+
+              // Send data to MailerLite
               await this.mailerLiteWebHook();
+
+              // Fetch or create user data
+              await this.$directus.fetchOrCreateUserData(); 
+
+              // Redirect the user to the appropriate page
               if (this.$route.query.redirect) {
                 this.$router.push({ path: this.$route.query.redirect });
               } else {
-                if (this.$l1 && this.$l2)
+                if (this.$l1 && this.$l2) {
                   this.$router.push({
                     name: "profile",
                     params: { l1: this.$l1.code, l2: this.$l2.code },
                   });
-                else this.$router.push("/dashboard");
+                } else {
+                  this.$router.push("/dashboard");
+                }
               }
             }
           }
@@ -173,10 +193,16 @@ export default {
       } catch (err) {
         this.loading = false;
         logError(err);
+
+        // Handle errors and display appropriate error messages
         if (err.response && err.response.data) {
           let message = err.response.data.error.message;
+
           if (err.response.data.error.code === 204) {
-            message = this.$tb('Your email {email} has already been registered, please login.', {email: this.form.email});
+            message = this.$tb(
+              "Your email {email} has already been registered, please login.",
+              { email: this.form.email }
+            );
             this.$router.push({
               name: "login",
               params: {
@@ -184,6 +210,7 @@ export default {
               },
             });
           }
+
           this.$toast.error(message, {
             position: "top-center",
             duration: 5000,
