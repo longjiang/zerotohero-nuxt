@@ -1,27 +1,27 @@
 <template>
   <div :class="`annotation-settings annotation-settings-${variant}`">
-    <div class="bg-gray rounded p-2" :class="annotationSettingsClass">
-      <Annotate class="text-center" :useZoom="true"
-        ><span>{{ $l2.vernacularName || "Example" }}</span></Annotate
-      >
-      <div class="translation-line text-center">
-        {{ $t("Example Translation") }}
-      </div>
-    </div>
-    <div class="text-size">
-      <div class="text-size-label">
-        <div style="font-size: 0.8rem">{{ $t("Smaller") }}</div>
-        <div style="font-size: 1.2rem">{{ $t("Bigger") }}</div>
-      </div>
-      <b-form-input
-        type="range"
-        min="0"
-        max="7"
-        step="1"
-        v-model="zoomLevel"
-      ></b-form-input>
-    </div>
     <div class="quick-settings-language-specific" v-if="$l1 && $l2">
+      <div class="bg-gray rounded p-2" :class="annotationSettingsClass">
+        <Annotate class="text-center" :useZoom="true"
+          ><span>{{ $l2.vernacularName || "Example" }}</span></Annotate
+        >
+        <div class="translation-line text-center">
+          {{ $t("Example Translation") }}
+        </div>
+      </div>
+      <div class="text-size">
+        <div class="text-size-label">
+          <div style="font-size: 0.8rem">{{ $t("Smaller") }}</div>
+          <div style="font-size: 1.2rem">{{ $t("Bigger") }}</div>
+        </div>
+        <b-form-input
+          type="range"
+          min="0"
+          max="7"
+          step="1"
+          v-model="zoomLevel"
+        ></b-form-input>
+      </div>
       <Toggle v-model="showPinyin" label="Show Phonetics">
         <span style="font-size: 0.8em; font-weight: bold">
           <ruby v-if="$l2.han" style="position: relative; bottom: -0.1rem">
@@ -88,7 +88,7 @@
         <i class="fa fa-wrench"></i>
       </Toggle>
       <hr />
-      <div :class="`annotation-setting-toggle`">
+      <div :class="`annotation-setting-toggle`" v-if="$l1 && $l2">
         <router-link :to="{ name: 'settings' }" class="text-success">
           <i class="fa-solid fa-gears annotation-setting-icon"></i
           >{{ $tb("More Settings") }}
