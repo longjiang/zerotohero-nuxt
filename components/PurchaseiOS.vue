@@ -29,7 +29,10 @@ export default {
   prop: {
     sale: {
       default: false
-    }
+    },
+    test: {
+      default: false
+    },
   },
   data() {
     return {

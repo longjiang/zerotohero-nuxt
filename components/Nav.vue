@@ -133,8 +133,7 @@ feature-card-name-${child.name}`"
 <script>
 import { Capacitor } from "@capacitor/core";
 import { mapState } from "vuex";
-import { languageLevels, background, LANGS_WITH_LEVELS } from "@/lib/utils";
-import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
+import { languageLevels, background, LANGS_WITH_LEVELS, LANGS_WITH_CONTENT } from "@/lib/utils";
 
 export default {
   props: {

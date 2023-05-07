@@ -319,8 +319,7 @@
 </template>
 
 <script>
-import { NON_PRO_MAX_SUBS_SEARCH_HITS } from "@/lib/config";
-import { unique, ucFirst, timeout, highlightMultiple, iOS } from "@/lib/utils";
+import { unique, ucFirst, timeout, highlightMultiple, iOS, NON_PRO_MAX_SUBS_SEARCH_HITS } from "@/lib/utils";
 
 export default {
   props: {

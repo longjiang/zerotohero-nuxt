@@ -86,9 +86,7 @@
 import YouTubeNav from "@/components/YouTubeNav";
 import YouTubeChannelCard from "@/components/YouTubeChannelCard";
 import SimpleSearch from "@/components/SimpleSearch";
-import { uniqueByValue } from "@/lib/utils/array";
-import { TOPICS } from "@/lib/utils/language-levels";
-import { LANGS_WITH_CONTENT } from "@/lib/utils/servers";
+import { uniqueByValue, LANGS_WITH_CONTENT, TOPICS } from "@/lib/utils";
 import { mapState } from "vuex";
 
 export default {

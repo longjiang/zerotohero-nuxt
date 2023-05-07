@@ -55,7 +55,10 @@ export default {
   props: {
     sale: {
       default: false
-    }
+    },
+    test: {
+      default: false
+    },
   },
   data() {
     // Legacy Pricing

@@ -95,10 +95,9 @@
 </template>
 
 <script>
-import { uniqueId, timeout, speak, documentOffsetTop } from "@/lib/utils";
+import { uniqueId, timeout, speak, documentOffsetTop, NON_PRO_MAX_LINES } from "@/lib/utils";
 import Vue from "vue";
 
-import { NON_PRO_MAX_LINES } from "@/lib/config";
 const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
 
 export default {
