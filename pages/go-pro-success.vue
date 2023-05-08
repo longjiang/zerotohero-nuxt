@@ -23,47 +23,64 @@
             <hr />
           </div>
           <div class="mt-4" />
-          <h3 class="text-center mt-3">
-            🎉 {{ $tb("You’re now Pro!") }}
-          </h3>
-          <div class="mt-4" />
           <client-only>
-            <div v-if="$auth.loggedIn && $auth.user && pro" class="text-center">
-              <div>
-                {{
-                  $tb(
-                    "Welcome {name}, you now enjoy the benefit of a Pro account across all languages.",
-                    { name: $auth.user ? $auth.user.first_name : "" }
-                  )
-                }}
+            <div v-if="$auth.loggedIn && $auth.user" class="text-center">
+              <div v-if="pro">
+                <h3 class="text-center mt-3">
+                  🎉 {{ $tb("You’re now Pro!") }}
+                </h3>
+                <div class="mt-4" />
+                <div>
+                  {{
+                    $tb(
+                      "Welcome {name}, you now enjoy the benefit of a Pro account across all languages.",
+                      { name: $auth.user ? $auth.user.first_name : "" }
+                    )
+                  }}
+                </div>
+                <div class="mt-4"></div>
+                <div>
+                  <router-link
+                    :to="{ name: 'dashboard' }"
+                    class="btn btn-success pl-4 pr-4"
+                  >
+                    {{ $tb("Start Using Pro") }}
+                    <i class="fas fa-chevron-right"></i>
+                  </router-link>
+                </div>
               </div>
-              <div class="mt-4"></div>
-              <div>
-                <router-link
-                  :to="{ path: '/' }"
-                  class="btn btn-success pl-4 pr-4"
-                >
-                  {{ $tb("Start Using Pro") }}
-                </router-link>
+              <div v-else-if="checking" class="mt-5 mb-5 text-center">
+                <Loader
+                  :sticky="true"
+                  :message="$tb('Checking your Pro subscription...')"
+                />
               </div>
             </div>
             <div v-else class="text-center">
               <p>
-                {{
-                  $tb(
-                    "Your upgrade was successful. Please login again to activate your Pro features."
-                  )
-                }}
+                {{ $tb("Please login to verify your Pro status.") }}
               </p>
               <div class="mt-4" />
               <div>
                 <router-link
-                  :to="{ path: '/login?redirect=/' }"
+                  :to="{ path: '/login?redirect=/go-pro-success' }"
                   class="btn btn-success pl-4 pr-4"
                 >
-                  {{ $tb("Login with Pro") }}
+                  {{ $tb("Login") }}
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
+              </div>
+              <div class="mt-3">
+                <small>
+                  {{
+                    $tb(
+                      "If you’ve purchased Pro but the system did not update your account, please contact us:"
+                    )
+                  }}
+                  <a href="mailto:jon.long@zerotohero.ca">{{
+                    $tb("Send us an email")
+                  }}</a>
+                </small>
               </div>
             </div>
           </client-only>
@@ -89,11 +106,16 @@ export default {
           .post(url, { email })
           .catch((err) => logError(err));
       }
-      await this.$auth.logout();
-      await this.$auth.setUser(null);
+      await this.$store.dispatch(
+        "subscriptions/checkSubscription",
+        this.$auth.user.id
+      );
     }
   },
   computed: {
+    checking() {
+      return this.$store.state.subscriptions.checking;
+    },
     pro() {
       return this.forcePro || this.$store.state.subscriptions.active;
     },
@@ -101,8 +123,7 @@ export default {
       return background();
     },
   },
-  methods: {
-  },
+  methods: {},
 };
 </script>
 <style scoped>

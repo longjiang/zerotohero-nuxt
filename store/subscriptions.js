@@ -1,5 +1,6 @@
 export const state = () => ({
   active: false,
+  checking: true,
   subscription: undefined,
 });
 
@@ -10,10 +11,14 @@ export const mutations = {
   SET_SUBSCRIPTION(state, subscription) {
     state.subscription = subscription;
   },
+  SET_CHECKING(state, checking) {
+    state.checking = checking;
+  },
 };
 
 export const actions = {
   async checkSubscription({ commit }, userId) {
+    commit("SET_CHECKING", true);
     try {
       let active = false;
       const subscription = await this.$directus.checkSubscription()
@@ -27,9 +32,11 @@ export const actions = {
         commit("SET_SUBSCRIPTION", subscription);
       }
       commit("SET_ACTIVE", active);
+      commit("SET_CHECKING", false);
     } catch (error) {
       console.error("Error checking subscription:", error.message);
       commit("SET_ACTIVE", false);
+      commit("SET_CHECKING", false);
     }
   },
 };
