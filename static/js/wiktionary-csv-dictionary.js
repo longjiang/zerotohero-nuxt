@@ -105,7 +105,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     if (supplementalLangCode) {
       // Append indonesian words to malay dictionary so we get more words
       const file = this.dictionaryFile({ l1Code, l2Code: supplementalLangCode })
-      let supplWords = await this.loadAndNormalizeDictionaryData(`wiktionary-${supplementalLangCode}-${l1Code}`, file);
+      let supplWords = await this.loadAndNormalizeDictionaryData({ name: `wiktionary-${supplementalLangCode}-${l1Code}`, file });
       for (let w of supplWords) {
         w.id = supplementalLangCode + "-" + w.id;
         w.supplementalLang = supplementalLangCode;
