@@ -26,22 +26,16 @@
       </b-button>
     </template>
     <template v-if="cnyPrice">
-      <a
-      :href="cnyPrice.paymentLink"
-      class="btn btn-success btn-purchase"
-    >
-      <span class="icons"><i class="fab fa-weixin"></i></span>
-      {{ $tb('WeChat Pay') }}
-      <i class="fa-solid fa-chevron-right ml-1"></i>
-    </a>
-    <a
-      :href="cnyPrice.paymentLink"
-      class="btn btn-success btn-purchase"
-    >
-      <span class="icons"><i class="fab fa-alipay"></i></span>
-      {{ $tb('Alipay') }}
-      <i class="fa-solid fa-chevron-right ml-1"></i>
-    </a>
+      <a :href="cnyPrice.paymentLink + `?client_reference_id=${this.$auth.user.id}`" class="btn btn-success btn-purchase">
+        <span class="icons"><i class="fab fa-weixin"></i></span>
+        {{ $tb("WeChat Pay") }}
+        <i class="fa-solid fa-chevron-right ml-1"></i>
+      </a>
+      <a :href="cnyPrice.paymentLink + `?client_reference_id=${this.$auth.user.id}`" class="btn btn-success btn-purchase">
+        <span class="icons"><i class="fab fa-alipay"></i></span>
+        {{ $tb("Alipay") }}
+        <i class="fa-solid fa-chevron-right ml-1"></i>
+      </a>
     </template>
   </div>
 </template>
@@ -153,15 +147,19 @@ export default {
           amount: 6,
         },
         {
-          plan: 'monthly',
-          type: 'regular',
-          mode: 'subscription',
-          id: this.test ? "price_1MutQPG5EbMGvOafheA9KTCi" : "price_1Muhw5G5EbMGvOafXWqu0m1l",
+          plan: "monthly",
+          type: "regular",
+          mode: "payment", // not a re-occurring payment so it can work with Alipay and WeChat Pay
+          id: this.test
+            ? "price_1MutQPG5EbMGvOafheA9KTCi"
+            : "price_1Muhw5G5EbMGvOafXWqu0m1l",
           currency: "cny",
           amount: 39,
-          paymentLink: this.test ? "https://buy.stripe.com/test_aEUfZsepT0D1aac3ce" : "https://buy.stripe.com/3cs6rPbV10Rdg4E14e"
+          paymentLink: this.test
+            ? "https://buy.stripe.com/test_aEUfZsepT0D1aac3ce"
+            : "https://buy.stripe.com/3cs6rPbV10Rdg4E14e",
         },
-      ]
+      ],
     };
   },
   methods: {
@@ -169,6 +167,10 @@ export default {
       // You will be redirected to Stripe's secure checkout page
       this.$refs.stripeCheckoutUSDRef.redirectToCheckout();
     },
+    submitStripeCNY() {
+      // You will be redirected to Stripe's secure checkout page
+      this.$refs.stripeCheckoutCNYRef.redirectToCheckout();
+    }
   },
 };
 </script>
