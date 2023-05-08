@@ -80,11 +80,7 @@
       </div>
       <div class="w-100" v-if="itemsFiltered.length === 0">
         <div class="col-sm-12">
-          <p
-            :class="`text-center p-4 rounded no-videos ${
-              skin === 'dark' ? 'ghost-dark' : ''
-            }`"
-          >
+          <p class="text-center p-4 rounded bg-accent">
             {{ $t("You haven't studied any {l2} videos yet.", {l2: l2 ? $t(l2.name) : ""}) }}
             <br />
             <br />
@@ -235,10 +231,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.no-videos {
-  background: rgb(239, 237, 237);
-  width: 100%;
-}
 .watch-history-dark {
   .no-videos {
     background: rgba(37, 36, 44, 0.651);

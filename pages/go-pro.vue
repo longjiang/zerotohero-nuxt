@@ -121,7 +121,7 @@ export default {
     async handlePlanSelection(plan) {
       this.selectedPlan = plan;
       await timeout(1000)
-      this.$refs.paymentMethods.scrollIntoView({ behavior: 'smooth' });
+      if (this.$refs.paymentMethods) this.$refs.paymentMethods.scrollIntoView({ behavior: 'smooth' });
     },
   },
 };
