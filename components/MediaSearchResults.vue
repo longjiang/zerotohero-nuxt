@@ -238,20 +238,31 @@ export default {
         filters.push("filter[level][eq]=" + this.level);
       }
       if (this.keyword !== "") {
-        if (this.keyword.startsWith("channel:"))
+        const words = this.keyword.split(' ');
+
+        let titleKeywords = [];
+
+        for (const word of words) {
+          if (word.startsWith("channel:")) {
+            filters.push(
+              "filter[channel_id][eq]=" +
+                encodeURIComponent(word.replace("channel:", ""))
+            );
+          } else if (word.startsWith("locale:")) {
+            filters.push(
+              "filter[locale][contains]=" +
+                encodeURIComponent(word.replace("locale:", ""))
+            );
+          } else {
+            titleKeywords.push(word);
+          }
+        }
+
+        if (titleKeywords.length > 0) {
           filters.push(
-            "filter[channel_id][eq]=" +
-              encodeURIComponent(this.keyword.replace("channel:", ""))
+            "filter[title][contains]=" + encodeURIComponent(titleKeywords.join(' '))
           );
-        if (this.keyword.startsWith("locale:"))
-          filters.push(
-            "filter[locale][contains]=" +
-              encodeURIComponent(this.keyword.replace("locale:", ""))
-          );
-        else
-          filters.push(
-            "filter[title][contains]=" + encodeURIComponent(this.keyword)
-          );
+        }
       }
       if (this.kidsOnly) {
         filters.push('filter[made_for_kids][eq]=1')
