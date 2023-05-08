@@ -60,7 +60,9 @@
               <u>{{ $t("content preferences") }}</u>
             </router-link>
           </i18n>
-          <u @click="refresh" class="ml-3 text-primary cursor-pointer">{{ $t("Refresh") }}</u>
+          <u @click="refresh" class="ml-3 text-primary cursor-pointer">{{
+            $t("Refresh")
+          }}</u>
         </div>
       </div>
       <div class="col-sm-12" v-if="showFilter">
@@ -220,9 +222,9 @@ export default {
       },
       sortOptions: [
         { text: "Sort by Recommended", value: "recommended" },
-        { text: "Sort by Views", value: "views" },
+        { text: "Sort by Views", value: "avg_views" },
         { text: "Sort by Title", value: "title" },
-        // { text: "Sort by Date", value: "date" },
+        { text: "Sort by Date Added", value: "created_on" },
       ],
     };
   },
@@ -433,25 +435,35 @@ export default {
       }
     },
     sortShows(shows) {
-      shows = shows.sort((x, y) => y.avg_views - x.avg_views);
-      if (this.sort === "title")
-        shows = shows.sort((x, y) =>
-          x.title.localeCompare(y.title, this.$l2.locales[0])
-        );
-      // if (this.sort === "date")
-      //   shows = shows.sort((x, y) => y.date - x.date);
-      if (this.sort === "recommended") {
-        shows = shows
-          .sort((x, y) => {
-            x = String(x.level) === this.languageLevel;
-            y = String(y.level) === this.languageLevel;
-            return x === y ? 0 : x ? -1 : 1;
-          })
-          .sort((x, y) => {
-            x = this.preferredCategories.includes(String(x.category));
-            y = this.preferredCategories.includes(String(y.category));
-            return x === y ? 0 : x ? -1 : 1;
+      switch (this.sort) {
+        case "title":
+          shows = shows.sort((x, y) =>
+            x.title.localeCompare(y.title, this.$l2.locales[0])
+          );
+          break;
+        case "created_on":
+          shows = shows.sort((a, b) => {
+            const dateA = new Date(a.created_on);
+            const dateB = new Date(b.created_on);
+            return dateB - dateA; // For descending order
           });
+          break;
+        case "avg_views":
+          shows = shows.sort((x, y) => y.avg_views - x.avg_views);
+          break;
+        case "recommended":
+          shows = shows
+            .sort((x, y) => {
+              x = String(x.level) === this.languageLevel;
+              y = String(y.level) === this.languageLevel;
+              return x === y ? 0 : x ? -1 : 1;
+            })
+            .sort((x, y) => {
+              x = this.preferredCategories.includes(String(x.category));
+              y = this.preferredCategories.includes(String(y.category));
+              return x === y ? 0 : x ? -1 : 1;
+            });
+          break;
       }
       return shows || [];
     },
