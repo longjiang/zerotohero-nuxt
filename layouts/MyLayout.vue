@@ -115,31 +115,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.zerotohero-wide .zerotohero-layout {
+
+.zerotohero-layout {
   display: grid;
   height: 100vh;
+  .zth-main-nav-wrapper {
+    grid-area: nav;
+  }
+  .zth-secondary-nav-wrapper {
+    grid-area: secondarynav;
+  }
+}
+
+.zerotohero-wide .zerotohero-layout {
   grid-template-rows: auto 1fr;
   grid-template-columns: 13rem 1fr;
   grid-template-areas:
     'nav topbar'
     'nav secondarynav'
     'nav content';
-}
-.zth-main-nav-wrapper {
-  grid-area: nav;
-  grid-row: 1 / 4; /* This makes the nav area span two rows */
-}
-.zth-secondary-nav-wrapper {
-  grid-area: secondarynav;
+  .zth-main-nav-wrapper {
+    grid-row: 1 / 4; /* This makes the nav area span two rows */
+  }
 }
 
 .zerotohero-not-wide .zerotohero-layout {
   grid-template-rows: auto auto 1fr;
   grid-template-columns: 1fr;
   grid-template-areas:
-    'nav'
+    'topbar'
     'secondarynav'
-    'content' 
-    'topbar';
+    'content'
+    'nav',
 }
 </style>
