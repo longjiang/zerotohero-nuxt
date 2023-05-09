@@ -207,7 +207,7 @@ export default {
           this.ids.map(async (id) => {
             let word = await dictionary.get(id);
             if (this.$l2.code === "ja")
-              word.romaji = await dictionary.transliterate(text);
+              word.romaji = await dictionary.transliterate(word.kana);
             return word;
           })
         );
