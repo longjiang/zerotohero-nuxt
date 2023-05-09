@@ -68,9 +68,11 @@ export const mutations = {
         state.progress[l2.code] = {}
       }
       let progress = Object.assign({}, state.progress)
+      if (!time) time = 0
       progress[l2.code].time = time
       localStorage.setItem('zthProgress', JSON.stringify(progress))
       this._vm.$set(state, 'progress', progress)
+      // console.log(`Progress: New time set: ${time / 1000}s for '${l2.code}'`)
     }
   },
   ADD_CERTIFICATION(state, { l2, certification }) {
@@ -128,16 +130,17 @@ export const actions = {
    */
   async setTime({ dispatch, commit }, { l2, time, autoLog }) {
     if (autoLog) {
-      // every minute
+      // Every minute
       if (time % 60000 === 0) {
         let progress = await dispatch('fetchProgressFromServer')
         if (progress?.[l2.code]) {
           let timeFromServer = progress[l2.code].time
-          if (time > timeFromServer) {
+          // If timeFromServer is undefined, or if time is greater than timeFromServer, push to server
+          if (!timeFromServer || time > timeFromServer) {
             commit('SET_TIME', { l2, time })
             dispatch('push')
           } else {
-            commit('SET_TIME', { l2, time: progress[l2.code].time })
+            commit('SET_TIME', { l2, time: timeFromServer })
           }
         }
       } else {
@@ -160,6 +163,7 @@ export const actions = {
         .catch(async (err) => {
           logError(err, 'progress.js: push()')
         })
+      // console.log('Progress: Pushed to server.')
     }
   }
 }
