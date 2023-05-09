@@ -298,4 +298,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@/components/SiteTopBar/styles.scss";
+.site-top-bar {
+  grid-area: topbar;
+}
 </style>

@@ -1,74 +1,20 @@
 <template>
   <div id="zerotohero" :class="classes" :fullscreen="fullscreen">
-    <FeedbackButton />
-    <HydrationNotice v-if="$route.path === '/'" />
-    <client-only>
-      <!-- Main nav - side bar on wide screen, bottom bar on small screen /-->
-      <Nav
-        v-if="!fullscreen && $route.params.l1 && $route.params.l2 && l1 && l2"
-        class="zth-main-nav-wrapper"
-        :l1="l1"
-        :l2="l2"
-        :key="`nav-main-${l1.code}-${l2.code}`"
-        :variant="wide ? 'side-bar' : 'bottom-bar'"
-        :skin="$skin"
-        @collapsed="updateCollapsed"
-        level="main"
-      />
-    </client-only>
-    <div class="zth-content">
-      <client-only>
-        <SiteTopBar
-          v-if="showTopBar"
-          :skin="$skin"
-          variant="menu-bar"
-          :badge="savedWordsCount + savedPhrasesCount"
-          :wide="wide"
-        />
-        <!-- SECONDARY NAV (Hidden on YouTubeView) -->
-        <Nav
-          v-if="l1 && l2 && $route.params.l1 && $route.params.l2"
-          :class="{
-            'zth-secondary-nav-wrapper': true,
-            'd-none': $route.name === 'video-view',
-          }"
-          variant="menu-bar"
-          level="secondary"
-          v-bind="{
-            l1,
-            l2,
-          }"
-          :key="`nav-secondary-${l1.code}-${l2.code}`"
-        />
-      </client-only>
-      <VideoViewComp
-        id="overlay-player"
-        ref="video-view-comp"
-        v-if="overlayPlayerType && $route.params.l2"
-        v-bind="{
-          type: overlayPlayerType,
-          youtube_id: overlayPlayerYouTubeId,
-          lesson: overlayPlayerLesson,
-          mini: overlayPlayerMinimized,
-          key: `video-view-comp-${overlayPlayerYouTubeId}`,
+    <MyLayout :wide="wide">
+      <Nuxt
+        :class="{
+          'nuxt-content': true,
+          [`skin-${$skin}`]: true,
         }"
-        @close="overlayPlayerClose"
       />
-      <div id="main" v-if="overlayPlayerMinimized">
-        <Nuxt
-          :class="{
-            'nuxt-content': true,
-            [`skin-${$skin}`]: true,
-          }"
-        />
-      </div>
-    </div>
+    </MyLayout>
     <i class="fas fa-star star-animation"></i>
   </div>
 </template>
 
 <script>
 import smoothscroll from "smoothscroll-polyfill";
+import MyLayout from '@/layouts/MyLayout.vue';
 import { wide, timeout } from "@/lib/utils"
 import { mapState } from "vuex";
 import { DelayHydration } from "nuxt-delay-hydration/dist/components";
@@ -76,19 +22,17 @@ import { DelayHydration } from "nuxt-delay-hydration/dist/components";
 export default {
   components: {
     DelayHydration,
+    MyLayout,
   },
   data() {
     return {
+      wide: false,
       focus: false,
       loaded: false,
-      wide: false,
       dictionaryCredit: "",
       settingsLoaded: undefined,
       fullPageRoutes: ["index", "sale"],
       collapsed: false,
-      overlayPlayerYouTubeId: undefined,
-      overlayPlayerLesson: undefined,
-      overlayPlayerType: undefined,
       l2Time: {},
       timeLoggerID: undefined,
       l2SettingsClasses: {},
@@ -105,32 +49,11 @@ export default {
     ...mapState("settings", ["l2Settings", "l1", "l2", "fullscreen"]),
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
-    showTopBar() {
-      if (this.fullscreen) return false;
-      if (this.$route.meta && this.$route.meta.layout === "full") return false;
-      else
-        return (
-          this.$route.params.l1 && this.$route.params.l1 && this.l1 && this.l2
-        );
-    },
     fullHistoryPathsByL1L2() {
       return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
         l1: this.l1,
         l2: this.l2,
       });
-    },
-    savedWordsCount() {
-      let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
-      return count;
-    },
-    savedPhrasesCount() {
-      let count = this.$store.getters["savedPhrases/count"]({
-        l2: this.l2.code,
-      });
-      return count;
-    },
-    overlayPlayerMinimized() {
-      return this.$route.name !== "video-view";
     },
     classes() {
       let classes = {
@@ -151,7 +74,6 @@ export default {
   created() {
     this.$nuxt.$on("history", this.addFullHistoryItem); // from Language map
     this.$nuxt.$on("animateStar", this.onAnimateStar);
-    this.updateOverlayPlayerProps();
   },
   async mounted() {
     this.isElectron = navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
@@ -222,7 +144,6 @@ export default {
     },
     $route() {
       this.addFullHistoryItem(this.$route.fullPath);
-      this.updateOverlayPlayerProps();
     },
     "$auth.user"() {
       this.$directus.fetchOrCreateUserData();
@@ -266,18 +187,6 @@ export default {
         this.l2SettingsClasses = l2SettingsClasses;
         this.classes
       }
-    },
-    updateOverlayPlayerProps() {
-      if (this.$route.name === "video-view") {
-        this.overlayPlayerType = this.$route.params.type;
-        this.overlayPlayerYouTubeId = this.$route.params.youtube_id;
-        this.overlayPlayerLesson = this.$route.params.lesson;
-      }
-    },
-    overlayPlayerClose() {
-      this.overlayPlayerType = undefined;
-      this.overlayPlayerYouTubeId = undefined;
-      this.overlayPlayerLesson = undefined;
     },
     subscribeToVuexMutations() {
       this.unsubscribe = this.$store.subscribe((mutation) => {
@@ -407,9 +316,6 @@ export default {
         star.style.display = "none";
       }
     },
-    updateCollapsed(collapsed) {
-      this.collapsed = collapsed;
-    },
     onAllLanguagesLoaded() {
       if (this.l1 && this.l2) {
         let l1 = this.$languages.getSmart(this.l1.code);
@@ -514,64 +420,5 @@ export default {
   width: 1.2rem;
   height: 1.2rem;
   display: none;
-}
-
-.zerotohero-not-wide.zerotohero-with-nav {
-  &:not(.route-video-view):not(.route-learning-path) .zth-content {
-    padding-bottom: calc(5rem + env(safe-area-inset-bottom));
-  }
-}
-
-#zerotohero {
-  min-height: 100vh;
-  .zth-content {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-}
-
-#zerotohero {
-  #main {
-    min-height: calc(100vh - 250px);
-    flex: 1;
-  }
-}
-
-.zerotohero-with-mini-player {
-  .zth-content {
-    padding-bottom: 5rem;
-  }
-}
-
-.zerotohero-wide {
-  height: 100%;
-  &.zerotohero-with-nav {
-    .zth-content {
-      margin-left: 13rem;
-      width: calc(100% - 13rem);
-    }
-    &.zerotohero-wide-collapsed {
-      .zth-content {
-        margin-left: 5rem;
-        width: calc(100% - 5rem);
-      }
-    }
-  }
-  .zth-content {
-    flex: 1;
-    overflow: visible;
-  }
-}
-
-@media screen and (max-device-width: 1024px) {
-  .zth-main-nav-wrapper {
-    background-attachment: scroll;
-  }
-}
-
-.zth-footer {
-  background-color: #25242cfa;
-  color: white;
 }
 </style>

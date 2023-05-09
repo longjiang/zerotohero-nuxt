@@ -1178,7 +1178,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/assets/scss/variables.scss";
-
 .zth-nav-dark {
   &.zth-nav-side-bar {
     background-color: $bg-color-dark-2;
@@ -1215,18 +1214,6 @@ export default {
   }
 }
 
-.zerotohero-wide {
-  .zth-main-nav-wrapper {
-    overflow: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 13rem;
-    height: 100vh;
-    z-index: 2;
-  }
-}
-
 .main-nav {
   margin: 0 auto;
   width: 100%;
@@ -1239,11 +1226,6 @@ export default {
   .main-nav {
     backdrop-filter: blur(20px);
   }
-}
-
-.nav-menu-bar,
-.nav-side-bar {
-  z-index: 3;
 }
 
 .zth-nav-secondary.zth-nav-light {
@@ -1276,7 +1258,6 @@ export default {
   padding-left: 1rem;
   padding-right: 1rem;
   padding-bottom: 2rem;
-  position: sticky;
   top: calc(env(safe-area-inset-top) + 2.9rem);
   z-index: 19;
   :deep(.nav-item-count) {
@@ -1310,10 +1291,6 @@ export default {
 }
 
 .zth-nav-bottom {
-  position: fixed;
-  bottom: 0;
-  z-index: 99;
-  width: 100%;
   padding-bottom: calc(env(safe-area-inset-bottom) + 0.25rem);
   transition: 0.2s all ease-in-out;
   &.zth-nav-bottom-hidden {
