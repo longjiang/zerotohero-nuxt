@@ -4,7 +4,7 @@
     <HydrationNotice v-if="$route.path === '/'" />
     <client-only>
       <!-- Main nav - side bar on wide screen, bottom bar on small screen /-->
-      <Nav
+      <NavMain
         v-if="!fullscreen && $route.params.l1 && $route.params.l2 && l1 && l2"
         class="zth-main-nav-wrapper"
         :l1="l1"
@@ -13,7 +13,6 @@
         :variant="wide ? 'side-bar' : 'bottom-bar'"
         :skin="$skin"
         @collapsed="updateCollapsed"
-        level="main"
       />
       <SiteTopBar
         v-if="showTopBar"
@@ -23,14 +22,13 @@
         :wide="wide"
       />
       <!-- SECONDARY NAV (Hidden on YouTubeView) -->
-      <Nav
+      <NavSecondary
         v-if="l1 && l2 && $route.params.l1 && $route.params.l2"
         :class="{
           'zth-secondary-nav-wrapper': true,
           'd-none': $route.name === 'video-view',
         }"
         variant="menu-bar"
-        level="secondary"
         v-bind="{
           l1,
           l2,

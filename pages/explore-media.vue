@@ -218,10 +218,9 @@
           </div>
 
           <client-only>
-            <Nav
+            <NavPage
               :l1="$l1"
               :l2="$l2"
-              variant="page"
               class="youtube-browse-nav mt-5"
               :showOnly="['Media']"
             />

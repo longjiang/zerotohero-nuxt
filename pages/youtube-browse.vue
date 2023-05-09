@@ -140,10 +140,9 @@
         class="mt-3"
       />
       <client-only>
-        <Nav
+        <NavPage
           :l1="$l1"
           :l2="$l2"
-          variant="page"
           class="youtube-browse-nav mt-5"
           :showOnly="['Listening']"
         />

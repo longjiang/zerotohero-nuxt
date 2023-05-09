@@ -164,10 +164,6 @@ export default {
       type: Boolean,
       default: true,
     },
-    showHeader: {
-      type: Boolean,
-      default: true,
-    },
     autoHide: {
       type: Boolean,
       default: false,

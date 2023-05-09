@@ -16,7 +16,7 @@
       <div class="row">
         <div class="col-sm-12">
           <!-- <Sale class="mt-4 mb-4" v-if="$l2.code === 'zh'" /> -->
-          <Nav :l1="$l1" :l2="$l2" variant="page" class="pb-2" />
+          <NavPage :l1="$l1" :l2="$l2" class="pb-2" />
           <div :class="{ 'pl-1 pr-1 pb-2': true }" v-if="$l2.identicalLangs">
             <div class="home-card bg-success">
               <LazyIdenticalLanguages
