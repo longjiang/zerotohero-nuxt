@@ -37,6 +37,19 @@
       />
     </client-only>
     <ContentArea>
+      <VideoViewComp
+        id="overlay-player"
+        ref="video-view-comp"
+        v-if="overlayPlayerType && $route.params.l2"
+        v-bind="{
+          type: overlayPlayerType,
+          youtube_id: overlayPlayerYouTubeId,
+          lesson: overlayPlayerLesson,
+          mini: overlayPlayerMinimized,
+          key: `video-view-comp-${overlayPlayerYouTubeId}`,
+        }"
+        @close="overlayPlayerClose"
+      />
       <slot></slot>
     </ContentArea>
   </div>
