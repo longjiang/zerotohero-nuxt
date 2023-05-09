@@ -136,9 +136,46 @@ const randomArrayItem = (array, start = 0, length = false) => {
   return array[index];
 };
 
-const removeTones = (pinyin) => {
+const removeToneNumbers = (pinyin) => {
   return pinyin.replace(/\d+/g, "");
 };
+
+const removeToneMarks = (pinyin) => {
+  const toneMap = {
+    'ā': 'a',
+    'á': 'a',
+    'ǎ': 'a',
+    'à': 'a',
+    'ē': 'e',
+    'é': 'e',
+    'ě': 'e',
+    'è': 'e',
+    'ī': 'i',
+    'í': 'i',
+    'ǐ': 'i',
+    'ì': 'i',
+    'ō': 'o',
+    'ó': 'o',
+    'ǒ': 'o',
+    'ò': 'o',
+    'ū': 'u',
+    'ú': 'u',
+    'ǔ': 'u',
+    'ù': 'u',
+    'ǖ': 'ü',
+    'ǘ': 'ü',
+    'ǚ': 'ü',
+    'ǜ': 'ü',
+  };
+
+  let noTonePinyin = '';
+
+  for (const char of pinyin) {
+    noTonePinyin += toneMap[char] || char;
+  }
+
+  return noTonePinyin;
+}
 
 const isAccentCritical = (l2) => {
   const accentCriticalLangs = ["tur", "vie", "fra"];

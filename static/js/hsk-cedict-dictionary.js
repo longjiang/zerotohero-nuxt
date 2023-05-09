@@ -62,6 +62,13 @@ class HskCedictDictionary extends BaseDictionary {
     return results
   }
 
+  lookupBySearch(text, limit = 10) {
+    let words = this.words.filter(w => w.search.includes(text) || w.simplified.includes(text) || w.traditional.includes(text))
+    words = words.sort((a, b) => a.search.length - b.search.length).slice(0, limit)
+    words = words.map(word => Object.assign({ score: 1 / (text.length + 1) }, word))
+    return words
+  }
+
   compileHSKStandardCourseWords(word) {
     let { book, lesson, dialog } = word;
     if (book && lesson && dialog) {
@@ -196,8 +203,8 @@ class HskCedictDictionary extends BaseDictionary {
   lookupByPronunciation(pinyin) {
     return this.words.filter(
       (row) =>
-        removeTones(row.pinyin).replace(/ /g, "") ===
-        removeTones(pinyin).replace(/ /g, "")
+        removeTonesMarks(row.search).replace(/ /g, "") ===
+        removeTonesMarks(pinyin).replace(/ /g, "")
     );
   }
 
@@ -313,7 +320,7 @@ class HskCedictDictionary extends BaseDictionary {
       },
       pronunciation: row.pinyin,
       definitions,
-      search: removeTones(row.pinyin.replace(/ /g, "")),
+      search: removeToneMarks(row.pinyin.replace(/ /g, "")),
       level: row.hsk,
       pos,
     });

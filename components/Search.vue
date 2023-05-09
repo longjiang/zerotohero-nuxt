@@ -169,10 +169,9 @@ export default {
       this.lookingUp = true
       if (this.type === "dictionary") {
         const dictionary = await this.$getDictionary();
+        let suggest = await dictionary.lookupBySearch(this.text.trim(), 10);
         let def = await dictionary.lookupByDef(this.text, 10);
-        let fuzzy = await dictionary.lookupFuzzy(this.text.trim(), 10, true);
-        this.suggestions = fuzzy
-          .concat(def)
+        this.suggestions = [...suggest, ...def]
           .sort((a, b) =>
             typeof b.score !== undefined ? b.score - a.score : 0
           );

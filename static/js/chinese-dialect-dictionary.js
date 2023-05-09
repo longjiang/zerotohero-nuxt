@@ -31,7 +31,7 @@ class ChineseDialectDictionary extends BaseDictionary {
     row.accented = row.traditional;
     row.pronunciation = row.pronunciation || row.jyutping;
     row.definitions = definitions;
-    row.search = removeTones(((row.pronunciation || row.jyutping) + row.pinyin).replace(/ /g, ''));
+    row.search = removeToneNumbers(((row.pronunciation || row.jyutping) + row.pinyin).replace(/ /g, ''));
 
     row.cjk = {
       canonical: row.traditional && row.traditional !== 'NULL' ? row.traditional : undefined,
@@ -65,8 +65,8 @@ class ChineseDialectDictionary extends BaseDictionary {
   lookupByPronunciation(jyutping) {
     let words = this.words.filter(
       row =>
-        (row.cjk.phonetics ? removeTones(row.cjk.phonetics).replace(/ /g, '') : '') ===
-        removeTones(jyutping).replace(/ /g, '')
+        (row.cjk.phonetics ? removeToneNumbers(row.cjk.phonetics).replace(/ /g, '') : '') ===
+        removeToneNumbers(jyutping).replace(/ /g, '')
     )
     return words
   }
