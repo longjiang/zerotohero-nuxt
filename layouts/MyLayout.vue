@@ -37,19 +37,6 @@
       />
     </client-only>
     <ContentArea>
-      <VideoViewComp
-        id="overlay-player"
-        ref="video-view-comp"
-        v-if="overlayPlayerType && $route.params.l2"
-        v-bind="{
-          type: overlayPlayerType,
-          youtube_id: overlayPlayerYouTubeId,
-          lesson: overlayPlayerLesson,
-          mini: overlayPlayerMinimized,
-          key: `video-view-comp-${overlayPlayerYouTubeId}`,
-        }"
-        @close="overlayPlayerClose"
-      />
       <slot></slot>
     </ContentArea>
   </div>
@@ -64,13 +51,6 @@ export default {
       type: Boolean,
       default: false,
     },
-  },
-  data() {
-    return {
-      overlayPlayerYouTubeId: undefined,
-      overlayPlayerLesson: undefined,
-      overlayPlayerType: undefined,
-    }
   },
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2", "fullscreen"]),
@@ -88,38 +68,14 @@ export default {
           this.$route.params.l1 && this.$route.params.l1 && this.l1 && this.l2
         );
     },
-    overlayPlayerMinimized() {
-      return this.$route.name !== "video-view";
-    },
     savedWordsCount() {
       let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
       return count;
     },
   },
-  created() {
-    this.updateOverlayPlayerProps();
-  },
-  watch: {
-    $route() {
-
-      this.updateOverlayPlayerProps();
-    }
-  },
   methods: {
-    overlayPlayerClose() {
-      this.overlayPlayerType = undefined;
-      this.overlayPlayerYouTubeId = undefined;
-      this.overlayPlayerLesson = undefined;
-    },
     updateCollapsed(collapsed) {
       this.collapsed = collapsed;
-    },
-    updateOverlayPlayerProps() {
-      if (this.$route.name === "video-view") {
-        this.overlayPlayerType = this.$route.params.type;
-        this.overlayPlayerYouTubeId = this.$route.params.youtube_id;
-        this.overlayPlayerLesson = this.$route.params.lesson;
-      }
     },
   }
 };
