@@ -2,9 +2,6 @@
   {
     path: '/compare-languages/:bookId?/:en?/:wiktionary?',
     props: true,
-    meta: {
-      layout: 'full'
-    }
   }
 </router>
 <template>

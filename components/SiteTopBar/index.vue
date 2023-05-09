@@ -220,7 +220,7 @@ export default {
       return this.forcePro || this.$store.state.subscriptions.active;
     },
     hideLogo() {
-      if (this.$route.path !== '/') return true
+      if (this.$route.path === '/') return true
       if (this.wide && (this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2)) return true
     }
   },

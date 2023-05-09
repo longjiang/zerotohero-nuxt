@@ -2,9 +2,6 @@
   {
     path: '/translators',
     props: true,
-    meta: {
-      layout: 'full'
-    }
   }
 </router>
 <template>

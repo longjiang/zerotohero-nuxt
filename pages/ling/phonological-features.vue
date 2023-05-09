@@ -2,9 +2,6 @@
   {
     path: '/phonological-features',
     props: true,
-    meta: {
-      layout: 'full'
-    }
   }
 </router>
 <template>

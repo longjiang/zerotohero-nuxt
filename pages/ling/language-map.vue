@@ -3,7 +3,6 @@
     path: '/language-map',
     props: true,
     meta: {
-      layout: 'full',
       skin: 'dark'
     }
   }

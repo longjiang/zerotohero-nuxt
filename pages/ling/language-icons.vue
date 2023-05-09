@@ -2,9 +2,6 @@
   {
     path: '/language-icons',
     props: true,
-    meta: {
-      layout: 'full'
-    }
   }
 </router>
 <template>

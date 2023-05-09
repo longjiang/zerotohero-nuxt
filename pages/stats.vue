@@ -2,9 +2,6 @@
   {
     path: '/stats',
     props: true,
-    meta: {
-      layout: 'full'
-    }
   }
 </router>
 <template>
