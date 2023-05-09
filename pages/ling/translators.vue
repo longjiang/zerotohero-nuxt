@@ -11,7 +11,6 @@
   <div style="min-height: 100vh">
     <SocialHead title="Compare AI Translators | Language Player"
       description="Check the availability of online translators for any given language." />
-    <SiteTopBar />
 
     <div class="container" v-if="translators">
       <div class="row">

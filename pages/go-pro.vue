@@ -17,7 +17,6 @@
         : ''
     }`"
   >
-    <SiteTopBar />
     <div class="pt-5 pb-5 container">
       <div class="row">
         <div class="col-sm-12">

@@ -13,7 +13,6 @@
       title="Stats | Language Player"
       description="How many videos we have for each language.”"
     />
-    <SiteTopBar />
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5">

@@ -19,7 +19,6 @@
       "
       image="/img/thumbnail-language-map-2.jpg"
     />
-    <SiteTopBar class="safe-padding-top" />
     <div
       :class="{
         'language-map-description': true,

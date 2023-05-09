@@ -7,17 +7,10 @@
 <template>
   <div>
     <client-only>
-      <SiteTopBar />
       <SocialHead
         title="Language Player | Master any language by comprehensible input."
         description="We provide TV shows with subtitles, music with lyrics, live TV channels, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” Our company, Zero to Hero Education, is also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
       />
-      <div
-        class="zerotohero-background"
-        :style="`background-image: url(${background})`"
-      />
-      <div class="gradient-backdrop"></div>
-      <div class="gradient-backdrop-2"></div>
       <div
         class="container-fluid safe-padding-top safe-padding-bottom pt-5"
         style="overflow: hidden; position: relative"

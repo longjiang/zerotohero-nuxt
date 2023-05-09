@@ -474,25 +474,6 @@ export default {
   font-weight: bold;
 }
 
-.gradient-backdrop {
-  background: radial-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
-  height: 100vh;
-  width: 100%;
-  z-index: 9;
-  position: absolute;
-  z-index: 0;
-  mix-blend-mode: overlay;
-}
-
-.gradient-backdrop-2 {
-  background: radial-gradient(rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
-  height: 100vh;
-  width: 100%;
-  z-index: 9;
-  position: absolute;
-  z-index: 0;
-}
-
 .blurb {
   font-size: 1.3rem;
   max-width: 45rem;

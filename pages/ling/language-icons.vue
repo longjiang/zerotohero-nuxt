@@ -14,7 +14,6 @@
       description="Tap on any face to learn the language! Live TV channels, TV shows with subtitles, music with lyrics, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.”"
       image="/img/thumbnail-language-icons.jpg"
     />
-    <SiteTopBar />
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-5 pb-5 text-center">

@@ -1,3 +1,4 @@
+// MyLayout.vue
 <template>
   <div class="zerotohero-layout">
     <FeedbackButton />
@@ -18,8 +19,6 @@
         v-if="showTopBar"
         :skin="$skin"
         variant="menu-bar"
-        :badge="savedWordsCount + savedPhrasesCount"
-        :wide="wide"
       />
       <!-- SECONDARY NAV (Hidden on YouTubeView) -->
       <NavSecondary
@@ -54,35 +53,21 @@ export default {
   },
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2", "fullscreen"]),
-    savedPhrasesCount() {
-      let count = this.$store.getters["savedPhrases/count"]({
-        l2: this.l2.code,
-      });
-      return count;
-    },
     showTopBar() {
-      if (this.fullscreen) return false;
+      if (this.fullscreen) return false; // Don't show top bar in browser's fullscreen mode (e.g. when a full-screen video is playing)
       if (this.$route.meta && this.$route.meta.layout === "full") return false;
-      else
-        return (
-          this.$route.params.l1 && this.$route.params.l1 && this.l1 && this.l2
-        );
-    },
-    savedWordsCount() {
-      let count = this.$store.getters["savedWords/count"]({ l2: this.l2.code });
-      return count;
+      return true
     },
   },
   methods: {
     updateCollapsed(collapsed) {
       this.collapsed = collapsed;
     },
-  }
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-
 .zerotohero-layout {
   display: grid;
   height: 100vh;
@@ -94,25 +79,36 @@ export default {
   }
 }
 
-.zerotohero-wide .zerotohero-layout {
-  grid-template-rows: auto 1fr;
-  grid-template-columns: 13rem 1fr;
-  grid-template-areas:
-    'nav topbar'
-    'nav secondarynav'
-    'nav content';
-  .zth-main-nav-wrapper {
-    grid-row: 1 / 4; /* This makes the nav area span two rows */
+#zerotohero.zerotohero-with-nav {
+  &.zerotohero-wide .zerotohero-layout {
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 13rem 1fr;
+    grid-template-areas:
+      "nav topbar"
+      "nav secondarynav"
+      "nav content";
+    .zth-main-nav-wrapper {
+      grid-row: 1 / 4; /* This makes the nav area span two rows */
+    }
+  }
+  .zerotohero-not-wide .zerotohero-layout {
+    grid-template-rows: auto auto 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "topbar"
+      "secondarynav"
+      "content"
+      "nav";
   }
 }
 
-.zerotohero-not-wide .zerotohero-layout {
-  grid-template-rows: auto auto 1fr;
-  grid-template-columns: 1fr;
-  grid-template-areas:
-    'topbar'
-    'secondarynav'
-    'content'
-    'nav',
+#zerotohero:not(.zerotohero-with-nav) {
+  .zerotohero-layout {
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "topbar"
+      "content";
+  }
 }
 </style>

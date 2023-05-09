@@ -16,9 +16,6 @@
         : ''
     }`"
   >
-    <client-only>
-      <SiteTopBar />
-    </client-only>
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-5">

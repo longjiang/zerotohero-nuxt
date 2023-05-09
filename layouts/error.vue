@@ -3,7 +3,6 @@
     name: 'error',
     path: '/',
     meta: {
-      layout: 'full',
       skin: 'dark'
     }
   }
@@ -12,13 +11,6 @@
   <div
     :style="`min-height: 100vh; background-image: url(${background}); background-size: cover; background-position: center;`"
   >
-    <client-only>
-      <SiteTopBar
-        v-if="!layoutHasTopBar"
-        skin="dark"
-        variant="menu-bar"
-      />
-    </client-only>
     <div class="container">
       <div class="row">
         <div class="col-sm-12 text-center pt-4">

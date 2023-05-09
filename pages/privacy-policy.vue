@@ -6,9 +6,6 @@
 </router>
 <template>
   <div>
-    <client-only>
-      <SiteTopBar />
-    </client-only>
     <div  class="main page pt-5 pb-5 container">
       <div class="row">
         <article class="col-sm-12">

@@ -3,7 +3,6 @@
     <div
       :class="[
         'site-top-bar',
-        wide ? 'site-top-bar-wide' : 'site-top-bar-not-wide',
         `site-top-bar-${skin}`,
         'draggable-region',
       ]"
@@ -23,7 +22,7 @@
           :class="{
             'logo flex-1 text-center': true,
           }"
-          v-show="!wide && $route.path !== '/'"
+          v-show="!hideLogo"
         >
           <router-link
             :to="
@@ -192,14 +191,6 @@ export default {
     };
   },
   props: {
-    wide: {
-      // Whether or not the bar is displayed on a wide layout
-      type: Boolean,
-      default: false,
-    },
-    badge: {
-      type: [String, Number],
-    },
     skin: {
       default: "dark", // or "light"
     },
@@ -228,6 +219,10 @@ export default {
     pro() {
       return this.forcePro || this.$store.state.subscriptions.active;
     },
+    hideLogo() {
+      if (this.$route.path !== '/') return true
+      if (this.wide && (this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2)) return true
+    }
   },
   watch: {
     $route() {

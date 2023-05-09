@@ -13,7 +13,6 @@
       title="Phonological Features | Language Player"
       description="Input IPA symbols, output phonological features."
     />
-    <SiteTopBar />
 
     <div class="container pb-5">
       <div class="row">

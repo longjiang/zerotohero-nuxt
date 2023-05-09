@@ -14,7 +14,6 @@
       description="See on a map how people say words like 'yes', 'no', 'thanks' on a map!"
       image="/img/thumbnail-compare-languages.jpg"
     />
-    <SiteTopBar class="safe-padding-top" />
     <div class="container-fluid">
       <div
         class="row bg-dark text-white pt-2 pb-2 text-left"
