@@ -1068,14 +1068,6 @@ export default {
       top: env(safe-area-inset-top, 0);
     }
   }
-
-  &.size-regular {
-    .video-wrapper {
-      top: calc(
-        env(safe-area-inset-top, 0) + 2.7rem
-      ); // 2.7rem for the site top bar
-    }
-  }
 }
 
 /* Subtitles mode */
