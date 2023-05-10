@@ -164,10 +164,18 @@
 
         <div
           :class="{ 'drag-handle': true, 'd-none': !useOverlay }"
-          @click="overlaySubsAlign = overlaySubsAlign === 'top' ? 'bottom' : 'top'"
+          @click="
+            overlaySubsAlign = overlaySubsAlign === 'top' ? 'bottom' : 'top'
+          "
         >
-          <i class="fa-solid fa-arrow-up-to-line" v-if="overlaySubsAlign === 'bottom'"></i>
-          <i class="fa-solid fa-arrow-down-to-line" v-if="overlaySubsAlign === 'top'"></i>
+          <i
+            class="fa-solid fa-arrow-up-to-line"
+            v-if="overlaySubsAlign === 'bottom'"
+          ></i>
+          <i
+            class="fa-solid fa-arrow-down-to-line"
+            v-if="overlaySubsAlign === 'top'"
+          ></i>
         </div>
 
         <!-- if the video has no subs, allow the user to add subs -->
@@ -942,7 +950,7 @@ export default {
       transition: all 0.3s ease-in-out;
     }
 
-    .video-transcript-wrapper.align-subs-bottom  {
+    .video-transcript-wrapper.align-subs-bottom {
       bottom: 5rem; // Make room for the controls
       top: auto;
       &:not(.hovering) {
@@ -950,7 +958,7 @@ export default {
       }
     }
 
-    .video-transcript-wrapper.align-subs-top  {
+    .video-transcript-wrapper.align-subs-top {
       bottom: auto;
       top: 0;
     }
@@ -1102,6 +1110,12 @@ export default {
       top: env(safe-area-inset-top, 0);
     }
   }
+  &.size-regular {
+    .video-wrapper {
+      top: 0;
+      height: inherit;
+    }
+  }
 }
 
 /* Subtitles mode */
@@ -1136,11 +1150,17 @@ export default {
 
 /* Landscape aspect */
 .video-with-transcript.mode-transcript.aspect-landscape:not(.collapsed) {
-  display: flex;
+  .video-with-transcript-inner {
+    display: flex;
 
-  .video-wrapper,
-  .video-transcript-wrapper {
-    flex: 1;
+    .video-wrapper {
+      height: 100vh;
+    }
+
+    .video-wrapper,
+    .video-transcript-wrapper {
+      flex: 1;
+    }
   }
 }
 
