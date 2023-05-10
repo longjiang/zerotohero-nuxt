@@ -937,12 +937,12 @@ export default {
     height: 100%;
     background: black;
 
-    &.size-fullscreen {
+    &.size-fullscreen .video-with-transcript-inner {
       // Width should be set so that when the height is calculated it will not exceed the viewport height
       max-width: calc(100vh * 16 / 9);
     }
 
-    &.size-regular {
+    &.size-regular .video-with-transcript-inner {
       // Width should be set so that when the height is calculated it will not exceed the viewport height
       max-width: calc((100vh - 2.9rem) * 16 / 9);
     }
