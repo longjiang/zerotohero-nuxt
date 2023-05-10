@@ -5,6 +5,7 @@
       'text-auto-size': useAutoTextSize,
       overlay: useOverlay,
       collapsed,
+      hovering,
       [`size-${size}`]: true,
       [`mode-${mode}`]: true,
       [`aspect-${aspect}`]: true,
@@ -152,13 +153,11 @@
       <div
         :class="{
           'video-transcript-wrapper': true,
+          [`align-${overlaySubsAlign}`]: useOverlay,
           overlay: useOverlay,
+          hovering,
         }"
         ref="videoTranscriptWrapper"
-        :style="`top: ${
-          (videoHeightWithoutControls * overlayTranscriptVerticalPercentage) /
-          100
-        }px`"
       >
         <!-- this is necessary for updating the transcript upon srt drop -->
         <div class="d-none">{{ transcriptKey }}</div>
@@ -447,6 +446,7 @@ export default {
       neverPlayed: true,
       paused: true,
       repeatMode: false,
+      overlaySubsAlign: "bottom",
       showSubsEditing: false,
       speaking: false,
       speed: 1,
@@ -936,6 +936,19 @@ export default {
     justify-content: center;
     height: 100%;
     background: black;
+    position: relative;
+
+    .video-transcript-wrapper {
+      transition: all 0.3s ease-in-out;
+    }
+
+    .video-transcript-wrapper.align-bottom  {
+      bottom: 5rem; // Make room for the controls
+      top: auto;
+      &:not(.hovering) {
+        bottom: 0;
+      }
+    }
 
     &.size-fullscreen .video-with-transcript-inner {
       // Width should be set so that when the height is calculated it will not exceed the viewport height
@@ -950,9 +963,6 @@ export default {
     .video-transcript-wrapper {
       position: absolute;
       display: inline-block;
-      top: 0; // to make room for the controls
-      // left: 0;
-      // right: 0;
       left: 50%;
       transform: translateX(-50%);
       width: max-content;
