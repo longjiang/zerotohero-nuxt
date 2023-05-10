@@ -100,6 +100,20 @@ export default {
       "content"
       "nav";
   }
+
+  &.route-video-view {
+    &.zerotohero-wide .zerotohero-layout {
+      grid-template-areas:
+        "nav topbar"
+        "nav content";
+    }
+    &.zerotohero-not-wide .zerotohero-layout {
+      grid-template-areas:
+        "topbar"
+        "content"
+        "nav";
+    }
+  }
 }
 
 #zerotohero:not(.zerotohero-with-nav) {
