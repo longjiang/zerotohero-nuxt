@@ -91,7 +91,7 @@ export default {
       grid-row: 1 / 4; /* This makes the nav area span two rows */
     }
   }
-  .zerotohero-not-wide .zerotohero-layout {
+  &.zerotohero-not-wide .zerotohero-layout {
     grid-template-rows: auto auto 1fr;
     grid-template-columns: 1fr;
     grid-template-areas:

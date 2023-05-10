@@ -116,8 +116,9 @@ export default {
     let response = await this.$directus.get(
       `items/tutoring_kit?fields=id,name,reading,free_talk,writing,level`
     );
-    this.lessons = response.data.data || [];
-
+    if (response) {
+      this.lessons = response.data.data || [];
+    }
   },
   methods: {
     getLevel(...args) {
