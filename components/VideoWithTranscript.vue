@@ -15,269 +15,277 @@
     @touchstart.passive="resetHoverTimeout"
     @touchend="resetHoverTimeout"
   >
-    <div
-      :class="{
-        'video-wrapper col-sm-12 p-0': true,
-        'order-2': aspect === 'landscape' && $l2.direction === 'rtl',
-      }"
-      :key="`video-${type}-${video.youtube_id}`"
-    >
-      <LazyVideo
-        ref="video"
-        :class="{ 'd-none': collapsed }"
-        v-bind="{
-          type,
-          speed,
-          cc,
-          autoload,
-          autoplay,
-          startAtRandomTime,
-          video,
-          controls: false,
-          starttime: startTimeOrLineIndex,
-        }"
-        @paused="onPaused"
-        @updateVideo="onUpdateVideo"
-        @currentTime="onCurrentTime"
-        @ended="onEnded"
-        @duration="onDuration"
-        @videoUnavailable="onVideoUnavailable"
-        @l1TranscriptLoaded="onL1TranscriptLoaded"
-      />
-      <LazyVideoControls
-        v-if="showControls && (video.youtube_id || video.url)"
+    <div class="video-with-transcript-inner">
+      <div
         :class="{
-          'video-controls': true,
-          overlay: useOverlay,
-          hovering,
+          'video-wrapper col-sm-12 p-0': true,
+          'order-2': aspect === 'landscape' && $l2.direction === 'rtl',
         }"
-        ref="videoControls"
-        v-bind="{
-          duration,
-          episodes,
-          fullscreen,
-          initialTime: starttime ? starttime : 0,
-          largeEpisodeCount,
-          mode,
-          paused,
-          show,
-          showCollapse: mode === 'transcript',
-          showFullscreenToggle,
-          showInfoButton,
-          showLineList,
-          showOpenButton,
-          showType,
-          skin: useOverlay ? 'dark' : $skin,
-          video,
-        }"
-        @previous="$emit('previous')"
-        @next="$emit('next')"
-        @goToLine="goToLine"
-        @play="play"
-        @pause="pause"
-        @rewind="rewind"
-        @fastforward="fastfowrard"
-        @seek="seek"
-        @open="onOpen"
-        @updateCollapsed="(c) => (this.collapsed = c)"
-        @updateAudioMode="(a) => (this.audioMode = a)"
-        @updateSpeed="(s) => (speed = s)"
-        @toggleTranscriptMode="toggleTranscriptMode"
-        @updateSmoothScroll="(r) => (this.useSmoothScroll = r)"
-        @updateAutoPause="(r) => (this.autoPause = r)"
-        @updateRepeatMode="(r) => (this.repeatMode = r)"
-        @fullscreen="onFullscreen"
-        @goToPreviousLine="
-          $refs.transcript ? $refs.transcript.goToPreviousLine() : null
-        "
-        @goToNextLine="
-          $refs.transcript ? $refs.transcript.goToNextLine() : null
-        "
-      />
-
-      <div
-        class="video-info video-info-side pl-3 pt-4"
-        v-if="
-          aspect === 'landscape' &&
-          size !== 'mini' &&
-          mode === 'transcript' &&
-          !collapsed
-        "
+        :key="`video-${type}-${video.youtube_id}`"
       >
-        <h3
-          v-if="video.title"
-          :class="{
-            h4: video.title.length > 30,
-            h5: video.title.length > 60,
+        <LazyVideo
+          ref="video"
+          :class="{ 'd-none': collapsed }"
+          v-bind="{
+            type,
+            speed,
+            cc,
+            autoload,
+            autoplay,
+            startAtRandomTime,
+            video,
+            controls: false,
+            starttime: startTimeOrLineIndex,
           }"
-          style="line-height: 1.5"
-        >
-          <span v-if="video" :key="`video-title-${video.title}`">
-            <Annotate
-              :phonetics="false"
-              :buttons="true"
-              v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
-              :showLoading="false"
-            >
-              <span>{{ video.title }}</span>
-            </Annotate>
-            <span v-else>{{ video.title }}</span>
-          </span>
-        </h3>
-        <VideoAdmin
-          v-if="type === 'youtube'"
-          :showVideoDetails="true"
-          :showTextEditing="true"
-          :video="video"
-          ref="videoAdmin1"
-          @showSubsEditing="onShowSubsEditing"
-          @updateTranslation="onUpdateTranslation"
-          @updateOriginalText="onUpdateOriginalText"
-          @enableTranslationEditing="onEnableTranslationEditing"
-          @updateTranscript="onUpdateTranscript"
+          @paused="onPaused"
+          @updateVideo="onUpdateVideo"
+          @currentTime="onCurrentTime"
+          @ended="onEnded"
+          @duration="onDuration"
+          @videoUnavailable="onVideoUnavailable"
+          @l1TranscriptLoaded="onL1TranscriptLoaded"
         />
-        <EpisodeNav
-          v-if="episodes"
-          :video="video"
-          :episodes="episodes"
-          :showType="showType"
-          :skin="skin"
-          :show="show"
-          :largeEpisodeCount="largeEpisodeCount"
-          class="mt-3"
+        <LazyVideoControls
+          v-if="showControls && (video.youtube_id || video.url)"
+          :class="{
+            'video-controls': true,
+            overlay: useOverlay,
+            hovering,
+          }"
+          ref="videoControls"
+          v-bind="{
+            duration,
+            episodes,
+            fullscreen,
+            initialTime: starttime ? starttime : 0,
+            largeEpisodeCount,
+            mode,
+            paused,
+            show,
+            showCollapse: mode === 'transcript',
+            showFullscreenToggle,
+            showInfoButton,
+            showLineList,
+            showOpenButton,
+            showType,
+            skin: useOverlay ? 'dark' : $skin,
+            video,
+          }"
+          @previous="$emit('previous')"
+          @next="$emit('next')"
+          @goToLine="goToLine"
+          @play="play"
+          @pause="pause"
+          @rewind="rewind"
+          @fastforward="fastfowrard"
+          @seek="seek"
+          @open="onOpen"
+          @updateCollapsed="(c) => (this.collapsed = c)"
+          @updateAudioMode="(a) => (this.audioMode = a)"
+          @updateSpeed="(s) => (speed = s)"
+          @toggleTranscriptMode="toggleTranscriptMode"
+          @updateSmoothScroll="(r) => (this.useSmoothScroll = r)"
+          @updateAutoPause="(r) => (this.autoPause = r)"
+          @updateRepeatMode="(r) => (this.repeatMode = r)"
+          @fullscreen="onFullscreen"
+          @goToPreviousLine="
+            $refs.transcript ? $refs.transcript.goToPreviousLine() : null
+          "
+          @goToNextLine="
+            $refs.transcript ? $refs.transcript.goToNextLine() : null
+          "
         />
-      </div>
-    </div>
-    <div
-      :class="{
-        'video-transcript-wrapper': true,
-        overlay: useOverlay,
-      }"
-      ref="videoTranscriptWrapper"
-      :style="`top: ${videoHeightWithoutControls * overlayTranscriptVerticalPercentage / 100}px`"
-    >
-      <!-- this is necessary for updating the transcript upon srt drop -->
-      <div class="d-none">{{ transcriptKey }}</div>
 
-      <div
-        :class="{ 'drag-handle': true, 'd-none': !useOverlay }"
-        @mousedown="handleMouseDown"
-        @touchstart.passive="handleTouchStart"
-      >
-        <i class="fa-solid fa-arrows-up-down"></i>
-      </div>
-
-      <!-- if the video has no subs, allow the user to add subs -->
-      <div class="pl-4 pr-4" v-if="video && !video.subs_l2">
-        <VideoAdmin
-          :showVideoDetails="true"
-          :showTextEditing="true"
-          :video="video"
-          ref="videoAdmin1"
-          @showSubsEditing="onShowSubsEditing"
-          @updateTranslation="onUpdateTranslation"
-          @updateOriginalText="onUpdateOriginalText"
-          @enableTranslationEditing="onEnableTranslationEditing"
-          @updateTranscript="onUpdateTranscript"
-        />
-      </div>
-      <SyncedTranscript
-        v-if="video.subs_l2 && video.subs_l2.length > 0"
-        ref="transcript"
-        :class="{ 'd-none': size === 'mini' }"
-        :key="`transcript-${type}-${video.youtube_id}-${transcriptKey}`"
-        v-bind="{
-          lines: video.subs_l2 || [],
-          parallellines: video.subs_l1 || [],
-          starttime: startTimeOrLineIndex,
-          single: mode === 'subtitles' || size === 'mini',
-          showAnimation,
-          showSubsEditing,
-          enableTranslationEditing,
-          sticky,
-          speed,
-          notes: video.notes,
-          collapsed,
-          startLineIndex,
-          skin: useOverlay ? 'dark' : skin,
-          textSize,
-          landscape: aspect === 'landscape',
-          stopLineIndex,
-          forcePro,
-          autoPause,
-          useSmoothScroll,
-          video,
-        }"
-        @seek="seek"
-        @pause="pause"
-        @play="play"
-        @speechStart="onSpeechStart"
-        @speechEnd="onSpeechEnd"
-        @updateTranslation="onUpdateTranslation"
-      />
-      <div class="video-info video-info-bottom" v-if="mode === 'transcript' && size !== 'mini'">
-        <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
-          <Loader :sticky="true" message="Loading subtitles..." />
-        </div>
         <div
-          class="mt-4 mb-5 rounded"
-          style="color: rgba(136, 136, 136, 0.85)"
+          class="video-info video-info-side pl-3 pt-4"
           v-if="
-            type !== 'bring-your-own' &&
-            (!video.subs_l2 || video.subs_l2.length === 0) &&
-            !video.checkingSubs
+            aspect === 'landscape' &&
+            size !== 'mini' &&
+            mode === 'transcript' &&
+            !collapsed
           "
         >
-          <h6>
-            {{
-              $t("This video does not have closed captions (CC) in {l2}.", {
-                l2: $t($l2.name),
-              })
-            }}
-          </h6>
-          <div class="mt-3">
-            <i18n
-              path="If you have the subtitles file (.srt or .ass), you can add it by uploading in the Video Information area. The Video Information area can be accessed by pressing the {0} Info or {1} Episode Select button in the video controls."
-            >
-              <i class="fa-solid fa-circle-info mr-1"></i>
-              <i class="fa-regular fa-rectangle-history mr-1"></i>
-            </i18n>
-          </div>
-        </div>
-        <client-only>
-          <EpisodeNav
-            v-if="episodes"
-            :video="video"
-            :skin="skin"
-            :episodes="episodes"
-            :show="show"
-            :showType="showType"
-            :largeEpisodeCount="largeEpisodeCount"
-            class="mt-4 mb-4 ml-4"
-          />
+          <h3
+            v-if="video.title"
+            :class="{
+              h4: video.title.length > 30,
+              h5: video.title.length > 60,
+            }"
+            style="line-height: 1.5"
+          >
+            <span v-if="video" :key="`video-title-${video.title}`">
+              <Annotate
+                :phonetics="false"
+                :buttons="true"
+                v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
+                :showLoading="false"
+              >
+                <span>{{ video.title }}</span>
+              </Annotate>
+              <span v-else>{{ video.title }}</span>
+            </span>
+          </h3>
           <VideoAdmin
-            v-if="$adminMode"
-            ref="videoAdmin2"
-            :class="{ 'mt-5': true }"
+            v-if="type === 'youtube'"
+            :showVideoDetails="true"
+            :showTextEditing="true"
             :video="video"
+            ref="videoAdmin1"
             @showSubsEditing="onShowSubsEditing"
             @updateTranslation="onUpdateTranslation"
             @updateOriginalText="onUpdateOriginalText"
-            @updateTranscript="onUpdateTranscript"
             @enableTranslationEditing="onEnableTranslationEditing"
+            @updateTranscript="onUpdateTranscript"
           />
-        </client-only>
-        <div
-          v-if="type === 'youtube' && related && related.length > 0"
-          class="pr-2 pb-5 mb-5"
-          style="padding-left: 2rem !important"
-        >
-          <YouTubeVideoList
-            :videos="related.slice(0, 24)"
-            :showDate="true"
-            :showProgress="true"
+          <EpisodeNav
+            v-if="episodes"
+            :video="video"
+            :episodes="episodes"
+            :showType="showType"
             :skin="skin"
+            :show="show"
+            :largeEpisodeCount="largeEpisodeCount"
+            class="mt-3"
           />
+        </div>
+      </div>
+      <div
+        :class="{
+          'video-transcript-wrapper': true,
+          overlay: useOverlay,
+        }"
+        ref="videoTranscriptWrapper"
+        :style="`top: ${
+          (videoHeightWithoutControls * overlayTranscriptVerticalPercentage) /
+          100
+        }px`"
+      >
+        <!-- this is necessary for updating the transcript upon srt drop -->
+        <div class="d-none">{{ transcriptKey }}</div>
+
+        <div
+          :class="{ 'drag-handle': true, 'd-none': !useOverlay }"
+          @mousedown="handleMouseDown"
+          @touchstart.passive="handleTouchStart"
+        >
+          <i class="fa-solid fa-arrows-up-down"></i>
+        </div>
+
+        <!-- if the video has no subs, allow the user to add subs -->
+        <div class="pl-4 pr-4" v-if="video && !video.subs_l2">
+          <VideoAdmin
+            :showVideoDetails="true"
+            :showTextEditing="true"
+            :video="video"
+            ref="videoAdmin1"
+            @showSubsEditing="onShowSubsEditing"
+            @updateTranslation="onUpdateTranslation"
+            @updateOriginalText="onUpdateOriginalText"
+            @enableTranslationEditing="onEnableTranslationEditing"
+            @updateTranscript="onUpdateTranscript"
+          />
+        </div>
+        <SyncedTranscript
+          v-if="video.subs_l2 && video.subs_l2.length > 0"
+          ref="transcript"
+          :class="{ 'd-none': size === 'mini' }"
+          :key="`transcript-${type}-${video.youtube_id}-${transcriptKey}`"
+          v-bind="{
+            lines: video.subs_l2 || [],
+            parallellines: video.subs_l1 || [],
+            starttime: startTimeOrLineIndex,
+            single: mode === 'subtitles' || size === 'mini',
+            showAnimation,
+            showSubsEditing,
+            enableTranslationEditing,
+            sticky,
+            speed,
+            notes: video.notes,
+            collapsed,
+            startLineIndex,
+            skin: useOverlay ? 'dark' : skin,
+            textSize,
+            landscape: aspect === 'landscape',
+            stopLineIndex,
+            forcePro,
+            autoPause,
+            useSmoothScroll,
+            video,
+          }"
+          @seek="seek"
+          @pause="pause"
+          @play="play"
+          @speechStart="onSpeechStart"
+          @speechEnd="onSpeechEnd"
+          @updateTranslation="onUpdateTranslation"
+        />
+        <div
+          class="video-info video-info-bottom"
+          v-if="mode === 'transcript' && size !== 'mini'"
+        >
+          <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
+            <Loader :sticky="true" message="Loading subtitles..." />
+          </div>
+          <div
+            class="mt-4 mb-5 rounded"
+            style="color: rgba(136, 136, 136, 0.85)"
+            v-if="
+              type !== 'bring-your-own' &&
+              (!video.subs_l2 || video.subs_l2.length === 0) &&
+              !video.checkingSubs
+            "
+          >
+            <h6>
+              {{
+                $t("This video does not have closed captions (CC) in {l2}.", {
+                  l2: $t($l2.name),
+                })
+              }}
+            </h6>
+            <div class="mt-3">
+              <i18n
+                path="If you have the subtitles file (.srt or .ass), you can add it by uploading in the Video Information area. The Video Information area can be accessed by pressing the {0} Info or {1} Episode Select button in the video controls."
+              >
+                <i class="fa-solid fa-circle-info mr-1"></i>
+                <i class="fa-regular fa-rectangle-history mr-1"></i>
+              </i18n>
+            </div>
+          </div>
+          <client-only>
+            <EpisodeNav
+              v-if="episodes"
+              :video="video"
+              :skin="skin"
+              :episodes="episodes"
+              :show="show"
+              :showType="showType"
+              :largeEpisodeCount="largeEpisodeCount"
+              class="mt-4 mb-4 ml-4"
+            />
+            <VideoAdmin
+              v-if="$adminMode"
+              ref="videoAdmin2"
+              :class="{ 'mt-5': true }"
+              :video="video"
+              @showSubsEditing="onShowSubsEditing"
+              @updateTranslation="onUpdateTranslation"
+              @updateOriginalText="onUpdateOriginalText"
+              @updateTranscript="onUpdateTranscript"
+              @enableTranslationEditing="onEnableTranslationEditing"
+            />
+          </client-only>
+          <div
+            v-if="type === 'youtube' && related && related.length > 0"
+            class="pr-2 pb-5 mb-5"
+            style="padding-left: 2rem !important"
+          >
+            <YouTubeVideoList
+              :videos="related.slice(0, 24)"
+              :showDate="true"
+              :showProgress="true"
+              :skin="skin"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -688,7 +696,7 @@ export default {
         this.seek(Math.max(0, this.currentTime - seconds));
       }
     },
-    
+
     fastfowrard(seconds) {
       this.seek(Math.min(this.duration, this.currentTime + seconds));
     },
@@ -849,7 +857,6 @@ export default {
       }
     },
 
-    
     handleMouseDown(e) {
       const videoTranscriptWrapper = this.$refs.videoTranscriptWrapper;
       e.preventDefault();
@@ -866,7 +873,8 @@ export default {
         const videoHeight = this.getVideoHeightWithoutControls();
         const transcriptHeight = this.$refs.videoTranscriptWrapper.offsetHeight;
         let newTopPercentage = (newTop / videoHeight) * 100;
-        let maxNewTopPercentage = (videoHeight - transcriptHeight) / videoHeight * 100;
+        let maxNewTopPercentage =
+          ((videoHeight - transcriptHeight) / videoHeight) * 100;
 
         // Constrain within the container
         if (newTopPercentage < 0) {
@@ -910,6 +918,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.video-with-transcript-inner {
+  width: 100%;
+  position: relative;
+}
+
 .video-with-transcript {
   position: relative;
 
@@ -918,6 +931,11 @@ export default {
     // height should be calculated based on the video aspect ratio 16/9
     // height: calc(100% * 9 / 16);
     // margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    background: black;
 
     &.size-fullscreen {
       // Width should be set so that when the height is calculated it will not exceed the viewport height
@@ -959,7 +977,6 @@ export default {
         opacity: 0.5;
         transition: opacity 0.3s;
       }
-
     }
 
     .video-controls {
@@ -1047,7 +1064,6 @@ export default {
       }
     }
   }
-
 }
 
 /* Drag and drop */
