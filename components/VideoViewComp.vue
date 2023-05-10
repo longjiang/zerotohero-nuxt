@@ -307,13 +307,6 @@ export default {
   }
 }
 
-.video-view-content {
-  &.subtitles-mode {
-    max-height: calc(100vh - 3rem - env(safe-area-inset-top));
-    z-index: 21;
-  }
-}
-
 .video-view {
   transition: all 1s ease-in-out;
   position: static;
