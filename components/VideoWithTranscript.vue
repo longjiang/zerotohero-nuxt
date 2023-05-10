@@ -153,7 +153,7 @@
       <div
         :class="{
           'video-transcript-wrapper': true,
-          [`align-${overlaySubsAlign}`]: useOverlay,
+          [`align-subs-${overlaySubsAlign}`]: useOverlay,
           overlay: useOverlay,
           hovering,
         }"
@@ -164,10 +164,10 @@
 
         <div
           :class="{ 'drag-handle': true, 'd-none': !useOverlay }"
-          @mousedown="handleMouseDown"
-          @touchstart.passive="handleTouchStart"
+          @click="overlaySubsAlign = overlaySubsAlign === 'top' ? 'bottom' : 'top'"
         >
-          <i class="fa-solid fa-arrows-up-down"></i>
+          <i class="fa-solid fa-arrow-up-to-line" v-if="overlaySubsAlign === 'bottom'"></i>
+          <i class="fa-solid fa-arrow-down-to-line" v-if="overlaySubsAlign === 'top'"></i>
         </div>
 
         <!-- if the video has no subs, allow the user to add subs -->
@@ -942,12 +942,17 @@ export default {
       transition: all 0.3s ease-in-out;
     }
 
-    .video-transcript-wrapper.align-bottom  {
+    .video-transcript-wrapper.align-subs-bottom  {
       bottom: 5rem; // Make room for the controls
       top: auto;
       &:not(.hovering) {
         bottom: 0;
       }
+    }
+
+    .video-transcript-wrapper.align-subs-top  {
+      bottom: auto;
+      top: 0;
     }
 
     &.size-fullscreen .video-with-transcript-inner {
@@ -979,13 +984,16 @@ export default {
         height: calc(100% - 1rem);
         position: absolute;
         left: 1rem;
-        cursor: move;
+        cursor: pointer;
         z-index: 2;
         display: flex;
         align-items: center;
         justify-content: center;
         opacity: 0.5;
-        transition: opacity 0.3s;
+        color: white;
+        &:hover {
+          opacity: 1;
+        }
       }
     }
 
