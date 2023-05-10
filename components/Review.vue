@@ -178,6 +178,7 @@ export default {
       return words;
     },
     async generateAnswers(form, word) {
+      const dictionary = await this.$getDictionary();
       let similarWords = await this.findSimilarWords(form);
       if (similarWords.length < 2) {
         for (let i of [1, 2]) {

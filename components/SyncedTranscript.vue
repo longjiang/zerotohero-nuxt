@@ -61,13 +61,13 @@
             <PopQuiz
               v-if="quizChunks[index]"
               :key="`pop-quiz-${index}`"
-              :lines="lines"
               class="pl-4"
-              :quizContent="
-                quizChunks[index]
+              v-bind="{
+                lines,
+                quizContent: quizChunks[index]
                   .filter((i) => $refs[`transcript-line-${i + visibleMin}`])
-                  .map((i) => $refs[`transcript-line-${i + visibleMin}`][0])
-              "
+                  .map((i) => $refs[`transcript-line-${i + visibleMin}`][0]),
+              }"
             />
           </template>
           <div
@@ -83,10 +83,7 @@
             <Loader :sticky="true" />
           </div>
           <template v-if="!pro">
-            <YouNeedPro
-              v-if="showYouNeedPro"
-              class="transcript-you-need-pro"
-            />
+            <YouNeedPro v-if="showYouNeedPro" class="transcript-you-need-pro" />
           </template>
         </client-only>
       </div>
@@ -95,7 +92,13 @@
 </template>
 
 <script>
-import { uniqueId, timeout, speak, documentOffsetTop, NON_PRO_MAX_LINES } from "@/lib/utils";
+import {
+  uniqueId,
+  timeout,
+  speak,
+  documentOffsetTop,
+  NON_PRO_MAX_LINES,
+} from "@/lib/utils";
 import Vue from "vue";
 
 const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
@@ -203,11 +206,11 @@ export default {
     showYouNeedPro() {
       let showYouNeedPro = false;
       if (this.single) {
-        showYouNeedPro = this.currentLineIndex > NON_PRO_MAX_LINES
+        showYouNeedPro = this.currentLineIndex > NON_PRO_MAX_LINES;
       } else {
-        showYouNeedPro = this.filteredLines.length < this.lines.length
+        showYouNeedPro = this.filteredLines.length < this.lines.length;
       }
-      return showYouNeedPro
+      return showYouNeedPro;
     },
     /**
      * A map of line indices after which to show a pop quiz to the lines this quiz is based on.
@@ -624,11 +627,7 @@ export default {
       if (!this.audioCancelled && !window.speechSynthesis.speaking) {
         if (this.currentLine) {
           this.$emit("speechStart");
-          let japanesePromise = speak(
-            this.currentLine.line,
-            this.$l2,
-            1
-          );
+          let japanesePromise = speak(this.currentLine.line, this.$l2, 1);
           await japanesePromise;
           this.$emit("speechEnd");
         }
@@ -828,7 +827,7 @@ export default {
 .transcript-you-need-pro {
   position: absolute;
   bottom: 0;
-  width: 100%
+  width: 100%;
 }
 
 .zerotohero-not-wide.zerotohero-with-nav {

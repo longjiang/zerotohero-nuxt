@@ -565,9 +565,8 @@ export default {
         let savedWords = [];
         for (let template of this.$refs["run-time-template"]) {
           let wordblocks = template.$children?.[0]?.$children;
-          savedWords = savedWords.concat(
-            wordblocks.filter((wb) => wb.saved).map((wb) => wb.saved)
-          );
+          let moreSavedWords = wordblocks.filter((wb) => wb.savedWord).map((wb) => wb.savedWord)
+          savedWords = [...savedWords, ...moreSavedWords]
         }
         return savedWords;
       }

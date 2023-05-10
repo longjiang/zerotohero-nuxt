@@ -74,7 +74,8 @@ export default {
           for (let saved of savedWords) {
             seen[saved.id] = seen[saved.id] || 0
             let savedForm
-            for (let form of saved.forms) {
+            let forms = saved.forms || [saved.head]
+            for (let form of forms) {
               if (transcriptLineComp.line.line.toLowerCase().includes(form.toLowerCase())) savedForm = form
             }
             let dictionary = await this.$getDictionary()

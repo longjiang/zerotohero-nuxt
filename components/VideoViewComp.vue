@@ -338,4 +338,7 @@ export default {
   }
 }
 
+:deep(.synced-transcript-single-line) .transcript-line {
+  font-size: 2em;
+}
 </style>
