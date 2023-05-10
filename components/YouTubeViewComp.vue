@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="youtube-view">
     <LazyVideoWithTranscript
       v-if="video"
       ref="youtube"

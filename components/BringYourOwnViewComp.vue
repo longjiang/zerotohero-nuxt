@@ -1,6 +1,7 @@
 
 <template>
   <LazyVideoWithTranscript
+    class="bring-your-own-view"
     ref="video"
     v-bind="{
       type: 'bring-your-own',

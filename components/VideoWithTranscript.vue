@@ -916,8 +916,8 @@ export default {
   /* overlay mode, when controls and subtitles overlay the video */
   &.overlay {
     // height should be calculated based on the video aspect ratio 16/9
-    height: calc(100% * 9 / 16);
-    margin: 0 auto;
+    // height: calc(100% * 9 / 16);
+    // margin: 0 auto;
 
     &.size-fullscreen {
       // Width should be set so that when the height is calculated it will not exceed the viewport height

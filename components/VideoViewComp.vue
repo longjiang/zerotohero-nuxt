@@ -40,7 +40,7 @@
       :class="{
         'video-view-content': true,
         'video-view-landscape': landscape,
-        fullscreen: mode === 'subtitles',
+        'subtitles-mode': mode === 'subtitles',
       }"
     >
       <component
@@ -57,6 +57,8 @@
         @currentTime="updateCurrentTimeQueryString"
         @onUpdateLayout="onYouTubeUpdateLayout"
         @videoLoaded="onVideoLoaded"
+        style="height: 100%;"
+        class="video-view-content-inner"
       />
       <div
         v-if="type === 'youtube'"
@@ -295,6 +297,7 @@ export default {
 
 .zerotohero-wide {
   .video-view-content {
+    height: 100%;
     :deep(.video-with-transcript-landscape) {
       .youtube {
         border-radius: 0.3rem 0.3rem 0 0;
@@ -305,7 +308,7 @@ export default {
 }
 
 .video-view-content {
-  &.fullscreen {
+  &.subtitles-mode {
     max-height: calc(100vh - 3rem - env(safe-area-inset-top));
     z-index: 21;
   }
@@ -326,6 +329,7 @@ export default {
     backdrop-filter: blur(20px);
   }
 }
+
 
 .zerotohero-wide {
   .video-view-minimized {
