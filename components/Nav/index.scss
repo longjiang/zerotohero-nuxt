@@ -26,10 +26,15 @@
 }
 
 .zerotohero-wide {
-  .zth-main-nav-wrapper.zth-nav-collapsed {
-    width: 5rem;
-    :deep(.word-mark) {
-      display: none;
+  .zth-main-nav-wrapper {
+    &:not(.zth-nav-collapsed) {
+      width: 13rem;
+    }    
+    &.zth-nav-collapsed {
+      width: 5rem;
+      :deep(.word-mark) {
+        display: none;
+      }
     }
   }
 }

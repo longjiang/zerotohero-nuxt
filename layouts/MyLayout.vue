@@ -104,7 +104,7 @@ export default {
 #zerotohero.zerotohero-with-nav {
   &.zerotohero-wide .zerotohero-layout {
     grid-template-rows: auto auto 1fr;
-    grid-template-columns: 13rem 1fr;
+    grid-template-columns: auto 1fr;
     grid-template-areas:
       "nav topbar"
       "nav secondarynav"
