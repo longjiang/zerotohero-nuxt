@@ -39,15 +39,7 @@
                 &nbsp;👈
               </div>
               <div
-                class="d-flex"
-                :style="`
-              margin: 0 auto 3rem auto;
-              position: sticky;
-              top: 0;
-              background: white;
-              padding: 1rem 0;
-              z-index: 9;
-            `"
+                :class="`new-hsk-filter-bar skin-${$skin}`"
                 v-if="newHSK && newHSK.length > 0"
                 v-cloak
               >
@@ -110,7 +102,7 @@
                   <router-link
                     v-for="(word, index) in rows.slice(0, numRowsVisible)"
                     :key="`new-hsk-row-${word.level}-${word.num}`"
-                    class="new-levels-table-row"
+                    :class="`new-levels-table-row skin-${$skin}`"
                     tag="tr"
                     v-observe-visibility="
                       index === numRowsVisible - 1 ? visibilityChanged : false
@@ -213,10 +205,35 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "@/assets/scss/variables.scss";
 .new-levels-table-row {
+  th,
+  td {
+    border: none;
+  }
   &:hover {
-    background-color: rgb(228, 228, 228);
     cursor: pointer;
+  }
+  &.skin-light:hover {
+    background: $bg-color-light-2;
+  }
+  &.skin-dark:hover {
+    background: $bg-color-dark-2;
+  }
+}
+
+.new-hsk-filter-bar {
+  display: flex;
+  margin: 0 auto 3rem auto;
+  position: sticky;
+  top: 0;
+  padding: 1rem 0;
+  z-index: 9;
+  &.skin-light {
+    background: $bg-color-light-1;
+  }
+  &.skin-dark {
+    background: $bg-color-dark-1;
   }
 }
 </style>
