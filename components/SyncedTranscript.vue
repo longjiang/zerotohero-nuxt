@@ -697,14 +697,7 @@ export default {
               3000
             )
           : 3000;
-      this.$smoothScroll({
-        scrollTo: el,
-        updateHistory: false,
-        offset,
-        duration,
-        left: 0,
-        easingFunction: (t) => t,
-      });
+      this.$nuxt.$emit("smooth-scroll-to", { el, offset, left: 0, duration });
     },
     scrollTo(lineIndex) {
       let el = this.$el.querySelector(
@@ -715,10 +708,11 @@ export default {
         let offset = this.scrollOffset(el);
         let top = elementTop + offset;
         let scrollDistanceIsLarge = Math.abs(window.scrollY - top) > 1000;
+
         if (this.useSmoothScroll && !scrollDistanceIsLarge) {
           this.smoothScrollToCurrentLine(offset, el);
         } else {
-          window.scrollTo({
+          this.$nuxt.$emit("scroll-to", {
             top,
             left: 0,
             behavior: scrollDistanceIsLarge ? "auto" : "smooth",

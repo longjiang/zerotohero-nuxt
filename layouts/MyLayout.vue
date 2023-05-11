@@ -35,7 +35,7 @@
         :key="`nav-secondary-${l1.code}-${l2.code}`"
       />
     </client-only>
-    <ContentArea>
+    <ContentArea ref="contentArea">
       <slot></slot>
     </ContentArea>
   </div>
@@ -59,9 +59,31 @@ export default {
       return true
     },
   },
+  mounted() {
+    $nuxt.$on("scroll-to", this.scrollTo);
+    $nuxt.$on("smooth-scroll-to", this.smoothScrollTo);
+  },
+  beforeDestroy() {
+    $nuxt.$off("scroll-to", this.scrollTo);
+    $nuxt.$off("smooth-scroll-to", this.smoothScrollTo);
+  },
   methods: {
     updateCollapsed(collapsed) {
       this.collapsed = collapsed;
+    },
+    scrollTo({top, left, behavior}) {
+      this.$refs.contentArea.$el.scrollTo({top, left, behavior});
+    },
+    smoothScrollTo({el, offset, left, duration}) {
+      this.$smoothScroll({
+        container: this.$refs.contentArea.$el,
+        scrollTo: el,
+        updateHistory: false,
+        offset,
+        left,
+        duration,
+        easingFunction: (t) => t,
+      });
     },
   },
 };
