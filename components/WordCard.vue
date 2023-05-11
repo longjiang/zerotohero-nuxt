@@ -2,7 +2,7 @@
   <component
     :is="tag"
     v-if="!removed"
-    :class="`word-list-ext-item text-center ${compareWith ? 'compare' : ''}`"
+    :class="`word-list-ext-item text-center ${compareWith ? 'compare' : ''} bg-accent`"
   >
     <div class="word-list-ext-item-head">
       <div class="word-list-ext-cycle">
@@ -183,7 +183,6 @@ export default {
   width: 20rem;
   margin: 2rem 1rem;
   flex: 1 0 auto;
-  background: #fafafa;
   border-radius: 0.3rem;
   overflow: hidden;
   box-shadow: 3px 3px 25px rgba(0, 0, 0, 0.2);
@@ -264,7 +263,6 @@ export default {
 .word-list-ext-item-head {
   position: relative;
   height: 15rem;
-  background-color: white;
 }
 
 .word-list-ext-cycle .paginate-button {
