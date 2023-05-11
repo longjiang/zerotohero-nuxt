@@ -125,11 +125,13 @@ export default {
 
   &.route-video-view {
     &.zerotohero-wide .zerotohero-layout {
+      grid-template-rows: auto 1fr;
       grid-template-areas:
         "nav topbar"
         "nav content";
     }
     &.zerotohero-not-wide .zerotohero-layout {
+      grid-template-rows: auto 1fr auto;
       grid-template-areas:
         "topbar"
         "content"

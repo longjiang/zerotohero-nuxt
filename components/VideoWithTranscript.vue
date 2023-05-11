@@ -960,7 +960,7 @@ export default {
 
     .video-transcript-wrapper.align-subs-top {
       bottom: auto;
-      top: 0;
+      top: 2%;
     }
 
     &.size-fullscreen .video-with-transcript-inner {
