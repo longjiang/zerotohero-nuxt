@@ -109,6 +109,7 @@ class HskCedictDictionary extends BaseDictionary {
       }
     }
   }
+  
 
   getNewHSK() {
     if (this.newHSKCrunched) return this.newHSKCrunched;
@@ -117,20 +118,17 @@ class HskCedictDictionary extends BaseDictionary {
       let newHSKWordsFlattened = newHSK
         .map((row) => row.simplified)
         .reduce((a, b) => a + b, "");
-      let subdict = this.subdictFromText(newHSKWordsFlattened);
+      let words = this.words.filter(row => newHSKWordsFlattened.includes(row.simplified) || newHSKWordsFlattened.includes(row.traditional));
       for (let newHSKWord of newHSK) {
-        let matchedWords = subdict.lookupSimplified(
-          newHSKWord.simplified,
-          newHSKWord.pinyin
-        );
+        let matchedWords = words.filter(word => newHSKWord.simplified === word.simplified || newHSKWord.pinyin === word.pinyin);
         if (matchedWords && matchedWords[0]) {
           let { hsk, pinyin, id, definitions } = matchedWords[0];
           newHSKWord = Object.assign(newHSKWord, { hsk, id });
         }
       }
       this.newHSKCrunched = newHSK; // Cache this
+      words = null;
       newHSKWordsFlattened = null;
-      subdict = null;
       return this.newHSKCrunched;
     }
   }

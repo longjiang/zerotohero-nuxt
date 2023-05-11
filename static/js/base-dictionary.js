@@ -132,13 +132,6 @@ class BaseDictionary {
     return await this.inflector.inflectWithCache(text);
   }
 
-  // This method should be overridden for CJK languages
-  lookupSimplified(simplifiedStr) {
-    throw new Error(
-      "lookupSimplified() method must be implemented in the subclass"
-    );
-  }
-
   lookupByDef(text, limit = 30) {
     text = text.toLowerCase();
     let results = [];
@@ -175,12 +168,6 @@ class BaseDictionary {
 
   random() {
     return randomProperty(this.words);
-  }
-
-  lookupByPattern(pattern) {
-    throw new Error(
-      "lookupByPattern() method must be implemented in the subclass"
-    );
   }
 
   lookup(text) {
@@ -367,6 +354,19 @@ class BaseDictionary {
     return this.inflector;
   }
 
+  // This method should be overridden for CJK languages
+  lookupSimplified(simplifiedStr) {
+    throw new Error(
+      "lookupSimplified() method must be implemented in the subclass"
+    );
+  }
+
+  lookupByPattern(pattern) {
+    throw new Error(
+      "lookupByPattern() method must be implemented in the subclass"
+    );
+  }
+
   lookupByLesson() {
     // Only implemented for Chinese
   }
@@ -376,6 +376,14 @@ class BaseDictionary {
   }
 
   async getHSKStandardCourseWords() {
+    // Only implemented for Chinese
+  }
+
+  getNewHSK() {
+    // Only implemented for Chinese
+  }
+
+  listCharacters() {
     // Only implemented for Chinese
   }
 }
