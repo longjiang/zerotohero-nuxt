@@ -4,7 +4,7 @@
     placement="top"
     ref="popover"
     :popoverClass="`skin-${$skin}`"
-    :popoverWrapperClass="`tooltip-wrapper skin-${$skin}`"
+    :popoverWrapperClass="`tooltip-wrapper skin-${$skin} l1-${$l1.code} l2-${$l2.code}`"
     :popoverInnerClass="`tooltip-inner popover-inner skin-${$skin}`"
     :popoverArrowClass="`tooltip-arrow popover-arrow skin-${$skin}`"
   >

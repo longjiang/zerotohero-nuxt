@@ -135,6 +135,12 @@ class HskCedictDictionary extends BaseDictionary {
     }
   }
 
+  get(id, head) {
+    let word = super.get(id, head);
+    this.addNewHSK(word);
+    return word
+  }
+
   getByNewHSK(level, num) {
     let match = this.newHSK.find(
       (word) => word.level === level && Number(word.num) === num
@@ -163,7 +169,7 @@ class HskCedictDictionary extends BaseDictionary {
 
   addNewHSK(word) {
     let newHSKMatches = this.getNewLevel(word) || [];
-    let newHSK = this.unique(newHSKMatches.map((word) => word.level)).join("/");
+    let newHSK = unique(newHSKMatches.map((word) => word.level)).join("/");
     return Object.assign(word, {
       newHSKMatches,
       newHSK,
