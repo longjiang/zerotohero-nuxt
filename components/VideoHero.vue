@@ -1,5 +1,5 @@
 <template>
-  <div class="video-hero-wrapper" v-observe-visibility="visibilityChanged">
+  <div v-if="wide" class="video-hero-wrapper" v-observe-visibility="visibilityChanged">
     <div
       :class="{
         'video-hero': true,
@@ -7,7 +7,6 @@
         [`skin-${$skin}`]: true,
       }"
       @click="play"
-      v-if="wide"
     >
       <!-- <div class="top-overlay"></div>
       <div class="bottom-overlay"></div> -->

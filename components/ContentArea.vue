@@ -64,8 +64,6 @@ export default {
   grid-area: content;
   overflow: auto;
   padding-bottom: 5rem;
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .zerotohero-wide .content-area {
