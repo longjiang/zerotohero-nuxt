@@ -22,7 +22,7 @@
           being in HSK 5, the rest 110 are all in HSK 6.
         </p>
       </div>
-      <table class="table table-responsive" style="color: #666">
+      <table class="table table-responsive">
         <thead>
           <tr>
             <th style="min-width: 9rem" class="text-center">Idiom</th>
@@ -45,10 +45,12 @@
             </td>
             <td style="min-width: 30rem">
               <Annotate>
-                <span>
-                  {{ idiom.sourceAuthor }} {{ idiom.sourceBook }}
-                  {{ idiom.sourceChapter }}：{{ idiom.sourceQuote }}
-                </span>
+                <span
+                  ><span>{{ idiom.sourceAuthor }} {{ idiom.sourceBook }}</span
+                  ><span
+                    >{{ idiom.sourceChapter }}：{{ idiom.sourceQuote }}</span
+                  ></span
+                >
               </Annotate>
             </td>
             <td>
