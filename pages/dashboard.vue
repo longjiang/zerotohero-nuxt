@@ -130,7 +130,7 @@ export default {
       return background();
     },
     loggedIn() {
-      if (this.$auth && this.$auth.loggedIn && this.$auth.user && this.$auth.first_name) return true
+      if (this.$auth?.loggedIn && this.$auth.user?.first_name) return true
       else return false
     },
     hasDashboard() {
