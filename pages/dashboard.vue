@@ -25,7 +25,14 @@
                 <h5 class="text-center mt-2 mb-1" v-if="$auth.user?.first_name">
                   {{ $auth.user.first_name }}{{ $tb("’s Language Dashboard") }}
                 </h5>
-                <div v-if="!progressLoaded" class="text-center mt-4">
+                <div v-if="!loggedIn" class="text-center mt-4 mb-4">
+                  <p>{{ $tb('To track your learning progress, please login.') }}</p>
+                  <router-link :to="{ name: 'login' }" class="btn btn-success">
+                    {{ $tb("Login") }}
+                    <i class="fas fa-chevron-right"></i>
+                  </router-link>
+                </div>
+                <div v-else-if="!progressLoaded" class="text-center mt-4 mb-4">
                   <Loader
                     :sticky="true"
                     :message="$tb('Loading your learning progress...')"
@@ -121,6 +128,10 @@ export default {
     ...mapState("progress", ["progressLoaded", "progress"]),
     background() {
       return background();
+    },
+    loggedIn() {
+      if (this.$auth && this.$auth.loggedIn && this.$auth.user && this.$auth.first_name) return true
+      else return false
     },
     hasDashboard() {
       let hasDashboard =
