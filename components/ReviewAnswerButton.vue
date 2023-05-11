@@ -1,15 +1,6 @@
 <template>
   <button
-    :class="{
-      'review-answer': true,
-      'review-answer-light': skin === 'light',
-      'review-answer-dark': skin === 'dark',
-      btn: true,
-      'bg-white': skin === 'light',
-      'btn-ghost-dark': skin === 'dark',
-      checked: checked,
-      'review-answer-correct': answer.correct,
-    }"
+    :class="reviewAnswerClasses"
     style="position: relative"
     @click="answered()"
   >
@@ -72,6 +63,17 @@ export default {
       if (typeof this.$l2Settings !== "undefined")
         return this.$l2Settings.useTraditional;
     },
+    reviewAnswerClasses() {
+      return {
+        'btn': true,
+        'review-answer': true,
+        'checked': this.checked,
+        'review-answer-light': this.$skin === 'light',
+        'review-answer-dark': this.$skin === 'dark',
+        'btn-ghost-dark': this.$skin === 'dark',
+        'review-answer-correct': this.answer.correct,
+      }
+    }
   },
 };
 </script>
@@ -80,8 +82,8 @@ export default {
 .review-answer,
 .review-answer:hover {
   &.review-answer-light {
-    border: 1px solid #999;
-    color: #999;
+    border: 1px solid #c6c6c6;
+    background-color: white;
   }
   padding: 0.1rem 0.3rem;
   font-size: 0.9em;

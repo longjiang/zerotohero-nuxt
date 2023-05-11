@@ -863,8 +863,9 @@ export default {
 
 .annotate-grammar-button {
   font-size: 0.8rem;
-  background: $primary-color;
+  background: #888;
   color: white;
+  opacity: 0.5;
   border-radius: 100%;
   width: 1.3rem;
   height: 1.3rem;
@@ -875,6 +876,10 @@ export default {
   position: relative;
   bottom: 0.1rem;
   margin-right: 0.1rem;
+  &:hover {
+    background: $primary-color;
+    opacity: 1;
+  }
 }
 
 .add-pinyin .word-block-segment {

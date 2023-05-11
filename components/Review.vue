@@ -244,6 +244,8 @@ export default {
   margin: 0.5rem 0;
   padding: 1rem;
   border: 1px solid #ffb7002b;
+  border-radius: 0.5rem;
+  background: #dea4171f;
   .review-speak-button,
   .review-seek-button {
     border-radius: 100%;
@@ -264,45 +266,13 @@ export default {
   .transcript-line-l1 {
     font-size: 13.44px;
   }
-  &.review-light {
-    background-color: #f3f3f3;
-    .review-speak-button,
-    .review-seek-button {
-      background: white;
-      border: 1px solid #999;
-      color: #999;
-    }
-    .transcript-line-l1 {
-      color: #999;
-    }
-    &:not(.show-answer) {
-      :deep(.transcript-line-l2) {
-        .highlight {
-          background-color: #ccc;
-        }
-      }
-    }
-    &.show-answer {
-      background-color: #e4f8e5;
-    }
-  }
-  &.review-dark {
-    border-radius: 0.5rem;
-    background: #dea4171f;
-    &:not(.show-answer) {
-      :deep(.highlight) {
-        background: rgba(0, 0, 0, 0);
-        margin: 0 0.2rem;
-        position: relative;
-        bottom: 0.2rem;
-      }
-    }
-    &.show-answer {
-      background-color: #92ff9930;
-      border: 1px solid #92ff9944;
-    }
-  }
   &:not(.show-answer) {
+    :deep(.highlight) {
+      background: rgba(0, 0, 0, 0);
+      margin: 0 0.2rem;
+      position: relative;
+      bottom: 0.2rem;
+    }
     :deep(.transcript-line-l2) {
       .highlight {
         color: rgba(0, 0, 0, 0);
@@ -312,6 +282,10 @@ export default {
         }
       }
     }
+  }
+  &.show-answer {
+    background-color: #92ff9930;
+    border: 1px solid #92ff9944;
   }
 }
 
