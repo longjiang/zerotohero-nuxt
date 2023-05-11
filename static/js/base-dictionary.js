@@ -386,4 +386,8 @@ class BaseDictionary {
   listCharacters() {
     // Only implemented for Chinese
   }
+
+  lookupHSKChar() {
+    // Only implemented for Chinese
+  }
 }

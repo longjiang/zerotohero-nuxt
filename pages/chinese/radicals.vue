@@ -25,7 +25,9 @@
         <div class="col-sm-12">
           <div>
             <h3 class="text-center mb-4">Chinese Radicals</h3>
-            <Loader class="mt-5" />
+            <div class="text-center mt-4 mb-4">
+              <Loader class="mt-5" />
+            </div>
             <table
               :class="{
                 table: true,
@@ -53,13 +55,14 @@
                     </Annotate>
                   </td>
                   <td>
-                    <template
-                      v-for="character in radical.characters"
+                    <span
+                      v-for="(character, index) in radical.characters"
                       :data-level="character.hsk"
-                      tag="span"
+                      @click="learnCharacter(radical, index)"
+                      class="cursor-pointer"
                     >
                       {{ character.character }}
-                    </template>
+                    </span>
                   </td>
                 </tr>
               </tbody>
@@ -72,7 +75,6 @@
 </template>
 
 <script>
-
 export default {
   async mounted() {
     let radicals =
@@ -85,7 +87,7 @@ export default {
       let hskCharacters = [];
       const dictionary = await this.$getDictionary();
       for (let character of characters) {
-        let c = dictionary.lookupHSKChar(character.character);
+        let c = await dictionary.lookupHSKChar(character.character);
         let d = c ? Object.assign(c, character) : character;
         if (!d.hsk) d.hsk = "7";
         hskCharacters.push(d);
@@ -103,6 +105,16 @@ export default {
       if (isVisible) {
         this.numRowsVisible = this.numRowsVisible + 10;
       }
+    },
+    learnCharacter(radical, index) {
+      this.$router.push({
+        name: "learn",
+        params: {
+          method: "adhoc",
+          argsProp: radical.characters.map((c) => c.character).join(","),
+          index,
+        },
+      });
     },
   },
   data() {
