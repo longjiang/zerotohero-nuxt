@@ -18,13 +18,7 @@
                 <TextCard :text="savedText" @removed="onTextRemoved" />
               </div>
             </div>
-            <div v-else class="text-center" style="
-                    font-size: 1.2em;
-                    min-height: calc(100vh - 30rem);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                  ">
+            <div v-else class="my-text-message">
               <div v-if="!$auth.loggedIn" class="text-center alert-success p-3 pb-4 rounded mt-4 w-100">
                 <p>{{ $t("To create new texts, please login.") }}</p>
                 <router-link :to="{ name: 'login' }" class="btn btn-success">
@@ -62,7 +56,7 @@
                 </p>
               </div>
             </div>
-            <div class="mt-5 text-center">
+            <div class="mt-3 text-center">
               <b-button v-if="$auth.loggedIn" class="new-button" variant="success" @click="newText">
                 <span v-if="!creating">
                   <i class="fas fa-plus mr-1"></i>
@@ -169,5 +163,13 @@ export default {
   .new-button {
     bottom: 11rem;
   }
+}
+
+.my-text-message {
+  font-size: 1.2em;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

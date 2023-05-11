@@ -258,7 +258,7 @@ export default {
     display: inline-block;
     min-width: 5rem;
     text-align: center;
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid rgba(125, 125, 125, 0.5);
     color: #00000000 !important;
   }
   .transcript-line-l1 {
@@ -298,8 +298,8 @@ export default {
       }
     }
     &.show-answer {
-      background-color: #4070433f;
-      border: 1px solid #093909;
+      background-color: #92ff9930;
+      border: 1px solid #92ff9944;
     }
   }
   &:not(.show-answer) {

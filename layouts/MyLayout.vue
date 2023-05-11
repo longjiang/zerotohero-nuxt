@@ -81,7 +81,7 @@ export default {
 
 #zerotohero.zerotohero-with-nav {
   &.zerotohero-wide .zerotohero-layout {
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto auto 1fr;
     grid-template-columns: 13rem 1fr;
     grid-template-areas:
       "nav topbar"
@@ -92,7 +92,7 @@ export default {
     }
   }
   &.zerotohero-not-wide .zerotohero-layout {
-    grid-template-rows: auto auto 1fr;
+    grid-template-rows: auto auto 1fr auto;
     grid-template-columns: 1fr;
     grid-template-areas:
       "topbar"

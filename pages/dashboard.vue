@@ -12,7 +12,7 @@
         description="We provide TV shows with subtitles, music with lyrics, live TV channels, phrasebooks with video examples... everything that can help you to learn a language “by osmosis.” Our company, Zero to Hero Education, is also known for our “Chinese Zero to Hero” and “English Zero to Hero” online language courses."
       />
       <div
-        class="container-fluid safe-padding-top safe-padding-bottom pt-5"
+        class="container-fluid safe-padding-top safe-padding-bottom pt-2"
         style="overflow: hidden; position: relative"
       >
         <div class="container pb-5">

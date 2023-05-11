@@ -27,7 +27,7 @@
       <div class="row">
         <div class="col-sm-12">
           <div class="reader-header-message" v-if="!$auth.loggedIn">
-            <h3 class="text-center mt-3 mb-3">
+            <h3 class="text-center mt-4 mb-3">
               {{ $t("{l2} Text Reader (Annotator)", { l2: $t($l2.name) }) }}
             </h3>
             <i18n
