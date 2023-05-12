@@ -339,7 +339,7 @@ export default ({ app }, inject) => {
     
     logoutAndRedirect() {
       app.$auth.setUser(null);
-      app.$toast.error("Sorry, but you need to login again.", {
+      app.$toast.error($tb("Sorry, but you need to login again."), {
         position: "top-center",
         duration: 5000,
       });

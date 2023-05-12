@@ -36,7 +36,6 @@
           </p>
           <table
             class="table table-responsive separable-table"
-            style="color: #666"
           >
             <thead>
               <tr>
