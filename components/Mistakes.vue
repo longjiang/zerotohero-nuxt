@@ -10,7 +10,7 @@
         <Loader :sticky="true" message="Loading student mistakes..." />
       </div>
       <div v-if="mistakes && mistakes.length > 0">
-        <ul class="collapsed pl-0" data-collapse-target>
+        <ul class="pl-0">
           <li
             class="list-unstyled mistake-item mt-4 mb-4"
             v-for="(mistake, index) in mistakes"
@@ -27,13 +27,11 @@
               :showTranslate="true"
               :checkSaved="false"
               :buttons="true"
+              ><span
+                >{{ mistake.left }}<span class="mistake-word">{{ text }}</span
+                >{{ mistake.right }}</span
+              ></Annotate
             >
-              <span>
-                {{ mistake.left }}
-                <span class="mistake-word">{{ text }}</span>
-                {{ mistake.right }}
-              </span>
-            </Annotate>
             <span class="mistake-context collapsed" data-collapse-target>
               <Annotate
                 :speak="true"
@@ -41,43 +39,23 @@
                 :checkSaved="false"
                 :fullscreen="true"
                 :showTranslate="true"
+                ><span>{{ mistake.rightContext }}</span></Annotate
               >
-                <span>{{ mistake.rightContext }}</span>
-              </Annotate>
             </span>
-            <ShowMoreButton :length="1" class="mb-2 btn-small ml-2">
+            <ShowMoreButton :length="1" :class="`btn-sm btn-${$skin}`">
               Context
             </ShowMoreButton>
-            <div>
-              <div class="mistake-description">
-                <span v-if="mistake.country">
-                  Student from
-                  <b>{{ mistake.country.name }}</b>
-                </span>
-                <span v-if="mistake.l1">
-                  and speaks
-                  <Annotate class="mistake-l1">
-                    <b>{{ mistake.l1 }}</b>
-                  </Annotate>
-                </span>
-              </div>
-              <div class="mistake-description">
-                <span v-if="mistake.errorLevel && mistake.errorType">
-                  Mistake with
-                  <b>
-                    {{ mistake.errorLevel }}
-                    <span v-if="mistake.errorType !== 'anomaly'">
-                      ({{ mistake.errorType }})
-                    </span>
-                  </b>
-                </span>
-              </div>
-              <div class="mistake-description">
-                <span v-if="mistake.proficiency">
-                  <b>{{ ucFirst(mistake.proficiency) }}</b>
-                  Chinese proficiency
-                </span>
-              </div>
+            <div class="mistake-description mt-2">
+              <span v-if="mistake.errorLevel && mistake.errorType">
+                This mistake has to do with
+                <b>
+                  {{ mistake.errorLevel }}
+                  <span v-if="mistake.errorType !== 'anomaly'">
+                    ({{ mistake.errorType }})
+                  </span> </b
+                >, committed by a {{ mistake.proficiency }} learner from
+                {{ mistake.country.name }}.
+              </span>
             </div>
           </li>
         </ul>
@@ -155,7 +133,7 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss">
 .mistake-word {
   color: red;
   font-weight: bold;
@@ -167,17 +145,20 @@ export default {
   font-size: 1.2rem;
 }
 
-.widget-title.widget-title-mistakes {
-  background-image: linear-gradient(180deg, #f8a7a7 0%, #dcdcdc00 100%);
-  color: #442b2bb0;
-}
 
 .mistake-flag {
   font-size: 1.5rem;
 }
 
-.mistake-description {
-  color: #dababa;
+.skin-dark {
+  .mistake-description {
+    color: #dababa;
+  }
+}
+.skin-light {
+  .mistake-description {
+    color: #a78585;
+  }
 }
 
 .mistake-item {
@@ -194,7 +175,7 @@ export default {
 }
 
 .mistake-context {
-  color: #c1c1c1;
+  color: #888;
 }
 
 .mistake-context.collapsed {
