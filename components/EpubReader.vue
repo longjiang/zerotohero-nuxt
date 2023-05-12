@@ -85,7 +85,10 @@ export default {
     },
     onGoToPage(page) {
       this.page = page;
-      if (window) window.scrollTo({ top: 0, behavior: "smooth" });
+      this.$nuxt.$emit("scroll-to", {
+        top: 0,
+        behavior: "smooth",
+      });
     },
     onNextPage() {
       this.onGoToPage(this.page + 1);
@@ -145,7 +148,10 @@ export default {
       this.page = 1;
       if (this.$refs.tocModal) this.$refs.tocModal.hide();
       this.updateChapterNavigation();
-      if (window) window.scrollTo({ top: 0, behavior: "smooth" });
+      this.$nuxt.$emit("scroll-to", {
+        top: 0,
+        behavior: "smooth",
+      })
       this.loading = false;
     },
 

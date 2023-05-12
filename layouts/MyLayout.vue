@@ -71,7 +71,7 @@ export default {
     updateCollapsed(collapsed) {
       this.collapsed = collapsed;
     },
-    scrollTo({top, left, behavior}) {
+    scrollTo({ top = 0, left = 0, behavior = "smooth" }) {
       this.$refs.contentArea.$el.scrollTo({top, left, behavior});
     },
     smoothScrollTo({el, offset, left, duration}) {
