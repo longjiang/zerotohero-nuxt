@@ -278,19 +278,6 @@ export default {
       fullscreen: false,
     };
   },
-  destroyed() {
-    if (this.keyboard) this.unbindKeys();
-  },
-  unmounted() {
-    if (this.keyboard) this.unbindKeys();
-  },
-  deactivated() {
-    if (this.keyboard) this.unbindKeys();
-  },
-  updated() {
-    if (this.keyboard) this.unbindKeys();
-    if (this.keyboard) this.bindKeys();
-  },
   computed: {
     groups() {
       return {
@@ -307,10 +294,8 @@ export default {
   },
   watch: {
     hitAB() {
-      this.$refs.searchSubsA.pauseYouTube(),
-        this.$refs.searchSubsB.pauseYouTube(),
-        this.unbindKeys();
-      this.bindKeys();
+      this.$refs.searchSubsA.pauseYouTube()
+      this.$refs.searchSubsB.pauseYouTube()
     },
   },
   methods: {
@@ -350,37 +335,6 @@ export default {
       merged.splice(zthSavedIndex, 1);
       merged = [zthSaved].concat(merged);
       return merged;
-    },
-    bindKeys() {
-      document.addEventListener("keydown", this.keydown);
-      if (this.$refs.searchSubsA) this.$refs.searchSubsA.unbindKeys();
-      if (this.$refs.searchSubsB) this.$refs.searchSubsB.unbindKeys();
-      if (this.hitAB === "A") this.$refs.searchSubsA.bindKeys();
-      if (this.hitAB === "B") this.$refs.searchSubsB.bindKeys();
-    },
-    unbindKeys() {
-      if (this.$refs.searchSubsA) this.$refs.searchSubsA.unbindKeys();
-      if (this.$refs.searchSubsB) this.$refs.searchSubsB.unbindKeys();
-      document.removeEventListener("keydown", this.keydown);
-    },
-    keydown(e) {
-      if (
-        !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&
-        !e.metaKey
-      ) {
-        // f = 70
-        if (e.keyCode == 70) {
-          this.toggleFullscreen();
-          e.preventDefault();
-          return false;
-        }
-        // escape = 27
-        if (e.keyCode == 27) {
-          this.fullscreen = false;
-          e.preventDefault();
-          return false;
-        }
-      }
     },
     toggleFullscreen() {
       if (this.hitsA.length > 0 || this.hitsB.length > 0)

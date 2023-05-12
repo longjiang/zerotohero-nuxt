@@ -6,7 +6,7 @@
         <DefinitionsList
           v-if="defCommon"
           :definitions="defCommon"
-          nodef="(no common definitions)"
+          :nodef="$t('(no common definitions)')"
           class="mt-2 mb-2"
         ></DefinitionsList>
         <Merge direction="bottom" class="h-half d-none d-sm-block" />

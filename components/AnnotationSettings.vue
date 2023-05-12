@@ -7,7 +7,7 @@
         v-model="showByeonggi"
       >
         <span v-if="$l2.code === 'ko'">
-          {{ $t("Show hanja next to hanguel (byeonggi)") }} (
+          {{ $t("Show hanja next to hanguel (byeonggi)") }} 
           <a
             href="https://ko.wikipedia.org/wiki/%ED%95%9C%EA%B8%80%EC%A0%84%EC%9A%A9%EA%B3%BC_%EA%B5%AD%ED%95%9C%EB%AC%B8%ED%98%BC%EC%9A%A9#%ED%95%9C%EC%9E%90_%EB%B3%91%EA%B8%B0"
             target="_blank"
@@ -104,7 +104,7 @@
         </b-button>
       </b-button-group>
     </div>
-    <div class="jumbotron mt-4 p-4">
+    <div class="mt-4 p-4 bg-accent rounded">
       <Annotate
         tag="div"
         class="mt-4 mb-4 text-left"

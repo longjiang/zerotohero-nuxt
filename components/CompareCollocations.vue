@@ -1,9 +1,9 @@
 <template>
-  <div class="widget" :key="'collocations-' + collocationsKey">
-    <div class="widget-title">
-      Collocations with “{{ term }}” and “{{ compareTerm }}”
-    </div>
-    <div class="jumbotron-fluid p-4">
+  <Widget class="widget" :key="'collocations-' + collocationsKey">
+    <template #title>
+      {{ $t('Collocations with “{term}” and “{compareTerm}”',  {term, compareTerm}) }}
+    </template>
+    <template #body>
       <div
         class="row"
         v-for="(description, name) in colDesc"
@@ -59,28 +59,26 @@
         .
       </div>
       <div class="mt-2">
-        Collocations provided by
+        {{ $t("Collocations provided by") }}
         <a
           target="_blank"
           :href="`https://app.sketchengine.eu/#wordsketch?corpname=${encodeURIComponent(
-            SketchEngine.corpname
+            corpname
           )}&tab=basic&lemma=${term}&showresults=1`"
         >
           <img
             src="/img/logo-sketch-engine.png"
             alt="Sketch Engine"
-            class="ml-2 logo-small"
+            class="ml-2 mr-2 logo-small"
           />
         </a>
-        <br />
-        Don't like the collocations? Choose a different corpus (dataset) in
-        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">
-          Settings
-        </router-link>
-        .
+        <span v-if="corpname">
+          {{ $t("Corpus") }}:
+          <code>{{ corpname.replace("preloaded/", "") }}</code>
+        </span>
       </div>
-    </div>
-  </div>
+    </template>
+  </Widget>
 </template>
 
 <script>
@@ -105,7 +103,22 @@ export default {
       SketchEngine,
       colDesc: undefined,
       collocationsKey: 0,
+      corpname: undefined,
     };
+  },
+  watch: {
+    term() {
+      this.update();
+    },
+    compareTerm() {
+      this.update();
+    },
+  },
+  async mounted() {
+    if (!this.colDesc) {
+      this.update();
+    }
+    this.corpname = await SketchEngine.corpname(this.$l2);
   },
   methods: {
     async update() {
@@ -134,19 +147,6 @@ export default {
         (gram) => gram.name === name && gram.Words && gram.Words.length > 0
       );
     },
-  },
-  watch: {
-    term() {
-      this.update();
-    },
-    compareTerm() {
-      this.update();
-    },
-  },
-  mounted() {
-    if (!this.colDesc) {
-      this.update();
-    }
   },
 };
 </script>
