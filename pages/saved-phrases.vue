@@ -140,7 +140,7 @@ export default {
         let viewportHeight =
           window.innerHeight || document.documentElement.clientHeight;
         let middle = offsetTop - viewportHeight / 2 + elHeight / 2;
-        window.scrollTo({
+        this.$nuxt.$emit("scroll-to", {
           top: middle,
           left: 0,
           behavior: "smooth",

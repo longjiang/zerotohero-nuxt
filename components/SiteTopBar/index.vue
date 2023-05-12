@@ -265,7 +265,7 @@ export default {
       this.$refs["settings-modal"].hide();
     },
     scrollToTop() {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      this.$nuxt.$emit("scroll-to", { top: 0, behavior: "smooth" });
     },
     async share() {
       if (document && document.location) {
