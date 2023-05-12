@@ -53,21 +53,6 @@
   }
 }
 
-.zth-nav-secondary.zth-nav-light {
-  background: linear-gradient(
-    $bg-color-light-1 0%,
-    $bg-color-light-1 66%,
-    transparent 100%
-  );
-}
-
-.zth-nav-secondary.zth-nav-dark {
-  background: linear-gradient(
-    $bg-color-dark-1 0%,
-    $bg-color-dark-1 66%,
-    transparent 100%
-  );
-}
 
 .zth-nav-menu-bar {
   .zth-header {
@@ -79,11 +64,9 @@
   width: 100vw;
   white-space: nowrap;
   text-align: center;
-  min-height: 61px;
   padding-left: 1rem;
   padding-right: 1rem;
-  padding-bottom: 2rem;
-  top: calc(env(safe-area-inset-top) + 2.9rem);
+  padding-bottom: 1rem;
   z-index: 19;
   :deep(.nav-item-count) {
     display: none;

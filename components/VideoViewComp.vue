@@ -291,10 +291,6 @@ export default {
   }
 }
 
-.toggle-wrapper.maximized {
-  top: calc(env(safe-area-inset-top) + 3rem);
-}
-
 .zerotohero-wide {
   .video-view-content {
     height: 100%;

@@ -309,6 +309,6 @@ export default {
 .hide-defs {
   position: sticky;
   z-index: 2;
-  top: calc(env(safe-area-inset-top) + 5rem);
+  top: 0;
 }
 </style>
