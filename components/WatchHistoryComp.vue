@@ -20,6 +20,7 @@
         </div>
         <div class="row">
           <template v-for="group in groups">
+            <!-- If date is not shown, the cards will be presented in one grid. -->
             <div class="col-sm-12" v-if="showDate" :key="`date-${group.date}`">
               <p v-if="group.date === '0'" class="mb-4 mt-4">
                 {{ $t('Studied earlier:') }}
@@ -180,7 +181,8 @@ export default {
           items: groups[date],
         };
       });
-      return groups.sort((a, b) => b.date.localeCompare(a.date));
+      groups = groups.sort((a, b) => b.date.localeCompare(a.date));
+      return groups
     },
     itemsFiltered() {
       if (typeof this.history !== "undefined") {

@@ -201,6 +201,7 @@ export default {
       this.initialMode = layout;
     },
     updateCurrentTimeQueryString(currentTime) {
+      if (this.size === "mini") return;
       if (typeof window !== "undefined") {
         this.currentTime = currentTime;
         const params = new URLSearchParams(window.location.search);
@@ -221,6 +222,7 @@ export default {
       }
     },
     saveHistory({ type, video, duration }) {
+      if (this.size === "mini") return;
       if (type === "youtube" && video && video.youtube_id) {
         let data = {
           type: "video",
