@@ -6,7 +6,7 @@
 </router>
 <template>
   <div
-    :style="`min-height: 100vh; ${
+    :style="`padding-top: 10rem; min-height: 100vh; ${
       background
         ? 'background-image: url(' +
           background +
@@ -133,7 +133,6 @@ export default {
   margin-top: -5.5rem;
 }
 .go-pro-wrapper {
-  margin-top: 10rem;
   max-width: 30rem;
   padding: 2rem;
   border-radius: 1rem;
