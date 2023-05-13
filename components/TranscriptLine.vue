@@ -283,6 +283,7 @@ export default {
       }
     }
     .transcript-line-l2-rtl {
+      padding-left: 0;
       padding-right: 1.5rem;
     }
     .transcript-line-l1 {
