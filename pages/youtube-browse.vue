@@ -21,8 +21,9 @@
           <VideoHero
             v-if="heroVideo"
             :video="heroVideo"
-            @videoUnavailable="onVideoUnavailable"
+            :key="'hero-video' + heroVideo.youtube_id"
             class="mb-5"
+            @unavailable="onVideoUnavailable"
           />
         </div>
       </div>
@@ -173,11 +174,28 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      videos: [],
+      LANGS_WITH_LEVELS,
+      sort: "recommended",
+      selectedHeroVideo: null,
+      sortOptions: [
+        { value: "recommended", text: "Sort by Recommended" },
+        { value: "id", text: "Sort by Date Added" },
+        { value: "date", text: "Sort by Date Uploaded" },
+        { value: "views", text: "Sort by Views" },
+        { value: "title", text: "Sort by Title" },
+      ],
+    };
+  },
   computed: {
     ...mapState("shows", ["categories"]),
     heroVideo() {
-      if (this.videos.length > 0)
-        return this.videos[Math.floor(Math.random() * this.videos.length)];
+      if (this.selectedHeroVideo === null && this.videos.length > 0) {
+        this.selectedHeroVideo = this.videos[Math.floor(Math.random() * this.videos.length)];
+      }
+      return this.selectedHeroVideo;
     },
     levels() {
       let langLevels = languageLevels(this.$l2);
@@ -207,20 +225,6 @@ export default {
       }
       return items;
     },
-  },
-  data() {
-    return {
-      videos: [],
-      LANGS_WITH_LEVELS,
-      sort: "recommended",
-      sortOptions: [
-        { value: "recommended", text: "Sort by Recommended" },
-        { value: "id", text: "Sort by Date Added" },
-        { value: "date", text: "Sort by Date Uploaded" },
-        { value: "views", text: "Sort by Views" },
-        { value: "title", text: "Sort by Title" },
-      ],
-    };
   },
   watch: {
     sort() {

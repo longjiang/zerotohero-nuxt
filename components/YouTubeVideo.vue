@@ -194,6 +194,11 @@ export default {
       this.randomSeeked = false;
     },
   },
+  watch: {
+    'video.youtube_id'() {
+      this.loadYouTubeiFrame()
+    }
+  },
   methods: {
     async getL1Transcript() {
       let subs_l1 = await YouTube.getL1Transcript(
@@ -220,7 +225,7 @@ export default {
     loadYouTubeiFrame() {
       if (this.posterOnly) return;
       this.loading = true;
-      let id = this.$el.querySelector(".youtube-iframe").getAttribute("id");
+      let id = this.youtubeIframeID;
       this.removeYouTubeAPIVars();
       let start = parseInt(this.starttime);
       let playerVars = {
