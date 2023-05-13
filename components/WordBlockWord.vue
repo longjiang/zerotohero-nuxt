@@ -38,7 +38,7 @@
         ><span
           class="word-block-pinyin"
           v-if="phonetics"
-          :class="{transparent: segment.type !== 'kanji'}"
+          :class="{ transparent: segment.type !== 'kanji' || !hasKanji(segment.surface) }"
           >{{ segment.reading || "&nbsp;" }}</span
         ><span :class="wordBlockTextClasses">
           {{ segment.surface }}</span
@@ -58,7 +58,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { hasKanji } from '@/lib/utils'
+
 export default {
   props: {
     pos: String,
@@ -126,6 +127,11 @@ export default {
       return this.$l2Settings.showDefinition;
     },
   },
+  methods: {
+    hasKanji(...args) {
+      return hasKanji(...args);
+    }
+  }
 };
 </script>
 
