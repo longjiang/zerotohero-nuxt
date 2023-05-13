@@ -1,5 +1,5 @@
 <template>
-  <div class="dictionary-entry">
+  <div class="tabbed-sections-wrapper" :class="`skin-${$skin}`">
     <div class="section-nav-wrapper">
       <div class="section-nav">
         <div
@@ -16,8 +16,8 @@
         </div>
       </div>
     </div>
-    <div class="dictionary-entry-sections">
-      <div class="dictionary-entry-section">
+    <div class="tabbed-sections">
+      <div class="tabbed-section">
         <slot :name="sections[currentSectionIndex].name"></slot>
       </div>
     </div>
@@ -53,9 +53,18 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/scss/variables.scss";
 
-.dictionary-entry-section {
+.tabbed-section {
   overflow: visible;
   padding: 1rem 0;
+}
+
+.tabbed-sections-wrapper {
+  &.skin-dark .section-nav-wrapper {
+    background: $bg-color-dark-1;
+  }
+  &.skin-light .section-nav-wrapper {
+    background: $bg-color-light-1;
+  }
 }
 
 .section-nav-wrapper {
