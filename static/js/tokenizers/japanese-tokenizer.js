@@ -14,10 +14,10 @@ class JapaneseTokenizer extends BaseTokenizer {
       if (!token) {
         tokens.push(" ");
       } else if (["補助記号-"].includes(token.pos)) {
-        tokens.push(token.word);
+        tokens.push(token.text);
       } else {
         tokens.push(this.normalizeToken(token));
-        if (!isJapanese(token.word)) {
+        if (!isJapanese(token.text)) {
           tokens.push(" ");
         }
       }
