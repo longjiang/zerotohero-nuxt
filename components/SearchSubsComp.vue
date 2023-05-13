@@ -737,7 +737,6 @@ export default {
       return hits;
     },
     saveHit(hit) {
-      console.log("Saving subs-search hit", hit);
       this.$store.dispatch("savedHits/add", {
         terms: this.terms,
         hit: hit,
@@ -751,7 +750,6 @@ export default {
       this.findAndRemoveHit(this.groupsRight, hit);
     },
     removeSavedHit(hit) {
-      console.log("Removing subs-search hit", hit);
       this.$store.dispatch("savedHits/remove", {
         terms: this.terms,
         hit: hit,
@@ -804,7 +802,7 @@ export default {
     },
     goToNextHit() {
       this.currentHit = this.nextHit;
-      this.navigated = true;
+      this.navigated = true; 
     },
     goToHit(hit) {
       this.currentHit = hit;

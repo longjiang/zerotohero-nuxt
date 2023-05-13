@@ -17,7 +17,7 @@
       muted,
       video,
     }"
-    ref="video"
+    ref="concreteVideo"
     @paused="onPaused"
     @currentTime="onCurrentTime"
     @ended="onEnded"
@@ -119,30 +119,30 @@ export default {
       this.$emit("videoUnavailable", videoUnavailable);
     },
     seek(starttime) {
-      let videoComponent = this.$refs.video;
+      let videoComponent = this.$refs.concreteVideo;
       if (videoComponent && videoComponent.seek) videoComponent.seek(starttime);
     },
     play() {
-      let videoComponent = this.$refs.video;
+      let videoComponent = this.$refs.concreteVideo;
       if (videoComponent && videoComponent.play) videoComponent.play();
     },
     pause() {
-      let videoComponent = this.$refs.video;
+      let videoComponent = this.$refs.concreteVideo;
       if (videoComponent && videoComponent.pause) videoComponent.pause();
     },
     setSpeed(speed) {
-      let videoComponent = this.$refs.video;
+      let videoComponent = this.$refs.concreteVideo;
       if (videoComponent && videoComponent.setSpeed)
         videoComponent.setSpeed(speed);
     },
     togglePaused() {
-      let videoComponent = this.$refs.video;
+      let videoComponent = this.$refs.concreteVideo;
       if (videoComponent && videoComponent.togglePaused) {
         videoComponent.togglePaused();
       }
     },
     open() {
-      const video = this.$refs.video;
+      const video = this.$refs.concreteVideo;
       if (video) video.open();
     },
   },

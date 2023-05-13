@@ -587,9 +587,7 @@ export default {
     },
     startLineIndex() {
       if (
-        this.$refs.video &&
-        this.$refs.video.player &&
-        this.$refs.video.player.seekTo
+        this.$refs.video?.$refs.concreteVideo?.player?.seekTo
       ) {
         this.rewind();
       }
@@ -710,7 +708,9 @@ export default {
     },
 
     seek(starttime) {
-      this.$refs.video.seek(starttime);
+      if (this.$refs.video?.seek) {
+        this.$refs.video.seek(starttime);
+      }
     },
 
     onShowSubsEditing(showSubsEditing) {
