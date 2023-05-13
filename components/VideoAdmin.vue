@@ -102,7 +102,7 @@
         </span>
         <router-link
           class="ml-2 btn btn-small bg-secondary text-white"
-          v-if="video.tv_show"
+          v-if="$adminMode && video.tv_show"
           :to="{
             name: 'show',
             params: { type: 'tv-show', id: String(video.tv_show.id) },
@@ -120,7 +120,7 @@
         </router-link>
         <router-link
           class="ml-2 btn btn-small bg-secondary text-white"
-          v-if="video.talk"
+          v-if="$adminMode && video.talk"
           :to="{
             name: 'show',
             params: { type: 'talk', id: String(video.talk.id) },
