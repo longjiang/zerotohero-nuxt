@@ -455,8 +455,6 @@ export default {
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.8);
   color: white;
-  font-size: 1.3rem;
-  font-weight: bold;
   text-align: center;
   padding: 1rem;
 }

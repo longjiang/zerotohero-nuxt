@@ -120,9 +120,7 @@
                 :buttons="true"
                 v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
                 :showLoading="false"
-              >
-                <span>{{ video.title }}</span>
-              </Annotate>
+              ><span>{{ video.title }}</span></Annotate>
               <span v-else>{{ video.title }}</span>
             </span>
           </h4>
