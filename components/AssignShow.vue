@@ -1,7 +1,7 @@
 <template>
   <span>
     <b-button
-      size="sm"
+      size="small"
       @click="assignShow = !assignShow"
       variant="ghost-dark"
     >
@@ -21,7 +21,7 @@
       ></b-form-select>
       <b-button
         v-if="selectedShowID"
-        size="sm"
+        size="small"
         variant="success"
         class="mt-2 w-100"
         @click="save"

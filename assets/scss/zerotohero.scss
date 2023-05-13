@@ -787,11 +787,9 @@ button.bg-primary:focus {
 }
 
 .btn-small {
-  color: #a7a7a7;
   font-size: 0.8rem;
   padding: 0.1rem 0.4rem;
   border-radius: 0.2rem;
-  background-color: #f3f3f3;
   position: relative;
   display: inline-block;
   border: none;
@@ -805,6 +803,12 @@ button.bg-primary:focus {
   height: 0.9rem;
   margin-bottom: 0.2rem;
   filter: opacity(0.3);
+}
+
+.form-control-small {
+  font-size: 0.8rem;
+  padding: 0 0.4rem;
+  height: 1.4rem;
 }
 
 .btn-primary {

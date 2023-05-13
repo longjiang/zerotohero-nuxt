@@ -98,7 +98,7 @@
         />
 
         <div
-          class="video-info video-info-side pl-3 pt-4"
+          class="video-info video-info-side pl-3 pt-2"
           v-if="
             aspect === 'landscape' &&
             size !== 'mini' &&
@@ -106,13 +106,13 @@
             !collapsed
           "
         >
-          <h3
+          <h4
             v-if="video.title"
             :class="{
               h4: video.title.length > 30,
               h5: video.title.length > 60,
             }"
-            style="line-height: 1.5"
+            style="line-height: 1.5; margin-bottom: 0;"
           >
             <span v-if="video" :key="`video-title-${video.title}`">
               <Annotate
@@ -125,7 +125,7 @@
               </Annotate>
               <span v-else>{{ video.title }}</span>
             </span>
-          </h3>
+          </h4>
           <VideoAdmin
             v-if="type === 'youtube'"
             :showVideoDetails="true"

@@ -1,23 +1,6 @@
 <template>
   <div class="video-edit">
     <div class="video-details" v-if="showVideoDetails">
-      <span v-if="$adminMode && video.subs_l2 && video.subs_l2.length > 0">
-        <a
-          :href="originalTextHref"
-          v-if="$adminMode"
-          :download="`${video.title}.txt`"
-          target="_blank"
-          class="link-unstyled"
-        >
-          <i class="fas fa-file-alt mr-1"></i>
-          {{ $t("Transcript") }}
-        </a>
-        <a :href="translationURL" target="_blank" class="link-unstyled ml-2">
-          <i class="fa fa-language mr-1"></i>
-          {{ $t("Translation") }}
-        </a>
-        <Share class="ml-2" />
-      </span>
       <div class="video-meta" v-if="video.youtube_id">
         <span v-if="video.channel">
           <u>
@@ -49,15 +32,60 @@
           />
           {{ localeDescription }}
         </span>
+        <template
+          v-if="video.category === 10 || video.tv_show?.title === 'Music'"
+        >
+          <span>
+            <a
+              :href="`https://play.spotify.com/search/${encodeURIComponent(
+                video.title
+              )}`"
+              target="_blank"
+            >
+              <u>Spotify</u>
+            </a>
+          </span>
+          <span>
+            <a
+              :href="`https://music.apple.com/us/search?term=${encodeURIComponent(
+                video.title
+              )}`"
+              target="_blank"
+            >
+              <u>Apple Music</u>
+            </a>
+          </span>
+        </template>
         <span>
           <a
             :href="`https://downsub.com/?url=https://www.youtube.com/watch?v=${video.youtube_id}`"
             target="_blank"
             class="link-unstyled"
           >
-            <u>{{ $t("Transcript") }}</u>
+            <u>{{ $t("DownSub") }}</u>
           </a>
         </span>
+        <template
+          v-if="$adminMode && video.subs_l2 && video.subs_l2.length > 0"
+        >
+          <span>
+            <a
+              :href="originalTextHref"
+              v-if="$adminMode"
+              :download="`${video.title}.txt`"
+              target="_blank"
+              class="link-unstyled"
+            >
+              <u>{{ $t("Transcript") }}</u>
+            </a>
+          </span>
+          <span>
+            <a :href="translationURL" target="_blank" class="link-unstyled">
+              <u>{{ $t("Translation") }}</u>
+            </a>
+          </span>
+          <Share class="ml-2" />
+        </template>
       </div>
       <div class="video-engagement">
         <span v-if="video.views">
@@ -72,57 +100,45 @@
           <i class="fa-solid fa-comment"></i>
           {{ formatK(video.comments) }}
         </span>
-      </div>
-      <div>
-        <template
-          v-if="video.category === 10 || video.tv_show?.title === 'Music'"
+        <router-link
+          class="ml-2 btn btn-small bg-secondary text-white"
+          v-if="video.tv_show"
+          :to="{
+            name: 'show',
+            params: { type: 'tv-show', id: String(video.tv_show.id) },
+          }"
         >
-          <a
-            :href="`https://play.spotify.com/search/${encodeURIComponent(
-              video.title
-            )}`"
-            target="_blank"
-            class="text-secondary mr-2"
-          >
-            <i class="text-secondary fa-brands fa-spotify"></i>
-            Spotify
-          </a>
-          <a
-            :href="`https://music.apple.com/us/search?term=${encodeURIComponent(
-              video.title
-            )}`"
-            target="_blank"
-            class="text-secondary mr-2"
-          >
-            <i class="text-secondary fa-brands fa-apple"></i>
-            Apple Music
-          </a>
-          <a
-            :href="`https://y.qq.com/n/ryqq/search?w=${encodeURIComponent(
-              video.title
-            )}&t=song&remoteplace=txt.yqq.top`"
-            target="_blank"
-            class="text-secondary mr-2"
-          >
-            <i class="text-secondary fa-solid fa-music-note"></i>
-            QQ Music
-          </a>
-        </template>
+          <i class="fa fa-tv mr-2" />
+          {{ video.tv_show.title }}
+          <i
+            :class="{
+              'fas fa-times-circle ml-1': true,
+              'd-none': !$adminMode,
+            }"
+            @click.stop.prevent="unassignShow('tv_show')"
+          />
+        </router-link>
+        <router-link
+          class="ml-2 btn btn-small bg-secondary text-white"
+          v-if="video.talk"
+          :to="{
+            name: 'show',
+            params: { type: 'talk', id: String(video.talk.id) },
+          }"
+        >
+          <i class="fas fa-graduation-cap mr-2"></i>
+          {{ video.talk.title }}
+          <i
+            :class="{
+              'fas fa-times-circle ml-1': true,
+              'd-none': !$adminMode,
+            }"
+            @click.stop.prevent="unassignShow('talk')"
+          />
+        </router-link>
       </div>
     </div>
     <client-only>
-      <div
-        :class="{
-          'd-none':
-            (video.subs_l2 && video.subs_l2.length > 0) || showSubsEditing,
-          'subs-drop drop p-4 mt-3': true,
-        }"
-        :key="`drop-${transcriptKey}`"
-      >
-        <i class="fa fa-file mr-2"></i>
-        {{ $t("Upload subtitles (.srt or .ass)") }}
-        <input type="file" accept=".srt,.ass" @change="handleDrop"  />
-      </div>
       <div class="video-edit-public" v-if="$adminMode">
         <b-button
           size="small"
@@ -137,7 +153,7 @@
           variant="success"
         >
           <i class="fas fa-plus mr-1"></i>
-          {{ $t("Save Video for Everyone") }}
+          {{ $t("Add Video") }}
         </b-button>
         <span v-if="saving">
           <i class="fas fa-hourglass mr-2 text-secondary"></i>
@@ -163,54 +179,14 @@
           }}
         </div>
       </div>
-      <div class="show-and-date" v-if="$adminMode">
-        <span class="mr-2">
-          <router-link
-            class="btn btn-small bg-secondary text-white"
-            v-if="video.tv_show"
-            :to="{
-              name: 'show',
-              params: { type: 'tv-show', id: String(video.tv_show.id) },
-            }"
-          >
-            <i class="fa fa-tv mr-2" />
-            {{ video.tv_show.title }}
-            <i
-              :class="{
-                'fas fa-times-circle ml-1': true,
-                'd-none': !$adminMode,
-              }"
-              @click.stop.prevent="unassignShow('tv_show')"
-            />
-          </router-link>
-          <router-link
-            class="btn btn-small bg-secondary text-white"
-            v-if="video.talk"
-            :to="{
-              name: 'show',
-              params: { type: 'talk', id: String(video.talk.id) },
-            }"
-          >
-            <i class="fas fa-graduation-cap mr-2"></i>
-            {{ video.talk.title }}
-            <i
-              :class="{
-                'fas fa-times-circle ml-1': true,
-                'd-none': !$adminMode,
-              }"
-              @click.stop.prevent="unassignShow('talk')"
-            />
-          </router-link>
-        </span>
-      </div>
       <div
         :class="{
-          'video-edit-admin rounded p-3 mt-3 mb-3 d-none': true,
+          'video-edit-admin rounded p-2 mt-2 mb-2 d-none': true,
           'd-block': $adminMode && video && video.id,
         }"
       >
         <div class="video-edit-admin-first-line">
-          <b-dropdown
+          <!-- <b-dropdown
             size="sm"
             id="dropdown-1"
             :text="video.topic ? topics[video.topic] : 'Topic'"
@@ -224,9 +200,9 @@
             >
               {{ title }}
             </b-dropdown-item>
-          </b-dropdown>
+          </b-dropdown> -->
           <template v-if="!video.lesson">
-            <b-dropdown
+            <!-- <b-dropdown
               id="dropdown-1"
               size="sm"
               :text="video.level ? levels[video.level] : 'Level'"
@@ -239,7 +215,7 @@
               >
                 {{ title }}
               </b-dropdown-item>
-            </b-dropdown>
+            </b-dropdown> -->
             <AssignShow
               @assignShow="saveShow"
               v-if="!video.tv_show && !video.talk"
@@ -256,7 +232,12 @@
               type="talks"
               variant="secondary"
             />
-            <b-button v-if="!deleted" @click="remove" size="sm">
+            <b-button
+              v-if="!deleted"
+              @click="remove"
+              size="small"
+              variant="danger"
+            >
               <i class="fas fa-trash-alt"></i>
               Remove
             </b-button>
@@ -268,6 +249,28 @@
               <i class="fas fa-check-circle mr-2 text-success"></i>
               Removed
             </span>
+            <small
+              :class="{
+                'd-none': !showSubsEditing && !enableTranslationEditing,
+              }"
+            >
+              <b-button
+                size="small"
+                variant="danger"
+                @click="clearSubs"
+              >
+                <i class="fas fa-times mr-1" />
+                Subs
+              </b-button>
+              <b-button
+                size="small"
+                variant="danger"
+                @click="clearTranslation"
+              >
+                <i class="fas fa-times mr-1" />
+                Translation
+              </b-button>
+            </small>
           </template>
           <div class="video-admin-checkboxes">
             <b-form-checkbox
@@ -282,60 +285,28 @@
             >
               Enable Translation Editing
             </b-form-checkbox>
-            <span
-              :class="{
-                'd-none': !showSubsEditing && !enableTranslationEditing,
-              }"
-            >
-              <u
-                class="mt-2 ml-2 d-inline-block text-danger"
-                style="cursor: pointer"
-                @click="clearSubs"
-              >
-                <i class="fas fa-times mr-1" />
-                Clear Subs
-              </u>
-              <u
-                class="mt-2 ml-2 d-inline-block text-danger"
-                style="cursor: pointer"
-                @click="clearTranslation"
-              >
-                <i class="fas fa-times mr-1" />
-                Clear Translation
-              </u>
-            </span>
           </div>
-        </div>
-        <div
-          :class="{
-            'video-edit-admin-second-line': true,
-            'd-none': !showSubsEditing,
-          }"
-        > {{ $t('Upload Subs')}}
-          <input type="file" accept=".srt,.ass" @change="handleDrop"  />
         </div>
         <b-form-textarea
           :class="{
             'd-none': !enableTranslationEditing && !showSubsEditing,
+            'original-textarea': true,
           }"
           v-model="originalText"
           placeholder="Original text"
-          rows="3"
           class="mt-2"
-          max-rows="6"
           @blur="updateOriginalText"
           v-if="showTextEditing"
         ></b-form-textarea>
         <b-form-textarea
           :class="{
             'd-none': !enableTranslationEditing,
+            'translation-textarea': true,
           }"
           v-model="translation"
           @blur="updateTranslation"
           placeholder="Translation"
-          rows="3"
           class="mt-2"
-          max-rows="6"
           v-if="showTextEditing"
         ></b-form-textarea>
         <client-only>
@@ -361,13 +332,12 @@
         <b-form-textarea
           :class="{
             'd-none': !enableTranslationEditing,
+            'notes-textarea': true,
           }"
           v-model="notes"
           @blur="updateNotes"
           placeholder="Notes"
-          rows="3"
           class="mt-2"
-          max-rows="6"
         ></b-form-textarea>
         <div
           :class="{
@@ -378,7 +348,7 @@
           First line starts at
           <b-form-input
             v-model="firstLineTime"
-            size="sm"
+            size="small"
             type="text"
             placeholder="0"
             class="d-inline-block ml-1"
@@ -387,7 +357,8 @@
           />
           <b-button
             v-if="!updating && !subsUpdated"
-            size="sm"
+            size="small"
+            variant="ghost-dark"
             @click="updateSubs"
             class="ml-2"
             style="margin-bottom: 0.2rem"
@@ -406,6 +377,18 @@
             </span>
           </span>
         </div>
+        <div
+          :class="{
+            'd-none':
+              (video.subs_l2 && video.subs_l2.length > 0) || showSubsEditing,
+            'subs-drop drop p-4 mt-3': true,
+          }"
+          :key="`drop-${transcriptKey}`"
+        >
+          <i class="fa fa-file mr-2"></i>
+          {{ $t("Upload subtitles (.srt or .ass)") }}
+          <input type="file" accept=".srt,.ass" @change="handleDrop" />
+        </div>
       </div>
     </client-only>
   </div>
@@ -414,7 +397,16 @@
 <script>
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
-import { languageLevels, formatK, TOPICS, makeTextFile, normalizeCircleNumbers, uniqueByValue, logError, timeout } from "@/lib/utils";
+import {
+  languageLevels,
+  formatK,
+  TOPICS,
+  makeTextFile,
+  normalizeCircleNumbers,
+  uniqueByValue,
+  logError,
+  timeout,
+} from "@/lib/utils";
 import Vue from "vue";
 import SmartQuotes from "smartquotes";
 
@@ -742,7 +734,9 @@ export default {
   border: 2px dashed rgba(136, 136, 136, 0.5);
   color: rgba(136, 136, 136, 0.85);
   border-radius: 0.25rem;
-  max-width: calc((100vh - 3rem - env(safe-area-inset-top) - 12rem) * 16 / 9 - 3rem);
+  max-width: calc(
+    (100vh - 3rem - env(safe-area-inset-top) - 12rem) * 16 / 9 - 3rem
+  );
   margin: 0 auto;
 
   &:over {
@@ -772,5 +766,12 @@ export default {
 
 .video-engagement span + span {
   margin-left: 0.5rem;
+}
+
+.original-textarea,
+.translation-textarea,
+.notes-textarea {
+  font-size: 0.8rem;
+  height: 8em;
 }
 </style>
