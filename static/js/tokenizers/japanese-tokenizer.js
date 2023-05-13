@@ -17,6 +17,9 @@ class JapaneseTokenizer extends BaseTokenizer {
         tokens.push(token.word);
       } else {
         tokens.push(this.normalizeToken(token));
+        if (!isJapanese(token.word)) {
+          tokens.push(" ");
+        }
       }
     }
     return tokens;
