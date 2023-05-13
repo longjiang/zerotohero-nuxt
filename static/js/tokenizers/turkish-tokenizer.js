@@ -18,7 +18,7 @@ class TurkishTokenizer extends BaseTokenizer {
       } else {
         let token = {
           text: lemmas[0].word,
-          lemmas: lemmas.filter(l => l.lemma !== "Unk").map((l) => l.lemma),
+          lemmas: lemmas.filter(l => l.lemma !== "Unk"),
           pos: lemmas[0].pos,
         }
         tokens.push(this.normalizeToken(token));

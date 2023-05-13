@@ -25,7 +25,7 @@ class ArabicTokenizer extends BaseTokenizer {
       } else {
         let token = {
           text: lemmas[0].word,
-          lemmas: lemmas.map((l) => l.lemma),
+          lemmas,
           pos: lemmas[0].pos,
         }
         tokens.push(this.normalizeToken(token));

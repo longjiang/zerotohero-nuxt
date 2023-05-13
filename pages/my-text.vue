@@ -91,7 +91,6 @@ export default {
     this.updateLoaded();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "savedText/LOAD") {
-        console.log("savedText/LOAD mutation detected");
         this.updateLoaded();
       }
     });
