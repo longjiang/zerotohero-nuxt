@@ -6,10 +6,10 @@
         unavailable: videoUnavailable,
         [`skin-${$skin}`]: true,
       }"
-      @click="play"
+      @click="togglePaused"
     >
-      <!-- <div class="top-overlay"></div>
-      <div class="bottom-overlay"></div> -->
+      <!-- <div class="top-overlay"></div> -->
+      <div class="bottom-overlay"></div>
       <LazyYouTubeVideo
         ref="youtube"
         v-bind="{
@@ -222,8 +222,8 @@ export default {
     },
   },
   methods: {
-    play() {
-      this.$refs.youtube.play();
+    togglePaused() {
+      this.$refs.youtube.togglePaused();
     },
     onVideoUnavailable(youtube_id) {
       if (youtube_id === this.video.youtube_id) {
@@ -258,6 +258,7 @@ export default {
     width: 100%;
     position: absolute;
     z-index: 2;
+    pointer-events: none;
   }
   .bottom-overlay {
     height: 20%;
@@ -265,13 +266,14 @@ export default {
     position: absolute;
     bottom: 0;
     z-index: 2;
+    pointer-events: none;
   }
   &.skin-light {
     .top-overlay {
       background: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 100%);
     }
     .bottom-overlay {
-      background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 75%);
+      background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%);
     }
   }
   &.skin-dark {
@@ -279,7 +281,7 @@ export default {
       background: linear-gradient(black 0%, rgba(0, 0, 0, 0) 100%);
     }
     .bottom-overlay {
-      background: linear-gradient(rgba(255, 255, 255, 0) 0%, black 75%);
+      background: linear-gradient(rgba(255, 255, 255, 0) 0%, black 100%);
     }
   }
   &.unavailable {
