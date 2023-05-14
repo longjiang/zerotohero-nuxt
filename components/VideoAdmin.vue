@@ -3,15 +3,38 @@
     <client-only>
       <div
         :class="{
-          'd-none':
-            (video.subs_l2 && video.subs_l2.length > 0) || showSubsEditing,
+          'd-none': video.subs_l2 && video.subs_l2.length > 0,
           'subs-drop drop p-4 mt-3': true,
         }"
         :key="`drop-${transcriptKey}`"
       >
-        <i class="fa fa-file mr-2"></i>
-        {{ $t("Upload subtitles (.srt or .ass)") }}
+        <p>
+          <i class="fa fa-file mr-2"></i>
+          {{ $t("Upload subtitles (.srt or .ass)") }}
+        </p>
         <input type="file" accept=".srt,.ass" @change="handleDrop" />
+      </div>
+      <div
+        class="mt-4 mb-5 rounded"
+        style="color: rgba(136, 136, 136, 0.85)"
+        v-if="
+          type !== 'bring-your-own' &&
+          (!video.subs_l2 || video.subs_l2.length === 0) &&
+          !video.checkingSubs
+        "
+      >
+        <div>
+          {{
+            $t("This video does not have closed captions (CC) in {l2}.", {
+              l2: $t($l2.name),
+            })
+          }}
+          {{
+            $t(
+              "If you have the subtitles file (.srt or .ass), you can add it by uploading it above."
+            )
+          }}
+        </div>
       </div>
       <div class="video-edit-public" v-if="$adminMode">
         <b-button
@@ -128,19 +151,11 @@
                 'd-none': !showSubsEditing && !enableTranslationEditing,
               }"
             >
-              <b-button
-                size="small"
-                variant="danger"
-                @click="clearSubs"
-              >
+              <b-button size="small" variant="danger" @click="clearSubs">
                 <i class="fas fa-times mr-1" />
                 Subs
               </b-button>
-              <b-button
-                size="small"
-                variant="danger"
-                @click="clearTranslation"
-              >
+              <b-button size="small" variant="danger" @click="clearTranslation">
                 <i class="fas fa-times mr-1" />
                 Translation
               </b-button>
@@ -575,13 +590,11 @@ export default {
   }
 }
 
-
 .skin-dark {
   .video-edit-admin {
     background-color: #88888822;
   }
 }
-
 
 .original-textarea,
 .translation-textarea,

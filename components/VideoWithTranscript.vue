@@ -218,31 +218,6 @@
           <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
             <Loader :sticky="true" message="Loading subtitles..." />
           </div>
-          <div
-            class="mt-4 mb-5 rounded"
-            style="color: rgba(136, 136, 136, 0.85)"
-            v-if="
-              type !== 'bring-your-own' &&
-              (!video.subs_l2 || video.subs_l2.length === 0) &&
-              !video.checkingSubs
-            "
-          >
-            <h6>
-              {{
-                $t("This video does not have closed captions (CC) in {l2}.", {
-                  l2: $t($l2.name),
-                })
-              }}
-            </h6>
-            <div class="mt-3">
-              <i18n
-                path="If you have the subtitles file (.srt or .ass), you can add it by uploading in the Video Information area. The Video Information area can be accessed by pressing the {0} Info or {1} Episode Select button in the video controls."
-              >
-                <i class="fa-solid fa-circle-info mr-1"></i>
-                <i class="fa-regular fa-rectangle-history mr-1"></i>
-              </i18n>
-            </div>
-          </div>
           <client-only>
             <EpisodeNav
               v-if="episodes"
@@ -253,17 +228,6 @@
               :showType="showType"
               :largeEpisodeCount="largeEpisodeCount"
               class="mt-4 mb-4 ml-4"
-            />
-            <VideoAdmin
-              v-if="$adminMode && video?.subs_l2?.length > 0"
-              ref="videoAdminBelowTranscript"
-              :class="{ 'mt-5': true }"
-              :video="video"
-              @showSubsEditing="onShowSubsEditing"
-              @updateTranslation="onUpdateTranslation"
-              @updateOriginalText="onUpdateOriginalText"
-              @updateTranscript="onUpdateTranscript"
-              @enableTranslationEditing="onEnableTranslationEditing"
             />
           </client-only>
           <div
