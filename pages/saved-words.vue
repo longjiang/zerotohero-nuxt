@@ -162,7 +162,7 @@ export default {
         this.$store.state.savedWords.savedWords &&
         this.$store.state.savedWords.savedWords[this.$l2.code]
       ) {
-        return this.$store.state.savedWords.savedWords;
+        return this.$store.state.savedWords.savedWords[this.$l2.code];
       } else {
         return [];
       }
@@ -265,10 +265,14 @@ export default {
       let sW = [];
       const dictionary = await this.$getDictionary();
       if (this.savedWords) {
-        let savedWords = this.$store.state.savedWords.savedWords[this.$l2.code];
+        let savedWords = this.savedWords;
+        console.log({savedWords})
         if (savedWords && savedWords.length > 0) {
           for (let savedWord of savedWords) {
             let word = await dictionary.get(savedWord.id, savedWord.forms[0]);
+            if (!word) {
+              word = await dictionary.lookup(savedWord.forms[0]);
+            }
             if (word) {
               let r = Object.assign({}, savedWord);
               r.word = word;
