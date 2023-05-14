@@ -18,7 +18,6 @@
         class="mt-4 mb-5 rounded"
         style="color: rgba(136, 136, 136, 0.85)"
         v-if="
-          type !== 'bring-your-own' &&
           (!video.subs_l2 || video.subs_l2.length === 0) &&
           !video.checkingSubs
         "

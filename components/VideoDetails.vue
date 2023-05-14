@@ -34,6 +34,9 @@
         />
         {{ localeDescription }}
       </span>
+      <span>
+        <a :href="`https://www.youtube.com/watch?v=${video.youtube_id}`" target="_blank">YouTube</a>
+      </span>
       <span v-if="video.channel">
         <router-link
           :to="{
@@ -86,13 +89,12 @@
             v-if="$adminMode"
             :download="`${video.title}.txt`"
             target="_blank"
-            class="link-unstyled"
           >
             {{ $t("Transcript") }}
           </a>
         </span>
         <span>
-          <a :href="translationURL" target="_blank" class="link-unstyled">
+          <a :href="translationURL" target="_blank">
             {{ $t("Translation") }}
           </a>
         </span>
@@ -195,6 +197,12 @@ export default {
     },
     originalTextHref() {
       return makeTextFile(this.text);
+    },
+    text() {
+      if (this.video.subs_l2)
+        return this.video.subs_l2
+          .map((line) => (line ? line.line.replace(/\n/g, " ") : ""))
+          .join("\n");
     },
   },
   methods: {
