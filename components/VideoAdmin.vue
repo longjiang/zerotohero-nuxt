@@ -139,6 +139,18 @@
       </div>
     </div>
     <client-only>
+      <div
+        :class="{
+          'd-none':
+            (video.subs_l2 && video.subs_l2.length > 0) || showSubsEditing,
+          'subs-drop drop p-4 mt-3': true,
+        }"
+        :key="`drop-${transcriptKey}`"
+      >
+        <i class="fa fa-file mr-2"></i>
+        {{ $t("Upload subtitles (.srt or .ass)") }}
+        <input type="file" accept=".srt,.ass" @change="handleDrop" />
+      </div>
       <div class="video-edit-public" v-if="$adminMode">
         <b-button
           size="small"
@@ -376,18 +388,6 @@
               Updated
             </span>
           </span>
-        </div>
-        <div
-          :class="{
-            'd-none':
-              (video.subs_l2 && video.subs_l2.length > 0) || showSubsEditing,
-            'subs-drop drop p-4 mt-3': true,
-          }"
-          :key="`drop-${transcriptKey}`"
-        >
-          <i class="fa fa-file mr-2"></i>
-          {{ $t("Upload subtitles (.srt or .ass)") }}
-          <input type="file" accept=".srt,.ass" @change="handleDrop" />
         </div>
       </div>
     </client-only>

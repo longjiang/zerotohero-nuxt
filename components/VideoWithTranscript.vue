@@ -129,7 +129,7 @@
             :showVideoDetails="true"
             :showTextEditing="true"
             :video="video"
-            ref="videoAdmin1"
+            ref="videoAdminBelowVideo"
             @showSubsEditing="onShowSubsEditing"
             @updateTranslation="onUpdateTranslation"
             @updateOriginalText="onUpdateOriginalText"
@@ -175,14 +175,15 @@
             v-if="overlaySubsAlign === 'top'"
           ></i>
         </div>
-
+        
+        <!-- this is the public facing video admin -->
         <!-- if the video has no subs, allow the user to add subs -->
-        <div class="pl-4 pr-4" v-if="video && !video.subs_l2">
+        <div class="pl-4 pr-4" v-if="video && !video.subs_l2">  
           <VideoAdmin
             :showVideoDetails="true"
             :showTextEditing="true"
             :video="video"
-            ref="videoAdmin1"
+            ref="videoAdminAboveTranscript"
             @showSubsEditing="onShowSubsEditing"
             @updateTranslation="onUpdateTranslation"
             @updateOriginalText="onUpdateOriginalText"
@@ -268,8 +269,8 @@
               class="mt-4 mb-4 ml-4"
             />
             <VideoAdmin
-              v-if="$adminMode"
-              ref="videoAdmin2"
+              v-if="$adminMode && video?.subs_l2?.length > 0"
+              ref="videoAdminBelowTranscript"
               :class="{ 'mt-5': true }"
               :video="video"
               @showSubsEditing="onShowSubsEditing"
@@ -641,12 +642,6 @@ export default {
     },
     onEnableTranslationEditing(enableTranslationEditing) {
       this.enableTranslationEditing = enableTranslationEditing;
-      if (this.$refs.videoAdmin1)
-        this.$refs.videoAdmin1.enableTranslationEditing =
-          enableTranslationEditing;
-      if (this.$refs.videoAdmin2)
-        this.$refs.videoAdmin2.enableTranslationEditing =
-          enableTranslationEditing;
     },
 
     onEnded(ended) {
@@ -713,10 +708,6 @@ export default {
 
     onShowSubsEditing(showSubsEditing) {
       this.showSubsEditing = showSubsEditing;
-      if (this.$refs.videoAdmin1)
-        this.$refs.videoAdmin1.showSubsEditing = showSubsEditing;
-      if (this.$refs.videoAdmin2)
-        this.$refs.videoAdmin2.showSubsEditing = showSubsEditing;
     },
     onSpeechEnd() {
       this.$emit("speechEnd");
