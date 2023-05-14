@@ -177,7 +177,10 @@
       :title="show ? show.title : $t('Video Information')"
     >
       <div class="video-info-inner">
-        <h6>{{ video.title }}</h6>
+        <VideoDetails
+          :video="video"
+          ref="videoDetails"
+        />
         <VideoAdmin
           :video="video"
           ref="videoAdmin1"

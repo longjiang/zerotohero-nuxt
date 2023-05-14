@@ -1,9 +1,9 @@
 <template>
   <div class="video-details">
-    <h4
+    <h5
       v-if="video.title"
       :class="{
-        h4: video.title.length > 30,
+        h5: video.title.length > 30,
         h5: video.title.length > 60,
       }"
       style="line-height: 1.5; margin-bottom: 0"
@@ -18,24 +18,8 @@
         >
         <span v-else>{{ video.title }}</span>
       </span>
-    </h4>
+    </h5>
     <div class="video-meta" v-if="video.youtube_id">
-      <span v-if="video.channel">
-        <u>
-          <router-link
-            class="link-unstyled"
-            :to="{
-              name: 'youtube-channel',
-              params: {
-                channel_id: video.channel.id,
-                title: video.channel.title || undefined,
-              },
-            }"
-          >
-            {{ video.channel.title || $t("Channel") }}
-          </router-link>
-        </u>
-      </span>
       <span v-if="video.date && !isNaN(Date.parse(video.date))">
         {{ formatDate(video.date) }}
       </span>
@@ -50,6 +34,19 @@
         />
         {{ localeDescription }}
       </span>
+      <span v-if="video.channel">
+        <router-link
+          :to="{
+            name: 'youtube-channel',
+            params: {
+              channel_id: video.channel.id,
+              title: video.channel.title || undefined,
+            },
+          }"
+        >
+          {{ video.channel.title || $t("Channel") }}
+        </router-link>
+      </span>
       <template
         v-if="video.category === 10 || video.tv_show?.title === 'Music'"
       >
@@ -60,7 +57,7 @@
             )}`"
             target="_blank"
           >
-            <u>Spotify</u>
+            Spotify
           </a>
         </span>
         <span>
@@ -70,7 +67,7 @@
             )}`"
             target="_blank"
           >
-            <u>Apple Music</u>
+            Apple Music
           </a>
         </span>
       </template>
@@ -78,9 +75,8 @@
         <a
           :href="`https://downsub.com/?url=https://www.youtube.com/watch?v=${video.youtube_id}`"
           target="_blank"
-          class="link-unstyled"
         >
-          <u>{{ $t("DownSub") }}</u>
+          {{ $t("DownSub") }}
         </a>
       </span>
       <template v-if="$adminMode && video.subs_l2 && video.subs_l2.length > 0">
@@ -92,12 +88,12 @@
             target="_blank"
             class="link-unstyled"
           >
-            <u>{{ $t("Transcript") }}</u>
+            {{ $t("Transcript") }}
           </a>
         </span>
         <span>
           <a :href="translationURL" target="_blank" class="link-unstyled">
-            <u>{{ $t("Translation") }}</u>
+            {{ $t("Translation") }}
           </a>
         </span>
         <Share class="ml-2" />
@@ -156,10 +152,7 @@
   </div>
 </template>
 <script>
-import {
-  makeTextFile,
-  formatK,
-} from "@/lib/utils";
+import { makeTextFile, formatK } from "@/lib/utils";
 
 export default {
   props: {
@@ -215,15 +208,10 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.skin-dark {
-  .video-details {
-    font-size: 0.8em;
-    text-align: left;
-    a {
-      color: #ccc;
-    }
-    line-height: 2;
-  }
+.video-details {
+  font-size: 0.8em;
+  text-align: left;
+  line-height: 2;
 }
 
 .video-meta span + span::before {
