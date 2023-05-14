@@ -1,143 +1,5 @@
 <template>
   <div class="video-edit">
-    <div class="video-details" v-if="showVideoDetails">
-      <div class="video-meta" v-if="video.youtube_id">
-        <span v-if="video.channel">
-          <u>
-            <router-link
-              class="link-unstyled"
-              :to="{
-                name: 'youtube-channel',
-                params: {
-                  channel_id: video.channel.id,
-                  title: video.channel.title || undefined,
-                },
-              }"
-            >
-              {{ video.channel.title || $t("Channel") }}
-            </router-link>
-          </u>
-        </span>
-        <span v-if="video.date && !isNaN(Date.parse(video.date))">
-          {{ formatDate(video.date) }}
-        </span>
-        <span v-if="localeDescription">
-          <img
-            v-if="country"
-            :alt="`Flag of ${country.name}`"
-            :title="`Flag of ${country.name} (${country.alpha2Code})`"
-            :src="`/vendor/flag-svgs/${country.alpha2Code}.svg`"
-            class="flag-icon mr-1"
-            style="width: 1rem; position: relative; bottom: 0.1rem"
-          />
-          {{ localeDescription }}
-        </span>
-        <template
-          v-if="video.category === 10 || video.tv_show?.title === 'Music'"
-        >
-          <span>
-            <a
-              :href="`https://play.spotify.com/search/${encodeURIComponent(
-                video.title
-              )}`"
-              target="_blank"
-            >
-              <u>Spotify</u>
-            </a>
-          </span>
-          <span>
-            <a
-              :href="`https://music.apple.com/us/search?term=${encodeURIComponent(
-                video.title
-              )}`"
-              target="_blank"
-            >
-              <u>Apple Music</u>
-            </a>
-          </span>
-        </template>
-        <span>
-          <a
-            :href="`https://downsub.com/?url=https://www.youtube.com/watch?v=${video.youtube_id}`"
-            target="_blank"
-            class="link-unstyled"
-          >
-            <u>{{ $t("DownSub") }}</u>
-          </a>
-        </span>
-        <template
-          v-if="$adminMode && video.subs_l2 && video.subs_l2.length > 0"
-        >
-          <span>
-            <a
-              :href="originalTextHref"
-              v-if="$adminMode"
-              :download="`${video.title}.txt`"
-              target="_blank"
-              class="link-unstyled"
-            >
-              <u>{{ $t("Transcript") }}</u>
-            </a>
-          </span>
-          <span>
-            <a :href="translationURL" target="_blank" class="link-unstyled">
-              <u>{{ $t("Translation") }}</u>
-            </a>
-          </span>
-          <Share class="ml-2" />
-        </template>
-      </div>
-      <div class="video-engagement">
-        <span v-if="video.views">
-          <i class="fa-solid fa-eye"></i>
-          {{ formatK(video.views) }}
-        </span>
-        <span v-if="video.likes">
-          <i class="fa-solid fa-thumbs-up"></i>
-          {{ formatK(video.likes) }}
-        </span>
-        <span v-if="video.comments">
-          <i class="fa-solid fa-comment"></i>
-          {{ formatK(video.comments) }}
-        </span>
-        <router-link
-          class="ml-2 btn btn-small bg-secondary text-white"
-          v-if="$adminMode && video.tv_show"
-          :to="{
-            name: 'show',
-            params: { type: 'tv-show', id: String(video.tv_show.id) },
-          }"
-        >
-          <i class="fa fa-tv mr-2" />
-          {{ video.tv_show.title }}
-          <i
-            :class="{
-              'fas fa-times-circle ml-1': true,
-              'd-none': !$adminMode,
-            }"
-            @click.stop.prevent="unassignShow('tv_show')"
-          />
-        </router-link>
-        <router-link
-          class="ml-2 btn btn-small bg-secondary text-white"
-          v-if="$adminMode && video.talk"
-          :to="{
-            name: 'show',
-            params: { type: 'talk', id: String(video.talk.id) },
-          }"
-        >
-          <i class="fas fa-graduation-cap mr-2"></i>
-          {{ video.talk.title }}
-          <i
-            :class="{
-              'fas fa-times-circle ml-1': true,
-              'd-none': !$adminMode,
-            }"
-            @click.stop.prevent="unassignShow('talk')"
-          />
-        </router-link>
-      </div>
-    </div>
     <client-only>
       <div
         :class="{
@@ -401,7 +263,6 @@ import {
   languageLevels,
   formatK,
   TOPICS,
-  makeTextFile,
   normalizeCircleNumbers,
   uniqueByValue,
   logError,
@@ -461,22 +322,10 @@ export default {
           .map((line) => (line ? line.line.replace(/\n/g, " ") : ""))
           .join("\n");
     },
-    originalTextHref() {
-      return makeTextFile(this.text);
-    },
   },
   async mounted() {
     this.mounted = true; // So that this component shows up on first load (updates $adminMode)
     this.originalText = this.text;
-    this.translationURL = this.getTranslationURL();
-    if (this.video?.locale) {
-      let { country, language, description } = await this.getLocaleDescription(
-        this.video.locale
-      );
-      if (description) this.localeDescription = description;
-      if (country) this.country = country;
-      if (language) this.language = language;
-    }
   },
   watch: {
     showSubsEditing() {
@@ -514,27 +363,8 @@ export default {
       this.translation = "";
       Vue.set(this.video, "subs_l1", undefined);
     },
-    async getLocaleDescription(locale) {
-      let language, country;
-      let [langCode, countryCode] = locale.split("-");
-      language = await this.$languages.getSmart(langCode);
-      if (countryCode) {
-        country = await this.$languages.countryFromCode(countryCode);
-      }
-      let description = `${language ? this.$t(language.name) : ""}`;
-      if (country) description += ` (${this.$t(country.name)})`;
-      return { country, language, description };
-    },
     formatK(number) {
       return formatK(number, 2, this.$l1.code);
-    },
-    formatDate(date) {
-      return this.$d(new Date(date), "short", this.$l1.code);
-    },
-    getTranslationURL() {
-      if (typeof this.$l2 !== "undefined") {
-        return this.$languages.translationURL(this.text, this.$l1, this.$l2);
-      }
     },
     breaklines(text) {
       return text
@@ -744,29 +574,14 @@ export default {
     color: rgba(136, 136, 136, 1);
   }
 }
+
+
 .skin-dark {
   .video-edit-admin {
     background-color: #88888822;
   }
-
-  .video-details {
-    font-size: 0.8em;
-    text-align: left;
-    a {
-      color: #ccc;
-    }
-    line-height: 2;
-  }
 }
 
-.video-meta span + span::before {
-  content: " · ";
-  margin: 0 0.25rem;
-}
-
-.video-engagement span + span {
-  margin-left: 0.5rem;
-}
 
 .original-textarea,
 .translation-textarea,

@@ -106,27 +106,8 @@
             !collapsed
           "
         >
-          <h4
-            v-if="video.title"
-            :class="{
-              h4: video.title.length > 30,
-              h5: video.title.length > 60,
-            }"
-            style="line-height: 1.5; margin-bottom: 0;"
-          >
-            <span v-if="video" :key="`video-title-${video.title}`">
-              <Annotate
-                :phonetics="false"
-                :buttons="true"
-                v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
-                :showLoading="false"
-              ><span>{{ video.title }}</span></Annotate>
-              <span v-else>{{ video.title }}</span>
-            </span>
-          </h4>
           <VideoAdmin
-            v-if="type === 'youtube'"
-            :showVideoDetails="true"
+            v-if="$adminMode && type === 'youtube'"
             :showTextEditing="true"
             :video="video"
             ref="videoAdminBelowVideo"
@@ -135,6 +116,11 @@
             @updateOriginalText="onUpdateOriginalText"
             @enableTranslationEditing="onEnableTranslationEditing"
             @updateTranscript="onUpdateTranscript"
+          />
+          <VideoDetails
+            v-if="type === 'youtube'"
+            :video="video"
+            ref="videoDetails"
           />
           <EpisodeNav
             v-if="episodes"
