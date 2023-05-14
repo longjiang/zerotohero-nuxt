@@ -266,7 +266,6 @@ export default {
       const dictionary = await this.$getDictionary();
       if (this.savedWords) {
         let savedWords = this.savedWords;
-        console.log({savedWords})
         if (savedWords && savedWords.length > 0) {
           for (let savedWord of savedWords) {
             let word = await dictionary.get(savedWord.id, savedWord.forms[0]);
