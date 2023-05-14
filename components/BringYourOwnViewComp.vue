@@ -8,7 +8,7 @@
       video,
       starttime,
       startLineIndex,
-      skin,
+      skin: $skin,
       useAutoTextSize: true,
       showInfoButton: false,
       showOpenButton: true,

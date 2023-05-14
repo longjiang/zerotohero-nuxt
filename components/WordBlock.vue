@@ -676,16 +676,6 @@ export default {
           }
           if (allLemmas.length > 0) words = [...words, ...allLemmas]; // We put lemmas at the bottom because at time irrelevant words can show up as 'lemmas'
         }
-        if (dictionary.findPhrases) {
-          // for (let word of words) {
-          //   word.phrases = await dictionary.findPhrases(word);
-          // }
-        }
-        if (dictionary.addNewHSK) {
-          for (let word of words) {
-            word = await dictionary.addNewHSK(word);
-          }
-        }
       }
 
       words = uniqueByValue(words, "id");

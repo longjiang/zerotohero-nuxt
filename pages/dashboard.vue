@@ -120,6 +120,12 @@ export default {
           icon: "fas fa-language",
           show: true,
         },
+        {
+          name: "stats",
+          title: "Language Player Stats",
+          icon: "fas fa-chart-simple",
+          show: true,
+        },
       ],
     };
   },
