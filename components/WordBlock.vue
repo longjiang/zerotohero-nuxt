@@ -291,6 +291,10 @@ export default {
     },
   },
   mounted() {
+    if (this.token?.candidates) {
+      let words = uniqueByValue([...this.token.candidates, ...this.words], "id");
+      this.words = words
+    }
     if (this.sticky) {
       this.lookup();
     }
