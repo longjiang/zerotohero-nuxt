@@ -47,6 +47,7 @@
         :is="currentComponent"
         v-bind="{
           youtube_id,
+          directus_id,
           lesson,
           mini,
           skin: $skin,
@@ -82,6 +83,11 @@ export default {
     },
     youtube_id: {
       type: String,
+      required: false,
+    },
+    directus_id: {
+      type: String,
+      required: false,
     },
     lesson: {
       type: String, // If the video is a "lesson video" (with lesson vocab highlighted), set this to "lesson"

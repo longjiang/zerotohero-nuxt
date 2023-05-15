@@ -7,6 +7,7 @@
       v-bind="{
         type: overlayPlayerType,
         youtube_id: overlayPlayerYouTubeId,
+        directus_id: overlayPlayerDirectusId,
         lesson: overlayPlayerLesson,
         mini: overlayPlayerMinimized,
         key: `video-view-comp-${overlayPlayerYouTubeId}`,
@@ -52,6 +53,7 @@ export default {
         this.overlayPlayerType = this.$route.params.type;
         this.overlayPlayerYouTubeId = this.$route.params.youtube_id;
         this.overlayPlayerLesson = this.$route.params.lesson;
+        this.overlayPlayerDirectusId = this.$route.params.directus_id;
       }
     },
   },

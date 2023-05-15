@@ -10,7 +10,7 @@
 </router>
 <template>
   <div class="video-view-page">
-    <VideoViewComp v-bind="{ type, youtube_id, lesson, skin }" />
+    <VideoViewComp v-bind="{ type, youtube_id, directus_id, lesson, skin }" />
   </div>
 </template>
 
