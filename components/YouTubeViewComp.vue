@@ -162,6 +162,9 @@ export default {
      *                    and associated TV show and talk information are loaded.
      */
      async loadVideo(youtube_id, directus_id) {
+      // Set video ID
+      this.video = { youtube_id };
+
       // If directus_id is present, retrieve video info and subs from our database
       if (directus_id) {
         const video = await this.getVideoFromDB(directus_id);
@@ -196,7 +199,7 @@ export default {
         return video;
       }
     },
-    async getMissingVideoInfoFromYouTube(youtube_id, videoInfo) {
+    async getMissingVideoInfoFromYouTube(video) {
 
     },
     onUpdateLayout(layout) {
