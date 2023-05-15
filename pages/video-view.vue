@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/video-view/:type/:youtube_id?/:lesson?',
+    path: '/:l1/:l2/video-view/:type/:youtube_id?/:directus_id?/:lesson?',
     props: true,
     meta: {
       skin: 'dark',
@@ -24,6 +24,10 @@ export default {
       type: String, // One of 'youtube' and 'bring-your-own'
     },
     youtube_id: {
+      type: String,
+      required: false,
+    },
+    directus_id: {
       type: String,
       required: false,
     },
