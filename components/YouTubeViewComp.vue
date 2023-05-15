@@ -42,6 +42,7 @@ import {
   queryString,
   shuffle,
   uniqueByValue,
+  toCamelCase,
   logError,
 } from "@/lib/utils";
 
@@ -94,6 +95,7 @@ export default {
   },
   computed: {
     ...mapState("stats", ["stats"]),
+    ...mapState("shows", ["showsLoaded"]),
     currentTimeInSeconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
       return t;
@@ -161,7 +163,7 @@ export default {
      * @returns {Promise} A promise that resolves when the video, subtitles,
      *                    and associated TV show and talk information are loaded.
      */
-     async loadVideo(youtube_id, directus_id) {
+    async loadVideo(youtube_id, directus_id) {
       // Set video ID
       this.video = { youtube_id };
 
@@ -171,11 +173,47 @@ export default {
         this.video = video;
       }
 
+      const showType = this.getShowType(this.video);
+
+      this.loadShowAndEpisodes({ showId: this.video[showType], showType });
+
       // Retrieve missing information from YouTube
       this.getMissingVideoInfoFromYouTube(this.video);
     },
+    loadShowAndEpisodes({ showId, showType }) {
+      if (this.showsLoaded?.[this.$l2.code]) {
+        if (!this.show) this.setShow({ showId, showType });
+      }
+      this.unsubscribe = this.$store.subscribe((mutation, state) => {
+        if (mutation.type === "shows/LOAD_SHOWS") {
+          if (!this.show) this.setShow({ showId, showType });
+        }
+      });
+    },
+    setShow({showId, showType}) {
+      const camelCaseShowType = toCamelCase(showType)
+      this.show = this.$store.getters[`shows/${camelCaseShowType}`]({
+        id: showId,
+        l2: this.$l2,
+      });
+      this.showType = showType
+    },
+    getShowType(video) {
+      let showType = false;
+
+      if (video.tv_show) {
+        showType = "tv_show";
+      } else if (video.talk) {
+        showType = "talk";
+      }
+
+      return showType;
+    },
     async getVideoFromDB(directus_id) {
-      let video = await this.$directus.getVideo({ id: directus_id, l2Id: this.$l2.id });
+      let video = await this.$directus.getVideo({
+        id: directus_id,
+        l2Id: this.$l2.id,
+      });
       if (video) {
         for (let field of ["subs_l2", "subs_l1"]) {
           if (video[field] && typeof video[field] === "string") {
@@ -199,9 +237,7 @@ export default {
         return video;
       }
     },
-    async getMissingVideoInfoFromYouTube(video) {
-
-    },
+    async getMissingVideoInfoFromYouTube(video) {},
     onUpdateLayout(layout) {
       this.$emit("updateLayout", layout);
     },
