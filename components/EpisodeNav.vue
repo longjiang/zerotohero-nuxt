@@ -141,6 +141,7 @@ export default {
         params: {
           type: "youtube",
           youtube_id: video.youtube_id,
+          directus_id: video.id,
           lesson: video.lesson,
         },
       };

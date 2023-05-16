@@ -28,7 +28,7 @@ export default {
       required: false,
     },
     directus_id: {
-      type: String,
+      type: Number,
       required: false,
     },
     lesson: {

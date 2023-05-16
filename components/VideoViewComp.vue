@@ -86,7 +86,7 @@ export default {
       required: false,
     },
     directus_id: {
-      type: String,
+      type: Number,
       required: false,
     },
     lesson: {
@@ -142,6 +142,7 @@ export default {
         params: {
           type: this.type,
           youtube_id: this.youtube_id,
+          directus_id: this.directus_id,
           lesson: this.lesson,
         },
       };

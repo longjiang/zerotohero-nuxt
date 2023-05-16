@@ -56,7 +56,7 @@ export default {
       required: true,
     },
     directus_id: {
-      type: String,
+      type: Number,
       required: false,
     },
     lesson: {
@@ -375,7 +375,7 @@ export default {
           params: {
             type: "youtube",
             youtube_id: this.previousEpisode.youtube_id,
-            directus_id: String(this.previousEpisode.id),
+            directus_id: this.previousEpisode.id,
             lesson: this.previousEpisode.lesson,
           },
         });
@@ -387,7 +387,7 @@ export default {
           params: {
             type: "youtube",
             youtube_id: this.nextEpisode.youtube_id,
-            directus_id: String(this.nextEpisode.id),
+            directus_id: this.nextEpisode.id,
             lesson: this.nextEpisode.lesson,
           },
         });
