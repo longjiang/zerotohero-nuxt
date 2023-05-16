@@ -1,5 +1,458 @@
 # Changelog
 
+## [2.18.7] - 2023-05-16
+### Added
+- Add changelog
+- Add version identifier.
+
+### Fixed
+- Various bugs in dictionary lookup, tokenizer, tabbed section nav, video seeking, and Arabic lemmatization.
+- Styling and layout issues in video player, video details, and admin area.
+- Saved words count, Chinese level colors, and new HSK info.
+- Error messages, translation strings, radicals, idioms, and word explorer.
+- Chinese level colors in popups.
+- Mistakes section in the dictionary.
+
+### Improved
+- Word lookup, localization, and video admin area.
+- Compactness of admin video editing area.
+- Allow video hero to be paused.
+- Japanese text spacing and non-kanji character display.
+- Japanese dictionary lookup.
+- Layout and appearance of New HSK list and pop quiz.
+
+### Removed
+- PopQuiz feature.
+
+## [2.18.6] - 2023-05-09
+
+### Added
+- Allow users to click to move the subs to the top or to the bottom.
+
+### Changed
+- Show subs at the bottom.
+- Correctly calculate video letterbox.
+- Vertically center video in overlay mode.
+
+### Fixed
+- Fix transcript mode layout.
+- Fix bug: fullscreen mode has space left over.
+- VideoWithTranscript: Remove redundant top padding.
+- Clean up classes with video view pages.
+
+
+## [2.18.5] - 2023-05-09
+
+### Added
+- Redirect landing page to appropriate language if appropriate.
+- YouTube Search: handle channel: and locale: filters.
+
+### Changed
+- Refactor Nav component and layout template and CSS.
+- New grid-based layout working.
+
+### Fixed
+- Take secondary nav from the layout for route-video-view.
+- Show sitetopbar on 'full' pages.
+- Get mini player to work with other pages.
+- Bring back mini player.
+- Fix bug: time is not pushed to server for new users (when their server-side time is undefined).
+- Fix bug: Chinese dictionary look up suggestion doesn't work when the user types in pinyin without tone marks.
+- Fix bug: wiktionary with supplemental langs not loading correctly.
+- Fix bug: languages with supplementalLangCode do not load.
+
+
+## [2.18.4] - 2023-05-07
+
+### Added
+- Ability to sort shows from newest to oldest.
+
+### Changed
+- Improved go-pro-success page without forcing the user to log out and log in.
+- PurchaseStripe: attach user ids to payment links to elevate them to pro.
+- Made "TEST" a shared variable defined in utils/variables.js.
+- Load or create the user's progress data item upon registration.
+
+### Fixed
+- Localizations and styling in WatchHistory, and a potential bug in go-pro.
+- Bug: home page "settings" icon throws error since l1 and l2 don't exist.
+- Language translations.
+
+
+## [2.18.3] - 2023-05-05
+
+### Added
+- Popular search terms.
+- Refresh button above show list.
+- Quality assurance checklist page.
+- Localized password reset messages.
+
+### Changed
+- Dark mode for phrasebook and phrasebook phrase cards.
+- Increased spacing between pinyin and text.
+- Localize and optimize Gutenberg library.
+- YouTubeBrowse refactored and optimized.
+- Refactored filters and FilterDropdown.
+- Reorganized and cleaned up pages and folders.
+- Format user's name differently if they are cjk.
+- Load fewer videos at a time for YouTubeBrowse and show episodes list.
+
+### Fixed
+- Chinese HSK level browser.
+- Dictionary: lookupMultiple looking for index that doesn't exist.
+- Popover issues and styles.
+- Redirects for English and Chinese courses.
+- Wiktionary can't do lookupMultiple.
+- ShowCard: if a show has no cover, direct to the show episode list.
+- "You need Pro" on overlay subs and positioning.
+- Speak component causing language map to crash.
+- Admin nav button goes to tutoring.
+- Removed unused dependencies and plugin files.
+- Deleted archived pages.
+
+
+## [2.18.2] - 2023-05-04
+### Added
+- Move site top bar electron css rule to zerotohero.scss, allow users to click on the flag
+- Optimize layout for electron
+- Create kana index for Japanese
+- String translations
+- Add links to desktop apps
+- Encapsulate RussianLegacy
+- Add new electron support
+
+### Changed
+- Improve Japanese searching
+- Reinstalled all npm packages
+- Fix app name in capacitor config
+- Use consistent naming for server urls
+- Refactor QuickSettings and add logout link
+- Refactor SiteTopBar and AnnotationSettings components
+
+### Fixed
+- Fix dictionaries: indices don't load
+- Fix bug: new variable name broke tokenization
+- Newly registered users should not see the dashboard
+
+
+## [2.18.1] - 2023-05-02
+### Added
+- Ban more endings for hanja byeonggi
+- Use em units for zoom
+- ePub reader: display images inside svgs with xlink:href
+
+### Changed
+- Revert annotate button to vertical elipsis
+
+### Fixed
+- Fix bug: when changing chapters in the ePub reader, sometimes the text of the previous chapter gets annotated and shows up in the current chapter (use a temporary hack (loader) to fix this)
+- Fix Korean dictionary bug
+- Chinese words now look up normally
+- Get fuzzy search to work with substrings
+- Resolve console errors
+
+## [2.18.0] - 2023-05-02
+### Added
+- Add source maps so dev tools don't complain
+- Add more compromise inflectors
+- Add a limited English inflector
+- Add ability to add russian accent marks back
+- Add LemmatizationListTokenizer as a fallback
+- Add local EnglishTokenizer
+
+### Changed
+- Externalize language data into CSVs
+- Load translations correctly
+- Load hours by raw loader
+- Load dPlayer only when livetv is loaded
+- Put all language data in one place
+- Get rid of "Helper"
+- Refactor Kdic-jc
+- Refactor edict
+- Simplify ChineseDialectDictionary
+- Simplify module loading
+- Simplify russian dictionary
+- Revise dictionary worker method names
+- Do not redirect to course home pages
+- Use new tokenizer for Klingon dictionary
+- Remove dead imports
+- Modularize tokenizers
+- Start to add tokenization logic back to the dictionary
+
+### Fixed
+- Fix Japanese-Chinese dictionary
+- Fix bug: freedict can't load words
+- Fix bug: wiktionary not loading words
+- Fix bug: load the dictionary only once
+- Fix bug: forgot to define the inflector in the base dictionary class
+- Fix logic with new l1/l2 passing into dictionary, but this is causing pages to freeze
+- Fix Russian inflections to work again
+- Fix French inflector to work
+- Fix bug: jp-conjugations.js is not committed to version control
+- Fix Korean Inflector to work
+- Get Chinese version of Kengdic to work again
+- Get HSK Cedict to work
+- Get FreeDict to work
+
+### Removed
+- Remove Config
+- Remove Helper
+- Remove console log
+
+
+## [2.17.3] - 2023-04-26
+
+### Added
+- Ability to rewind/fast-forward 2s in admin mode
+- Russian inflectors and tokenizer
+- Improved rendering of saved Japanese pronunciation
+- Hanja display made more robust
+- Korean conjugator loading via script tag in default.vue's head() hook
+- Japanese tokenizer
+- MediaSearchResults can search for a locale
+
+### Changed
+- Use of new inflectors and tokenizers consistently throughout
+- Improved Register functionality (flip first/last name in Asian languages)
+- Moved jp-conjugations into a folder with a README
+
+### Fixed
+- CommonJS export issue
+- Various bugs related to tokenization, furigana, and Korean tokenizer
+- Vuex mutation errors with findPhrases
+- iOS Safari Speak reading out diagnostic info
+- BringYourOwnVideo always using light skin
+
+
+## [2.17.2] - 2023-04-22
+
+### Added
+- Caching for ChatGPT
+- Epub prompt
+- Subtitle dragging functionality for mobile devices
+
+### Changed
+- Improved subs search and word lists display
+- ShowCard behavior in adminMode
+- Constrained moving of subtitles height
+- Made subtitles only as wide as needed
+
+### Fixed
+- Dark Mode not correctly checked in quick settings
+- Various localizations and bug fixes
+- VideoWithTranscript: Hiding video info area in mini mode
+- Bug fixes related to subtitles
+
+## [2.17.1] - 2023-04-20
+
+### Added
+- Keyboard shortcuts to video controls and paginator
+- Vernacular names to language lists
+- Language name localizations
+- Images for unrecognized words in the popup
+- New quick settings design
+
+### Changed
+- Disabled most zhwiktionary languages due to bad parsing
+- Slightly tweaked HSK 5 color
+- Improved line spacing in reader and definition/pinyin spacing
+- Improved video settings, inline pronunciation display, and transcript typography
+- Refactored EpubReader's loadChapter function
+- Styling for dark/light themes and various UI tweaks
+- Separated translations into multiple files
+
+### Fixed
+- Reduce spacing in annotate, Reader should show single line breaks
+- Several bugs related to keyboard shortcuts, languages loading, and freezing pages
+- Improved display of inline glosses and styled inline definitions
+- Various fixes and improvements related to video and transcript functionality
+- Fixed Korean word search and implemented new fuzzy search for wiktionary
+- Corrected translation of 'Polish'
+
+
+## [2.17.0] - 2023-04-17
+
+### Added
+- Ability to bring the video to fullscreen
+- Fullscreen toggle automatically switching to subtitles mode
+
+### Changed
+- Allowed bigger text zooms
+- Tweak progress bar color
+- Renamed video layout related variables for consistency
+
+### Fixed
+- Annotated text reflow issue
+- Some mobile layout issues
+- Mobile Safari allowed to go into full screen
+- Fullscreen mode hiding the margin the nav bar leaves off
+- Transcript mode toggle not working
+- Mini mode
+
+### Removed
+- 'Go Pro' button on site top bar to save space
+
+## [2.16.2] - 2023-04-16
+
+### Added
+- Remember the same L1 when switching languages.
+- Message shown before loading YouTube video iframe in case the user's connection to YouTube is blocked.
+- VPN links added.
+- Custom CSS variables before loading Bootstrap (recolor all links to green).
+
+### Improved
+- Styling for dark/light modes across various components.
+- Exclude kids content on home page.
+- Resolve language object circularity.
+- Improve phrasebook colors and triage L1 select.
+- Improved triage, selecting the user's default language if available.
+- Translate register and forget password.
+- Use the right dark/light logos, string translations, do not show 14-day refund badge for iOS purchases (Apple doesn't refund them), and youneedpro styling for dark/light modes.
+- Some Chinese quick gloss is too long.
+- Remove jQuery from YouTubeVideo component.
+- Improve Kengdic performance by not getting too many phrases.
+
+### Fixed
+- Fix bug in FeatureComparison (missing var).
+- Fix styling issues across various components in light/dark modes.
+- Dark mode optimizations.
+
+## [2.16.1] - 2023-04-16
+
+### Added
+- Ability to study Korean from Chinese.
+
+### Improved
+- Korean dictionary search speed.
+
+
+## [2.16.0] - 2023-04-14
+
+### Added
+- Dark mode for various pages, including my texts and explore-media.
+- Ability to lemmatize Persian and show lemmas in the word block popup.
+- Improved tooltip colors.
+- Improved horizontal lines appearance.
+- Style video controls progress bar and slider.
+- Style nav bar and mini player.
+
+### Changed
+- Improved lemma-getting.
+- Consolidated $primary-color and references to l2Settings.
+- Localized quick settings by browser setting.
+- Make video hero smaller throughout.
+
+### Fixed
+- Fixed bugs related to settings loading, dictionary names, and layout loading.
+- Fixed tokenization issues for some traditional texts.
+- Fixed color of video controls buttons.
+- Restored wordblock 'shine' animation.
+- Closed overlay player when switching languages.
+
+## [2.15.3] - 2023-04-12
+
+### Added
+- Improved page navigation consistency.
+- Ability to assign lesson videos and improved assign interface.
+- Nested table of contents in ePub reader.
+- Support for various toc/spine item correlations in ePub reader.
+- Support for Japanese right-to-left books in ePub reader.
+- Ability to read images in ePub and show cover image as a chapter.
+
+### Changed
+- Turned off verb underlining.
+- Updated pricing.
+- Improved lesson assign interface.
+- Optimized lesson videos SQL performance.
+- Slightly reworded the 'save all' prompt.
+
+### Fixed
+- Fixed text zoom and spacing issues in wordblock.
+- Fixed page turn behavior in ePub reader.
+- Fixed bring-your-video minimizing behavior.
+- Fixed bug in assigning lesson videos (adding a video resets matched words).
+- Fixed wordblock map kana errors.
+- Added safe inset for mobile in the reader.
+
+## [2.15.2] - 2023-04-10
+
+### Added
+- ePub reader for beta use.
+- Table of contents toggle in the ePub reader.
+- Ability to read local ePub files.
+- Ability to extract the table of contents from ePub files.
+- ePubjs library.
+
+### Changed
+- Consolidated reader and user's text.
+
+### Fixed
+- Fixed bug in wordblock.
+- Fixed ePub reader update process.
+- Implemented pagination for ePub content.
+
+
+## [2.15.1] - 2023-04-09
+
+### Added
+- Vue-infinite-loading package and translation strings.
+- Restored legacy pricing until Apr 10.
+
+### Changed
+- Localize and optimize.
+- Handle ChatGPT error and added localizations.
+- Improved Hepburn display.
+- Added localizations, improved books, and minimal pairs.
+
+### Fixed
+- Make sure not to show up 'bring-your-own' videos in history.
+
+
+## [2.15.0] - 2023-04-09
+
+### Added
+- Translation for 'go-pro-success' (a18f07a0, ee9333fc).
+- Test mode in PurchaseStripe (89162f8b).
+- Subscription renewal reminder (32e457b6).
+- Legacy pricing display until Apr 10 (297d09d0).
+- Upgraded PayPal pricing (bdcd5165).
+- Japanese translations for dictionary results (ce87ff2e).
+- New subscription pricing for Stripe (643ad569).
+
+### Changed
+- Removed specific price references (f66b488f).
+- Disabled PayPal and iOS in-app purchases for non-lifetime plans (94ca407e).
+- Styled pricing cards (762536b3).
+- Added plan selection and annual subscription handling with Stripe (9a430edd).
+
+### Fixed
+- Search subs respecting Pro privileges (797e032a).
+
+### Updated
+- Checked subscription status on login (dbb2e933).
+- Used Vuex for subscription change monitoring (8f9f2cad).
+- Added active subscription check logic (ac6377a5).
+- Showed subscription status in Profile (5ae3818f).
+
+
+## [2.14.2] - 2023-04-07
+
+### Added
+- Legacy path support (1c69bba9, f916ad0d).
+- Duration badge in YouTube search (fac34ad3).
+
+### Changed
+- HSK Cedict tokenization handling (e407b5c6).
+- Switched back to Directus VPS (bc40605d).
+
+### Fixed
+- Temporarily switched to db2 (c2596a32).
+- Duration parsing error (faa1c3ab).
+
+### Reverted
+- Route redirects (42941040).
+
+
 ## [2.14.1] - 2023-04-01
 
 ### Changed
