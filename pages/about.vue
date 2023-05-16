@@ -27,8 +27,8 @@
         <div class="row">
           
           <div class="col-sm-12 mb-4">
-            <p class="mb-4">Language Player is an innovative language learning platform designed to help you master a new language through engaging video content. With its unique subtitle-based learning approach, Language Player immerses you in authentic videos that cater to your interests and skill level. Our platform offers an extensive library of TV shows, movies, and talks to make language learning not just effective, but also fun and enjoyable. </p>
-            <h4 class="mb-3">Version Information</h4>
+            <p class="mb-4">{{ $t('Language Player is an innovative language learning platform designed to help you master a new language through engaging video content. With its unique subtitle-based learning approach, Language Player immerses you in authentic videos that cater to your interests and skill level. Our platform offers an extensive library of TV shows, movies, and talks to make language learning not just effective, but also fun and enjoyable.') }}</p>
+            <h4 class="mb-4">{{ $t('Version Information') }}</h4>
             <VersionInfo />
           </div>
         </div>
