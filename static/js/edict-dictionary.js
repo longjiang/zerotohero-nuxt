@@ -126,11 +126,11 @@ class EdictDictionary extends BaseDictionary  {
     if (row.kanji === 'ー') delete row.kana;
     let pos = row.english ? row.english.replace(/^\((.*?)\).*/gi, "$1").split(',')[0] : undefined;
     pos = this.posLookupTable[pos] || pos;
-  
     row.head = row.kanji || row.kana;
-    row.bare = row.kanji || row.kana;
-    row.accented = row.kanji || row.kana;
-    row.pos = pos;
+    row.bare = row.head;
+    row.search = row.head;
+    row.accented = row.head;
+    row.pos = '';
     row.definitions = row.english ? row.english.replace(/\(.*?\)/gi, '').replace('/(P)', '').split('/').filter(d => d !== '') : [];
     row.cjk = {
       canonical: row.kanji && row.kanji !== 'NULL' ? row.kanji : undefined,
