@@ -638,8 +638,8 @@ export default {
       } else if (this.text) {
         // Sometimes the lemmas haven't been looked up yet, so we do that here
         if (this.token.lemmas) {
-          for (let lemma of token.lemmas) {
-            if (lemma.lemma && lemma.lemma !== token.text) {
+          for (let lemma of this.token.lemmas) {
+            if (lemma.lemma && lemma.lemma !== this.token.text) {
               const lemmaCandidates = await dictionary.lookupMultiple(lemma.lemma)
               words = [...words, ...lemmaCandidates]
             }
