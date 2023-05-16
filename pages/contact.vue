@@ -14,7 +14,7 @@
 </router>
 <template>
   <div class="main">
-    <div class="container pb-5">
+    <div class="container pt-3 pb-5">
       <SocialHead :title="$t('Support and Contact') + ' | Language Player'" />
       <template>
         <div class="row">

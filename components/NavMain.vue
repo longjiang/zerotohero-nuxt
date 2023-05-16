@@ -34,17 +34,19 @@
             />
           </template>
         </div>
-        <b-button
-          v-if="variant === 'side-bar'"
-          variant="unstyled collapse-toggle"
-          @click="toggleCollapsed"
-        >
-          <span v-if="!collapsed">
-            <i class="fa-solid fa-caret-left mr-1"></i>
-            {{ $t("Collapse Menu") }}
-          </span>
-          <span v-else><i class="fa-solid fa-caret-right"></i></span>
-        </b-button>
+        <div class="nav-side-bar-end" v-if="variant === 'side-bar'">
+          <VersionInfo class="mb-2 small" />
+          <b-button
+            variant="unstyled collapse-toggle"
+            @click="toggleCollapsed"
+          >
+            <span v-if="!collapsed">
+              <i class="fa-solid fa-caret-left mr-1"></i>
+              {{ $t("Collapse Menu") }}
+            </span>
+            <span v-else><i class="fa-solid fa-caret-right"></i></span>
+          </b-button>
+        </div>
       </nav>
     </div>
   </div>
@@ -153,4 +155,42 @@ export default {
 <style lang="scss" scoped>
 @import "~@/assets/scss/variables.scss";
 @import "./Nav/index.scss";
+
+
+.nav-side-bar-end {
+  margin-left: 1rem;
+  width: calc(100% - 2rem);
+  position: absolute;
+  bottom: 1rem;
+  .collapse-toggle {
+    width: 100%;
+    text-align: center;
+  }
+}
+.zth-nav-dark {
+  &.zth-nav-side-bar {
+    background-color: $bg-color-dark-2;
+  }
+  .collapse-toggle {
+    color: white;
+    background: rgb(255 255 255 / 20%);
+    text-shadow: rgba(0, 0, 0, 0.465) 0 1px 3px;
+  }
+  &.zth-nav-bottom {
+    background: $bg-color-dark-2;
+    border-top: 1px solid #666;
+  }
+}
+.zth-nav-light {
+  &.zth-nav-side-bar {
+    background-color: $bg-color-light-2;
+  }
+  .collapse-toggle {
+    background: white;
+  }
+  &.zth-nav-bottom {
+    background: $bg-color-light-2;
+    border-top: rgb(222, 222, 222);
+  }
+}
 </style>

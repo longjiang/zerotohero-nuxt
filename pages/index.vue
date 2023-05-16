@@ -563,7 +563,7 @@
             <h3 class="text-white mb-4">
               {{ $tb("Made with ❤️ by language lovers like you.") }}
             </h3>
-            <div class="text-left text-white"><LazyFooter /></div>
+            <LazyFooter />
           </div>
         </div>
       </div>

@@ -23,10 +23,32 @@ for (let lang of 'af ar ca zh hr nl en fi fr de el hi hu id ga it ja ko la nan n
   dateTimeFormats[lang] = defaultDateTimeFormat
 }
 
+const childProcess = require('child_process');
+
+let GIT_COMMIT, GIT_BRANCH, GIT_TAG;
+
+try {
+  GIT_COMMIT = childProcess
+    .execSync('git rev-parse HEAD')
+    .toString().trim();
+  GIT_BRANCH = childProcess
+    .execSync('git symbolic-ref --short HEAD')
+    .toString().trim();
+  GIT_TAG = childProcess
+    .execSync('git describe --tags --abbrev=0')
+    .toString().trim();
+} catch (error) {
+  console.error('Error while getting Git information:', error);
+}
+
+
 export default {
   env: {
     baseUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000',
-    openAIToken: process.env.OPEN_AI_TOKEN
+    openAIToken: process.env.OPEN_AI_TOKEN,
+    GIT_COMMIT,
+    GIT_BRANCH,
+    GIT_TAG,
   },
   // server: {
   //   host: '0.0.0.0' // default: 'localhost'

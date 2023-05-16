@@ -76,6 +76,11 @@
               </div>
             </div>
           </div>
+          <div class="row mt-5">
+            <div class="col-sm-12 text-center">
+              <Footer />
+            </div>
+          </div>
         </div>
       </div>
     </client-only>

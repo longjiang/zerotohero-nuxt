@@ -1,29 +1,4 @@
-.zth-nav-dark {
-  &.zth-nav-side-bar {
-    background-color: $bg-color-dark-2;
-  }
-  .collapse-toggle {
-    color: white;
-    background: rgb(255 255 255 / 20%);
-    text-shadow: rgba(0, 0, 0, 0.465) 0 1px 3px;
-  }
-  &.zth-nav-bottom {
-    background: $bg-color-dark-2;
-    border-top: 1px solid #666;
-  }
-}
-.zth-nav-light {
-  &.zth-nav-side-bar {
-    background-color: $bg-color-light-2;
-  }
-  .collapse-toggle {
-    background: white;
-  }
-  &.zth-nav-bottom {
-    background: $bg-color-light-2;
-    border-top: rgb(222, 222, 222);
-  }
-}
+
 
 .zerotohero-wide {
   .zth-main-nav-wrapper {
@@ -241,12 +216,4 @@
     top: inherit;
     right: -5px;
   }
-}
-
-.collapse-toggle {
-  margin-left: 1rem;
-  width: calc(100% - 2rem);
-  text-align: center;
-  position: absolute;
-  bottom: 1rem;
 }
