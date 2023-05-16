@@ -636,17 +636,29 @@ export default {
       ) {
         words = this.token.candidates;
       } else if (this.text) {
-        if (!this.text && this.token) this.text = this.token.candidates[0].head;
-        words = await dictionary.lookupFuzzy(this.text, 20, quick);
-        if (words && !quick) {
-          for (let word of words) {
-            // Russian
-            if (word && word.matches) {
-              for (let match of word.matches) {
-                match.form = await dictionary.accent(match.form);
-                match.field = await dictionary.stylize(match.field);
-                match.number = await dictionary.stylize(match.number);
-                match.table = await dictionary.stylize(match.table);
+        // Sometimes the lemmas haven't been looked up yet, so we do that here
+        if (this.token.lemmas) {
+          for (let lemma of this.token.lemmas) {
+            if (lemma.lemma && lemma.lemma !== this.token.text) {
+              const lemmaCandidates = await dictionary.lookupMultiple(lemma.lemma)
+              words = [...words, ...lemmaCandidates]
+            }
+          }
+        }
+        // Only do a fuzzy lookup if the word does not have a found lemma
+        if (words.length === 0) {
+          if (!this.text && this.token) this.text = this.token.candidates[0].head;
+          words = await dictionary.lookupFuzzy(this.text, 20, quick);
+          if (words && !quick) {
+            for (let word of words) {
+              // Russian
+              if (word && word.matches) {
+                for (let match of word.matches) {
+                  match.form = await dictionary.accent(match.form);
+                  match.field = await dictionary.stylize(match.field);
+                  match.number = await dictionary.stylize(match.number);
+                  match.table = await dictionary.stylize(match.table);
+                }
               }
             }
           }

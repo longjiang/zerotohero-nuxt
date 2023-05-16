@@ -9,7 +9,6 @@
     <div
       :class="{
         'phrase focus': true,
-        'bg-white': !wide,
         'phrase-wide': wide,
       }"
     >
