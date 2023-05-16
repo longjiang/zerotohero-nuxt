@@ -226,7 +226,7 @@ export default {
       // News and YouTube channels are sorted by date
       // Audiobooks and TV Shows are sorted by title
       if (videos.length === 0) {
-        let fields = "youtube_id,title,date";
+        let fields = "id,youtube_id,title,date";
         if (LANGS_WITH_CONTENT.includes(this.$l2.code))
           fields =
             fields +
@@ -375,6 +375,7 @@ export default {
           params: {
             type: "youtube",
             youtube_id: this.previousEpisode.youtube_id,
+            directus_id: String(this.previousEpisode.id),
             lesson: this.previousEpisode.lesson,
           },
         });
@@ -386,6 +387,7 @@ export default {
           params: {
             type: "youtube",
             youtube_id: this.nextEpisode.youtube_id,
+            directus_id: String(this.nextEpisode.id),
             lesson: this.nextEpisode.lesson,
           },
         });
