@@ -91,22 +91,7 @@
             {{ video.title }}
           </router-link>
         </div>
-        <div class="statistics">
-          <span v-if="video.views" class="statistics-item">
-            <i class="fa-solid fa-eye"></i>
-            {{ formatK(video.views) }}
-          </span>
-          <span
-            class="statistics-item"
-            v-if="
-              (showDate || $adminMode) &&
-              video.date &&
-              !isNaN(Date.parse(video.date))
-            "
-          >
-            {{ $d(new Date(video.date), "short", $l1.code) }}
-          </span>
-        </div>
+        <MediaItemStats :item="video" :showDate="showDate" />
         <client-only>
           <div
             class="youtube-video-card-badges"
@@ -308,7 +293,6 @@ import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import { mapState } from "vuex";
 import {
-  formatK,
   parseDuration,
   timeout,
   logError,
@@ -470,16 +454,10 @@ export default {
     level(...args) {
       return level(...args);
     },
-    formatK(n) {
-      return formatK(n, 2, this.$l1.code);
-    },
     thumbnailError(e) {
       console.log("❌ ERROR", this.video.title);
     },
     async thumbnailLoaded(e) {},
-    formatDate(date) {
-      return DateHelper.formatDate(date);
-    },
     newShow(show) {
       this.saveShow(show, show.type);
       this.$emit("newShow", show);

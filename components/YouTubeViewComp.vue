@@ -362,7 +362,19 @@ export default {
         return video;
       }
     },
-    async getMissingVideoInfoFromYouTube(video) {},
+    async getMissingVideoInfoFromYouTube(video) {
+
+      // If the video doesn't have subtitles, we load it from YouTube
+      if (!(this.video?.subs_l2?.length > 0)) {
+      }
+
+      // If the video doesn't have subtitle translations, we load it from YouTube
+      if (!(this.video?.subs_l1?.length > 0)) {
+      }
+
+      
+
+    },
     onUpdateLayout(layout) {
       this.$emit("updateLayout", layout);
     },

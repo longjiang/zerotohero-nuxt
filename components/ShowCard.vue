@@ -32,26 +32,7 @@
             </span>
           </h6>
         </router-link>
-        <div class="statistics">
-          <span v-if="show.avg_views">
-            <i class="fa-solid fa-eye"></i>
-            {{ formatK(show.avg_views) }}
-          </span>
-          <span v-if="show.locale">
-            <img
-              v-if="country"
-              :alt="`Flag of ${country.name}`"
-              :title="`Flag of ${country.name} (${country.alpha2Code})`"
-              :src="`/vendor/flag-svgs/${country.alpha2Code}.svg`"
-              class="flag-icon mr-1"
-              style="width: 1rem; position: relative; bottom: 0.1rem"
-            />
-            {{ localeDescription }}
-          </span>
-          <span v-if="show.category">
-            {{ $t(categories[show.category]) }}
-          </span>
-        </div>
+        <MediaItemStats :item="show" />
         <div v-if="$adminMode">
           <b-button
             v-if="$adminMode"
@@ -94,9 +75,6 @@ export default {
     return {
       field: this.type === "tvShows" ? "tv_show" : "talk",
       slug: this.type === "tvShows" ? "tv-show" : "talk",
-      localeDescription: undefined,
-      country: undefined,
-      language: undefined,
     };
   },
   props: {
@@ -125,31 +103,7 @@ export default {
       return to;
     },
   },
-  async mounted() {
-    if (this.show?.locale) {
-      let { country, language, description } = await this.getLocaleDescription(
-        this.show.locale
-      );
-      if (description) this.localeDescription = description;
-      if (country) this.country = country;
-      if (language) this.language = language;
-    }
-  },
   methods: {
-    formatK(number) {
-      return formatK(number, 2, this.$l1.code);
-    },
-    async getLocaleDescription(locale) {
-      let language, country;
-      let [langCode, countryCode] = locale.split("-");
-      language = await this.$languages.getSmart(langCode);
-      if (countryCode) {
-        country = await this.$languages.countryFromCode(countryCode);
-      }
-      let description = `${language ? this.$t(language.name) : ""}`;
-      if (country) description += ` (${this.$t(country.name)})`;
-      return { country, language, description };
-    },
     async remove(show) {
       if (
         confirm(
@@ -298,25 +252,5 @@ export default {
   bottom: 0.1rem;
 }
 
-.statistics {
-  font-size: 0.8em;
-  margin-top: 0.25rem;
-}
 
-.tv-show-card.skin-dark {
-  .statistics {
-    color: darken($text-color-on-dark, 33%);
-  }
-}
-
-.tv-show-card.skin-light {
-  .statistics {
-    color: lighten($text-color-on-light, 33%);
-  }
-}
-
-.statistics span + span::before {
-  content: " · ";
-  margin: 0 0.25rem;
-}
 </style>
