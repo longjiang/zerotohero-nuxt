@@ -164,7 +164,7 @@
         
         <!-- this is the public facing video admin -->
         <!-- if the video has no subs, allow the user to add subs -->
-        <div class="pl-4 pr-4" v-if="video && !video.subs_l2">  
+        <div class="pl-4 pr-4" v-if="!checkingSubs && video && !video.subs_l2">  
           <VideoAdmin
             :showVideoDetails="true"
             :showTextEditing="true"
@@ -215,7 +215,7 @@
           class="video-info video-info-bottom"
           v-if="mode === 'transcript' && size !== 'mini'"
         >
-          <div class="text-center mt-5 mb-5" v-if="video.checkingSubs">
+          <div class="text-center mt-2 mb-2" v-if="checkingSubs">
             <Loader :sticky="true" message="Loading subtitles..." />
           </div>
           <client-only>
@@ -387,6 +387,9 @@ export default {
       default: false,
     },
     related: Array,
+    checkingSubs: {
+      default: false,
+    },
   },
   data() {
     return {

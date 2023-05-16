@@ -21,6 +21,7 @@
         autoplay: false,
         forcePortrait: false,
         initialMode,
+        checkingSubs,
         initialSize: this.mini ? 'mini' : 'regular',
       }"
       :key="`transcript-${video.youtube_id}`"
@@ -91,6 +92,7 @@ export default {
       startLineIndex: 0,
       video: undefined,
       largeEpisodeCount: undefined,
+      checkingSubs: false,
     };
   },
   computed: {
@@ -140,6 +142,11 @@ export default {
       return uniqueByValue(related, "youtube_id");
     },
   },
+  watch: {
+    'video.subs_l2'() {
+      if (this.video?.subs_l2?.lenghth > 0) this.checkingSubs = false
+    }
+  },
   async mounted() {
     await this.loadVideo(this.youtube_id, this.directus_id);
   },
@@ -166,6 +173,7 @@ export default {
     async loadVideo(youtube_id, directus_id) {
       // Set video ID
       this.video = { youtube_id };
+      this.checkingSubs = true;
 
       // If directus_id is present, retrieve video info and subs from our database
       if (directus_id) {
@@ -179,6 +187,7 @@ export default {
 
       // Retrieve missing information from YouTube
       this.getMissingVideoInfoFromYouTube(this.video);
+      this.checkingSubs = false;
     },
     loadShowAndEpisodes({ showId, showType }) {
       if (this.showsLoaded?.[this.$l2.code]) {
