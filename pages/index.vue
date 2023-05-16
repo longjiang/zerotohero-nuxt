@@ -228,12 +228,7 @@
                   <p class="mt-3 text-white">
                     <a
                       href="https://server.chinesezerotohero.com/data/electron/Language Player.dmg"
-                      >64-bit (Intel)</a
-                    >
-                    |
-                    <a
-                      href="https://server.chinesezerotohero.com/data/electron/Language Player-arm64.dmg"
-                      >ARM64 (M1/M2)</a
+                      >macOS Installer Dmg</a
                     >
                   </p>
                 </div>
