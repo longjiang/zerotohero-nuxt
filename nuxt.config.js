@@ -257,7 +257,7 @@ export default {
         config.devtool = false
       }
       config.module.rules.push({
-        test: /\.(csv|txt)$/i,
+        test: /\.(csv|txt|md)$/i,
         loader: 'raw-loader',
       });
     },
