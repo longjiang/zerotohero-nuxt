@@ -676,7 +676,7 @@ export default {
           Vue.set(video, "checkingSubs", false);
           this.$emit("hasSubs", true);
         } else {
-          video = await YouTube.getYouTubeSubsListAndAddLocale(
+          await YouTube.addTranscriptLocalesToVideo(
             video,
             this.$l1,
             this.$l2
@@ -693,7 +693,7 @@ export default {
     async addSubsL1(video) {
       if (video) {
         if (!video.l1Locale) {
-          video = await YouTube.getYouTubeSubsListAndAddLocale(
+          YouTube.addTranscriptLocalesToVideo(
             video,
             this.$l1,
             this.$l2

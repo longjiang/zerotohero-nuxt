@@ -143,9 +143,9 @@ export default {
     },
   },
   watch: {
-    'video.subs_l2'() {
-      if (this.video?.subs_l2?.lenghth > 0) this.checkingSubs = false
-    }
+    "video.subs_l2"() {
+      if (this.video?.subs_l2?.lenghth > 0) this.checkingSubs = false;
+    },
   },
   async mounted() {
     await this.loadVideo(this.youtube_id, this.directus_id);
@@ -183,7 +183,7 @@ export default {
 
       const showType = this.getShowType(this.video);
 
-      this.loadShowAndEpisodes({ showId: this.video[showType], showType });
+      if (showType) this.loadShowAndEpisodes({ showId: this.video[showType], showType });
 
       // Retrieve missing information from YouTube
       this.getMissingVideoInfoFromYouTube(this.video);
@@ -362,18 +362,57 @@ export default {
         return video;
       }
     },
+    async getSubsL2({ youtube_id, l2Locale, l2Name }) {
+      let forceRefresh = this.$adminMode;
+      let generated = false;
+      let subs_l2 = await YouTube.getTranscript(
+        youtube_id,
+        l2Locale,
+        l2Name,
+        forceRefresh,
+        generated
+      );
+      if (!subs_l2 || subs_l2.length === 0) {
+        generated = true;
+        subs_l2 = await YouTube.getTranscript(
+          youtube_id,
+          l2Locale || this.$l2.code,
+          l2Name,
+          forceRefresh,
+          generated
+        );
+      }
+      return { subs_l2, generated };
+    },
     async getMissingVideoInfoFromYouTube(video) {
-
       // If the video doesn't have subtitles, we load it from YouTube
-      if (!(this.video?.subs_l2?.length > 0)) {
+      if (!(video?.subs_l2?.length > 0)) {
+        let { l1Locale, l2Locale, l2Name } = await YouTube.getTranscriptLocales(video.youtube_id, this.$l1, this.$l2)
+        let { subs_l2, generated } = await this.getSubsL2({ youtube_id: video.youtube_id, l2Locale, l2Name });
+        if (subs_l2 && subs_l2.length > 0) Vue.set(video, "subs_l2", subs_l2);
+        console.log(`YouTube View: Got ${this.$l2.name} transcript (${generated ? '' : 'not'} auto-generated).`);
       }
 
       // If the video doesn't have subtitle translations, we load it from YouTube
       if (!(this.video?.subs_l1?.length > 0)) {
       }
 
-      
+      // If the video has other missing information, we load it from YouTube
+      const properties = [
+        "category",
+        "comments",
+        "date",
+        "duration",
+        "likes",
+        "locale",
+        "made_for_kids",
+        "tags",
+        "title",
+        "views",
+      ];
 
+      if (!properties.every((property) => property in this.video)) {
+      }
     },
     onUpdateLayout(layout) {
       this.$emit("updateLayout", layout);
