@@ -13,7 +13,7 @@
       <i class="fa-solid fa-comment"></i>
       {{ formatK(item.avg_comments || item.comments) }}
     </span>
-    <span class="statistics-item" v-if="item.locale">
+    <span class="statistics-item" v-if="item.locale && localeDescription">
       <img v-if="country" :alt="`Flag of ${country.name}`" :title="`Flag of ${country.name} (${country.alpha2Code})`"
         :src="`/vendor/flag-svgs/${country.alpha2Code}.svg`" class="flag-icon mr-1"
         style="width: 1rem; position: relative; bottom: 0.1rem" />
@@ -72,14 +72,25 @@ export default {
   methods: {
     formatK,
     async getLocaleDescription(locale) {
-      let language, country;
-      let [langCode, countryCode] = locale.split("-");
+      let language, country, script;
+      let [langCode, countryCodeOrScript] = locale.split("-");
       language = await this.$languages.getSmart(langCode);
-      if (countryCode) {
-        country = await this.$languages.countryFromCode(countryCode);
+      if (countryCodeOrScript) {
+        const scripts = [
+          { code: 'Hans', name: 'Simplified' },
+          { code: 'Hant', name: 'Traditional' },
+          { code: 'Latn', name: 'Latin' },
+          { code: 'Cyrl', name: 'Cyrillic' },
+        ];
+        script = scripts.find(s => s.code === countryCodeOrScript)
+        if (!script){
+          const countryCode = countryCodeOrScript;
+          country = await this.$languages.countryFromCode(countryCode);
+        }
       }
       let description = `${language ? this.$t(language.name) : ""}`;
       if (country) description += ` (${this.$t(country.name)})`;
+      if (script) description += ` (${this.$t(script.name)})`;
       return { country, language, description };
     },
   },

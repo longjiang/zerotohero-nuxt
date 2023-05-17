@@ -157,7 +157,7 @@ export default {
       if (locale) {
         let [langCode, countryCode] = locale.split("-");
         if (countryCode) {
-          country = await this.$languages.countryFromCode(countryCode);
+          const country = await this.$languages.countryFromCode(countryCode);
           return country;
         }
       }
