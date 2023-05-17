@@ -8,13 +8,13 @@
 export default {
   computed: {
     gitCommitVersion() {
-      return process.env.GIT_COMMIT;
+      return process.env.COMMIT_REF;
     },
     gitBranch() {
-      return process.env.GIT_BRANCH;
+      return process.env.BRANCH;
     },
     gitTag() {
-      return process.env.GIT_TAG;
+      return process.env.TAG;
     },
   },
 };
