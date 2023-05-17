@@ -174,7 +174,7 @@ export default {
       if (showType) this.loadShowAndEpisodes({ showId: this.video[showType], showType });
 
       // Retrieve missing information from YouTube
-      this.getMissingVideoInfoFromYouTube(this.video);
+      await this.getMissingVideoInfoFromYouTube(this.video);
       this.checkingSubs = false;
     },
     loadShowAndEpisodes({ showId, showType }) {
@@ -331,9 +331,8 @@ export default {
         });
       } else {
         let videos = await this.$directus.getVideos({
-          youtube_id,
           l2Id: this.$l2.id,
-          query: `youtube_id[eq]=${youtube_id}`,
+          query: `filter[youtube_id][eq]=${youtube_id}`,
         });
         if (videos?.length > 0) video = videos[0];
       }
@@ -411,7 +410,7 @@ export default {
       if (!properties.every((property) => property in this.video)) {
         const videoData = await YouTube.videoByApi(this.youtube_id);
         properties.forEach((property) => {
-          if (!video[property]) video[property] = videoData[property];
+          if (!video[property]) Vue.set(video, property, videoData[property]);
         });
       }
     },
