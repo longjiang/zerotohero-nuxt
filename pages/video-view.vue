@@ -10,7 +10,7 @@
 </router>
 <template>
   <div class="video-view-page">
-    <VideoViewComp v-bind="{ type, youtube_id, directus_id, lesson, skin }" />
+    <VideoViewComp v-bind="{ type, youtube_id, directus_id: directus_id ? Number(directus_id) : undefined, lesson, skin }" />
   </div>
 </template>
 
@@ -28,7 +28,7 @@ export default {
       required: false,
     },
     directus_id: {
-      type: Number,
+      type: String,
       required: false,
     },
     lesson: {

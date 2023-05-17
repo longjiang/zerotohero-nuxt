@@ -1,8 +1,17 @@
 <template>
-  <div class="statistics" :class="`skin-${$skin}`">
+  <div class="statistics">
+
     <span class="statistics-item" v-if="item.avg_views || item.views">
       <i class="fa-solid fa-eye"></i>
       {{ formatK(item.avg_views || item.views) }}
+    </span>
+    <span v-if="item.avg_likes || item.likes">
+      <i class="fa-solid fa-thumbs-up"></i>
+      {{ formatK(item.avg_likes || item.likes) }}
+    </span>
+    <span v-if="item.avg_comments || item.comments">
+      <i class="fa-solid fa-comment"></i>
+      {{ formatK(item.avg_comments || item.comments) }}
     </span>
     <span class="statistics-item" v-if="item.locale">
       <img v-if="country" :alt="`Flag of ${country.name}`" :title="`Flag of ${country.name} (${country.alpha2Code})`"
@@ -79,21 +88,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/variables.scss";
-.statistics {
-  font-size: 0.8em;
-  margin-top: 0.25rem;
-}
 
 .statistics span+span::before {
   content: " · ";
   margin: 0 0.25rem;
 }
 
-.statistics.skin-dark {
-  color: darken($text-color-on-dark, 33%);
-}
-
-.statistics.skin-light {
-  color: lighten($text-color-on-light, 33%);
-}
 </style>

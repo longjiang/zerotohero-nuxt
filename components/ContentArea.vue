@@ -7,7 +7,7 @@
       v-bind="{
         type: overlayPlayerType,
         youtube_id: overlayPlayerYouTubeId,
-        directus_id: overlayPlayerDirectusId,
+        directus_id: overlayPlayerDirectusId ? Number(overlayPlayerDirectusId) : undefined,
         lesson: overlayPlayerLesson,
         mini: overlayPlayerMinimized,
         key: `video-view-comp-${overlayPlayerYouTubeId}`,

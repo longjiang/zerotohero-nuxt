@@ -322,7 +322,6 @@ export default {
       topics: TOPICS,
       transcriptKey: 0,
       translation: "",
-      translationURL: undefined,
       updating: false,
     };
   },
@@ -359,9 +358,6 @@ export default {
         }
         this.transcriptKey++;
       }
-    },
-    text() {
-      this.translationURL = this.getTranslationURL();
     },
     levels() {
       return languageLevels(this.$l2);

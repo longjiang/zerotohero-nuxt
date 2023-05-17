@@ -32,7 +32,7 @@
             </span>
           </h6>
         </router-link>
-        <MediaItemStats :item="show" />
+        <MediaItemStats :item="show" style="font-size: 0.8em; margin-top: 0.25rem; opacity: 0.8" />
         <div v-if="$adminMode">
           <b-button
             v-if="$adminMode"

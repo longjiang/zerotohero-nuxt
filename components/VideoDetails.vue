@@ -20,7 +20,8 @@
       </span>
     </h5>
     <div class="video-meta" v-if="video.youtube_id">
-      <span v-if="video.date && !isNaN(Date.parse(video.date))">
+      <MediaItemStats :item="video" :showDate="true" />
+      <!-- <span v-if="video.date && !isNaN(Date.parse(video.date))">
         {{ formatDate(video.date) }}
       </span>
       <span v-if="localeDescription">
@@ -33,7 +34,7 @@
           style="width: 1rem; position: relative; bottom: 0.1rem"
         />
         {{ localeDescription }}
-      </span>
+      </span> -->
       <span>
         <a :href="`https://www.youtube.com/watch?v=${video.youtube_id}`" target="_blank">YouTube</a>
       </span>
@@ -100,20 +101,7 @@
         </span>
         <Share class="ml-2" />
       </template>
-    </div>
-    <div class="video-engagement">
-      <span v-if="video.views">
-        <i class="fa-solid fa-eye"></i>
-        {{ formatK(video.views) }}
-      </span>
-      <span v-if="video.likes">
-        <i class="fa-solid fa-thumbs-up"></i>
-        {{ formatK(video.likes) }}
-      </span>
-      <span v-if="video.comments">
-        <i class="fa-solid fa-comment"></i>
-        {{ formatK(video.comments) }}
-      </span>
+      
       <router-link
         class="ml-2 btn btn-small bg-secondary text-white"
         v-if="$adminMode && video.tv_show"

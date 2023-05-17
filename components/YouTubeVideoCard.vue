@@ -91,7 +91,7 @@
             {{ video.title }}
           </router-link>
         </div>
-        <MediaItemStats :item="video" :showDate="showDate" />
+        <MediaItemStats :item="video" :showDate="showDate" style="font-size: 0.8em; margin-top: 0.25rem; opacity: 0.8" />
         <client-only>
           <div
             class="youtube-video-card-badges"
