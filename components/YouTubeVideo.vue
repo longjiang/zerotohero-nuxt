@@ -50,8 +50,6 @@
 </template>
 
 <script>
-import YouTube from "@/lib/youtube";
-import Vue from "vue";
 import { timeout } from "@/lib/utils";
 
 export default {
@@ -174,7 +172,6 @@ export default {
       this.loadYouTubeiFrame();
     }
     this.time = this.starttime;
-    await this.getL1Transcript();
   },
   destroyed() {
     if (this.player) {
@@ -200,16 +197,6 @@ export default {
     }
   },
   methods: {
-    async getL1Transcript() {
-      let subs_l1 = await YouTube.getL1Transcript(
-        this.video,
-        this.$l1,
-        this.$l2,
-        this.$adminMode
-      );
-      Vue.set(this.video, "subs_l1", subs_l1);
-      this.$emit("l1TranscriptLoaded");
-    },
     getDuration() {
       if (this.player) {
         let duration = this.player.getDuration();

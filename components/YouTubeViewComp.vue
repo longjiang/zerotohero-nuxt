@@ -35,7 +35,6 @@ import {
   shuffle,
   uniqueByValue,
   toCamelCase,
-  logError,
 } from "@/lib/utils";
 
 export default {
