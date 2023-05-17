@@ -1,36 +1,27 @@
 <template>
   <div class="youtube-view">
-    <LazyVideoWithTranscript
-      v-if="video"
-      ref="youtube"
-      v-bind="{
-        type: 'youtube',
-        cc: false,
-        video,
-        skin,
-        related,
-        starttime,
-        startLineIndex,
-        show,
-        showType,
-        episodes,
-        largeEpisodeCount,
-        useAutoTextSize: true,
-        showInfoButton: true,
-        autoload: true,
-        autoplay: false,
-        forcePortrait: false,
-        initialMode,
-        checkingSubs,
-        initialSize: this.mini ? 'mini' : 'regular',
-      }"
-      :key="`transcript-${video.youtube_id}`"
-      @ended="onEnded"
-      @previous="goToPreviousEpisode"
-      @next="goToNextEpisode"
-      @currentTime="onCurrentTime"
-      @updateLayout="onUpdateLayout"
-    />
+    <LazyVideoWithTranscript v-if="video" ref="youtube" v-bind="{
+      type: 'youtube',
+      cc: false,
+      video,
+      skin,
+      related,
+      starttime,
+      startLineIndex,
+      show,
+      showType,
+      episodes,
+      largeEpisodeCount,
+      useAutoTextSize: true,
+      showInfoButton: true,
+      autoload: true,
+      autoplay: false,
+      forcePortrait: false,
+      initialMode,
+      checkingSubs,
+      initialSize: this.mini ? 'mini' : 'regular',
+    }" :key="`transcript-${video.youtube_id}`" @ended="onEnded" @previous="goToPreviousEpisode"
+      @next="goToNextEpisode" @currentTime="onCurrentTime" @updateLayout="onUpdateLayout" />
   </div>
 </template>
 
@@ -175,11 +166,9 @@ export default {
       this.video = { youtube_id };
       this.checkingSubs = true;
 
-      // If directus_id is present, retrieve video info and subs from our database
-      if (directus_id) {
-        const video = await this.getVideoFromDB(directus_id);
-        this.video = video;
-      }
+      // Retrieve video info and subs from our database
+      const video = await this.getVideoFromDB(youtube_id, directus_id);
+      this.video = video || this.video;
 
       const showType = this.getShowType(this.video);
 
@@ -279,8 +268,8 @@ export default {
         videos = videos.sort((a, b) =>
           a.title
             ? a.title.localeCompare(b.title, this.$l2.locales[0], {
-                numeric: true,
-              })
+              numeric: true,
+            })
             : 0
         );
       }
@@ -334,11 +323,21 @@ export default {
 
       return showType;
     },
-    async getVideoFromDB(directus_id) {
-      let video = await this.$directus.getVideo({
-        id: directus_id,
-        l2Id: this.$l2.id,
-      });
+    async getVideoFromDB(youtube_id, directus_id) {
+      let video
+      if (directus_id) {
+        video = await this.$directus.getVideo({
+          id: directus_id,
+          l2Id: this.$l2.id,
+        });
+      } else {
+        let videos = await this.$directus.getVideos({
+          youtube_id,
+          l2Id: this.$l2.id,
+          query: `youtube_id[eq]=${youtube_id}`,
+        });
+        if (videos?.length > 0) video = videos[0];
+      }
       if (video) {
         for (let field of ["subs_l2", "subs_l1"]) {
           if (video[field] && typeof video[field] === "string") {
