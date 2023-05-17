@@ -394,8 +394,7 @@ export default {
       }
 
       // If the video doesn't have subtitle translations, we load it from YouTube
-      if (!(this.video?.subs_l1?.length > 0)) {
-      }
+      // Note that VideoWithTranscript already loads the L1 subs from YouTube, so we skip this step for now
 
       // If the video has other missing information, we load it from YouTube
       const properties = [
@@ -412,6 +411,10 @@ export default {
       ];
 
       if (!properties.every((property) => property in this.video)) {
+        const videoData = await YouTube.videoByApi(this.youtube_id);
+        properties.forEach((property) => {
+          if (!video[property]) video[property] = videoData[property];
+        });
       }
     },
     onUpdateLayout(layout) {
