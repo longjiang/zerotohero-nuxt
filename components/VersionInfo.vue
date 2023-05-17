@@ -1,6 +1,6 @@
 <template>
   <div class="version-info" :class="`skin-${$skin}`">
-    <span class="branch mr-1">{{ gitBranch }}</span> <span class="tag mr-1">v{{ gitTag }}</span> <span class="commit-version">{{ gitCommitVersion ? gitCommitVersion.slice(0, 10) : '' }}</span>
+    <span class="branch mr-1" v-if="gitBranch">{{ gitBranch }}</span> <span class="tag mr-1" v-if="gitTag">v{{ gitTag }}</span> <span class="commit-version"><i class="fa-solid fa-code-commit"></i> {{ gitCommitVersion ? gitCommitVersion.slice(0, 10) : '' }}</span>
   </div>
 </template>
 
