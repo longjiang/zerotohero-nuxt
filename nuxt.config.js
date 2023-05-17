@@ -28,23 +28,22 @@ const childProcess = require('child_process');
 let COMMIT_REF, BRANCH, TAG;
 
 try {
-  COMMIT_REF = childProcess
+  COMMIT_REF = process.env.COMMIT_REF || childProcess
     .execSync('git rev-parse HEAD')
     .toString().trim();
-  BRANCH = childProcess
+  BRANCH = process.env.BRANCH || childProcess
     .execSync('git symbolic-ref --short HEAD')
     .toString().trim();
-  TAG = childProcess
+  TAG = process.env.TAG || childProcess
     .execSync('git describe --tags --abbrev=0')
     .toString().trim();
 } catch (error) {
   console.error('Error while getting Git information:', error);
 }
 
-
 export default {
   env: {
-    baseUrl: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000',
+    baseUrl: process.env.URL ? process.env.URL : 'http://localhost:3000',
     openAIToken: process.env.OPEN_AI_TOKEN,
     COMMIT_REF,
     BRANCH,
