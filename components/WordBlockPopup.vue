@@ -228,6 +228,7 @@
 </template>
 
 <script>
+import { transliterate as tr } from "transliteration";
 import { IMAGE_PROXY } from "@/lib/config";
 import Klingon from "@/lib/klingon";
 import pinyin2ipa from "pinyin2ipa";
@@ -269,11 +270,6 @@ export default {
     if (this.$l2.han) this.entryClasses["l2-zh"] = true;
   },
   methods: {
-    transliterate(text) {
-      return this.transliterationprop && this.transliterationprop !== text
-        ? this.transliterationprop
-        : "";
-    },
     segment(text) {
       return text
         .replace(
@@ -324,8 +320,11 @@ export default {
         !pronunciation &&
         this.$hasFeature("transliteration") &&
         !["tlh", "fa", "ja"].includes(this.$l2.code)
-      )
-        pronunciation = this.transliterate(word.head);
+      ) {
+
+        pronunciation = tr(word.head);
+      }
+      
       let formattedPronunciation = pronunciation ? `[${pronunciation}]` : "";
       if (this.$l2.code === "tlh")
         formattedPronunciation = word.head + " " + formattedPronunciation;
