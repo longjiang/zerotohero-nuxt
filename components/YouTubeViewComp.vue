@@ -407,20 +407,27 @@ export default {
         this.l2Name = l2Name;
       }
 
-      // If the video doesn't have subtitles, we load it from YouTube
-      if (!(video?.subs_l2?.length > 0) && this.l2Locale) {
-        let { subs, generated } = await this.getSubs({
-          youtube_id: video.youtube_id,
-          locale: this.l2Locale || this.$l2.code,
-          name: this.l2Name,
-        });
-        if (subs && subs.length > 0) Vue.set(video, "subs_l2", subs);
-        this.$emit("l2TranscriptLoaded");
-        console.log(
-          `YouTube View: Got ${this.$l2.name} transcript (${
-            generated ? "" : "not"
-          } auto-generated).`
-        );
+      // If the video doesn't have L1 or L2 subtitles, we load it from YouTube
+      for (let l1OrL2 of ['l1', 'l2']) {
+        if (!(video?.[`subs_${l1OrL2}`]?.length > 0) && this[`${l1OrL2}Locale`]) {
+          let { subs, generated } = await this.getSubs({
+            youtube_id: video.youtube_id,
+            locale: this[`${l1OrL2}Locale`] || this[`$${l1OrL2}`].code,
+            name: this[`${l1OrL2}Name`],
+          });
+          // In the case of L1 subtitles, if we still don't have it, we get translated ones
+          if (l1OrL2 === 'l1' && !(subs?.length > 0)) {
+            let tlang = this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code // tlang
+            subs = await YouTube.getTranslatedTranscript(
+              video.youtube_id,
+              video.l2Locale,
+              video.l2Name,
+              tlang
+            );
+          }
+          if (subs && subs.length > 0) Vue.set(video, `subs_${l1OrL2}`, subs);
+          this.$emit(`${l1OrL2}TranscriptLoaded`);
+        }
       }
 
       // If the video has other missing information, we load it from YouTube
