@@ -1,27 +1,36 @@
 <template>
   <div class="youtube-view">
-    <LazyVideoWithTranscript v-if="video" ref="youtube" v-bind="{
-      type: 'youtube',
-      cc: false,
-      video,
-      skin,
-      related,
-      starttime,
-      startLineIndex,
-      show,
-      showType,
-      episodes,
-      largeEpisodeCount,
-      useAutoTextSize: true,
-      showInfoButton: true,
-      autoload: true,
-      autoplay: false,
-      forcePortrait: false,
-      initialMode,
-      checkingSubs,
-      initialSize: this.mini ? 'mini' : 'regular',
-    }" :key="`transcript-${video.youtube_id}`" @ended="onEnded" @previous="goToPreviousEpisode"
-      @next="goToNextEpisode" @currentTime="onCurrentTime" @updateLayout="onUpdateLayout" />
+    <LazyVideoWithTranscript
+      v-if="video"
+      ref="youtube"
+      v-bind="{
+        type: 'youtube',
+        cc: false,
+        video,
+        skin,
+        related,
+        starttime,
+        startLineIndex,
+        show,
+        showType,
+        episodes,
+        largeEpisodeCount,
+        useAutoTextSize: true,
+        showInfoButton: true,
+        autoload: true,
+        autoplay: false,
+        forcePortrait: false,
+        initialMode,
+        checkingSubs,
+        initialSize: this.mini ? 'mini' : 'regular',
+      }"
+      :key="`transcript-${video.youtube_id}`"
+      @ended="onEnded"
+      @previous="goToPreviousEpisode"
+      @next="goToNextEpisode"
+      @currentTime="onCurrentTime"
+      @updateLayout="onUpdateLayout"
+    />
   </div>
 </template>
 
@@ -83,6 +92,9 @@ export default {
       video: undefined,
       largeEpisodeCount: undefined,
       checkingSubs: false,
+      l1Locale: undefined,
+      l2Locale: undefined,
+      l2Name: undefined,
     };
   },
   computed: {
@@ -171,7 +183,8 @@ export default {
 
       const showType = this.getShowType(this.video);
 
-      if (showType) this.loadShowAndEpisodes({ showId: this.video[showType], showType });
+      if (showType)
+        this.loadShowAndEpisodes({ showId: this.video[showType], showType });
 
       // Retrieve missing information from YouTube
       await this.getMissingVideoInfoFromYouTube(this.video);
@@ -267,8 +280,8 @@ export default {
         videos = videos.sort((a, b) =>
           a.title
             ? a.title.localeCompare(b.title, this.$l2.locales[0], {
-              numeric: true,
-            })
+                numeric: true,
+              })
             : 0
         );
       }
@@ -323,7 +336,7 @@ export default {
       return showType;
     },
     async getVideoFromDB(youtube_id, directus_id) {
-      let video
+      let video;
       if (directus_id) {
         video = await this.$directus.getVideo({
           id: directus_id,
@@ -359,39 +372,56 @@ export default {
         return video;
       }
     },
-    async getSubsL2({ youtube_id, l2Locale, l2Name }) {
+    async getSubs({ youtube_id, locale, name }) {
       let forceRefresh = this.$adminMode;
       let generated = false;
-      let subs_l2 = await YouTube.getTranscript(
+      let subs = await YouTube.getTranscript(
         youtube_id,
-        l2Locale,
-        l2Name,
+        locale,
+        name,
         forceRefresh,
         generated
       );
-      if (!subs_l2 || subs_l2.length === 0) {
+      if (!subs || subs.length === 0) {
         generated = true;
-        subs_l2 = await YouTube.getTranscript(
+        subs_ = await YouTube.getTranscript(
           youtube_id,
-          l2Locale || this.$l2.code,
-          l2Name,
+          locale,
+          name,
           forceRefresh,
           generated
         );
       }
-      return { subs_l2, generated };
+      return { subs, generated };
     },
     async getMissingVideoInfoFromYouTube(video) {
-      // If the video doesn't have subtitles, we load it from YouTube
-      if (!(video?.subs_l2?.length > 0)) {
-        let { l1Locale, l2Locale, l2Name } = await YouTube.getTranscriptLocales(video.youtube_id, this.$l1, this.$l2)
-        let { subs_l2, generated } = await this.getSubsL2({ youtube_id: video.youtube_id, l2Locale, l2Name });
-        if (subs_l2 && subs_l2.length > 0) Vue.set(video, "subs_l2", subs_l2);
-        console.log(`YouTube View: Got ${this.$l2.name} transcript (${generated ? '' : 'not'} auto-generated).`);
+      // If the video either doesn't have L2 subtitles, or doesn't have L1 subtitles, we retrieve the locales of the subtitles from YouTube
+      if (!(video?.subs_l2?.length > 0) || !(video?.subs_l1?.length > 0)) {
+        let { l1Locale, l2Locale, l2Name } = await YouTube.getTranscriptLocales(
+          video.youtube_id,
+          this.$l1,
+          this.$l2
+        );
+        this.l1Locale = l1Locale;
+        this.l2Locale = l2Locale;
+        this.l2Name = l2Name;
       }
 
-      // If the video doesn't have subtitle translations, we load it from YouTube
-      // Note that VideoWithTranscript already loads the L1 subs from YouTube, so we skip this step for now
+      // If the video doesn't have subtitles, we load it from YouTube
+      if (!(video?.subs_l2?.length > 0) && this.l2Locale) {
+        let { subs, generated } = await this.getSubs({
+          youtube_id: video.youtube_id,
+          locale: this.l2Locale || this.$l2.code,
+          name: this.l2Name,
+        });
+        if (subs && subs.length > 0) Vue.set(video, "subs_l2", subs);
+        this.$emit("l2TranscriptLoaded");
+        console.log(
+          `YouTube View: Got ${this.$l2.name} transcript (${
+            generated ? "" : "not"
+          } auto-generated).`
+        );
+      }
 
       // If the video has other missing information, we load it from YouTube
       const properties = [
