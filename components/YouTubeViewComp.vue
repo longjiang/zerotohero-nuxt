@@ -384,7 +384,7 @@ export default {
       );
       if (!subs || subs.length === 0) {
         generated = true;
-        subs_ = await YouTube.getTranscript(
+        subs = await YouTube.getTranscript(
           youtube_id,
           locale,
           name,

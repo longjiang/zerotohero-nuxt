@@ -320,6 +320,8 @@
 
 <script>
 import { unique, ucFirst, timeout, highlightMultiple, iOS, NON_PRO_MAX_SUBS_SEARCH_HITS } from "@/lib/utils";
+import YouTube from '@/lib/youtube'
+import Vue from 'vue'
 
 export default {
   props: {
@@ -426,6 +428,9 @@ export default {
       this.collectContext(hits);
       this.$emit("updated", hits);
     },
+    async currentHit() {      
+      this.loadL1SubsIfNeeded();
+    }
   },
   async mounted() {
     if (typeof this.$store.state.settings !== "undefined") {
@@ -452,6 +457,40 @@ export default {
     ucFirst,
     highlightMultiple,
     iOS,
+    async loadL1SubsIfNeeded() {
+      let video = this.currentHit?.video;
+      if (!video) return;
+
+      // If the video doesn't have L1 subtitles, we load it from YouTube
+      if (!(video?.subs_l1?.length > 0)) {
+        let subs
+
+        let { l1Locale, l2Locale, l2Name } = await YouTube.getTranscriptLocales(
+          video.youtube_id,
+          this.$l1,
+          this.$l2
+        );
+
+        if (l1Locale) {
+          subs = await YouTube.getTranscript(
+            youtube_id,
+            l1Locale,
+          );
+        }
+
+        // If we still don't have it, we get translated ones
+        if (!(subs?.length > 0)) {
+          let tlang = this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code; // tlang
+          subs = await YouTube.getTranslatedTranscript(
+            video.youtube_id,
+            l2Locale,
+            l2Name,
+            tlang
+          );
+        }
+        if (subs && subs.length > 0) Vue.set(video, `subs_l1`, subs);
+      }
+    },
     async onVideoUnavailable(youtube_id) {
       let video = this.currentHit.video;
       if (youtube_id && youtube_id !== video.youtube_id) return; // Always make sure the unavailable video is indeed what the user is looking at
