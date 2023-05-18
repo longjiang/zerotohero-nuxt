@@ -441,6 +441,7 @@ export default {
         "date",
         "duration",
         "likes",
+        "channel",
         "locale",
         "made_for_kids",
         "tags",

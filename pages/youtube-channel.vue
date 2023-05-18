@@ -4,7 +4,6 @@
     props: true,
     meta: {
       title: 'Study YouTube Subtitles | Language Player',
-      skin: 'dark',
       metaTags: [
         {
           name: 'description',
@@ -50,7 +49,7 @@
             </router-link>
           </div>
           <template v-if="!loading">
-            <YouTubePlaylists :playlists="playlists" skin="dark" />
+            <YouTubePlaylists :playlists="playlists" :skin="$skin" />
           </template>
         </div>
       </div>

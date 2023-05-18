@@ -2,9 +2,6 @@
   {
     path: '/:l1/:l2/youtube/playlist/:playlist_id?/:title?',
     props: true,
-    meta: {
-      skin: 'dark'
-    }
   }
 </router>
 <template>
@@ -62,9 +59,10 @@
               :videos="
                 videos.filter((video) => video.title !== 'Private video')
               "
-              skin="dark"
+              :skin="$skin"
               :checkSubs="true"
               :showProgress="false"
+              :showDate="true"
               @newShow="newShow"
               ref="youtubeVideoList"
             />

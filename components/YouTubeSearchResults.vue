@@ -15,7 +15,7 @@
       :cloakVideosWithoutSubs="cloakVideosWithoutSubs"
       :showBadges="showBadges"
       :showProgress="false"
-      :skin="skin"
+      :skin="$skin"
     />
     <div
       v-if="infinite && !noMoreVideos"
@@ -90,7 +90,7 @@ export default {
       default: true,
     },
     skin: {
-      default: "light",
+      default: "dark",
     },
     cloakVideosWithoutSubs: {
       default: "true"

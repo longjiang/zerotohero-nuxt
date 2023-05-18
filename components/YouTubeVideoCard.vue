@@ -33,7 +33,7 @@
     >
       <span v-if="!over">
         <i class="fa fa-times"></i>
-        NO SUBS
+        {{ $t('NO SUBS') }}
       </span>
     </div>
     <div
@@ -831,6 +831,7 @@ export default {
 .no-subs-badge {
   opacity: 1 !important;
   background-color: rgb(140, 0, 0);
+  color: white;
   position: absolute;
   z-index: 2;
   font-size: 0.9em;

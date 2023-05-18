@@ -133,7 +133,7 @@
           :long="long"
           :infinite="true"
           :showProgress="false"
-          skin="dark"
+          :skin="$skin"
           ref="youtubeSearchResults"
           :cloakVideosWithoutSubs="!$adminMode"
         />

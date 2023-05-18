@@ -2,7 +2,7 @@
   <div class="youtube-playlists">
     <div
       v-for="(playlist, index) in playlists"
-      :class="`youtube-playlist-card youtube-playlist-card-${skin} media rounded shadow`"
+      :class="`youtube-playlist-card youtube-playlist-card-${skin}`"
       :key="`youtube-playlist-item-${index}`"
     >
       <router-link
@@ -12,12 +12,9 @@
         class="playlist-link"
       >
         <div class="youtube-thumbnail-wrapper aspect-wrapper">
-          <img
-            :src="playlist.thumbnail"
-            class="youtube-thumbnail aspect"
-          />
+          <img :src="playlist.thumbnail" class="youtube-thumbnail aspect" />
         </div>
-        <div class="media-body">
+        <div class="pt-2">
           <div class="playlist-title">{{ playlist.title }}</div>
           <div class="playlist-video-count" v-if="playlist.count">
             {{ playlist.count }} video{{ playlist.count > 1 ? "s" : "" }}
@@ -41,13 +38,17 @@ export default {
       type: Array,
     },
     skin: {
-      default: "light", // or 'dark'
+      default: "dark", // or 'light'
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.youtube-thumbnail-wrapper {
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
 .youtube-playlists {
   display: flex;
   flex-wrap: wrap;
@@ -66,7 +67,6 @@ export default {
     .playlist-video-count {
       color: #999;
       text-decoration: none;
-      margin: 0.5rem 0;
     }
     .playlist-description {
       color: #999;
@@ -74,13 +74,5 @@ export default {
       text-decoration: none;
     }
   }
-  &.youtube-playlist-card-dark {
-    .media-body {
-      padding: 1rem 0 0 0;
-      color: white;
-    }
-  }
 }
-
-
 </style>
