@@ -547,6 +547,9 @@ export default {
     initialMode() {
       this.mode = this.initialMode;
     },
+    video() {
+      this.paused = true
+    }
   },
   methods: {
     resetHoverTimeout() {

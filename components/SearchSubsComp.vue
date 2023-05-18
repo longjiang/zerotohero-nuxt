@@ -449,6 +449,9 @@ export default {
     this.unsubscribeSettings();
   },
   methods: {
+    ucFirst,
+    highlightMultiple,
+    iOS,
     async onVideoUnavailable(youtube_id) {
       let video = this.currentHit.video;
       if (youtube_id && youtube_id !== video.youtube_id) return; // Always make sure the unavailable video is indeed what the user is looking at
@@ -609,15 +612,6 @@ export default {
     },
     get(name) {
       return this[name];
-    },
-    ucFirst() {
-      return ucFirst(...arguments);
-    },
-    highlightMultiple(a, b, c) {
-      return highlightMultiple(a, b, c);
-    },
-    iOS() {
-      return iOS();
     },
     collectContext(hits) {
       let contextLeft = [];
@@ -781,21 +775,6 @@ export default {
         }
       }
     },
-    toggleSpeed() {
-      this.speed = this.speed === 1 ? 0.75 : this.speed === 0.75 ? 0.5 : 1;
-    },
-    goToPreviousLine() {
-      if (this.$refs[`youtube-${this.hitIndex}`])
-        this.$refs[`youtube-${this.hitIndex}`].goToPreviousLine();
-    },
-    goToNextLine() {
-      if (this.$refs[`youtube-${this.hitIndex}`])
-        this.$refs[`youtube-${this.hitIndex}`].goToNextLine();
-    },
-    rewind() {
-      if (this.$refs[`youtube-${this.hitIndex}`])
-        this.$refs[`youtube-${this.hitIndex}`].rewind();
-    },
     goToPrevHit() {
       this.currentHit = this.prevHit;
       this.navigated = true;
@@ -817,22 +796,6 @@ export default {
       index = Math.max(index, 0);
       this.currentHit = this.hits[index];
       this.navigated = true;
-    },
-    seekYouTube(starttime) {
-      let youtube = this.$refs[`youtube-${this.hitIndex}`];
-      if (youtube) this.$refs[`youtube-${this.hitIndex}`].seek(starttime);
-    },
-    pauseYouTube() {
-      let youtube = this.$refs[`youtube-${this.hitIndex}`];
-      if (youtube) this.$refs[`youtube-${this.hitIndex}`].pause();
-    },
-    playYouTube() {
-      let youtube = this.$refs[`youtube-${this.hitIndex}`];
-      if (youtube) this.$refs[`youtube-${this.hitIndex}`].play();
-    },
-    togglePaused() {
-      let youtube = this.$refs[`youtube-${this.hitIndex}`];
-      if (youtube) this.$refs[`youtube-${this.hitIndex}`].togglePaused();
     },
     toggleFullscreen() {
       if (this.hits.length > 0) this.fullscreen = !this.fullscreen;
