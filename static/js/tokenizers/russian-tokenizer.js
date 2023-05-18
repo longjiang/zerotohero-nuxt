@@ -4,6 +4,10 @@ class RussianTokenizer extends BaseTokenizer {
   async tokenize(text) {
     let url = `${PYTHON_SERVER}lemmatize-russian?text=${encodeURIComponent(text)}`;
     let tokenized = await proxy(url);
+    // Make sure that tokenized is an array of objects
+    if (!tokenized || typeof tokenized === 'string') {
+      return super.tokenize(text);
+    }
     let tokens = [];
 
     for (let token of tokenized) {

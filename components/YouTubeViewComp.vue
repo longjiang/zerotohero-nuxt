@@ -395,6 +395,7 @@ export default {
       return { subs, generated };
     },
     async getMissingVideoInfoFromYouTube(video) {
+      console.log("getMissingVideoInfoFromYouTube");
       // If the video either doesn't have L2 subtitles, or doesn't have L1 subtitles, we retrieve the locales of the subtitles from YouTube
       if (!(video?.subs_l2?.length > 0) || !(video?.subs_l1?.length > 0)) {
         let { l1Locale, l2Locale, l2Name } = await YouTube.getTranscriptLocales(
@@ -408,20 +409,23 @@ export default {
       }
 
       // If the video doesn't have L1 or L2 subtitles, we load it from YouTube
-      for (let l1OrL2 of ['l1', 'l2']) {
-        if (!(video?.[`subs_${l1OrL2}`]?.length > 0) && this[`${l1OrL2}Locale`]) {
-          let { subs, generated } = await this.getSubs({
-            youtube_id: video.youtube_id,
-            locale: this[`${l1OrL2}Locale`] || this[`$${l1OrL2}`].code,
-            name: this[`${l1OrL2}Name`],
-          });
+      for (let l1OrL2 of ["l2", "l1"]) {
+        if (!(video?.[`subs_${l1OrL2}`]?.length > 0)) {
+          let subs, generated
+          if (this[`${l1OrL2}Locale`]) {
+            ({ subs, generated } = await this.getSubs({
+              youtube_id: video.youtube_id,
+              locale: this[`${l1OrL2}Locale`] || this[`$${l1OrL2}`].code,
+              name: this[`${l1OrL2}Name`],
+            }));
+          }
           // In the case of L1 subtitles, if we still don't have it, we get translated ones
-          if (l1OrL2 === 'l1' && !(subs?.length > 0)) {
-            let tlang = this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code // tlang
+          if (l1OrL2 === "l1" && !(subs?.length > 0)) {
+            let tlang = this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code; // tlang
             subs = await YouTube.getTranslatedTranscript(
               video.youtube_id,
-              video.l2Locale,
-              video.l2Name,
+              this.l2Locale,
+              this.l2Name,
               tlang
             );
           }

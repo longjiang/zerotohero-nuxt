@@ -396,9 +396,9 @@ export default {
         text = "";
       }
       if (this.$l2.code === "ru" && this.savedWord) {
-        let dictionary = await this.$getDictioary();
+        let dictionary = await this.$getDictionary();
         let inflector = await dictionary.getInflector()
-        let accentText = await inflector.getRussianAccentText(this.text, this.savedWord.head);
+        let accentText = await inflector.getAccentForm(this.text, this.savedWord.head);
         if (accentText) return accentText;
       }
       if (this.$l2.code === "tlh" && text.trim() !== "") {
