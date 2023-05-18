@@ -61,13 +61,6 @@
         style="height: 100%;"
         class="video-view-content-inner"
       />
-      <div
-        v-if="type === 'youtube'"
-        :class="{ 'loader text-center': true, 'd-none': video }"
-        style="padding-top: 30vh; padding-bottom: 30vh"
-      >
-        <Loader :sticky="true" message="Preparing video and transcript..." />
-      </div>
     </div>
   </div>
 </template>
