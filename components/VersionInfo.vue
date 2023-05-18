@@ -1,5 +1,5 @@
 <template>
-  <div class="version-info" :class="`skin-${$skin}`">
+  <div class="version-info cursor-pointer" :class="`skin-${$skin}`" @click="goToAbout" :title="$t('About')">
     <span class="branch mr-1" v-if="gitBranch">{{ gitBranch }}</span> <span class="tag mr-1" v-if="gitTag">v{{ gitTag }}</span> <span class="commit-version"><i class="fa-solid fa-code-commit"></i> {{ gitCommitVersion ? gitCommitVersion.slice(0, 10) : '' }}</span>
   </div>
 </template>
@@ -15,6 +15,11 @@ export default {
     },
     gitTag() {
       return process.env.TAG;
+    },
+  },
+  methods: {
+    goToAbout() {
+      this.$router.push({ name: 'about' });
     },
   },
 };
