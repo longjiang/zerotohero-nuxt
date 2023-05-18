@@ -35,4 +35,8 @@ class BaseInflector {
       form: lemma
     }];
   }
+
+  async getAccentForm(text, head = undefined) {
+    // Only for Russian.
+  }
 }
