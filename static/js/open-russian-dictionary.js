@@ -5,7 +5,10 @@ class OpenRussianDictionary extends BaseDictionary {
 
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     super({l1, l2});
-    this.file = `${SERVER}data/openrussian/words_with_definitions.csv.txt`
+    this.file = `${SERVER}data/openrussian/words_with_definitions_pronunciation.csv.txt`
+    this.indexDbVerByLang = {
+      rus: '2.18.7',
+    };
   }
 
   credit() {
