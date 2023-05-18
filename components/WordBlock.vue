@@ -152,12 +152,12 @@ export default {
       if (quickGloss && quickGloss.length < 20) return quickGloss;
     },
     savedTransliteration() {
-      if (this.savedWord) {
+      if (this.word) {
         return (
-          this.savedWord.jyutping ||
-          this.savedWord.pinyin ||
-          this.savedWord.kana ||
-          (this.savedWord.pronunciation || "").split(", ")[0]
+          this.word.jyutping ||
+          this.word.pinyin ||
+          this.word.kana ||
+          (this.word.pronunciation || "").split(", ")[0]
         );
       }
     },
@@ -180,13 +180,16 @@ export default {
       if (pos) return pos.replace(/\-.*/, "").replace(/\s/g, "-");
     },
     word() {
-      if (this.savedWord) return this.savedWord
-      else if (this.$l2.han) {
-        let firstWord = this.words?.[0];
-        if (firstWord && ((firstWord.simplified && firstWord.simplified === this.text) || (firstWord.traditional && firstWord.traditional === this.text))) {
-          return firstWord
+      let word = this.savedWord
+      if (this.$l2.han) {
+        if (!word) {
+          word = this.words?.[0];
+        }
+        if (word) {
+          if (!(word.simplified && word.simplified === this.text) || (word.traditional && word.traditional === this.text)) word = undefined
         }
       }
+      return word
     },
     hanja() {
       if (["ko", "vi"].includes(this.$l2.code)) {
@@ -252,7 +255,7 @@ export default {
     async attributes() {
       let word = this.word;
       let definition = this.quickGloss;
-      let phonetics = this.getPhonetics(word, this.text);
+      let phonetics = this.getPhonetics();
       let text = this.$l2.han ? this.getWordText(word, this.text) : this.text;
       let hanja =
         this.$l2Settings.showByeonggi && this.hanja ? this.hanja : undefined;
