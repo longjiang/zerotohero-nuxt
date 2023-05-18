@@ -390,4 +390,11 @@ class BaseDictionary {
   lookupHSKChar() {
     // Only implemented for Chinese
   }
+
+  getAccentForm() {
+    // Only implemented for Russian
+    if (this.inflector?.getAccentForm) {
+      return this.inflector.getAccentForm(...arguments);
+    }
+  }
 }

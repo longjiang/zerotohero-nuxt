@@ -397,8 +397,7 @@ export default {
       }
       if (this.$l2.code === "ru" && this.savedWord) {
         let dictionary = await this.$getDictionary();
-        let inflector = await dictionary.getInflector()
-        let accentText = await inflector.getAccentForm(this.text, this.savedWord.head);
+        let accentText = await dictionary.getAccentForm(this.text, this.savedWord.head);
         if (accentText) return accentText;
       }
       if (this.$l2.code === "tlh" && text.trim() !== "") {
@@ -409,12 +408,20 @@ export default {
       }
       return text;
     },
+    /**
+     * checkSavedWord function:
+     * Checks whether the first word in `this.words` array or `this.tokens` array is saved in the store.
+     * If not found in `this.words` and `this.tokens`, it checks for the word in `this.text`.
+     * If the word is saved, it assigns it to `this.savedWord` and returns it, else it sets `this.savedWord` as undefined.
+     * @return {Object|undefined} - Returns the saved word object if found, else returns undefined.
+     */
     checkSavedWord() {
       if (!this.checkSaved) return false;
       let saved;
       let firstWord = this.words[0] || this.tokens?.[0];
       let text = this.text;
-      if (firstWord) {
+      let textLowerCase = text.toLowerCase();
+      if (firstWord && firstWord.search === textLowerCase) {
         saved = this.$store.getters["savedWords/has"]({
           id: firstWord.id,
           l2: this.$l2.code,
@@ -425,24 +432,26 @@ export default {
       }
       if (!saved && text) {
         saved = this.$store.getters["savedWords/has"]({
-          text: text.toLowerCase(),
+          text: textLowerCase,
           l2: this.$l2.code,
         });
       }
       if (saved) {
-        this.appendSavedWord(saved.id, saved.forms[0]);
+        this.setSavedWord(saved.id, saved.forms[0]);
       } else {
         this.savedWord = undefined;
       }
       return saved;
     },
-    checkSavedPhrase() {
-      let phrase = this.phraseItem(this.text);
-      this.savedPhrase = this.$store.getters["savedPhrases/get"](
-        Object.assign({}, phrase)
-      );
-    },
-    async appendSavedWord(id, head) {
+    /**
+     * setSavedWord function:
+     * Finds the word with the given id in `this.words` array and sets it as `this.savedWord`.
+     * If the word is not found, it retrieves the word from the dictionary and sets it as `this.savedWord`.
+     * @param {string} id - The id of the word to be found.
+     * @param {string} head - The head form of the word to be found.
+     * @return {Promise<void>}
+     */
+    async setSavedWord(id, head) {
       let savedWord = this.words.find((w) => w.id === id);
       if (!savedWord) {
         let dictionary = await this.$getDictionary();
@@ -452,6 +461,12 @@ export default {
         this.words = uniqueByValue([savedWord, ...this.words], "id");
         this.savedWord = savedWord;
       }
+    },
+    checkSavedPhrase() {
+      let phrase = this.phraseItem(this.text);
+      this.savedPhrase = this.$store.getters["savedPhrases/get"](
+        Object.assign({}, phrase)
+      );
     },
     test(arg) {
       console.log(`Evaluated`, arg);
