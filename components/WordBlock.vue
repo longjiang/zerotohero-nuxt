@@ -346,8 +346,10 @@ export default {
     },
   },
   methods: {
-    playAnimation() {
+    async playAnimation(animationDuration) {
       this.animate = true
+      await timeout(animationDuration)
+      this.animate = false
     },
     getWordText(word, text) {
       let result = "";

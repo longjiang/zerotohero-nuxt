@@ -517,8 +517,8 @@ export default {
               // Which ones should skip
               if (durationAlreadyPlayed > startFrom) {
                 if (!this.animate) return;
-                wb.playAnimation();
-                await timeout((blockDuration * 1000) / this.animationSpeed);
+                const animationDuration = (blockDuration * 1000) / this.animationSpeed
+                await wb.playAnimation(animationDuration);
               }
             }
           }
