@@ -131,7 +131,11 @@ export default {
     showPlayButton: {
       type: Boolean,
       default: true,
-    }
+    },
+    includePhrasebooks: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -191,7 +195,7 @@ export default {
           if (i.type === "video") return typeof i.video !== "undefined" && i.video.youtube_id;
           if (i.type === "phrasebook")
             return (
-              typeof i.phrasebook !== "undefined" && i.phrasebook.id !== "saved"
+              this.includePhrasebooks && typeof i.phrasebook !== "undefined" && i.phrasebook.id !== "saved"
             );
         });
       }
