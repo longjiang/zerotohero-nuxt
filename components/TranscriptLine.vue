@@ -214,7 +214,7 @@ export default {
     },
     playAnimation() {
       if (!this.showAnimation) return
-      const startFrom = Math.min(this.currentTime - this.line.starttime, 0)
+      const startFrom = Math.max(this.currentTime - this.line.starttime, 0)
       if (this.$refs["annotate"]) {
         this.$refs["annotate"].playAnimation(startFrom);
       }

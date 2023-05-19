@@ -497,6 +497,7 @@ export default {
      * @param {Number} startFrom Starting time in seconds
      */
     async playAnimation(startFrom = 0) {
+      console.log("playAnimation", startFrom);
       if (this.annotated) {
         this.animate = true;
         if (this.animationDuration) {
