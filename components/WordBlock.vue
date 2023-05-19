@@ -594,7 +594,7 @@ export default {
             (this.words && this.words.length === 0) ||
             this.lastLookupWasQuick
           ) {
-            this.lookup();
+            this.lookup(false);
           }
         }
         let hasImageWorthyWords = false;
@@ -638,7 +638,7 @@ export default {
       this.open = false;
       this.$nuxt.$emit("popupClosed");
     },
-    async lookup(quick = false) {
+    async lookup(quick = true) {
       this.loading = true;
       let dictionary = await this.$getDictionary();
       if (this.loaded) {
@@ -663,6 +663,8 @@ export default {
             }
           }
         }
+      }
+      if (!quick) {
         // Only do a fuzzy lookup if the word does not have a found lemma
         if (words.length === 0) {
           if (!this.text && this.token) this.text = this.token.candidates[0].head;
@@ -681,8 +683,6 @@ export default {
             }
           }
         }
-      }
-      if (!quick) {
         words = words
           ? words.sort((a, b) => {
               let asaved = this.$store.getters["savedWords/has"]({

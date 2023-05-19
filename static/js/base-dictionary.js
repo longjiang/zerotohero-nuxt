@@ -184,7 +184,7 @@ class BaseDictionary {
         return w.search === text.toLowerCase() || w.head === text.toLowerCase() || w.simplified === text.toLowerCase()
       })
     }
-    words.forEach(word => this.addNewHSK(word))
+    if (this.addNewHSK) words.forEach(word => this.addNewHSK(word))
     return words;
   }
 
