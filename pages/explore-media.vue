@@ -35,9 +35,9 @@
           />
           <div :class="{ 'media-section': true, 'd-none': !hasWatchHistory }">
             <h3 class="media-seaction-heading">
-              {{ $t('Continue Studying') }}
+              {{ $t("Continue Studying") }}
               <router-link :to="{ name: 'watch-history' }" class="show-all">
-                {{ $t('More') }}
+                {{ $t("More") }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
             </h3>
@@ -64,11 +64,36 @@
           >
             <Loader :sticky="true" message="Loading videos in our library..." />
           </div>
+
           <div v-if="tvShows && tvShows.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              {{ $t('TV Shows') }}
+              {{ $t("Newly Added") }}
               <router-link :to="{ name: 'tv-shows' }" class="show-all">
-                {{ $t('More') }}
+                {{ $t("More") }}
+                <i class="fas fa-chevron-right"></i>
+              </router-link>
+            </h3>
+            <ShowList
+              :shows="
+                tvShows
+                  .filter((s) => !['Movies', 'Music'].includes(s.title))
+                  .sort((a, b) => {
+                    const dateA = new Date(a.created_on);
+                    const dateB = new Date(b.created_on);
+                    return dateB - dateA; // For descending order
+                  })
+                  .slice(0, 4)
+              "
+              type="tvShows"
+              :key="`new-tv-shows`"
+            />
+          </div>
+
+          <div v-if="tvShows && tvShows.length > 0" class="media-section">
+            <h3 class="media-seaction-heading">
+              {{ $t("TV Shows") }}
+              <router-link :to="{ name: 'tv-shows' }" class="show-all">
+                {{ $t("More") }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
               <RecommendedMessage class="mt-2" />
@@ -86,9 +111,9 @@
 
           <div class="media-section">
             <h3 class="media-seaction-heading">
-              {{ $t('YouTube') }}
+              {{ $t("YouTube") }}
               <router-link :to="{ name: 'youtube-browse' }" class="show-all">
-                {{ $t('More') }}
+                {{ $t("More") }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
               <RecommendedMessage class="mt-2" />
@@ -111,7 +136,7 @@
 
           <div v-if="music && music.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              {{ $t('Music') }}
+              {{ $t("Music") }}
               <router-link
                 :to="{
                   name: 'show',
@@ -119,7 +144,7 @@
                 }"
                 class="show-all"
               >
-                {{ $t('More') }}
+                {{ $t("More") }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
             </h3>
@@ -133,7 +158,7 @@
           <div class="media-sections" v-if="!loading">
             <div v-if="movies && movies.length > 0" class="media-section">
               <h3 class="media-seaction-heading">
-                {{ $t('Movies') }}
+                {{ $t("Movies") }}
                 <router-link
                   :to="{
                     name: 'show',
@@ -141,7 +166,7 @@
                   }"
                   class="show-all"
                 >
-                  {{ $t('More') }}
+                  {{ $t("More") }}
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
               </h3>
@@ -155,9 +180,9 @@
 
           <div v-if="talks && talks.length > 0" class="media-section">
             <h3 class="media-seaction-heading">
-              {{ $t('YouTube Channels') }}
+              {{ $t("YouTube Channels") }}
               <router-link :to="{ name: 'talks' }" class="show-all">
-                {{ $t('More') }}
+                {{ $t("More") }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
               <RecommendedMessage class="mt-2" />
@@ -181,9 +206,9 @@
             class="media-section"
           >
             <h3 class="media-seaction-heading">
-              {{ $t('Audiobooks') }}
+              {{ $t("Audiobooks") }}
               <router-link :to="{ name: 'audiobooks' }" class="show-all">
-                {{ $t('More') }}
+                {{ $t("More") }}
                 <i class="fas fa-chevron-right"></i>
               </router-link>
             </h3>
@@ -197,7 +222,7 @@
           <div class="media-sections" v-if="!loading">
             <div v-if="news && news.length > 0" class="media-section">
               <h3 class="media-seaction-heading">
-                {{ $t('News') }}
+                {{ $t("News") }}
                 <router-link
                   :to="{
                     name: 'show',
@@ -205,7 +230,7 @@
                   }"
                   class="show-all"
                 >
-                  {{ $t('More') }}
+                  {{ $t("More") }}
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
               </h3>
@@ -240,10 +265,17 @@
 
 <script>
 import { mapState } from "vuex";
-import { timeout, uniqueByValue, languageLevels, randomItemFromArray, LANGS_WITH_LEVELS, LANGS_WITH_CONTENT } from "@/lib/utils";
+import {
+  timeout,
+  uniqueByValue,
+  languageLevels,
+  randomItemFromArray,
+  LANGS_WITH_LEVELS,
+  LANGS_WITH_CONTENT,
+} from "@/lib/utils";
 
 export default {
-  name: 'explore-media', // Added to resolve Vue warn - Invalid component name: "pages/explore-media.vue"
+  name: "explore-media", // Added to resolve Vue warn - Invalid component name: "pages/explore-media.vue"
   data() {
     return {
       videos: undefined,
@@ -265,7 +297,11 @@ export default {
     };
   },
   async mounted() {
-    if (LANGS_WITH_LEVELS.includes(this.$l2.code) && this.progressLoaded && !this.languageLevel)
+    if (
+      LANGS_WITH_LEVELS.includes(this.$l2.code) &&
+      this.progressLoaded &&
+      !this.languageLevel
+    )
       this.$router.push({
         name: "set-language-level",
         params: { l1: this.$l1.code, l2: this.$l2.code },
@@ -331,7 +367,7 @@ export default {
   },
   methods: {
     onVideosLoaded(videos) {
-      this.videos = videos
+      this.videos = videos;
     },
     onHasWatchHistory() {
       this.hasWatchHistory = true;
@@ -378,7 +414,10 @@ export default {
           (s) => s.title === "Movies"
         );
         if (this.musicShow) {
-          if (this.videos) this.videos = this.videos.filter(v => v.tv_show !== this.musicShow.id)
+          if (this.videos)
+            this.videos = this.videos.filter(
+              (v) => v.tv_show !== this.musicShow.id
+            );
           this.music = await this.getVideos({
             limit: 25,
             tvShow: this.musicShow.id,
@@ -493,7 +532,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 @import "~@/assets/scss/variables.scss";
 
 .media-section {
