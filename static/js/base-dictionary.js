@@ -49,8 +49,8 @@ class BaseDictionary {
     throw new Error("loadData() method must be implemented in the subclass");
   }
 
-  async tokenize(text) {
-    const tokens = await this.tokenizer.tokenize(text);
+  async tokenizeWithCache(text) {
+    const tokens = await this.tokenizer.tokenizeWithCache(text);
     return tokens;
   }
 

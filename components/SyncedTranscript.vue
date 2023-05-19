@@ -325,7 +325,7 @@ export default {
           this.currentLineIndex + 5
         );
         for (let line of nextLines) {
-          let tokens = await dictionary.tokenize(line.line.replace(/\n/g, " "));
+          let tokens = await dictionary.tokenizeWithCache(line.line.replace(/\n/g, " "));
         }
       }
     },

@@ -131,7 +131,7 @@ export default {
         annotatedHtml = ''
         dictionaryTemplate = ''
         const dictionary = await this.$getDictionary();
-        let tokenized = await dictionary.tokenize(text)
+        let tokenized = await dictionary.tokenizeWithCache(text)
         this.tokenized[batchId] = tokenized
         for (let index = 0; index < this.tokenized[batchId].length; index++) {
           let item = this.tokenized[batchId][index]

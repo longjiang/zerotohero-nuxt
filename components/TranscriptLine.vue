@@ -43,6 +43,7 @@
               youtube_id: this.video.youtube_id,
               starttime: this.line.starttime,
               useZoom: true,
+              breakSentences: false
             }"
             :class="{
               'transcript-line-l2': true,

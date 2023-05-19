@@ -17,6 +17,7 @@ class BaseTokenizer {
 
   async tokenizeWithCache(text) {
     if (this.tokenizationCache[text]) {
+
       return this.tokenizationCache[text];
     }
 
@@ -28,23 +29,19 @@ class BaseTokenizer {
 
   async tokenize(text) {
     const tokenizationType = this.tokenizationType(this.l2);
-    if (this.tokenizationCache[text]) return this.tokenizationCache[text];
-    else {
-      let tokenized = [];
-      switch (tokenizationType) {
-        // tokenizationType passed in from <Annotate>
-        case "integral":
-          tokenized = this.tokenizeIntegral(text);
-          break;
-        case "agglutenative":
-        case "continua":
-          tokenized = await this.tokenizeContinua(text);
-          break;
-        default:
-      }
-      this.tokenizationCache[text] = tokenized;
-      return tokenized;
+    let tokenized = [];
+    switch (tokenizationType) {
+      // tokenizationType passed in from <Annotate>
+      case "integral":
+        tokenized = this.tokenizeIntegral(text);
+        break;
+      case "agglutenative":
+      case "continua":
+        tokenized = await this.tokenizeContinua(text);
+        break;
+      default:
     }
+    return tokenized;
   }
 
   tokenizationType(l2) {

@@ -200,6 +200,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    breakSentences: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -330,7 +334,7 @@ export default {
       return sentences;
     },
     translationHtml(text) {
-      let sentences = breakSentences(text);
+      let sentences = this.breakSentences ? breakSentences(text) : [text];
       let html = "";
       for (let s of sentences) {
         html += `<span class="annotate-translation-sentence">${s}</span>`;
@@ -618,7 +622,7 @@ export default {
     async tokenize(text, batchId) {
       let html = "";
       let dictionary = await this.$getDictionary();
-      let tokens = await dictionary.tokenize(text);
+      let tokens = await dictionary.tokenizeWithCache(text);
       this.tokenized[batchId] = tokens;
       for (let index in this.tokenized[batchId]) {
         let token = this.tokenized[batchId][index];
@@ -682,7 +686,7 @@ export default {
         // break setnences
         let text = node.nodeValue;
         text = text.replace(/\n\u200e/g, "\n"); // Fix error when \n and a left-to-right mark are found together and mess up with the order of words.
-        let sentences = breakSentences(text);
+        let sentences = this.breakSentences ? breakSentences(text) : [text];
         for (let sentence of sentences) {
           // $(node).before(`<span id="sentence-placeholder-${this.batchId}">${sentence}</span>`)
           let dataSentenceText = this.emitSentenceTextAsAttr
