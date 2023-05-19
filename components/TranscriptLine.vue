@@ -110,6 +110,9 @@ export default {
     current: {
       type: Boolean
     },
+    currentTime: {
+      type: Number
+    },
     sticky: {
       type: Boolean
     },
@@ -153,6 +156,10 @@ export default {
     },
     video: {
       type: Object
+    },
+    paused: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -176,6 +183,23 @@ export default {
   mounted() {
     this.height = this.$el.clientHeight;
     this.width = this.$el.clientWidth;
+    if (this.current) this.playAnimation();
+  },
+  watch: {
+    current() {
+      if (this.current) {
+        this.playAnimation();
+      } else {
+        this.pauseAnimation();
+      }
+    },
+    paused() {
+      if (this.paused) {
+        this.pauseAnimation();
+      } else {
+        this.playAnimation();
+      }
+    },
   },
   methods: {
     getSavedWords() {
@@ -188,7 +212,9 @@ export default {
     updateAnnotated(annotated) {
       this.annotated = annotated;
     },
-    playAnimation(startFrom) {
+    playAnimation() {
+      if (!this.showAnimation) return
+      const startFrom = Math.min(this.currentTime - this.line.starttime, 0)
       if (this.$refs["annotate"]) {
         this.$refs["annotate"].playAnimation(startFrom);
       }

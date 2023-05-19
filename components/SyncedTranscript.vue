@@ -33,6 +33,8 @@
                 showParallelLine: parallellines && parallellines.length > 0,
                 lineIndex: index + visibleMin,
                 current: currentLine === line,
+                currentTime,
+                paused,
                 hideWhileAnnotating: single,
                 enableTranslationEditing:
                   $adminMode && enableTranslationEditing,
@@ -285,10 +287,6 @@ export default {
       if (this.paused && this.useSmoothScroll) {
         this.cancelSmoothScroll();
       }
-      if (this.showAnimation) {
-        if (this.paused) this.pauseCurrentLineAnimation();
-        if (!this.paused) this.playCurrentLineAnimation();
-      }
     },
     async currentTime() {
       if (this.preventCurrentTimeUpdate) return;
@@ -307,10 +305,6 @@ export default {
     },
     async currentLine() {
       if (!this.single && !this.paused) this.scrollTo(this.currentLineIndex);
-      if (!this.paused && this.showAnimation) {
-        if (this.single) await timeout(100); // wait for the element to render first
-        this.playCurrentLineAnimation(this.single ? 0.1 : 0);
-      }
     },
     parallellines() {
       this.matchParallelLines();
@@ -756,31 +750,6 @@ export default {
       this.currentLine = line;
       this.nextLine = this.lines[this.currentLineIndex + 1];
       this.seekVideoTo(line.starttime - NEXT_LINE_STARTED_TOLERANCE); // We rewind to a little bit earlier to capture more audio at the beginning of the line
-      if (!this.paused) {
-        this.playCurrentLineAnimation();
-      }
-    },
-    playCurrentLineAnimation() {
-      if (!this.showAnimation) return;
-      let currentLineRefs = this.single
-        ? this.$refs[`transcript-line`]
-        : this.$refs[`transcript-line-${this.currentLineIndex}`];
-      if (currentLineRefs && currentLineRefs[0]) {
-        currentLineRefs[0].playAnimation(
-          this.single
-            ? 0
-            : Math.min(this.currentTime - this.currentLine.starttime, 0)
-        );
-      }
-    },
-    pauseCurrentLineAnimation() {
-      let currentLineRef;
-      let currentLineRefs = this.single
-        ? this.$refs[`transcript-line`]
-        : this.$refs[`transcript-line-${this.currentLineIndex}`];
-      if (currentLineRefs && currentLineRefs[0])
-        currentLineRef = currentLineRefs[0];
-      if (currentLineRef) currentLineRef.pauseAnimation();
     },
     rewind() {
       this.goToLine(this.currentLine);

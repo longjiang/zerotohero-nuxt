@@ -99,6 +99,9 @@ export default {
     useZoom: {
       default: false,
     },
+    animate: {
+      default: false,
+    },
   },
   computed: {
     wordBlockTextClasses() {
@@ -119,6 +122,7 @@ export default {
         seen: this.seen,
         saved: this.saved,
         obscure: this.obscure,
+        animate: this.animate
       };
       if (this.pos) classes[`pos-${this.pos}`] = true;
       return classes;
@@ -130,7 +134,7 @@ export default {
   methods: {
     hasKanji(...args) {
       return hasKanji(...args);
-    }
+    },
   }
 };
 </script>

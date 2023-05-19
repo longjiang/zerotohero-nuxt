@@ -1,70 +1,138 @@
 <template>
   <div>
-    <div :class="{
-      'annotate-wrapper': true,
-      'annotate-with-translation': showTranslation && translationData,
-    }" v-observe-visibility="{
-    callback: visibilityChanged,
-    once: true,
-  }">
+    <div
+      :class="{
+        'annotate-wrapper': true,
+        'annotate-with-translation': showTranslation && translationData,
+      }"
+      v-observe-visibility="{
+        callback: visibilityChanged,
+        once: true,
+      }"
+    >
       <div class="text-center" v-if="showLoading && !annotated">
-        <beat-loader class="d-inline-block" color="#28a745" size="5px"></beat-loader>
+        <beat-loader
+          class="d-inline-block"
+          color="#28a745"
+          size="5px"
+        ></beat-loader>
       </div>
-      <component :is="tag" :dir="dir()" :class="{
+      <component
+        :is="tag"
+        :dir="dir()"
+        :class="{
           'd-none': showLoading && !annotated,
           annotated,
           'text-right': dir() === 'rtl',
-          'add-pinyin': $l2Settings && ($l2Settings.showPinyin || $l2Settings.showDefinition),
+          'add-pinyin':
+            $l2Settings &&
+            ($l2Settings.showPinyin || $l2Settings.showDefinition),
           phonetics,
           fullscreen: fullscreenMode,
           'with-buttons': buttons,
-        }">
+        }"
+      >
         <div class="annotator-buttons" v-if="!empty() && buttons">
           <div class="annotator-menu-toggle" @click="showMenuModal">
             <i class="fa-regular fa-ellipsis-v"></i>
           </div>
         </div>
         <div class="annotate-except-buttons" style="width: 100%">
-          <div :class="{ 'use-zoom': useZoom, 'annotate-slot': true }" v-if="!annotated">
+          <div
+            :class="{ 'use-zoom': useZoom, 'annotate-slot': true }"
+            v-if="!annotated"
+          >
             <slot></slot>
           </div>
           <div v-if="textMode && annotated">
-            <input :class="{
+            <input
+              :class="{
                 'annotate-input': true,
-              }" @select="select" @blur="annotateInputBlur" @click.stop="dummyFunction" :value="text"
-              style="width: calc(100% - 2rem)" />
+              }"
+              @select="select"
+              @blur="annotateInputBlur"
+              @click.stop="dummyFunction"
+              :value="text"
+              style="width: calc(100% - 2rem)"
+            />
           </div>
           <template v-if="annotated && !textMode">
-            <v-runtime-template v-for="(template, index) of annotatedSlots" :key="`annotate-template-${index}`"
-              :template="template" class="annotate-template" ref="run-time-template" />
-            <span v-if="matchedGrammar.length > 0" @click="showGrammarModal" class="annotate-grammar-button">
+            <v-runtime-template
+              v-for="(template, index) of annotatedSlots"
+              :key="`annotate-template-${index}`"
+              :template="template"
+              class="annotate-template"
+              ref="run-time-template"
+            />
+            <span
+              v-if="matchedGrammar.length > 0"
+              @click="showGrammarModal"
+              class="annotate-grammar-button"
+            >
               {{ $t("G") }}
             </span>
           </template>
         </div>
       </component>
-      <div class="annotate-translation" v-if="showTranslation && (translationLoading || translationData)">
-        <beat-loader class="d-inline-block" v-if="translationLoading" color="#28a745" size="5px"></beat-loader>
-        <div v-else v-html="translationHtml(translationData ? translationData : '')" />
+      <div
+        class="annotate-translation"
+        v-if="showTranslation && (translationLoading || translationData)"
+      >
+        <beat-loader
+          class="d-inline-block"
+          v-if="translationLoading"
+          color="#28a745"
+          size="5px"
+        ></beat-loader>
+        <div
+          v-else
+          v-html="translationHtml(translationData ? translationData : '')"
+        />
       </div>
     </div>
-    <b-modal ref="grammar-modal" size="md" centered hide-footer :title="$t('Grammar Notes')"
-      modal-class="safe-padding-top mt-4" :body-class="`grammar-modal-wrapper l2-${$l2.code}`">
-      <table class="table table-responsive grammar-table w-100 mb-0" style="font-size: 0.9em">
+    <b-modal
+      ref="grammar-modal"
+      size="md"
+      centered
+      hide-footer
+      :title="$t('Grammar Notes')"
+      modal-class="safe-padding-top mt-4"
+      :body-class="`grammar-modal-wrapper l2-${$l2.code}`"
+    >
+      <table
+        class="table table-responsive grammar-table w-100 mb-0"
+        style="font-size: 0.9em"
+      >
         <tbody>
-          <tr v-for="row in matchedGrammar" :key="`annotate-grammar-${row.id}`" class="grammar-table-row" @click="$router.push({ name: 'grammar-view', params: { id: row.id } })
-            ">
+          <tr
+            v-for="row in matchedGrammar"
+            :key="`annotate-grammar-${row.id}`"
+            class="grammar-table-row"
+            @click="
+              $router.push({ name: 'grammar-view', params: { id: row.id } })
+            "
+          >
             <td class="align-left align-middle" style="min-width: 7rem">
               {{ $t(l2LevelName) }} {{ row.code }}
             </td>
-            <td class="align-left align-middle font-weight-bold" style="min-width: 6rem" :data-level="row.level">
-              <span v-html="highlightMultiple(row.structure, row.words, row.book)" />
+            <td
+              class="align-left align-middle font-weight-bold"
+              style="min-width: 6rem"
+              :data-level="row.level"
+            >
+              <span
+                v-html="highlightMultiple(row.structure, row.words, row.book)"
+              />
             </td>
             <td class="align-left align-middle w-100" style="min-width: 6rem">
               <span>{{ row.english }}</span>
             </td>
             <td class="align-right align-middle text-right">
-              <router-link class="text-success" v-if="row" :to="{ name: 'grammar-view', params: { id: row.id } }">
+              <router-link
+                class="text-success"
+                v-if="row"
+                :to="{ name: 'grammar-view', params: { id: row.id } }"
+              >
                 <i class="fas fa-chevron-right ml-1" />
               </router-link>
             </td>
@@ -72,39 +140,69 @@
         </tbody>
       </table>
     </b-modal>
-    <b-modal ref="annotate-menu-modal" size="sm" centered hide-footer :title="$t('Annotated Text')"
-      modal-class="safe-padding-top mt-4" body-class="annotate-menu-modal-wrapper">
+    <b-modal
+      ref="annotate-menu-modal"
+      size="sm"
+      centered
+      hide-footer
+      :title="$t('Annotated Text')"
+      modal-class="safe-padding-top mt-4"
+      body-class="annotate-menu-modal-wrapper"
+    >
       <div class="annotate-menu-modal">
         <div class="annotate-menu-modal-item">
-          <Saved :item="phraseItem(text, translationData)" store="savedPhrases" icon="bookmark"
-            class="annotator-button focus-exclude" title="Save Phrase" ref="savePhrase" />
+          <Saved
+            :item="phraseItem(text, translationData)"
+            store="savedPhrases"
+            icon="bookmark"
+            class="annotator-button focus-exclude"
+            title="Save Phrase"
+            ref="savePhrase"
+          />
           <span @click.stop.prevent="saveAsPhraseClick">
             {{ $t(phraseSaved ? "Remove Phrase" : "Save as Phrase") }}
           </span>
         </div>
         <div class="annotate-menu-modal-item">
-          <Speak :text="text" class="annotator-button" title="Speak" ref="speak" />
+          <Speak
+            :text="text"
+            class="annotator-button"
+            title="Speak"
+            ref="speak"
+          />
           <span @click="readAloud">{{ $t("Read Aloud") }}</span>
         </div>
 
         <div class="annotate-menu-modal-item">
-          <span class="annotator-button annotator-translate focus-exclude" title="Translate Inline"
-            @click="translateClick" ref="translation">
+          <span
+            class="annotator-button annotator-translate focus-exclude"
+            title="Translate Inline"
+            @click="translateClick"
+            ref="translation"
+          >
             <i class="fas fa-language"></i>
           </span>
           <span @click="translateClick">{{ $t("Get Translation") }}</span>
         </div>
         <div class="annotate-menu-modal-item">
-          <span :class="{
-            'annotator-button annotator-text-mode focus-exclude': true,
-            active: textMode,
-          }" title="Edit" @click="editClick">
+          <span
+            :class="{
+              'annotator-button annotator-text-mode focus-exclude': true,
+              active: textMode,
+            }"
+            title="Edit"
+            @click="editClick"
+          >
             <i class="fas fa-edit"></i>
           </span>
           <span @click="editClick">{{ $t("Edit Text") }}</span>
         </div>
         <div class="annotate-menu-modal-item">
-          <span @click="copyClick" title="Copy" class="annotator-button annotator-copy focus-exclude">
+          <span
+            @click="copyClick"
+            title="Copy"
+            class="annotator-button annotator-copy focus-exclude"
+          >
             <i class="fas fa-copy"></i>
           </span>
           <span @click="copyClick">{{ $t("Copy Text") }}</span>
@@ -125,7 +223,15 @@ import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 import { transliterate as tr } from "transliteration";
 import { mapState } from "vuex";
 import { getClient } from "iframe-translator";
-import { highlightMultiple, isMobile, timeout, uniqueByValue, logError, breakSentences, l2LevelName } from "@/lib/utils";
+import {
+  highlightMultiple,
+  isMobile,
+  timeout,
+  uniqueByValue,
+  logError,
+  breakSentences,
+  l2LevelName,
+} from "@/lib/utils";
 
 export default {
   components: {
@@ -394,40 +500,34 @@ export default {
       if (this.annotated) {
         this.animate = true;
         if (this.animationDuration) {
-          let blocks = this.$el.querySelectorAll(
-            ".word-block, .word-block-unknown"
-          );
-          let durationAlreadyPlayed = 0;
-          let spans = this.$el.querySelectorAll(
-            ".word-block-text, .word-block-unknown"
-          );
-          let aggregateText = "";
-          spans.forEach(
-            (span) => (aggregateText = aggregateText + span.textContent.trim())
-          );
-          for (let block of blocks) {
-            let span = block.classList.contains("word-block")
-              ? block.querySelector(".word-block-text")
-              : block;
-            let blockLength = span
-              ? span.textContent.trim().length
-              : aggregateText.length / blocks.length;
-            let blockDuration =
-              (blockLength / aggregateText.length) * this.animationDuration;
-            if (blockDuration === 0) continue;
-            durationAlreadyPlayed = durationAlreadyPlayed + blockDuration;
-            // Which ones should skip
-            if (durationAlreadyPlayed > startFrom) {
-              if (!this.animate) return;
-              block.classList.add("animate");
-              await timeout(
-                (blockDuration * 1000) / this.animationSpeed
-              );
+          let wordBlockComponents =
+            this.$refs["run-time-template"]?.[0]?.$children?.[0]?.$children;
+          if (wordBlockComponents?.length > 0) {
+            let aggregateText = wordBlockComponents
+              .map((wb) => wb.text || "")
+              .join(" ");
+            let durationAlreadyPlayed = 0;
+            for (const wb of wordBlockComponents) {
+              
+              let blockLength = wb.text?.length || 0;
+              let blockDuration =
+                blockLength / aggregateText.length * this.animationDuration;
+              if (blockDuration === 0) continue;
+              durationAlreadyPlayed = durationAlreadyPlayed + blockDuration;
+              // Which ones should skip
+              if (durationAlreadyPlayed > startFrom) {
+                if (!this.animate) return;
+                wb.playAnimation();
+                await timeout((blockDuration * 1000) / this.animationSpeed);
+              }
             }
           }
-          await timeout(2000);
-          blocks.forEach((b) => b.classList.remove("animate"));
         }
+      } else {
+        console.log("annotated", this.annotated);
+        await timeout(1000);
+        console.log("annotated", this.annotated);
+        this.playAnimation(startFrom + 1000);
       }
     },
     async pauseAnimation() {
@@ -569,8 +669,10 @@ export default {
         let savedWords = [];
         for (let template of this.$refs["run-time-template"]) {
           let wordblocks = template.$children?.[0]?.$children;
-          let moreSavedWords = wordblocks.filter((wb) => wb.savedWord).map((wb) => wb.savedWord)
-          savedWords = [...savedWords, ...moreSavedWords]
+          let moreSavedWords = wordblocks
+            .filter((wb) => wb.savedWord)
+            .map((wb) => wb.savedWord);
+          savedWords = [...savedWords, ...moreSavedWords];
         }
         return savedWords;
       }
@@ -629,14 +731,18 @@ export default {
         if (typeof token === "object") {
           html += `<WordBlock v-bind="wordBlockAttributes(${batchId},${index})">${token.text}</WordBlock>`;
         } else {
-          html += `<span class="word-block-unknown ${this.useZoom ? 'use-zoom' : ''}"><span class="word-block-segment">${token.replace(/\s/g, "&nbsp;")}</span></span>`;
+          html += `<span class="word-block-unknown ${
+            this.useZoom ? "use-zoom" : ""
+          }"><span class="word-block-segment">${token.replace(
+            /\s/g,
+            "&nbsp;"
+          )}</span></span>`;
         }
       }
       return html;
     },
 
     wordBlockAttributes(batchId, index) {
-      
       let token = this.tokenized[batchId][index];
       let text = token.text;
       let context = {
@@ -644,7 +750,9 @@ export default {
         youtube_id: this.youtube_id,
         starttime: this.starttime,
       }; // { text, starttime = undefined, youtube_id = undefined}
-      let transliterationprop = token.pronunciation ? token.pronunciation : tr(text).replace(/"/g, "")
+      let transliterationprop = token.pronunciation
+        ? token.pronunciation
+        : tr(text).replace(/"/g, "");
       let attrs = {
         transliterationprop,
         ref: "word-block",
@@ -705,7 +813,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~/assets/scss/variables';
+@import "~/assets/scss/variables";
 
 .annotate-translation {
   font-size: 0.8em;
@@ -720,7 +828,7 @@ export default {
   color: $primary-color;
 }
 
-.sentence+.sentence {
+.sentence + .sentence {
   margin-left: 0.1em;
 }
 
@@ -729,15 +837,15 @@ export default {
     margin-right: 0;
   }
 
-  .sentence+.highlight {
+  .sentence + .highlight {
     margin-left: 0;
   }
 
-  .highlight+.sentence {
+  .highlight + .sentence {
     margin-left: 0;
   }
 
-  .sentence+.sentence {
+  .sentence + .sentence {
     margin-left: 0;
   }
 }
@@ -885,7 +993,6 @@ export default {
 
 .zerotohero-zoom-1 {
   .annotate-wrapper.use-zoom {
-
     .annotate-slot,
     .word-block-segment {
       font-size: calc(1rem * 1.25);
@@ -895,7 +1002,6 @@ export default {
 
 .zerotohero-zoom-2 {
   .annotate-wrapper.use-zoom {
-
     .annotate-slot,
     .word-block-segment {
       font-size: calc(1rem * 1.25 * 1.25);
@@ -905,7 +1011,6 @@ export default {
 
 .zerotohero-zoom-3 {
   .annotate-wrapper.use-zoom {
-
     .annotate-slot,
     .word-block-segment {
       font-size: calc(1rem * 1.25 * 1.25 * 1.25);
@@ -915,7 +1020,6 @@ export default {
 
 .zerotohero-zoom-4 {
   .annotate-wrapper.use-zoom {
-
     .annotate-slot,
     .word-block-segment {
       font-size: calc(1rem * 1.25 * 1.25 * 1.25 * 1.25);

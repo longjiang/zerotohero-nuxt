@@ -20,7 +20,7 @@
         "
         v-bind="attributes"
       />
-      <WordBlockWord v-else v-bind="attributes" />
+      <WordBlockWord v-else v-bind="attributes" :animate="animate" />
     </div>
 
     <template slot="popover">
@@ -126,6 +126,7 @@ export default {
       lastLookupWasQuick: false,
       reveal: false,
       t: 0,
+      animate: false,
     };
   },
   computed: {
@@ -250,8 +251,6 @@ export default {
     },
   },
   asyncComputed: {
-
-
     async attributes() {
       let word = this.word;
       let definition = this.quickGloss;
@@ -347,6 +346,9 @@ export default {
     },
   },
   methods: {
+    playAnimation() {
+      this.animate = true
+    },
     getWordText(word, text) {
       let result = "";
       if (word) {
