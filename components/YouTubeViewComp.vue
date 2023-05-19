@@ -395,7 +395,6 @@ export default {
       return { subs, generated };
     },
     async getMissingVideoInfoFromYouTube(video) {
-      console.log("getMissingVideoInfoFromYouTube");
       // If the video either doesn't have L2 subtitles, or doesn't have L1 subtitles, we retrieve the locales of the subtitles from YouTube
       if (!(video?.subs_l2?.length > 0) || !(video?.subs_l1?.length > 0)) {
         let { l1Locale, l2Locale, l2Name } = await YouTube.getTranscriptLocales(
@@ -462,6 +461,7 @@ export default {
     onCurrentTime(currentTime) {
       if (this.currentTime !== currentTime) {
         this.currentTime = currentTime;
+        this.updateCurrentTimeQueryString();
         this.$emit("currentTime", this.currentTime);
       }
     },
@@ -493,6 +493,52 @@ export default {
             lesson: this.nextEpisode.lesson,
           },
         });
+    },
+    updateCurrentTimeQueryString(currentTime) {
+      if (this.size === "mini") return;
+      if (typeof window !== "undefined") {
+        this.currentTime = currentTime;
+        const params = new URLSearchParams(window.location.search);
+        const queryStringTime = params.get("t") ? Number(params.get("t")) : 0;
+        if (this.currentTimeInSeconds !== queryStringTime) {
+          window.history.replaceState(
+            "",
+            "",
+            `?t=${this.currentTimeInSeconds}`
+          );
+          if (this.currentTimeInSeconds % 60 === 0)
+            this.saveHistory({
+              type: 'youtube',
+              video: this.video,
+              duration: this.duration,
+            }); // Only update history (and push to the server) every minute
+        }
+      }
+    },
+    saveHistory({ type, video, duration }) {
+      console.log("saveHistory", { type, video, duration })
+      if (this.size === "mini") return;
+      if (type === "youtube" && video && video.youtube_id) {
+        let data = {
+          type: "video",
+          id: `${this.$l2.code}-video-${video.youtube_id}`,
+          date: DateHelper.unparseDate(new Date()),
+          l1: this.$l1.code,
+          l2: this.$l2.code,
+          video: {
+            id: video.id,
+            title: video.title,
+            youtube_id: video.youtube_id,
+            starttime: this.currentTimeInSeconds,
+          },
+        };
+        if (duration) {
+          data.video.duration = duration;
+          data.video.progress = data.video.starttime / duration;
+        }
+        this.$store.dispatch("history/add", data); // history's ADD_HISTORY_ITEM mutation automatically checks if this item is already in the history based on it's id (e.g. zh-video-Y23x9L4)
+        console.log(`Video View: YouTube video saved to watch history.`, data);
+      }
     },
   },
 };

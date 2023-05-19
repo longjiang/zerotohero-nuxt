@@ -98,7 +98,6 @@ export default {
   components: {
     dirs: [
       '~/components',
-      '~/components/jw' // Auto-import components in the sub dir while maintaining their names
     ]
   },
 

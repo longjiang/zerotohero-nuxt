@@ -94,6 +94,7 @@
       <div v-if="!term" class="mt-3">
         {{ $t('Popular search terms in {l2}:', {l2: $t($l2.name)}) }} <router-link
           v-for="topic in popularTopics"
+          :key="`topic-${topic[$l2.code]}`"
           :to="{ name: 'youtube-search', params: { term: topic[$l2.code], start: 0 } }"
           class="mr-2"
           >{{ topic[$l2.code] }}</router-link
