@@ -20,9 +20,55 @@
     >
       <i class="fa fa-times"></i>
     </button>
-    <div v-if="token?.lemmas && token.lemmas.length > 0 && token.lemmas[0].lemma !== text" class="word-block-lemma">
-      <b>{{ $t('Lemmatized:') }}</b> {{ text }} → {{ token.lemmas.map(l => l.lemma).join(', ') }} <template v-if="token.pos">({{ token.pos.toLowerCase() }})</template>
-      <hr/>
+    <div
+      v-if="
+        token?.lemmas &&
+        token.lemmas.length > 0 &&
+        token.lemmas[0].lemma !== text
+      "
+      class="word-block-lemma"
+    >
+      <b>{{ $t("Lemmatized:") }}</b> {{ text }} →
+      {{ token.lemmas.map((l) => l.lemma).join(", ") }}
+      <template v-if="token.pos">({{ token.pos.toLowerCase() }})</template>
+      <hr />
+    </div>
+    <div v-if="!loading && !preciseMatchFound" class="no-entry">
+      <span v-if="$hasFeature('transliteration')">
+        <Speak :text="text" class="mr-1" ref="speak" />
+        <span class="word-pronunciation"
+          >[{{ transliterationprop || tr(text) }}]</span
+        >
+      </span>
+      <div>
+        <router-link
+          data-level="outside"
+          :to="{ name: 'phrase', params: { term: text } }"
+          style="font-size: 1.5rem; font-weight: bold"
+          >{{ text }}</router-link
+        >
+        <i class="fa fa-chevron-right text-success"></i>
+        <span class="copy-button">
+          <i class="ml-1 fa-regular fa-copy" @click="onCopyClick(text)"></i>
+        </span>
+      </div>
+      <Saved
+        :item="phraseObj"
+        store="savedPhrases"
+        icon="bookmark"
+        class="d-block annotator-button focus-exclude"
+        title="Save Phrase"
+        ref="savePhrase"
+        :saveText="$t('Save as Phrase')"
+        :removeText="$t('Saved')"
+      />
+      <span>
+        {{ $t("No precise match found.") }}
+      </span>
+      <span v-if="words?.length > 0">
+        {{ $t("Similar words are listed below.") }}
+      </span>
+      <hr class="mt-2 mb-2" />
     </div>
     <div
       v-for="word in words"
@@ -82,6 +128,9 @@
           </b>
         </router-link>
         <i class="fas fa-chevron-right text-success"></i>
+        <span class="copy-button">
+          <i class="ml-1 fa-regular fa-copy" @click="onCopyClick(word.head)"></i>
+        </span>
         <span
           v-if="word.traditional && word.traditional !== word.simplified"
           class="ml-1"
@@ -184,39 +233,7 @@
     <div v-if="loading === true">
       <Loader :sticky="true" message="Looking up the dictionary..." />
     </div>
-    <div
-      v-if="words && words.length === 0 && loading === false"
-      class="no-entry"
-    >
-      <span style="color: #999" v-if="$hasFeature('transliteration')">
-        <span>{{ transliterationprop || tr(text) }}</span>
-        <Speak :text="text" class="ml-1" ref="speak" />
-      </span>
-      <div style="font-size: 1.5rem; font-weight: bold">
-        <router-link
-          data-level="outside"
-          :to="{ name: 'phrase', params: { term: text } }"
-          >{{ text }} <i class="fa fa-chevron-right"></i
-        ></router-link>
-        <span class="copy-button">
-          <i class="ml-1 fa-regular fa-copy" @click="copyClick"></i>
-        </span>
-      </div>
-      <span style="color: #999">
-        {{ $t("Sorry, no definition found.") }}
-      </span>
-      <Saved
-        :item="phraseObj"
-        store="savedPhrases"
-        icon="bookmark"
-        class="annotator-button focus-exclude"
-        title="Save Phrase"
-        ref="savePhrase"
-        :saveText="$t('Save as Phrase')"
-        :removeText="$t('Saved')"
-      />
-    </div>
-    <hr class="mt-2 mb-0" />
+    <hr v-if="words?.length > 0" class="mt-2 mb-2" />
     <TranslatorLinks v-bind="{ text }" class="mt-2" />
     <LookUpIn
       v-if="text || token"
@@ -263,6 +280,12 @@ export default {
       IMAGE_PROXY,
       entryClasses: { "tooltip-entry": true }, // Other classes are added upon update
     };
+  },
+  computed: {
+    preciseMatchFound() {
+      if (this.token?.candidates?.length > 0) return true;
+      return false;
+    },
   },
   mounted() {
     if (this.$l1) this.entryClasses[`l1-${this.$l1.code}`] = true;
@@ -322,10 +345,9 @@ export default {
         this.$hasFeature("transliteration") &&
         !["tlh", "fa", "ja"].includes(this.$l2.code)
       ) {
-
         pronunciation = tr(word.head);
       }
-      
+
       let formattedPronunciation = pronunciation ? `[${pronunciation}]` : "";
       if (this.$l2.code === "tlh")
         formattedPronunciation = word.head + " " + formattedPronunciation;
@@ -337,8 +359,7 @@ export default {
           "]";
       return formattedPronunciation;
     },
-    copyClick() {
-      let text = this.text;
+    onCopyClick(text) {
       let tempInput = document.createElement("input");
       let popover = document.querySelector(".popover");
       tempInput.style = "position: absolute; left: -1000px; top: -1000px";
@@ -439,7 +460,6 @@ $tooltip-border-dark: #474545;
 :deep(.definition-list-item) {
   font-size: 1rem;
 }
-
 
 .tooltip {
   display: block !important;

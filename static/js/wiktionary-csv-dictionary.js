@@ -144,7 +144,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
   lookupMultiple(text, ignoreAccents = false) {
     if (ignoreAccents && !isAccentCritical(this.l2)) text = stripAccents(text);
     let type = ignoreAccents ? "search" : "head";
-    let words = this[type + "Index"][text.toLowerCase()];
+    let words = this[type + "Index"][text];
     return words || [];
   }
   
