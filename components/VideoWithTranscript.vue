@@ -278,7 +278,6 @@
  *
  * 2. Fullscreen size:
  *   - Hides SiteTopBar and Nav bar
- *   - Enforces subtitles mode
  *   - Does not force screen rotation, allows users to rotate as desired
  *
  * 3. Mini size:
@@ -751,7 +750,6 @@ export default {
       if (fullscreen !== this.fullscreen) {
         if (fullscreen) {
           this.requestFullscreen();
-          this.mode = "subtitles";
         } else {
           this.exitFullscreen();
           this.mode = this.$store.state.settings.mode;
