@@ -497,7 +497,6 @@ export default {
      * @param {Number} startFrom Starting time in seconds
      */
     async playAnimation(startFrom = 0) {
-      console.log("playAnimation", startFrom);
       if (this.annotated) {
         this.animate = true;
         if (this.animationDuration) {
@@ -509,7 +508,6 @@ export default {
               .join(" ");
             let durationAlreadyPlayed = 0;
             for (const wb of wordBlockComponents) {
-              
               let blockLength = wb.text?.length || 0;
               let blockDuration =
                 blockLength / aggregateText.length * this.animationDuration;
@@ -527,10 +525,21 @@ export default {
           }
         }
       } else {
-        console.log("annotated", this.annotated);
-        await timeout(1000);
-        console.log("annotated", this.annotated);
-        this.playAnimation(startFrom + 1000);
+        const timeBeforeRetry = Date.now();
+        this.$on('annotated', (annotated) => {
+          if (annotated) {
+            this.$nextTick(() => {
+              let wordBlockComponents =
+                this.$refs["run-time-template"]?.[0]?.$children?.[0]?.$children;
+              if (wordBlockComponents?.length > 0) {
+
+            const delay = (Date.now() - timeBeforeRetry) / 1000;
+            this.playAnimation(startFrom + delay);
+              }
+                
+            });
+          }
+        })
       }
     },
     async pauseAnimation() {
