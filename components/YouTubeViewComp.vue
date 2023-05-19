@@ -36,6 +36,7 @@
 
 <script>
 import YouTube from "@/lib/youtube";
+import DateHelper from "@/lib/date-helper";
 import Vue from "vue";
 import { mapState } from "vuex";
 import {
@@ -100,7 +101,7 @@ export default {
   computed: {
     ...mapState("stats", ["stats"]),
     ...mapState("shows", ["showsLoaded"]),
-    currentTimeInSeconds() {
+    currentTimeEvery10Seconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
       return t;
     },
@@ -494,19 +495,18 @@ export default {
           },
         });
     },
-    updateCurrentTimeQueryString(currentTime) {
+    updateCurrentTimeQueryString() {
       if (this.size === "mini") return;
       if (typeof window !== "undefined") {
-        this.currentTime = currentTime;
         const params = new URLSearchParams(window.location.search);
         const queryStringTime = params.get("t") ? Number(params.get("t")) : 0;
-        if (this.currentTimeInSeconds !== queryStringTime) {
+        if (this.currentTimeEvery10Seconds !== queryStringTime) {
           window.history.replaceState(
             "",
             "",
-            `?t=${this.currentTimeInSeconds}`
+            `?t=${this.currentTimeEvery10Seconds}`
           );
-          if (this.currentTimeInSeconds % 60 === 0)
+          if (this.currentTimeEvery10Seconds % 60 === 0)
             this.saveHistory({
               type: 'youtube',
               video: this.video,
@@ -516,7 +516,6 @@ export default {
       }
     },
     saveHistory({ type, video, duration }) {
-      console.log("saveHistory", { type, video, duration })
       if (this.size === "mini") return;
       if (type === "youtube" && video && video.youtube_id) {
         let data = {
@@ -529,7 +528,7 @@ export default {
             id: video.id,
             title: video.title,
             youtube_id: video.youtube_id,
-            starttime: this.currentTimeInSeconds,
+            starttime: this.currentTimeEvery10Seconds,
           },
         };
         if (duration) {
@@ -537,7 +536,7 @@ export default {
           data.video.progress = data.video.starttime / duration;
         }
         this.$store.dispatch("history/add", data); // history's ADD_HISTORY_ITEM mutation automatically checks if this item is already in the history based on it's id (e.g. zh-video-Y23x9L4)
-        console.log(`Video View: YouTube video saved to watch history.`, data);
+        console.log(`Video View: YouTube video saved to watch history.`);
       }
     },
   },

@@ -55,8 +55,7 @@
           landscape,
           starttime,
         }"
-        @currentTime="updateCurrentTimeQueryString"
-        @onUpdateLayout="onYouTubeUpdateLayout"
+        @updateLayout="onUpdateLayout"
         @videoLoaded="onVideoLoaded"
         style="height: 100%;"
         class="video-view-content-inner"
@@ -66,7 +65,6 @@
 </template>
 
 <script>
-import DateHelper from "@/lib/date-helper";
 import { scrollToTargetAdjusted, wide } from "@/lib/utils";
 
 export default {
@@ -197,53 +195,8 @@ export default {
       if (this.layout !== "mini") this.$router.push(this.minimizeVideoTo);
       this.$emit("close", { type: this.type, youtube_id: this.youtube_id });
     },
-    onYouTubeUpdateLayout(layout) {
+    onUpdateLayout(layout) {
       this.initialMode = layout;
-    },
-    updateCurrentTimeQueryString(currentTime) {
-      if (this.size === "mini") return;
-      if (typeof window !== "undefined") {
-        this.currentTime = currentTime;
-        const params = new URLSearchParams(window.location.search);
-        const queryStringTime = params.get("t") ? Number(params.get("t")) : 0;
-        if (this.currentTimeInSeconds !== queryStringTime) {
-          window.history.replaceState(
-            "",
-            "",
-            `?t=${this.currentTimeInSeconds}`
-          );
-          if (this.currentTimeInSeconds % 60 === 0)
-            this.saveHistory({
-              type: this.type,
-              video: this.video,
-              duration: this.duration,
-            }); // Only update history (and push to the server) every minute
-        }
-      }
-    },
-    saveHistory({ type, video, duration }) {
-      if (this.size === "mini") return;
-      if (type === "youtube" && video && video.youtube_id) {
-        let data = {
-          type: "video",
-          id: `${this.$l2.code}-video-${video.youtube_id}`,
-          date: DateHelper.unparseDate(new Date()),
-          l1: this.$l1.code,
-          l2: this.$l2.code,
-          video: {
-            id: video.id,
-            title: video.title,
-            youtube_id: video.youtube_id,
-            starttime: this.currentTimeInSeconds,
-          },
-        };
-        if (duration) {
-          data.video.duration = duration;
-          data.video.progress = data.video.starttime / duration;
-        }
-        this.$store.dispatch("history/add", data); // history's ADD_HISTORY_ITEM mutation automatically checks if this item is already in the history based on it's id (e.g. zh-video-Y23x9L4)
-        console.log(`Video View: YouTube video saved to watch history.`);
-      }
     },
   },
 };
