@@ -752,7 +752,6 @@ export default {
           this.requestFullscreen();
         } else {
           this.exitFullscreen();
-          this.mode = this.$store.state.settings.mode;
         }
       }
     },
