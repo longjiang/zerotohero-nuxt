@@ -136,6 +136,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.word-block,
+.word-block-unknown {
+  text-align: center;
+  display: inline-block;
+}
+
 .zerotohero-dark {
 
   .word-block,
@@ -195,7 +201,7 @@ export default {
 
   10% {
     color: #54ff7c;
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
 
   100% {
@@ -212,7 +218,7 @@ export default {
 
   10% {
     color: #00d031;
-    transform: scale(1.2);
+    transform: scale(1.1);
   }
 
   100% {
@@ -254,13 +260,9 @@ export default {
   }
 }
 
-.word-block {
-  text-align: center;
-}
 
 .add-pinyin {
   .word-block {
-    display: inline-block;
     margin: 0;
     position: relative;
     text-indent: 0;
@@ -343,14 +345,6 @@ export default {
     font-weight: normal;
   }
 }
-
-// Turn this off until we can have this set in options
-// .pos-v,
-// .pos-verb,
-// .pos-Verb,
-// .pos-動詞 {
-//   border-bottom: 1px solid #888;
-// }
 
 .show-pinyin-for-saved {
   .word-block:hover:not(.saved) {
