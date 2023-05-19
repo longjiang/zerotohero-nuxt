@@ -519,7 +519,9 @@ export default {
               if (durationAlreadyPlayed > startFrom) {
                 if (!this.animate) return;
                 const animationDuration = (blockDuration * 1000) / this.animationSpeed
-                await wb.playAnimation(animationDuration);
+                const fadeDuration = animationDuration * 2000; 
+                wb.playAnimation(fadeDuration);
+                await timeout(animationDuration);
               }
             }
           }
