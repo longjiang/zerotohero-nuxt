@@ -1088,7 +1088,6 @@ export default {
 
     :deep(.transcript-line) {
       height: 100%;
-      overflow: hidden;
     }
   }
 }
