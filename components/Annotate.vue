@@ -635,28 +635,10 @@ export default {
       return html;
     },
 
-    async addCandidatesToToken(token) {
-      const dictionary = await this.$getDictionary();
-      let candidates = await dictionary.lookupMultiple(token.text);
-      if (token.lemmas) {
-        for (let lemma of token.lemmas) {
-          if (lemma.lemma && lemma.lemma !== token.text) {
-            const lemmaCandidates = await dictionary.lookupMultiple(lemma.lemma)
-            candidates = [...candidates, ...lemmaCandidates]
-          }
-        }
-      }
-      token.candidates = uniqueByValue(candidates, 'id');
-      return token;
-    },
-
     wordBlockAttributes(batchId, index) {
       
       let token = this.tokenized[batchId][index];
       let text = token.text;
-      if (!token.candidates) {
-        this.addCandidatesToToken(token);
-      }
       let context = {
         text: this.text,
         youtube_id: this.youtube_id,

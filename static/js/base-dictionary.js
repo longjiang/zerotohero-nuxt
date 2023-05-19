@@ -51,7 +51,26 @@ class BaseDictionary {
 
   async tokenizeWithCache(text) {
     const tokens = await this.tokenizer.tokenizeWithCache(text);
+    tokens.forEach(token => this.addCandidatesToToken(token))
     return tokens;
+  }
+
+
+  async addCandidatesToToken(token) {
+    if (typeof token !== "object") return;
+    if (token.candidates) {
+      return;
+    }
+    let candidates = await this.lookupMultiple(token.text);
+    if (token.lemmas) {
+      for (let lemma of token.lemmas) {
+        if (lemma.lemma && lemma.lemma !== token.text) {
+          const lemmaCandidates = await this.lookupMultiple(lemma.lemma)
+          candidates = [...candidates, ...lemmaCandidates]
+        }
+      }
+    }
+    token.candidates = uniqueByValues(candidates, ['id']);
   }
 
   dictionaryFile({ l1Code = undefined, l2Code = undefined } = {}) {

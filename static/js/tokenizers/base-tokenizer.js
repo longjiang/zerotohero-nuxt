@@ -93,59 +93,6 @@ class BaseTokenizer {
     return longest;
   }
 
-
-  // /* Returns the longest word in filteredWords that is inside `text` */
-  // longest(text, filteredWords) {
-  //   // Only return the *first* seen word and those the same as it
-  //   let firstSeen = false;
-  //   let matchedIndex, matchEndIndex, matchedText;
-  //   let search = text.toLowerCase();
-  //   if (!isAccentCritical(this.l2)) search = stripAccents(search);
-  //   let matches = [];
-  //   for (let word of filteredWords) {
-  //     let matched = false;
-  //     if (word.head.trim() === "") continue;
-  //     if (firstSeen) {
-  //       matched = word.search === firstSeen;
-  //     } else {
-  //       matchedIndex = search.indexOf(word.search);
-  //       let matchFound = matchedIndex !== -1;
-  //       if (matchFound) {
-  //         matchEndIndex = matchedIndex + word.search.length;
-  //         let nextChar = text.charAt(matchEndIndex);
-  //         while (isCombining(nextChar)) {
-  //           matchEndIndex = matchEndIndex + 1;
-  //           nextChar = text.charAt(matchEndIndex);
-  //         }
-  //         firstSeen = word.search;
-  //         matchedText = text.slice(matchedIndex, matchEndIndex);
-  //         matched = true;
-  //       }
-  //     }
-  //     if (matched) {
-  //       matches.push({
-  //         word,
-  //         matchedIndex,
-  //         matchEndIndex,
-  //       });
-  //     }
-  //   }
-  //   // Turkish words should only find matches at the beginning of each word
-  //   if (this.l2['iso639-3'] === "tur") {
-  //     matches = matches.sort((a, b) => {
-  //       return a.matchedIndex - b.matchedIndex;
-  //     });
-  //   } else {
-  //     matches = matches.sort((a, b) => {
-  //       return b.word.head.length - a.word.head.length;
-  //     });
-  //   }
-  //   return {
-  //     matches: matches.map((m) => m.word),
-  //     text: matchedText,
-  //   };
-  // }
-
   async tokenizeContinua(text, filteredWords) {
     if (!filteredWords) filteredWords = this.words.filter(function (row) {
       return text.includes(row.head);
