@@ -189,7 +189,7 @@
       class="no-entry"
     >
       <span style="color: #999" v-if="$hasFeature('transliteration')">
-        <span>{{ transliterate(text) }}</span>
+        <span>{{ transliterationprop || tr(text) }}</span>
         <Speak :text="text" class="ml-1" ref="speak" />
       </span>
       <div style="font-size: 1.5rem; font-weight: bold">
@@ -270,6 +270,7 @@ export default {
     if (this.$l2.han) this.entryClasses["l2-zh"] = true;
   },
   methods: {
+    tr,
     segment(text) {
       return text
         .replace(
