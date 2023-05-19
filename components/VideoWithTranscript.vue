@@ -926,14 +926,14 @@ export default {
       width: max-content;
       max-width: 100%;
       // background: rgba(0, 0, 0, 0.6);
-      padding: 0.5rem 1rem;
+      padding: 0;
       box-sizing: border-box;
       overflow: hidden;
-      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
-        1px 1px 0 #000;
-
+      // Add a soft text shadow
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+      background-color: #000000aa;
+      padding-top: 0.75em;
       .drag-handle {
-        width: 2rem;
         height: calc(100% - 1rem);
         position: absolute;
         left: 1rem;
