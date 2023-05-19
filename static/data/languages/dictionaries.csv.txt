@@ -1,55 +1,55 @@
-l2	l1	dictionary
-cdo	eng	hsk-cedict
-cjy	eng	hsk-cedict
-cnp	eng	hsk-cedict
-cpx	eng	hsk-cedict
-csp	eng	hsk-cedict
-czo	eng	hsk-cedict
-deu	zho	wiktionary-csv
-eng	afr	freedict
-eng	ara	freedict
-eng	ell	freedict
-eng	fin	freedict
-eng	fra	freedict
-eng	gle	freedict
-eng	hin	freedict
-eng	hrv	freedict
-eng	hun	freedict
-eng	ita	freedict
-eng	jpn	freedict
-eng	lat	freedict
-eng	nld	freedict
-eng	pol	freedict
-eng	por	freedict
-eng	ron	freedict
-eng	rus	freedict
-eng	spa	freedict
-eng	srp	freedict
-eng	swa	freedict
-eng	swe	freedict
-eng	tur	freedict
-eng	zho	wiktionary-csv
-fra	zho	wiktionary-csv
-gan	eng	hsk-cedict
-hak	eng	hsk-cedict
-hak	zho	chinese-dialect
-hsn	eng	hsk-cedict
-jpn	eng	edict
-jpn	zho	kdic-jc
-kor	eng	kengdic
-kor	zho	kengdic
-ltc	eng	hsk-cedict
-ltc	zho	hsk-cedict
-lzh	eng	hsk-cedict
-lzh	zho	hsk-cedict
-mnp	eng	hsk-cedict
-nan	eng	hsk-cedict
-nan	zho	chinese-dialect
-och	eng	hsk-cedict
-och	zho	hsk-cedict
-rus	eng	open-russian
-tlh	eng	klingonska
-wuu	eng	hsk-cedict
-yue	eng	chinese-dialect
-zha	eng	hsk-cedict
-zho	eng	hsk-cedict
+l2,l1,dictionary
+cdo,eng,hsk-cedict
+cjy,eng,hsk-cedict
+cnp,eng,hsk-cedict
+cpx,eng,hsk-cedict
+csp,eng,hsk-cedict
+czo,eng,hsk-cedict
+deu,zho,wiktionary-csv
+eng,afr,freedict
+eng,ara,freedict
+eng,ell,freedict
+eng,fin,freedict
+eng,fra,freedict
+eng,gle,freedict
+eng,hin,freedict
+eng,hrv,freedict
+eng,hun,freedict
+eng,ita,freedict
+eng,jpn,freedict
+eng,lat,freedict
+eng,nld,freedict
+eng,pol,freedict
+eng,por,freedict
+eng,ron,freedict
+eng,rus,freedict
+eng,spa,freedict
+eng,srp,freedict
+eng,swa,freedict
+eng,swe,freedict
+eng,tur,freedict
+eng,zho,wiktionary-csv
+fra,zho,wiktionary-csv
+gan,eng,hsk-cedict
+hak,eng,hsk-cedict
+hak,zho,chinese-dialect
+hsn,eng,hsk-cedict
+jpn,eng,edict
+jpn,zho,kdic-jc
+kor,eng,kengdic
+kor,zho,kengdic
+ltc,eng,hsk-cedict
+ltc,zho,hsk-cedict
+lzh,eng,hsk-cedict
+lzh,zho,hsk-cedict
+mnp,eng,hsk-cedict
+nan,eng,hsk-cedict
+nan,zho,chinese-dialect
+och,eng,hsk-cedict
+och,zho,hsk-cedict
+rus,eng,wiktionary-csv
+tlh,eng,klingonska
+wuu,eng,hsk-cedict
+yue,eng,chinese-dialect
+zha,eng,hsk-cedict
+zho,eng,hsk-cedict
