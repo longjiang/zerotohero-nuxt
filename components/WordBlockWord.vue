@@ -196,7 +196,6 @@ export default {
   10% {
     color: #54ff7c;
     transform: scale(1.2);
-    opacity: 0;
   }
 
   100% {
