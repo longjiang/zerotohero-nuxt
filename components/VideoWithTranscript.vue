@@ -893,16 +893,16 @@ export default {
     }
 
     .video-transcript-wrapper.align-subs-bottom {
-      bottom: 5rem; // Make room for the controls
+      bottom: 6rem; // Make room for the controls
       top: auto;
       &:not(.hovering) {
-        bottom: 0;
+        bottom: 1rem;
       }
     }
 
     .video-transcript-wrapper.align-subs-top {
       bottom: auto;
-      top: 2%;
+      top: 1rem;
     }
 
     &.size-fullscreen .video-with-transcript-inner {
@@ -928,7 +928,7 @@ export default {
       overflow: hidden;
       // Add a soft text shadow
       text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
-      background-color: #000000aa;
+      background-color: #000000ee;
       padding-top: 0.75em;
       .drag-handle {
         height: calc(100% - 1rem);
@@ -1052,7 +1052,7 @@ export default {
       top: 0;
     }
   }
-  
+
   &.size-regular {
     .video-wrapper {
       top: 0;
