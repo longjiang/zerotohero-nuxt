@@ -159,7 +159,6 @@ export default {
         this.token?.pronunciation || this.phoneticsFromWord(this.bestWord); // Prop
       return phonetics;
     },
-    hanAnnotation() {},
   },
   asyncComputed: {
     /**
@@ -193,8 +192,8 @@ export default {
       let definition, hanAnnotation, mappedPronunciation;
       if (this.$l2Settings.showDefinition || this.$l2Settings.showQuickGloss)
         definition = this.shortDefinition;
-      if (this.$l2Settings.showByeonggi && this.hanAnnotation)
-        hanAnnotation = this.hanAnnotation;
+      if (this.$l2Settings.showByeonggi && ['ko', 'vi'].includes(this.$l2.code))
+        hanAnnotation = this.getHanAnnotation(this.bestWord);
       if (this.$l2.code === "ja")
         mappedPronunciation = this.getMappedPronunciation();
       let attributes = {
@@ -251,6 +250,23 @@ export default {
       this.animate = true;
       await timeout(animationDuration);
       this.animate = false;
+    },
+    getHanAnnotation(word) {
+      let hanja = word?.hanja
+      if (!hanja) return
+      let head = word.head;
+      let isValid = true;
+      if (hanja.length <= 1) isValid = false;
+      if (hanja.includes(',')) isValid = false;
+      if (this.$l2.code === "ko") {
+        let bannedEndings = "이히하해한고가기는은도의로를";
+        let bannedWords = ["지난", "진자", "가야", "주시", "거야", "위해"];
+        if ((new RegExp("[" + bannedEndings + "]$")).test(head)) isValid = false;
+        if (bannedWords.includes(head)) isValid = false;
+      }
+      if (isValid) {
+        return hanja ? hanja.split(/[,\-]/)[0] : ""; 
+      }
     },
     async getDisplayText(text) {
       if (typeof text === "undefined" || text.trim() === "") {

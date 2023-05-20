@@ -44,7 +44,8 @@ class KengdicDictionary extends BaseDictionary {
       };
       item.hanja = item.han;
     }
-    item.id = "w" + hash(item.head + item.definitions[0]);
+    let idBasis = item.head + (item.definitions.length > 0 ? item.definitions[0] : item.hanja)
+    item.id = "w" + hash(idBasis);
     delete item.han;
     delete item.word;
     delete item.stems

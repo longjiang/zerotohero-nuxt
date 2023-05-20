@@ -72,10 +72,10 @@
           >
             {{ suggestion.head }}
           </span>
-          <span class="mr-1" v-if="suggestion.match">
-            {{ suggestion.match.field }} of
-            <b>{{ suggestion.head }}</b>
-          </span>
+          <span
+            class="suggestion-alternate"
+            v-if="getAlternate(suggestion)"
+          >[{{ getAlternate(suggestion) }}]</span>
           <span
             class="suggestion-l1"
             v-if="suggestion.definitions"
@@ -182,8 +182,10 @@ export default {
     },
   },
   methods: {
-    highlight(...args) {
-      return highlight(...args)
+    highlight,
+    getAlternate(word) {
+      let alternate = word.hanja || word.kana || word.traditional
+      if (alternate && alternate !== word.head) return alternate
     },
     focusOnInput() {
       this.$refs.lookup.focus();
