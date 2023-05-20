@@ -73,8 +73,5 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/assets/scss/variables.scss";
-
-.feature-card-column:hover {
-  z-index: 1;
-}
+@import "./Nav/index.scss";
 </style>
