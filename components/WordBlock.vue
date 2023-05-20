@@ -149,16 +149,14 @@ export default {
         word = this.words?.[0];
       }
       if (word && this.$l2.han) {
-        if (
-          !(word.simplified && word.simplified === this.text) ||
-          (word.traditional && word.traditional === this.text)
-        )
+        if (!(word.simplified === this.text || word.traditional === this.text))
           word = undefined;
       }
       return word;
     },
     bestPhonetics() {
-      let phonetics = this.token?.pronunciation || this.phoneticsFromWord(this.bestWord); // Prop
+      let phonetics =
+        this.token?.pronunciation || this.phoneticsFromWord(this.bestWord); // Prop
       return phonetics;
     },
     hanAnnotation() {},
