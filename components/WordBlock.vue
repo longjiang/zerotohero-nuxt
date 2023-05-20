@@ -155,28 +155,23 @@ export default {
       }
     },
     pos() {
-      let pos;
-      if (this.token && this.token.pos) {
-        pos = this.token.pos.replace(/\s/g, "-");
-      }
-      if (!pos && this.words && this.words[0]) {
-        pos = this.words[0].pos;
-      }
+      let pos = this.bestWord?.pos || this.token?.pos;
       if (pos) return pos.replace(/\-.*/, "").replace(/\s/g, "-");
     },
     bestWord() {
       let word = this.savedWord;
-      if (this.$l2.han) {
-        if (!word) {
-          word = this.words?.[0];
-        }
-        if (word) {
-          if (
-            !(word.simplified && word.simplified === this.text) ||
-            (word.traditional && word.traditional === this.text)
-          )
-            word = undefined;
-        }
+      if (!word) {
+        word = this.token?.candidates?.[0];
+      }
+      if (!word) {
+        word = this.words?.[0];
+      }
+      if (word && this.$l2.han) {
+        if (
+          !(word.simplified && word.simplified === this.text) ||
+          (word.traditional && word.traditional === this.text)
+        )
+          word = undefined;
       }
       return word;
     },
