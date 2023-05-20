@@ -59,8 +59,7 @@
 </template>
 
 <script>
-import { timeout, unique, uniqueByValue, isMobile } from "@/lib/utils";
-import { speak } from "@/lib/utils/speak";
+import { timeout, unique, speak, uniqueByValue, isMobile } from "@/lib/utils";
 import { mapState } from "vuex";
 import { tify, sify } from "chinese-conv";
 import WordPhotos from "@/lib/word-photos";
@@ -130,14 +129,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["l2Settings"]),
     ...mapState("savedWords", ["savedWords"]),
-    $l2Settings() {
-      let $l2Settings = {};
-      if (this.l2Settings && this.l2Settings[this.$l2.code])
-        $l2Settings = this.l2Settings[this.$l2.code];
-      return $l2Settings;
-    },
     quickGloss() {
       let definition =
         this.savedWord?.definitions?.[0] || this.words?.[0]?.definitions?.[0];
@@ -327,12 +319,7 @@ export default {
     }
     this.update();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("savedWords")) {
-        this.update();
-      }
-    });
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("savedPhrases")) {
+      if (mutation.type.startsWith("savedWords") || mutation.type.startsWith("savedPhrases")) {
         this.update();
       }
     });
@@ -356,6 +343,8 @@ export default {
     },
   },
   methods: {
+    unique,
+    speak,
     async playAnimation(animationDuration) {
       this.animate = true
       await timeout(animationDuration)
@@ -731,20 +720,6 @@ export default {
       this.updateIPA();
       this.loading = false;
       this.loaded = true;
-    },
-    unique(a) {
-      return a.filter((item, i, ar) => ar.indexOf(item) === i);
-    },
-    speak(text) {
-      let speechSynthesis = window?.speechSynthesis;
-      if (!speechSynthesis) return;
-      if (this.$hasFeature("speech")) {
-        if (!speechSynthesis.speaking) {
-          this.utterance = new SpeechSynthesisUtterance(text);
-          this.utterance.lang = this.$l2.code;
-          speechSynthesis.speak(this.utterance);
-        }
-      }
     },
   },
 };

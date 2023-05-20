@@ -356,13 +356,6 @@ export default {
     }
   },
   computed: {
-    ...mapState("settings", ["l2Settings"]),
-    $l2Settings() {
-      let $l2Settings = {};
-      if (this.l2Settings && this.l2Settings[this.$l2.code])
-        $l2Settings = this.l2Settings[this.$l2.code];
-      return $l2Settings;
-    },
     quizMode() {
       return this.$l2Settings?.quizMode;
     },
