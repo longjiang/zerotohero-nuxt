@@ -80,7 +80,7 @@ class BaseTokenizer {
       matches: [],
     };
     for (let word of filteredWords) {
-      let match = text.match(word.head);
+      let match = text.match(new RegExp(word.head, 'i'));
       if (match) {
         if (match[0].length > longest.text.length) {
           longest.text = match[0];
@@ -94,9 +94,12 @@ class BaseTokenizer {
   }
 
   async tokenizeContinua(text, filteredWords) {
-    if (!filteredWords) filteredWords = this.words.filter(function (row) {
-      return text.includes(row.head);
-    })
+    if (!filteredWords) {
+      const textLowerCase = text.toLowerCase();
+      filteredWords = this.words.filter(function (row) {
+        return textLowerCase.includes(row.search);
+      })
+    }
     const longest = this.longest(text, filteredWords);
     if (this.l2 === "tha") {
       const isThai = isThai(text);
