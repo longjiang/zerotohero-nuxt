@@ -1047,11 +1047,6 @@ export default {
     height: 100%; // otherwise this is too tall for sticky to work
   }
 
-  &.size-fullscreen {
-    .video-wrapper {
-      top: env(safe-area-inset-top, 0);
-    }
-  }
   &.size-regular {
     .video-wrapper {
       top: 0;
