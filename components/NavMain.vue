@@ -202,7 +202,7 @@ export default {
     padding-bottom: 0;
   }
   .main-nav-items {
-    padding: 0.5rem 0.5rem env(safe-area-inset-bottom, 0) 0.5rem;
+    padding: 0.5rem 0.5rem;
     white-space: nowrap;
     width: 100%;
     overflow: auto;
