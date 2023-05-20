@@ -921,14 +921,13 @@ export default {
       left: 50%;
       transform: translateX(-50%);
       width: max-content;
-      max-width: 100%;
-      // background: rgba(0, 0, 0, 0.6);
+      max-width: calc(100% - 2rem);
+      border-radius: 0.25rem;
       padding: 0;
       box-sizing: border-box;
       overflow: hidden;
-      // Add a soft text shadow
       text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
-      background-color: #000000ee;
+      background-color: #000000dd;
       padding-top: 0.75em;
       .drag-handle {
         height: calc(100% - 1rem);
@@ -936,9 +935,6 @@ export default {
         left: 1rem;
         cursor: pointer;
         z-index: 2;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         opacity: 0.5;
         color: white;
         &:hover {
