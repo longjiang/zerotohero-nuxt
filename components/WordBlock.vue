@@ -342,21 +342,6 @@ export default {
     // you may call unsubscribe to stop the subscription
     this.unsubscribe();
   },
-  head() {
-    let head = {};
-    if (this.$l2.code === "ja")
-      head.script = [
-        {
-          hid: "wanakana",
-          src: "/vendor/wanakana/wanakana.min.js",
-        },
-        {
-          hid: "map-kana",
-          src: "/js/map-kana.js",
-        },
-      ];
-    return head;
-  },
   watch: {
     async wordblockHover() {
       if (!this.loaded || this.lastLookupWasQuick) {

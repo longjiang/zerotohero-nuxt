@@ -14,8 +14,8 @@
 
 <script>
 import smoothscroll from "smoothscroll-polyfill";
-import MyLayout from '@/layouts/MyLayout.vue';
-import { wide, timeout } from "@/lib/utils"
+import MyLayout from "@/layouts/MyLayout.vue";
+import { wide, timeout } from "@/lib/utils";
 import { mapState } from "vuex";
 import { DelayHydration } from "nuxt-delay-hydration/dist/components";
 
@@ -63,20 +63,25 @@ export default {
         "zerotohero-with-mini-player":
           this.overlayPlayerYouTubeId && this.overlayPlayerMinimized,
         "zerotohero-with-nav":
-          !this.fullscreen && this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2,
+          !this.fullscreen &&
+          this.$route.params.l1 &&
+          this.$route.params.l2 &&
+          this.l1 &&
+          this.l2,
         "zerotohero-electron": this.isElectron,
         [`route-${this.$route.name}`]: true,
         [`zerotohero-${this.$skin}`]: true,
-      }
+      };
       return Object.assign(classes, this.l2SettingsClasses);
-    }
+    },
   },
   created() {
     this.$nuxt.$on("history", this.addFullHistoryItem); // from Language map
     this.$nuxt.$on("animateStar", this.onAnimateStar);
   },
   async mounted() {
-    this.isElectron = navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
+    this.isElectron =
+      navigator.userAgent.toLowerCase().indexOf(" electron/") > -1;
     if (this.$auth.loggedIn && this.$route.path === "/") {
       this.$router.push({ path: "/dashboard" });
     } else {
@@ -123,20 +128,34 @@ export default {
       window.removeEventListener("resize", this.onResize);
   },
   head() {
-    let head = { script: [] };
-    if (this.l2 && this.l2.code === "my") {
-      head.script.push({
-        src: "/vendor/myanmar-tools/zawgyi_converter.min.js",
-        hid: 'zawgyi_converter',
-        body: true,
-      });
-      head.script.push({
-        src: "/vendor/myanmar-tools/zawgyi_detector.min.js",
-        hid: 'zawgyi_detector',
-        body: true,
-      });
+    // Map languages to their respective scripts
+    const scriptsMap = {
+      my: {
+        zawgyi_converter: "/vendor/myanmar-tools/zawgyi_converter.min.js",
+        zawgyi_detector: "/vendor/myanmar-tools/zawgyi_detector.min.js",
+      },
+      ja: {
+        wanakana: "/vendor/wanakana/wanakana.min.js",
+        "map-kana": "/js/map-kana.js",
+      },
+    };
+
+    // Check if the current language has associated scripts
+    if (this.l2?.code in scriptsMap) {
+      // Transform the scripts into the needed format
+      const scripts = Object.entries(scriptsMap[this.l2.code]).map(
+        ([hid, src]) => ({ hid, src, body: true })
+      );
+
+      return {
+        script: scripts,
+      };
     }
-    return head;
+
+    // If the current language has no associated scripts, return an empty array
+    return {
+      script: [],
+    };
   },
   watch: {
     l2() {
@@ -148,7 +167,7 @@ export default {
     "$auth.user"() {
       this.$directus.fetchOrCreateUserData();
     },
-    '$l2Settings': {
+    $l2Settings: {
       deep: true,
       immediate: true,
       handler() {
@@ -178,14 +197,16 @@ export default {
             "show-quick-gloss": this.$l2Settings.showQuickGloss,
             "show-byeonggi": this.$l2Settings.showByeonggi,
             "use-serif": this.$l2Settings.useSerif,
-          }
-          l2SettingsClasses[`zerotohero-zoom-${this.$l2Settings.zoomLevel}`] = true;
+          };
+          l2SettingsClasses[
+            `zerotohero-zoom-${this.$l2Settings.zoomLevel}`
+          ] = true;
         }
         l2SettingsClasses[`l1-${this.l1.code}`] = true;
         l2SettingsClasses[`l2-${this.l2.code}`] = true;
         if (this.l2.han) l2SettingsClasses["l2-zh"] = true;
         this.l2SettingsClasses = l2SettingsClasses;
-        this.classes
+        this.classes;
       }
     },
     subscribeToVuexMutations() {
@@ -348,7 +369,7 @@ export default {
         youtube.video.l2.id &&
         youtube.video.l2.id !== this.l2.id
       ) {
-        this.overlayPlayerClose();  // Close the mini player unless the language matches
+        this.overlayPlayerClose(); // Close the mini player unless the language matches
       }
       if (this.l1) this.updatei18n();
       let dictionary = await this.$getDictionary();
