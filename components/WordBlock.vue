@@ -196,6 +196,7 @@ export default {
         hanAnnotation = this.getHanAnnotation(this.bestWord);
       if (this.$l2.code === "ja")
         mappedPronunciation = this.getMappedPronunciation();
+      let level = this.bestWord?.level || "outside"
       let attributes = {
         usePopup,
         isSaved,
@@ -206,6 +207,7 @@ export default {
         hanAnnotation,
         useZoom: this.useZoom,
         mappedPronunciation,
+        "data-hover-level": level
       };
       return attributes;
     },
