@@ -10,7 +10,6 @@
   >
     <div
       v-on="usePopup ? { click: wordBlockClick } : {}"
-      v-observe-visibility="visibilityChanged"
       @mouseenter="wordblockHover = true"
       @mouseleave="wordblockHover = false"
     >
@@ -44,10 +43,9 @@
             token,
             words,
             images,
-            loading,
+            lookupInProgress,
             loadingImages,
             context,
-            transliterationprop,
             phraseObj: phraseItem(text),
           }"
           ref="popup"
@@ -73,14 +71,8 @@ export default {
     explore: {
       default: false,
     },
-    phonetics: {
-      default: true,
-    },
     usePopup: {
       default: true,
-    },
-    transliterationprop: {
-      type: String,
     },
     quizMode: {
       default: false,
@@ -103,9 +95,8 @@ export default {
     return {
       open: false,
       showPhrase: {},
-      loading: false,
+      lookupInProgress: false,
       loadingImages: false,
-      loaded: false,
       text: this.$slots.default ? this.$slots.default[0].text : undefined,
       images: [],
       words: [],
@@ -114,7 +105,6 @@ export default {
       checkSaved: true,
       wordblockHover: false,
       tooltipHover: false,
-      transliteration: undefined,
       lastLookupWasQuick: false,
       reveal: false,
       t: 0,
@@ -142,17 +132,9 @@ export default {
 
       shortDefinition = shortDefinition.split(/[，；,;]\s*/)[0];
 
-      return shortDefinition && shortDefinition.length < 20 ? shortDefinition : undefined;
-    },
-    savedTransliteration() {
-      if (this.bestWord) {
-        return (
-          this.bestWord.jyutping ||
-          this.bestWord.pinyin ||
-          this.bestWord.kana ||
-          (this.bestWord.pronunciation || "").split(", ")[0]
-        );
-      }
+      return shortDefinition && shortDefinition.length < 20
+        ? shortDefinition
+        : undefined;
     },
     pos() {
       let pos = this.bestWord?.pos || this.token?.pos;
@@ -175,8 +157,11 @@ export default {
       }
       return word;
     },
-    hanAnnotation() {
+    bestPhonetics() {
+      let phonetics = this.token?.pronunciation || this.phoneticsFromWord(this.bestWord); // Prop
+      return phonetics;
     },
+    hanAnnotation() {},
   },
   asyncComputed: {
     /**
@@ -204,14 +189,16 @@ export default {
     async attributes() {
       let isSaved = this.savedWord || this.savedPhrase ? true : false;
       let usePopup = this.usePopup;
-      let phonetics = false;
+      let phonetics = this.$l2Settings.showPinyin ? this.bestPhonetics : false;
       let text = await this.getDisplayText(this.text);
       let pos = this.pos;
       let definition, hanAnnotation, mappedPronunciation;
-      if (this.$l2Settings.showDefinition || this.$l2Settings.showQuickGloss) definition = this.shortDefinition;
-      if (this.$l2Settings.showPinyin) phonetics = this.getPhonetics();
-      if (this.$l2Settings.showByeonggi && this.hanAnnotation) hanAnnotation = this.hanAnnotation
-      if (this.$l2.code === "ja") mappedPronunciation = this.getMappedPronunciation();
+      if (this.$l2Settings.showDefinition || this.$l2Settings.showQuickGloss)
+        definition = this.shortDefinition;
+      if (this.$l2Settings.showByeonggi && this.hanAnnotation)
+        hanAnnotation = this.hanAnnotation;
+      if (this.$l2.code === "ja")
+        mappedPronunciation = this.getMappedPronunciation();
       let attributes = {
         usePopup,
         isSaved,
@@ -234,13 +221,13 @@ export default {
       );
       this.words = words;
     }
-    this.update();
+    this.checkSavedItems();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (
         mutation.type.startsWith("savedWords") ||
         mutation.type.startsWith("savedPhrases")
       ) {
-        this.update();
+        this.checkSavedItems();
       }
     });
   },
@@ -251,15 +238,12 @@ export default {
   },
   watch: {
     async wordblockHover() {
-      if (!this.loaded || this.lastLookupWasQuick) {
-        this.lookup();
-      }
       await timeout(300);
-      this.updateOpen();
+      this.openOrClosePopup();
     },
     async tooltipHover() {
       await timeout(123);
-      this.updateOpen();
+      this.openOrClosePopup();
     },
   },
   methods: {
@@ -272,7 +256,7 @@ export default {
     },
     async getDisplayText(text) {
       if (typeof text === "undefined" || text.trim() === "") {
-        return ""
+        return "";
       }
       if (this.$l2.code === "ru") {
         if (this.savedWord) {
@@ -293,8 +277,8 @@ export default {
       return text;
     },
     getSimplifiedOrTraditionalText() {
-      const word = this.bestWord
-      const text = this.text
+      const word = this.bestWord;
+      const text = this.text;
       let result = "";
       if (word) {
         result = this.$l2Settings.useTraditional
@@ -305,12 +289,15 @@ export default {
       }
       return result;
     },
-    getPhonetics() {
-      let phonetics =
-          this.savedTransliteration ||
-          this.transliterationprop ||
-          this.transliteration;
-      return phonetics;
+    phoneticsFromWord(word) {
+      if (word) {
+        return (
+          word.jyutping ||
+          word.pinyin ||
+          word.kana ||
+          (word.pronunciation || "").split(", ")[0]
+        );
+      }
     },
     getMappedPronunciation() {
       if (
@@ -401,45 +388,6 @@ export default {
     test(arg) {
       console.log(`Evaluated`, arg);
     },
-    async visibilityChanged(isVisible) {
-      await timeout(123);
-      if (isVisible && (!this.words || this.words.length === 0)) {
-        if (this.$l2.code !== "fa") {
-          let quick = true;
-          if (this.$l2Settings.showPinyin && !this.transliteration)
-            quick = false; // If the user wants to see IPA, we get all the words from the get go by setting quick to false, which can take a performance hit
-          await this.lookup(quick);
-        }
-      }
-    },
-    async getTransliteration() {
-      let transliteration;
-      if (this.$l2.code === "tlh") {
-        return this.fixKlingonTypos(this.text);
-      } else if (this.token && this.token.candidates?.length > 0) {
-        if (this.$l2.code !== "ja") {
-          if (this.token.pronunciation) {
-            transliteration = this.token.pronunciation;
-          } else if (this.token.candidates[0].pronunciation) {
-            transliteration =
-              this.token.candidates[0].pronunciation.split(",")[
-                this.$l2.code === "vi" ? 1 : 0
-              ];
-          }
-        }
-        transliteration =
-          transliteration ||
-          this.token.candidates[0].kana ||
-          this.token.candidates[0].jyutping ||
-          this.token.candidates[0].pinyin;
-      }
-      if (!transliteration && this.$hasFeature("transliteration")) {
-        if (!["ja", "zh", "nan", "hak"].includes(this.$l2.code)) {
-          transliteration = this.transliterate(this.text);
-        }
-      }
-      if (transliteration !== this.text) return transliteration;
-    },
     fixKlingonTypos(text) {
       return Klingon.fixTypos(text);
     },
@@ -464,14 +412,7 @@ export default {
         if (!isMobile()) this.togglePopup();
       }
     },
-    transliterate(text) {
-      return this.transliterationprop && this.transliterationprop !== text
-        ? this.transliterationprop
-        : "";
-    },
-    async update() {
-      if (!this.transliteration || this.transliteration === "")
-        this.transliteration = await this.getTransliteration();
+    async checkSavedItems() {
       this.checkSavedWord();
       this.checkSavedPhrase();
     },
@@ -492,161 +433,86 @@ export default {
         else this.openPopup();
       }
     },
-    updateOpen() {
+    openOrClosePopup() {
       if (this.wordblockHover || this.tooltipHover) {
         this.openPopup();
       } else {
         this.closePopup();
       }
     },
-    updateIPA() {
-      if (this.$l2.code === "ja") return;
-      if (!this.transliteration && this.words && this.words[0]) {
-        let word = this.words.find(
-          (w) => w.pronunciation && w.pronunciation !== ""
-        );
-        this.transliteration =
-          word && word.pronunciation
-            ? word.pronunciation.split(",")[0]
-            : this.transliteration;
+    shouldLoadImages() {
+      let hasImageWorthyWords = false;
+      if (this.words) {
+        if (this.words.length === 0) return true;
+        hasImageWorthyWords = this.words.find((w) => {
+          if (this.$l2.code === "ja") return true;
+          else if (
+            w.pos &&
+            ["proper noun", "noun", "Noun", "name", "n"].includes(w.pos)
+          )
+            return true;
+        });
       }
+      return hasImageWorthyWords;
     },
     async openPopup() {
-      if (this.open) return;
-      if (!this.usePopup) return;
-      let dictionary = await this.$getDictionary();
-      if (dictionary) {
-        if (this.loading === true) {
-          if (
-            (this.words && this.words.length === 0) ||
-            this.lastLookupWasQuick
-          ) {
-            this.lookup(false);
-          }
-        }
-        let hasImageWorthyWords = false;
-        if (this.words) {
-          hasImageWorthyWords = this.words.find((w) => {
-            if (this.$l2.code === "ja") return true;
-            else if (
-              w.pos &&
-              ["proper noun", "noun", "Noun", "name", "n"].includes(w.pos)
-            )
-              return true;
-          });
-        }
-        if ((this.words && this.words.length === 0) || hasImageWorthyWords) {
-          this.loadingImages = true;
-          this.loadImages();
-        }
-        this.open = true;
-        await timeout(123);
-        if (this.open && this.$l2Settings.autoPronounce) {
-          if (!this.quizMode || this.reveal) {
-            let speed = 0.75;
-            let volume = 0.5;
-            // Only wiktionary has real human audio
-            let speakComponent = this.$refs.popup?.$refs.speak?.[0];
-            if (
-              speakComponent &&
-              this.$dictionaryName === "wiktionary-csv" &&
-              this.words?.[0].head?.toLowerCase() === this.text.toLowerCase()
-            ) {
-              speakComponent.speak(speed, volume);
-            } else {
-              speak(this.text, this.$l2, speed, volume);
-            }
-          }
+      if (!this.usePopup) return; // Not using popup
+      if (this.open) return; // Already open
+      this.open = true;
+      if (this.lookupInProgress === false && !(this.words?.length > 0)) {
+        await this.lookup();
+      }
+      if (this.shouldLoadImages()) this.loadImages();
+      if (this.$l2Settings.autoPronounce) {
+        if (!this.quizMode || this.reveal) {
+          this.playWordAudio();
         }
       }
       this.$nuxt.$emit("popupOpened");
+    },
+    playWordAudio() {
+      let speed = 0.75;
+      let volume = 0.5;
+      // Only wiktionary has real human audio
+      let speakComponent = this.$refs.popup?.$refs.speak?.[0];
+      if (
+        speakComponent &&
+        this.$dictionaryName === "wiktionary-csv" &&
+        this.words?.[0].head?.toLowerCase() === this.text.toLowerCase()
+      ) {
+        speakComponent.speak(speed, volume);
+      } else {
+        speak(this.text, this.$l2, speed, volume);
+      }
     },
     async closePopup() {
       this.open = false;
       this.$nuxt.$emit("popupClosed");
     },
-    async lookup(quick = true) {
-      this.loading = true;
+    async lookup() {
+      this.lookupInProgress = true;
       let dictionary = await this.$getDictionary();
-      if (this.loaded) {
-        if (quick) return;
-        else if (!this.lastLookupWasQuick) return;
+      let words = this.words;
+      if (words.length === 0) {
+        words = (await dictionary.lookupFuzzy(this.text, 20)) || [];
       }
-      this.lastLookupWasQuick = quick;
-      let words = [];
-      if (
-        this.token &&
-        this.token.candidates &&
-        this.token.candidates.length > 0
-      ) {
-        words = this.token.candidates;
-      } else if (this.text) {
-        // Sometimes the lemmas haven't been looked up yet, so we do that here
-        if (this.token.lemmas) {
-          for (let lemma of this.token.lemmas) {
-            if (lemma.lemma && lemma.lemma !== this.token.text) {
-              const lemmaCandidates = await dictionary.lookupMultiple(
-                lemma.lemma
-              );
-              words = [...words, ...lemmaCandidates];
-            }
-          }
-        }
-      }
-      if (!quick) {
-        // Only do a fuzzy lookup if the word does not have a found lemma
-        if (words.length === 0) {
-          if (!this.text && this.token)
-            this.text = this.token.candidates[0].head;
-          words = await dictionary.lookupFuzzy(this.text, 20, quick);
-          if (words && !quick) {
-            for (let word of words) {
-              // Russian
-              if (word && word.matches) {
-                for (let match of word.matches) {
-                  match.form = await dictionary.accent(match.form);
-                  match.field = await dictionary.stylize(match.field);
-                  match.number = await dictionary.stylize(match.number);
-                  match.table = await dictionary.stylize(match.table);
-                }
-              }
-            }
-          }
-        }
-        words = words
-          ? words.sort((a, b) => {
-              let asaved = this.$store.getters["savedWords/has"]({
-                id: a.id,
-                l2: this.$l2.code,
-              });
-              let bsaved = this.$store.getters["savedWords/has"]({
-                id: b.id,
-                l2: this.$l2.code,
-              });
-              return asaved === bsaved ? 0 : asaved ? -1 : 1;
-            })
-          : [];
-        if (dictionary.getLemmas) {
-          let allLemmas = [];
-          for (let word of words) {
-            let lemmas = await dictionary.getLemmas(
-              word.traditional || word.head
-            );
-            if (lemmas) allLemmas = allLemmas.concat(lemmas);
-          }
-          if (allLemmas.length > 0) words = [...words, ...allLemmas]; // We put lemmas at the bottom because at time irrelevant words can show up as 'lemmas'
-        }
-      }
-
-      words = uniqueByValue(words, "id");
-      words = uniqueByValue([...words, ...this.words], "id");
-      this.words = words;
-      this.checkSavedWord();
-      this.checkSavedPhrase();
-
-      this.updateIPA();
-      this.loading = false;
-      this.loaded = true;
+      // if (this.$l2.code === "ru") this.stylizeRussian(words)
+      words = words
+        ? words.sort((a, b) => {
+            let asaved = this.$store.getters["savedWords/has"]({
+              id: a.id,
+              l2: this.$l2.code,
+            });
+            let bsaved = this.$store.getters["savedWords/has"]({
+              id: b.id,
+              l2: this.$l2.code,
+            });
+            return asaved === bsaved ? 0 : asaved ? -1 : 1;
+          })
+        : [];
+      this.words = uniqueByValue([...words, ...this.words], "id");
+      this.checkSavedItems();
+      this.lookupInProgress = false;
     },
   },
 };

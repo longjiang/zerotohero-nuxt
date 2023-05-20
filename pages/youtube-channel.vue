@@ -19,7 +19,7 @@
       <div class="row">
         <div class="col-sm-12">
           <h3 class="mb-4 text-center">
-            <Annotate :phonetics="false" :buttons="true" v-if="title && title !== 'undefined'">
+            <Annotate :buttons="true" v-if="title && title !== 'undefined'">
               <span>{{ title }}</span>
             </Annotate>
             <span v-else>Playlists from the Channel</span>

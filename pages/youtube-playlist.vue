@@ -10,7 +10,7 @@
       <div class="row">
         <div class="col-sm-12">
           <h3 class="text-center" v-if="title">
-            <Annotate :phonetics="false" :buttons="true">
+            <Annotate :buttons="true">
               <span>{{ title.replace('All uploaded videos of ', '') }}</span>
             </Annotate>
           </h3>

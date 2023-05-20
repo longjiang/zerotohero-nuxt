@@ -342,7 +342,7 @@ class BaseDictionary {
       .map((result) => result.item);
   }
 
-  lookupFuzzy(text, limit = 10, quick = false) {
+  lookupFuzzy(text, limit = 10) {
     if (!isAccentCritical(this.l2)) text = stripAccents(text);
     text = text.toLowerCase();
     let uniqueWords = new Set();

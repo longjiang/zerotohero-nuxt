@@ -27,7 +27,6 @@
           'add-pinyin':
             $l2Settings &&
             ($l2Settings.showPinyin || $l2Settings.showDefinition),
-          phonetics,
           fullscreen: fullscreenMode,
           'with-buttons': buttons,
         }"
@@ -247,9 +246,6 @@ export default {
     },
     emitSentenceTextAsAttr: {
       default: false,
-    },
-    phonetics: {
-      default: true,
     },
     delay: {
       default: 123,
@@ -755,14 +751,13 @@ export default {
         youtube_id: this.youtube_id,
         starttime: this.starttime,
       }; // { text, starttime = undefined, youtube_id = undefined}
-      let transliterationprop = token.pronunciation
+      let phonetics = token.pronunciation
         ? token.pronunciation
         : tr(text).replace(/"/g, "");
       let attrs = {
-        transliterationprop,
+        phonetics,
         ref: "word-block",
         usePopup: this.usePopup,
-        phonetics: this.phonetics,
         sticky: this.sticky,
         explore: this.explore,
         context,

@@ -13,7 +13,7 @@
     </div>
     <h2 class="phrase-header-phrase text-center font-weight-normal mt-3">
       <div class="d-inline-block">
-        <Annotate :phonetics="true" :buttons="true">
+        <Annotate :buttons="true">
           <span>{{ term }}</span>
         </Annotate>
       </div>
