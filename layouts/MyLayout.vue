@@ -1,6 +1,6 @@
 // MyLayout.vue
 <template>
-  <div class="zerotohero-layout">
+  <div class="zerotohero-layout" :class="{fullscreen}">
     <FeedbackButton />
     <HydrationNotice v-if="$route.path === '/'" />
     <client-only>
@@ -98,6 +98,10 @@ export default {
   }
   .zth-secondary-nav-wrapper {
     grid-area: secondarynav;
+  }
+  &.fullscreen {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
   }
 }
 

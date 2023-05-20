@@ -154,7 +154,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/assets/scss/variables.scss";
-@import "./Nav/index.scss";
 
 
 .nav-side-bar-end {
@@ -167,6 +166,7 @@ export default {
     text-align: center;
   }
 }
+
 .zth-nav-dark {
   &.zth-nav-side-bar {
     background-color: $bg-color-dark-2;
@@ -191,6 +191,130 @@ export default {
   &.zth-nav-bottom {
     background: $bg-color-light-2;
     border-top: rgb(222, 222, 222);
+  }
+}
+
+.zth-nav-bottom {
+  padding-bottom: calc(env(safe-area-inset-bottom) + 0.25rem);
+  transition: 0.2s all ease-in-out;
+  &.zth-nav-bottom-hidden {
+    bottom: -5rem;
+    padding-bottom: 0;
+  }
+  .main-nav-items {
+    padding: 0.5rem 0.5rem env(safe-area-inset-bottom, 0) 0.5rem;
+    white-space: nowrap;
+    width: 100%;
+    overflow: auto;
+    display: flex;
+    justify-content: space-around;
+  }
+}
+
+
+.nav-side-bar {
+  display: flex;
+  flex-wrap: nowrap;
+  top: 0;
+  left: 0;
+  height: 100%;
+
+  .main-nav {
+    width: 100%;
+
+    margin: 0;
+    position: relative;
+
+
+    .main-nav-items {
+      padding: 1rem;
+    }
+
+    .end-nav {
+      position: absolute;
+      width: calc(100% - 1rem);
+      bottom: 1rem;
+      left: 1rem;
+
+      .icon-description {
+        color: white;
+        font-size: 0.7rem;
+        padding: 0 1rem 1rem 1rem;
+        z-index: -9;
+        margin-left: -1rem;
+        margin-bottom: -1rem;
+        text-shadow: 2px 2px 15px black;
+
+        .logo-circle {
+          width: 44px;
+          height: 44px;
+          -o-object-fit: cover;
+          object-fit: cover;
+          border-radius: 0.3rem;
+          margin-top: 0.2rem;
+          margin-bottom: -2px;
+          margin-right: 8px;
+          display: block;
+          box-shadow: 2px 2px 15px rgb(0 0 0 / 50%);
+          float: left;
+        }
+      }
+    }
+
+    .end-nav-item {
+      border-radius: 0.25rem;
+      background-color: rgba(29, 29, 29, 0.5);
+      padding: 0.5rem 1rem;
+      margin-top: 0.5rem;
+      margin-right: 1rem;
+      text-align: left;
+      display: block;
+      color: white;
+      cursor: pointer;
+      font-size: 0.85em;
+    }
+  }
+}
+
+
+.main-nav {
+  margin: 0 auto;
+  width: 100%;
+  overflow: hidden;
+  display: block;
+}
+
+.logo {
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
+}
+
+.nav-bottom-bar {
+  text-align: center;
+  .nav-item-bottom-bar {
+    padding: 0.5rem;
+  }
+}
+
+.nav-side-bar {
+  background-size: cover;
+  .main-nav {
+    backdrop-filter: blur(20px);
+  }
+}
+
+
+
+.zerotohero-wide {
+  .zth-main-nav-wrapper {
+    &:not(.zth-nav-collapsed) {
+      width: 13rem;
+    }    
+    &.zth-nav-collapsed {
+      width: 5rem;
+      :deep(.word-mark) {
+        display: none;
+      }
+    }
   }
 }
 </style>

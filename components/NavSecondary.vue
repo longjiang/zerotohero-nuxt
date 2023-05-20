@@ -74,5 +74,34 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/assets/scss/variables.scss";
-@import "./Nav/index.scss";
+
+
+.zth-nav-secondary {
+  width: 100vw;
+  white-space: nowrap;
+  text-align: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+  z-index: 19;
+  :deep(.nav-item-count) {
+    display: none;
+  }
+}
+
+.zerotohero-wide {
+  .zth-nav-secondary {
+    width: 100%;
+    left: 13rem;
+  }
+
+  &.zerotohero-wide-collapsed {
+    .zth-nav-secondary {
+      width: calc(100vw - 5rem);
+      left: 5rem;
+    }
+  }
+}
+
+
 </style>
