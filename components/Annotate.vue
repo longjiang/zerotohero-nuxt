@@ -263,7 +263,7 @@ export default {
     checkSaved: {
       default: true,
     },
-    popup: {
+    usePopup: {
       default: true,
     },
     tag: {
@@ -761,7 +761,7 @@ export default {
       let attrs = {
         transliterationprop,
         ref: "word-block",
-        popup: this.popup,
+        usePopup: this.usePopup,
         phonetics: this.phonetics,
         sticky: this.sticky,
         explore: this.explore,

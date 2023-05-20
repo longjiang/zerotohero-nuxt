@@ -330,14 +330,6 @@ export default {
     ...mapState("shows", ["categories"]),
     ...mapState("settings", ["preferredCategories", "settingsLoaded"]),
     ...mapState("progress", ["progress", "progressLoaded"]),
-    languageLevel() {
-      if (
-        this.progress &&
-        this.progress[this.$l2.code] &&
-        this.progress[this.$l2.code].level
-      )
-        return this.progress[this.$l2.code].level;
-    },
     audiobooks() {
       return this.talks.filter((t) => t.audiobook);
     },

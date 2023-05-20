@@ -66,15 +66,6 @@ export default {
     usePopup: {
       default: true,
     },
-    sticky: {
-      default: false, // whether or not to show each word's level color by default (without hovering)
-    },
-    common: {
-      default: false,
-    },
-    seen: {
-      default: false, // whether this word has already been annotated ('seen') before
-    },
     saved: {
       default: false,
     },
@@ -117,9 +108,6 @@ export default {
         "word-block": true,
         "with-popup": this.usePopup,
         "with-quick-gloss": this.saved && this.definition,
-        sticky: this.sticky,
-        common: this.common,
-        seen: this.seen,
         saved: this.saved,
         obscure: this.obscure,
         animate: this.animate

@@ -2,7 +2,6 @@
   <span
     :class="{
       'word-block-dictionary': true,
-      common: token && token.candidates && token.candidates.length > 0 && token.candidates[0].weight && token.candidates[0].weight > 750,
       seen: seen
     }"
     v-if="token && token.candidates && token.candidates.length > 0 && !seen"

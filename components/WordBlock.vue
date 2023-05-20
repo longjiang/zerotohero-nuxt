@@ -76,12 +76,6 @@ export default {
     phonetics: {
       default: true,
     },
-    sticky: {
-      default: false, // whether or not to show each word's level color by default (without hovering)
-    },
-    seen: {
-      default: false, // whether this word has already been annotated ('seen') before
-    },
     usePopup: {
       default: true,
     },
@@ -120,7 +114,6 @@ export default {
       checkSaved: true,
       wordblockHover: false,
       tooltipHover: false,
-      highlightHardWords: true,
       transliteration: undefined,
       lastLookupWasQuick: false,
       reveal: false,
@@ -131,36 +124,35 @@ export default {
   computed: {
     ...mapState("savedWords", ["savedWords"]),
     quickGloss() {
-      let definition =
+      let quickGloss =
         this.savedWord?.definitions?.[0] || this.words?.[0]?.definitions?.[0];
-      let quickGloss = definition
-        ?.replace(/\s*\(.*?\)/, "")
-        ?.replace(/\s*\（.*?）/, "")
-        ?.replace(/\s*.*?：/, "")
-        ?.replace(/^.*\./, "")
-        ?.replace(/^to /, "")
-        ?.replace(/^see .*/, "")
-        ?.replace(/^variant .*/, "")
-        ?.split(/[，；,;]\s*/)[0];
-      if (quickGloss && quickGloss.length < 20) return quickGloss;
+      if (!quickGloss) return;
+
+      [
+        /\s*\(.*?\)/,
+        /\s*\（.*?）/,
+        /\s*.*?：/,
+        /^.*\./,
+        /^to /,
+        /^see .*/,
+        /^variant .*/,
+      ].forEach((rule) => {
+        quickGloss = quickGloss.replace(rule, "");
+      });
+
+      quickGloss = quickGloss.split(/[，；,;]\s*/)[0];
+
+      return quickGloss && quickGloss.length < 20 ? quickGloss : undefined;
     },
     savedTransliteration() {
-      if (this.word) {
+      if (this.bestWord) {
         return (
-          this.word.jyutping ||
-          this.word.pinyin ||
-          this.word.kana ||
-          (this.word.pronunciation || "").split(", ")[0]
+          this.bestWord.jyutping ||
+          this.bestWord.pinyin ||
+          this.bestWord.kana ||
+          (this.bestWord.pronunciation || "").split(", ")[0]
         );
       }
-    },
-    common() {
-      return (
-        this.words &&
-        this.words.length > 0 &&
-        this.words[0].weight &&
-        this.words[0].weight > 750
-      );
     },
     pos() {
       let pos;
@@ -172,74 +164,23 @@ export default {
       }
       if (pos) return pos.replace(/\-.*/, "").replace(/\s/g, "-");
     },
-    word() {
-      let word = this.savedWord
+    bestWord() {
+      let word = this.savedWord;
       if (this.$l2.han) {
         if (!word) {
           word = this.words?.[0];
         }
         if (word) {
-          if (!(word.simplified && word.simplified === this.text) || (word.traditional && word.traditional === this.text)) word = undefined
+          if (
+            !(word.simplified && word.simplified === this.text) ||
+            (word.traditional && word.traditional === this.text)
+          )
+            word = undefined;
         }
       }
-      return word
+      return word;
     },
     hanja() {
-      if (["ko", "vi"].includes(this.$l2.code)) {
-        let hanja = "";
-        if (this.savedWord) hanja = this.savedWord.hanja;
-        else if (this.words && this.words[0]) {
-          let head = this.words[0].head;
-          let bannedEndings = "이히하해한고가기는은도의로를";
-          let bannedWords = ["지난", "진자", "가야", "주시", "거야", "위해"];
-          if (
-            !bannedWords.includes(head) &&
-            !bannedEndings.includes(head.charAt(head.length - 1))
-          ) {
-            let hanjas = this.words.map((c) => c.hanja);
-            if (this.$l2.code !== "vi") hanjas = unique(hanjas || []); // Vietnamese Han Tu is wiktionary CSV file has incorrect homophones
-            if (hanjas.length === 1 && hanjas[0] && !hanjas[0].includes(",")) {
-              hanja = hanjas[0];
-            } else if (this.$l2.code === "vi") {
-              if (hanjas[0] && hanjas[0].length > 1) {
-                hanja = hanjas[0];
-              }
-            }
-          }
-        }
-        return hanja ? hanja.split(/[,\-]/)[0] : "";
-      }
-    },
-    bestCandidate() {
-      if (this.token && this.token.candidates && this.token.candidates[0]) {
-        let saved = this.token.candidates.find((c) => c.saved);
-        if (saved) {
-          return saved;
-        } else return this.token.candidates[0];
-      }
-    },
-    hard() {
-      if (this.highlightHardWords) {
-        if (
-          this.$l2.code === "zh" &&
-          this.token &&
-          this.token.candidates &&
-          this.token.candidates.length > 0
-        ) {
-          if (this.token.candidates[0].head.length < 4) return false; // Only highlight chengyu
-        } else if (
-          this.$l2.code === "en" &&
-          this.token &&
-          this.token.candidates &&
-          this.token.candidates.length > 0
-        ) {
-          if (this.token.candidates[0].level === "C2") {
-            return "C2";
-          } else {
-            return false;
-          }
-        }
-      }
     },
   },
   asyncComputed: {
@@ -249,9 +190,6 @@ export default {
      * The returned object has the following properties:
      *
      * - `usePopup`: A value indicating whether we are using Popup for this Word Block.
-     * - `sticky`: A value indicating whether the element is sticky.
-     * - `common`: A value indicating whether the element is common.
-     * - `seen`: A value indicating whether the element has been seen.
      * - `saved`: A value indicating whether the word or phrase has been saved.
      * - `phonetics`: The phonetics of the current word or phrase.
      * - `pos`: The part of speech of the current word or phrase.
@@ -269,7 +207,7 @@ export default {
      * @returns {Promise<Object>} The attributes object.
      */
     async attributes() {
-      let word = this.word;
+      let word = this.bestWord;
       let definition = this.quickGloss;
       let phonetics = this.getPhonetics();
       let text = this.$l2.han ? this.getWordText(word, this.text) : this.text;
@@ -281,9 +219,6 @@ export default {
           : undefined;
       let attributes = {
         usePopup: this.usePopup,
-        sticky: this.sticky,
-        common: this.common,
-        seen: this.seen,
         saved: this.savedWord || this.savedPhrase,
         phonetics,
         pos: this.pos,
@@ -311,15 +246,18 @@ export default {
   },
   mounted() {
     if (this.token?.candidates) {
-      let words = uniqueByValue([...this.token.candidates, ...this.words], "id");
-      this.words = words
-    }
-    if (this.sticky) {
-      this.lookup();
+      let words = uniqueByValue(
+        [...this.token.candidates, ...this.words],
+        "id"
+      );
+      this.words = words;
     }
     this.update();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("savedWords") || mutation.type.startsWith("savedPhrases")) {
+      if (
+        mutation.type.startsWith("savedWords") ||
+        mutation.type.startsWith("savedPhrases")
+      ) {
         this.update();
       }
     });
@@ -346,9 +284,9 @@ export default {
     unique,
     speak,
     async playAnimation(animationDuration) {
-      this.animate = true
-      await timeout(animationDuration)
-      this.animate = false
+      this.animate = true;
+      await timeout(animationDuration);
+      this.animate = false;
     },
     getWordText(word, text) {
       let result = "";
@@ -363,12 +301,12 @@ export default {
     },
     getPhonetics() {
       let phonetics = false;
-      if (
-        this.$l2Settings.showPinyin &&
-        this.phonetics
-      ) {
-        phonetics = this.savedTransliteration || this.transliterationprop || this.transliteration;
-      }    
+      if (this.$l2Settings.showPinyin && this.phonetics) {
+        phonetics =
+          this.savedTransliteration ||
+          this.transliterationprop ||
+          this.transliteration;
+      }
       return phonetics;
     },
     getMappedPronunciation() {
@@ -403,7 +341,10 @@ export default {
       }
       if (this.$l2.code === "ru" && this.savedWord) {
         let dictionary = await this.$getDictionary();
-        let accentText = await dictionary.getAccentForm(this.text, this.savedWord.head);
+        let accentText = await dictionary.getAccentForm(
+          this.text,
+          this.savedWord.head
+        );
         if (accentText) return accentText;
       }
       if (this.$l2.code === "tlh" && text.trim() !== "") {
@@ -661,8 +602,10 @@ export default {
         if (this.token.lemmas) {
           for (let lemma of this.token.lemmas) {
             if (lemma.lemma && lemma.lemma !== this.token.text) {
-              const lemmaCandidates = await dictionary.lookupMultiple(lemma.lemma)
-              words = [...words, ...lemmaCandidates]
+              const lemmaCandidates = await dictionary.lookupMultiple(
+                lemma.lemma
+              );
+              words = [...words, ...lemmaCandidates];
             }
           }
         }
@@ -670,7 +613,8 @@ export default {
       if (!quick) {
         // Only do a fuzzy lookup if the word does not have a found lemma
         if (words.length === 0) {
-          if (!this.text && this.token) this.text = this.token.candidates[0].head;
+          if (!this.text && this.token)
+            this.text = this.token.candidates[0].head;
           words = await dictionary.lookupFuzzy(this.text, 20, quick);
           if (words && !quick) {
             for (let word of words) {
