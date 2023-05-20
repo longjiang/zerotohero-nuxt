@@ -15,9 +15,9 @@
         </span> </span
       ><span class="word-block-text-byeonggi-wrapper">
         <span
-          v-if="hanja"
+          v-if="hanAnnotation"
           class="word-block-text-byeonggi d-inline-block"
-          v-html="hanja"
+          v-html="hanAnnotation"
         />
         <span v-if="saved && definition" class="word-block-text-quick-gloss">
           {{ definition }}
@@ -45,9 +45,9 @@
         > </span
       ><span class="word-block-text-byeonggi-wrapper">
         <span
-          v-if="hanja"
+          v-if="hanAnnotation"
           class="word-block-text-byeonggi d-inline-block"
-          v-html="hanja"
+          v-html="hanAnnotation"
         />
         <span v-if="saved && definition" class="word-block-text-quick-gloss">
           {{ definition }}
@@ -78,7 +78,7 @@ export default {
     text: {
       default: "",
     },
-    hanja: {
+    hanAnnotation: {
       default: undefined,
     },
     phonetics: {

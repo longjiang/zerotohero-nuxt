@@ -175,7 +175,7 @@ export default {
       }
       return word;
     },
-    hanja() {
+    hanAnnotation() {
     },
   },
   asyncComputed: {
@@ -190,7 +190,7 @@ export default {
      * - `pos`: The part of speech of the current word or phrase.
      * - `definition`: The quick gloss definition of the current word or phrase.
      * - `text`: The transformed text of the word or phrase.
-     * - `hanja`: The Hanja form of the word, if it exists and should be shown.
+     * - `hanAnnotation`: For Vietnamese and Korean, the Han character form of the word, if it exists and should be shown in small print on the side.
      * - `useZoom`: A value indicating whether zoom should be used.
      * - `mappedPronunciation`: The pronunciation of the word as mapped for Japanese, if the current language is Japanese.
      * - `data-hover-level`: Set to "outside" if the usePopup is true.
@@ -205,13 +205,15 @@ export default {
       let word = this.bestWord;
       let definition = this.quickGloss;
       let phonetics = this.getPhonetics();
-      let text = this.$l2.han ? this.getWordText(word, this.text) : this.text;
-      let hanja =
-        this.$l2Settings.showByeonggi && this.hanja ? this.hanja : undefined;
-      let mappedPronunciation =
-        this.$l2.code === "ja"
-          ? this.getMappedPronunciation(word, this.text)
-          : undefined;
+      let text = this.text;
+      let hanAnnotation =
+        this.$l2Settings.showByeonggi && this.hanAnnotation ? this.hanAnnotation : undefined;
+      if (this.$l2.han) {
+        text = this.getSimplifiedOrTraditionalText()
+      }
+      if (this.$l2.code === "ja") {
+        mappedPronunciation = this.getMappedPronunciation();
+      }
       let attributes = {
         usePopup: this.usePopup,
         saved: this.savedWord || this.savedPhrase,
@@ -219,7 +221,7 @@ export default {
         pos: this.pos,
         definition,
         text: await this.transform(text),
-        hanja,
+        hanAnnotation,
         useZoom: this.useZoom,
       };
 
@@ -283,7 +285,9 @@ export default {
       await timeout(animationDuration);
       this.animate = false;
     },
-    getWordText(word, text) {
+    getSimplifiedOrTraditionalText() {
+      const word = this.bestWord
+      const text = this.text
       let result = "";
       if (word) {
         result = this.$l2Settings.useTraditional
