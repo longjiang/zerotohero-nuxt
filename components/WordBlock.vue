@@ -123,10 +123,10 @@ export default {
   },
   computed: {
     ...mapState("savedWords", ["savedWords"]),
-    quickGloss() {
-      let quickGloss =
+    shortDefinition() {
+      let shortDefinition =
         this.savedWord?.definitions?.[0] || this.words?.[0]?.definitions?.[0];
-      if (!quickGloss) return;
+      if (!shortDefinition) return;
 
       [
         /\s*\(.*?\)/,
@@ -137,12 +137,12 @@ export default {
         /^see .*/,
         /^variant .*/,
       ].forEach((rule) => {
-        quickGloss = quickGloss.replace(rule, "");
+        shortDefinition = shortDefinition.replace(rule, "");
       });
 
-      quickGloss = quickGloss.split(/[，；,;]\s*/)[0];
+      shortDefinition = shortDefinition.split(/[，；,;]\s*/)[0];
 
-      return quickGloss && quickGloss.length < 20 ? quickGloss : undefined;
+      return shortDefinition && shortDefinition.length < 20 ? shortDefinition : undefined;
     },
     savedTransliteration() {
       if (this.bestWord) {
@@ -202,42 +202,27 @@ export default {
      * @returns {Promise<Object>} The attributes object.
      */
     async attributes() {
-      let word = this.bestWord;
-      let definition = this.quickGloss;
-      let phonetics = this.getPhonetics();
-      let text = this.text;
-      let hanAnnotation =
-        this.$l2Settings.showByeonggi && this.hanAnnotation ? this.hanAnnotation : undefined;
-      if (this.$l2.han) {
-        text = this.getSimplifiedOrTraditionalText()
-      }
-      if (this.$l2.code === "ja") {
-        mappedPronunciation = this.getMappedPronunciation();
-      }
+      let isSaved = this.savedWord || this.savedPhrase ? true : false;
+      let usePopup = this.usePopup;
+      let phonetics = false;
+      let text = await this.getDisplayText(this.text);
+      let pos = this.pos;
+      let definition, hanAnnotation, mappedPronunciation;
+      if (this.$l2Settings.showDefinition || this.$l2Settings.showQuickGloss) definition = this.shortDefinition;
+      if (this.$l2Settings.showPinyin) phonetics = this.getPhonetics();
+      if (this.$l2Settings.showByeonggi && this.hanAnnotation) hanAnnotation = this.hanAnnotation
+      if (this.$l2.code === "ja") mappedPronunciation = this.getMappedPronunciation();
       let attributes = {
-        usePopup: this.usePopup,
-        saved: this.savedWord || this.savedPhrase,
+        usePopup,
+        isSaved,
         phonetics,
-        pos: this.pos,
+        pos,
         definition,
-        text: await this.transform(text),
+        text,
         hanAnnotation,
         useZoom: this.useZoom,
+        mappedPronunciation,
       };
-
-      if (mappedPronunciation) {
-        attributes.mappedPronunciation = mappedPronunciation;
-      }
-
-      if (this.usePopup) {
-        attributes["data-hover-level"] = "outside";
-      }
-
-      if (word) {
-        if (word.rank) attributes["data-rank"] = word.rank;
-        if (word.weight) attributes["data-weight"] = word.weight;
-      }
-
       return attributes;
     },
   },
@@ -285,6 +270,28 @@ export default {
       await timeout(animationDuration);
       this.animate = false;
     },
+    async getDisplayText(text) {
+      if (typeof text === "undefined" || text.trim() === "") {
+        return ""
+      }
+      if (this.$l2.code === "ru") {
+        if (this.savedWord) {
+          let dictionary = await this.$getDictionary();
+          let accentText = await dictionary.getAccentForm(
+            this.text,
+            this.savedWord.head
+          );
+          if (accentText) text = accentText;
+        }
+      }
+      if (this.$l2.code === "tlh") {
+        text = Klingon.latinToConScript(text);
+      }
+      if (this.$l2.han) {
+        text = this.getSimplifiedOrTraditionalText();
+      }
+      return text;
+    },
     getSimplifiedOrTraditionalText() {
       const word = this.bestWord
       const text = this.text
@@ -299,13 +306,10 @@ export default {
       return result;
     },
     getPhonetics() {
-      let phonetics = false;
-      if (this.$l2Settings.showPinyin && this.phonetics) {
-        phonetics =
+      let phonetics =
           this.savedTransliteration ||
           this.transliterationprop ||
           this.transliteration;
-      }
       return phonetics;
     },
     getMappedPronunciation() {
@@ -333,26 +337,6 @@ export default {
         if (translation) phraseItem.translations[this.$l1.code] = translation;
         return phraseItem;
       }
-    },
-    async transform(text, removeSpacing = false) {
-      if (typeof text === "undefined") {
-        text = "";
-      }
-      if (this.$l2.code === "ru" && this.savedWord) {
-        let dictionary = await this.$getDictionary();
-        let accentText = await dictionary.getAccentForm(
-          this.text,
-          this.savedWord.head
-        );
-        if (accentText) return accentText;
-      }
-      if (this.$l2.code === "tlh" && text.trim() !== "") {
-        text = Klingon.latinToConScript(text);
-      }
-      if (removeSpacing) {
-        text = text.replace(/ /gi, "");
-      }
-      return text;
     },
     /**
      * checkSavedWord function:

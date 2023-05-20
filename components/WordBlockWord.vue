@@ -19,7 +19,7 @@
           class="word-block-text-byeonggi d-inline-block"
           v-html="hanAnnotation"
         />
-        <span v-if="saved && definition" class="word-block-text-quick-gloss">
+        <span v-if="isSaved && definition" class="word-block-text-quick-gloss">
           {{ definition }}
         </span>
       </span>
@@ -49,7 +49,7 @@
           class="word-block-text-byeonggi d-inline-block"
           v-html="hanAnnotation"
         />
-        <span v-if="saved && definition" class="word-block-text-quick-gloss">
+        <span v-if="isSaved && definition" class="word-block-text-quick-gloss">
           {{ definition }}
         </span>
       </span>
@@ -66,7 +66,7 @@ export default {
     usePopup: {
       default: true,
     },
-    saved: {
+    isSaved: {
       default: false,
     },
     obscure: {
@@ -107,8 +107,8 @@ export default {
       let classes = {
         "word-block": true,
         "with-popup": this.usePopup,
-        "with-quick-gloss": this.saved && this.definition,
-        saved: this.saved,
+        "with-quick-gloss": this.isSaved && this.definition,
+        'saved': this.isSaved,
         obscure: this.obscure,
         animate: this.animate
       };
