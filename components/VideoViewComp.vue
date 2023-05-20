@@ -57,7 +57,7 @@
         }"
         @updateLayout="onUpdateLayout"
         @videoLoaded="onVideoLoaded"
-        style="height: 100%;"
+        style="height: 100%"
         class="video-view-content-inner"
       />
     </div>
@@ -246,17 +246,19 @@ export default {
   }
 }
 
+.video-view-content {
+  height: 100%;
+}
+
 .zerotohero-wide {
-  .video-view-content {
-    height: 100%;
-    :deep(.video-with-transcript-landscape) {
-      .youtube {
-        border-radius: 0.3rem 0.3rem 0 0;
-        overflow: hidden;
-      }
+  :deep(.video-with-transcript-landscape) {
+    .youtube {
+      border-radius: 0.3rem 0.3rem 0 0;
+      overflow: hidden;
     }
   }
 }
+
 
 .video-view {
   transition: all 1s ease-in-out;
