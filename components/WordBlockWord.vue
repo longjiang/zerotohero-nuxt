@@ -63,7 +63,7 @@ import { hasKanji } from '@/lib/utils'
 export default {
   props: {
     pos: String,
-    popup: {
+    usePopup: {
       default: true,
     },
     sticky: {
@@ -115,7 +115,7 @@ export default {
     wordBlockClasses() {
       let classes = {
         "word-block": true,
-        "with-popup": this.popup,
+        "with-popup": this.usePopup,
         "with-quick-gloss": this.saved && this.definition,
         sticky: this.sticky,
         common: this.common,

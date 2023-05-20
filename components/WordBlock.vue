@@ -1,15 +1,15 @@
 <template>
   <v-popover
     :open="open"
-    placement="top"
-    ref="popover"
     :popoverClass="`skin-${$skin}`"
     :popoverWrapperClass="`tooltip-wrapper skin-${$skin} l1-${$l1.code} l2-${$l2.code}`"
     :popoverInnerClass="`tooltip-inner popover-inner skin-${$skin}`"
     :popoverArrowClass="`tooltip-arrow popover-arrow skin-${$skin}`"
+    placement="top"
+    ref="popover"
   >
     <div
-      v-on="popup ? { click: wordBlockClick } : {}"
+      v-on="usePopup ? { click: wordBlockClick } : {}"
       v-observe-visibility="visibilityChanged"
       @mouseenter="wordblockHover = true"
       @mouseleave="wordblockHover = false"
@@ -83,7 +83,7 @@ export default {
     seen: {
       default: false, // whether this word has already been annotated ('seen') before
     },
-    popup: {
+    usePopup: {
       default: true,
     },
     transliterationprop: {
@@ -251,6 +251,31 @@ export default {
     },
   },
   asyncComputed: {
+    /**
+     * Asynchronously calculates the attributes object.
+     *
+     * The returned object has the following properties:
+     *
+     * - `usePopup`: A value indicating whether we are using Popup for this Word Block.
+     * - `sticky`: A value indicating whether the element is sticky.
+     * - `common`: A value indicating whether the element is common.
+     * - `seen`: A value indicating whether the element has been seen.
+     * - `saved`: A value indicating whether the word or phrase has been saved.
+     * - `phonetics`: The phonetics of the current word or phrase.
+     * - `pos`: The part of speech of the current word or phrase.
+     * - `definition`: The quick gloss definition of the current word or phrase.
+     * - `text`: The transformed text of the word or phrase.
+     * - `hanja`: The Hanja form of the word, if it exists and should be shown.
+     * - `useZoom`: A value indicating whether zoom should be used.
+     * - `mappedPronunciation`: The pronunciation of the word as mapped for Japanese, if the current language is Japanese.
+     * - `data-hover-level`: Set to "outside" if the usePopup is true.
+     * - `data-rank`: The rank of the word, if it exists.
+     * - `data-weight`: The weight of the word, if it exists.
+     *
+     * @async
+     * @computed
+     * @returns {Promise<Object>} The attributes object.
+     */
     async attributes() {
       let word = this.word;
       let definition = this.quickGloss;
@@ -263,7 +288,7 @@ export default {
           ? this.getMappedPronunciation(word, this.text)
           : undefined;
       let attributes = {
-        popup: this.popup,
+        usePopup: this.usePopup,
         sticky: this.sticky,
         common: this.common,
         seen: this.seen,
@@ -280,7 +305,7 @@ export default {
         attributes.mappedPronunciation = mappedPronunciation;
       }
 
-      if (this.popup) {
+      if (this.usePopup) {
         attributes["data-hover-level"] = "outside";
       }
 
@@ -564,7 +589,7 @@ export default {
       this.loadingImages = false;
     },
     togglePopup() {
-      if (this.popup) {
+      if (this.usePopup) {
         if (this.open) this.closePopup();
         else this.openPopup();
       }
@@ -590,7 +615,7 @@ export default {
     },
     async openPopup() {
       if (this.open) return;
-      if (!this.popup) return;
+      if (!this.usePopup) return;
       let dictionary = await this.$getDictionary();
       if (dictionary) {
         if (this.loading === true) {
