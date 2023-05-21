@@ -131,6 +131,12 @@ export default {
           icon: "fas fa-chart-simple",
           show: true,
         },
+        {
+          name: "popular",
+          title: "What's Popular",
+          icon: "fas fa-fire",
+          show: true,
+        },
       ],
     };
   },
