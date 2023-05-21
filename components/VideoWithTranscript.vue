@@ -161,10 +161,10 @@
             v-if="overlaySubsAlign === 'top'"
           ></i>
         </div>
-        
+
         <!-- this is the public facing video admin -->
         <!-- if the video has no subs, allow the user to add subs -->
-        <div class="pl-4 pr-4" v-if="!checkingSubs && video && !video.subs_l2">  
+        <div class="pl-4 pr-4" v-if="!checkingSubs && video && !video.subs_l2">
           <VideoAdmin
             :showVideoDetails="true"
             :showTextEditing="true"
@@ -425,13 +425,18 @@ export default {
      * @returns {Boolean} true if the aspect is landscape and mode is subtitles, false otherwise.
      */
     useOverlay() {
-      return (
+      if (
         this.aspect === "landscape" &&
         this.mode === "subtitles" &&
         this.size !== "mini" &&
         !this.collapsed
-      );
+      ) {
+        if (!this.hasEnoughSpaceUnderVideo()) {
+          return true;
+        }
+      }
     },
+
     startTimeOrLineIndex() {
       let starttime = 0;
       if (this.starttime) starttime = this.starttime;
@@ -537,9 +542,7 @@ export default {
         this.$refs.transcript.audioMode = this.audioMode;
     },
     startLineIndex() {
-      if (
-        this.$refs.video?.$refs.concreteVideo?.player?.seekTo
-      ) {
+      if (this.$refs.video?.$refs.concreteVideo?.player?.seekTo) {
         this.rewind();
       }
     },
@@ -547,10 +550,43 @@ export default {
       this.mode = this.initialMode;
     },
     video() {
-      this.paused = true
-    }
+      this.paused = true;
+    },
   },
   methods: {
+    getVideoHeight() {
+      if (this.$refs.video) {
+        const video = this.$refs.video.$el;
+        return video.offsetHeight;
+      }
+    },
+
+    getControlsHeight() {
+      if (this.$refs.videoControls) {
+        const videoControls = this.$refs.videoControls.$el;
+        return videoControls.offsetHeight;
+      }
+    },
+
+    getVideoHeightWithoutControls() {
+      const videoHeight = this.getVideoHeight();
+      const controlsHeight = this.getControlsHeight();
+      if (videoHeight && controlsHeight) return videoHeight - controlsHeight;
+    },
+
+    hasEnoughSpaceUnderVideo() {
+      let containerElement = document.querySelector(".video-view-content");
+      if (containerElement) {
+        let containerHeight = containerElement.offsetHeight;
+        let videoHeight = this.getVideoHeight();
+        let controlsHeight = this.getControlsHeight();
+        let spaceUnderVideo =
+          (containerHeight - videoHeight - controlsHeight) / containerHeight;
+        console.log(spaceUnderVideo)
+        if (spaceUnderVideo > 0.10) return true;
+      }
+    },
+
     resetHoverTimeout() {
       clearTimeout(this.hoverTimeout);
       this.hovering = true;
@@ -797,14 +833,6 @@ export default {
         document.msFullscreenElement
       );
       this.$store.dispatch("settings/setFullscreen", fullscreen);
-    },
-
-    getVideoHeightWithoutControls() {
-      if (this.$refs.video && this.$refs.videoControls) {
-        const video = this.$refs.video.$el;
-        const videoControls = this.$refs.videoControls.$el;
-        return video.offsetHeight - videoControls.offsetHeight;
-      }
     },
 
     handleMouseDown(e) {
