@@ -6,7 +6,7 @@
         <thead>
           <tr>
             <th>Language Pair</th>
-            <th>Count</th>
+            <th>Page Views</th>
           </tr>
         </thead>
         <tbody>

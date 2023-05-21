@@ -46,7 +46,8 @@ export default {
       unavailablePaths: [
         '/en/zh/show/tv-show/142',
         '/en/ja/show/tv-show/1389',
-        '/en/ja/show/tv-show/958'
+        '/en/ja/show/tv-show/958',
+        '/en/ja/video-view/youtube/_FB9JZe0L1w',
       ],
     };
   },
