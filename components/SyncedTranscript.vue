@@ -161,6 +161,9 @@ export default {
     collapsed: {
       default: false,
     },
+    currentTime: {
+      type: Number
+    },
     landscape: {
       default: false,
     },
@@ -185,7 +188,6 @@ export default {
       sW: [],
       id: uniqueId(),
       previousTime: 0,
-      currentTime: 0,
       currentLine: undefined,
       currentLineIndex: undefined,
       nextLine: undefined,
@@ -601,9 +603,6 @@ export default {
       return interrupt;
     },
     async doAudioModeStuff() {
-      if (!this.currentLineIndex) {
-        this.currentTime = this.currentTime + 0.1;
-      }
       this.$emit("pause");
       this.audioCancelled = false;
       if (

@@ -183,7 +183,7 @@ export default {
   mounted() {
     this.height = this.$el.clientHeight;
     this.width = this.$el.clientWidth;
-    if (this.current) this.playAnimation();
+    if (this.current && !this.paused) this.playAnimation();
   },
   watch: {
     current() {

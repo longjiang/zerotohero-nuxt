@@ -186,6 +186,7 @@
             lines: video.subs_l2 || [],
             parallellines: video.subs_l1 || [],
             starttime: startTimeOrLineIndex,
+            currentTime,
             single: mode === 'subtitles' || size === 'mini',
             showAnimation,
             showSubsEditing,
@@ -648,6 +649,14 @@ export default {
       }
       if (this.$refs.transcript) this.$refs.transcript.paused = paused;
     },
+
+    goToPreviousLine() {
+      if (this.$refs.transcript) this.$refs.transcript.goToPreviousLine();
+    },
+    goToNextLine() {
+      if (this.$refs.transcript) this.$refs.transcript.goToNextLine();
+    },
+    
     goToLine(line) {
       if (this.$refs.transcript) this.$refs.transcript.goToLine(line);
     },
@@ -690,9 +699,10 @@ export default {
       this.seek(Math.min(this.duration, this.currentTime + seconds));
     },
 
-    seek(starttime) {
+    seek(time) {
       if (this.$refs.video?.seek) {
-        this.$refs.video.seek(starttime);
+        this.$refs.video.seek(time);
+        this.currentTime = time
       }
     },
 
@@ -767,12 +777,6 @@ export default {
       this.viewportWidth = this.$el.clientWidth;
       this.viewportHeight = window.innerHeight;
       this.videoHeightWithoutControls = this.getVideoHeightWithoutControls();
-    },
-    goToPreviousLine() {
-      if (this.$refs.transcript) this.$refs.transcript.goToPreviousLine();
-    },
-    goToNextLine() {
-      if (this.$refs.transcript) this.$refs.transcript.goToNextLine();
     },
     toggleTranscriptMode() {
       this.mode = this.mode === "transcript" ? "subtitles" : "transcript";
