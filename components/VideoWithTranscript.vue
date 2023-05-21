@@ -618,7 +618,6 @@ export default {
         this.$emit("currentTime", this.currentTime);
       }
       if (this.$refs.transcript) {
-        this.$refs.transcript.currentTime = currentTime;
         if (this.$refs.videoControls) {
           this.$refs.videoControls.currentLine =
             this.$refs.transcript.currentLine;
