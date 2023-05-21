@@ -411,7 +411,7 @@ export default {
       // If the video doesn't have L1 or L2 subtitles, we load it from YouTube
       for (let l1OrL2 of ["l2", "l1"]) {
         if (!(video?.[`subs_${l1OrL2}`]?.length > 0)) {
-          let subs, generated
+          let subs, generated;
           if (this[`${l1OrL2}Locale`]) {
             ({ subs, generated } = await this.getSubs({
               youtube_id: video.youtube_id,
@@ -451,9 +451,11 @@ export default {
 
       if (!properties.every((property) => property in this.video)) {
         const videoData = await YouTube.videoByApi(this.youtube_id);
-        properties.forEach((property) => {
-          if (!video[property]) Vue.set(video, property, videoData[property]);
-        });
+        if (videoData)
+          properties.forEach((property) => {
+            if (!video[property] && videoData[property])
+              Vue.set(video, property, videoData[property]);
+          });
       }
     },
     onUpdateLayout(layout) {
@@ -508,7 +510,7 @@ export default {
           );
           if (this.currentTimeEvery10Seconds % 60 === 0)
             this.saveHistory({
-              type: 'youtube',
+              type: "youtube",
               video: this.video,
               duration: this.duration,
             }); // Only update history (and push to the server) every minute

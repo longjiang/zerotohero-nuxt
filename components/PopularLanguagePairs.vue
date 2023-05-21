@@ -33,6 +33,7 @@
 
 <script>
 import axios from "axios";
+import { PYTHON_SERVER } from "@/lib/utils";
 
 export default {
   data() {
@@ -42,7 +43,7 @@ export default {
   },
   async mounted() {
     const response = await axios.get(
-      "https://python.zerotohero.ca/ga-popular-language-pairs"
+      PYTHON_SERVER + "ga-popular-language-pairs"
     );
     this.pairs = response.data.pairs.slice(0, 10); // get only top 10
   },

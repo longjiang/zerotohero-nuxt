@@ -21,6 +21,7 @@
           <h4>Popular Language Pairs</h4>
           <PopularLanguagePairs />
           <h4>Popular Features</h4>
+          <PopularFeatures />
         </div>
       </div>
     </div>
