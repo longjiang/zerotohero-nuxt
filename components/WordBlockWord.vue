@@ -128,6 +128,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/variables.scss";
+// [data-hover-level=outside].saved {
+//   color: white !important;
+// }
+
 .word-block,
 .word-block-unknown {
   text-align: center;
@@ -138,7 +143,7 @@ export default {
 
   .word-block,
   .word-block-unknown {
-    &.animate {
+    &.animate .word-block-segment {
       animation-name: shinedark;
     }
   }
@@ -148,7 +153,7 @@ export default {
 
   .word-block,
   .word-block-unknown {
-    &.animate {
+    &.animate .word-block-segment {
       animation-name: shinelight;
     }
   }
@@ -170,19 +175,36 @@ export default {
 
 .word-block,
 .word-block-unknown {
-  &.animate {
+  &.animate .word-block-segment {
     animation-iteration-count: 1;
     animation-duration: 2s;
     animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1.0);
   }
 
-  &.saved.animate {
-    animation-name: shinedark;
+  &.saved[data-hover-level=outside].animate .word-block-segment {
+    animation-name: shinesaved;
   }
 }
 
 .word-block.obscure {
   opacity: 0;
+}
+
+@keyframes shinesaved {
+  0% {
+    color: $primary-color;
+    transform: scale(1);
+  }
+
+  10% {
+    color: #54ff7c;
+    transform: scale(1.1);
+  }
+
+  100% {
+    color: $primary-color;
+    transform: scale(1);
+  }
 }
 
 @keyframes shinedark {

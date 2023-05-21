@@ -582,7 +582,6 @@ export default {
         let controlsHeight = this.getControlsHeight();
         let spaceUnderVideo =
           (containerHeight - videoHeight - controlsHeight) / containerHeight;
-        console.log(spaceUnderVideo)
         if (spaceUnderVideo > 0.10) return true;
       }
     },
