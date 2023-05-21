@@ -2,11 +2,11 @@
   {
     path: '/popular',
     meta: {
-      title: 'What's Popular | Language Player',
+      title: 'What\'s Popular | Language Player',
       metaTags: [
         {
           name: 'description',
-          content: 'See what's popular on Language Player.'
+          content: 'See what\'s popular on Language Player.'
         }
       ]
     }

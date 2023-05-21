@@ -43,6 +43,11 @@ export default {
     return {
       pairs: [],
       features: [],
+      unavailablePaths: [
+        '/en/zh/show/tv-show/142',
+        '/en/ja/show/tv-show/1389',
+        '/en/ja/show/tv-show/958'
+      ],
     };
   },
   async mounted() {
@@ -58,13 +63,14 @@ export default {
   },
   methods: {
     topPaths(feature, pair) {
-      return Array.from(
+      let paths = Array.from(
         new Set(
           feature.language_pairs[pair.l1 + "/" + pair.l2]?.top_paths.map(
             (path) => path.replace(/\/$/, "")
           )
         )
       );
+      return paths.filter((path) => !this.unavailablePaths.includes(path));
     },
   },
 };
