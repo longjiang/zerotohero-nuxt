@@ -188,16 +188,20 @@ export default {
   watch: {
     current() {
       if (this.current) {
-        this.playAnimation();
-      } else {
-        this.pauseAnimation();
+        if (!this.paused) {
+          this.playAnimation();
+        } else {
+          this.pauseAnimation();
+        }
       }
     },
     paused() {
-      if (this.paused) {
-        this.pauseAnimation();
-      } else {
-        this.playAnimation();
+      if (this.current) {
+        if (this.paused) {
+          this.pauseAnimation();
+        } else {
+          this.playAnimation();
+        }
       }
     },
   },
