@@ -188,7 +188,10 @@ export default {
         this.loadShowAndEpisodes({ showId: this.video[showType], showType });
 
       // Retrieve missing information from YouTube
-      await this.getMissingVideoInfoFromYouTube(this.video);
+      await this.loadTranscriptLocalesFromYouTube(this.video)
+      await this.loadMissingSubsFromYouTube(this.video)
+      await this.loadMissingMetaFromYouTube(this.video)
+
       this.checkingSubs = false;
     },
     loadShowAndEpisodes({ showId, showType }) {
@@ -373,9 +376,8 @@ export default {
         return video;
       }
     },
-    async getSubs({ youtube_id, locale, name }) {
+    async getSubs({ youtube_id, locale, name, generated = false }) {
       let forceRefresh = this.$adminMode;
-      let generated = false;
       let subs = await YouTube.getTranscript(
         youtube_id,
         locale,
@@ -383,17 +385,7 @@ export default {
         forceRefresh,
         generated
       );
-      if (!subs || subs.length === 0) {
-        generated = true;
-        subs = await YouTube.getTranscript(
-          youtube_id,
-          locale,
-          name,
-          forceRefresh,
-          generated
-        );
-      }
-      return { subs, generated };
+      return subs;
     },
     async loadTranscriptLocalesFromYouTube(video) {
       // If the video either doesn't have L2 subtitles, or doesn't have L1 subtitles, we retrieve the locales of the subtitles from YouTube
@@ -413,20 +405,21 @@ export default {
       // If the video doesn't have L1 or L2 subtitles, we load it from YouTube
       for (let l1OrL2 of ["l2", "l1"]) {
         if (!(video?.[`subs_${l1OrL2}`]?.length > 0)) {
-          let subs, generated;
-          if (this[`${l1OrL2}Locale`]) {
-            ({ subs, generated } = await this.getSubs({
-              youtube_id: video.youtube_id,
-              locale: this[`${l1OrL2}Locale`] || this[`$${l1OrL2}`].code,
-              name: this[`${l1OrL2}Name`],
-            }));
-          }
+          let subs
+          let locale = this[`${l1OrL2}Locale`]
+          let generated = locale ? false : true // If we don't have the locale from YouTube, that means that the subs are generated
+          subs = await this.getSubs({
+            youtube_id: video.youtube_id,
+            locale: this[`${l1OrL2}Locale`] || this[`$${l1OrL2}`].code,
+            name: this[`${l1OrL2}Name`],
+            generated
+          });
           // In the case of L1 subtitles, if we still don't have it, we get translated ones
           if (l1OrL2 === "l1" && !(subs?.length > 0)) {
             let tlang = this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code; // tlang
             subs = await YouTube.getTranslatedTranscript(
               video.youtube_id,
-              this.l2Locale,
+              this.l2Locale || this[`$${l1OrL2}`].code,
               this.l2Name,
               tlang
             );
@@ -460,13 +453,6 @@ export default {
               Vue.set(video, property, videoData[property]);
           });
       }
-    },
-    async getMissingVideoInfoFromYouTube(video) {
-      await this.loadTranscriptLocalesFromYouTube(video)
-      
-      await this.loadMissingSubsFromYouTube(video)
-
-      await this.loadMissingMetaFromYouTube(video)
     },
     onUpdateLayout(layout) {
       this.$emit("updateLayout", layout);
