@@ -991,8 +991,8 @@ export default {
         rgba(0, 0, 0, 0.8) 100%
       );
 
-      :deep(.video-controls-time),
-      :deep(.btn-video-controls) {
+      :deep(.video-controls-time:not([disabled])),
+      :deep(.btn-video-controls:not([disabled])) {
         text-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
         color: white;
       }
