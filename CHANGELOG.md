@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.19.1] - 2023-05-21
+
+### Fixed
+- Fixed issue causing `matchParallelLines` to get stuck in an infinite loop.
+- Fixed bug where translations were not showing up due to incorrect filtering.
+- Fixed handling of literary Chinese.
+- Fixed issue where overlay player's disabled buttons were displayed as white.
+- Fixed bug where text without phonetic annotation didn't animate with scaling.
+
+### Added
+- Added the ability to import words.
+
+### Improved
+- Improved parallel line assignment.
+
+
 ## [2.19.0] - 2023-05-21
 
 ### Added
