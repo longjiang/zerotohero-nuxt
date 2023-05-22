@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.19.0] - 2023-05-21
+
+### Added
+- Improved subtitle search and added popular features chart.
+- Included Newly Added section to explore-media and popular language pairs.
+- Enhanced Russian dictionary with IPA pronunciation and loaded wiktionary words.
+
+### Fixed
+- Fixed several bugs including issues with subs fetching, scroll behavior, and word identification in multiple languages.
+- Resolved 'mutating prop' error and fixed issues with skin switching and localization.
+
+### Changed
+- Refactored YouTubeViewComp and changed data collection start date for What's popular feature.
+- Enhanced overlay player subs display and removed reduplicated padding bottom.
+
+### Refactored
+- Simplified wordblock attributes and refactored subtitles loading logic in <YouTubeViewComp>.
 ## [2.18.7] - 2023-05-16
 ### Added
 - Add changelog
