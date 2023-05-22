@@ -85,7 +85,10 @@
             <Loader :sticky="true" />
           </div>
           <template v-if="!pro">
-            <YouNeedPro v-if="showYouNeedPro" class="transcript-you-need-pro pl-5 pr-5 rounded" />
+            <YouNeedPro
+              v-if="showYouNeedPro"
+              class="transcript-you-need-pro pl-5 pr-5 rounded"
+            />
           </template>
         </client-only>
       </div>
@@ -104,6 +107,34 @@ import {
 import Vue from "vue";
 
 const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
+
+const DEFAULT_PARALLEL_LINE_DURATION = 2;
+const DEFAULT_LINE_DURATION = 10;
+const SMALL_TIME_GAP = 0.5;
+
+function filterParallelLines(line, nextLine, parallelLine, nextParallelLine) {
+  let parallelLineDuration =
+    parallelLine.duration ||
+    (nextParallelLine
+      ? nextParallelLine.starttime - parallelLine.starttime
+      : DEFAULT_PARALLEL_LINE_DURATION);
+  let parallelLineEndTime = parallelLine.starttime + parallelLineDuration;
+  let nextLineStartTime = line.duration
+    ? line.starttime + line.duration
+    : nextLine
+    ? nextLine.starttime
+    : line.starttime + DEFAULT_LINE_DURATION;
+  let parallelLineStartsBeforeNextLineStarts =
+    line.starttime - SMALL_TIME_GAP <= parallelLine.starttime &&
+    parallelLine.starttime <= nextLineStartTime - SMALL_TIME_GAP;
+  let parallelLineEndsBeforeNextLineStarts =
+    line.starttime + SMALL_TIME_GAP <= parallelLineEndTime &&
+    parallelLineEndTime <= nextLineStartTime + SMALL_TIME_GAP;
+  return (
+    parallelLineStartsBeforeNextLineStarts ||
+    parallelLineEndsBeforeNextLineStarts
+  );
+}
 
 export default {
   props: {
@@ -162,7 +193,7 @@ export default {
       default: false,
     },
     currentTime: {
-      type: Number
+      type: Number,
     },
     landscape: {
       default: false,
@@ -321,7 +352,9 @@ export default {
           this.currentLineIndex + 5
         );
         for (let line of nextLines) {
-          let tokens = await dictionary.tokenizeWithCache(line.line.replace(/\n/g, " "));
+          let tokens = await dictionary.tokenizeWithCache(
+            line.line.replace(/\n/g, " ")
+          );
         }
       }
     },
@@ -361,11 +394,12 @@ export default {
       if (!this.paused && this.audioMode) this.doAudioModeStuff();
     },
     getParallelLine(line, index) {
-      return this.$l2.code !== this.$l1.code && this.parallellines
-        ? this.matchedParallelLines[
-            this.single ? this.currentLineIndex : index + this.visibleMin
-          ]
-        : undefined;
+      if (this.$l2.code === this.$l1.code) return; // Don't show parallel lines if the languages are the same
+      if (!this.matchedParallelLines) return;
+      let lineIndex;
+      if (this.single) this.currentLineIndex;
+      else lineIndex = index + this.visibleMin;
+      return this.matchedParallelLines[lineIndex];
     },
     longPauseAfterLine(index) {
       let thisLine = this.lines[index + this.visibleMin];
@@ -439,52 +473,45 @@ export default {
     /**
      * Match parallel lines (translation lines) to L2 lines.
      */
+
     matchParallelLines() {
-      let matchedParallelLines = [];
       if (!this.parallellines) {
         this.matchedParallelLines = [];
         return;
       }
-      for (let lineIndex in this.lines) {
-        lineIndex = Number(lineIndex);
-        let line = this.lines[lineIndex];
-        let nextLine = this.lines[lineIndex + 1];
-        // Assign parallel lines to this line if the parallel line starts before this line ends, or ends before this line ends
-        const filterParallelLines = (parallelLine, parallelLineIndex) => {
-          if (!parallelLine) return false;
-          let nextParallelLine = this.parallellines[parallelLineIndex + 1];
-          let parallelLineDuration = parallelLine.duration;
-          if (!parallelLineDuration)
-            parallelLineDuration = nextParallelLine
-              ? nextParallelLine.starttime - parallelLine.starttime
-              : 2;
-          let parallelLineEndTime =
-            parallelLine.starttime + parallelLineDuration;
-          let medianTime = parallelLine.starttime + parallelLineDuration / 2;
-          let nextLineStartTime = line.duration
-            ? line.starttime + line.duration
-            : nextLine
-            ? nextLine.starttime
-            : line.starttime + 10;
-          let parallelLineStartsBeforeNextLineStarts =
-            line.starttime - 0.5 <= parallelLine.starttime &&
-            parallelLine.starttime <= nextLineStartTime - 0.5;
-          let parallelLineEndsBeforeNextLineStarts =
-            line.starttime + 0.5 <= parallelLineEndTime &&
-            parallelLineEndTime <= nextLineStartTime + 0.5;
-          return (
-            parallelLineStartsBeforeNextLineStarts ||
-            parallelLineEndsBeforeNextLineStarts
-          );
-        };
-        matchedParallelLines[lineIndex] = this.parallellines
-          .filter(filterParallelLines)
-          .slice(0, 4) // So that we don't have way too many translation lines that fills the whole screen
-          .map((l) => l.line)
-          .join(" ");
-        if (!nextLine) break;
-      }
-      this.matchedParallelLines = matchedParallelLines;
+
+      // Make a deep copy of parallellines
+      let parallellinesCopy = JSON.parse(JSON.stringify(this.parallellines));
+
+      // Sort both arrays in ascending order by starttime
+      this.lines.sort((a, b) => a.starttime - b.starttime);
+      parallellinesCopy.sort((a, b) => a.starttime - b.starttime);
+
+      let j = 0; // Pointer for parallellines
+      this.matchedParallelLines = this.lines.map((line, i) => {
+        let nextLine = this.lines[i + 1];
+
+        // Skip parallelLines that have been assigned already
+        while (parallellinesCopy[j] && parallellinesCopy[j].assigned) {
+          j++;
+        }
+
+        if (
+          parallellinesCopy[j] &&
+          filterParallelLines(
+            line,
+            nextLine,
+            parallellinesCopy[j],
+            parallellinesCopy[j + 1]
+          )
+        ) {
+          // Mark parallelLine as assigned and move to next
+          parallellinesCopy[j].assigned = true;
+          return parallellinesCopy[j].line;
+        }
+
+        return "";
+      });
     },
     executeTimeBasedMethods() {
       // (video starts first time) "first play"
