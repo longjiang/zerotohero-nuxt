@@ -369,7 +369,7 @@ export default {
       if (this.$l2.code === this.$l1.code) return; // Don't show parallel lines if the languages are the same
       if (!this.matchedParallelLines) return;
       let lineIndex;
-      if (this.single) this.currentLineIndex;
+      if (this.single) lineIndex = this.currentLineIndex;
       else lineIndex = index + this.visibleMin;
       return this.matchedParallelLines[lineIndex];
     },
