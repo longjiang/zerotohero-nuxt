@@ -555,10 +555,30 @@ export default {
     },
   },
   methods: {
+
+    getContainerElementWidth() {
+      let containerElement = document.querySelector(".video-view-content");
+      if (containerElement) {
+        return containerElement.offsetWidth;
+      }
+    },
+
+    getContainerElementHeight() {
+      let containerElement = document.querySelector(".video-view-content");
+      if (containerElement) {
+        return containerElement.offsetHeight;
+      }
+    },
+
     getVideoHeight() {
-      if (this.$refs.video) {
-        const video = this.$refs.video.$el;
-        return video.offsetHeight;
+      let containerWidth = this.getContainerElementWidth();
+      if (containerWidth) {
+        const videoIsFullWidth = this.mode === 'subtitles' || (this.mode === 'transcript' && this.aspect === 'portrait');
+        if (videoIsFullWidth) {
+          return containerWidth * 9 / 16;
+        } else {
+          return containerWidth * 9 / 32;
+        }
       }
     },
 
@@ -576,9 +596,8 @@ export default {
     },
 
     hasEnoughSpaceUnderVideo() {
-      let containerElement = document.querySelector(".video-view-content");
-      if (containerElement) {
-        let containerHeight = containerElement.offsetHeight;
+      let containerHeight = this.getContainerElementHeight();
+      if (containerHeight) {        
         let videoHeight = this.getVideoHeight();
         let controlsHeight = this.getControlsHeight();
         let spaceUnderVideo =
