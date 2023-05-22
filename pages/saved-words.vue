@@ -17,36 +17,32 @@
     <div class="container">
       <div class="row text-center" v-if="sW.length > 0">
         <div class="col-sm-12">
-          <div>
-            <input
-              id="fileUpload"
-              ref="upload"
-              type="file"
-              hidden
-              @change="importCSV"
-            />
-            <button
-              class="btn btn-sm text-secondary"
+          <div class="mt-3">
+            <b-button
               @click="importButtonClick()"
+              :variant="$skin"
+              size="sm"
             >
               <i class="fa fa-upload mr-1"></i>
-              {{ $t("Import") }} (CSV)
-            </button>
-            <button
-              class="btn btn-sm text-secondary"
+              {{ $t("Import") }}
+            </b-button>
+            <b-button
+              :variant="$skin"
+              size="sm"
               @click="exportButtonClick()"
             >
               <i class="fa fa-download mr-1"></i>
               {{ $t("Export") }}
-            </button>
-            <button
-              class="remove-all text-danger btn btn-sm"
+            </b-button>
+            <b-button
+              variant="danger"
+              size="sm"
               v-on:click="removeAllClick"
               v-if="this.sW.length > 0"
             >
               <i class="fas fa-times mr-1"></i>
               {{ $t("Remove All") }}
-            </button>
+            </b-button>
           </div>
         </div>
       </div>
@@ -115,6 +111,31 @@
       </div>
     </div>
     <b-modal
+    ref="import-modal"
+    centered
+    hide-footer
+    :title="$t('Import')"
+    body-class="import-modal-modal"
+    modal-class="safe-padding-top mt-4"
+  >
+    <b-form-textarea
+      id="word-input"
+      v-model="inputWords"
+      :placeholder="$t('Enter words separated by commas or new lines')"
+      rows="3"
+      max-rows="6"
+    >
+    </b-form-textarea>
+
+    <b-button
+      variant="primary"
+      class="mt-3"
+      @click="importWords"
+    >
+      {{ $t('Import') }}
+    </b-button>
+  </b-modal>
+    <b-modal
       ref="export-modal"
       centered
       hide-footer
@@ -153,6 +174,7 @@ export default {
       sWLoaded: false,
       showExport: false,
       showLegacy: false,
+      inputWords: '',
       sW: [],
     };
   },
@@ -238,25 +260,15 @@ export default {
       this.$refs["export-modal"].show();
     },
     importButtonClick() {
-      this.$refs["upload"].click();
+      this.$refs["import-modal"].show();
     },
-    importCSV(event) {
-      let files = event.target.files;
-      for (let file of files) {
-        let reader = new FileReader();
-        reader.readAsText(file);
-        reader.onload = (event) => {
-          let csv = event.target.result;
-          let parsed = Papa.parse(csv, { header: true });
-          let rows = parsed.data;
-          if (rows && rows[0] && rows[0].id) {
-            this.importSavedWords(csv);
-          }
-        };
-      }
-    },
-    importSavedWords(csv) {
-      this.$store.dispatch("savedWords/importWords", csv);
+    async importWords() {
+      // Split words by comma or new line
+      const words = this.inputWords.split(/[\n,]+/).map(word => word.trim());
+
+      // Log array of words
+      this.$router.push({ name: "learn", params: { method: 'adhoc', argsProp: words.join(',') } });
+      this.$refs["import-modal"].hide();
     },
     updateLoaded(loaded) {
       this.dictionaryLoaded = loaded;

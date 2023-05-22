@@ -18,7 +18,7 @@
     >
       <i class="far fa-eye-slash" v-if="hidePhonetics"></i>
       <i class="fas fa-eye" v-else></i>
-      <span class="ml-1" v-if="$l2.code === 'ko'">Hanja</span>
+      <span class="ml-1" v-if="$l2.code === 'ko'">{{ $t(!hidePhonetics ? 'Show Hanja' : 'Hide Hanja') }}</span>
       <span class="ml-1" v-else>{{ $t(!hidePhonetics ? 'Show Phonetics' : 'Hide Phonetics') }}</span>
     </b-button>
     <b-button

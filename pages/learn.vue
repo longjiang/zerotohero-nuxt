@@ -8,7 +8,7 @@
   <container-query :query="query" v-model="params">
     <div :class="{ 'pt-4': !wide }">
       <SocialHead :title="`${$l2.name} Word List | Language Player`" />
-      <div :class="{ container: !wide }" v-cloak>
+      <div class="main" :class="{ container: !wide }" v-cloak>
         <div :class="{ row: !wide, 'content-panes': wide }">
           <div
             :class="{
@@ -26,7 +26,7 @@
               {{ $t("HSK Standard Course") }}
             </router-link>
             <component
-              class="h3 mb-4 d-block text-center text-secondary"
+              class="h3 mb-4 d-block text-center"
               :is="index ? 'router-link' : 'span'"
               :data-level="args[0]"
               :to="{
@@ -124,6 +124,15 @@
             <div v-if="!index && words.length > 0" :class="{ 'p-4': wide }">
               <WordList :words="words" :url="url" ref="wordList"></WordList>
               <div class="mt-4">
+                <button
+                  v-if="words.length > 0"
+                  data-level="hsk1"
+                  class="btn btn-md mr-1 bg-warning text-white"
+                  @click="saveAllClick"
+                >
+                  <i class="far fa-star mr-1"></i>
+                  {{ $t("Save All") }}
+                </button>
                 <router-link
                   v-if="words.length > 0"
                   :data-bg-level="method === 'hsk' ? args[0] : 'outside'"
@@ -206,10 +215,10 @@ export default {
           this.args = this.$route.params.argsProp.split(",");
           let words = [];
           for (let word of this.args) {
-            let r = await dictionary.lookup(word);
+            let r = await dictionary.lookupMultiple(word);
             if (r) words.push(r);
           }
-          this.words = words;
+          this.words = words.flat();
         }
       }
     },
