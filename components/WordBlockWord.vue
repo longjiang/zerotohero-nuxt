@@ -26,10 +26,10 @@
     </template>
     <template v-else>
       <span
-          class="word-block-definition"
-          v-if="showDefinition"
-          v-html="definition || '&nbsp;'"
-        ></span>
+        class="word-block-definition"
+        v-if="showDefinition"
+        v-html="definition || '&nbsp;'"
+      ></span>
       <span
         class="word-block-segment"
         :class="{ 'use-zoom': useZoom }"
@@ -38,7 +38,9 @@
         ><span
           class="word-block-pinyin"
           v-if="phonetics"
-          :class="{ transparent: segment.type !== 'kanji' || !hasKanji(segment.surface) }"
+          :class="{
+            transparent: segment.type !== 'kanji' || !hasKanji(segment.surface),
+          }"
           >{{ segment.reading || "&nbsp;" }}</span
         ><span :class="wordBlockTextClasses">
           {{ segment.surface }}</span
@@ -58,7 +60,7 @@
 </template>
 
 <script>
-import { hasKanji } from '@/lib/utils'
+import { hasKanji } from "@/lib/utils";
 
 export default {
   props: {
@@ -108,9 +110,9 @@ export default {
         "word-block": true,
         "with-popup": this.usePopup,
         "with-quick-gloss": this.isSaved && this.definition,
-        'saved': this.isSaved,
+        saved: this.isSaved,
         obscure: this.obscure,
-        animate: this.animate
+        animate: this.animate,
       };
       if (this.pos) classes[`pos-${this.pos}`] = true;
       return classes;
@@ -123,7 +125,7 @@ export default {
     hasKanji(...args) {
       return hasKanji(...args);
     },
-  }
+  },
 };
 </script>
 
@@ -140,7 +142,6 @@ export default {
 }
 
 .zerotohero-dark {
-
   .word-block,
   .word-block-unknown {
     &.animate .word-block-segment {
@@ -150,7 +151,6 @@ export default {
 }
 
 .zerotohero-light {
-
   .word-block,
   .word-block-unknown {
     &.animate .word-block-segment {
@@ -175,13 +175,17 @@ export default {
 
 .word-block,
 .word-block-unknown {
+  .word-block-segment {
+    display: inline-block;
+  }
+
   &.animate .word-block-segment {
     animation-iteration-count: 1;
     animation-duration: 2s;
-    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1.0);
+    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
   }
 
-  &.saved[data-hover-level=outside].animate .word-block-segment {
+  &.saved[data-hover-level="outside"].animate .word-block-segment {
     animation-name: shinesaved;
   }
 }
@@ -241,7 +245,6 @@ export default {
   }
 }
 
-
 .word-block.with-popup {
   cursor: pointer;
 
@@ -274,16 +277,11 @@ export default {
   }
 }
 
-
 .add-pinyin {
   .word-block {
     margin: 0;
     position: relative;
     text-indent: 0;
-
-    .word-block-segment {
-      display: inline-block;
-    }
 
     .word-block-pinyin,
     .word-block-text-byeonggi-wrapper {
@@ -332,7 +330,7 @@ export default {
 
 /* Line style */
 
-.show-pinyin .word-block-segment  .word-block-text,
+.show-pinyin .word-block-segment .word-block-text,
 .show-definition .word-block-segment .word-block-text {
   position: relative;
   top: -0.1em;
@@ -351,7 +349,6 @@ export default {
   position: relative;
   // bottom: -0.25em;
 }
-
 
 .word-block.saved {
   .word-block-pinyin {
