@@ -182,10 +182,8 @@ export default {
       const video = await this.getVideoFromDB(youtube_id, directus_id);
       this.video = video || this.video;
 
-      const showType = this.getShowType(this.video);
-
-      if (showType)
-        this.loadShowAndEpisodes({ showId: this.video[showType], showType });
+      if (this.video.tv_show || this.video.talk)
+        this.loadShowAndEpisodes();
 
       // Retrieve missing information from YouTube
       await this.loadTranscriptLocalesFromYouTube(this.video)
@@ -194,22 +192,36 @@ export default {
 
       this.checkingSubs = false;
     },
-    loadShowAndEpisodes({ showId, showType }) {
+    loadShowAndEpisodes() {
       if (this.showsLoaded?.[this.$l2.code]) {
-        if (!this.show) this.setShow({ showId, showType });
+        if (!this.show) this.setShow();
       }
       this.unsubscribe = this.$store.subscribe((mutation, state) => {
         if (mutation.type === "shows/LOAD_SHOWS") {
-          if (!this.show) this.setShow({ showId, showType });
+          if (!this.show) this.setShow();
         }
       });
     },
-    setShow({ showId, showType }) {
-      const camelCaseShowType = toCamelCase(showType);
-      const show = this.$store.getters[`shows/${camelCaseShowType}`]({
-        id: showId,
-        l2: this.$l2,
-      });
+    getShowTypeAndShow(video) {
+      let foundShowType, showId, foundShow;
+
+      for (let showType of ['tv_show', 'talk']) {
+        if (video[showType]) {
+          showId = video[showType];
+          foundShowType = showType;
+          const camelCaseShowType = toCamelCase(showType);
+          foundShow = this.$store.getters[`shows/${camelCaseShowType}`]({
+            id: video[showType],
+            l2: this.$l2,
+          });
+          if (foundShow) break;
+        }
+      }
+
+      return { showType: foundShowType, show: foundShow };
+    },
+    setShow() {
+      let { showType, show } = this.getShowTypeAndShow(this.video);
       if (show) {
         this.show = show;
         this.showType = showType;
@@ -327,17 +339,6 @@ export default {
           episodeCount,
         });
       return episodeCount;
-    },
-    getShowType(video) {
-      let showType = false;
-
-      if (video.tv_show) {
-        showType = "tv_show";
-      } else if (video.talk) {
-        showType = "talk";
-      }
-
-      return showType;
     },
     async getVideoFromDB(youtube_id, directus_id) {
       let video;
