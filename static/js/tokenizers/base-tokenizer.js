@@ -1,12 +1,13 @@
 class BaseTokenizer {
-  constructor({ l2, words = [] }) {
+  constructor({ l2, words = [], indexKeys = ['search'] }) {
     this.l2 = l2;
     this.tokenizationCache = {};
     this.words = words;
+    this.indexKeys = indexKeys;
   }
 
-  static async load({ l2, words = [] }) {
-    const instance = new this({ l2, words });
+  static async load({ l2, words = [], indexKeys = ['search'] }) {
+    const instance = new this({ l2, words, indexKeys });
     await instance.loadData();
     return instance;
   }
@@ -93,12 +94,18 @@ class BaseTokenizer {
     return longest;
   }
 
+  textContainsWords(text) {
+    const textLowerCase = text.toLowerCase();
+    return this.words.filter((row) => {
+      for (let key of this.indexKeys) {
+        if (textLowerCase.includes(row[key])) return true // row.search, for example
+      }      
+    })
+  }
+
   async tokenizeContinua(text, filteredWords) {
     if (!filteredWords) {
-      const textLowerCase = text.toLowerCase();
-      filteredWords = this.words.filter(function (row) {
-        return textLowerCase.includes(row.search);
-      })
+      filteredWords = this.textContainsWords(text);
     }
     const longest = this.longest(text, filteredWords);
     if (this.l2 === "tha") {

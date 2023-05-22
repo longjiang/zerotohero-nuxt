@@ -32,6 +32,7 @@ class BaseDictionary {
     instance.tokenizer = await TokenizerFactory.createTokenizer({
       l2,
       words: instance.words,
+      indexKeys: instance.indexKeys,
     });
     instance.inflector = await InflectorFactory.createInflector(l2);
     return instance;

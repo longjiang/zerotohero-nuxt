@@ -13,6 +13,7 @@ class HskCedictDictionary extends BaseDictionary {
     this.newHSK = [];
     this.maxWeight = 0;
     this.traditionalIndex = {};
+    this.indexKeys = ["simplified", "traditional"];
   }
 
   credit() {

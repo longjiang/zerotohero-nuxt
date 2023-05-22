@@ -19,7 +19,7 @@ const TokenizerFactory = {
     ]
   },
  
-  async createTokenizer({l2, words = []}) {
+  async createTokenizer({l2, words = [], indexKeys = ['search']}) {
     // pick the right tokenizer for the language
     let languageCode = l2["iso639-3"] || l2["glottologId"];
     for (let tokenizer in this.tokenizers) {
@@ -32,11 +32,11 @@ const TokenizerFactory = {
 
         // Initialize the tokenizer class
         const TokenizerClass = eval(tokenizer); // Access the tokenizer class from the global scope
-        return await TokenizerClass.load({l2, words});
+        return await TokenizerClass.load({l2, words, indexKeys});
       }
     }
     importScripts('../js/tokenizers/base-tokenizer.js');
     const BaseTokenizerClass = BaseTokenizer;
-    return new BaseTokenizerClass({ l2, words });
+    return new BaseTokenizerClass({ l2, words, indexKeys });
   },
 }
