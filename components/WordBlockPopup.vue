@@ -129,7 +129,10 @@
         </router-link>
         <i class="fas fa-chevron-right text-success"></i>
         <span class="copy-button">
-          <i class="ml-1 fa-regular fa-copy" @click="onCopyClick(word.head)"></i>
+          <i
+            class="ml-1 fa-regular fa-copy"
+            @click="onCopyClick(word.head)"
+          ></i>
         </span>
         <span
           v-if="word.traditional && word.traditional !== word.simplified"
@@ -283,7 +286,14 @@ export default {
   },
   computed: {
     preciseMatchFound() {
-      if (this.token?.candidates?.length > 0) return true;
+      let tokenCandidatesFound = this.token?.candidates?.length > 0;
+      if (tokenCandidatesFound) return true;
+      let matchFoundInWords = this.words.find(
+        (w) =>
+          w.head === this.text ||
+          this.token?.lemmas?.map((l) => l.lemma).includes(w.head)
+      );
+      if (matchFoundInWords) return true;
       return false;
     },
   },
