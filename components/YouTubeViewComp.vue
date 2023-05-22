@@ -395,7 +395,7 @@ export default {
       }
       return { subs, generated };
     },
-    async getMissingVideoInfoFromYouTube(video) {
+    async loadTranscriptLocalesFromYouTube(video) {
       // If the video either doesn't have L2 subtitles, or doesn't have L1 subtitles, we retrieve the locales of the subtitles from YouTube
       if (!(video?.subs_l2?.length > 0) || !(video?.subs_l1?.length > 0)) {
         let { l1Locale, l2Locale, l2Name } = await YouTube.getTranscriptLocales(
@@ -407,6 +407,8 @@ export default {
         this.l2Locale = l2Locale;
         this.l2Name = l2Name;
       }
+    },
+    async loadMissingSubsFromYouTube(video) {
 
       // If the video doesn't have L1 or L2 subtitles, we load it from YouTube
       for (let l1OrL2 of ["l2", "l1"]) {
@@ -433,7 +435,8 @@ export default {
           this.$emit(`${l1OrL2}TranscriptLoaded`);
         }
       }
-
+    },
+    async loadMissingMetaFromYouTube(video) {
       // If the video has other missing information, we load it from YouTube
       const properties = [
         "category",
@@ -457,6 +460,13 @@ export default {
               Vue.set(video, property, videoData[property]);
           });
       }
+    },
+    async getMissingVideoInfoFromYouTube(video) {
+      await this.loadTranscriptLocalesFromYouTube(video)
+      
+      await this.loadMissingSubsFromYouTube(video)
+
+      await this.loadMissingMetaFromYouTube(video)
     },
     onUpdateLayout(layout) {
       this.$emit("updateLayout", layout);
