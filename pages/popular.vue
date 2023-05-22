@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       pairs: [],
-      startDate: undefined,
+      startDate: new Date(new Date().setMonth(new Date().getMonth() - 2)),
     };
   },
   async mounted() {
