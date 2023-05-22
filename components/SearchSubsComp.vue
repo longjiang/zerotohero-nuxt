@@ -368,6 +368,7 @@ export default {
       groupIndexRight: [],
       groupIndexLength: [],
       fullscreen: false,
+      maxNumOfHitsForSanity: 500,
       showFilter: false,
       regex: undefined,
       reels: false,
@@ -473,7 +474,7 @@ export default {
 
         if (l1Locale) {
           subs = await YouTube.getTranscript(
-            youtube_id,
+            video.youtube_id,
             l1Locale,
           );
         }
@@ -560,7 +561,7 @@ export default {
     },
     calculateLimit() {
       // No limit unless set
-      if (!this.$store.state.settings.subsSearchLimit) return false;
+      if (!this.$store.state.settings.subsSearchLimit) return this.maxNumOfHitsForSanity;
       else {
         if (this.exact) {
           // Exact search while limit is set

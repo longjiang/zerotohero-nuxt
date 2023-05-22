@@ -148,7 +148,7 @@ export default ({ app }, inject) => {
         );
       }
       hits = uniqueByValue(hits, "id");
-      if (limit) hits = hits.slice(0, 1000 ); // For device performance
+      if (limit) hits = hits.slice(0, limit );
       return hits.sort((a, b) => a.lineIndex - b.lineIndex);
     },
 
@@ -165,6 +165,8 @@ export default ({ app }, inject) => {
       let seenYouTubeIds = [];
       let hits = [];
       let punctuations, punctuationsRegex, boundary, termsStr, regexStr, regex;
+      const termsRegex = terms.map(t => escapeRegExp(t))
+      const excludeTermsRegex = excludeTerms.map(t => escapeRegExp(t))
       if (exact) {
         punctuations = characterClass(
           apostrophe ? "PunctuationNoApostropheNoHyphen" : "Punctuation"
@@ -174,12 +176,11 @@ export default ({ app }, inject) => {
         }
         punctuationsRegex = new RegExp(`[${punctuations}]`, "g");
         regexStr =
-          "^s*(" + terms.map(t => escapeRegExp(t)).join("|") + ")s*$";
+          "^s*(" + termsRegex.join("|") + ")s*$";
         regex = new RegExp(regexStr, "i");
       } else {
         boundary = continua ? "" : `(^|[^${characterClass("L")}]+)`;
-        termsStr = terms
-          .map(t => escapeRegExp(t))
+        termsStr = termsRegex
           .join("|")
           .replace(/\\\*/g, ".+")
           .replace(/[_]/g, ".");
@@ -204,7 +205,7 @@ export default ({ app }, inject) => {
                 if (test) passed = true;
               }
             } else {
-              let excludeRegex = new RegExp(excludeTerms.map(t => escapeRegExp(t)).join("|"), "i")
+              let excludeRegex = new RegExp(excludeTermsRegex.join("|"), "i")
               let notExcluded = excludeTerms.length === 0 || !excludeRegex.test(line);
               if (mustIncludeYouTubeId === video.youtube_id) notExcluded = true // Do not use exclude terms on "must include" videos
               passed = regex.test(line)
@@ -260,8 +261,7 @@ export default ({ app }, inject) => {
         if (!hit.leftContext) {
           let prev = hit.video.subs_l2[hit.lineIndex - 1];
           let regex = new RegExp(
-            `(${terms
-              .map(t => escapeRegExp(t))
+            `(${termsRegex
               .join("|")
               .replace(/[*]/g, ".+")
               .replace(/[_]/g, ".")})(.|\n)*`,
@@ -279,8 +279,7 @@ export default ({ app }, inject) => {
         if (!hit.rightContext) {
           let next = hit.video.subs_l2[Number(hit.lineIndex) + 1];
           let regex = new RegExp(
-            `(.|\n)*(${terms
-              .map(t => escapeRegExp(t))
+            `(.|\n)*(${termsRegex
               .join("|")
               .replace(/[*]/g, ".+")
               .replace(/[_]/g, ".")})`,
