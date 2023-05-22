@@ -106,35 +106,6 @@ import {
 } from "@/lib/utils";
 import Vue from "vue";
 
-const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
-
-const DEFAULT_PARALLEL_LINE_DURATION = 2;
-const DEFAULT_LINE_DURATION = 10;
-const SMALL_TIME_GAP = 0.5;
-
-function filterParallelLines(line, nextLine, parallelLine, nextParallelLine) {
-  let parallelLineDuration =
-    parallelLine.duration ||
-    (nextParallelLine
-      ? nextParallelLine.starttime - parallelLine.starttime
-      : DEFAULT_PARALLEL_LINE_DURATION);
-  let parallelLineEndTime = parallelLine.starttime + parallelLineDuration;
-  let nextLineStartTime = line.duration
-    ? line.starttime + line.duration
-    : nextLine
-    ? nextLine.starttime
-    : line.starttime + DEFAULT_LINE_DURATION;
-  let parallelLineStartsBeforeNextLineStarts =
-    line.starttime - SMALL_TIME_GAP <= parallelLine.starttime &&
-    parallelLine.starttime <= nextLineStartTime - SMALL_TIME_GAP;
-  let parallelLineEndsBeforeNextLineStarts =
-    line.starttime + SMALL_TIME_GAP <= parallelLineEndTime &&
-    parallelLineEndTime <= nextLineStartTime + SMALL_TIME_GAP;
-  return (
-    parallelLineStartsBeforeNextLineStarts ||
-    parallelLineEndsBeforeNextLineStarts
-  );
-}
 
 export default {
   props: {
@@ -473,8 +444,7 @@ export default {
     /**
      * Match parallel lines (translation lines) to L2 lines.
      */
-
-    matchParallelLines() {
+     matchParallelLines() {
       if (!this.parallellines) {
         this.matchedParallelLines = [];
         return;
@@ -487,30 +457,18 @@ export default {
       this.lines.sort((a, b) => a.starttime - b.starttime);
       parallellinesCopy.sort((a, b) => a.starttime - b.starttime);
 
-      let j = 0; // Pointer for parallellines
       this.matchedParallelLines = this.lines.map((line, i) => {
-        let nextLine = this.lines[i + 1];
+        // Find the parallel line with the closest starttime to the current line's starttime
+        let closestParallelLine = parallellinesCopy.reduce((closest, current) => {
+          let closestDiff = Math.abs(closest.starttime - line.starttime);
+          let currentDiff = Math.abs(current.starttime - line.starttime);
+          return currentDiff < closestDiff ? current : closest;
+        });
 
-        // Skip parallelLines that have been assigned already
-        while (parallellinesCopy[j] && parallellinesCopy[j].assigned) {
-          j++;
-        }
+        // Remove the closest parallel line from the copy array so it won't be used again
+        parallellinesCopy = parallellinesCopy.filter(pl => pl !== closestParallelLine);
 
-        if (
-          parallellinesCopy[j] &&
-          filterParallelLines(
-            line,
-            nextLine,
-            parallellinesCopy[j],
-            parallellinesCopy[j + 1]
-          )
-        ) {
-          // Mark parallelLine as assigned and move to next
-          parallellinesCopy[j].assigned = true;
-          return parallellinesCopy[j].line;
-        }
-
-        return "";
+        return closestParallelLine ? closestParallelLine.line : "";
       });
     },
     executeTimeBasedMethods() {
