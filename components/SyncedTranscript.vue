@@ -301,7 +301,7 @@ export default {
       line.starttime = Number(line.starttime);
       if (line.duration) Number(line.duration);
     });
-    if (this.parallellines) this.matchParallelLines();
+    if (this.parallellines?.length) this.matchParallelLines();
     if (this.startLineIndex) {
       let startLineIndex = Number(this.startLineIndex);
       this.currentLine = this.lines[startLineIndex];
@@ -340,7 +340,7 @@ export default {
       if (!this.single && !this.paused) this.scrollTo(this.currentLineIndex);
     },
     parallellines() {
-      this.matchParallelLines();
+      if (this.parallellines?.length) this.matchParallelLines();
     },
   },
   methods: {
