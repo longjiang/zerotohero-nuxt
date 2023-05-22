@@ -737,7 +737,7 @@ export default {
       this.currentLineIndex = this.lines.findIndex((l) => l === line);
       this.currentLine = line;
       this.nextLine = this.lines[this.currentLineIndex + 1];
-      this.seekVideoTo(line.starttime - NEXT_LINE_STARTED_TOLERANCE); // We rewind to a little bit earlier to capture more audio at the beginning of the line
+      this.seekVideoTo(line.starttime);
     },
     rewind() {
       this.goToLine(this.currentLine);
