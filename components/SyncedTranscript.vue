@@ -106,6 +106,7 @@ import {
 } from "@/lib/utils";
 import Vue from "vue";
 
+const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
 
 export default {
   props: {
@@ -457,7 +458,8 @@ export default {
       this.lines.sort((a, b) => a.starttime - b.starttime);
       parallellinesCopy.sort((a, b) => a.starttime - b.starttime);
 
-      this.matchedParallelLines = this.lines.map((line, i) => {
+      const matchedParallelLines = this.lines.map((line, i) => {
+        if (parallellinesCopy.length === 0) return "";
         // Find the parallel line with the closest starttime to the current line's starttime
         let closestParallelLine = parallellinesCopy.reduce((closest, current) => {
           let closestDiff = Math.abs(closest.starttime - line.starttime);
@@ -470,6 +472,8 @@ export default {
 
         return closestParallelLine ? closestParallelLine.line : "";
       });
+
+      this.matchedParallelLines = matchedParallelLines
     },
     executeTimeBasedMethods() {
       // (video starts first time) "first play"
