@@ -71,6 +71,7 @@ class BaseDictionary {
       }
     }
     token.candidates = uniqueByValues(candidates, ['id']);
+    return token
   }
 
   dictionaryFile({ l1Code = undefined, l2Code = undefined } = {}) {

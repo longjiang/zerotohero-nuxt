@@ -508,9 +508,17 @@ export default {
     async lookup() {
       this.lookupInProgress = true;
       let dictionary = await this.$getDictionary();
-      let words = this.words;
+      let words = uniqueByValue(
+        [...( this.token.candidates || [] ), ...this.words],
+        "id"
+      );
       if (words.length === 0) {
-        words = (await dictionary.lookupFuzzy(this.text, 20)) || [];
+        // addCandidatesToToken is already done by the tokenizer, but sometimes this doesn't happen in time. Let's do it again so we don't override the candidates.
+        if (this.token && ! this.token.candidates?.length > 0) {
+          let token = await dictionary.addCandidatesToToken(this.token);
+          words = token?.candidates || [];
+          if (!words.length) words = (await dictionary.lookupFuzzy(this.text, 20)) || [];
+        }
       }
       // if (this.$l2.code === "ru") this.stylizeRussian(words)
       words = words

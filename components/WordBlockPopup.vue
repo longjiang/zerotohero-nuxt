@@ -290,8 +290,8 @@ export default {
       if (tokenCandidatesFound) return true;
       let matchFoundInWords = this.words.find(
         (w) =>
-          w.head === this.text ||
-          this.token?.lemmas?.map((l) => l.lemma).includes(w.head)
+          w.head.toLowerCase() === this.text.toLowerCase() ||
+          this.token?.lemmas?.map((l) => l.lemma.toLowerCase()).includes(w.head.toLowerCase())
       );
       if (matchFoundInWords) return true;
       return false;

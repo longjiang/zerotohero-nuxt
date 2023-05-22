@@ -142,9 +142,10 @@ class WiktionaryCsvDictionary extends BaseDictionary {
   }
 
   lookupMultiple(text, ignoreAccents = false) {
-    if (ignoreAccents && !isAccentCritical(this.l2)) text = stripAccents(text);
-    let type = ignoreAccents ? "search" : "head";
-    let words = this[type + "Index"][text];
+    const textLower = text.toLowerCase();
+    if (typeof ignoreAccents === "undefined") ignoreAccents = !isAccentCritical(this.l2);
+    if (ignoreAccents) textLower = stripAccents(textLower);
+    let words = this.searchIndex[textLower];
     return words || [];
   }
   
