@@ -1,18 +1,15 @@
 import Papa from 'papaparse';
+import Vue from 'vue';
 
 export const state = () => ({
   playlists: {},
   playlistsLoaded: {},
-  playlist: {},
 });
 
 export const mutations = {
   LOAD_PLAYLISTS(state, { l2, playlists }) {
-    state.playlists[l2.code] = playlists;
-    state.playlistsLoaded[l2.code] = true;
-  },
-  SET_PLAYLIST(state, { l2, playlist }) {
-    state.playlist[l2.code] = playlist;
+    Vue.set(state.playlists, l2.code, playlists);
+    Vue.set(state.playlistsLoaded, l2.code, true);
   },
   ADD_PLAYLIST(state, { l2, playlist }) {
     state.playlists[l2.code].push(playlist);
@@ -37,7 +34,7 @@ export const actions = {
       }&fields=id,title,videos,l2&limit=500&timestamp=${forceRefresh ? Date.now() : 0}`
     );
     let playlists =
-      response.data.data
+      response?.data?.data || []
     playlists = playlists.sort((x, y) =>
       (x.title || "").localeCompare(y.title, l2.locales[0])
     ) || [];

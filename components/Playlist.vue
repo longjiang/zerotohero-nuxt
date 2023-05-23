@@ -17,7 +17,7 @@ export default {
   computed: {
     ...mapState("playlists", {
       playlistsByLanguage(state) {
-        return state.playlists[this.$l2.code];
+        return state.playlists[this.$l2.code] || [];
       },
     }),
     playlist() {

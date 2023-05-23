@@ -2,6 +2,15 @@
   <container-query :query="query" v-model="params">
     <div class="playlists row">
       <div
+        :class="{
+          'col-sm-12 text-center': true,
+          'd-none': playlistsByLanguage?.length,
+        }"
+        style="flex: 1"
+      >
+        <Loader :sticky="true" message="Loading Playlists..." />
+      </div>
+      <div
         v-for="playlist in playlistsByLanguage"
         :key="playlist.id"
         :class="colClasses"
@@ -62,7 +71,7 @@ export default {
   computed: {
     ...mapState("playlists", {
       playlistsByLanguage(state) {
-        return state.playlists[this.$l2.code];
+        return state.playlists[this.$l2.code] || [];
       },
     }),
     colClasses() {
