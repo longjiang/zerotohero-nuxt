@@ -1,18 +1,19 @@
 <template>
-  <div>
+  <span>
     <span @click="showModal = true" class="add-to-playlist-button cursor-pointer"><slot>{{ $t('Add to Playlist') }}</slot></span>
     <b-modal v-model="showModal" :title="$t('Add to Playlist')">
-      <h5>{{ $t('Select a Playlist:') }}</h5>
       <b-form-checkbox
         v-for="(playlist, index) in playlistsByLanguage"
         :key="index"
         :value="playlist.id"
         v-model="selectedPlaylists"
+        class="playlist-checklist-item"
         inline
       >
         {{ playlist.title }}
       </b-form-checkbox>
-      <b-form-checkbox inline value="new" v-model="selectedPlaylists">
+      <b-form-checkbox inline value="new" v-model="selectedPlaylists" 
+        class="playlist-checklist-item">
         <template v-if="!selectedPlaylists.includes('new')">
           {{ $t('New Playlist ...') }}
         </template>
@@ -31,7 +32,7 @@
         >
       </template>
     </b-modal>
-  </div>
+  </span>
 </template>
 
 <script>
@@ -116,5 +117,9 @@ export default {
 </script>
 
 <style scoped>
-/* You can style your button and modal here */
+.playlist-checklist-item {
+  display: block;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
 </style>

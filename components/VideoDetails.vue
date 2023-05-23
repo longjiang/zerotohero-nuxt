@@ -20,7 +20,6 @@
       </span>
     </h5>
     <div class="video-meta" v-if="video.youtube_id">
-      <AddToPlaylist :video="video" />
       <MediaItemStats :item="video" :showDate="true" />
       <!-- <span v-if="video.date && !isNaN(Date.parse(video.date))">
         {{ formatDate(video.date) }}
@@ -84,6 +83,8 @@
           {{ $t("DownSub") }}
         </a>
       </span>
+      <AddToPlaylist :video="video" class="text-primary" />
+      <Share class="ml-2" />
       <template v-if="$adminMode && video.subs_l2 && video.subs_l2.length > 0">
         <span>
           <a
@@ -100,7 +101,6 @@
             {{ $t("Translation") }}
           </a>
         </span>
-        <Share class="ml-2" />
       </template>
       
       <router-link
