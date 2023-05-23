@@ -13,16 +13,17 @@
         {{ playlist.title }}
       </b-form-checkbox>
       <b-form-checkbox inline value="new" v-model="selectedPlaylists">
-        {{ $t('New Playlist ...') }}
+        <template v-if="!selectedPlaylists.includes('new')">
+          {{ $t('New Playlist ...') }}
+        </template>
+        <template v-else>
+          <b-form-input
+            v-model="newPlaylistName"
+            :placeholder="$t('Enter a name for the playlist')"
+          ></b-form-input>
+        </template>
       </b-form-checkbox>
-      <b-form-group
-        v-if="selectedPlaylists.includes('new')"
-      >
-        <b-form-input
-          v-model="newPlaylistName"
-          :placeholder="$t('Enter a name for the playlist')"
-        ></b-form-input>
-      </b-form-group>
+
       <template v-slot:modal-footer>
         <b-button @click="addToPlaylists" variant="primary"><b-spinner small v-if="adding" /><span v-else>{{ $t('Add') }}</span></b-button>
         <b-button @click="showModal = false" variant="secondary"

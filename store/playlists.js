@@ -46,10 +46,10 @@ export const actions = {
     commit('LOAD_PLAYLISTS', { l2, playlists });
   },
   async createPlaylist({ commit }, { l2, playlist }) {
-    console.log('createPlaylist', playlist);
     playlist.videos = Papa.unparse(playlist.videos);
     const { data } = await this.$directus.post('items/playlists', playlist);
     if (data?.data) {
+      data.data.videos = Papa.parse(data.data.videos, { header: true }).data;
       commit('ADD_PLAYLIST', { l2, playlist: data.data });
     }
   },

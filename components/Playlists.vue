@@ -11,7 +11,7 @@
         <Loader :sticky="true" message="Loading Playlists..." />
       </div>
       <div
-        class="text-center"
+        class="col-sm-12"
         v-if="playlistsByLanguage && playlistsByLanguage.length === 0"
       >
         {{
