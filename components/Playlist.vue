@@ -1,7 +1,7 @@
 <template>
-  <div v-if="playlist">
-    <h3 class="mb-5">{{ playlist.title }}</h3>
-    <YouTubeVideoList :videos="playlist.videos" />
+  <div>
+    <h3 class="mb-5" v-if="playlist">{{ playlist.title }}</h3>
+    <YouTubeVideoList v-if="playlist?.videos" :videos="playlist.videos" />
   </div>
 </template>
 
@@ -20,18 +20,18 @@ export default {
         return state.playlists[this.$l2.code] || [];
       },
     }),
-    playlist() {
-      return this.playlistsByLanguage.find((pl) => pl.id === parseInt(this.id));
+  },
+  asyncComputed: {
+    async playlist() {
+      let playlist = this.playlistsByLanguage.find((pl) => pl.id === parseInt(this.id));
+      if (!playlist) {
+        playlist = await this.fetchPlaylist({ id: this.id });
+      }
+      return playlist;
     },
   },
   methods: {
-    ...mapActions('playlists', ['fetchPlaylist']),
-  },
-  async created() {
-    if (!this.playlist) {
-      // If playlist isn't in state, fetch it
-      await this.fetchPlaylist(this.id);
-    }
+    ...mapActions("playlists", ["fetchPlaylist"]),
   },
 };
 </script>

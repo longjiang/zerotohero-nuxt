@@ -66,9 +66,17 @@ export const actions = {
     await this.$directus.delete(`items/playlists/${playlist.id}`);
     commit('REMOVE_PLAYLIST', { l2, playlist });
   },
+  async fetchPlaylist({ commit }, { id }) {
+    const playlistFromApi = await this.$directus.getData(`items/playlists/${id}`);
+    if (playlistFromApi?.videos) {
+      playlistFromApi.videos = Papa.parse(playlistFromApi.videos, {
+        header: true,
+      }).data;
+    }
+    return playlistFromApi;
+  }
 };
 
 export const getters = {
   playlists: (state) => (l2) => state.playlists[l2.code],
-  playlist: (state) => (l2) => state.playlist[l2.code],
 };
