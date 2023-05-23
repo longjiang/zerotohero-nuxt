@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-button @click="showModal = true">Add to Playlist</b-button>
-    <b-modal v-model="showModal">
+    <span @click="showModal = true" class="add-to-playlist-button cursor-pointer"><slot>{{ $t('Add to Playlist') }}</slot></span>
+    <b-modal v-model="showModal" :title="$t('Add to Playlist')">
       <h5>Select a Playlist:</h5>
       <b-form-checkbox
         v-for="(playlist, index) in playlistsByLanguage"
@@ -13,21 +13,20 @@
         {{ playlist.title }}
       </b-form-checkbox>
       <b-form-checkbox inline value="new" v-model="selectedPlaylists">
-        New Playlist ...
+        {{ $t('New Playlist ...') }}
       </b-form-checkbox>
       <b-form-group
         v-if="selectedPlaylists.includes('new')"
-        label="Name your playlist:"
       >
         <b-form-input
           v-model="newPlaylistName"
-          placeholder="Enter playlist name"
+          :placeholder="$t('Enter a name for the playlist')"
         ></b-form-input>
       </b-form-group>
       <template v-slot:modal-footer>
-        <b-button @click="addToPlaylists" variant="primary">Add</b-button>
+        <b-button @click="addToPlaylists" variant="primary"><b-spinner small v-if="adding" /><span v-else>{{ $t('Add') }}</span></b-button>
         <b-button @click="showModal = false" variant="secondary"
-          >Cancel</b-button
+          >{{ $t('Cancel') }}</b-button
         >
       </template>
     </b-modal>
@@ -49,6 +48,7 @@ export default {
       showModal: false,
       selectedPlaylists: [],
       newPlaylistName: "",
+      adding: false
     };
   },
   computed: {
@@ -88,14 +88,23 @@ export default {
       } else {
         // If existing playlists were selected, add the video to them.
         for (const id of this.selectedPlaylists) {
-          const oldPlaylist = this.playlists.find(
+          const oldPlaylist = this.playlistsByLanguage.find(
             (playlist) => playlist.id === id
           );
           const playlist = {
             id,
             videos: [...oldPlaylist.videos, videoData],
           };
+          this.adding = true;
           await this.updatePlaylist({ l2: this.$l2, playlist });
+          this.$toast.success(
+            this.$tb("Playlist added."),
+            {
+              position: "top-center",
+              duration: 5000,
+            }
+          );
+          this.adding = false;
         }
       }
       this.showModal = false;

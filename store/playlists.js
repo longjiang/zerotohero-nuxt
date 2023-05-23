@@ -20,11 +20,12 @@ export const mutations = {
   REMOVE_PLAYLIST(state, { l2, playlist }) {
     state.playlists[l2.code] = state.playlists[l2.code].filter((p) => p !== playlist);
   },
-  UPDATE_PLAYLIST(state, { l2, playlist, videos }) {
+  UPDATE_PLAYLIST(state, { l2, playlist }) {
     const playlists = state.playlists[l2.code];
     const playlistToUpdate = playlists.find(pl => pl.id === playlist.id);
     if (playlistToUpdate) {
-      playlistToUpdate.videos = videos;
+      if (playlist.title) playlistToUpdate.title = playlist.title
+      if (playlist.videos) playlistToUpdate.videos = playlist.videos;
     }
   }
 };
@@ -55,17 +56,13 @@ export const actions = {
       commit('ADD_PLAYLIST', { l2, playlist: data.data });
     }
   },
-  async updatePlaylist({ commit }, { l2, playlist, videos }) {
-    videos = videos.map((v, id) => {
-      v.id = id;
-      return v;
-    });
+  async updatePlaylist({ commit }, { l2, playlist }) {
     const payload = {
-      videos: Papa.unparse(videos),
+      videos: Papa.unparse(playlist.videos),
     };
     const { data } = await this.$directus.patch(`items/playlists/${playlist.id}`, payload);
     if (data?.data) {
-      commit('UPDATE_PLAYLIST', { l2, playlist, videos });
+      commit('UPDATE_PLAYLIST', { l2, playlist });
     }
   },
   async deletePlaylist({ commit }, { l2, playlist }) {

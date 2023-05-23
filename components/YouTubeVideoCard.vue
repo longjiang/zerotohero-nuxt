@@ -33,7 +33,7 @@
     >
       <span v-if="!over">
         <i class="fa fa-times"></i>
-        {{ $t('NO SUBS') }}
+        {{ $t("NO SUBS") }}
       </span>
     </div>
     <div
@@ -43,10 +43,7 @@
         'youtube-video-card-list': view === 'list',
       }"
     >
-      <router-link
-        :to="to"
-        class="youtube-thumbnail-wrapper aspect-wrapper d-block"
-      >
+      <div class="youtube-thumbnail-wrapper aspect-wrapper d-block">
         <button class="btn btn-unstyled play-button" v-if="showPlayButton">
           <i class="fa fa-play"></i>
         </button>
@@ -58,17 +55,22 @@
             :max="1"
           ></b-progress>
         </client-only>
-        <img
-          class="youtube-thumbnail aspect"
-          ref="thumbnail"
-          @load="thumbnailLoaded"
-          @error="thumbnailError"
-          :src="thumbnail"
-        />
+        <router-link :to="to">
+          <img
+            class="youtube-thumbnail aspect"
+            ref="thumbnail"
+            @load="thumbnailLoaded"
+            @error="thumbnailError"
+            :src="thumbnail"
+          />
+        </router-link>
+        <AddToPlaylist class="add-to-playlist" :video="video">
+          <i class="fa fa-plus"></i> <i class="fa fa-list-music"></i>
+        </AddToPlaylist>
         <div class="duration" v-if="video.duration">
           {{ parseDuration(video.duration) }}
         </div>
-      </router-link>
+      </div>
       <div class="media-body">
         <div class="youtube-title">
           <span
@@ -91,7 +93,11 @@
             {{ video.title }}
           </router-link>
         </div>
-        <MediaItemStats :item="video" :showDate="showDate" style="font-size: 0.8em; margin-top: 0.25rem; opacity: 0.8" />
+        <MediaItemStats
+          :item="video"
+          :showDate="showDate"
+          style="font-size: 0.8em; margin-top: 0.25rem; opacity: 0.8"
+        />
         <client-only>
           <div
             class="youtube-video-card-badges"
@@ -292,13 +298,7 @@ import languageEncoding from "detect-file-encoding-and-language";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import { mapState } from "vuex";
-import {
-  parseDuration,
-  timeout,
-  logError,
-  level,
-  TOPICS,
-} from "@/lib/utils";
+import { parseDuration, timeout, logError, level, TOPICS } from "@/lib/utils";
 
 export default {
   components: {
@@ -676,11 +676,7 @@ export default {
           Vue.set(video, "checkingSubs", false);
           this.$emit("hasSubs", true);
         } else {
-          await YouTube.addTranscriptLocalesToVideo(
-            video,
-            this.$l1,
-            this.$l2
-          );
+          await YouTube.addTranscriptLocalesToVideo(video, this.$l1, this.$l2);
           this.$emit("hasSubs", video.hasSubs);
           if (this.checkSaved && this.showSubsEditing) {
             this.addSubsL1(video);
@@ -693,11 +689,7 @@ export default {
     async addSubsL1(video) {
       if (video) {
         if (!video.l1Locale) {
-          YouTube.addTranscriptLocalesToVideo(
-            video,
-            this.$l1,
-            this.$l2
-          );
+          YouTube.addTranscriptLocalesToVideo(video, this.$l1, this.$l2);
         }
         let subs_l1 = await YouTube.getTranscript(
           video.youtube_id,
@@ -724,7 +716,6 @@ export default {
     box-shadow: 0 -1px 1px #00000069;
   }
 }
-
 
 .youtube-video-card-wrapper.skin-dark {
   .statistics {
@@ -754,6 +745,21 @@ export default {
       border-radius: 0.25rem;
       overflow: hidden;
       position: relative;
+
+      .add-to-playlist {
+        position: absolute;
+        bottom: 0.2rem;
+        left: 0.2rem;
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: bold;
+        padding: 0;
+        border-radius: 0.15rem;
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 0.08rem 0.3rem;
+        :deep(".add-to-playlist-button") {
+        }
+      }
       .duration {
         position: absolute;
         bottom: 0.2rem;
@@ -845,7 +851,6 @@ export default {
   font-size: 0.8em;
   margin-top: 0.25rem;
 }
-
 
 .statistics-item + .statistics-item::before {
   content: "·";
