@@ -5,19 +5,17 @@
       :class="`youtube-playlist-card youtube-playlist-card-${skin}`"
       :key="`youtube-playlist-item-${index}`"
     >
-      <router-link
-        :to="`/${$l1.code}/${$l2.code}/youtube/playlist/${
-          playlist.id
-        }/${encodeURIComponent(playlist.title)}`"
-        class="playlist-link"
+      <VideoThumbnailStack
+        :thumbnail="playlist.thumbnail"
+        :title="playlist.title"
+        :to="{
+          name: 'youtube-playlist',
+          params: { playlist_id: playlist.id, title: playlist.title },
+        }"
       >
-        <div class="youtube-thumbnail-wrapper aspect-wrapper">
-          <img :src="playlist.thumbnail" class="youtube-thumbnail aspect" />
-        </div>
-        <div class="pt-2">
-          <div class="playlist-title">{{ playlist.title }}</div>
-          <div class="playlist-video-count" v-if="playlist.count">
-            {{ playlist.count }} video{{ playlist.count > 1 ? "s" : "" }}
+        <template v-slot:belowTitle>
+          <div v-if="playlist.count" style="opacity: 0.8; font-size: 0.8em;  margin-top: 0.25rem; ">
+            ({{ $t("{num} Videos", { num: playlist.count }) }})
           </div>
           <div class="playlist-description" v-if="playlist.description">
             {{
@@ -25,8 +23,8 @@
               (playlist.description.length > 50 ? "..." : "")
             }}
           </div>
-        </div>
-      </router-link>
+        </template>
+      </VideoThumbnailStack>
     </div>
   </div>
 </template>
@@ -57,22 +55,17 @@ export default {
   min-width: 15rem;
   flex: 1;
   margin: 1rem;
-  a.playlist-link,
-  a.playlist-link:hover {
-    color: #666;
+  .playlist-title {
+    font-weight: bold;
+  }
+  .playlist-video-count {
+    color: #999;
     text-decoration: none;
-    .playlist-title {
-      font-weight: bold;
-    }
-    .playlist-video-count {
-      color: #999;
-      text-decoration: none;
-    }
-    .playlist-description {
-      color: #999;
-      font-size: 0.8em;
-      text-decoration: none;
-    }
+  }
+  .playlist-description {
+    opacity: 0.8;
+    font-size: 0.8em;
+    margin-top: 0.25rem;
   }
 }
 </style>
