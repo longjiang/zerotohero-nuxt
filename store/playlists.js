@@ -31,7 +31,7 @@ export const actions = {
   async loadPlaylists({ commit }, { l2, forceRefresh }) {
     const response = await this.$directus.get(
       `items/playlists?sort=title&filter[l2][eq]=${l2.id
-      }&fields=id,title,videos,l2&limit=500&timestamp=${forceRefresh ? Date.now() : 0}`
+      }&fields=owner,id,title,videos,l2&limit=500&timestamp=${forceRefresh ? Date.now() : 0}`
     );
     let playlists =
       response?.data?.data || []

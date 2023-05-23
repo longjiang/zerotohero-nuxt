@@ -4,11 +4,21 @@
       <div
         :class="{
           'col-sm-12 text-center': true,
-          'd-none': playlistsByLanguage?.length,
+          'd-none': playlistsByLanguage,
         }"
         style="flex: 1"
       >
         <Loader :sticky="true" message="Loading Playlists..." />
+      </div>
+      <div
+        class="text-center"
+        v-if="playlistsByLanguage && playlistsByLanguage.length === 0"
+      >
+        {{
+          $t("You have not created any playlists for {l2}.", {
+            l2: $t($l2.name),
+          })
+        }}
       </div>
       <div
         v-for="playlist in playlistsByLanguage"
@@ -24,7 +34,7 @@
           }"
         >
           <template v-slot:belowTitle>
-            <div style="opacity: 0.8; font-size: 0.8em;  margin-top: 0.25rem; ">
+            <div style="opacity: 0.8; font-size: 0.8em; margin-top: 0.25rem">
               ({{ $t("{num} Videos", { num: playlist.videos?.length }) }})
             </div>
           </template>
