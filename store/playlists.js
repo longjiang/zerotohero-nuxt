@@ -45,7 +45,6 @@ export const actions = {
         header: true,
       }).data;
     });
-    console.log('loadPlaylists', playlists);
     commit('LOAD_PLAYLISTS', { l2, playlists });
   },
   async createPlaylist({ commit }, { l2, playlist }) {

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
   computed: {
@@ -18,10 +18,9 @@ export default {
     }),
   },
   methods: {
-    ...mapActions('playlists', ['fetchPlaylists']),
     viewPlaylist(id) {
       // navigate to individual playlist view
-      this.$router.push({ name: 'playlist', params: { l2: this.$l2, id } });
+      this.$router.push({ name: 'playlist', params: { id } });
     },
   },
   async created() {
