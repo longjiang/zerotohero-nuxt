@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="playlist">
     <h3 class="mb-5">{{ playlist.title }}</h3>
     <YouTubeVideoList :videos="playlist.videos" />
   </div>
@@ -15,9 +15,13 @@ export default {
     };
   },
   computed: {
-    ...mapState('playlists', ['playlists']),
+    ...mapState("playlists", {
+      playlistsByLanguage(state) {
+        return state.playlists[this.$l2.code];
+      },
+    }),
     playlist() {
-      return this.playlists[this.$l2.code].find((pl) => pl.id === parseInt(this.id));
+      return this.playlistsByLanguage.find((pl) => pl.id === parseInt(this.id));
     },
   },
   methods: {
