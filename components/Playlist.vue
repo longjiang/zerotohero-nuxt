@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>{{ playlist.title }}</h2>
+    <h3 class="mb-5">{{ playlist.title }}</h3>
     <YouTubeVideoList :videos="playlist.videos" />
   </div>
 </template>

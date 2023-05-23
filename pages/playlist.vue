@@ -16,7 +16,7 @@
 <template>
   <div class="main pb-4" v-cloak>
     <div class="container">
-      <div class="row text-center">
+      <div class="rowr">
         <div class="col-sm-12">
           <Playlist :id="id" />
         </div>

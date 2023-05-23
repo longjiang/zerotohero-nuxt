@@ -1,26 +1,83 @@
 <template>
-  <div>
-    <div v-for="playlist in playlistsByLanguage" :key="playlist.id">
-      <div @click="viewPlaylist(playlist.id)">{{ playlist.title }}</div>
+  <container-query :query="query" v-model="params">
+    <div class="playlists row">
+      <div
+        v-for="playlist in playlistsByLanguage"
+        :key="playlist.id"
+        :class="colClasses"
+      >
+        <VideoThumbnailStack
+          :thumbnail="thumbnail(playlist.videos?.[0].youtube_id)"
+          :title="playlist.title"
+          :to="{
+            name: 'playlist',
+            params: { id: playlist.id },
+          }"
+        >
+          <template v-slot:belowTitle>
+            <div style="opacity: 0.8; font-size: 0.8em;  margin-top: 0.25rem; ">
+              ({{ $t("{num} Videos", { num: playlist.videos?.length }) }})
+            </div>
+          </template>
+        </VideoThumbnailStack>
+      </div>
     </div>
-  </div>
+  </container-query>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
+import { ContainerQuery } from "vue-container-query";
 
 export default {
+  components: {
+    ContainerQuery,
+  },
+  data() {
+    return {
+      params: {},
+      query: {
+        xs: {
+          minWidth: 0,
+          maxWidth: 423,
+        },
+        sm: {
+          minWidth: 423,
+          maxWidth: 720,
+        },
+        md: {
+          minWidth: 720,
+          maxWidth: 960,
+        },
+        lg: {
+          minWidth: 960,
+          maxWidth: 1140,
+        },
+        xl: {
+          minWidth: 1140,
+        },
+      },
+    };
+  },
   computed: {
-    ...mapState('playlists', {
+    ...mapState("playlists", {
       playlistsByLanguage(state) {
         return state.playlists[this.$l2.code];
       },
     }),
+    colClasses() {
+      let classes = {
+        "col-compact": this.params.xs,
+        "col-6": this.params.xs || this.params.sm,
+        "col-4": this.params.md,
+        "col-3": this.params.lg || this.params.xl,
+      };
+      return classes;
+    },
   },
   methods: {
-    viewPlaylist(id) {
-      // navigate to individual playlist view
-      this.$router.push({ name: 'playlist', params: { id } });
+    thumbnail(youtube_id) {
+      return `https://img.youtube.com/vi/${youtube_id}/mqdefault.jpg`;
     },
   },
   async created() {

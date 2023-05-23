@@ -2,7 +2,7 @@
   <div>
     <span @click="showModal = true" class="add-to-playlist-button cursor-pointer"><slot>{{ $t('Add to Playlist') }}</slot></span>
     <b-modal v-model="showModal" :title="$t('Add to Playlist')">
-      <h5>Select a Playlist:</h5>
+      <h5>{{ $t('Select a Playlist:') }}</h5>
       <b-form-checkbox
         v-for="(playlist, index) in playlistsByLanguage"
         :key="index"
@@ -54,7 +54,7 @@ export default {
   computed: {
     ...mapState("playlists", {
       playlistsByLanguage(state) {
-        return state.playlists[this.$l2.code];
+        return state.playlists[this.$l2.code] || [];
       },
     }),
   },

@@ -1,38 +1,19 @@
 <template>
-  <div style="padding-bottom: 2rem">
-    <div class="deck3"></div>
-    <div class="deck2"></div>
-    <div class="deck1"></div>
-    <div
-      :class="{
-        'tv-show-card media': true,
-        'tv-show-card-hidden': show.hidden,
-        [`skin-${$skin}`]: true,
-      }"
-    >
-      <router-link
-        class="youtube-thumbnail-wrapper aspect-wrapper d-block"
-        :to="to"
+  <div class="show-card" :class="{ 'tv-show-card-hidden': show.hidden }">
+    <VideoThumbnailStack :thumbnail="thumbnail" :to="to" :title="show.title">
+      <template #afterTitle
+        ><span
+          v-if="show.level"
+          :data-bg-level="levels[show.level].level"
+          class="level-tag"
+        >
+          {{ levels[show.level].name }}
+        </span></template
       >
-        <img
-          :src="`https://img.youtube.com/vi/${show.youtube_id}/hqdefault.jpg`"
-          class="youtube-thumbnail aspect"
-        />
-      </router-link>
-      <div class="tv-show-card-title">
-        <router-link :to="to" class="link-unstyled">
-          <h6 class="mb-0">
-            {{ show.title }}
-            <span
-              v-if="show.level"
-              :data-bg-level="levels[show.level].level"
-              class="level-tag"
-            >
-              {{ levels[show.level].name }}
-            </span>
-          </h6>
-        </router-link>
-        <MediaItemStats :item="show" style="font-size: 0.8em; margin-top: 0.25rem; opacity: 0.8" />
+      <template #belowTitle
+        ><MediaItemStats
+          :item="show"
+          style="font-size: 0.8em; margin-top: 0.25rem; opacity: 0.8" />
         <div v-if="$adminMode">
           <b-button
             v-if="$adminMode"
@@ -59,10 +40,9 @@
             @click.stop.prevent="remove(show)"
           >
             <i class="fa fa-trash"></i>
-          </b-button>
-        </div>
-      </div>
-    </div>
+          </b-button></div
+      ></template>
+    </VideoThumbnailStack>
   </div>
 </template>
 
@@ -90,6 +70,9 @@ export default {
     levels() {
       return languageLevels(this.$l2);
     },
+    thumbnail() {
+      return `https://img.youtube.com/vi/${this.show.youtube_id}/hqdefault.jpg`;
+    },
     to() {
       const showList = {
         name: "show",
@@ -99,7 +82,8 @@ export default {
         name: "video-view",
         params: { type: "youtube", youtube_id: this.show.youtube_id },
       };
-      const to = this.$adminMode || !this.show.youtube_id ? showList : firstEpisode
+      const to =
+        this.$adminMode || !this.show.youtube_id ? showList : firstEpisode;
       return to;
     },
   },
@@ -136,82 +120,6 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/variables.scss";
 
-.deck1,
-.deck2,
-.deck3 {
-  height: 4rem;
-  position: absolute;
-  left: 1rem;
-  width: calc(100% - 2rem);
-  border-radius: 0.25rem;
-}
-
-.skin-dark {
-  .deck1,
-  .deck2,
-  .deck3 {
-    background-color: #767676;
-    box-shadow: 1px -3px 4px #00000070;
-    border: 1px solid rgb(138, 138, 138);
-  }
-}
-
-.skin-light {
-  .deck1,
-  .deck2,
-  .deck3 {
-    background-color: #ffffff;
-    box-shadow: 1px -3px 4px #00000019;
-    border: 1px solid rgb(217, 217, 217);
-  }
-}
-
-.col-compact {
-  .deck1,
-  .deck2,
-  .deck3 {
-    left: 0.5rem;
-    width: calc(100% - 1rem);
-  }
-
-  .deck1 {
-    top: 0;
-  }
-
-  .deck2 {
-    top: -0.5rem;
-  }
-
-  .deck3 {
-    top: -1rem;
-  }
-}
-
-.deck1 {
-  top: -0.5rem;
-  transform: scale(0.95);
-}
-
-.deck2 {
-  top: -1rem;
-  transform: scale(0.9);
-  opacity: 0.66;
-}
-
-.deck3 {
-  top: -1.4rem;
-  transform: scale(0.85);
-  opacity: 0.33;
-}
-
-.col-compact {
-  padding: 0.5rem;
-
-  :deep(.media-body) {
-    font-size: 0.9em;
-  }
-}
-
 .show-tag {
   font-size: 0.8em;
   color: #888;
@@ -219,28 +127,6 @@ export default {
 
 .show-tags {
   line-height: 1;
-}
-
-.tv-show-card {
-  position: relative;
-  height: 100%;
-
-  &.tv-show-card-hidden {
-    opacity: 0.3;
-  }
-
-  .youtube-thumbnail {
-    border-radius: 0.25rem;
-  }
-
-  .tv-show-card-title {
-    padding-top: 0.5rem;
-
-    a {
-      z-index: 1;
-      width: 100%;
-    }
-  }
 }
 
 .level-tag {
@@ -251,6 +137,4 @@ export default {
   position: relative;
   bottom: 0.1rem;
 }
-
-
 </style>
