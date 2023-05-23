@@ -417,6 +417,12 @@ export default {
           adminMode: this.$adminMode,
         });
       }
+      if (!this.$store.state.playlists.playlistsLoaded[this.l2.code]) {
+        this.$store.dispatch("playlists/loadPlaylists", {
+          l2: this.l2,
+          forceRefresh: this.$adminMode,
+        });
+      }
     },
   },
 };

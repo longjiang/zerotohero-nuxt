@@ -353,6 +353,7 @@ export default {
       let saved;
       let firstWord = this.words[0] || this.tokens?.[0];
       let text = this.text;
+      if (!text) return false;
       let textLowerCase = text.toLowerCase();
       if (firstWord && firstWord.search === textLowerCase) {
         saved = this.$store.getters["savedWords/has"]({

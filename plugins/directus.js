@@ -78,6 +78,14 @@ export default ({ app }, inject) => {
       if (res) return res
     },
 
+    async getData(path, params = {}) {
+      let res = await this.get(path, params)
+      if (res?.data?.data) {
+        let data = res.data.data
+        return data
+      }
+    },
+
     /**
      * Count the number of episodes in a show
      * @param {string} showType 'tv_show' or 'talk'

@@ -20,6 +20,7 @@
       </span>
     </h5>
     <div class="video-meta" v-if="video.youtube_id">
+      <AddToPlaylist :video="video" />
       <MediaItemStats :item="video" :showDate="true" />
       <!-- <span v-if="video.date && !isNaN(Date.parse(video.date))">
         {{ formatDate(video.date) }}
