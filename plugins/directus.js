@@ -130,9 +130,10 @@ export default ({ app }, inject) => {
     },
 
     async getVideo({ id, l2Id }) {
-      let res = await this.get(`${this.youtubeVideosTableName(l2Id)}/${id}`)
-      if (res?.data?.data) {
-        let video = res.data.data
+      const suffix = this.youtubeVideosTableSuffix(l2Id)
+      let res = await axios.get(LP_DIRECTUS_TOOLS_URL + `video/${suffix}/${id}`).catch(err => logError(err))
+      if (res?.data) {
+        let video = res.data
         return video
       }
     },
@@ -159,7 +160,7 @@ export default ({ app }, inject) => {
       limit,
       timestamp }) {
       let params = {}
-      params.suffix = this.youtubeVideosTableSuffix(l2Id)
+      params.suffix = '_' + this.youtubeVideosTableSuffix(l2Id)
       if (this.youtubeVideosTableHasOnlyOneLanguage(l2Id)) {
         // No language filter is necessary since the table only has one language
       } else {
@@ -219,7 +220,7 @@ export default ({ app }, inject) => {
       let suffix = ''
       for (let key in YOUTUBE_VIDEOS_TABLES) {
         if (YOUTUBE_VIDEOS_TABLES[key].includes(langId)) {
-          suffix = `_${key}`
+          suffix = key
         }
       }
       return suffix
@@ -235,7 +236,7 @@ export default ({ app }, inject) => {
     },
     
     youtubeVideosTableName(langId) {
-      return `items/youtube_videos${this.youtubeVideosTableSuffix(langId)}`
+      return `items/youtube_videos_${this.youtubeVideosTableSuffix(langId)}`
     },
 
     async checkShows(videos, langId, adminMode = false) {
