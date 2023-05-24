@@ -23,8 +23,8 @@ export const mutations = {
     const playlists = state.playlists[l2.code];
     const playlistToUpdate = playlists.find((pl) => pl.id === playlist.id);
     if (playlistToUpdate) {
-      if (playlist.title) playlistToUpdate.title = playlist.title;
-      if (playlist.videos) playlistToUpdate.videos = playlist.videos;
+      if (playlist.title) Vue.set(playlistToUpdate, 'title', playlist.title);
+      if (playlist.videos) Vue.set(playlistToUpdate, 'videos', playlist.videos);
     }
   },
 };

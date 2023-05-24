@@ -12,7 +12,14 @@
       v-if="playlist?.videos"
       :videos="playlist.videos"
       :playlist="playlist"
-    />
+    >
+      <template v-slot:footer="{ video }">
+        <b-button size="small" @click="deleteVideo(video)" :variant="$skin">
+          <i class="fas fa-trash"></i> {{ $t("Remove") }}
+        </b-button>
+      </template>
+    </YouTubeVideoList>
+
     <div class="playlist-actions">
       <b-button
         size="sm"
@@ -58,7 +65,17 @@ export default {
     },
   },
   methods: {
-    ...mapActions("playlists", ["fetchPlaylist"]),
+    ...mapActions("playlists", ["fetchPlaylist", "updatePlaylist"]),
+    async deleteVideo(video) {
+      if (!confirm(this.$t("Are you sure you want to delete this video from the playlist?"))) {
+        return;
+      }
+      // Filter out the video
+      let playlist = Object.assign({}, this.playlist);
+      playlist.videos = playlist.videos.filter(v => v !== video);
+      // Update the playlist
+      this.updatePlaylist({ l2: this.$l2, playlist });
+    },
     async deletePlaylist() {
       // Get confirmation
       if (!confirm(this.$t("Are you sure you want to delete this playlist?"))) {
