@@ -445,36 +445,32 @@ export default {
     /**
      * Match parallel lines (translation lines) to L2 lines.
      */
-     matchParallelLines() {
+    matchParallelLines() {
       if (!this.parallellines) {
         this.matchedParallelLines = [];
         return;
       }
 
-      // Make a deep copy of parallellines
-      let parallellinesCopy = JSON.parse(JSON.stringify(this.parallellines));
-
-      // Sort both arrays in ascending order by starttime
-      this.lines.sort((a, b) => a.starttime - b.starttime);
-      parallellinesCopy.sort((a, b) => a.starttime - b.starttime);
-
-      const matchedParallelLines = this.lines.map((line, i) => {
-        if (parallellinesCopy.length === 0) return "";
-        // Find the parallel line with the closest starttime to the current line's starttime
-        let closestParallelLine = parallellinesCopy.reduce((closest, current) => {
-          let closestDiff = Math.abs(closest.starttime - line.starttime);
-          let currentDiff = Math.abs(current.starttime - line.starttime);
-          return currentDiff < closestDiff ? current : closest;
-        });
-
-        // Remove the closest parallel line from the copy array so it won't be used again
-        parallellinesCopy = parallellinesCopy.filter(pl => pl !== closestParallelLine);
-
-        return closestParallelLine ? closestParallelLine.line : "";
-      });
-
-      this.matchedParallelLines = matchedParallelLines
+      this.matchedParallelLines = this.matchLines(this.lines, this.parallellines);
     },
+
+    matchLines(lines, parallelLines) {
+      let matchedLines = [];
+      lines.forEach((line) => {
+        let matchedLine = "";
+        parallelLines.forEach((parallelLine) => {
+          if (Math.abs(line.starttime - parallelLine.starttime) < 0.1) {
+            matchedLine = parallelLine.line;
+          }
+        });
+        if (matchedLine === "" && matchedLines.length < parallelLines.length) {
+          matchedLine = ""; // No corresponding match found, so add an empty line
+        }
+        matchedLines.push(matchedLine);
+      });
+      return matchedLines;
+    },
+
     executeTimeBasedMethods() {
       // (video starts first time) "first play"
       // (current line starts)
