@@ -139,7 +139,9 @@ export default ({ app }, inject) => {
 
     async getVideo({ id, l2Id }) {
       const suffix = this.youtubeVideosTableSuffix(l2Id)
-      let res = await axios.get(LP_DIRECTUS_TOOLS_URL + `video/${suffix}/${id}`).catch(err => logError(err))
+      const url = LP_DIRECTUS_TOOLS_URL + `video/${suffix ? suffix : 0}/${id}`
+      let res = await axios.get(url).catch(err => logError(err))
+      console.log({res, url})
       if (res?.data) {
         let video = res.data
         return video
@@ -244,7 +246,9 @@ export default ({ app }, inject) => {
     },
     
     youtubeVideosTableName(langId) {
-      return `items/youtube_videos_${this.youtubeVideosTableSuffix(langId)}`
+      const suffix = this.youtubeVideosTableSuffix(langId)
+      if (suffix) suffix = '_' + suffix
+      return `items/youtube_videos${suffix}`
     },
 
     async checkShows(videos, langId, adminMode = false) {
