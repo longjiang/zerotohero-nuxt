@@ -4,9 +4,9 @@ importScripts("../js/base-dictionary.js");
 class HskCedictDictionary extends BaseDictionary {
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     super({ l1, l2 });
-    this.cedictFile = `${SERVER}/data/hsk-cedict/hsk_cedict.csv.txt`;
-    this.characterFile = `${SERVER}/data/hsk-cedict/hsk_characters.csv.txt`;
-    this.newHSKFile = `${SERVER}/data/hsk-cedict/new_hsk.csv.txt`;
+    this.cedictFile = `/data/hsk-cedict/hsk_cedict.csv.txt`;
+    this.characterFile = `/data/hsk-cedict/hsk_characters.csv.txt`;
+    this.newHSKFile = `/data/hsk-cedict/new_hsk.csv.txt`;
     this.version = "1.1.11";
     this.hskStandardCourseWords = {}; // a tree structure by book, lesson, and dialog
     this.characters = [];
