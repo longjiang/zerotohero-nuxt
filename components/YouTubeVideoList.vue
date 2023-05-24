@@ -169,7 +169,7 @@
       <draggable
         @end="$emit('end', $event)"
         class="youtube-videos row"
-        v-if="playlist?.videos"
+        v-if="videos"
         :disabled="!dragEnabled"
       >
         <div
