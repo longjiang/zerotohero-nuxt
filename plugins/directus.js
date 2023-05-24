@@ -141,7 +141,6 @@ export default ({ app }, inject) => {
       const suffix = this.youtubeVideosTableSuffix(l2Id)
       const url = LP_DIRECTUS_TOOLS_URL + `video/${suffix ? suffix : 0}/${id}`
       let res = await axios.get(url).catch(err => logError(err))
-      console.log({res, url})
       if (res?.data) {
         let video = res.data
         return video
