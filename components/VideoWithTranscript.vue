@@ -71,6 +71,7 @@
             showType,
             skin: useOverlay ? 'dark' : $skin,
             video,
+            playlist
           }"
           @previous="$emit('previous')"
           @next="$emit('next')"
@@ -389,6 +390,9 @@ export default {
     related: Array,
     checkingSubs: {
       default: false,
+    },
+    playlist: {
+      type: Object,
     },
   },
   data() {

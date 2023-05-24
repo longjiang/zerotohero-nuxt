@@ -349,6 +349,9 @@ export default {
     video: {
       type: Object,
     },
+    playlist: {
+      type: Object,
+    },
   },
   data() {
     return {
@@ -397,6 +400,9 @@ export default {
         to.query.t = this.video.starttime;
       } else if (this.showProgress && this.historyItem) {
         to.query.t = this.historyItem.video.starttime;
+      }
+      if (this.playlist) {
+        to.query.p = this.playlist.id;
       }
       return to;
     },

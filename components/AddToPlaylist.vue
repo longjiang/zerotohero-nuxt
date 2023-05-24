@@ -10,7 +10,7 @@
         class="playlist-checklist-item"
         inline
       >
-        {{ playlist.title }}
+        {{ playlist.title }} ({{ playlist.videos?.length }})
       </b-form-checkbox>
       <b-form-checkbox inline value="new" v-model="selectedPlaylists" 
         class="playlist-checklist-item">

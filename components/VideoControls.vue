@@ -174,7 +174,7 @@
       hide-footer
       modal-class="safe-padding-top mt-4"
       size="md"
-      :title="show ? show.title : $t('Video Information')"
+      :title="playlist ? $t('Playlist: {title}', { title: playlist.title }) : show ? show.title : $t('Video Information')"
     >
       <div class="video-info-inner">
         <VideoDetails
@@ -189,8 +189,22 @@
         <div class="mt-3">
           <h6 v-if="show">
             <hr class="mb-3" />
-            {{ $t("More Episodes") }}
+            {{ $t(playlist ? $t("{num} Videos", { num: playlist.videos.length }) : "More Episodes") }}
+            <router-link v-if="playlist"
+              :to="{
+                name: 'playlist',
+                params: {
+                  id: playlist.id,
+                },
+              }"
+              class="show-all"
+            >
+              {{ $t("Open Playlist") }}
+              <i class="fas fa-chevron-right"></i>
+
+            </router-link>
             <router-link
+              v-else
               :to="{
                 name: 'show',
                 params: {
@@ -330,6 +344,9 @@ export default {
     initialTime: {
       type: Number,
       default: 0,
+    },
+    playlist: {
+      type: Object,
     },
   },
   data() {

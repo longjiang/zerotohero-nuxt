@@ -13,7 +13,7 @@
         startLineIndex,
         show,
         showType,
-        episodes,
+        episodes: playlist?.videos?.length ? playlist.videos : episodes,
         largeEpisodeCount,
         useAutoTextSize: true,
         showInfoButton: true,
@@ -23,11 +23,12 @@
         initialMode,
         checkingSubs,
         initialSize: this.mini ? 'mini' : 'regular',
+        playlist
       }"
       :key="`transcript-${video.youtube_id}`"
       @ended="onEnded"
-      @previous="goToPreviousEpisode"
-      @next="goToNextEpisode"
+      @previous="goToPreviousItem"
+      @next="goToNextItem"
       @currentTime="onCurrentTime"
       @updateLayout="onUpdateLayout"
     />
@@ -78,6 +79,10 @@ export default {
     starttime: {
       default: 0,
     },
+    playlist: {
+      type: Object,
+      required: false,
+    },
   },
   data() {
     return {
@@ -105,24 +110,29 @@ export default {
       let t = Math.floor(this.currentTime / 10) * 10;
       return t;
     },
-    episodeIndex() {
-      return this.episodes.findIndex(
+    items() {
+      return this.playlist?.videos?.length
+        ? this.playlist.videos
+        : this.episodes;
+    },
+    itemIndex() {
+      return this.items.findIndex(
         (e) => e.youtube_id === this.video.youtube_id
       );
     },
-    previousEpisode() {
-      if (this.episodes && this.episodeIndex > -1) {
-        return this.episodes[this.episodeIndex - 1];
+    previousItem() {
+      if (this.items && this.itemIndex > -1) {
+        return this.items[this.itemIndex - 1];
       }
     },
-    nextEpisode() {
-      if (this.episodes && this.episodeIndex > -1) {
-        return this.episodes[this.episodeIndex + 1];
+    nextItem() {
+      if (this.items && this.itemIndex > -1) {
+        return this.items[this.itemIndex + 1];
       }
     },
     related() {
       let related = [];
-      if (this.episodes && this.episodes.length > 0 && this.episodeIndex >= 0) {
+      if (this.episodes && this.episodes.length > 0 && this.itemIndex >= 0) {
         let watchedYouTubeIds = this.$store.state.history.history.map(
           (h) => h.video?.youtube_id
         );
@@ -133,14 +143,14 @@ export default {
         related = [
           ...shuffle([
             ...this.episodes.slice(
-              this.episodeIndex + 2,
-              this.episodeIndex + 16
+              this.itemIndex + 2,
+              this.itemIndex + 16
             ),
             ...shuffle(popularEpisodes.slice(0, 16)),
           ]),
         ];
-        let nextEpisode = this.episodes[this.episodeIndex + 1];
-        if (nextEpisode) related = [nextEpisode, ...related];
+        let nextItem = this.episodes[this.itemIndex + 1];
+        if (nextItem) related = [nextItem, ...related];
       }
       return uniqueByValue(related, "youtube_id");
     },
@@ -470,28 +480,30 @@ export default {
         this.ended = ended;
       }
     },
-    goToPreviousEpisode() {
-      if (this.previousEpisode)
+    goToPreviousItem() {
+      if (this.previousItem)
         this.$router.push({
           name: "video-view",
           params: {
             type: "youtube",
-            youtube_id: this.previousEpisode.youtube_id,
-            directus_id: this.previousEpisode.id,
-            lesson: this.previousEpisode.lesson,
+            youtube_id: this.previousItem.youtube_id,
+            directus_id: this.previousItem.id,
+            lesson: this.previousItem.lesson,
           },
+          query: { p: this.playlist?.id },
         });
     },
-    goToNextEpisode() {
-      if (this.nextEpisode)
+    goToNextItem() {
+      if (this.nextItem)
         this.$router.push({
           name: "video-view",
           params: {
             type: "youtube",
-            youtube_id: this.nextEpisode.youtube_id,
-            directus_id: this.nextEpisode.id,
-            lesson: this.nextEpisode.lesson,
+            youtube_id: this.nextItem.youtube_id,
+            directus_id: this.nextItem.id,
+            lesson: this.nextItem.lesson,
           },
+          query: { p: this.playlist?.id },
         });
     },
     updateCurrentTimeQueryString() {

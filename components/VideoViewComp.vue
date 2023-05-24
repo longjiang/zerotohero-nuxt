@@ -54,6 +54,7 @@
           initialMode: mode,
           landscape,
           starttime,
+          playlist
         }"
         @updateLayout="onUpdateLayout"
         @videoLoaded="onVideoLoaded"
@@ -98,6 +99,7 @@ export default {
       starttime: 0,
       video: undefined,
       duration: undefined,
+      playlist: undefined,
     };
   },
   computed: {
@@ -167,6 +169,17 @@ export default {
   },
   async fetch() {
     this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
+    // Get the playlist from the store based on the query string
+    if (this.$route.query.p) {
+      let playlist = await this.$store.dispatch("playlists/fetchPlaylist", {
+        l2: this.$l2,
+        id: Number(this.$route.query.p),
+      });
+      console.log({playlist})
+      if (playlist) {
+        this.playlist = playlist;
+      }
+    }
   },
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();

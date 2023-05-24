@@ -189,6 +189,7 @@
             :showProgress="showProgress"
             :showPlayButton="showPlayButton"
             :showLanguage="multilingual"
+            :playlist="playlist"
           >
 
             <template v-slot:footer>
@@ -262,6 +263,9 @@ export default {
     },
     multilingual: {
       default: false,
+    },
+    playlist: {
+      type: Object,
     },
   },
 

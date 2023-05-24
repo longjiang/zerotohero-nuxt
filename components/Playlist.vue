@@ -11,6 +11,7 @@
       class="mt-3"
       v-if="playlist?.videos"
       :videos="playlist.videos"
+      :playlist="playlist"
     />
     <div class="playlist-actions">
       <b-button
@@ -51,7 +52,7 @@ export default {
         (pl) => pl.id === parseInt(this.id)
       );
       if (!playlist) {
-        playlist = await this.fetchPlaylist({ id: this.id });
+        playlist = await this.fetchPlaylist({ id: this.id, l2: this.$l2 });
       }
       return playlist;
     },
