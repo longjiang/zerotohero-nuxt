@@ -245,7 +245,7 @@ export default ({ app }, inject) => {
     },
     
     youtubeVideosTableName(langId) {
-      const suffix = this.youtubeVideosTableSuffix(langId)
+      let suffix = this.youtubeVideosTableSuffix(langId)
       if (suffix) suffix = '_' + suffix
       return `items/youtube_videos${suffix}`
     },
