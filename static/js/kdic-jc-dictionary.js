@@ -13,7 +13,7 @@ class KdicJcDictionary extends BaseDictionary  {
     this.indexDbVerByLang = {
       jpn: '0fc5e9b',
     };
-    this.file = 'https://server.chinesezerotohero.com/data/kdic-jc/kdic-jc.tsv.txt';
+    this.file = '/data/kdic-jc/kdic-jc.tsv.txt';
   }
   
   credit() {

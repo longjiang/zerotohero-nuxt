@@ -39,8 +39,8 @@
                 <b>Download</b>
                 the list as a
                 <a
-                  href="/data/zh-grammar/zh-grammar.csv.txt"
-                  download="Language Player Chinese Grammar Chart.csv"
+                  :href="`/data/grammar/${$l2.code}-grammar.csv.txt`"
+                  :download="`Language Player ${$l2.name} Grammar Chart.csv`"
                 >
                   CSV
                 </a>
