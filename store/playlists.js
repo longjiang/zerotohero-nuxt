@@ -83,7 +83,6 @@ export const actions = {
     const playlistFromApi = await this.$directus.getData(
       `items/playlists/${id}`
     );
-    console.log({playlistFromApi})
     if (playlistFromApi?.videos) {
       playlistFromApi.videos = Papa.parse(playlistFromApi.videos, {
         header: true,

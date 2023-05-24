@@ -565,6 +565,7 @@ export default {
       }
     },
     async importSrt(file) {
+      if (!file) return
       let extension = file.name.split(".").pop().toLowerCase();
       try {
         let reader = new FileReader();
