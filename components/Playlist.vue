@@ -7,29 +7,20 @@
     <div class="text-center" v-if="playlist && playlist.videos.length === 0">
       {{ $t("Sorry, this playlist is empty.") }}
     </div>
-    <!-- <YouTubeVideoList
+    <YouTubeVideoList
       class="mt-3"
       v-if="playlist?.videos"
       :videos="playlist.videos"
       :playlist="playlist"
+      :dragEnabled="true"
+      @end="onDragEnd"
     >
       <template v-slot:footer="{ video }">
         <b-button size="small" @click="deleteVideo(video)" :variant="$skin">
           <i class="fas fa-trash"></i> {{ $t("Remove") }}
         </b-button>
       </template>
-    </YouTubeVideoList> -->
-    <draggable @end="onDragEnd" class="mt-3" v-if="playlist?.videos">
-      <div v-for="video in playlist.videos" :key="video.id">
-        <YouTubeVideoCard :video="video">
-          <template v-slot:footer="{ video }">
-            <b-button size="small" @click="deleteVideo(video)" :variant="$skin">
-              <i class="fas fa-trash"></i> {{ $t("Remove") }}
-            </b-button>
-          </template>
-        </YouTubeVideoCard>
-      </div>
-    </draggable>
+    </YouTubeVideoList>
 
     <div class="playlist-actions">
       <b-button
@@ -47,12 +38,8 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import draggable from 'vuedraggable'
 
 export default {
-  components: {
-    draggable
-  },
   data() {
     return {
       id: this.$route.params.id,

@@ -165,7 +165,13 @@
           </div>
         </div>
       </client-only>
-      <div class="youtube-videos row">
+
+      <draggable
+        @end="$emit('end', $event)"
+        class="youtube-videos row"
+        v-if="playlist?.videos"
+        :disabled="!dragEnabled"
+      >
         <div
           v-for="(video, videoIndex) in shownVideos"
           :class="colClasses(video, videoIndex)"
@@ -191,30 +197,40 @@
             :showLanguage="multilingual"
             :playlist="playlist"
           >
-
             <template v-slot:footer>
               <slot name="footer" :video="video"></slot>
             </template>
           </LazyYouTubeVideoCard>
         </div>
-      </div>
+      </draggable>
     </div>
   </container-query>
 </template>
 
 <script>
 import Vue from "vue";
-import { groupArrayBy, arrayChunk, timeout, unique, uniqueByValue } from "@/lib/utils";
+import {
+  groupArrayBy,
+  arrayChunk,
+  timeout,
+  unique,
+  uniqueByValue,
+} from "@/lib/utils";
 import { Drag, Drop } from "vue-drag-drop";
 import { ContainerQuery } from "vue-container-query";
+import draggable from 'vuedraggable'
 
 export default {
   components: {
+    draggable,
     ContainerQuery,
     Drag,
     Drop,
   },
   props: {
+    dragEnabled: {
+      default: false,
+    },
     videos: {
       type: Array,
     },
@@ -244,7 +260,7 @@ export default {
       default: false,
     },
     skin: {
-      default: null
+      default: null,
     },
     showProgress: {
       default: false,
@@ -517,7 +533,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .youtube-video-list-admin-bar {
   background: rgb(205, 207, 212);
 }
@@ -527,7 +542,6 @@ export default {
     background-color: #88888822;
   }
 }
-
 
 .skin-light {
   .youtube-video-list-admin-bar {
