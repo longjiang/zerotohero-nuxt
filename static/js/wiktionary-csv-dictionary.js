@@ -9,6 +9,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     this.version = "2.18.0";
     this.headIndex = {};
     this.indexKeys = ['search', 'head'];
+    this.useLocal = [ "eng-zho" ], // Load locally rather than from server
     this.indexDbVerByLang = {
       fra: '2.18.0',
       eng: '2.18.0',
@@ -76,7 +77,8 @@ class WiktionaryCsvDictionary extends BaseDictionary {
           break;
         }
       }
-      let filename = `${SERVER}data/wiktionary-csv/${l2Code}-${l1Code}.csv.txt`;
+      const baseUrl = this.useLocal.includes(`${l2Code}-${l1Code}`) ? "/" : SERVER;
+      let filename = `${baseUrl}data/wiktionary-csv/${l2Code}-${l1Code}.csv.txt`;
       return filename;
     }
   }
