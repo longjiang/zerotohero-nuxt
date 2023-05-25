@@ -83,6 +83,7 @@ export default {
     this.$nuxt.$on("animateStar", this.onAnimateStar);
   },
   async mounted() {
+    this.setClientEnvironment();
     this.subscribeToVuexMutations();
     await this.getUserDataAndSubscription();
     this.loadGeneralData();
