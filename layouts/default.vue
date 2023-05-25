@@ -260,6 +260,9 @@ export default {
           this.l2Time[this.l2.code] += 1000;
           // Log user's time on site every 2 minutes
           if (this.l2Time[this.l2.code] % 15000 === 0) {
+            console.log(
+              `User has spent ${this.l2Time[this.l2.code] / 1000} seconds on ${this.l2.code}`
+            );
             this.$store.dispatch("progress/setTime", {
               l2: this.l2,
               time: this.l2Time[this.l2.code],

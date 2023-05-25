@@ -103,7 +103,7 @@
                 <LanguageFlag :language="$l2" :autocycle="true" class="mb-2" />
                 {{
                   $t("{name}’s {l2} Language Progress", {
-                    name: $auth.user.first_name,
+                    name: formatName($auth.user.first_name, $auth.user.last_name, true),
                     l2: $t($l2.name),
                   })
                 }}

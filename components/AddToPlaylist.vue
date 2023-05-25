@@ -1,7 +1,7 @@
 <template>
   <span>
     <span @click="showModal = true" class="add-to-playlist-button cursor-pointer"><slot>{{ $t('Add to Playlist') }}</slot></span>
-    <b-modal v-model="showModal" :title="$t('Add to Playlist')">
+    <b-modal v-model="showModal" :title="$t('Add to Playlist')" modal-class="safe-padding-top mt-4">
       <b-form-checkbox
         v-for="(playlist, index) in playlistsByLanguage"
         :key="index"

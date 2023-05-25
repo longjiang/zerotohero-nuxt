@@ -6,7 +6,7 @@
         <span v-if="dot" class="dot"></span>
         <span
           v-if="edit"
-          @click="showManuallySetHours = !showManuallySetHours"
+          @click="showManuallySetHoursModal = !showManuallySetHoursModal"
           class="btn-edit text-secondary ml-2"
         >
           <i class="fas fa-pencil-alt mr-1"></i>
@@ -14,27 +14,26 @@
         </span>
       </h5>
     </div>
-    <div v-if="showManuallySetHours" class="mt-2 mb-3">
-      {{
+    <b-modal v-model="showManuallySetHoursModal" :title="$t('Edit hours')" modal-class="safe-padding-top mt-4">
+      <p>{{
         $tb("Mannually set your total time on {l2} to", {
           l2: $tb(l2.name),
         })
-      }}
+      }}</p>
       <b-form-input
-        v-model="manuallySetHours"
+        v-model.number="manuallySetHours"
         type="number"
-        :lazy="true"
-        placeholder="hours"
-        aria-autocomplete="both"
-        aria-haspopup="false"
-        autocapitalize="off"
-        autocomplete="off"
-        autocorrect="off"
-        autofocus=""
-        role="combobox"
-        spellcheck="false"
+        :placeholder="$t('hours')"
       />
-    </div>
+
+      <template v-slot:modal-footer>
+        <b-button variant="primary" @click="setHours">{{ $t('Set') }}</b-button>
+        <b-button @click="showManuallySetHoursModal = false" variant="secondary"
+          >{{ $t('Cancel') }}</b-button
+        >
+      </template>
+    </b-modal>
+    
     <div class="progress-bar-wrapper">
       <b-progress
         class="mt-2 language-progress-bar"
@@ -53,7 +52,7 @@
       <div class="bottom-label-left" style="color: #999">
         {{
           $tb("{hours} to {goal}", {
-            hours: Math.round((hours / hoursNeeded) * 100),
+            hours: formatDuration((hoursNeeded - hours) * 1000 * 3600),
             goal: $tb(goalText),
           })
         }}
@@ -244,19 +243,13 @@ export default {
   },
   data() {
     return {
-      showManuallySetHours: false,
+      showManuallySetHoursModal: false,
       manuallySetHours: undefined,
       manuallySetWeeklyHours: 7,
       showDescriptionDetails: false,
     };
   },
   watch: {
-    manuallySetHours() {
-      this.$store.dispatch("progress/setTime", {
-        l2: this.l2,
-        time: this.manuallySetHours * 60 * 60 * 1000,
-      });
-    },
     manuallySetWeeklyHours() {
       this.$store.dispatch("progress/setWeeklyHours", {
         l2: this.l2,
@@ -281,6 +274,13 @@ export default {
     });
   },
   methods: {
+    setHours() {
+      this.$store.dispatch("progress/setTime", {
+        l2: this.l2,
+        time: this.manuallySetHours * 60 * 60 * 1000,
+      });
+      this.showManuallySetHoursModal = false
+    },
     levelObj(level) {
       return languageLevels(this.l2)[level];
     },
