@@ -980,8 +980,9 @@ export default {
       box-sizing: border-box;
       overflow: hidden;
       text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
-      background-color: #000000dd;
+      background-color: #000000cc;
       padding-top: 0.75em;
+      backdrop-filter: blur(7px);
       .drag-handle {
         height: calc(100% - 1rem);
         position: absolute;

@@ -175,7 +175,6 @@ export default {
         l2: this.$l2,
         id: Number(this.$route.query.p),
       });
-      console.log({playlist})
       if (playlist) {
         this.playlist = playlist;
       }
