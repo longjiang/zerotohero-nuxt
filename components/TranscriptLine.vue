@@ -74,7 +74,7 @@
         >
           <beat-loader v-if="translationLoading" class="d-inline-block" color="#28a745" size="5px"></beat-loader>
           <span
-            v-else-if="line.line.length > 0 && (parallelLine || translation)"
+            v-else-if="showParallelLine && line.line.length > 0 && (parallelLine || translation)"
             :data-line-index="lineIndex"
             v-html="translation || parallelLine"
             :contenteditable="enableTranslationEditing"

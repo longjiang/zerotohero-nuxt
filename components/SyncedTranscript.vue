@@ -29,8 +29,8 @@
                 hsk,
                 notes,
                 textSize: single ? textSize : 1,
-                parallelLine: getParallelLine(line, index),
-                showParallelLine: parallellines && parallellines.length > 0,
+                parallelLine: matchedParallelLines ? matchedParallelLines[single ? currentLineIndex || 0 : index + visibleMin] : null,
+                showParallelLine: $l1.code !== $l2.code && parallellines && parallellines.length > 0,
                 lineIndex: index + visibleMin,
                 current: currentLine === line,
                 currentTime,
@@ -364,14 +364,6 @@ export default {
         this.nextLine = this.lines[this.currentLineIndex + 1];
       }
       if (!this.paused && this.audioMode) this.doAudioModeStuff();
-    },
-    getParallelLine(line, index) {
-      if (this.$l2.code === this.$l1.code) return; // Don't show parallel lines if the languages are the same
-      if (!this.matchedParallelLines) return;
-      let lineIndex;
-      if (this.single) lineIndex = this.currentLineIndex;
-      else lineIndex = index + this.visibleMin;
-      return this.matchedParallelLines[lineIndex];
     },
     longPauseAfterLine(index) {
       let thisLine = this.lines[index + this.visibleMin];

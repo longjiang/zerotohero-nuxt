@@ -414,7 +414,8 @@ export default {
     async loadMissingSubsFromYouTube(video) {
 
       // If the video doesn't have L1 or L2 subtitles, we load it from YouTube
-      for (let l1OrL2 of ["l2", "l1"]) {
+      // Do not load L1 subs if L1 and L2 are the same
+      for (let l1OrL2 of this.$l1 === this.$l2 ? ["l2"] : ["l2", "l1"]) {
         if (!(video?.[`subs_${l1OrL2}`]?.length > 0)) {
           let subs
           let locale = this[`${l1OrL2}Locale`]
