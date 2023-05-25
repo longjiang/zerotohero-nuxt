@@ -275,9 +275,6 @@ export default {
       return this.$store.state.subscriptions.subscription;
     },
   },
-  beforeDestroy() {
-    this.unsubscribe();
-  },
   methods: {
     formatName,
     levelObj(level) {
