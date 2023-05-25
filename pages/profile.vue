@@ -23,7 +23,9 @@
       <div class="container" v-else>
         <div class="row mb-3">
           <div class="col-sm-12 text-center">
-            <h4>{{ formatName($auth.user.first_name, $auth.user.last_name) }}</h4>
+            <h4>
+              {{ formatName($auth.user.first_name, $auth.user.last_name) }}
+            </h4>
             <div>{{ $auth.user.email }}</div>
             <hr class="mt-3 mb-3" />
             <div v-if="subscription && !pro">
@@ -103,7 +105,11 @@
                 <LanguageFlag :language="$l2" :autocycle="true" class="mb-2" />
                 {{
                   $t("{name}’s {l2} Language Progress", {
-                    name: formatName($auth.user.first_name, $auth.user.last_name, true),
+                    name: formatName(
+                      $auth.user.first_name,
+                      $auth.user.last_name,
+                      true
+                    ),
                     l2: $t($l2.name),
                   })
                 }}
@@ -269,47 +275,11 @@ export default {
       return this.$store.state.subscriptions.subscription;
     },
   },
-  data() {
-    return {
-      showManuallySetHours: false,
-      mannuallySetLevel: this.level,
-      mannuallySetHours: undefined,
-    };
-  },
   beforeDestroy() {
     this.unsubscribe();
   },
-  mounted() {
-    if (this.$store.state.progress.progressLoaded)
-      this.mannuallySetLevel = Number(
-        this.$store.getters["progress/level"](this.$l2)
-      );
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "progress/LOAD") {
-        this.mannuallySetLevel = Number(
-          this.$store.getters["progress/level"](this.$l2)
-        );
-      }
-    });
-  },
-  watch: {
-    mannuallySetLevel() {
-      this.$store.dispatch("progress/setLevel", {
-        l2: this.$l2,
-        level: this.mannuallySetLevel,
-      });
-    },
-    mannuallySetHours() {
-      this.$store.dispatch("progress/setTime", {
-        l2: this.$l2,
-        time: this.mannuallySetHours * 60 * 60 * 1000,
-      });
-    },
-  },
   methods: {
-    formatName(...args) {
-      return formatName(...args);
-    },
+    formatName,
     levelObj(level) {
       return languageLevels(this.$l2)[level];
     },

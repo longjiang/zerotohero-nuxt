@@ -22,6 +22,31 @@
         <img src="/img/trophy.svg" />
       </div>
     </div>
+    <b-modal
+      v-model="showResetHoursModal"
+      :title="$t('Proficiency Level Changed')"
+      centered
+    >
+      <p>
+        {{
+          $t(
+            "You have changed your proficiency level. Would you like to reset your {l2} learning hours to zero?",
+            {
+              l2: $t($l2.name),
+            }
+          )
+        }}
+      </p>
+
+      <template v-slot:modal-footer>
+        <b-button variant="primary" @click="resetHours">{{
+          $t("Reset Hours to Zero")
+        }}</b-button>
+        <b-button @click="showResetHoursModal = false" variant="secondary">{{
+          $t("Keep Current Hours")
+        }}</b-button>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -62,7 +87,7 @@ export default {
   },
   data() {
     return {
-      showManuallySetHours: false,
+      showResetHoursModal: false,
       manuallySetLevel: this.level,
     };
   },
@@ -83,6 +108,10 @@ export default {
     });
   },
   methods: {
+    resetHours() {
+      this.$store.dispatch("progress/setTime", { l2: this.$l2, time: 0 });
+      this.showResetHoursModal = false;
+    },
     levelObj(level) {
       return languageLevels(this.$l2)[level];
     },
@@ -91,6 +120,7 @@ export default {
         l2: this.$l2,
         level: this.manuallySetLevel,
       });
+      this.showResetHoursModal = true;
     },
   },
 };

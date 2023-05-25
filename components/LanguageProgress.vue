@@ -24,6 +24,7 @@
         v-model.number="manuallySetHours"
         type="number"
         :placeholder="$t('hours')"
+        @keyup.enter="setHours"
       />
 
       <template v-slot:modal-footer>
