@@ -34,8 +34,8 @@ export default {
       fullPageRoutes: ["index", "sale"],
       collapsed: false,
       l2Time: {},
-      timeLoggerID: undefined,
       l2SettingsClasses: {},
+      timeLoggerID: undefined,
       isElectron: false,
       host: process.server
         ? process.env.baseUrl
@@ -46,13 +46,16 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["l2Settings", "l1", "l2", "fullscreen"]),
+    ...mapState("settings", ["l2Settings", "fullscreen"]),
     ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
+    combinedLanguages() {
+      return `${this.$l1}-${this.$l2}`;
+    },
     fullHistoryPathsByL1L2() {
       return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
-        l1: this.l1,
-        l2: this.l2,
+        l1: this.$l1,
+        l2: this.$l2,
       });
     },
     classes() {
@@ -66,8 +69,8 @@ export default {
           !this.fullscreen &&
           this.$route.params.l1 &&
           this.$route.params.l2 &&
-          this.l1 &&
-          this.l2,
+          this.$l1 &&
+          this.$l2 ? true : false,
         "zerotohero-electron": this.isElectron,
         [`route-${this.$route.name}`]: true,
         [`zerotohero-${this.$skin}`]: true,
@@ -80,44 +83,14 @@ export default {
     this.$nuxt.$on("animateStar", this.onAnimateStar);
   },
   async mounted() {
-    this.isElectron =
-      navigator.userAgent.toLowerCase().indexOf(" electron/") > -1;
-    if (this.$auth.loggedIn && this.$route.path === "/") {
-      this.$router.push({ path: "/dashboard" });
-    } else {
-      if (window)
-        this.addFullHistoryItem(
-          window.location.pathname + window.location.search
-        );
-    }
     this.subscribeToVuexMutations();
-    this.wide = wide();
-    smoothscroll.polyfill(); // Safari does not support smoothscroll
-    if (!this.$store.state.history.historyLoaded) {
-      this.$store.dispatch("history/load");
-    }
-    await this.$directus.fetchOrCreateUserData(); // Make sure user data is fetched from the server
-    if (this.$auth.loggedIn) {
-      await this.$store.dispatch(
-        "subscriptions/checkSubscription",
-        this.$auth.user.id
-      );
-    }
-    if (this.l1 && this.l2) {
-      this.loadLanguageSpecificSettings(); // Make sure this line is AFTER registering mutation event listeners above!
-      this.$store.commit("settings/LOAD_SETTINGS", {
-        l1: this.l1,
-        l2: this.l2,
-      });
+    await this.getUserDataAndSubscription();
+    this.loadGeneralData();
+    if (this.$l1 && this.$l2) {
       this.onLanguageChange();
+    } else {
+      this.redirectToDashboardIfAppropriate();
     }
-    if (this.$adminMode && this.$loadWolLangs) this.$loadWolLangs();
-    this.$watch("$adminMode", () => {
-      if (this.$adminMode && this.$loadWolLangs) this.$loadWolLangs();
-    });
-    this.onAllLanguagesLoaded();
-    if (typeof window !== "undefined")
-      window.addEventListener("resize", this.onResize);
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -141,9 +114,9 @@ export default {
     };
 
     // Check if the current language has associated scripts
-    if (this.l2?.code in scriptsMap) {
+    if (this.$l2?.code in scriptsMap) {
       // Transform the scripts into the needed format
-      const scripts = Object.entries(scriptsMap[this.l2.code]).map(
+      const scripts = Object.entries(scriptsMap[this.$l2.code]).map(
         ([hid, src]) => ({ hid, src, body: true })
       );
 
@@ -158,7 +131,7 @@ export default {
     };
   },
   watch: {
-    l2() {
+    combinedLanguages() {
       this.onLanguageChange();
     },
     $route() {
@@ -176,20 +149,45 @@ export default {
     },
   },
   methods: {
+    loadGeneralData()  {
+      if (!this.$store.state.history.historyLoaded) {
+        this.$store.dispatch("history/load");
+      }
+    },
+    async getUserDataAndSubscription() {
+      await this.$directus.fetchOrCreateUserData(); // Make sure user data is fetched from the server
+      if (this.$auth.loggedIn) {
+        await this.$store.dispatch(
+          "subscriptions/checkSubscription",
+          this.$auth.user.id
+        );
+      }
+    },
+    redirectToDashboardIfAppropriate() {
+      if (this.$auth.loggedIn && this.$route.path === "/") {
+        this.$router.push({ path: "/dashboard" });
+      }
+    },
+    setClientEnvironment() {
+      this.wide = wide();
+      smoothscroll.polyfill(); // Safari does not support smoothscroll
+      if (typeof window !== "undefined")
+        window.addEventListener("resize", this.onResize);
+      this.isElectron =
+        navigator.userAgent.toLowerCase().indexOf(" electron/") > -1;
+    },
     updateL2SettingsClasses() {
       if (
-        this.$route.params.l1 &&
-        this.$route.params.l2 &&
-        this.l1 &&
-        this.l2
+        this.$l1 &&
+        this.$l2
       ) {
-        this.l1, this.l2;
+        this.$l1, this.$l2;
         let l2SettingsClasses = {};
         if (this.$l2Settings) {
           l2SettingsClasses = {
             "show-pinyin": this.$l2Settings.showPinyin,
             "show-pinyin-for-saved":
-              !this.$l2Settings.showPinyin && this.l2 && this.l2.han,
+              !this.$l2Settings.showPinyin && this.$l2 && this.$l2.han,
             "show-simplified": !this.$l2Settings.useTraditional,
             "show-traditional": this.$l2Settings.useTraditional,
             "show-definition": this.$l2Settings.showDefinition,
@@ -202,49 +200,38 @@ export default {
             `zerotohero-zoom-${this.$l2Settings.zoomLevel}`
           ] = true;
         }
-        l2SettingsClasses[`l1-${this.l1.code}`] = true;
-        l2SettingsClasses[`l2-${this.l2.code}`] = true;
-        if (this.l2.han) l2SettingsClasses["l2-zh"] = true;
+        l2SettingsClasses[`l1-${this.$l1.code}`] = true;
+        l2SettingsClasses[`l2-${this.$l2.code}`] = true;
+        if (this.$l2.han) l2SettingsClasses["l2-zh"] = true;
         this.l2SettingsClasses = l2SettingsClasses;
         this.classes;
       }
     },
     subscribeToVuexMutations() {
       this.unsubscribe = this.$store.subscribe((mutation) => {
-        if (mutation.type.startsWith("settings")) {
-          if (mutation.type === "settings/SET_L1_L2") {
-            this.updatei18n();
-            this.loadLanguageSpecificSettings();
-            this.updateL2SettingsClasses();
-            this.$store.dispatch("settings/resetShowFilters");
-          }
-          if (mutation.type === "settings/SET_L2_SETTINGS") {
-            this.updateL2SettingsClasses();
-          }
-        }
         if (
           mutation.type === "progress/LOAD" ||
           mutation.type === "progress/IMPORT_FROM_JSON"
         ) {
-          if (this.l2) {
-            this.l2Time[this.l2.code] = this.$store.getters["progress/time"](
-              this.l2
+          if (this.$l2) {
+            this.l2Time[this.$l2.code] = this.$store.getters["progress/time"](
+              this.$l2
             );
             this.startLoggingUserTime();
           }
         }
         if (mutation.type === "progress/SET_TIME") {
-          if (this.l2) {
-            this.l2Time[this.l2.code] = this.$store.getters["progress/time"](
-              this.l2
+          if (this.$l2) {
+            this.l2Time[this.$l2.code] = this.$store.getters["progress/time"](
+              this.$l2
             );
           }
         }
         if (mutation.type === "shows/LOAD_SHOWS") {
-          if (this.l2) {
-            if (!this.$store.state.stats.statsLoaded[this.l2.code]) {
+          if (this.$l2) {
+            if (!this.$store.state.stats.statsLoaded[this.$l2.code]) {
               this.$store.dispatch("stats/load", {
-                l2: this.l2,
+                l2: this.$l2,
                 adminMode: this.$adminMode,
               });
             }
@@ -255,14 +242,14 @@ export default {
     startLoggingUserTime() {
       if (this.timeLoggerID) return;
       this.timeLoggerID = setInterval(() => {
-        if (!this.isAppIdle && this.l2) {
-          if (!this.l2Time[this.l2.code]) this.l2Time[this.l2.code] = 0;
-          this.l2Time[this.l2.code] += 1000;
+        if (!this.isAppIdle && this.$l2) {
+          if (!this.l2Time[this.$l2.code]) this.l2Time[this.$l2.code] = 0;
+          this.l2Time[this.$l2.code] += 1000;
           // Log user's time on site every 2 minutes
-          if (this.l2Time[this.l2.code] % 15000 === 0) {
+          if (this.l2Time[this.$l2.code] % 15000 === 0) {
             this.$store.dispatch("progress/setTime", {
-              l2: this.l2,
-              time: this.l2Time[this.l2.code],
+              l2: this.$l2,
+              time: this.l2Time[this.$l2.code],
               autoLog: true,
             });
           }
@@ -272,9 +259,9 @@ export default {
     stopAndRestartLoggingUserTimeOnLanguageChange() {
       clearInterval(this.timeLoggerID);
       this.timeLoggerID = undefined;
-      if (this.l2) {
-        this.l2Time[this.l2.code] = this.$store.getters["progress/time"](
-          this.l2
+      if (this.$l2) {
+        this.l2Time[this.$l2.code] = this.$store.getters["progress/time"](
+          this.$l2
         );
         this.startLoggingUserTime();
       }
@@ -337,13 +324,6 @@ export default {
         star.style.display = "none";
       }
     },
-    onAllLanguagesLoaded() {
-      if (this.l1 && this.l2) {
-        let l1 = this.$languages.getSmart(this.l1.code);
-        let l2 = this.$languages.getSmart(this.l2.code);
-        this.$store.dispatch("settings/setL1L2", { l1, l2 });
-      }
-    },
     addFullHistoryItem(path) {
       this.$store.dispatch("fullHistory/add", path);
     },
@@ -354,10 +334,10 @@ export default {
       this.wide = wide();
     },
     updatei18n() {
-      this.$i18n.locale = this.l1.code;
+      this.$i18n.locale = this.$l1.code;
       this.$i18n.silentTranslationWarn = true;
-      if (this.l1.translations) {
-        this.$i18n.setLocaleMessage(this.l1.code, this.l1.translations);
+      if (this.$l1.translations) {
+        this.$i18n.setLocaleMessage(this.$l1.code, this.$l1.translations);
       }
     },
     async onLanguageChange() {
@@ -365,23 +345,28 @@ export default {
       if (
         youtube &&
         youtube.video &&
-        youtube.video.l2 &&
-        youtube.video.l2.id &&
-        youtube.video.l2.id !== this.l2.id
+        youtube.video.l2 !== String(this.$l2.id)
       ) {
         this.overlayPlayerClose(); // Close the mini player unless the language matches
       }
-      if (this.l1) this.updatei18n();
-      let dictionary = await this.$getDictionary();
-      let grammar = await this.$getGrammar();
-      if (dictionary) {
-        this.dictionaryCredit = await dictionary.credit();
-      }
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
+      if (this.$l1) this.updatei18n();
+      if (this.$l1 && this.$l2) {
+        this.loadLanguageSpecificData(); // This will trigger updateL2SettingsClasses()
+        let dictionary = await this.$getDictionary();
+        await this.$getGrammar();
+        if (dictionary) {
+          this.dictionaryCredit = await dictionary.credit();
+        }
+      }
     },
-    loadLanguageSpecificSettings() {
-      if (this.settingsLoaded === this.l2.code) return;
-      this.settingsLoaded = this.l2.code;
+    loadLanguageSpecificData() {
+      if (this.settingsLoaded === this.$l2.code) return;
+      this.settingsLoaded = this.$l2.code;
+      this.$store.commit("settings/LOAD_SETTINGS", {
+        l1: this.$l1,
+        l2: this.$l2,
+      });
       if (!this.$store.state.savedWords.savedWordsLoaded) {
         this.$store.dispatch("savedWords/load");
       }
@@ -399,27 +384,27 @@ export default {
       }
       if (
         !(
-          this.$store.state.shows.showsLoaded[this.l2.code] &&
+          this.$store.state.shows.showsLoaded[this.$l2.code] &&
           this.$store.state.tvShows &&
-          this.$store.state.tvShows[this.l2.code].length > 0 &&
+          this.$store.state.tvShows[this.$l2.code].length > 0 &&
           this.$store.state.talks &&
-          this.$store.state.talks[this.l2.code].length > 0
+          this.$store.state.talks[this.$l2.code].length > 0
         )
       ) {
         this.$store.dispatch("shows/load", {
-          l2: this.l2,
+          l2: this.$l2,
           forceRefresh: this.$adminMode,
         });
       }
-      if (!this.$store.state.phrasebooks.phrasebooksLoaded[this.l2.code]) {
+      if (!this.$store.state.phrasebooks.phrasebooksLoaded[this.$l2.code]) {
         this.$store.dispatch("phrasebooks/load", {
-          l2: this.l2,
+          l2: this.$l2,
           adminMode: this.$adminMode,
         });
       }
-      if (!this.$store.state.playlists.playlistsLoaded[this.l2.code]) {
+      if (!this.$store.state.playlists.playlistsLoaded[this.$l2.code]) {
         this.$store.dispatch("playlists/loadPlaylists", {
-          l2: this.l2,
+          l2: this.$l2,
           forceRefresh: true,
         });
       }
