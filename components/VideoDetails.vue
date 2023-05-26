@@ -76,12 +76,7 @@
         </span>
       </template>
       <span>
-        <a
-          :href="`https://downsub.com/?url=https://www.youtube.com/watch?v=${video.youtube_id}`"
-          target="_blank"
-        >
-          {{ $t("DownSub") }}
-        </a>
+        <span @click="downloadSubtitles" class="text-primary cursor-pointer">{{ $t('Download Subs') }}</span>
       </span>
       <AddToPlaylist :video="video" class="text-primary" />
       <Share class="ml-2" />
@@ -143,7 +138,8 @@
   </div>
 </template>
 <script>
-import { makeTextFile, formatK } from "@/lib/utils";
+import { makeTextFile, formatK, sanitizeFilename } from "@/lib/utils";
+import subsrt from 'subsrt';
 
 export default {
   props: {
@@ -201,6 +197,32 @@ export default {
     formatDate(date) {
       return this.$d(new Date(date), "short", this.$l1.code);
     },
+    downloadSubtitles() {
+      let captions = this.video.subs_l2.map((item, i) => ({
+        id: i + 1,
+        start: item.starttime * 1000,
+        end: (item.starttime + item.duration) * 1000,
+        text: item.line
+      }));
+
+      let srt = subsrt.build(captions);
+
+      // create a Blob from the SRT string
+      let blob = new Blob([srt], { type: 'text/plain' });
+      let url = URL.createObjectURL(blob);
+
+      // create a hidden link to download the file and simulate a click on it
+      let link = document.createElement('a');
+      link.href = url;
+      link.download = `${sanitizeFilename(this.video.title || this.video.youtube_id || $t('Subtitles'))}.srt`;
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+
+      // clean up by revoking the object URL and removing the link element
+      URL.revokeObjectURL(url);
+      document.body.removeChild(link);
+    }
   },
 };
 </script>

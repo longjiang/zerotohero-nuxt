@@ -71,6 +71,7 @@
     "semver": "^7.5.0",
     "smartquotes": "^2.3.2",
     "smoothscroll-polyfill": "^0.4.4",
+    "subsrt": "^1.1.1",
     "subtitle": "^4.1.0",
     "timeago-reverse": "^1.0.10",
     "transliteration": "^2.2.0",
