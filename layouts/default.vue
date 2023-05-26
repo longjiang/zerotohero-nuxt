@@ -46,11 +46,20 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["l2Settings", "fullscreen"]),
-    ...mapState("history", ["history"]),
     ...mapState("fullHistory", ["fullHistory"]),
+    ...mapState("history", ["history", "historyLoaded"]),
+    ...mapState("phrasebooks", ["phrasebooksLoaded"]),
+    ...mapState("playlists", ["playlistsLoaded"]),
+    ...mapState("progress", ["progressLoaded"]),
+    ...mapState("savedCollocations", ["savedCollocationsLoaded"]),
+    ...mapState("savedHits", ["savedHitsLoaded"]),
+    ...mapState("savedPhrases", ["savedPhrasesLoaded"]),
+    ...mapState("savedWords", ["savedWordsLoaded"]),
+    ...mapState("settings", ["l2Settings", "fullscreen"]),
+    ...mapState("shows", ["showsLoaded", "tvShows", "talks"]),
+    ...mapState("stats", ["statsLoaded"]),
     combinedLanguages() {
-      return `${this.$l1}-${this.$l2}`;
+      return `${this.$l1?.code}-${this.$l2?.code}`;
     },
     fullHistoryPathsByL1L2() {
       return this.$store.getters["fullHistory/fullHistoryPathsByL1L2"]({
@@ -151,7 +160,7 @@ export default {
   },
   methods: {
     loadGeneralData()  {
-      if (!this.$store.state.history.historyLoaded) {
+      if (!this.historyLoaded) {
         this.$store.dispatch("history/load");
       }
     },
@@ -230,7 +239,7 @@ export default {
         }
         if (mutation.type === "shows/LOAD_SHOWS") {
           if (this.$l2) {
-            if (!this.$store.state.stats.statsLoaded[this.$l2.code]) {
+            if (!this.statsLoaded[this.$l2.code]) {
               this.$store.dispatch("stats/load", {
                 l2: this.$l2,
                 adminMode: this.$adminMode,
@@ -368,28 +377,26 @@ export default {
         l1: this.$l1,
         l2: this.$l2,
       });
-      if (!this.$store.state.savedWords.savedWordsLoaded) {
+      if (!this.savedWordsLoaded) {
         this.$store.dispatch("savedWords/load");
       }
-      if (!this.$store.state.savedPhrases.savedPhrasesLoaded) {
+      if (!this.savedPhrasesLoaded) {
         this.$store.dispatch("savedPhrases/load");
       }
-      if (!this.$store.state.progress.progressLoaded) {
+      if (!this.progressLoaded) {
         this.$store.dispatch("progress/load");
       }
-      if (!this.$store.state.savedCollocations.savedCollocationsLoaded) {
+      if (!this.savedCollocationsLoaded) {
         this.$store.commit("savedCollocations/LOAD_SAVED_COLLOCATIONS");
       }
-      if (!this.$store.state.savedHits.savedHitsLoaded) {
+      if (!this.savedHitsLoaded) {
         this.$store.commit("savedHits/LOAD_SAVED_HITS");
       }
       if (
         !(
-          this.$store.state.shows.showsLoaded[this.$l2.code] &&
-          this.$store.state.tvShows &&
-          this.$store.state.tvShows[this.$l2.code].length > 0 &&
-          this.$store.state.talks &&
-          this.$store.state.talks[this.$l2.code].length > 0
+          this.showsLoaded[this.$l2.code] &&
+          this.tvShows?.[this.$l2.code]?.length &&
+          this.talks?.[this.$l2.code]?.length
         )
       ) {
         this.$store.dispatch("shows/load", {
@@ -397,13 +404,13 @@ export default {
           forceRefresh: this.$adminMode,
         });
       }
-      if (!this.$store.state.phrasebooks.phrasebooksLoaded[this.$l2.code]) {
+      if (!this.phrasebooksLoaded[this.$l2.code]) {
         this.$store.dispatch("phrasebooks/load", {
           l2: this.$l2,
           adminMode: this.$adminMode,
         });
       }
-      if (!this.$store.state.playlists.playlistsLoaded[this.$l2.code]) {
+      if (!this.playlistsLoaded[this.$l2.code]) {
         this.$store.dispatch("playlists/loadPlaylists", {
           l2: this.$l2,
           forceRefresh: true,
