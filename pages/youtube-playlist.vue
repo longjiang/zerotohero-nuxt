@@ -15,7 +15,7 @@
             </Annotate>
           </h3>
           <h3 class="text-center" v-else>Playlist</h3>
-          <span v-if="$adminMode">Playlist ID: {{ playlist_id }}</span>
+          <div class="text-center mb-3" v-if="$adminMode">Playlist ID: {{ playlist_id }}</div>
           <p v-if="totalResults" class="text-center">
             {{ shownResults }} of {{ totalResults }} videos loaded. Videos without subs are dimmed.
           </p>

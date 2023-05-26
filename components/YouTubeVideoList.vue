@@ -36,7 +36,7 @@
               v-if="
                 checkSavedData &&
                 checkSavedDone &&
-                (generated ? shownVideos.length : videosWithSubs.length) -
+                (generated ? filteredVideos.length : videosWithSubs.length) -
                   savedVideos.length >
                   0
               "
@@ -46,7 +46,7 @@
               <i class="fas fa-plus mr-2"></i>
               Add All
               {{
-                (generated ? shownVideos.length : videosWithSubs.length) -
+                (generated ? filteredVideos.length : videosWithSubs.length) -
                 savedVideos.length
               }}
             </b-button>
@@ -94,7 +94,7 @@
           </div>
           <div class="mt-1">
             {{ filteredVideos.length }} videos
-            <span v-if="checkSubs">, {{ shownVideos.length }} checked</span>
+            <span v-if="checkSubs">, {{ filteredVideos.length }} checked</span>
             <span v-if="checkSubs">
               , {{ videosWithSubs.length }} have subs
             </span>
@@ -173,7 +173,7 @@
         :disabled="!dragEnabled"
       >
         <div
-          v-for="(video, videoIndex) in shownVideos"
+          v-for="(video, videoIndex) in filteredVideos"
           :class="colClasses(video, videoIndex)"
           :key="`youtube-video-wrapper-${video.youtube_id}-${videoIndex}`"
         >
@@ -181,6 +181,7 @@
           <LazyYouTubeVideoCard
             v-else
             ref="youTubeVideoCard"
+            :class="{'checking-subs' : subsChecked < videoIndex }"
             @newShow="newShow"
             @hasSubs="onHasSubs"
             :skin="$skin"
@@ -343,11 +344,6 @@ export default {
       if (!this.$adminMode)
         filteredVideos = uniqueByValue(filteredVideos, "youtube_id");
       return filteredVideos;
-    },
-    shownVideos() {
-      return this.checkSubs
-        ? this.filteredVideos.slice(0, this.subsChecked)
-        : this.filteredVideos;
     },
     videosWithSubs() {
       return this.checkSubs
@@ -565,5 +561,9 @@ export default {
   .col-no-subs {
     display: none;
   }
+}
+
+.checking-subs {
+  opacity: 0.2;
 }
 </style>
