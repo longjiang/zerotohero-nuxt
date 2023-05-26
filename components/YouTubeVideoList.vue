@@ -15,7 +15,7 @@
             <b-button
               class="mt-1 mb-1"
               v-if="!checkSavedData"
-              size="sm"
+              size="small"
               @click="checkSavedData = true"
             >
               <i class="fas fa-question mr-2"></i>
@@ -24,7 +24,7 @@
             <b-button
               class="mt-1 mb-1"
               v-if="checkSavedData && checkSavedDone"
-              size="sm"
+              size="small"
               @click="checkSavedData = false"
             >
               <i class="fas fa-question mr-2"></i>
@@ -40,7 +40,7 @@
                   savedVideos.length >
                   0
               "
-              size="sm"
+              size="small"
               @click="addAll()"
             >
               <i class="fas fa-plus mr-2"></i>
@@ -50,14 +50,14 @@
                 savedVideos.length
               }}
             </b-button>
-            <b-button size="sm" @click="surveyChannels">
+            <b-button size="small" @click="surveyChannels">
               Survey Channels
             </b-button>
             <b-button
               v-if="checkSavedData && checkSavedDone"
               class="mt-1 mb-1"
               @click="removeAll()"
-              size="sm"
+              size="small"
             >
               <i class="fas fa-trash mr-2"></i>
               Remove All
@@ -66,13 +66,13 @@
           </div>
           <div v-if="checkSavedData && checkSavedDone">
             <AssignShow
-              size="sm"
+              size="small"
               @assignShow="assignShowToAll"
               :defaultSelection="defaultShowTitle"
               type="tv-shows"
             />
             <AssignShow
-              size="sm"
+              size="small"
               @assignShow="assignShowToAll"
               :defaultSelection="defaultShowTitle"
               type="talks"
@@ -136,7 +136,7 @@
               v-model="keyword"
               :lazy="true"
               placeholder="Filter"
-              size="sm"
+              size="small"
             />
           </div>
           <div v-if="channels">
