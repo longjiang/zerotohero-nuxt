@@ -1,4 +1,5 @@
 import { sify } from "chinese-conv";
+import { parseSync } from "subtitle";
 import Papa from "papaparse";
 import he from "he"; // html entities
 import { mutuallyExclusive, uniqueByValue, characterClass, escapeRegExp } from '@/lib/utils'
@@ -29,6 +30,30 @@ export default ({ app }, inject) => {
       } else {
         return [];
       }
+    },
+    parseSrt(srt) {
+      let parsed = parseSync(srt).map((cue) => {
+        return {
+          starttime: cue.data.start / 1000,
+          duration: (cue.data.end - cue.data.start) / 1000,
+          line: cue.data.text,
+        };
+      });
+
+      let subs_l2 = [];
+      let prevLine;
+      for (let line of parsed) {
+        // In the rare case when two consecutive lines have the same starttime,
+        // merge them and join them by "\n"
+        if (prevLine && prevLine.starttime === line.starttime) {
+          prevLine.duration += line.duration;
+          prevLine.line = prevLine.line + "\n" + line.line;
+        } else {
+          subs_l2.push(line);
+          prevLine = line;
+        }
+      }
+      return uniqueByValue(subs_l2, "starttime");
     },
     unparseSubs(subs, l2 = "en") {
       let lines = subs

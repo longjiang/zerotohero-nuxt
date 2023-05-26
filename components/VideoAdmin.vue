@@ -18,8 +18,7 @@
         class="mt-4 mb-5 rounded"
         style="color: rgba(136, 136, 136, 0.85)"
         v-if="
-          (!video.subs_l2 || video.subs_l2.length === 0) &&
-          !video.checkingSubs
+          (!video.subs_l2 || video.subs_l2.length === 0) && !video.checkingSubs
         "
       >
         <div>
@@ -145,6 +144,9 @@
               <i class="fas fa-check-circle mr-2 text-success"></i>
               Removed
             </span>
+            <b-button v-if="video?.subs_l2?.length" @click="syncSubs" size="small" variant="success"
+              ><span v-if="syncingSrt"><b-spinner small  /> Syncing</span><span v-else><i class="fas fa-sync"></i> Sync Subs</span></b-button
+            >
             <small
               :class="{
                 'd-none': !showSubsEditing && !enableTranslationEditing,
@@ -272,13 +274,13 @@
 
 <script>
 import { Drag, Drop } from "vue-drag-drop";
-import { parseSync } from "subtitle";
+import subsrt from 'subsrt';
 import {
   languageLevels,
   formatK,
   TOPICS,
+  PYTHON_SERVER,
   normalizeCircleNumbers,
-  uniqueByValue,
   logError,
   timeout,
 } from "@/lib/utils";
@@ -323,6 +325,7 @@ export default {
       transcriptKey: 0,
       translation: "",
       updating: false,
+      syncingSrt: false,
     };
   },
   computed: {
@@ -364,6 +367,29 @@ export default {
     },
   },
   methods: {
+    async syncSubs() {
+      const srt_content = this.getSrt();
+      const youtube_id = this.video.youtube_id;
+      this.syncingSrt = true;
+      const res = await axios.post(`${PYTHON_SERVER}/sync-srt`, { youtube_id, srt_content });
+      if (res?.data) {
+        const syncedSrt = res.data;
+        this.video.subs_l2 = this.$subs.parseSrt(syncedSrt)
+        this.$toast.success("Subtitles synced successfully.", { duration: 3000 });
+      }
+      this.syncingSrt = false;
+    },
+    getSrt() {
+      let captions = this.video.subs_l2.map((item, i) => ({
+        id: i + 1,
+        start: item.starttime * 1000,
+        end: (item.starttime + item.duration) * 1000,
+        text: item.line
+      }));
+
+      let srt = subsrt.build(captions);
+      return srt
+    },
     clearSubs() {
       this.video.subs_l2 = undefined;
       this.originalText = "";
@@ -478,28 +504,7 @@ export default {
       let parsed = [];
       reader.onload = (event) => {
         let srt = event.target.result;
-        parsed = parseSync(srt).map((cue) => {
-          return {
-            starttime: cue.data.start / 1000,
-            duration: (cue.data.end - cue.data.start) / 1000,
-            line: cue.data.text,
-          };
-        });
-
-        let subs_l2 = [];
-        let prevLine;
-        for (let line of parsed) {
-          // In the rare case when two consecutive lines have the same starttime,
-          // merge them and join them by "\n"
-          if (prevLine && prevLine.starttime === line.starttime) {
-            prevLine.duration += line.duration;
-            prevLine.line = prevLine.line + "\n" + line.line;
-          } else {
-            subs_l2.push(line);
-            prevLine = line;
-          }
-        }
-        this.video.subs_l2 = uniqueByValue(subs_l2, "starttime");
+        this.video.subs_l2 = this.$subs.parseSrt(srt);
         this.firstLineTime = this.video.subs_l2[0].starttime;
         this.originalText = this.text; // Update the text in the textarea
         this.transcriptKey++;
