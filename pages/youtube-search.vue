@@ -29,8 +29,7 @@
       </h4>
       <SimpleSearch
         :placeholder="
-          $t('Search {stats} {l2} videos', {
-            stats: stats && stats[$l2.code] ? stats[$l2.code].allVideos : '',
+          $t('Enter {l2} keywords to search, or a YouTube ID or URL to import', {
             l2: $t($l2.name),
           })
         "
@@ -92,10 +91,14 @@
         </b-form-group>
       </client-only>
       <div v-if="!term" class="mt-3">
-        {{ $t('Popular search terms in {l2}:', {l2: $t($l2.name)}) }} <router-link
+        {{ $t("Popular search terms in {l2}:", { l2: $t($l2.name) }) }}
+        <router-link
           v-for="topic in popularTopics"
           :key="`topic-${topic[$l2.code]}`"
-          :to="{ name: 'youtube-search', params: { term: topic[$l2.code], start: 0 } }"
+          :to="{
+            name: 'youtube-search',
+            params: { term: topic[$l2.code], start: 0 },
+          }"
           class="mr-2"
           >{{ topic[$l2.code] }}</router-link
         >
@@ -162,6 +165,7 @@
 <script>
 import SimpleSearch from "@/components/SimpleSearch";
 import YouTubeSearchResults from "@/components/YouTubeSearchResults";
+import YouTube from "@/lib/youtube";
 import { mapState } from "vuex";
 import popularTopicsCSV from "@/static/data/languages/popular-topics.csv.txt";
 import Papa from "papaparse";
@@ -200,17 +204,36 @@ export default {
       }
     },
   },
-  watch: {
-    term() {
-      this.updateSearchText();
-    },
-  },
   mounted() {
     this.updateSearchText();
+    this.detectYouTubeEntitiesAndRedirect();
     this.long = this.$route.query.long === "true" ? true : false;
     this.captions = this.$route.query.captions || "all";
   },
   methods: {
+    detectYouTubeEntitiesAndRedirect() {
+      let { youtube_id, playlist_id } = YouTube.detectYouTubeEntity(
+        this.term
+      );
+      console.log(this.term, {youtube_id, playlist_id});
+      if (youtube_id) {
+        this.$toast.success(this.$t("Redirecting to video..."), {
+          duration: 1000,
+        });
+        this.$router.push({
+          name: "video-view",
+          params: { youtube_id, type: "youtube",},
+        });
+      } else if (playlist_id) {
+        this.$toast.success(this.$t("Redirecting to playlist..."), {
+          duration: 1000,
+        });
+        this.$router.push({
+          name: "youtube-playlist",
+          params: { playlist_id },
+        });
+      }
+    },
     async updateSearchText() {
       if (this.term) {
         let url = decodeURIComponent(this.term);
