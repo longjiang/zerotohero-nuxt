@@ -216,21 +216,21 @@ export default {
       let { youtube_id, playlist_id } = YouTube.detectYouTubeEntity(
         this.term
       );
-      if (youtube_id) {
-        this.$toast.success(this.$t("Redirecting to video..."), {
-          duration: 1000,
-        });
-        this.$router.push({
-          name: "video-view",
-          params: { youtube_id, type: "youtube",},
-        });
-      } else if (playlist_id) {
+      if (playlist_id) {
         this.$toast.success(this.$t("Redirecting to playlist..."), {
           duration: 1000,
         });
         this.$router.push({
           name: "youtube-playlist",
           params: { playlist_id },
+        });
+      } else if (youtube_id) {
+        this.$toast.success(this.$t("Redirecting to video..."), {
+          duration: 1000,
+        });
+        this.$router.push({
+          name: "video-view",
+          params: { youtube_id, type: "youtube",},
         });
       }
     },

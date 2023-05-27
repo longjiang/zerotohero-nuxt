@@ -58,18 +58,29 @@ export default ({ app }, inject) => {
     unparseSubs(subs, l2 = "en") {
       let lines = subs
         .filter(l => l)
-        .map(l => {
+        .map((l, index) => {
           let line = l.line;
           if (["he", "hbo"].includes(l2)) line = this.stripHebrewVowels(line);
           if (l2 === "got") line = he.encode(line);
-          let obj = { starttime: l.starttime };
-          if (l.duration) obj.duration = l.duration;
-          obj.line = line;
+          const starttime =  l.starttime
+          let duration
+          if (l.duration) {
+            duration = l.duration;
+          } else if (index < subs.length - 1) {
+            // Calculate duration based on starttime of next line
+            duration = subs[index + 1].starttime - l.starttime;
+          } else {
+            // Set duration to undefined or a default value for the last line
+            duration = undefined; // or set a default value here
+          }
+    
+          const obj = { starttime, duration, line };
           return obj;
         });
+    
       let csv = Papa.unparse(lines);
       return csv;
-    },
+    },    
     unparseNotes(notes) {
       notes = notes.filter(note => note);
       let csv = Papa.unparse(notes);
