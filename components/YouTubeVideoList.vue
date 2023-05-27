@@ -220,6 +220,7 @@ import {
 import { Drag, Drop } from "vue-drag-drop";
 import { ContainerQuery } from "vue-container-query";
 import draggable from 'vuedraggable'
+import YouTube from "@/lib/youtube";
 
 export default {
   components: {
@@ -373,7 +374,51 @@ export default {
       }
     },
   },
+  mounted() {
+    if (this.checkSubs) {
+      this.checkInfo();
+    }
+  },
   methods: {
+    async checkInfo() {
+      if (!this.videos?.length) return
+      const videoInfo = await YouTube.videosByApi(this.videos?.map((v) => v.youtube_id));
+      // Add info to videos
+      for (let video of this.videos) {
+        let info = videoInfo.find((v) => v.id === video.youtube_id);
+        if (!info) continue;
+        let date = info.snippet['publishedAt'] || null;
+        let channelId = info.snippet['channelId'] || null;
+        let tags = info.snippet['tags'] ? info.snippet['tags'].join(',') : '';
+        let category = info.snippet['categoryId'] || null;
+        let locale = info.snippet['defaultAudioLanguage'] || null;
+        let duration = info.contentDetails['duration'] || null;
+        let made_for_kids = info.status['madeForKids'] || false;
+        let views = info.statistics['viewCount'] || 0;
+        let likes = info.statistics['likeCount'] || 0;
+        let comments = info.statistics['commentCount'] || 0;
+
+        let updates = {
+            'date': date,
+            'channel_id': channelId,
+            'tags': tags,
+            'category': category,
+            'locale': locale,
+            'duration': duration,
+            'made_for_kids': made_for_kids ? 1 : 0,
+            'views': views,
+            'likes': likes,
+            'comments': comments,
+            'title': info.snippet.title,
+        };
+        for (let key in updates) {
+          if (key === 'data') continue;
+          if (video[key] !== updates[key]) {
+            Vue.set(video, key, updates[key]);
+          }
+        }
+      }
+    },
     colClasses(video, videoIndex) {
       let classes = { "pb-3": true, "col-no-subs": !video.hasSubs };
       if (this.view == "list" || this.singleColumn) {

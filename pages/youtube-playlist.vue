@@ -54,19 +54,18 @@
               Load Paritially Over Infinite Scroll
             </b-button>
           </div>
-          <div :key="videoListKey">
-            <LazyYouTubeVideoList
-              :videos="
-                videos.filter((video) => video.title !== 'Private video')
-              "
-              :skin="$skin"
-              :checkSubs="true"
-              :showProgress="false"
-              :showDate="true"
-              @newShow="newShow"
-              ref="youtubeVideoList"
-            />
-          </div>
+          <LazyYouTubeVideoList
+            :key="`video-list-${videos ? sha256(videos.map((video) => video.youtube_id).join(',')) : ''}`"
+            :videos="
+              videos.filter((video) => video.title !== 'Private video')
+            "
+            :skin="$skin"
+            :checkSubs="true"
+            :showProgress="false"
+            :showDate="true"
+            @newShow="newShow"
+            ref="youtubeVideoList"
+          />
           <div v-if="noMoreVideos" class="text-center mt-4">
             <h6>No more videos.</h6>
             <p>{{ videos.length }} videos loaded.</p>
@@ -80,6 +79,7 @@
 <script>
 import YouTube from "@/lib/youtube";
 import { uniqueByValue } from "@/lib/utils";
+import sha256 from "js-sha256";
 
 export default {
   props: {
@@ -101,7 +101,6 @@ export default {
       totalResults: undefined,
       forceRefresh: false,
       noMoreVideos: false,
-      videoListKey: 0,
     };
   },
   async mounted() {
@@ -113,6 +112,7 @@ export default {
   computed: {
   },
   methods: {
+    sha256,
     async load() {
       if (this.entire) {
         this.videos = [];
@@ -178,7 +178,6 @@ export default {
     },
     async load500() {
       if (this.shownResults > 50) this.clearVideos();
-      this.videoListKey++;
       for (let i = 0; i < (this.shownResults > 50 ? 10 : 9); i++) {
         await this.visibilityChanged(true);
       }
