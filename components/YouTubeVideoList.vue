@@ -221,6 +221,7 @@ import { Drag, Drop } from "vue-drag-drop";
 import { ContainerQuery } from "vue-container-query";
 import draggable from "vuedraggable";
 import YouTube from "@/lib/youtube";
+import sha256 from "js-sha256";
 
 export default {
   components: {
@@ -374,10 +375,16 @@ export default {
         this.checkSavedDone = false;
       }
     },
-    videos() {
-      if (this.checkSubs) {
-        this.checkInfo();
-      }
+    videos: {
+      handler(newValue, oldValue) {
+        const changed =
+          sha256(newValue.map((video) => video.youtube_id).join(",")) !==
+          sha256(oldValue.map((video) => video.youtube_id).join(","));
+        if (changed) {
+          if (this.checkSubs) this.checkInfo();
+        }
+      },
+      immediate: false, // This makes the watcher "lazy"
     },
   },
   methods: {
@@ -386,7 +393,7 @@ export default {
       // Only get the ones that are not already in the cache
       const youtube_ids = this.videos
         .map((v) => v.youtube_id)
-        .filter((id) => !this.cachedVideoMetaFromYouTube.includes(id));
+        .filter((id) => !this.cachedVideoMetaFromYouTube.find(v => v.id === id));
       if (youtube_ids.length) {
         const videoMetaFromYouTube = await YouTube.videosByApi(youtube_ids);
         if (videoMetaFromYouTube?.length)
@@ -397,7 +404,9 @@ export default {
       }
       // Add info to videos
       for (let video of this.videos) {
-        let info = this.cachedVideoMetaFromYouTube.find((v) => v.id === video.youtube_id);
+        let info = this.cachedVideoMetaFromYouTube.find(
+          (v) => v.id === video.youtube_id
+        );
         if (!info) continue;
         let date = info.snippet["publishedAt"] || null;
         let channelId = info.snippet["channelId"] || null;
