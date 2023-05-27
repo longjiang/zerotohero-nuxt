@@ -181,7 +181,7 @@
           <LazyYouTubeVideoCard
             v-else
             ref="youTubeVideoCard"
-            :class="{'checking-subs' : subsChecked < videoIndex }"
+            :class="{ 'checking-subs': subsChecked < videoIndex }"
             @newShow="newShow"
             @hasSubs="onHasSubs"
             :skin="$skin"
@@ -219,7 +219,7 @@ import {
 } from "@/lib/utils";
 import { Drag, Drop } from "vue-drag-drop";
 import { ContainerQuery } from "vue-container-query";
-import draggable from 'vuedraggable'
+import draggable from "vuedraggable";
 import YouTube from "@/lib/youtube";
 
 export default {
@@ -304,6 +304,7 @@ export default {
       unavailableYouTubeIds: [],
       videosInfoKey: 0,
       params: {},
+      cachedVideoMetaFromYouTube: [],
       query: {
         xs: {
           minWidth: 0,
@@ -373,46 +374,57 @@ export default {
         this.checkSavedDone = false;
       }
     },
-  },
-  mounted() {
-    if (this.checkSubs) {
-      this.checkInfo();
-    }
+    videos() {
+      if (this.checkSubs) {
+        this.checkInfo();
+      }
+    },
   },
   methods: {
     async checkInfo() {
-      if (!this.videos?.length) return
-      const videoInfo = await YouTube.videosByApi(this.videos?.map((v) => v.youtube_id));
+      if (!this.videos?.length) return;
+      // Only get the ones that are not already in the cache
+      const youtube_ids = this.videos
+        .map((v) => v.youtube_id)
+        .filter((id) => !this.cachedVideoMetaFromYouTube.includes(id));
+      if (youtube_ids.length) {
+        const videoMetaFromYouTube = await YouTube.videosByApi(youtube_ids);
+        if (videoMetaFromYouTube?.length)
+          this.cachedVideoMetaFromYouTube = [
+            ...this.cachedVideoMetaFromYouTube,
+            ...videoMetaFromYouTube,
+          ];
+      }
       // Add info to videos
       for (let video of this.videos) {
-        let info = videoInfo.find((v) => v.id === video.youtube_id);
+        let info = this.cachedVideoMetaFromYouTube.find((v) => v.id === video.youtube_id);
         if (!info) continue;
-        let date = info.snippet['publishedAt'] || null;
-        let channelId = info.snippet['channelId'] || null;
-        let tags = info.snippet['tags'] ? info.snippet['tags'].join(',') : '';
-        let category = info.snippet['categoryId'] || null;
-        let locale = info.snippet['defaultAudioLanguage'] || null;
-        let duration = info.contentDetails['duration'] || null;
-        let made_for_kids = info.status['madeForKids'] || false;
-        let views = info.statistics['viewCount'] || 0;
-        let likes = info.statistics['likeCount'] || 0;
-        let comments = info.statistics['commentCount'] || 0;
+        let date = info.snippet["publishedAt"] || null;
+        let channelId = info.snippet["channelId"] || null;
+        let tags = info.snippet["tags"] ? info.snippet["tags"].join(",") : "";
+        let category = info.snippet["categoryId"] || null;
+        let locale = info.snippet["defaultAudioLanguage"] || null;
+        let duration = info.contentDetails["duration"] || null;
+        let made_for_kids = info.status["madeForKids"] || false;
+        let views = info.statistics["viewCount"] || 0;
+        let likes = info.statistics["likeCount"] || 0;
+        let comments = info.statistics["commentCount"] || 0;
 
         let updates = {
-            'date': date,
-            'channel_id': channelId,
-            'tags': tags,
-            'category': category,
-            'locale': locale,
-            'duration': duration,
-            'made_for_kids': made_for_kids ? 1 : 0,
-            'views': views,
-            'likes': likes,
-            'comments': comments,
-            'title': info.snippet.title,
+          date: date,
+          channel_id: channelId,
+          tags: tags,
+          category: category,
+          locale: locale,
+          duration: duration,
+          made_for_kids: made_for_kids ? 1 : 0,
+          views: views,
+          likes: likes,
+          comments: comments,
+          title: info.snippet.title,
         };
         for (let key in updates) {
-          if (key === 'data') continue;
+          if (key === "data") continue;
           if (video[key] !== updates[key]) {
             Vue.set(video, key, updates[key]);
           }
