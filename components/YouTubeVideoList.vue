@@ -181,7 +181,7 @@
           <LazyYouTubeVideoCard
             v-else
             ref="youTubeVideoCard"
-            :class="{ 'checking-subs': subsChecked < videoIndex }"
+            :class="{ 'checking-subs': checkSubs && subsChecked < videoIndex }"
             @newShow="newShow"
             @hasSubs="onHasSubs"
             :skin="$skin"
@@ -216,6 +216,7 @@ import {
   timeout,
   unique,
   uniqueByValue,
+  reduceTags
 } from "@/lib/utils";
 import { Drag, Drop } from "vue-drag-drop";
 import { ContainerQuery } from "vue-container-query";
@@ -387,6 +388,9 @@ export default {
       immediate: false, // This makes the watcher "lazy"
     },
   },
+  mounted() {
+    if (this.checkSubs) this.checkInfo();
+  },
   methods: {
     async checkInfo() {
       if (!this.videos?.length) return;
@@ -410,7 +414,7 @@ export default {
         if (!info) continue;
         let date = info.snippet["publishedAt"] || null;
         let channelId = info.snippet["channelId"] || null;
-        let tags = info.snippet["tags"] ? info.snippet["tags"].join(",") : "";
+        let tags = info.snippet["tags"] ? info.snippet["tags"].join(',') : "";
         let category = info.snippet["categoryId"] || null;
         let locale = info.snippet["defaultAudioLanguage"] || null;
         let duration = info.contentDetails["duration"] || null;
@@ -420,16 +424,16 @@ export default {
         let comments = info.statistics["commentCount"] || 0;
 
         let updates = {
-          date: date,
+          date,
           channel_id: channelId,
-          tags: tags,
-          category: category,
-          locale: locale,
-          duration: duration,
+          tags,
+          category,
+          locale,
+          duration,
           made_for_kids: made_for_kids ? 1 : 0,
-          views: views,
-          likes: likes,
-          comments: comments,
+          views,
+          likes,
+          comments,
           title: info.snippet.title,
         };
         for (let key in updates) {

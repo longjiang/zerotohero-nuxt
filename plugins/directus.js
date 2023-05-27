@@ -2,7 +2,7 @@ import DateHelper from "@/lib/date-helper";
 import axios from 'axios'
 import SmartQuotes from "smartquotes";
 import he from "he"; // html entities
-import { randBase64, proxy, escapeRegExp, logError, DIRECTUS_API_URL, LP_DIRECTUS_TOOLS_URL, WEB_URL } from '@/lib/utils'
+import { randBase64, proxy, escapeRegExp, logError, DIRECTUS_API_URL, LP_DIRECTUS_TOOLS_URL, WEB_URL, reduceTags } from '@/lib/utils'
 
 export const YOUTUBE_VIDEOS_TABLES = {
   2: [
@@ -196,13 +196,23 @@ export default ({ app }, inject) => {
         line.line = qline;
       }
       let csv = app.$subs.unparseSubs(lines, l2.code);
+      let { youtube_id, title, channel, channel_id, date, tags, category, locale, duration, made_for_kids, views, likes, comments } = video
+      tags = tags ? tags.split(",") : [];
       let data = {
-        youtube_id: video.youtube_id,
-        title: video.title || "Untitled",
+        youtube_id,
+        title: title || "Untitled",
         l2: l2.id,
         subs_l2: csv.replace(/&quot;/g, "”"),
-        channel_id: video.channel ? video.channel.id : video.channel_id,
-        date: DateHelper.unparseDate(video.date)
+        channel_id: channel ? channel.id : channel_id,
+        date: DateHelper.unparseDate(date),
+        tags: reduceTags(tags, 200), // The database field is limited to 200 characters
+        category,
+        locale,
+        duration,
+        made_for_kids: made_for_kids ? 1 : 0,
+        views,
+        likes,
+        comments,
       };
       if (video.tv_show) data.tv_show = video.tv_show.id;
       if (video.talk) data.talk = video.talk.id;
