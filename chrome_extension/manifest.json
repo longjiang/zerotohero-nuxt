@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "Language Player",
+  "description": "The official Chrome extension for Language Player.",
+  "version": "1.0",
+  "browser_action": {
+    "default_icon": "icon4.png",
+    "default_popup": "index.html",
+    "default_width": 300,
+    "default_height": 600
+  },
+  "permissions": ["activeTab"]
+}

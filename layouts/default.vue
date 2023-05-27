@@ -37,6 +37,7 @@ export default {
       l2SettingsClasses: {},
       timeLoggerID: undefined,
       isElectron: false,
+      isExtension: false,
       host: process.server
         ? process.env.baseUrl
         : window.location.protocol +
@@ -81,6 +82,7 @@ export default {
           this.$l1 &&
           this.$l2 ? true : false,
         "zerotohero-electron": this.isElectron,
+        "zerotohero-extension": this.isExtension,
         [`route-${this.$route.name}`]: true,
         [`zerotohero-${this.$skin}`]: true,
       };
@@ -185,6 +187,7 @@ export default {
         window.addEventListener("resize", this.onResize);
       this.isElectron =
         navigator.userAgent.toLowerCase().indexOf(" electron/") > -1;
+      this.isExtension = !!window.chrome.extension;
     },
     updateL2SettingsClasses() {
       if (

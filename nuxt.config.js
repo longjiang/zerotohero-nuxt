@@ -239,6 +239,7 @@ export default {
   ],
 
   build: {
+    publicPath: '/nuxt/',
     /* Extending webpack config */
     /* https://vue-loader.vuejs.org/guide/css-modules.html */
     loaders: {
