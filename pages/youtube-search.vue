@@ -212,10 +212,10 @@ export default {
   },
   methods: {
     detectYouTubeEntitiesAndRedirect() {
+      if (!this.term) return;
       let { youtube_id, playlist_id } = YouTube.detectYouTubeEntity(
         this.term
       );
-      console.log(this.term, {youtube_id, playlist_id});
       if (youtube_id) {
         this.$toast.success(this.$t("Redirecting to video..."), {
           duration: 1000,
