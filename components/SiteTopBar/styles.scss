@@ -1,14 +1,15 @@
 
 @import "~@/assets/scss/variables.scss";
+
+body.chrome-extension {
+  min-width: 375px;
+  min-height: 812px;
+}
+
 .zerotohero-electron {
   .site-top-bar {
     padding-top: 1.5rem; // For electron
   }
-}
-
-.zerotohero-extension {
-  min-width: 375px;
-  min-height: 812px;
 }
 
 .flag-icon {

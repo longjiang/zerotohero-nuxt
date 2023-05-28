@@ -132,8 +132,13 @@ export default {
         ([hid, src]) => ({ hid, src, body: true })
       );
 
+      const bodyClasses = this.isExtension ? "chrome-extension" : '';
+
       return {
         script: scripts,
+        bodyAttrs: {
+          class: bodyClasses
+        },
       };
     }
 
