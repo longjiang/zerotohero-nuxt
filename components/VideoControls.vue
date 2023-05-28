@@ -79,6 +79,7 @@
         <i v-else class="fas fa-arrow-left"></i>
       </button>
       <button
+        v-if="showPlayPauseButton"
         :class="{
           'btn-video-controls btn-video-controls-play play-pause text-center': true,
         }"
@@ -325,6 +326,11 @@ export default {
     },
     showInfoButton: {
       // Whether to show an "i" button that toggles the video information display modal
+      type: Boolean,
+      default: true,
+    },
+    showPlayPauseButton: {
+      // Whether to show a play/pause button
       type: Boolean,
       default: true,
     },
@@ -686,6 +692,7 @@ export default {
   justify-content: space-evenly;
   max-width: 40rem;
   margin: 0 auto;
+  min-height: 3.75rem;
 
   .btn-video-controls {
     border: none;

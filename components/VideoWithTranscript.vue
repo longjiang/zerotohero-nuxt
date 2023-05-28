@@ -68,6 +68,7 @@
             showInfoButton,
             showLineList,
             showOpenButton,
+            showPlayPauseButton: !neverPlayed,
             showType,
             skin: useOverlay ? 'dark' : $skin,
             video,
