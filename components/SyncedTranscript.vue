@@ -298,7 +298,7 @@ export default {
       this.executeTimeBasedMethods();
       this.previousTime = this.currentTime;
     },
-    async currentLineIndex() {
+    async currentLineIndex(newValue, oldValue) {
       let visibleMax = Math.max(
         this.visibleMax,
         this.currentLineIndex + this.visibleRange
@@ -307,9 +307,11 @@ export default {
         this.visibleMax = visibleMax;
       }
       if (this.single) this.tokenizeNextLines();
-    },
-    async currentLine() {
-      if (!this.single && !this.paused) this.scrollTo(this.currentLineIndex);
+      let shouldScroll = !this.single && !this.paused
+      if (this.showSubsEditing && Math.abs(newValue - oldValue) < 5) shouldScroll = false;
+      if (shouldScroll) {
+        this.scrollTo(this.currentLineIndex);
+      }
     },
     parallellines() {
       if (this.parallellines?.length) this.matchParallelLines();

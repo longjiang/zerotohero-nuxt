@@ -207,7 +207,7 @@ export default {
   },
   methods: {
     getSavedWords() {
-      return this.$refs.annotate.getSavedWords();
+      return this.$refs.annotate?.getSavedWords() || [];
     },
     onTranslation(translation) {
       this.translation = translation;

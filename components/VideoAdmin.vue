@@ -557,6 +557,8 @@ export default {
       }
     },
     async remove() {
+      // Confirm before deleting
+      if (!confirm("Are you sure you want to remove this video?")) return;
       let data = await this.$directus.deleteVideo({
         l2Id: this.$l2.id,
         id: this.video.id,
