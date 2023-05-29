@@ -655,7 +655,7 @@ export default {
       linesCopy.splice(lineIndex, 1);
       this.$store.commit("shows/MODIFY_ITEM", {
         item: this.video,
-        key: "lines",
+        key: "subs_l2",
         value: linesCopy,
       });
       if (this.matchedParallelLines)
