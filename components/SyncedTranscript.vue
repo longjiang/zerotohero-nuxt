@@ -29,8 +29,15 @@
                 hsk,
                 notes,
                 textSize: single ? textSize : 1,
-                parallelLine: matchedParallelLines ? matchedParallelLines[single ? currentLineIndex || 0 : index + visibleMin] : null,
-                showParallelLine: $l1.code !== $l2.code && parallellines && parallellines.length > 0,
+                parallelLine: matchedParallelLines
+                  ? matchedParallelLines[
+                      single ? currentLineIndex || 0 : index + visibleMin
+                    ]
+                  : null,
+                showParallelLine:
+                  $l1.code !== $l2.code &&
+                  parallellines &&
+                  parallellines.length > 0,
                 lineIndex: index + visibleMin,
                 current: currentLine === line,
                 currentTime,
@@ -52,9 +59,11 @@
               :key="`line-${index + visibleMin}-${
                 line.starttime
               }-${line.line.substr(0, 10)}`"
-              :ref="`${single ? 'transcript-line' : 'transcript-line-'}${
-                !single ? index + visibleMin : ''
-              }`"
+              :ref="
+                single
+                  ? 'transcript-line'
+                  : `transcript-line-${index + visibleMin}`
+              "
               @click="lineClick(line)"
               @removeLineClick="removeLine(index + visibleMin)"
               @trasnlationLineBlur="trasnlationLineBlur"
@@ -210,6 +219,31 @@ export default {
     };
   },
   computed: {
+    currentLineVisible() {
+      if (this.single) return true;
+      const transcriptLineRef = `transcript-line-${
+        this.currentLineIndex + this.visibleMin
+      }`;
+      const transcriptLine = this.$refs[transcriptLineRef]?.[0]?.$el;
+
+      if (transcriptLine) {
+        const scrollingContainer = transcriptLine.closest(".content-area");
+
+        if (scrollingContainer) {
+          const containerRect = scrollingContainer.getBoundingClientRect();
+          const elementRect = transcriptLine.getBoundingClientRect();
+
+          return (
+            elementRect.top >= containerRect.top &&
+            elementRect.bottom <= containerRect.bottom &&
+            elementRect.left >= containerRect.left &&
+            elementRect.right <= containerRect.right
+          );
+        }
+      }
+
+      return false;
+    },
     showYouNeedPro() {
       let showYouNeedPro = false;
       if (this.single) {
@@ -307,8 +341,10 @@ export default {
         this.visibleMax = visibleMax;
       }
       if (this.single) this.tokenizeNextLines();
-      let shouldScroll = !this.single && !this.paused
-      if (this.showSubsEditing && Math.abs(newValue - oldValue) < 5) shouldScroll = false;
+      let shouldScroll = !this.single && !this.paused;
+      if (this.showSubsEditing) {
+        if (this.currentLineVisible && Math.abs(newValue - oldValue) < 5) shouldScroll = false;
+      }
       if (shouldScroll) {
         this.scrollTo(this.currentLineIndex);
       }
@@ -445,7 +481,10 @@ export default {
         return;
       }
 
-      this.matchedParallelLines = this.matchLines(this.lines, this.parallellines);
+      this.matchedParallelLines = this.matchLines(
+        this.lines,
+        this.parallellines
+      );
     },
 
     matchLines(lines, parallelLines) {
@@ -612,7 +651,13 @@ export default {
       this.$emit("pause");
     },
     removeLine(lineIndex) {
-      this.lines.splice(lineIndex, 1);
+      let linesCopy = [...this.lines];
+      linesCopy.splice(lineIndex, 1);
+      this.$store.commit("shows/MODIFY_ITEM", {
+        item: this.video,
+        key: "lines",
+        value: linesCopy,
+      });
       if (this.matchedParallelLines)
         this.matchedParallelLines.splice(lineIndex, 1);
       this.emitUpdateTranslation();
@@ -708,9 +753,17 @@ export default {
         let line = this.lines[lineIndex];
         if (lineIndex === currentLineIndex) {
           delta = this.currentTime - currentLine.starttime;
-          Vue.set(line, "starttime", this.currentTime);
+          this.$store.commit("shows/MODIFY_ITEM", {
+            item: line,
+            key: "starttime",
+            value: this.currentTime,
+          });
         } else if (lineIndex > currentLineIndex) {
-          Vue.set(line, "starttime", (line.starttime += delta));
+          this.$store.commit("shows/MODIFY_ITEM", {
+            item: line,
+            key: "starttime",
+            value: line.starttime + delta,
+          });
         }
       }
       this.currentLine = currentLine;

@@ -52,8 +52,9 @@ export const mutations = {
     let show = state[collection][l2.code].find(s => s.id === showId)
     if (show.episodes) show.episodes = show.episodes.filter(e => e.youtube_id !== episode.youtube_id)
   },
-  MODIFY_VIDEO(state, { video, key, value }) {
-    Vue.set(video, key, value)
+  // Modify any item in the store, be it a show, a video, or a line in the subs.
+  MODIFY_ITEM(state, { item, key, value }) {
+    Vue.set(item, key, value)
   },
   ADD_EPISODES_TO_SHOW(state, { l2, collection = 'tvShows', showId, episodes, sort = '-date' }) {
     let show = state[collection][l2.code].find(s => s.id === showId)
