@@ -15,7 +15,7 @@
       :style="textSize !== 1 ? `font-size: ${textSize}em` : ''"
     >
       <div v-if="!single && showSubsEditing" class="transcript-line-edit mr-3">
-        <div style="font-size: 0.7em; color: #ccc">{{ Math.round(line.starttime * 100) / 100 }}</div>
+        <div class="transcript-line-edit-time">{{ Math.round(line.starttime * 100) / 100 }}</div>
         <b-button class="btn btn-small bg-danger text-white" @click="removeLineClick">
           <i class="fa fa-trash"></i>
         </b-button>
@@ -449,5 +449,10 @@ export default {
     opacity: 0;
     transform: scale(2.5);
   }
+}
+
+.transcript-line-edit-time {
+  font-size: 0.5em;
+  color: #ccc
 }
 </style>
