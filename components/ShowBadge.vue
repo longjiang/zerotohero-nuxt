@@ -9,7 +9,7 @@
       v-if="$adminMode && tvShow"
       :to="{
         name: 'show',
-        params: { type: 'tv-show', id: String(tvShow) },
+        params: { type: 'tv-show', id: String(tvShow.id) },
       }"
     >
       <i class="fa fa-tv mr-1" />
