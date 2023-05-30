@@ -67,7 +67,7 @@
                 <b-button
                   variant="ghost-dark-no-bg"
                   class="ml-1"
-                  @click="muted = !muted"
+                  @click="mute()"
                 >
                   <i class="fas fa-volume-mute" v-if="muted"></i>
                   <i class="fas fa-volume-up" v-else></i>
@@ -82,8 +82,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
 import { wide, isMobile } from "@/lib/utils";
+import { mapState } from "~/imports";
 
 export default {
   props: {
@@ -105,8 +105,15 @@ export default {
   },
   mounted() {
     this.wide = wide();
+    this.loadSettings();
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "settings/LOAD_SETTINGS") {
+        this.loadSettings();
+      }
+    });
   },
   computed: {
+    ...mapState("settings", ["muteAutoplay"]),
     isMobile() {
       return isMobile();
     },
@@ -215,6 +222,15 @@ export default {
     },
   },
   methods: {
+    loadSettings() {
+      if (this.muted !== this.muteAutoplay) {
+        this.muted = this.muteAutoplay;
+      }
+    },
+    mute() {
+      this.muted = !this.muted
+      this.$store.dispatch("settings/setGeneralSettings", { muteAutoplay: this.muted});
+    },
     togglePaused() {
       this.$refs.youtube.togglePaused();
     },

@@ -35,17 +35,8 @@
               "
               @videoUnavailable="onVideoUnavailable"
             />
-            <div
-              :class="{
-                'loader text-center pt-5 pb-5': true,
-                'd-none': videos,
-              }"
-              style="flex: 1"
-            >
-              <Loader :sticky="true" message="Loading videos..." />
-            </div>
             <!-- <Sale class="mb-4" v-if="$l2.code === 'zh'" /> -->
-            <h3 v-if="show">
+            <h3 v-if="show" class="mt-4">
               <span v-if="$adminMode" contenteditable="true" @blur="rename">
                 {{ show.title }}
               </span>
@@ -72,6 +63,15 @@
             </p>
           </div>
 
+          <div
+            :class="{
+              'loader text-center pt-5 pb-5': true,
+              'd-none': videos,
+            }"
+            style="flex: 1"
+          >
+            <Loader :sticky="true" message="Loading videos..." />
+          </div>
           <div class="col-sm-12 mt-3 mb-5">
             <div class="episode-list-wrapper">
               <div class="episode-filter row mb-3" v-if="videos">
@@ -127,7 +127,7 @@
                         @click="cycleSort"
                         title="Sort by..."
                         :class="{
-                          'btn': true,
+                          btn: true,
                           'btn-ghost-dark-no-bg': $skin === 'dark',
                           'btn-light': $skin === 'light',
                         }"
@@ -187,7 +187,13 @@
 </template>
 
 <script>
-import { randomArrayItem, unique, shuffle, uniqueByValue, LANGS_WITH_CONTENT } from "@/lib/utils";
+import {
+  randomArrayItem,
+  unique,
+  shuffle,
+  uniqueByValue,
+  LANGS_WITH_CONTENT,
+} from "@/lib/utils";
 import { tify, sify } from "chinese-conv";
 
 export default {
@@ -195,8 +201,7 @@ export default {
     id: [Number, String],
     type: String, // "tv-show" or "talk"
   },
-  computed: {
-  },
+  computed: {},
   data() {
     return {
       collection: this.type === "tv-show" ? "tv_show" : "talk",

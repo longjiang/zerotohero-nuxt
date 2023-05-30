@@ -66,6 +66,7 @@ export const defaultGeneralSettings = {
   hideDefinitions: false, // as used in the <HideDefs> component
   subsSearchLimit: true,
   openAIToken: undefined,
+  muteAutoplay: false,
   l2Settings: {}, // keyed by language
 };
 
