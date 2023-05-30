@@ -192,7 +192,7 @@ export default {
         window.addEventListener("resize", this.onResize);
       this.isElectron =
         navigator.userAgent.toLowerCase().indexOf(" electron/") > -1;
-      this.isExtension = !!window.chrome.extension;
+      this.isExtension = !!window?.chrome?.extension;
     },
     updateL2SettingsClasses() {
       if (
