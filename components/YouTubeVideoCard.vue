@@ -143,46 +143,7 @@
               <i class="fas fa-plus mr-2"></i>
               Add
             </b-button>
-            <router-link
-              :class="{
-                'youtube-video-card-badge ml-0': true,
-                'text-white bg-success': showSaved,
-                'text-success border-dashed border-success': !showSaved,
-              }"
-              v-if="video.tv_show"
-              :to="{
-                name: 'show',
-                params: { type: 'tv-show', id: String(video.tv_show.id) },
-              }"
-            >
-              <i class="fa fa-tv mr-2" />
-              {{ video.tv_show.title }}
-              <i
-                class="fas fa-times-circle ml-1"
-                v-if="$adminMode"
-                @click.stop.prevent="unassignShow('tv_show')"
-              />
-            </router-link>
-            <router-link
-              :class="{
-                'youtube-video-card-badge ml-0': true,
-                'text-white bg-success border-0': showSaved,
-                'bg-none text-success border-dashed': !showSaved,
-              }"
-              v-if="video.talk"
-              :to="{
-                name: 'show',
-                params: { type: 'talk', id: String(video.talk.id) },
-              }"
-            >
-              <i class="fas fa-graduation-cap mr-2"></i>
-              {{ video.talk.title }}
-              <i
-                class="fas fa-times-circle ml-1"
-                v-if="$adminMode"
-                @click.stop.prevent="unassignShow('talk')"
-              />
-            </router-link>
+            <ShowBadge :video="video" :showSaved="showSaved" />
             <div
               v-if="video.id && video.topic && topics"
               class="youtube-video-card-badge"

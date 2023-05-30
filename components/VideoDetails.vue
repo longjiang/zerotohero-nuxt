@@ -97,43 +97,6 @@
           </a>
         </span>
       </template>
-      
-      <router-link
-        class="ml-2 btn btn-small bg-secondary text-white"
-        v-if="$adminMode && video.tv_show"
-        :to="{
-          name: 'show',
-          params: { type: 'tv-show', id: String(video.tv_show.id) },
-        }"
-      >
-        <i class="fa fa-tv mr-2" />
-        {{ video.tv_show.title }}
-        <i
-          :class="{
-            'fas fa-times-circle ml-1': true,
-            'd-none': !$adminMode,
-          }"
-          @click.stop.prevent="unassignShow('tv_show')"
-        />
-      </router-link>
-      <router-link
-        class="ml-2 btn btn-small bg-secondary text-white"
-        v-if="$adminMode && video.talk"
-        :to="{
-          name: 'show',
-          params: { type: 'talk', id: String(video.talk.id) },
-        }"
-      >
-        <i class="fas fa-graduation-cap mr-2"></i>
-        {{ video.talk.title }}
-        <i
-          :class="{
-            'fas fa-times-circle ml-1': true,
-            'd-none': !$adminMode,
-          }"
-          @click.stop.prevent="unassignShow('talk')"
-        />
-      </router-link>
     </div>
   </div>
 </template>

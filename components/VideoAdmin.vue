@@ -144,9 +144,14 @@
               <i class="fas fa-check-circle mr-2 text-success"></i>
               Removed
             </span>
-            <b-button v-if="video?.subs_l2?.length" @click="syncSubs" size="small" variant="success"
-              ><span v-if="syncingSrt"><b-spinner small  /> Syncing</span><span v-else><i class="fas fa-sync"></i> Sync Subs</span></b-button
-            >
+            <b-button
+              v-if="video?.subs_l2?.length"
+              @click="syncSubs"
+              size="small"
+              variant="success"
+              ><span v-if="syncingSrt"><b-spinner small /> Syncing</span
+              ><span v-else><i class="fas fa-sync"></i> Sync Subs</span>
+            </b-button>
             <small
               :class="{
                 'd-none': !showSubsEditing && !enableTranslationEditing,
@@ -161,6 +166,7 @@
                 Translation
               </b-button>
             </small>
+            <ShowBadge :video="video"/>
           </template>
           <div class="video-admin-checkboxes">
             <b-form-checkbox
@@ -274,7 +280,7 @@
 
 <script>
 import { Drag, Drop } from "vue-drag-drop";
-import subsrt from 'subsrt';
+import subsrt from "subsrt";
 import {
   languageLevels,
   formatK,
@@ -371,11 +377,16 @@ export default {
       const srt_content = this.getSrt();
       const youtube_id = this.video.youtube_id;
       this.syncingSrt = true;
-      const res = await axios.post(`${PYTHON_SERVER}/sync-srt`, { youtube_id, srt_content });
+      const res = await axios.post(`${PYTHON_SERVER}/sync-srt`, {
+        youtube_id,
+        srt_content,
+      });
       if (res?.data) {
         const syncedSrt = res.data;
-        this.video.subs_l2 = this.$subs.parseSrt(syncedSrt)
-        this.$toast.success("Subtitles synced successfully.", { duration: 3000 });
+        this.video.subs_l2 = this.$subs.parseSrt(syncedSrt);
+        this.$toast.success("Subtitles synced successfully.", {
+          duration: 3000,
+        });
       }
       this.syncingSrt = false;
     },
@@ -384,11 +395,11 @@ export default {
         id: i + 1,
         start: item.starttime * 1000,
         end: (item.starttime + item.duration) * 1000,
-        text: item.line
+        text: item.line,
       }));
 
       let srt = subsrt.build(captions);
-      return srt
+      return srt;
     },
     clearSubs() {
       this.video.subs_l2 = undefined;
@@ -449,19 +460,6 @@ export default {
       if (this.autoBreakTranslationLines)
         translation = this.breaklines(translation);
       this.$emit("updateTranslation", translation);
-    },
-    async unassignShow(type) {
-      let payload = {};
-      payload[type] = null;
-      let data = await this.$directus.patchVideo({
-        l2Id: this.$l2.id,
-        id: this.video.id,
-        payload,
-      });
-      if (data) {
-        this.video[type] = undefined;
-        this.videoInfoKey++;
-      }
     },
     async save() {
       this.saving = true;
