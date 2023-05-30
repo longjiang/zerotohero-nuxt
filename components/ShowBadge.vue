@@ -60,16 +60,22 @@ export default {
     },
   },
   data() {
-    return {
-      
-    };
+    return {};
   },
   computed: {
     tvShow() {
-      return this.$store.getters["shows/tvShow"]({l2: this.$l2, id: this.video.tv_show});
+      if (this.video.tv_show)
+        return this.$store.getters["shows/tvShow"]({
+          l2: this.$l2,
+          id: this.video.tv_show.id || this.video.tv_show,
+        });
     },
     talk() {
-      return this.$store.getters["shows/talk"]({l2: this.$l2, id: this.video.talk});
+      if (this.video.talk)
+        return this.$store.getters["shows/talk"]({
+          l2: this.$l2,
+          id: this.video.talk.id || this.video.talk,
+        });
     },
   },
   methods: {
