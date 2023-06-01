@@ -260,6 +260,7 @@ export default {
                   this.seek(startAtRandomTime);
                 }
                 if (state === PLAYING) {
+                  this.neverPlayed = false;
                   if (window && window.speechSynthesis) {
                     window.speechSynthesis.cancel();
                   }
