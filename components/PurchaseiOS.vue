@@ -4,7 +4,7 @@
       <b-spinner small v-if="iOSPurchaseProcessing"></b-spinner>
       <span v-else>
         <i class="fab fa-apple mr-1"></i>
-        Pay & Upgrade to Pro Now
+        {{ $tb('Pay & Upgrade to Pro Now') }}
       </span>
     </b-button>
     <!-- <div class="mt-3">

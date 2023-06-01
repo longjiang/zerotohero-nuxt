@@ -22,7 +22,7 @@
         <div class="col-sm-12">
           <div v-if="type === 'sale'" class="bg-primary text-white p-3 rounded text-center mb-5" style="max-width: 46rem; margin: 0 auto; font-size: 1.2em" >
             <div><b>{{ $tb('VALENTINES DAY SALE!') }}</b> {{ $tb('50% off on lifetime Pro account upgrade') }}</div>
-            <small style="text-small">{{ $t('Offer ends:')}} {{ $d(new Date(2023, 1, 14), 'short') }}</small>
+            <small style="text-small">{{ $tb('Offer ends:')}} {{ $d(new Date(2023, 1, 14), 'short') }}</small>
           </div>
           <client-only>
             <div class="mt-4"></div>
