@@ -85,13 +85,13 @@
                 <span>{{ speed }}x</span>
               </b-button>
             </template>
-            <b-button
+            <!-- <b-button
               :variant="$skin"
               @click="translateAll()"
               :title="$t('Translate') + ' (T)'"
             >
               <i class="fas fa-language"></i>
-            </b-button>
+            </b-button> -->
           </b-button-group>
         </client-only>
       </div>
@@ -406,10 +406,10 @@ export default {
             this.toggleSpeed();
             return false;
           }
-          if (["KeyT"].includes(e.code)) {
-            this.translateAll();
-            return false;
-          }
+          // if (["KeyT"].includes(e.code)) {
+          //   this.translateAll();
+          //   return false;
+          // }
         }
       }
     },

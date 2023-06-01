@@ -49,7 +49,7 @@
     "he": "^1.2.0",
     "html-entities": "^1.4.0",
     "idle-vue": "^2.0.5",
-    "iframe-translator": "^0.3.4",
+    "iframe-translator": "^0.3.6",
     "jquery": "^3.6.0",
     "js-sha256": "^0.9.0",
     "leaflet": "^1.7.1",

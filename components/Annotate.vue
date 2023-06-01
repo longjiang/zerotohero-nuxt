@@ -171,8 +171,7 @@
           />
           <span @click="readAloud">{{ $t("Read Aloud") }}</span>
         </div>
-
-        <div class="annotate-menu-modal-item">
+        <!-- <div class="annotate-menu-modal-item">
           <span
             class="annotator-button annotator-translate focus-exclude"
             title="Translate Inline"
@@ -182,7 +181,7 @@
             <i class="fas fa-language"></i>
           </span>
           <span @click="translateClick">{{ $t("Get Translation") }}</span>
-        </div>
+        </div> -->
         <div class="annotate-menu-modal-item">
           <span
             :class="{
@@ -220,13 +219,11 @@ import VRuntimeTemplate from "v-runtime-template";
 import SmartQuotes from "smartquotes";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 import { transliterate as tr } from "transliteration";
-import { mapState } from "vuex";
 import { getClient } from "iframe-translator";
 import {
   highlightMultiple,
   isMobile,
   timeout,
-  uniqueByValue,
   logError,
   breakSentences,
   l2LevelName,
