@@ -922,6 +922,11 @@ export default {
   background: none;
   border: none;
   opacity: 0.5;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+    background-color: #cccccc33;
+  }
 }
 
 .annotate-menu-modal {
