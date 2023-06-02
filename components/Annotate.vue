@@ -150,6 +150,21 @@
     >
       <div class="annotate-menu-modal">
         <div class="annotate-menu-modal-item">
+          <span
+            :class="{
+              'annotator-button annotator-text-mode focus-exclude': true,
+              active: textMode,
+            }"
+            title="Lookup As Phrase"
+            @click="lookupAsPhraseClick"
+          >
+            <i class="fas fa-search"></i>
+          </span>
+          <span @click.stop.prevent="lookupAsPhraseClick">
+            {{ $t("Lookup As Phrase") }} <i class="fas fa-chevron-right ml-1" />
+          </span>
+        </div>
+        <div class="annotate-menu-modal-item">
           <Saved
             :item="phraseItem(text, translationData)"
             store="savedPhrases"
@@ -383,6 +398,14 @@ export default {
     },
   },
   methods: {
+    lookupAsPhraseClick() {
+      this.$router.push({
+        name: "phrase",
+        params: {
+          term: this.text,
+        },
+      });
+    },
     highlightMultiple(...args) {
       return highlightMultiple(...args);
     },
