@@ -186,7 +186,7 @@
           />
           <span @click="readAloud">{{ $t("Read Aloud") }}</span>
         </div>
-        <!-- <div class="annotate-menu-modal-item">
+        <div class="annotate-menu-modal-item">
           <span
             class="annotator-button annotator-translate focus-exclude"
             title="Translate Inline"
@@ -196,7 +196,7 @@
             <i class="fas fa-language"></i>
           </span>
           <span @click="translateClick">{{ $t("Get Translation") }}</span>
-        </div> -->
+        </div>
         <div class="annotate-menu-modal-item">
           <span
             :class="{
@@ -242,6 +242,7 @@ import {
   logError,
   breakSentences,
   l2LevelName,
+  PYTHON_SERVER
 } from "@/lib/utils";
 
 export default {
@@ -473,14 +474,27 @@ export default {
       this.hideMenuModal();
     },
     async translateClick() {
-      let text = this.text;
-      let iframeTranslationClient;
-      let translation;
       this.hideMenuModal();
+      this.translationLoading = true;
+      this.$emit("translationLoading", true);
+      let translation = await this.translateWithApi(this.text)
+      // let translation = await this.trnslateWithIframe(this.text)
+      this.setTranslation(translation);
+    },
+    async translateWithApi() {
+      // post to api
+      let res = await axios.post(`${PYTHON_SERVER}/translate`, {
+        text: this.text,
+        l1: this.$l1.code,
+        l2: this.$l2.code,
+      })
+      if (res?.data?.translated_text) return res.data.translated_text
+    },
+    async trnslateWithIframe(text) {
+      let translation;
+      let iframeTranslationClient;
       try {
         // https://www.npmjs.com/package/iframe-translator
-        this.translationLoading = true;
-        this.$emit("translationLoading", true);
         const timeout = setTimeout(() => {
           this.setTranslation(translation);
           clearTimeout(timeout);
@@ -491,9 +505,7 @@ export default {
           this.$l1.code === "zh" ? "zh-CN" : this.$l1.code
         );
         iframeTranslationClient.destroy();
-        this.setTranslation(translation);
       } catch (err) {
-        this.setTranslation();
         try {
           iframeTranslationClient.destroy();
         } catch (err) {
@@ -501,6 +513,7 @@ export default {
         }
         logError(err);
       }
+      return translation;
     },
     /**
      * @param {Number} startFrom Starting time in seconds
