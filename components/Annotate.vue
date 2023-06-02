@@ -155,13 +155,13 @@
               'annotator-button annotator-text-mode focus-exclude': true,
               active: textMode,
             }"
-            title="Lookup As Phrase"
+            title="Look up as Phrase"
             @click="lookupAsPhraseClick"
           >
             <i class="fas fa-search"></i>
           </span>
           <span @click.stop.prevent="lookupAsPhraseClick">
-            {{ $t("Lookup As Phrase") }} <i class="fas fa-chevron-right ml-1" />
+            {{ $t("Look up as Phrase") }} <i class="fas fa-chevron-right ml-1" />
           </span>
         </div>
         <div class="annotate-menu-modal-item">
