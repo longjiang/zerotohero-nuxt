@@ -231,7 +231,6 @@
                     url: resource.url,
                     thumbnail: resource.thumbnail.data.full_url,
                   }"
-                  :internal="true"
                 />
               </div>
             </div>
