@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/admin/manage-subscriptions/:start?',
+    path: '/:l1/:l2/admin/manage-subscriptions',
     props: true
   }
 </router>
