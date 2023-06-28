@@ -90,7 +90,7 @@
       </div>
       <div>{{ $tb(plan.description) }}</div>
       <div v-if="plan.name === 'lifetime' && SALE" class="sale-end-date">
-        <div>{{ $tb('Offer ends:')}} {{ $db(new Date(2023, 7, 5), 'short') }}</div>
+        <div>{{ $tb('Offer ends:')}} {{ $db(new Date(2023, 6, 5), 'short') }}</div>
       </div>
     </div>
   </div>
