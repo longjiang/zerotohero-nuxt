@@ -1,5 +1,55 @@
 # Changelog
 
+## [2.19.7] - 2023-06-14
+### Fixed
+- Corrected the URL scheme in the manage subscriptions module.
+- Reverted back to directusvps after server issue was fixed.
+### Added
+- Admin interface for updating user subscriptions.
+- Option to "look up as phrase" in annotate menu.
+- Use of Microsoft translate API.
+
+## [2.19.6] - 2023-06-01
+### Fixed
+- Various bugs, including issues with the dashboard on Safari and show badge functionality.
+- Vuex errors resolved.
+### Added
+- Localizations.
+- Features to VideoHero and video admin interface.
+
+## [2.19.5] - 2023-05-27
+### Fixed
+- Various errors and bugs, including issues with language switching and grammar loading.
+### Added
+- YouTube integration improvements, such as caching and API retrieval.
+- Features for admin to auto-synchronize subs and users to import videos or playlists from search.
+
+## [2.19.4] - 2023-05-23
+### Fixed
+- Various errors and bugs, including issues with YouTube video syncing.
+### Added
+- Local dictionaries and grammar files.
+- Improvements to playlist features.
+
+## [2.19.3] - 2023-05-23
+### Fixed
+- Bug with YouTubeVideoList not displaying due to v-if.
+- Playlist update bug.
+### Added
+- Playlist editing features, including the ability to reorder and delete videos from a playlist.
+- Shareable playlist URL.
+
+
+## [2.19.2] - 2023-05-22
+
+### Fixed
+- Bug fixes.
+
+## [2.19.2] - 2023-05-22
+
+### Fixed
+- Bug fixes.
+
 ## [2.19.1] - 2023-05-21
 
 ### Fixed
