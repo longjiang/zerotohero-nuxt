@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     goToAbout() {
-      this.$router.push({ name: 'about' });
+      if (this.$l1 && this.$l2) this.$router.push({ name: 'about' });
     },
   },
 };
