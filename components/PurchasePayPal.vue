@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { PYTHON_SERVER, SALE } from "@/lib/utils/servers";
+import { PYTHON_SERVER, SALE } from "@/lib/utils";
 import { HOST } from "@/lib/utils/url";
 
 export default {

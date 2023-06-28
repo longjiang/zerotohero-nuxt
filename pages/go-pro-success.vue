@@ -99,12 +99,6 @@ export default {
   async mounted() {
     if (this.$auth.loggedIn) {
       let email = this.$auth.user?.email;
-      if (email) {
-        let url = `${PYTHON_SERVER}upgrade_mailer_lite_subscriber_to_pro`;
-        let res = await axios
-          .post(url, { email })
-          .catch((err) => logError(err));
-      }
       await this.$store.dispatch(
         "subscriptions/checkSubscription",
         this.$auth.user.id
