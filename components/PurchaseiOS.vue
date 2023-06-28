@@ -26,14 +26,6 @@ import axios from "axios";
 const IOS_IAP_PRODUCT_ID = "pro";
 
 export default {
-  prop: {
-    sale: {
-      default: false
-    },
-    test: {
-      default: false
-    },
-  },
   data() {
     return {
       iOSPurchaseProcessing: false,

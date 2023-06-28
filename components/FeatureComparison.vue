@@ -76,12 +76,8 @@
 
 <script>
 import { Capacitor } from "@capacitor/core";
+
 export default {
-  props: {
-    sale: {
-      default: false,
-    },
-  },
   computed: {
     native() {
       return Capacitor.isNativePlatform();

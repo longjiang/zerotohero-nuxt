@@ -48,26 +48,14 @@
 </template>
 
 <script>
-import { PYTHON_SERVER } from "@/lib/utils/servers";
+import { PYTHON_SERVER, SALE } from "@/lib/utils/servers";
 import { HOST } from "@/lib/utils/url";
 
 export default {
-  props: {
-    sale: {
-      default: false
-    },
-    test: {
-      default: false
-    },
-  },
   data() {
-    // Legacy Pricing
-    // let defaultPrice = "89.00"
-    // let discountPrice = "44.50"
-    // New pricing in effect on 2023-04-10
     let defaultPrice = "119.00"
-    let discountPrice = "59.50"
-    let price = this.sale ? discountPrice : defaultPrice
+    let discountPrice = "83.00" // 30% off
+    let price = SALE ? discountPrice : defaultPrice
     return {
       price,
       paypalPaymentStatus: undefined,

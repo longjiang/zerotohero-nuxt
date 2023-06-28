@@ -5,39 +5,104 @@
       :key="index"
       :class="{
         'pricing-card': true,
+        sale: SALE && plan.name === 'lifetime',
         selected: selectedPlan && selectedPlan.name === plan.name,
       }"
       @click="selectPlan(plan)"
     >
       <div class="price" style="white-space: nowrap">
-        <span
-          ><span style="position: relative; bottom: 1.2rem">{{
-            plan.currency
-          }}</span>
-          <b style="font-size: 2.68rem">{{ plan.amount }}</b></span
-        >
-        <span
-          style="
-            display: inline-block;
-            position: relative;
-            bottom: 1.2rem;
-            margin-left: 0.1rem;
-            text-align: left;
-          "
-          ><span style="display: block; margin-bottom: 0px; line-height: 0.4">
-            {{ $tb(plan.intervalText) }}
-          </span>
-        </span>
+        <div v-if="plan.name !== 'lifetime' || !SALE">
+          <span>
+            <span style="position: relative; bottom: 1.2rem">{{
+              plan.currency
+            }}</span>
+            <b style="font-size: 2.68rem">{{ plan.amount }}</b></span>
+          <span
+            style="
+              display: inline-block;
+              position: relative;
+              bottom: 1.2rem;
+              margin-left: 0.1rem;
+              text-align: left;
+            "
+            ><span
+              style="display: block; margin-bottom: 0px; line-height: 0.4"
+              >{{ $tb(plan.intervalText) }}</span
+            ></span
+          >
+        </div>
+        <div v-else>
+          <div v-if="plan.name === 'lifetime'" class="sale-banner">{{ $tb('{name} SALE!', {name: $tb('SUMMER')}) }}</div>
+          <div style="margin-top: 1rem; margin-bottom: -0.5em">
+            <span>
+              <span
+                style="
+                  position: relative;
+                  text-decoration: line-through;
+                "
+                >{{ plan.currency }}</span
+              >
+              <b style="text-decoration: line-through">{{
+                plan.amount
+              }}</b></span
+            >
+            <span
+              style="
+                display: inline-block;
+                position: relative;
+                margin-left: 0.1rem;
+                text-align: left;
+                text-decoration: line-through;
+              "
+            >
+              <span
+                style="display: block; margin-bottom: 0px; line-height: 0.4"
+                >{{ $tb(plan.intervalText) }}</span
+              >
+            </span>
+          </div>
+          <div>
+            <span
+              ><span style="position: relative; bottom: 1.2rem; color: red">{{
+                plan.currency
+              }}</span
+              ><b style="font-size: 2.68rem; color: red">83</b></span
+            ><span
+              style="
+                display: inline-block;
+                position: relative;
+                bottom: 1.2rem;
+                margin-left: 0.1rem;
+                text-align: left;
+              "
+              ><span
+                style="
+                  display: block;
+                  margin-bottom: 0px;
+                  line-height: 0.4;
+                  color: red;
+                "
+                >{{ $tb(plan.intervalText) }}</span
+              ></span
+            >
+          </div>
+        </div>
       </div>
       <div>{{ $tb(plan.description) }}</div>
+      <div v-if="plan.name === 'lifetime' && SALE" class="sale-end-date">
+        <div>{{ $tb('Offer ends:')}} {{ $db(new Date(2023, 7, 5), 'short') }}</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { SALE } from "@/lib/utils/variables";
+
 export default {
   data() {
     return {
+      SALE,
       selectedPlan: null,
       pricingPlans: [
         {
@@ -73,8 +138,7 @@ export default {
       ],
     };
   },
-  computed: {
-  },
+  computed: {},
   methods: {
     selectPlan(plan) {
       this.selectedPlan = plan;
@@ -102,11 +166,24 @@ export default {
   background: white;
   color: #666;
   cursor: pointer;
-  // add a matching green border when the card is hovered
   border: 3px solid rgba($primary-color, 0);
   &:hover,
   &.selected {
     border: 3px solid $primary-color;
   }
+}
+
+.sale-banner {
+  background: red;
+  color: white;
+  width: 100%;
+  padding: 2px 5px;
+  font-weight: bold;
+}
+
+.sale-end-date {
+  color: red;
+  font-size: 0.8em;
+  margin-top: 10px;
 }
 </style>

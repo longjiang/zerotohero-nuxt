@@ -59,5 +59,15 @@ Vue.mixin({
       if (code && this.$languages) return this.$languages.translate(text, code, data);
       else return text;
     },
+    // Localize a date into the browser language
+    $db(date, data = {}) {
+      let code = this.$l1 ? this.$l1.code : this.$browserLanguage ? this.$browserLanguage : 'en'
+      
+      // options for the date format
+      let options = { year: 'numeric', month: 'long', day: 'numeric' };
+
+      // create a new Intl.DateTimeFormat with the given locale (code) and options, then format the date
+      return new Intl.DateTimeFormat(code, options).format(date);
+    },
   },
 });

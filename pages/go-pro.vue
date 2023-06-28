@@ -20,13 +20,13 @@
     <div class="pt-5 pb-5 container">
       <div class="row">
         <div class="col-sm-12">
-          <div v-if="type === 'sale'" class="bg-primary text-white p-3 rounded text-center mb-5" style="max-width: 46rem; margin: 0 auto; font-size: 1.2em" >
-            <div><b>{{ $tb('VALENTINES DAY SALE!') }}</b> {{ $tb('50% off on lifetime Pro account upgrade') }}</div>
-            <small style="text-small">{{ $tb('Offer ends:')}} {{ $d(new Date(2023, 1, 14), 'short') }}</small>
+          <div v-if="SALE" class="text-white p-3 rounded text-center mb-5" style="max-width: 46rem; margin: 0 auto; font-size: 1.2em; background: red" >
+            <div><b>{{ $tb('{name} SALE!', {name: $tb('SUMMER')}) }}</b> {{ $tb('{discount} on lifetime Pro account', { discount: $tb('30% off') }) }}</div>
+            <small style="text-small">{{ $tb('Offer ends:')}} {{ $db(new Date(2023, 7, 5), 'short') }}</small>
           </div>
           <client-only>
             <div class="mt-4"></div>
-            <FeatureComparison :type="type" />
+            <FeatureComparison />
             <div v-if="$auth.loggedIn && $auth.user" class="text-center text-white">
               <div v-if="pro">
                 <h5 class="mb-3">🎉 {{ $tb('You are already Pro!') }} 🚀 {{ $tb('Enjoy!') }}</h5>
@@ -44,15 +44,15 @@
                   <section class="mt-3" v-if="selectedPlan" id="payment-methods" ref="paymentMethods">
                     <div v-if="native">
                       <div class="pt-4 pb-5">
-                        <PurchaseiOS :type="type" :test="TEST" :plan="selectedPlan.name" v-if="selectedPlan.name === 'lifetime'" />
+                        <PurchaseiOS v-if="selectedPlan.name === 'lifetime'" />
                         <div v-else class="alert alert-warning" style="max-width: 15.5rem; margin: 0 auto;">⚠️ {{ $tb('Only the lifetime plan is available as an in-app purchase.') }}</div>
                       </div>
                     </div>
                     <div v-else>
                       <div>
                         <p>{{ $tb('Please choose your method of payment.') }}</p>
-                        <PurchaseStripe  :type="type" :test="TEST" :plan="selectedPlan.name" />
-                        <PurchasePayPal v-if="selectedPlan.name === 'lifetime'"  :type="type" :test="TEST" :plan="selectedPlan.name" />
+                        <PurchaseStripe  :plan="selectedPlan.name" />
+                        <PurchasePayPal v-if="selectedPlan.name === 'lifetime'" :plan="selectedPlan.name" />
                       </div>
                     </div>
                   </section>
@@ -94,14 +94,14 @@
 
 <script>
 import { Capacitor } from "@capacitor/core";
-import { timeout, background, TEST } from "@/lib/utils";
+import { timeout, background, TEST, SALE } from "@/lib/utils";
 
 export default {
   data() {
     return {
       TEST,
+      SALE,
       loading: false,
-      type: 'regular',
       selectedPlan: undefined,
     };
   },
