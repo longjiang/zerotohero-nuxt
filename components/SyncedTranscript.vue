@@ -472,35 +472,65 @@ export default {
         this.$emit("updateTranslation", updatedLines);
       }
     },
+    
     /**
      * Match parallel lines (translation lines) to L2 lines.
      */
-    matchParallelLines() {
+    
+     matchParallelLines() {
+      // If there are no translated lines, set matchedParallelLines to an empty array
       if (!this.parallellines) {
         this.matchedParallelLines = [];
         return;
       }
 
+      // If translated lines exist, match them with the original lines
       this.matchedParallelLines = this.matchLines(
         this.lines,
         this.parallellines
       );
     },
 
-    matchLines(lines, parallelLines) {
+    matchLines(lines, parallelLines, tolerance = 1.0) { // tolerance in seconds
       let matchedLines = [];
-      lines.forEach((line) => {
+      let i = 0; // Counter for the parallel lines
+
+      // Loop through each original line
+      for (let line of lines) {
         let matchedLine = "";
-        parallelLines.forEach((parallelLine) => {
-          if (Math.abs(line.starttime - parallelLine.starttime) < 0.1) {
-            matchedLine = parallelLine.line;
+        let hasMatched = false;
+
+        // Loop through each translated line starting from where we left off in the last iteration
+        while (i < parallelLines.length) {
+          let difference = line.starttime - parallelLines[i].starttime;
+          
+          // If the start times of the original line and the parallel line are close enough
+          if (Math.abs(difference) <= tolerance) {
+            matchedLine += " " + parallelLines[i].line;
+            hasMatched = true;
           }
-        });
-        if (matchedLine === "" && matchedLines.length < parallelLines.length) {
-          matchedLine = ""; // No corresponding match found, so add an empty line
+
+          // If the difference is negative, this means we've found a parallel line that is
+          // ahead in time compared to the current line. Therefore, we break from the loop.
+          if (difference < 0) {
+            break;
+          }
+          // Otherwise, we move to the next parallel line
+          else {
+            i++;
+          }
         }
-        matchedLines.push(matchedLine);
-      });
+
+        // If no match is found, add an empty line to represent no corresponding match
+        if (!hasMatched) {
+          matchedLine = "";
+        }
+
+        // Add the matched line (translated line or empty string) to the array of all matched lines
+        matchedLines.push(matchedLine.trim()); // Using trim() to remove leading space in case we concatenated lines
+      }
+
+      // Return all matched lines
       return matchedLines;
     },
 
