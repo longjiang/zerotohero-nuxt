@@ -54,8 +54,13 @@
                     <div v-else>
                       <div>
                         <p>{{ $tb('Please choose your method of payment.') }}</p>
-                        <PurchaseStripe  :plan="selectedPlan.name" />
-                        <PurchasePayPal v-if="selectedPlan.name === 'lifetime'" :plan="selectedPlan.name" />
+                        <template v-if="$auth.user?.id">
+                          <PurchaseStripe  :plan="selectedPlan.name" />
+                          <PurchasePayPal v-if="selectedPlan.name === 'lifetime'" :plan="selectedPlan.name" />
+                        </template>
+                        <div v-else class="alert alert-warning">
+                          {{ $tb('Your account is not logged in. Please log in to purchase.') }} <a href="/login?redirect=/go-pro">{{ $tb('Login') }}</a>
+                        </div>
                       </div>
                     </div>
                   </section>

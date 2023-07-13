@@ -70,7 +70,7 @@ export default {
       }
     },
     stripeSuccessURL() {
-      return this.$auth.user ? `${PYTHON_SERVER}stripe_checkout_success?user_id=${this.$auth.user.id}&host=${HOST}&session_id={CHECKOUT_SESSION_ID}` : undefined // Make sure we have the user's id
+      return this.$auth.user?.id ? `${PYTHON_SERVER}stripe_checkout_success?user_id=${this.$auth.user.id}&host=${HOST}&session_id={CHECKOUT_SESSION_ID}` : undefined // Make sure we have the user's id
     }
   },
   data() {
