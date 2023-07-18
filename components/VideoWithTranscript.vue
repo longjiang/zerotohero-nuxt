@@ -51,7 +51,7 @@
           :class="{
             'video-controls': true,
             overlay: useOverlay,
-            hovering,
+            shown: overlayControlsVisible,
           }"
           ref="videoControls"
           v-bind="{
@@ -140,8 +140,8 @@
         :class="{
           'video-transcript-wrapper': true,
           [`align-subs-${overlaySubsAlign}`]: useOverlay,
+          'controls-shown': overlayControlsVisible,
           overlay: useOverlay,
-          hovering,
         }"
         ref="videoTranscriptWrapper"
       >
@@ -441,6 +441,10 @@ export default {
           return true;
         }
       }
+    },
+
+    overlayControlsVisible() {
+      return this.hovering || this.paused;
     },
 
     startTimeOrLineIndex() {
@@ -949,7 +953,7 @@ export default {
     .video-transcript-wrapper.align-subs-bottom {
       bottom: 6rem; // Make room for the controls
       top: auto;
-      &:not(.hovering) {
+      &:not(.controls-shown) {
         bottom: 1rem;
       }
     }
@@ -1005,7 +1009,7 @@ export default {
       right: 0;
       opacity: 0;
 
-      &.hovering {
+      &.shown {
         opacity: 1;
       }
 
