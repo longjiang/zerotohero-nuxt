@@ -18,7 +18,7 @@
         class="youtube-icon"
         v-if="!posterOnly && !autoplay && !loading"
       ></div>
-      <div class="youtube-screen-blocker" @click="togglePaused" v-if="!neverPlayed"></div>
+      <!-- <div class="youtube-screen-blocker" @click="togglePaused" v-if="!neverPlayed"></div> -->
     </div>
     <div class="placeholder-message" :class="{ 'd-none': youtubeScriptLoaded }">
       <client-only>
