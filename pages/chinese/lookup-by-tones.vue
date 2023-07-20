@@ -148,6 +148,12 @@ export default {
       this.crunching = true;
       let dictionary = await this.$getDictionary();
       let words = await dictionary.lookupByTones(this.tonePattern);
+      words = words.sort((a, b) => {
+        let aLevel = (!a.level || a.level === 'outside') ? 7 : Number(a.level);
+        let bLevel = (!b.level || b.level === 'outside') ? 7 : Number(b.level);
+        console.log(aLevel, bLevel, aLevel - bLevel);
+        return aLevel - bLevel
+      });
       this.crunching = false;
       return (this.wordsByTones = words);
     },
