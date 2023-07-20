@@ -349,4 +349,47 @@ class HskCedictDictionary extends BaseDictionary {
   listCharacters() {
     return this.characters;
   }
+
+  /**
+   * Lookup words by tones
+   * @param {Array} words - An array of words to search in
+   * @param {String} tonePattern - A string of numbers representing the tones to search for
+   * @returns {Array} An array of matching words
+   * @example
+   * // Returns all words with the pattern 3-2-4
+   * lookupByTones('324');
+   */
+  lookupByTones(tonePattern) {
+    let words = this.words;
+  
+    // Define a map for tones
+    const tonesMap = {
+        '1': '[^ ]*[āēīōūǖ][^ ]*',
+        '2': '[^ ]*[áéíóúǘ][^ ]*',
+        '3': '[^ ]*[ǎěǐǒǔǚ][^ ]*',
+        '4': '[^ ]*[àèìòùǜ][^ ]*',
+        '5': '[^ āēīōūǖáéíóúǘǎěǐǒǔǚàèìòùǜ]*' // Neutral tone, no accent
+    };
+  
+    // Build the regular expression pattern
+    let regexPattern = tonePattern.split('')
+        .map(tone => `${tonesMap[tone]} `) // Adding space after each tone
+        .join('');
+  
+    // Add beginning and end to the pattern
+    regexPattern = `^${regexPattern.trim()}$`;
+  
+    // Create the regular expression object
+    let regex = new RegExp(regexPattern, 'i'); // Trim to remove trailing space
+  
+    // Use the filter() function and the test() method to find the matching words
+    let matchingWords = words.filter(word => {
+      let syllables = word.pinyin.trim().split(' ');
+      return syllables.length === tonePattern.length && regex.test(word.pinyin);
+    });
+  
+    // Return the array of matching words
+    return matchingWords;
+  }
+  
 }

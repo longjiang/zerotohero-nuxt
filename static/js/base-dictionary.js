@@ -418,4 +418,8 @@ class BaseDictionary {
       return this.inflector.getAccentForm(...arguments);
     }
   }
+
+  lookupByTones() {
+    // Only implemented for Chinese
+  }
 }
