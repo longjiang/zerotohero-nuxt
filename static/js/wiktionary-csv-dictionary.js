@@ -144,7 +144,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
   }
 
   lookupMultiple(text, ignoreAccents = false) {
-    const textLower = text.toLowerCase();
+    let textLower = text.toLowerCase();
     if (typeof ignoreAccents === "undefined") ignoreAccents = !isAccentCritical(this.l2);
     if (ignoreAccents) textLower = stripAccents(textLower);
     let words = this.searchIndex[textLower];
