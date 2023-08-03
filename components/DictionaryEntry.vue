@@ -8,7 +8,8 @@
       >
         <template #title>
           <ChooseSearchTerms
-            v-model="selectedSearchTerms"
+            @selectedSearchTerms = "selectedSearchTerms = $event"
+            @wholePhraseOnly = "wholePhraseOnly = $event"
             :initialSelectedTerms="selectedSearchTerms"
             :allSearchTerms="allSearchTerms"
           />
@@ -24,10 +25,10 @@
             ref="searchSubs"
             skin="dark"
             :level="entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk"
-            :key="`subs-search-${entry.id}`"
+            :key="`subs-search-${entry.id}-${wholePhraseOnly}-${selectedSearchTerms.join('-')}`"
             :terms="selectedSearchTerms"
             :tvShow="tvShow"
-            :exact="exact"
+            :exact="wholePhraseOnly"
             :context="context"
           />
         </template>
@@ -226,10 +227,10 @@ export default {
       default: undefined,
     },
     exact: {
-      default: false,
+      default: false, // Whether to search for the exact phrase
     },
     exactPhrase: {
-      type: String,
+      type: String, // The phrase to search for exactly, set from the phrasebook-phrase page
     },
   },
   data() {
@@ -249,6 +250,7 @@ export default {
       searchSubsReady: false,
       renderSearchSubs: true,
       searchTermsWatcherActivated: false,
+      wholePhraseOnly: this.exact ? true : false,
     };
   },
   computed: {
@@ -361,7 +363,7 @@ export default {
       if (this.$dictionaryName === "hsk-cedict") {
         return unique([this.entry.simplified, this.entry.traditional]);
       }
-      if (this.exact && this.exactPhrase) return [this.exactPhrase];
+      if (this.wholePhraseOnly && this.exactPhrase) return [this.exactPhrase];
       let terms;
       if (this.$dictionaryName === "edict") {
         terms = [this.entry.head];

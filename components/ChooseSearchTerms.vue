@@ -32,7 +32,13 @@
           {{ term }}
         </b-form-checkbox>
       </b-form-checkbox-group>
-      
+      <hr />
+      <b-form-checkbox
+        v-model="wholePhraseOnly"
+        class="d-block mb-1"
+      >
+        {{ $t('Whole Phrase Only') }}
+      </b-form-checkbox>
     </b-modal>
   </span>
 </template>
@@ -42,16 +48,22 @@
 export default {
   props: {
     allSearchTerms: Array,
-    initialSelectedTerms: Array
+    initialSelectedTerms: Array,
+    initialWholePhraseOnly: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
-      selectedSearchTerms: this.initialSelectedTerms
+      selectedSearchTerms: this.initialSelectedTerms,
+      wholePhraseOnly: this.initialWholePhraseOnly
     };
   },
   methods: {
     onModalHide() {
-      this.$emit('input', this.selectedSearchTerms)
+      this.$emit('selectedSearchTerms', this.selectedSearchTerms)
+      this.$emit('wholePhraseOnly', this.wholePhraseOnly)
     },
     showModal() {
       this.$refs["choose-search-terms-modal"].show();
