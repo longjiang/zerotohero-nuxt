@@ -561,8 +561,13 @@ export default {
     },
     calculateLimit() {
       // No limit unless set
-      if (!this.$store.state.settings.subsSearchLimit) return this.maxNumOfHitsForSanity;
-      else {
+      if (!this.$store.state.settings.subsSearchLimit) {
+        if (this.exact) {
+          return 2000;
+        } else {
+          return this.maxNumOfHitsForSanity;
+        }
+      } else {
         if (this.exact) {
           // Exact search while limit is set
           let l2HasScriptLearningFeature = ["hy", "ka", "ko"].includes(
@@ -606,13 +611,14 @@ export default {
       this.checking = true;
       let terms = this.terms;
       let mustIncludeYouTubeId = this.context?.youtube_id;
+      let limit = this.calculateLimit();
       let hits = await this.$subs.searchSubs({
         terms,
         excludeTerms: this.excludeTerms,
         langId: this.$l2.id,
         adminMode: false,
         continua: this.$l2.continua,
-        limit: this.calculateLimit(),
+        limit,
         tvShowFilter: this.tvShowFilter,
         talkFilter: this.talkFilter,
         exact: this.exact,
