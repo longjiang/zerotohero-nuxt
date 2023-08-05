@@ -130,6 +130,46 @@ export default {
       );
       return res;
     },
+    analytics() {
+      this.$gtag.event('user_register')
+    },
+    async onUserRegistered() {
+      this.analytics()
+
+      // Show success toast message
+      this.$toast.success(
+        this.$tb("Registration successful. Welcome aboard, {name}!", {
+          name: this.form.first_name,
+        }),
+        {
+          position: "top-center",
+          duration: 5000,
+        }
+      );
+
+      // Fetch or create user data
+      await this.$directus.fetchOrCreateUserData(); 
+
+      // Send data to MailerLite
+      await this.mailerLiteWebHook();
+
+      this.redirectAfterRegistration();
+    },
+    redirectAfterRegistration() {
+      // Redirect the user to the appropriate page
+      if (this.$route.query.redirect) {
+        this.$router.push({ path: this.$route.query.redirect });
+      } else {
+        if (this.$l1 && this.$l2) {
+          this.$router.push({
+            name: "profile",
+            params: { l1: this.$l1.code, l2: this.$l2.code },
+          });
+        } else {
+          this.$router.push("/dashboard");
+        }
+      }
+    },
     async onSubmit(event) {
       try {
         this.loading = true;
@@ -154,36 +194,7 @@ export default {
               let user = userResponse.data.data;
               this.$auth.setUser(user);
 
-              // Show success toast message
-              this.$toast.success(
-                this.$tb("Registration successful. Welcome aboard, {name}!", {
-                  name: this.form.first_name,
-                }),
-                {
-                  position: "top-center",
-                  duration: 5000,
-                }
-              );
-
-              // Send data to MailerLite
-              await this.mailerLiteWebHook();
-
-              // Fetch or create user data
-              await this.$directus.fetchOrCreateUserData(); 
-
-              // Redirect the user to the appropriate page
-              if (this.$route.query.redirect) {
-                this.$router.push({ path: this.$route.query.redirect });
-              } else {
-                if (this.$l1 && this.$l2) {
-                  this.$router.push({
-                    name: "profile",
-                    params: { l1: this.$l1.code, l2: this.$l2.code },
-                  });
-                } else {
-                  this.$router.push("/dashboard");
-                }
-              }
+              this.onUserRegistered();
             }
           }
         }
