@@ -90,9 +90,6 @@
 </template>
 
 <script>
-import { PYTHON_SERVER } from "@/lib/utils/servers";
-import { logError } from "@/lib/utils/error";
-import axios from "axios";
 import { background } from "@/lib/utils/background";
 
 export default {
