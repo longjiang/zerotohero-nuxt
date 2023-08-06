@@ -178,6 +178,17 @@ export default {
           "subscriptions/checkSubscription",
           this.$auth.user.id
         );
+        this.$gtag.event(
+          "login",
+          this.$auth.user.id
+            ? {
+                method: this.$auth.user.provider,
+                user_id: this.$auth.user.id,
+              }
+            : {
+                method: "anonymous",
+              }
+        );
       }
     },
     redirectToDashboardIfAppropriate() {

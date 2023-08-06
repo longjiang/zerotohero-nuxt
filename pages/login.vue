@@ -126,6 +126,21 @@ export default {
             "subscriptions/checkSubscription",
             this.$auth.user.id
           );
+          // Fetch or create user data
+          await this.$directus.fetchOrCreateUserData(); 
+
+          this.$gtag.event(
+            "login",
+            this.$auth.user.id
+              ? {
+                  method: this.$auth.user.provider,
+                  user_id: this.$auth.user.id,
+                }
+              : {
+                  method: "anonymous",
+                }
+          );
+          
           this.$toast.success(
             this.$tb("Welcome back, {name}!", {
               name: this.$auth.user.first_name,

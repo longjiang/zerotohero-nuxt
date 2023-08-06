@@ -150,6 +150,18 @@ export default {
       // Fetch or create user data
       await this.$directus.fetchOrCreateUserData(); 
 
+      this.$gtag.event(
+        "login",
+        this.$auth.user.id
+          ? {
+              method: this.$auth.user.provider,
+              user_id: this.$auth.user.id,
+            }
+          : {
+              method: "anonymous",
+            }
+      );
+
       // Send data to MailerLite
       await this.mailerLiteWebHook();
 

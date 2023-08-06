@@ -53,7 +53,9 @@ Vue.filter('truncate', function (text, length, clamp) {
 
 export default async ({ app, store, route }, inject) => {
   Vue.use(VueGtag, {
-    config: { id: 'UA-1846573-21' } // Move to 'G-CXDV1NLTC2' after UA shutoff
+    config: {
+      id: 'UA-1846573-21', // Move to 'G-CXDV1NLTC2' after UA shutoff
+    } 
   }, app.router)
   // Make legacy hash URLs work
   // https://qvault.io/javascript/vue-history-mode-support-legacy-hash-urls/
