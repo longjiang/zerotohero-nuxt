@@ -26,8 +26,6 @@ Vygotsky (1978) introduced a perspective that emphasizes the role of social inte
 
 Recent advancements in neuroimaging techniques have provided insights into the brain's mechanisms during language learning. It's observed that bilinguals have denser gray matter in areas related to language processing compared to monolinguals (Mechelli et al., 2004).
 
-## Concluding Thoughts
-
 Language acquisition is a multifaceted process influenced by various cognitive, social, and environmental factors. As research progresses, we hope to further unravel the complex tapestry of how humans acquire languages.
 
 ---

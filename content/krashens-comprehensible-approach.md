@@ -26,8 +26,6 @@ Krashen proposed that while acquiring a language is a subconscious process, lear
 
 Lastly, Krashen made a clear distinction between acquisition and learning. Acquisition is a natural, intuitive, and subconscious process similar to how children acquire their first language. Learning, on the other hand, is a result of direct instruction and is a conscious process.
 
-## In Conclusion
-
 Krashen's theories, though debated, have had a profound impact on the world of language teaching. His emphasis on comprehensible input and the importance of a positive learning environment resonate with many educators and learners alike. As with all theories, it's essential to consider individual learner needs and contexts.
 
 ---

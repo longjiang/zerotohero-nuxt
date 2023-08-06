@@ -20,4 +20,4 @@ In our interconnected world, it's easy to form opinions based on second-hand inf
 
 ### Making Connections
 
-Ultimately, watching videos from other cultures makes the world feel a bit smaller. It bridges the gap between 'us' and 'them', fostering a sense of shared humanity. As we watch stories
+Watching videos from other cultures makes the world feel a bit smaller. It ultimately bridges the gap between 'us' and 'them', fostering a sense of shared humanity. As we watch stories

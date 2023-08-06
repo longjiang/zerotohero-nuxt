@@ -30,8 +30,6 @@ The idea is simple yet powerful: for effective language learning to occur, learn
 
 4. **Feedback is Crucial:** It's essential for learners to get feedback on their understanding. This could be through quizzes, conversations, or interactive exercises.
 
-## Conclusion
-
 Comprehensible input is not just a theory but a practical, effective, and learner-centric approach to language acquisition. By emphasizing understanding and context, it allows learners to progress naturally and confidently on their language journey.
 
 ---
