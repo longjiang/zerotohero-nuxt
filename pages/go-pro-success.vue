@@ -95,10 +95,18 @@ import { background } from "@/lib/utils/background";
 export default {
   async mounted() {
     if (this.$auth.loggedIn) {
-      let email = this.$auth.user?.email;
       await this.$store.dispatch(
         "subscriptions/checkSubscription",
         this.$auth.user.id
+      );
+
+      this.$gtag.event(
+        "purchase",
+        {
+          event_category: "ecommerce",
+          event_label: "purchase",
+          value: 6,
+        },
       );
     }
   },

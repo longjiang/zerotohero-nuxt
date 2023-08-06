@@ -72,6 +72,11 @@ export default {
       if (receipt && !this.iOSPurchaseVerified) {
         this.iOSPurchaseVerified = true;
         this.elevateiOSUserToPro(receipt);
+        this.$gtag("event", "in_app_purchase", {
+          event_category: "ecommerce",
+          event_label: "in_app_purchase",
+          value: 119,
+        });
       }
       product.finish();
     },
