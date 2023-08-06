@@ -49,8 +49,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* You can use the styles from your homepage as a starting point, 
-   and adjust or add additional styles specific to the article index here */
 
 .article-list {
   list-style: none;
@@ -69,5 +67,4 @@ export default {
   }
 }
 
-/* [Rest of the styles from your homepage, potentially with some modifications] */
 </style>

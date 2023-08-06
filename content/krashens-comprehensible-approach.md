@@ -1,10 +1,8 @@
 ---
 title: "Krashen's Comprehensible Approach to Language Learning"
 date: "2023-07-20"
-author: "Your Name"
+author: "Jon Long"
 ---
-
-# Krashen's Comprehensible Approach to Language Learning
 
 Stephen Krashen, a renowned linguist and researcher, introduced the idea of the "Comprehensible Approach" in the 1980s. His theories on second language acquisition have been foundational for many language teaching methodologies that followed.
 
@@ -34,4 +32,4 @@ Krashen's theories, though debated, have had a profound impact on the world of l
 
 ---
 
-*Looking to delve deeper into language learning methodologies? Check out our other articles on [interactive learning with videos](/blog/interactive-learning-videos) and [authentic language learning](/blog/authentic-language-learning).*
+*Looking to delve deeper into language learning methodologies? Check out our other article [Boost Your Language Skills with Interactive Learning Videos](/interactive-learning-videos) and [authentic language learning](/authentic-language-learning).*
