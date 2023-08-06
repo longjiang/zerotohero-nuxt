@@ -1,7 +1,13 @@
 import { DIRECTUS_URL } from "./lib/utils";
 
-const fs = require('fs');
-const path = require('path');
+const routes = async () => {
+  const { $content } = require('@nuxt/content');
+  const files = await $content().only(['path']).fetch();
+
+  return files.map(file => (file.path === '/index' ? '/' : file.path)).concat(['/privacy-policy', '/']);
+}
+
+const hostname = process.env.URL ? process.env.URL : 'http://localhost:3000'
 
 let defaultDateTimeFormat =  {
   short: {
@@ -46,7 +52,7 @@ try {
 
 export default {
   env: {
-    baseUrl: process.env.URL ? process.env.URL : 'http://localhost:3000',
+    baseUrl: hostname,
     openAIToken: process.env.OPEN_AI_TOKEN,
     COMMIT_REF,
     BRANCH,
@@ -145,6 +151,7 @@ export default {
 
   modules: [
     'bootstrap-vue/nuxt',
+    '@nuxtjs/sitemap',
     '@nuxtjs/axios',
     '@nuxt/content',
     ['nuxt-i18n', {
@@ -271,13 +278,16 @@ export default {
   },
   target: 'static',
   generate: {
-    routes: async () => {
-      const { $content } = require('@nuxt/content');
-      const files = await $content().only(['path']).fetch();
-
-      return files.map(file => (file.path === '/index' ? '/' : file.path)).concat(['/privacy-policy', '/']);
-    },
+    routes,
     fallback: true,
     crawler: false
-  }
+  },
+  sitemap: {
+    hostname,
+    gzip: true,
+    exclude: [
+      // Exclude any paths you don't want to be indexed
+    ],
+    routes
+  },
 }
