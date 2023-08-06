@@ -63,12 +63,8 @@
 </template>
 
 <script>
-import GrammarChart from "@/components/GrammarChart.vue";
 
 export default {
-  components: {
-    GrammarChart,
-  },
   computed: {
   },
   data() {
