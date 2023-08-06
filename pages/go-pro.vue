@@ -42,7 +42,7 @@
                   <p>{{ $tb('Please choose your plan.') }}</p>
                   <Pricing @plan-selected="handlePlanSelection" />
                   <section class="mt-3" v-if="selectedPlan" id="payment-methods" ref="paymentMethods">
-                    <div v-if="native">
+                    <div v-if="iOS">
                       <div class="pt-4 pb-5">
                         <div v-if="selectedPlan.name === 'lifetime'">
                           <PurchaseiOS  />
@@ -119,6 +119,9 @@ export default {
     },
     native() {
       return Capacitor.isNativePlatform();
+    },
+    iOS() {
+      return Capacitor.getPlatform() === "ios";
     },
     pro() {
       return this.forcePro || this.$store.state.subscriptions.active;
