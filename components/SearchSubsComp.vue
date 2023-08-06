@@ -561,13 +561,8 @@ export default {
     },
     calculateLimit() {
       // No limit unless set
-      if (!this.$store.state.settings.subsSearchLimit) {
-        if (this.exact) {
-          return 2000;
-        } else {
-          return this.maxNumOfHitsForSanity;
-        }
-      } else {
+      if (!this.$store.state.settings.subsSearchLimit) return this.maxNumOfHitsForSanity;
+      else {
         if (this.exact) {
           // Exact search while limit is set
           let l2HasScriptLearningFeature = ["hy", "ka", "ko"].includes(
