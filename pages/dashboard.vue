@@ -102,6 +102,12 @@ export default {
           show: true,
         },
         {
+          name: "articles",
+          title: `Articles on Languages`,
+          icon: "fas fa-globe-asia",
+          show: true,
+        },
+        {
           name: "ling-language-icons",
           title: "Face of the Language",
           icon: "fas fa-user",

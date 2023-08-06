@@ -304,6 +304,7 @@ export default {
   padding: calc(env(safe-area-inset-top) + 0.25rem) 0.75rem 0.25rem 0.75rem;
   color: #777;
   font-size: 0.875rem;
+  z-index: 99;
   .btn,
   a {
     line-height: 2.3rem;
@@ -337,7 +338,6 @@ export default {
     width: 100vw;
     position: sticky;
     top: 0;
-    z-index: 99;
   }
 
   .language-flag-and-name {
