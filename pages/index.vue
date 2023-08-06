@@ -39,14 +39,13 @@
                 >
                   {{ $tb("Go Pro") }}
                 </router-link>
-                <span
-                  class="index-nav-item"
-                  @click="scrollTo('#index-features')"
-                  style="cursor: pointer"
+                <router-link
+                  class="index-nav-item link-unstyled"
+                  to="/articles"
                   v-else
                 >
-                  {{ $tb("Features") }}
-                </span>
+                  {{ $tb("Articles") }}
+                </router-link>
                 <router-link
                   class="index-nav-item link-unstyled"
                   to="/login"

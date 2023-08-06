@@ -1,5 +1,8 @@
 import { DIRECTUS_URL } from "./lib/utils";
 
+const fs = require('fs');
+const path = require('path');
+
 let defaultDateTimeFormat =  {
   short: {
     year: 'numeric',
@@ -143,6 +146,7 @@ export default {
   modules: [
     'bootstrap-vue/nuxt',
     '@nuxtjs/axios',
+    '@nuxt/content',
     ['nuxt-i18n', {
       vueI18n: {
         fallbackLocale: 'en',
