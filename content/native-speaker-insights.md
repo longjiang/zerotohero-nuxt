@@ -24,7 +24,7 @@ The [Language Player app](#) deeply understands the importance of native speaker
 
 - **Pronunciation Aids:** Direct inputs from native speakers ensure that users learn the most authentic pronunciation.
 
-In conclusion, while technology and structured courses are crucial, the nuanced insights offered by native speakers are unparalleled. They bridge the gap between textbook language and the language as it's genuinely spoken (Ellis, 2008).
+While technology and structured courses are crucial, the nuanced insights offered by native speakers are unparalleled. They bridge the gap between textbook language and the language as it's genuinely spoken (Ellis, 2008).
 
 ---
 
