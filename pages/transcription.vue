@@ -113,7 +113,11 @@ export default {
           transcription = t.candidates[0].pronunciation;
         }
         if (useIPA) {
-          transcription = pinyin2ipa(transcription, { toneMarker: "chaoletter" });
+          // A bug in pinyin2ipa causes it to not recognize "zou" and return an empty string. We fix that here.
+          transcription = transcription.replace('zōu', 'tsou˥').replace('zóu', 'tsou˧˥').replace('zǒu', 'tsou˨˩˦').replace('zòu', 'tsou˥˩')
+          if (!transcription.startsWith('tsou')) {
+            transcription = pinyin2ipa(transcription, { toneMarker: "chaoletter" });
+          }
         }        
         return transcription
       }
