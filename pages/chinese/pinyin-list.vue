@@ -88,7 +88,8 @@ export default {
       const dictionary = await this.$getDictionary();
       for (let line of lines) {
         let seen = [];
-        let candidates = dictionary.lookupSimplified(line);
+        let candidates = await dictionary.lookupSimplified(line);
+        console.log(candidates);  
         candidates = candidates.filter((candidate) => {
           const keep = !seen.includes(candidate.pinyin);
           seen.push(candidate.pinyin);
