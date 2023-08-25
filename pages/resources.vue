@@ -134,7 +134,7 @@ export default {
       },
     };
   },
-  async fetch() {
+  async created() {
     let canonical = `/${this.$l1.code}/${this.$l2.code}/resource/list/${this.topic}/${this.type}`;
     let filters = "";
     if (this.$router.currentRoute.path !== canonical) {

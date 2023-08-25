@@ -93,7 +93,7 @@ export default {
       return stripTags(html);
     },
   },
-  async fetch() {
+  async created() {
     if (this.$route.params.method) {
       this.method = this.$route.params.method;
       if (this.method === "list") {

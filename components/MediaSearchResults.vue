@@ -338,8 +338,6 @@ export default {
       let canonical = `/${this.$l1.code}/${this.$l2.code}/youtube/browse/${this.topic}/${this.level}/${this.start}`;
       if (!this.$router.currentRoute.path.startsWith(canonical)) {
         this.$router.push({ path: canonical });
-      } else {
-        this.$fetch();
       }
     },
   },

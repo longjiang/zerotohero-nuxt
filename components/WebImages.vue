@@ -50,7 +50,7 @@ export default {
       images: [],
     };
   },
-  async fetch() {
+  async created() {
     if (this.preloaded && this.preloaded.length > 0)
       this.images = this.preloaded;
     else {

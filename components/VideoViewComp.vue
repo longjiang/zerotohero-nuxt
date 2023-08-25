@@ -167,7 +167,7 @@ export default {
       return t;
     },
   },
-  async fetch() {
+  async created() {
     this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
     // Get the playlist from the store based on the query string
     if (this.$route.query.p) {

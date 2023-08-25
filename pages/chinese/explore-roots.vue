@@ -152,7 +152,7 @@ export default {
     }
     this.rootsAugmented = rootsAugmented;
   },
-  async fetch() {
+  async created() {
     if (this.arg) {
       const dictionary = await this.$getDictionary();
       let words = await dictionary.lookupByPattern(this.arg);

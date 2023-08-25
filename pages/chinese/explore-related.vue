@@ -96,33 +96,35 @@ export default {
       return `/${this.$store.state.settings.l1.code}/${this.$store.state.settings.l2.code}/explore/related/${entry.id}`;
     },
   },
-  mounted() {
+  created() {
     if (this.related.length < 2) {
-      this.$fetch();
+      this.fetchData();
     }
   },
-  async fetch() {
-    if (this.arg) {
-      const dictionary = await this.$getDictionary();
-      let word = await dictionary.get(this.arg);
-      let related = [word];
-      let data = await SketchEngine.thesaurus({
-        l2: this.$l2,
-        term: word.simplified,
-      });
-      if (data && data.Words) {
-        for (let Word of data.Words) {
-          let words = await dictionary.lookupSimplified(Word.word);
-          if (words.length > 0) {
-            let word = words[0];
-            if (word.hsk === "") word.hsk = "outside";
-            related.push(word);
+  methods: {
+    async fetchData() {
+      if (this.arg) {
+        const dictionary = await this.$getDictionary();
+        let word = await dictionary.get(this.arg);
+        let related = [word];
+        let data = await SketchEngine.thesaurus({
+          l2: this.$l2,
+          term: word.simplified,
+        });
+        if (data && data.Words) {
+          for (let Word of data.Words) {
+            let words = await dictionary.lookupSimplified(Word.word);
+            if (words.length > 0) {
+              let word = words[0];
+              if (word.hsk === "") word.hsk = "outside";
+              related.push(word);
+            }
           }
+          this.word = word;
+          this.related = related;
         }
-        this.word = word;
-        this.related = related;
       }
-    }
-  },
+    },
+  }
 };
 </script>

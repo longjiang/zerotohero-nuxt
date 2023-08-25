@@ -90,7 +90,7 @@ export default {
       LEVELS,
     };
   },
-  async fetch() {
+  async created() {
     let grammar = await this.$getGrammar();
     this.grammar = grammar._grammarData;
     this.csvSource = await grammar.getCSVSource(this.$l2["iso639-3"]);

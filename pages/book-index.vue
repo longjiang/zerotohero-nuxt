@@ -118,7 +118,7 @@ export default {
     let url = decodeURIComponent(this.args);
     this.$refs.search.text = url;
   },
-  async fetch() {
+  async created() {
     let url = decodeURIComponent(this.args);
     try {
       let libraryL2 = await (

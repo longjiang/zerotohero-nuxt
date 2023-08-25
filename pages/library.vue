@@ -117,7 +117,7 @@ export default {
       return Library.source(url);
     },
   },
-  async fetch() {
+  async created() {
     try {
       let libraryL2 = await (
         await import(`@/lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)

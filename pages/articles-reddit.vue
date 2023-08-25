@@ -93,7 +93,7 @@ export default {
       key: 0,
     };
   },
-  async fetch() {
+  async created() {
     if (this.method) {
       if (this.method === "view" && this.args) {
         this.articleId = this.args.split(",")[0];

@@ -145,7 +145,7 @@ export default {
       bImages: [],
     };
   },
-  async fetch() {
+  async created() {
     this.aImages = await WordPhotos.getGoogleImages({
       term: this.term,
       lang: this.$l2.code,

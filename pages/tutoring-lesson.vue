@@ -163,7 +163,7 @@ export default {
       IMAGE_PROXY
     };
   },
-  async fetch() {
+  async created() {
     let lesson = await this.$directus.get(`items/tutoring_kit/${this.id}`);
     lesson = lesson.data.data;
     let readings = await this.$directus.get(

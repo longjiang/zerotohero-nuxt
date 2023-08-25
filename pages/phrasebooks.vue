@@ -163,7 +163,7 @@ export default {
       }
     },
   },
-  async fetch() {
+  async created() {
     this.phrasebooks = this.getPhrasebooksFromStore();
   },
   mounted() {

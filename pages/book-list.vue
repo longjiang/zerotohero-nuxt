@@ -107,7 +107,7 @@ export default {
       booklist: [],
     };
   },
-  async fetch() {
+  async created() {
     let url = decodeURIComponent(this.args);
     try {
       let libraryL2 = await (

@@ -228,7 +228,7 @@ export default {
       ],
     };
   },
-  async fetch() {
+  async created() {
     let shows = this.$store.state.shows[this.type][this.$l2.code];
     if (shows) {
       this.loadShows();

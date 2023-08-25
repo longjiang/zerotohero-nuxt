@@ -139,7 +139,7 @@ export default {
       srcIndex: 0,
     };
   },
-  async fetch() {
+  async created() {
     if (this.srcs.length === 0) {
       let images = await WordPhotos.getWebImages(this.word.simplified, {
         cacheLife: -1,

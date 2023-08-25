@@ -30,7 +30,7 @@ export default {
       default: false,
     },
   },
-  async fetch() {
+  async created() {
     let cacheLife = 3600; // clear cache every hour
     let response = await axios.get(
       `${jsonProxy}?cache_life=${cacheLife}&url=https://www.reddit.com/${this.path}.json`

@@ -10,15 +10,8 @@
       <div class="row">
         <div :class="{ 'col-sm-12 mb-5': true }">
           <h1>Quality Assurance Checklist</h1>
-          <h2>General Routes</h2>
           <ul>
-            <li v-for="route in generalRoutes" :key="route">
-              <nuxt-link :to="route">{{ route }}</nuxt-link>
-            </li>
-          </ul>
-          <h2>Language Specific Routes</h2>
-          <ul>
-            <li v-for="route in languageSpecificRoutes" :key="route">
+            <li v-for="route in routes" :key="route">
               <nuxt-link :to="route">{{ route }}</nuxt-link>
             </li>
           </ul>
@@ -29,113 +22,111 @@
 </template>
 
 <script>
+const popularPaths = `/
+/dashboard
+/en/zh/explore-media
+/en/zh/dictionary
+/language-map
+/register
+/en/zh/reader
+/login
+/zh/en/explore-media
+/en/zh/set-content-preferences
+/en/zh/grammar
+/en/zh/set-language-level
+/en/zh/learning-path
+/en/zh/explore/levels
+/en/ja/explore-media
+/en/zh/profile
+/en/zh/tv-shows
+/zh/en/set-language-level
+/en/zh/phrasebooks
+/zh/en/reader
+/en/en/explore-media
+/zh/en/set-content-preferences
+/zh/en/learning-path
+/en/zh/youtube/view/MSRJY_qehlQ
+/zh/en/dictionary
+/go-pro
+/en/zh/youtube/view/nixrQRrPy2k
+/zh/en/live-tv
+/en/zh/youtube/search
+/en/ja/set-content-preferences
+/en/zh/all-media
+/en/zh/live-tv
+/en/zh/youtube/view/qIko053otwQ
+/en/zh/youtube/view/kqxzTZ6Jp-M
+/en/zh/talks
+/en/zh/settings
+/en/fr/explore-media
+/en/ko/explore-media
+/en/zh/saved-words
+/en/de/explore-media
+/en/zh/explore/new-levels
+/en/ja/live-tv
+/en/zh/books
+/en/ja/reader
+/en/zh/online-courses
+/en/zh/phrasebook/452
+/en/es/explore-media
+/en/zh/youtube/view/ppwO0lxrz5g
+/zh/en/books
+/en/zh/youtube/view/KlFA5qxz4iA
+/zh/en/profile
+/zh/en/tv-shows
+/en/en/set-content-preferences
+/en/zh/youtube/view/WxZvXPTBC0A
+/en/zh/youtube/view/BfKhREVFLkQ
+/en/zh/contact-us
+/en/zh/youtube/view/iSkZytjAfks
+/en/zh/youtube/view/jkN1kB2G5x0
+/en/ru/explore-media
+/en/en/set-language-level
+/en/ja/dictionary
+/en/zh/youtube/view/e21AC8qPLLA
+/zh/en/talks
+/en/en/reader
+/en/ja/learning-path
+/zh/en/phrasebooks
+/en/zh/youtube/view/HqODiKTH8a4
+/en/en/live-tv
+/zh/en/contact-us
+/zh/en/phrasebook/478
+/en/zh/youtube/browse
+/en/ko/set-content-preferences
+/forgot-password
+/en/zh/youtube/view/M8tZmljZdTA
+/en/zh/youtube/view/fy3enrrXeOU
+/zh/en
+/en/zh/youtube/browse/all/1
+/en/zh/youtube/view/vUnRePT8juE
+/en/en/learning-path
+/en/zh/youtube/view/jz1IgOG1lZg
+/logout
+/zh/en/my-text
+/en/zh/youtube/view/P7Ogdtg_71w
+/en/zh/youtube/view/szzpWY8_vDE
+/en/en/dictionary
+/zh/en/online-courses
+/en/fr/set-language-level
+/en/zh/my-text
+/en/zh/resource/list/all/all
+/en/ar/explore-media
+/en/zh/web-reader
+/en/zh/youtube/view/TK_WYjrcoqc
+/en/zh/youtube/view/LQiWx3SrJ8Y
+/en/zh/learn/hsk/1,1,1
+/en/fr/set-content-preferences
+/en/zh/youtube/view/pNIRHvS2bLM
+/en/zh/youtube/view/jya768fqQ7g
+/en/zh/youtube/view/mmDD-QWlQpU
+/en/hi/explore-media
+/en/ja/tv-shows`.split('\n').filter(Boolean)
+
 export default {
   data() {
     return {
-      generalRoutes: [
-        "/compare-languages",
-        "/dashboard",
-        "/forgot-password",
-        "/go-pro",
-        "/go-pro-success",
-        "/language-icons",
-        "/language-map",
-        "/login",
-        "/logout",
-        "/password-reset",
-        "/phonological-features",
-        "/register",
-        "/stats",
-        "/translators",
-      ],
-      languageSpecificRoutes: [
-        "/zh/ko/explore-media",
-        "/zh/ja/youtube/browse",
-        "/zh/ja/tv-shows",
-        "/zh/ja/set-content-preferences",
-        "/zh/ja/profile",
-        "/zh/ja/phrasebooks",
-        "/zh/ja/my-text",
-        "/zh/ja/learning-path",
-        "/zh/ja/explore-media",
-        "/zh/ja/dictionary",
-        "/zh/ja/contact-us",
-        "/zh/fr/set-language-level",
-        "/zh/fr/set-content-preferences",
-        "/zh/fr/explore-media",
-        "/zh/en/youtube/search",
-        "/zh/en/youtube/browse",
-        "/zh/en/video-view/youtube/bBLKvPSgQ2A",
-        "/zh/en/tv-shows",
-        "/zh/en/show/tv-show/994",
-        "/zh/en/settings",
-        "/zh/en/set-language-level",
-        "/zh/en/set-content-preferences",
-        "/zh/en/saved-words",
-        "/zh/en/resource/list",
-        "/zh/en/profile",
-        "/zh/en/phrasebooks",
-        "/zh/en/phrasebook/478",
-        "/zh/en/online-courses",
-        "/zh/en/my-text",
-        "/zh/en/learning-path",
-        "/zh/en/explore-media",
-        "/zh/en/epub",
-        "/zh/en/dictionary",
-        "/zh/en/contact-us",
-        "/zh/en/bookshelf",
-        "/zh/en/books",
-        "/zh/de/set-language-level",
-        "/zh/de/set-content-preferences",
-        "/zh/de/explore-media",
-        "/en/zh/youtube/view/qIko053otwQ",
-        "/en/zh/youtube/search",
-        "/en/zh/youtube/history",
-        "/en/zh/youtube/browse",
-        "/en/zh/video-view/youtube/kqxzTZ6Jp-M",
-        "/en/zh/tv-shows/all",
-        "/en/zh/tv-shows",
-        "/en/zh/show/tv-show/675",
-        "/en/zh/settings",
-        "/en/zh/set-language-level",
-        "/en/zh/set-content-preferences",
-        "/en/zh/saved-words",
-        "/en/zh/resource/list",
-        "/en/zh/reader",
-        "/en/zh/profile",
-        "/en/zh/phrasebooks",
-        "/en/zh/phrasebook/452",
-        "/en/zh/online-courses",
-        "/en/zh/my-text",
-        "/en/zh/lesson-videos/5",
-        "/en/zh/learning-path",
-        "/en/zh/learn/hsk/3,1,2",
-        "/en/zh/grammar",
-        "/en/zh/explore/levels",
-        "/en/zh/explore-media",
-        "/en/zh/epub",
-        "/en/zh/dictionary",
-        "/en/zh/contact-us",
-        "/en/zh/books",
-        "/en/ru/explore-media",
-        "/en/ko/explore-media",
-        "/en/ja/tv-shows",
-        "/en/ja/set-content-preferences",
-        "/en/ja/profile",
-        "/en/ja/my-text",
-        "/en/ja/explore-media",
-        "/en/ja/dictionary",
-        "/en/hi/explore-media",
-        "/en/fr/explore-media",
-        "/en/es/explore-media",
-        "/en/en/tv-shows",
-        "/en/en/set-language-level",
-        "/en/en/set-content-preferences",
-        "/en/en/my-text",
-        "/en/en/explore-media",
-        "/en/en/dictionary",
-        "/en/de/explore-media",
-      ],
+      routes: popularPaths,
     };
   },
 };
