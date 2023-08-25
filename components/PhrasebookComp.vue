@@ -9,8 +9,8 @@
           {{ $t("{num} phrases", { num: phrasebook.phrases.length }) }}
         </div>
         <div class="text-center mt-3">
-          <b-input-group :prepend="$t('Start from')">
-            <b-form-input v-model.lazy="startRow" type="number"></b-form-input>
+          <b-input-group :prepend="$t('Filter')">
+            <b-form-input v-model.lazy="keyword"></b-form-input>
             <b-input-group-append>
               <b-button variant="primary">{{ $t("OK") }}</b-button>
             </b-input-group-append>
@@ -38,8 +38,11 @@
       />
     </div>
     <div class="row" v-if="phrasebook">
+      <div class="col-sm-12 mb-3 mt-3" v-if="startRow > 1" @click="startRow = 1">
+        <b-button variant="success" class="d-block w-100"><i class="fa fa-chevron-up mr-1"></i> {{ $t('Show Previous {n} Phrases', {n: startRow - 1}) }}</b-button>
+      </div>
       <router-link
-        v-for="(phraseObj, phraseIndex) in phrasebook.phrases.slice(
+        v-for="(phraseObj, phraseIndex) in filteredPhrases.slice(
           Number(startRow) - 1,
           Number(startRow) + 1 + Number(numRowsVisible)
         )"
@@ -133,6 +136,7 @@ export default {
       csvHref: undefined,
       numRowsVisible: 24,
       startRow: this.initId ? this.initId : 1,
+      keyword: undefined,
       hideDefinitions: false,
       hidePhonetics: false,
       hideWord: false,
@@ -140,6 +144,22 @@ export default {
   },
   mounted() {
     this.genCSV();
+  },
+  computed: {
+    filteredPhrases() {
+      if (this.keyword) {
+        return this.phrasebook.phrases.filter((p) => {
+          return (
+            p.phrase.toLowerCase().indexOf(this.keyword.toLowerCase()) > -1 ||
+            (p[this.$l1.code] &&
+              p[this.$l1.code].toLowerCase().indexOf(this.keyword) > -1) ||
+            (p.en && p.en.toLowerCase().indexOf(this.keyword) > -1)
+          );
+        });
+      } else {
+        return this.phrasebook.phrases;
+      }
+    }
   },
   watch: {
     startRow() {
