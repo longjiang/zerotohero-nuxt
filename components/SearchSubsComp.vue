@@ -319,9 +319,16 @@
 </template>
 
 <script>
-import { unique, ucFirst, timeout, highlightMultiple, iOS, NON_PRO_MAX_SUBS_SEARCH_HITS } from "@/lib/utils";
-import YouTube from '@/lib/youtube'
-import Vue from 'vue'
+import {
+  unique,
+  ucFirst,
+  timeout,
+  highlightMultiple,
+  iOS,
+  NON_PRO_MAX_SUBS_SEARCH_HITS,
+} from "@/lib/utils";
+import YouTube from "@/lib/youtube";
+import Vue from "vue";
 
 export default {
   props: {
@@ -429,9 +436,9 @@ export default {
       this.collectContext(hits);
       this.$emit("updated", hits);
     },
-    async currentHit() {      
+    async currentHit() {
       this.loadL1SubsIfNeeded();
-    }
+    },
   },
   async mounted() {
     if (typeof this.$store.state.settings !== "undefined") {
@@ -464,7 +471,7 @@ export default {
 
       // If the video doesn't have L1 subtitles, we load it from YouTube
       if (!(video?.subs_l1?.length > 0)) {
-        let subs
+        let subs;
 
         let { l1Locale, l2Locale, l2Name } = await YouTube.getTranscriptLocales(
           video.youtube_id,
@@ -473,10 +480,7 @@ export default {
         );
 
         if (l1Locale) {
-          subs = await YouTube.getTranscript(
-            video.youtube_id,
-            l1Locale,
-          );
+          subs = await YouTube.getTranscript(video.youtube_id, l1Locale);
         }
 
         // If we still don't have it, we get translated ones
@@ -561,25 +565,10 @@ export default {
     },
     calculateLimit() {
       // No limit unless set
-      if (!this.$store.state.settings.subsSearchLimit) return this.maxNumOfHitsForSanity;
-      else {
-        if (this.exact) {
-          // Exact search while limit is set
-          let l2HasScriptLearningFeature = ["hy", "ka", "ko"].includes(
-            this.$l2.code
-          );
-          if (l2HasScriptLearningFeature) {
-            return this.terms[0].length < 5
-              ? this.terms[0].length < 4
-                ? this.terms[0].length < 3
-                  ? 100
-                  : 80
-                : 70
-              : 60;
-          } else return 50;
-        } else {
-          return 25;
-        }
+      if (this.$store.state.settings.subsSearchLimit) {
+        return 150;
+      } else {
+        return this.maxNumOfHitsForSanity;
       }
     },
     async getExcludeTerms() {
@@ -620,7 +609,7 @@ export default {
         apostrophe: true,
         convertToSimplified: this.$l2.han,
         mustIncludeYouTubeId,
-      }
+      };
       let hits = await this.$subs.searchSubs(options);
       if (hits.length === 0) {
         options.limit = this.maxNumOfHitsForSanity;
@@ -834,7 +823,7 @@ export default {
     },
     goToNextHit() {
       this.currentHit = this.nextHit;
-      this.navigated = true; 
+      this.navigated = true;
     },
     goToHit(hit) {
       this.currentHit = hit;

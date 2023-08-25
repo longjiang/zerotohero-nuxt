@@ -36,7 +36,7 @@ export const defaultL2Settings = {
   showQuiz: true,
   showByeonggi: true,
   tvShowFilter: "all", // By default we only search TV shows.
-  talkFilter: "all", // By default we search all talks.
+  talkFilter: [],
   autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
   quizMode: false,
   disableAnnotation: false,
