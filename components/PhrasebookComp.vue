@@ -167,6 +167,11 @@ export default {
         this.startRow = 1;
       }
     },
+    keyword() {
+      if (this.keyword) {
+        this.startRow = 1;
+      }
+    }
   },
   methods: {
     remove(phraseObj) {
