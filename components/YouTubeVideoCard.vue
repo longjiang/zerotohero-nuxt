@@ -44,18 +44,18 @@
       }"
     >
       <div class="youtube-thumbnail-wrapper aspect-wrapper d-block">
-        <button class="btn btn-unstyled play-button" v-if="showPlayButton">
-          <i class="fa fa-play"></i>
-        </button>
-        <client-only>
-          <b-progress
-            class="youtube-video-card-progress"
-            v-if="progress"
-            :value="progress"
-            :max="1"
-          ></b-progress>
-        </client-only>
         <router-link :to="to">
+          <button class="btn btn-unstyled play-button" v-if="showPlayButton">
+            <i class="fa fa-play"></i>
+          </button>
+          <client-only>
+            <b-progress
+              class="youtube-video-card-progress"
+              v-if="progress"
+              :value="progress"
+              :max="1"
+            ></b-progress>
+          </client-only>
           <img
             class="youtube-thumbnail aspect"
             ref="thumbnail"
