@@ -100,7 +100,7 @@
               <Loader :sticky="true" message="Getting shows..." />
             </div>
             <div
-              class="text-center"
+              class="text-center mb-5"
               v-if="filteredShows && filteredShows.length === 0"
             >
               {{

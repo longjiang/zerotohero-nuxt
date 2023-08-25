@@ -607,7 +607,7 @@ export default {
       let terms = this.terms;
       let mustIncludeYouTubeId = this.context?.youtube_id;
       let limit = this.calculateLimit();
-      let hits = await this.$subs.searchSubs({
+      let options = {
         terms,
         excludeTerms: this.excludeTerms,
         langId: this.$l2.id,
@@ -620,7 +620,19 @@ export default {
         apostrophe: true,
         convertToSimplified: this.$l2.han,
         mustIncludeYouTubeId,
-      });
+      }
+      let hits = await this.$subs.searchSubs(options);
+      if (hits.length === 0) {
+        options.limit = this.maxNumOfHitsForSanity;
+        hits = await this.$subs.searchSubs(options);
+      }
+      if (hits.length === 0) {
+        this.tvShowFilter = "all";
+        this.talkFilter = "all";
+        options.tvShowFilter = "all";
+        options.talkFilter = "all";
+        hits = await this.$subs.searchSubs(options);
+      }
 
       hits = this.updateSaved(hits);
       hits = this.setShows(hits);
