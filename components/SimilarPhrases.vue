@@ -3,14 +3,15 @@
     <div class="similar-phrases">
       <div v-if="!autoLoad && showButton">
         <div>
-          {{ $t("How do you say this word in other languages?") }}
+          {{ $t("How do you say “{translation}” in other languages?", { translation }) }}
+          {{ $t("What does “{phrase}” mean in other languages?", { phrase }) }}
 
           <u
             @click="getSimilarPhrases"
-            style="font-weight: bold"
+            style="font-weight: bold; cursor: pointer;"
             class="text-success ml-2"
           >
-            {{ $t("Show Words") }}
+            {{ $t("Show Me") }} <i class="fa fa-chevron-right"></i>
           </u>
         </div>
       </div>

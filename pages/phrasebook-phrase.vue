@@ -17,7 +17,7 @@
             }"
             v-if="phrasebook && phrasebook.phrases && phraseId && phraseObj"
           >
-            <div class="text-center">
+            <div class="text-center mb-3">
               <router-link class="link-unstyled mb-4 d-block" :to="homeRoute">
                 <h5 class="phrasebook-title">
                   <i class="fa fa-chevron-left mr-2"></i>
@@ -120,7 +120,7 @@
                 </Flashcard>
               </div>
               <div
-                class="text-center mt-3 mb-3"
+                class="text-center mb-3"
                 v-if="words && words.length > 1"
               >
                 <b-dropdown
@@ -181,20 +181,6 @@
                     </div>
                   </template>
                 </Flashcard>
-                <EntryExternal
-                  :term="word.head"
-                  :traditional="word.traditional"
-                  :level="word.level"
-                  :sticky="false"
-                  class="mt-4 mb-4 text-center"
-                  style="margin-bottom: 0"
-                />
-                <EntryCourseAd
-                  v-if="$l2.code === 'zh'"
-                  variant="compact"
-                  class="focus-exclude mt-4 mb-5"
-                  :entry="word"
-                ></EntryCourseAd>
               </div>
             </div>
           </div>
@@ -215,6 +201,7 @@
                 :exact="phraseObj.exact || phrasebook.exact"
                 :exactPhrase="phraseObj.phrase"
                 :key="`dictionary-entry-${word.id}`"
+                :showImages="false"
                 ref="dictionaryEntry"
               />
               <LazyPhraseComp
@@ -228,6 +215,14 @@
                 :showExamples="false"
                 ref="phrase"
               />
+              <template v-if="word">
+                <EntryCourseAd
+                  v-if="$l2.code === 'zh'"
+                  variant="compact"
+                  class="focus-exclude"
+                  :entry="word"
+                ></EntryCourseAd>
+              </template>
               <SimilarPhrases
                 v-if="phraseObj && phraseObj.en"
                 :phrase="phraseObj.phrase"
