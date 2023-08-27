@@ -22,7 +22,7 @@
     </div>
     <div class="placeholder-message" :class="{ 'd-none': youtubeScriptLoaded }">
       <client-only>
-        <div class="placeholder-message-text">
+        <div class="placeholder-message-text" v-show="showPlaceholderMessage">
           <i18n
             path="If this video doesn't load, it means your connection to YouTube may be blocked. You may need a {0}."
           >
@@ -115,6 +115,7 @@ export default {
       loading: false,
       randomSeeked: false,
       youtubeScriptLoaded: false,
+      showPlaceholderMessage: false,
       vpns: [
         {
           name: "Astrill VPN",
@@ -172,6 +173,8 @@ export default {
       this.loadYouTubeiFrame();
     }
     this.time = this.starttime;
+    await timeout(5000);
+    this.showPlaceholderMessage = true;
   },
   destroyed() {
     if (this.player) {
