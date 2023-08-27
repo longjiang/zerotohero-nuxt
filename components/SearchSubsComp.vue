@@ -170,6 +170,7 @@
         v-bind="{
           autoload: true,
           autoplay: navigated,
+          cc: true,
           episodes: hits.map((h) => h.video),
           forcePro: true,
           initialMode: 'subtitles',
