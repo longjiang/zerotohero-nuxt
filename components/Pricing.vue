@@ -32,7 +32,7 @@
           >
         </div>
         <div v-else>
-          <div v-if="plan.name === 'lifetime'" class="sale-banner">{{ $tb('{name} SALE!', {name: $tb('SUMMER')}) }}</div>
+          <div v-if="plan.name === 'lifetime'" class="sale-banner">{{ $tb('{name} SALE!', {name: $tb('BACK TO SCHOOL')}) }}</div>
           <div style="margin-top: 1rem; margin-bottom: -0.5em">
             <span>
               <span
@@ -90,7 +90,7 @@
       </div>
       <div>{{ $tb(plan.description) }}</div>
       <div v-if="plan.name === 'lifetime' && SALE" class="sale-end-date">
-        <div>{{ $tb('Offer ends:')}} {{ $db(new Date(2023, 6, 5), 'short') }}</div>
+        <div>{{ $tb('Offer ends:')}} {{ $db(new Date(2023, 8, 3), 'short') }}</div>
       </div>
     </div>
   </div>
