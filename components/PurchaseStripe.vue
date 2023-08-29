@@ -1,5 +1,6 @@
 <template>
   <div class="purchase-stripe">
+    <!-- If there are USD prices, show the Credit Card button -->
     <template v-if="usdPrice">
       <stripe-checkout
         ref="stripeCheckoutUSDRef"
@@ -13,6 +14,7 @@
         ]"
         :success-url="stripeSuccessURL"
         :cancel-url="stripeCancelURL"
+        :client-reference-id="this.$auth.user.id"
         @loading="(v) => (loading = v)"
       />
       <b-button @click="submitStripeUSD" variant="success btn-purchase" size="md">
@@ -25,6 +27,7 @@
         <i class="fa-solid fa-chevron-right ml-1"></i>
       </b-button>
     </template>
+    <!-- If there are CNY prices, show the Alipay and WeChat Pay buttons -->
     <template v-if="cnyPrice">
       <a :href="cnyPrice.paymentLink + `?client_reference_id=${this.$auth.user.id}`" class="btn btn-success btn-purchase">
         <span class="icons"><i class="fab fa-weixin"></i></span>
