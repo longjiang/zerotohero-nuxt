@@ -28,6 +28,7 @@
             <div class="mt-4"></div>
             <FeatureComparison />
             <div v-if="$auth.loggedIn && $auth.user" class="text-center text-white">
+              <Pricing class="mb-5" />
               <div v-if="pro">
                 <h5 class="mb-3">🎉 {{ $tb('You are already Pro!') }} 🚀 {{ $tb('Enjoy!') }}</h5>
                 <router-link class="btn btn-success mb-3" to="/">
@@ -68,6 +69,7 @@
               </div>
             </div>
             <div v-else class="text-center text-white">
+              <Pricing class="mb-5" />
               <p style="font-size: 1.2em">
                 {{ $tb('Before you get Pro, you need to create an account.') }}
               </p>
