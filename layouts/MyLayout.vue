@@ -1,7 +1,7 @@
 // MyLayout.vue
 <template>
   <div class="zerotohero-layout" :class="{fullscreen}">
-    <FeedbackButton />
+    <!-- <FeedbackButton /> -->
     <HydrationNotice v-if="$route.path === '/'" />
     <client-only>
       <!-- Main nav - side bar on wide screen, bottom bar on small screen /-->
