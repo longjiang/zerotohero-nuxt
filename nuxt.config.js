@@ -1,6 +1,6 @@
 import { DIRECTUS_URL } from "./lib/utils";
 
-const popularPaths = `/
+let popularPaths = `/
 /dashboard
 /en/zh/explore-media
 /en/zh/dictionary
@@ -100,6 +100,12 @@ const popularPaths = `/
 /en/zh/youtube/view/mmDD-QWlQpU
 /en/hi/explore-media
 /en/ja/tv-shows`.split('\n').filter(Boolean)
+
+const excludePaths = ['/zh/en/online-courses', '/en/zh/online-courses']
+
+popularPaths = popularPaths.filter(path => !excludePaths.includes(path))
+
+popularPaths = popularPaths.map(path => path.replace('/youtube/view/',  '/video-view/youtube/'))
 
 const hostname = process.env.URL ? process.env.URL : 'http://localhost:3000'
 
