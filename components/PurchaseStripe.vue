@@ -14,7 +14,7 @@
         ]"
         :success-url="stripeSuccessURL"
         :cancel-url="stripeCancelURL"
-        :client-reference-id="this.$auth.user.id"
+        :client-reference-id="this.$auth.user?.id?.toString()"
         @loading="(v) => (loading = v)"
       />
       <b-button @click="submitStripeUSD" variant="success btn-purchase" size="md">
