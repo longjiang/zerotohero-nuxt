@@ -326,6 +326,14 @@
           </div>
           <div class="col-12">
             <FeatureComparison :sale="sale" />
+            <Pricing class="mb-4" style="text-shadow: none"/>
+            <div class="text-center mb-4">
+              <router-link class="btn btn-success btn-purchase btn-lg" :to="{name: 'go-pro'}">
+                🚀 
+                {{ $tb("Go Pro") }}
+                <i class="fa-solid fa-chevron-right ml-1"></i>
+              </router-link>
+            </div>
           </div>
         </div>
         <div class="row index-section" id="index-testimonials">
