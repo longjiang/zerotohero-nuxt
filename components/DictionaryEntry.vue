@@ -8,8 +8,8 @@
       >
         <template #title>
           <ChooseSearchTerms
-            @selectedSearchTerms = "selectedSearchTerms = $event"
-            @wholePhraseOnly = "wholePhraseOnly = $event"
+            @selectedSearchTerms="selectedSearchTerms = $event"
+            @wholePhraseOnly="wholePhraseOnly = $event"
             :initialSelectedTerms="selectedSearchTerms"
             :allSearchTerms="allSearchTerms"
           />
@@ -25,7 +25,9 @@
             ref="searchSubs"
             skin="dark"
             :level="entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk"
-            :key="`subs-search-${entry.id}-${wholePhraseOnly}-${selectedSearchTerms.join('-')}`"
+            :key="`subs-search-${
+              entry.id
+            }-${wholePhraseOnly}-${selectedSearchTerms.join('-')}`"
             :terms="selectedSearchTerms"
             :tvShow="tvShow"
             :exact="wholePhraseOnly"
@@ -255,7 +257,7 @@ export default {
   },
   computed: {
     context() {
-      return this.entry?.saved?.context
+      return this.entry?.saved?.context;
     },
     sections() {
       return [
@@ -339,7 +341,10 @@ export default {
       allSearchTerms = unique([this.context.form, ...allSearchTerms]);
     }
     this.allSearchTerms = allSearchTerms;
-    this.selectedSearchTerms = mutuallyExclusive(this.allSearchTerms).slice(0, 3);
+    this.selectedSearchTerms = mutuallyExclusive(this.allSearchTerms).slice(
+      0,
+      3
+    );
     this.searchTermsWatcherActivated = true;
     let dictionary = await this.$getDictionary();
     if (dictionary.findPhrases) {
@@ -359,38 +364,63 @@ export default {
         this.renderSearchSubs = true;
       });
     },
-    async getSearchTerms() {
-      if (this.$dictionaryName === "hsk-cedict") {
-        return unique([this.entry.simplified, this.entry.traditional]);
+    getEntryProperties(entry) {
+      const properties = [
+        "simplified",
+        "traditional",
+        "kana",
+        "head",
+        "hangul",
+      ];
+      const validValues = [];
+
+      for (const prop of properties) {
+        if (entry[prop] !== undefined) {
+          validValues.push(entry[prop]);
+        }
       }
-      if (this.wholePhraseOnly && this.exactPhrase) return [this.exactPhrase];
-      let terms;
-      if (this.$dictionaryName === "edict") {
-        terms = [this.entry.head];
-        terms.push(this.entry.kana);
-        terms = unique(terms);
-      }
-      let dictionary = await this.$getDictionary();
-      let forms = await dictionary.inflect(this.entry.head) || [];
-      let entryIsLemma = !forms.find((f) => f.table === "lemma");
-      if (!entryIsLemma) {
+
+      return validValues;
+    },
+    async getInflectedSearchTerms() {
+      // General handling for other dictionaries.
+      const dictionary = await this.$getDictionary();
+      let forms = (await dictionary.inflect(this.entry.head)) || [];
+
+      // Include only the first lemma form.
+      if (forms.some((f) => f.table !== "lemma")) {
         forms = [forms[0]];
       }
-      terms = forms
-        .map((form) => form.form)
-        .filter((s) => typeof s !== "undefined" && s.length > 1);
 
+      // Filter and map forms.
+      let terms = forms
+        .map((form) => form.form)
+        .filter((s) => s && s.length > 1);
+
+      // Handling OpenRussian dictionary.
       if (this.$dictionaryName === "openrussian") {
         terms = terms.map((t) => t.replace(/'/gi, ""));
       }
-      terms = [this.entry.head].concat(terms);
-      terms = unique(terms);
-      let optimalLength = this.entry.head.length - 1;
-      terms = terms.sort(
+
+      return terms;
+    },
+    async getSearchTerms() {
+      console.log('🍉 ');
+      let terms = [];
+
+      terms = terms.concat(this.getEntryProperties(this.entry));
+
+      terms = terms.concat(await this.getInflectedSearchTerms());
+
+      // Deduplicate and sort terms.
+      terms = unique([this.entry.head, ...terms]);
+      const optimalLength = this.entry.head.length - 1;
+      terms.sort(
         (a, b) =>
           Math.abs(a.length - optimalLength) -
           Math.abs(b.length - optimalLength)
       );
+
       return terms;
     },
     webImagesLoaded(images) {
