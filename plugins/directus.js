@@ -169,7 +169,8 @@ export default ({ app }, inject) => {
       limit,
       timestamp }) {
       let params = {}
-      params.suffix = '_' + this.youtubeVideosTableSuffix(l2Id)
+      let suffix = this.youtubeVideosTableSuffix(l2Id)
+      params.suffix = suffix ? '_' + this.youtubeVideosTableSuffix(l2Id) : ''
       if (this.youtubeVideosTableHasOnlyOneLanguage(l2Id)) {
         // No language filter is necessary since the table only has one language
       } else {
