@@ -86,7 +86,7 @@
           @updateCollapsed="(c) => (this.collapsed = c)"
           @updateAudioMode="(a) => (this.audioMode = a)"
           @updateSpeed="(s) => (speed = s)"
-          @toggleTranscriptMode="toggleTranscriptMode"
+          @updateTranscriptMode="(t) => (this.mode = t ? 'transcript' : 'subtitles')"
           @updateSmoothScroll="(r) => (this.useSmoothScroll = r)"
           @updateAutoPause="(r) => (this.autoPause = r)"
           @updateRepeatMode="(r) => (this.repeatMode = r)"
@@ -562,6 +562,12 @@ export default {
     video() {
       this.paused = true;
     },
+    mode() {
+      this.$store.dispatch("settings/setGeneralSettings", {
+        mode: this.mode,
+      });
+      this.$emit("updateLayout", this.mode);
+    },
   },
   methods: {
 
@@ -804,13 +810,6 @@ export default {
       this.viewportWidth = this.$el.clientWidth;
       this.viewportHeight = window.innerHeight;
       this.videoHeightWithoutControls = this.getVideoHeightWithoutControls();
-    },
-    toggleTranscriptMode() {
-      this.mode = this.mode === "transcript" ? "subtitles" : "transcript";
-      this.$store.dispatch("settings/setGeneralSettings", {
-        mode: this.mode,
-      });
-      this.$emit("updateLayout", this.mode);
     },
     onFullscreen(fullscreen) {
       if (fullscreen !== this.fullscreen) {

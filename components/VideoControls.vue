@@ -51,15 +51,13 @@
         <i class="fa-solid fa-folder-open"></i>
       </button>
       <button
-        v-if="showTranscriptModeToggle"
         :class="{
           'btn-video-controls btn-video-controls-transcript-mode text-center': true,
-          'btn-video-controls-active': mode === 'transcript',
         }"
-        @click="toggleTranscriptMode"
-        :title="$t('Trasncript Mode') + ' (T)'"
+        @click="rewind()"
+        :title="$t('Rewind') + ' (R)'"
       >
-        <i class="fa-solid fa-align-left"></i>
+        <i class="fa-solid fa-rotate-left"></i>
       </button>
       <button
         v-if="episodes"
@@ -255,6 +253,9 @@
       modal-class="safe-padding-top mt-4"
       size="sm"
     >
+      <Toggle v-model="transcriptMode" label="Transcript Mode">
+        <i class="fas fa-align-left"></i>
+      </Toggle>
       <Toggle v-model="collapsed" label="Collapse Video">
         <i class="fas fa-caret-square-up"></i>
       </Toggle>
@@ -312,9 +313,6 @@ export default {
     fullscreen: {
       default: false,
     },
-    showTranscriptModeToggle: {
-      default: true,
-    },
     showFullscreenModeToggle: {
       default: true,
     },
@@ -370,6 +368,7 @@ export default {
       currentLine: undefined,
       currentTime: this.initialTime,
       progressPercentage: 0,
+      transcriptMode: false,
     };
   },
   computed: {
@@ -426,12 +425,14 @@ export default {
       this.autoPause = this.$store.state.settings.autoPause;
       this.speed = this.$store.state.settings.speed || 1;
       this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
+      this.transcriptMode = this.$store.state.settings.mode !== "subtitles";
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "settings/LOAD_SETTINGS") {
         this.autoPause = this.$store.state.settings.autoPause;
         this.speed = this.$store.state.settings.speed || 1;
         this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
+        this.transcriptMode = this.$store.state.settings.mode !== "subtitles";
       }
     });
   },
@@ -453,6 +454,9 @@ export default {
     },
     collapsed() {
       this.$emit("updateCollapsed", this.collapsed);
+    },
+    transcriptMode() {
+      this.$emit("updateTranscriptMode", this.transcriptMode);
     },
     autoPause() {
       this.$store.dispatch("settings/setGeneralSettings", {
