@@ -170,6 +170,9 @@ export default {
       if (!this.historyLoaded) {
         this.$store.dispatch("history/load");
       }
+      if (!this.fullHistoryLoaded) {
+        this.$store.dispatch("fullHistory/load");
+      }
     },
     async getUserDataAndSubscription() {
       await this.$directus.fetchOrCreateUserData(); // Make sure user data is fetched from the server

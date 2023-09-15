@@ -435,12 +435,11 @@ export default {
         this.transcriptMode = this.$store.state.settings.mode !== "subtitles";
       }
     });
-  },
-  mounted() {
     this.bindKeys();
   },
   beforeDestroy() {
     this.unbindKeys();
+    this.unsubscribe();
   },
   watch: {
     initialTime() {

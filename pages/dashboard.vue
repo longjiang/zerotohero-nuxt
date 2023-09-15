@@ -185,37 +185,45 @@ export default {
       if (this.fullHistory) {
         let lastL1;
         let lastL2;
-        this.fullHistory.find((item) => {
-          // Resolve item.path
+        // find the last item in fullHistory that has l1 and l2 params
+        for (let i = this.fullHistory.length - 1; i >= 0; i--) {
+          let item = this.fullHistory[i];
+          // resolve item.path
           const route = this.$router.resolve(item.path);
-          // Find the l2 param
-          const l1 = route.route?.params?.l1;
-          const l2 = route.route?.params?.l2;
-          if (l1 && l2) {
-            lastL1 = l1;
-            lastL2 = l2;
-            return true;
+          if (route.route?.params?.l1 && route.route?.params?.l2) {
+            lastL1 = route.route?.params?.l1;
+            lastL2 = route.route?.params?.l2;
+            break;
           }
-        });
+        }
+
         if (lastL1 && lastL2) {
           return { l1: lastL1, l2: lastL2 };
         }
       }
     },
   },
-  mounted() {},
-  watch: {
-    fullHistory() {
-      // When fullHistory is loaded, redirect to last l2 if on landing page
-      const isLandingPage = window?.history?.length < 3;
-      if (isLandingPage) this.redirectLastL2()
-    },
+  mounted() {
+    if (this.fullHistory) this.redirectLastL2IfIsLandingPage();
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "fullHistory/LOAD") {
+        this.redirectLastL2IfIsLandingPage();
+      }
+    });
+  },
+  beforeDestroy() {
+    if (this.unsubscribe) this.unsubscribe();
   },
   methods: {
+    redirectLastL2IfIsLandingPage() {
+      // When fullHistory is loaded, redirect to last l2 if on landing page
+      let isLandingPage = true
+      if (window?.history?.length > 3) isLandingPage = false;
+      if (isLandingPage) this.redirectLastL2()
+    },
     redirectLastL2() {
       if (this.lastL1L2) {
         const { l1, l2 } = this.lastL1L2;
-        console.log({ l1, l2 });
         this.$router.push({ name: "explore-media", params: { l1, l2 } });
       }
     },

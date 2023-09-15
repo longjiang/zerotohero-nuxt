@@ -32,10 +32,15 @@ export const mutations = {
   ADD(state, path) {
     if (typeof localStorage !== 'undefined') {
       let history = state.fullHistory
-      history.push({
+      let payload = {
         path,
         date: Date.now()
-      })
+      }
+      history.push(payload)
+      // trim history to the last 1000 items
+      if (history.length > 1000) {
+        history = history.slice(history.length - 1000)
+      }
       localStorage.setItem('zthFullHistory', JSON.stringify(history))
       this._vm.$set(state, 'history', history)
     }
