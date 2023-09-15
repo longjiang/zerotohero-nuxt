@@ -906,6 +906,10 @@ export default {
   }
 }
 
+:deep(.synced-transcript-single-line) .transcript-line-both {
+  min-height: 5rem;
+}
+
 .reels {
   :deep(.video-controls) {
     display: none !important;
