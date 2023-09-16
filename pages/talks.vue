@@ -16,6 +16,7 @@
       :level="level"
       :showExtraSearchResults="true"
       :showLoader="true"
+      :showHeroVideo="true"
     />
     <LazyIdenticalLanguages class="mt-3" routeName="talks" />
   </div>

@@ -10,6 +10,16 @@
           : `https://img.youtube.com/vi/${shows[0].youtube_id}/hqdefault.jpg`
       "
     />
+    <div class="row">
+      <div class="col-sm-12">
+        <VideoHero
+          v-if="showHeroVideo && heroVideo"
+          :video="heroVideo"
+          :key="'hero-video' + heroVideo.youtube_id"
+          class="mb-5"
+        />
+      </div>
+    </div>
     <div class="show-filter row mt-3 mb-2" v-if="showFilter">
       <div class="col-sm-12 text-center mb-4">
         <div>
@@ -121,10 +131,13 @@
           </template>
           <ShowList
             v-if="shows && shows.length > 0"
-            :shows="filteredShows"
+            :shows="filteredShows.slice(0, limit || filteredShows.length)"
             :type="type"
             :key="`shows-filtered-${this.keyword}`"
           />
+          <b-button v-if="filteredShows && filteredShows.length > 12" :to="{name: routeType}" variant="outline-success" class="mt-3 d-block w-100" size="lg">
+            {{ $t('See All {type}', { type: routeTitles[routeType] }) }}
+          </b-button>
           <div
             v-if="
               keyword &&
@@ -200,6 +213,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    showHeroVideo: {
+      type: Boolean,
+      default: false,
+    },
+    limit: {
+      type: Number,
+      default: 0, // 0 means no limit
+    },
   },
   data() {
     return {
@@ -248,6 +269,19 @@ export default {
   computed: {
     ...mapState("progress", ["progress"]),
     ...mapState("settings", ["preferredCategories"]),
+    heroVideo() {
+      let shows = this.filteredShowsByAudiobookAndTags;
+      if (shows?.length > 0) {
+        let randomShow = shows[Math.floor(Math.random() * shows.length)];
+        let video = {
+          youtube_id: randomShow.youtube_id,
+          title: randomShow.title,
+          l2: randomShow.l2,
+          [this.routeType === 'tv-shows' ? 'tv_show' : 'talk']: randomShow.id,
+        };
+        return video
+      }
+    },
     languageLevel() {
       if (
         this.progress &&
@@ -476,6 +510,13 @@ export default {
         this.loadFeatureShowAndEpisode();
       }
     },
+    getRandomShow() {
+      if (this.filteredShows) {
+        let shows = this.filteredShows;
+        let randomShow = shows[Math.floor(Math.random() * shows.length)];
+        return randomShow;
+      }
+    },
     async loadFeatureShowAndEpisode() {
       this.featureShow = this.getRandomShow();
       this.featureEpisode = await this.getFirstEpisodeOfShow(
@@ -494,13 +535,6 @@ export default {
       let videos = await this.$directus.getVideos({ l2Id, query });
       let firstEpisode = videos[0];
       return firstEpisode;
-    },
-    getRandomShow() {
-      if (this.filteredShows) {
-        let shows = this.filteredShows;
-        let randomShow = shows[Math.floor(Math.random() * shows.length)];
-        return randomShow;
-      }
     },
   },
 };

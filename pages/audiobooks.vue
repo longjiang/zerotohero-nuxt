@@ -9,7 +9,7 @@
 </router>
 <template>
   <div class="audiobooks container mb-5">
-    <Shows routeType="audiobooks" :category="category" :tag="tag" :level="level" :showExtraSearchResults="true" :showLoader="true" />
+    <Shows routeType="audiobooks" :showHeroVideo="true" :category="category" :tag="tag" :level="level" :showExtraSearchResults="true" :showLoader="true" />
     <LazyIdenticalLanguages class="mt-3" routeName="audiobooks" />
   </div>
 </template>

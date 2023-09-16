@@ -9,7 +9,7 @@
 </router>
 <template>
   <div class="tv-shows container mb-5">
-    <Shows routeType="tv-shows" :category="category" :tag="tag" :level="level" :showExtraSearchResults="true" :showLoader="true" />
+    <Shows routeType="tv-shows" :showHeroVideo="true" :category="category" :tag="tag" :level="level" :showExtraSearchResults="true" :showLoader="true" />
     <LazyIdenticalLanguages class="mt-3" routeName="tv-shows" />
   </div>
 </template>
