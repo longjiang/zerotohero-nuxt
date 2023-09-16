@@ -62,12 +62,23 @@ export default {
   mounted() {
     $nuxt.$on("scroll-to", this.scrollTo);
     $nuxt.$on("smooth-scroll-to", this.smoothScrollTo);
+    this.setVH();
+    window.addEventListener("resize", this.setVH);
   },
   beforeDestroy() {
     $nuxt.$off("scroll-to", this.scrollTo);
     $nuxt.$off("smooth-scroll-to", this.smoothScrollTo);
+    window.removeEventListener("resize", this.setVH);
   },
   methods: {
+    /**
+     * Set CSS variable --vh to the height of the viewport
+     * This is to fix the height of the layout on mobile browsers
+     */
+    setVH() {
+      let vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    },
     updateCollapsed(collapsed) {
       this.collapsed = collapsed;
     },
@@ -92,7 +103,7 @@ export default {
 <style lang="scss" scoped>
 .zerotohero-layout {
   display: grid;
-  height: 100vh;
+  height: calc(var(--vh, 1vh) * 100); // This is to fix the height of the layout on mobile browsers
   .zth-main-nav-wrapper {
     grid-area: nav;
   }
