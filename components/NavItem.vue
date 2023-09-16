@@ -372,12 +372,11 @@ export default {
 }
 
 .nav-item-page {
-  padding: 0.75rem;
-  font-size: 1.2em;
-  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
   box-shadow: 0 10px 30px rgba(68, 75, 134, 0.2);
   display: block;
-  text-align: center;
+  text-align: left;
   height: 100%;
   cursor: pointer;
   .nav-item-count {
@@ -385,9 +384,8 @@ export default {
   }
 
   &:hover {
-    transform: scale(115%);
     transition: 200ms ease-in-out;
-    background-color: hsla(0deg, 100%, 100%, 0.8);
+    background-color: hsla(0deg, 100%, 100%, 0.1);
   }
 
   &.nav-item-page-light {
@@ -401,15 +399,7 @@ export default {
   }
 
   &.nav-item-page-dark {
-    background: rgb(69, 69, 69);
-    background: radial-gradient(
-      circle,
-      rgba(69, 69, 69, 1) 0%,
-      rgba(0, 0, 0, 1) 100%
-    );
-    border: 1px solid rgba(255, 255, 255, 0.226);
-    border-top: 1px solid rgba(255, 255, 255, 0.5);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.366);
     color: rgba(255, 255, 255, 0.8);
 
     &:hover {
@@ -418,17 +408,15 @@ export default {
   }
 
   .icon-wrapper {
-    font-size: 2rem;
     opacity: 1;
-    display: block;
+    display: inline;
+    margin-right: 0.25rem;
   }
 
   .nav-item-title {
-    font-size: 0.9em;
     line-height: 1;
-    display: block;
+    display: inline;
     height: 2rem;
-    display: flex;
     align-items: center;
     justify-content: center;
   }

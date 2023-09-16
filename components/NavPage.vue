@@ -6,39 +6,31 @@
     }"
   >
     <div class="nav-page">
-        <div class="container">
-          <div class="row">
-            <template
-              v-for="item in menu.filter(
+      <div class="container">
+        <div class="row">
+          <div
+            v-for="(item, index) in flattenList(
+              menu.filter(
                 (item) =>
                   item.show &&
                   to(item) &&
                   !['Admin', 'Contact', 'Settings'].includes(item.title)
-              )"
-            >
-              <template v-if="typeof item !== 'undefined' && item.children">
-                <div
-                  v-for="(child, index) in childrenAndGrandchildren(
-                    item
-                  ).filter((child) => child.show)"
-                  :key="`subnav-${child.name || child.href}-${index}`"
-                  :class="`col-6 col-sm-4 col-lg-3 col-xl-2
-mb-1
+              )
+            ).filter((item) => item.show && !item.children).slice(0, limit ? limit : 10000)"
+            :key="`subnav-${item.name || item.href}-${index}`"
+            :class="`col-6 col-sm-4 col-lg-3 col-xl-2
 p-1
 feature-card-column
-feature-card-name-${child.name}`"
-                >
-                  <NavItem
-                    v-if="!child.children"
-                    :to="last(child) || child"
-                    :item="child"
-                    variant="page"
-                  ></NavItem>
-                </div>
-              </template>
-            </template>
+feature-card-name-${item.name}`"
+          >
+            <NavItem
+              :to="last(item) || item"
+              :item="item"
+              variant="page"
+            ></NavItem>
           </div>
         </div>
+      </div>
     </div>
   </div>
 </template>
@@ -60,6 +52,13 @@ export default {
     },
     showOnly: {
       type: Array,
+    },
+    showOnlyChildren: {
+      type: Array,
+    },
+    limit: {
+      type: Number,
+      default: 0,
     },
   },
   data() {

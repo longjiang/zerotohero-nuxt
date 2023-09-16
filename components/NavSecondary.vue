@@ -62,6 +62,9 @@ export default {
     showOnly: {
       type: Array,
     },
+    showOnlyChildren: {
+      type: Array,
+    },
   },
   data() {
     return {

@@ -31,7 +31,7 @@
             v-if="heroVideo"
             :video="heroVideo"
             @videoUnavailable="onVideoUnavailable"
-            class="mb-5"
+            class="mb-3"
           />
           <div :class="{ 'media-section': true, 'd-none': !hasWatchHistory }">
             <h3 class="media-seaction-heading">
@@ -55,6 +55,15 @@
               @hasWatchHistory="onHasWatchHistory"
             />
           </div>
+          <client-only>
+            <NavPage
+              :l1="$l1"
+              :l2="$l2"
+              class="youtube-browse-nav mb-5"
+              :showOnly="['Media']"
+              :limit="12"
+            />
+          </client-only>
 
           <div
             :class="{
@@ -242,15 +251,6 @@
               />
             </div>
           </div>
-
-          <client-only>
-            <NavPage
-              :l1="$l1"
-              :l2="$l2"
-              class="youtube-browse-nav mt-5"
-              :showOnly="['Media']"
-            />
-          </client-only>
           <client-only>
             <LazyIdenticalLanguages
               class="mt-5 mb-5"

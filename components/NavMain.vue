@@ -77,6 +77,9 @@ export default {
     showOnly: {
       type: Array,
     },
+    showOnlyChildren: {
+      type: Array,
+    },
     showLogo: {
       type: Boolean,
       default: true,
