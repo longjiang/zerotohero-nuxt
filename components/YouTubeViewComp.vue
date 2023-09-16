@@ -421,12 +421,13 @@ export default {
     async loadMissingSubsFromYouTube(video) {
 
       // If the video doesn't have L1 or L2 subtitles, we load it from YouTube
-      // Do not load L1 subs if L1 and L2 are the same
+      // Do not load L1 subs if the current $l1 and $l2 are the same
+      let generated = false
       for (let l1OrL2 of this.$l1 === this.$l2 ? ["l2"] : ["l2", "l1"]) {
         if (!(video?.[`subs_${l1OrL2}`]?.length > 0)) {
           let subs
           let locale = this[`${l1OrL2}Locale`]
-          let generated = locale ? false : true // If we don't have the locale from YouTube, that means that the subs are generated
+          generated = locale ? false : true // If we don't have the locale from YouTube, that means that the subs are generated
           subs = await this.getSubs({
             youtube_id: video.youtube_id,
             locale: this[`${l1OrL2}Locale`] || this[`$${l1OrL2}`].code,
@@ -436,12 +437,13 @@ export default {
           // In the case of L1 subtitles, if we still don't have it, we get translated ones
           if (l1OrL2 === "l1" && !(subs?.length > 0)) {
             let tlang = this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code; // tlang
-            subs = await YouTube.getTranslatedTranscript(
-              video.youtube_id,
-              this.l2Locale || this[`$${l1OrL2}`].code,
-              this.l2Name,
-              tlang
-            );
+            subs = await YouTube.getTranslatedTranscript({
+              youtube_id: video.youtube_id,
+              locale: this.l2Locale || this.$l2.code,
+              name: this.l2Name,
+              tlang,
+              generated
+            });
           }
           if (subs && subs.length > 0) Vue.set(video, `subs_${l1OrL2}`, subs);
           this.$emit(`${l1OrL2}TranscriptLoaded`);
