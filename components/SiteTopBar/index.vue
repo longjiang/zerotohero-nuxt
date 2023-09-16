@@ -25,15 +25,9 @@
           v-show="!hideLogo"
         >
           <router-link
-            :to="
-              $auth.loggedIn
-                ? $route.path === '/dashboard'
-                  ? '/'
-                  : '/dashboard'
-                : '/'
-            "
+            to="/"
             class="btn btn-unstyled"
-            title="Dashboard"
+            title="Language Player"
           >
             <img
               src="/img/logo-play-circle-light.png"

@@ -70,9 +70,16 @@
                 <router-link
                   class="index-nav-item btn btn-success"
                   to="/dashboard"
-                  v-if="$auth.loggedIn"
+                  v-if="$auth.loggedIn && !$lastL1L2"
                 >
                   {{ $tb("Dashboard") }}
+                </router-link>
+                <router-link
+                  class="index-nav-item btn btn-success"
+                  :to="{name: 'explore-media', params: $lastL1L2}"
+                  v-if="$auth.loggedIn && $lastL1L2"
+                >
+                  {{ languageName($lastL1L2) }}
                 </router-link>
               </nav>
             </client-only>
@@ -130,7 +137,11 @@
                     {{ $tb("Welcome back") }}
                     {{ $auth.user.first_name }}.
                   </p>
-                  <router-link class="btn btn-success" to="/dashboard">
+                  <router-link class="btn btn-success" :to="{name: 'explore-media', params: $lastL1L2}" v-if="$lastL1L2">
+                    {{ $tb("Go to {l2}", {l2: languageName($lastL1L2) }) }}
+                    <i class="ml-1 fas fa-chevron-right"></i>
+                  </router-link>
+                  <router-link class="btn btn-success" :to="{name: 'dashboard'}" v-else>
                     {{ $tb("Go to Dashboard") }}
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
@@ -656,6 +667,12 @@ export default {
   methods: {
     language(code) {
       if (this.$languages) return this.$languages.getSmart(code);
+    },
+    languageName({ l1, l2 }) {
+      let language = this.language(l2);
+      if (language) {
+        return this.$languages.translate(language.name, l1);
+      }
     },
     scrollTo(selector) {
       document.querySelector(selector).scrollIntoView({

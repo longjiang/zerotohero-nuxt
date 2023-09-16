@@ -195,8 +195,8 @@ export default {
       }
     },
     redirectToDashboardIfAppropriate() {
-      if (this.$auth.loggedIn && this.$route.path === "/") {
-        this.$router.push({ path: "/dashboard" });
+      if (this.$auth.loggedIn && this.$lastL1L2) {
+        this.$router.push({ name: "explore-media", params: this.$lastL1L2 });
       }
     },
     setClientEnvironment() {
