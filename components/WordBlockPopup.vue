@@ -13,13 +13,6 @@
         :src="`${IMAGE_PROXY}?${image.src}`"
       />
     </div>
-    <button
-      class="word-block-tool-tip-close"
-      @click="$nuxt.$emit('popupClosed')"
-      v-close-popover
-    >
-      <i class="fa fa-times"></i>
-    </button>
     <div
       v-if="
         token?.lemmas &&
@@ -291,7 +284,9 @@ export default {
       let matchFoundInWords = this.words.find(
         (w) =>
           w.head.toLowerCase() === this.text.toLowerCase() ||
-          this.token?.lemmas?.map((l) => l.lemma.toLowerCase()).includes(w.head.toLowerCase())
+          this.token?.lemmas
+            ?.map((l) => l.lemma.toLowerCase())
+            .includes(w.head.toLowerCase())
       );
       if (matchFoundInWords) return true;
       return false;
@@ -403,50 +398,7 @@ $tooltip-background-dark: #312d2d;
 $tooltip-background-light: #fff;
 $tooltip-border-dark: #474545;
 
-.tooltip-arrow.skin-dark {
-  color: $tooltip-background-dark;
-}
-.popover.skin-dark {
-  .tooltip-wrapper {
-    background: $tooltip-background-dark;
-  }
-  hr {
-    border-color: $tooltip-border-dark;
-  }
-  .tooltip-entry + .tooltip-entry {
-    border-top: 1px solid $tooltip-border-dark;
-  }
-}
-.tooltip-arrow.skin-light {
-  color: $tooltip-background-light;
-}
-.popover.skin-light {
-  .tooltip-wrapper {
-    background: $tooltip-background-light;
-  }
-  .tooltip-arrow,
-  .tooltip-inner {
-    background: $tooltip-background-light;
-  }
-  .tooltip-entry + .tooltip-entry {
-    border-top: 1px solid #ccc;
-  }
-}
-.popover.skin-dark,
-.popover.skin-light {
-  background: none;
-  border: none;
-  .tooltip-wrapper {
-    border-radius: 1rem;
-    box-shadow: 0 5px 20px rgba(black, 0.2);
-    overflow: hidden;
-    .tooltip-inner {
-      background: none;
-    }
-  }
-}
-
-.tooltip-inner {
+.word-block-popup {
   .word-block-pinyin,
   .word-block-simplified,
   .word-block-traditional {
@@ -471,166 +423,60 @@ $tooltip-border-dark: #474545;
   font-size: 1rem;
 }
 
-.tooltip {
-  display: block !important;
-  $height: 20rem;
-  $width: 20rem;
-  border: none;
-  max-height: $height;
-  max-width: $width;
+.word-block-popup {
+  text-align: left;
+  overflow-y: auto;
 
-  &[x-placement^="top"] {
-    margin-bottom: 1rem;
-
-    .tooltip-arrow {
-      border-width: 5px 5px 0 5px;
-      border-left-color: transparent !important;
-      border-right-color: transparent !important;
-      border-bottom-color: transparent !important;
-      bottom: -5px;
-      left: calc(50% - 5px);
-      margin-top: 0;
-      margin-bottom: 0;
-    }
+  .popover-inner-hover-area {
+    padding: 0.75rem;
+    position: relative;
   }
 
-  &[x-placement^="bottom"] {
-    margin-top: 5px;
+  .tooltip-images {
+    margin-bottom: 0.5rem;
+    overflow-x: auto;
+    display: flex;
+    height: 4rem;
 
-    .tooltip-arrow {
-      border-width: 0 5px 5px 5px;
-      border-left-color: transparent !important;
-      border-right-color: transparent !important;
-      border-top-color: transparent !important;
-      top: -5px;
-      left: calc(50% - 5px);
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-
-  &[x-placement^="right"] {
-    margin-left: 5px;
-
-    .tooltip-arrow {
-      border-width: 5px 5px 5px 0;
-      border-left-color: transparent !important;
-      border-top-color: transparent !important;
-      border-bottom-color: transparent !important;
-      left: -5px;
-      top: calc(50% - 5px);
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
-
-  &[x-placement^="left"] {
-    margin-right: 5px;
-
-    .tooltip-arrow {
-      border-width: 5px 0 5px 5px;
-      border-top-color: transparent !important;
-      border-right-color: transparent !important;
-      border-bottom-color: transparent !important;
-      right: -5px;
-      top: calc(50% - 5px);
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
-
-  &[aria-hidden="true"] {
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.15s, visibility 0.15s;
-  }
-
-  &[aria-hidden="false"] {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.15s;
-  }
-
-  .word-block-tool-tip-close {
-    border-radius: 100%;
-    background: $primary-color;
-    color: white;
-    border: none;
-    position: fixed;
-    top: 0.5rem;
-    right: 0.5rem;
-    height: 1.5rem;
-    width: 1.5rem;
-    padding: 0;
-    z-index: 10;
-  }
-
-  .tooltip-arrow {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    position: absolute;
-    margin: 5px;
-  }
-
-  .tooltip-inner {
-    text-align: left;
-    overflow-y: auto;
-    max-width: $width;
-    max-height: $height;
-
-    .popover-inner-hover-area {
-      padding: 0.75rem;
-      position: relative;
-    }
-
-    .tooltip-images {
-      margin-bottom: 0.5rem;
-      width: $width;
-      overflow-x: auto;
-      display: flex;
+    img {
+      flex: 1;
       height: 4rem;
-
-      img {
-        flex: 1;
-        height: 4rem;
-        width: auto;
-        margin: 0 0.2rem;
-      }
+      width: auto;
+      margin: 0 0.2rem;
     }
+  }
 
-    .tooltip-entry + .tooltip-entry {
-      margin-top: 1rem;
-      padding-top: 1rem;
+  .tooltip-entry + .tooltip-entry {
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+
+  .word-pronunciation,
+  .word-pronunciation span {
+    color: #779bb5;
+    font-family: AndikaW, Andika, Arial, sans-serif;
+  }
+
+  .wordlist-item {
+    .toggle-saved-word {
+      padding-right: 0 !important;
     }
-
-    .word-pronunciation,
-    .word-pronunciation span {
-      color: #779bb5;
-      font-family: AndikaW, Andika, Arial, sans-serif;
+    .wordlist-item-word {
+      font-size: 1rem !important;
     }
-
-    .wordlist-item {
-      .toggle-saved-word {
-        padding-right: 0 !important;
-      }
-      .wordlist-item-word {
-        font-size: 1rem !important;
-      }
-      .btn-toggle-saved-word {
-        font-size: 0.8em !important;
-      }
+    .btn-toggle-saved-word {
+      font-size: 0.8em !important;
     }
+  }
 
-    .copy-button {
-      font-size: 0.8em;
-      position: relative;
-      bottom: 0.1em;
-      color: #999;
-      cursor: pointer;
-      &:hover {
-        color: $primary-color;
-      }
+  .copy-button {
+    font-size: 0.8em;
+    position: relative;
+    bottom: 0.1em;
+    color: #999;
+    cursor: pointer;
+    &:hover {
+      color: $primary-color;
     }
   }
 }

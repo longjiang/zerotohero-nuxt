@@ -1,17 +1,13 @@
 <template>
-  <v-popover
-    :open="open"
-    :popoverClass="`skin-${$skin}`"
-    :popoverWrapperClass="`tooltip-wrapper skin-${$skin} l1-${$l1.code} l2-${$l2.code}`"
-    :popoverInnerClass="`tooltip-inner popover-inner skin-${$skin}`"
-    :popoverArrowClass="`tooltip-arrow popover-arrow skin-${$skin}`"
-    placement="top"
+  <div
+    class="d-inline-block"
     ref="popover"
   >
     <div
       v-on="usePopup ? { click: wordBlockClick } : {}"
       @mouseenter="wordblockHover = true"
       @mouseleave="wordblockHover = false"
+      @click="wordBlockClick"
     >
       <WordBlockQuiz
         v-if="
@@ -22,7 +18,15 @@
       <WordBlockWord v-else v-bind="attributes" :animate="animate" />
     </div>
 
-    <template slot="popover">
+    <b-modal
+      ref="popup-dictionary-modal"
+      size="sm"
+      centered
+      hide-footer
+      modal-class="safe-padding-top mt-4"
+      :title="$tb('Dictionary')"
+      :body-class="`popup-dictionary-modal-wrapper l2-${$l2.code}`"
+    >
       <div
         v-if="
           (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
@@ -34,7 +38,7 @@
       <div
         @mouseenter="tooltipHover = true"
         @mouseleave="tooltipHover = false"
-        v-else-if="open"
+        v-else
         class="popover-inner-hover-area"
       >
         <WordBlockPopup
@@ -49,11 +53,10 @@
             phraseObj: phraseItem(text),
           }"
           ref="popup"
-          v-if="open"
         />
       </div>
-    </template>
-  </v-popover>
+    </b-modal>
+  </div>
 </template>
 
 <script>
@@ -235,19 +238,15 @@ export default {
     // you may call unsubscribe to stop the subscription
     this.unsubscribe();
   },
-  watch: {
-    async wordblockHover() {
-      await timeout(300);
-      this.openOrClosePopup();
-    },
-    async tooltipHover() {
-      await timeout(123);
-      this.openOrClosePopup();
-    },
-  },
   methods: {
     unique,
     speak,
+    showMenuModal() {
+      this.$refs["popup-dictionary-modal"].show();
+    },
+    hideMenuModal() {
+      this.$refs["popup-dictionary-modal"].hide();
+    },
     async playAnimation(animationDuration) {
       this.animate = true;
       await timeout(animationDuration);
@@ -426,7 +425,7 @@ export default {
           path: `/${this.$l1.code}/${this.$l2.code}/explore/related/${this.token.candidates[0].id}`,
         });
       } else {
-        if (!isMobile()) this.togglePopup();
+        this.openPopup();
       }
     },
     async checkSavedItems() {
@@ -450,13 +449,6 @@ export default {
         else this.openPopup();
       }
     },
-    openOrClosePopup() {
-      if (this.wordblockHover || this.tooltipHover) {
-        this.openPopup();
-      } else {
-        this.closePopup();
-      }
-    },
     shouldLoadImages() {
       let hasImageWorthyWords = false;
       if (this.words) {
@@ -475,7 +467,7 @@ export default {
     async openPopup() {
       if (!this.usePopup) return; // Not using popup
       if (this.open) return; // Already open
-      this.open = true;
+      this.showMenuModal();
       if (this.lookupInProgress === false && !(this.words?.length > 0)) {
         await this.lookup();
       }
@@ -503,7 +495,7 @@ export default {
       }
     },
     async closePopup() {
-      this.open = false;
+      this.hideMenuModal()
       this.$nuxt.$emit("popupClosed");
     },
     async lookup() {
