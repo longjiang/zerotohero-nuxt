@@ -173,7 +173,7 @@
           cc: true,
           episodes: hits.map((h) => h.video),
           forcePro: true,
-          initialMode: 'subtitles',
+          forceMode: 'subtitles',
           show: currentHit.show,
           showInfoButton: true,
           showAnimation: !reels,

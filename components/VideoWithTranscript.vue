@@ -7,7 +7,7 @@
       collapsed,
       hovering,
       [`size-${size}`]: true,
-      [`mode-${mode}`]: true,
+      [`mode-${(forceMode || mode)}`]: true,
       [`aspect-${aspect}`]: true,
     }"
     @mouseenter="resetHoverTimeout"
@@ -61,6 +61,7 @@
             initialTime: starttime ? starttime : 0,
             largeEpisodeCount,
             mode,
+            forceMode,
             paused,
             show,
             showCollapse: mode === 'transcript',
@@ -98,13 +99,12 @@
             $refs.transcript ? $refs.transcript.goToNextLine() : null
           "
         />
-
         <div
           class="video-info video-info-side pl-3 pt-2"
           v-if="
             aspect === 'landscape' &&
             size !== 'mini' &&
-            mode === 'transcript' &&
+            (forceMode || mode) === 'transcript' &&
             !collapsed
           "
         >
@@ -189,7 +189,7 @@
             parallellines: video.subs_l1 || [],
             starttime: startTimeOrLineIndex,
             currentTime,
-            single: mode === 'subtitles' || size === 'mini',
+            single: (forceMode || mode) === 'subtitles' || size === 'mini',
             showAnimation,
             showSubsEditing,
             enableTranslationEditing,
@@ -216,7 +216,7 @@
         />
         <div
           class="video-info video-info-bottom"
-          v-if="mode === 'transcript' && size !== 'mini'"
+          v-if="(forceMode || mode) === 'transcript' && size !== 'mini'"
         >
           <div class="text-center mt-2 mb-2" v-if="checkingSubs">
             <Loader :sticky="true" message="Loading subtitles..." />
@@ -381,6 +381,9 @@ export default {
     },
     forcePro: {
       default: false,
+    },
+    forceMode: {
+      default: undefined,
     },
     showAnimation: {
       default: true,

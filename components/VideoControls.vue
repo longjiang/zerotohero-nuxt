@@ -73,7 +73,7 @@
         @click="goToPreviousLine()"
         :title="$t('Previous Line') + ' (←)'"
       >
-        <i v-if="mode === 'transcript'" class="fas fa-arrow-up"></i>
+        <i v-if="(forceMode || mode) === 'transcript'" class="fas fa-arrow-up"></i>
         <i v-else class="fas fa-arrow-left"></i>
       </button>
       <button
@@ -92,7 +92,7 @@
         @click="goToNextLine()"
         :title="$t('Next Line')"
       >
-        <i v-if="mode === 'transcript'" class="fas fa-arrow-down"></i>
+        <i v-if="(forceMode || mode) === 'transcript'" class="fas fa-arrow-down"></i>
         <i v-else class="fas fa-arrow-right"></i>
       </button>
       <button
@@ -303,6 +303,9 @@ export default {
     },
     mode: {
       default: "subtitles",
+    },
+    forceMode: {
+      default: undefined,
     },
     skin: {
       default: "dark",
