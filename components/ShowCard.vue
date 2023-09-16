@@ -47,14 +47,23 @@
 </template>
 
 <script>
-import { languageLevels, formatK } from "@/lib/utils";
+import { languageLevels } from "@/lib/utils";
+import YouTube from "@/lib/youtube";
 import { mapState } from "vuex";
 import Vue from "vue";
 export default {
+  async created() {
+    let unavailable = await YouTube.videoUnavailable(this.show.youtube_id)
+    if (unavailable) {
+      this.unavailable = true
+      this.$emit('unavailable', this.show)
+    }
+  },
   data() {
     return {
       field: this.type === "tvShows" ? "tv_show" : "talk",
       slug: this.type === "tvShows" ? "tv-show" : "talk",
+      coverUnavailable: false, // Set to true if the cover image is not available, meaning that the first video is not available
     };
   },
   props: {

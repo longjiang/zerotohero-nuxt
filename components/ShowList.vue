@@ -3,10 +3,12 @@
     <div class="tv-shows row">
       <ShowCard
         v-for="show of shows"
+        v-show="!unavailableShows.includes(show)"
         :show="show"
         :type="type"
         :key="`tv-show-card-wrapper-${show.id}`"
         :class="colClasses"
+        @unavailable="unavailableShows.push(show)"
       />
     </div>
   </container-query>
@@ -25,6 +27,7 @@ export default {
   },
   data() {
     return {
+      unavailableShows: [],
       field: this.type === "tvShows" ? "tv_show" : "talk",
       slug: this.type === "tvShows" ? "tv-show" : "talk",
       params: {},
