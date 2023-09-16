@@ -7,15 +7,7 @@
     }"
   >
     <SocialHead
-      v-if="this.type === 'youtube'"
-      :title="`${video ? video.title + ' | ' : ''}Learn ${
-        $l2.name
-      } with Language Player`"
-      description="Study the transcript of this video with a popup dictionary"
-      :image="`https://img.youtube.com/vi/${this.youtube_id}/hqdefault.jpg`"
-    />
-    <SocialHead
-      v-else
+      v-if="this.type === 'bring-your-own'"
       :title="`Play Your Own Video | Learn ${$l2.name} with Language Player`"
       description="Study the transcript of this video with a popup dictionary"
     />
