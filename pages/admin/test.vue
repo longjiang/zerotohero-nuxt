@@ -16,15 +16,20 @@
 </template>
 
 <script>
+import { IMAGE_PROXY } from "@/lib/utils";
 export default {
+  async mounted() {
+    console.log('Available: ', await this.videoUnavailable("8SHf6wmX5MU")); // available
+    console.log('Unavailable: ', await this.videoUnavailable("yx8NF4EF9iA")); // unavailable
+  },
   methods: {
     async testTokenizer() {
       const tokenizer = await this.$getTokenizer();
-      console.log('testing tokenizer', {tokenizer});
+      console.log("testing tokenizer", { tokenizer });
       if (tokenizer.tokenize) {
-        let tokens = await tokenizer.tokenize("Hello, world!")
-        console.log({tokens});
-      }   
+        let tokens = await tokenizer.tokenize("Hello, world!");
+        console.log({ tokens });
+      }
     },
     detectCircularReferences(obj, path = []) {
       if (typeof obj !== "object" || obj === null) {
@@ -43,6 +48,21 @@ export default {
           this.detectCircularReferences(obj[key], path.slice());
         }
       }
+    },
+    videoUnavailable(youtube_id) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "Anonymous"; // Handle CORS
+        img.src = `${IMAGE_PROXY}?https://img.youtube.com/vi/${youtube_id}/hqdefault.jpg`;
+
+        img.onload = function () {
+          resolve(false);
+        };
+
+        img.onerror = function () {
+          resolve(true)
+        };
+      });
     },
   },
 };

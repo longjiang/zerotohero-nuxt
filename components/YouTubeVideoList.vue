@@ -184,6 +184,7 @@
             :class="{ 'checking-subs': checkSubs && subsChecked < videoIndex }"
             @newShow="newShow"
             @hasSubs="onHasSubs"
+            @unavailable="unavailableVideos.push(video)"
             :skin="$skin"
             :video="video"
             :generated="generated"
@@ -291,6 +292,7 @@ export default {
 
   data() {
     return {
+      unavailableVideos: [],
       channels: undefined,
       checkSavedData: this.checkSaved,
       checkSavedDone: false,
@@ -334,6 +336,7 @@ export default {
     filteredVideos() {
       let keyword = this.keyword ? this.keyword.toLowerCase() : undefined;
       let filteredVideos = this.videos.filter((video) => {
+        if (this.unavailableVideos.includes(video)) return false;
         if (this.hideVideosWithoutSubs && !video.hasSubs) return false;
         if (
           this.hideVideosInShows &&

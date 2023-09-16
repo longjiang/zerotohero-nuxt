@@ -317,6 +317,7 @@ export default {
   data() {
     return {
       over: false,
+      unavailable: false,
       firstLineTime:
         this.video.subs_l2 && this.video.subs_l2[0]
           ? this.video.subs_l2[0].starttime
@@ -399,6 +400,13 @@ export default {
     // if (!this.$store.state.history.historyLoaded) {
     //   this.$store.dispatch("history/load");
     // }
+  },
+  async created() {
+    let unavailable = await YouTube.videoUnavailable(this.video.youtube_id)
+    if (unavailable) {
+      this.unavailable = true
+      this.$emit('unavailable', this.video)
+    }
   },
   watch: {
     firstLineTime(newTime, oldTime) {
