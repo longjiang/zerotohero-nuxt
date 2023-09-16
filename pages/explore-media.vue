@@ -34,7 +34,7 @@
             class="mb-3"
           />
           <div :class="{ 'media-section': true, 'd-none': !hasWatchHistory }">
-            <h3 class="media-seaction-heading">
+            <h3 class="media-seaction-heading mt-5">
               {{ $t("Continue Studying") }}
               <router-link :to="{ name: 'watch-history' }" class="show-all">
                 {{ $t("More") }}

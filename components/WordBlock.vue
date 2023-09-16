@@ -7,7 +7,6 @@
       v-on="usePopup ? { click: wordBlockClick } : {}"
       @mouseenter="wordblockHover = true"
       @mouseleave="wordblockHover = false"
-      @click="wordBlockClick"
     >
       <WordBlockQuiz
         v-if="
@@ -47,6 +46,7 @@
             token,
             words,
             images,
+            shouldLoadImages,
             lookupInProgress,
             loadingImages,
             context,
@@ -401,9 +401,6 @@ export default {
         Object.assign({}, phrase)
       );
     },
-    test(arg) {
-      console.log(`Evaluated`, arg);
-    },
     fixKlingonTypos(text) {
       return Klingon.fixTypos(text);
     },
@@ -442,12 +439,6 @@ export default {
         ).slice(0, 5);
       }
       this.loadingImages = false;
-    },
-    togglePopup() {
-      if (this.usePopup) {
-        if (this.open) this.closePopup();
-        else this.openPopup();
-      }
     },
     shouldLoadImages() {
       let hasImageWorthyWords = false;

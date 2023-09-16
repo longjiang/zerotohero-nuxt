@@ -3,7 +3,7 @@
     <div
       class="tooltip-images"
       :key="`tooltip-images-${text}`"
-      v-if="images && (images.length > 0 || loadingImages)"
+      v-if="shouldLoadImages"
     >
       <img
         alt
@@ -252,6 +252,9 @@ export default {
     words: Array,
     token: Object,
     images: Array,
+    shouldLoadImages: {
+      default: false,
+    },
     transliterationprop: String,
     phraseObj: Object,
     loading: {
