@@ -131,7 +131,7 @@
           kidsOnly,
           sort,
           showLatestIfKeywordMissing: true,
-          includeTVShows: true,
+          includeTVShows: keyword ? true : false,
           showNoVideosMessage: true,
           perPage: 12,
           showSearchBar: false,
