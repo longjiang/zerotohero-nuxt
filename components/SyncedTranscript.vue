@@ -754,7 +754,9 @@ export default {
         let elementTop = documentOffsetTop(el); // distance from top of the document to the top of the element
         let offset = this.scrollOffset(el);
         let top = elementTop + offset;
-        let scrollDistanceIsLarge = Math.abs(window.scrollY - top) > 1000;
+        const contentArea = document.querySelector('.content-area');
+        const currentScrollY = contentArea.scrollTop;
+        let scrollDistanceIsLarge = Math.abs(currentScrollY - top) > 1000;
 
         if (this.useSmoothScroll && !scrollDistanceIsLarge) {
           this.smoothScrollToCurrentLine(offset, el);
