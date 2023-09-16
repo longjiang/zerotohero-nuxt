@@ -123,6 +123,7 @@
             v-if="type === 'youtube'"
             :video="video"
             ref="videoDetails"
+            @updateVideo="onUpdateVideo"
           />
           <EpisodeNav
             v-if="episodes"

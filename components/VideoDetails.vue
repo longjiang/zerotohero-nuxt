@@ -36,9 +36,13 @@
         {{ localeDescription }}
       </span> -->
       <span>
-        <a :href="`https://www.youtube.com/watch?v=${video.youtube_id}`" target="_blank">YouTube</a>
+        <a :href="`https://www.youtube.com/watch?v=${video.youtube_id}`" target="_blank">View on YouTube</a>
       </span>
-      <span v-if="video.channel">
+      <span @click="retranslate" v-if="this.video.id" class="text-success" style="{cursor: pointer;}">
+        <template v-if="this.retranslating">{{ $t('Retranslating...') }}</template>
+        <template v-else>{{ $t('Retranslate') }}</template>
+      </span>
+      <span v-if="video.channel && $adminMode">
         <router-link
           :to="{
             name: 'youtube-channel',
@@ -101,7 +105,7 @@
   </div>
 </template>
 <script>
-import { makeTextFile, formatK, sanitizeFilename } from "@/lib/utils";
+import { makeTextFile, formatK, proxy, sanitizeFilename, PYTHON_SERVER } from "@/lib/utils";
 import subsrt from 'subsrt';
 
 export default {
@@ -110,6 +114,11 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  data() {
+    return {
+      retranslating: false,
+    }
   },
   asyncComputed: {
     async country() {
@@ -154,6 +163,22 @@ export default {
     },
   },
   methods: {
+    async retranslate() {
+      this.retranslating = true
+      let response = await proxy(`${PYTHON_SERVER}/translate_video_and_save?l1=${this.$l1.code}&l2=${this.$l2.code}&video_id=${this.video.id}`)
+      let subs_l1 = this.$subs.parseSavedSubs(response)
+      console.log({subs_l1})
+      this.video.subs_l1 = subs_l1
+      this.$emit('updateVideo', this.video)
+      this.$toast.success(
+        this.$t('The subtitles have been retranslated.'),
+        {
+          position: "top-center",
+          duration: 5000,
+        }
+      );
+      this.retranslating = false
+    },
     formatK(number) {
       return formatK(number, 2, this.$l1.code);
     },
