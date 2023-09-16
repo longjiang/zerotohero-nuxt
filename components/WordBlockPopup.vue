@@ -30,7 +30,7 @@
       <span v-if="$hasFeature('transliteration')">
         <Speak :text="text" class="mr-1" ref="speak" />
         <span class="word-pronunciation"
-          >[{{ transliterationprop || tr(text) }}]</span
+          >[{{ transliterationprop || token?.pronunciation || tr(text) }}]</span
         >
       </span>
       <div>
