@@ -201,7 +201,6 @@ export default {
     id: [Number, String],
     type: String, // "tv-show" or "talk"
   },
-  computed: {},
   data() {
     return {
       collection: this.type === "tv-show" ? "tv_show" : "talk",
@@ -310,7 +309,7 @@ export default {
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();
   },
-  mounted() {
+  created() {
     if (this.id) {
       if (this.$store.state.shows.showsLoaded[this.$l2.code]) {
         this.getShowFromStore();
