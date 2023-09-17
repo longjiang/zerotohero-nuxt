@@ -197,7 +197,7 @@ export default ({ app }, inject) => {
     },
 
     // Helper function to process videos
-    processVideos(
+    extractHitsFromVideos(
       videos,
       termsRegex,
       regex,
@@ -265,6 +265,46 @@ export default ({ app }, inject) => {
       const notExcluded = !excludeRegex || !excludeRegex.test(line);
       return regex.test(line) && notExcluded;
     },
+
+    // Helper function to update hit contexts
+    updateHitContexts(hit, termsRegex) {
+      const getLeftContext = (prevLine, currentLine, regex) =>
+        (prevLine ? prevLine.trim() : "") + currentLine.replace(regex, "");
+
+      const getRightContext = (currentLine, nextLine, regex) =>
+        currentLine.replace(regex, "").trim() +
+        (nextLine ? nextLine.trim() : "");
+
+      let prev = hit.video.subs_l2[hit.lineIndex - 1];
+      let next = hit.video.subs_l2[Number(hit.lineIndex) + 1];
+      let regex = new RegExp(
+        `(${termsRegex.join("|").replace(/[*]/g, ".+").replace(/[_]/g, ".")})`,
+        "gim"
+      );
+
+      if (!hit.leftContext) {
+        hit.leftContext = getLeftContext(prev ? prev.line : "", hit.line, regex)
+          .split("")
+          .reverse()
+          .join("")
+          .trim();
+      }
+
+      if (!hit.rightContext) {
+        hit.rightContext = getRightContext(hit.line, next && next.line, regex);
+      }
+    },
+
+    // Convert subtitles to simplified Chinese
+    convertSubLinesToSimplified(hit, sify) {
+      [hit.lineIndex - 1, hit.lineIndex, hit.lineIndex + 1].forEach((index) => {
+        const lineObj = hit.video.subs_l2[index];
+        if (lineObj) {
+          lineObj.line = sify(lineObj.line);
+        }
+      });
+    },
+
     getHits(
       videos,
       terms,
@@ -282,66 +322,33 @@ export default ({ app }, inject) => {
         continua,
         termsRegex,
       });
+      const excludeRegex = new RegExp(
+        excludeTerms.map(this.escapeRegExp).join("|"),
+        "i"
+      );
 
-      const excludeTermsRegex = excludeTerms.map(escapeRegExp);
-      const excludeRegex = new RegExp(excludeTermsRegex.join("|"), "i");
-
-      let hits = this.processVideos(
+      let hits = this.extractHitsFromVideos(
         videos,
         termsRegex,
         regex,
         excludeRegex,
         mustIncludeYouTubeId
       );
-      
+
       for (let hit of hits) {
-        if (convertToSimplified) {
-          if (hit.video.subs_l2[hit.lineIndex - 1])
-            hit.video.subs_l2[hit.lineIndex - 1].line = sify(
-              hit.video.subs_l2[hit.lineIndex - 1].line
-            );
-          hit.video.subs_l2[hit.lineIndex].line = sify(
-            hit.video.subs_l2[hit.lineIndex].line
-          );
-          if (hit.video.subs_l2[hit.lineIndex + 1])
-            hit.video.subs_l2[hit.lineIndex + 1].line = sify(
-              hit.video.subs_l2[hit.lineIndex + 1].line
-            );
-        }
-
         hit.line = hit.video.subs_l2[hit.lineIndex].line.trim();
-        if (!hit.leftContext) {
-          let prev = hit.video.subs_l2[hit.lineIndex - 1];
-          let regex = new RegExp(
-            `(${termsRegex
-              .join("|")
-              .replace(/[*]/g, ".+")
-              .replace(/[_]/g, ".")})(.|\n)*`,
-            "gim"
-          );
 
-          let leftContext =
-            (prev ? prev.line.trim() : "") + hit.line.replace(regex, "");
-          hit.leftContext = leftContext.split("").reverse().join("").trim();
+        if (convertToSimplified) {
+          this.convertSubLinesToSimplified(hit, sify);
         }
-        if (!hit.rightContext) {
-          let next = hit.video.subs_l2[Number(hit.lineIndex) + 1];
-          let regex = new RegExp(
-            `(.|\n)*(${termsRegex
-              .join("|")
-              .replace(/[*]/g, ".+")
-              .replace(/[_]/g, ".")})`,
-            "gim"
-          );
-          let rightContext =
-            hit.line.replace(regex, "").trim() +
-            (next && next.line ? next.line.trim() : "");
-          hit.rightContext = rightContext;
-        }
+
+        this.updateHitContexts(hit, termsRegex);
       }
+
       hits = hits.sort((a, b) =>
         a.rightContext.localeCompare(b.rightContext, "zh-CN")
       );
+
       return hits;
     },
   });
