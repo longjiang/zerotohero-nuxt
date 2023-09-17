@@ -405,7 +405,6 @@ export default {
       return terms;
     },
     async getSearchTerms() {
-      console.log('🍉 ');
       let terms = [];
 
       terms = terms.concat(this.getEntryProperties(this.entry));
