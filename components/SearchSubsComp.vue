@@ -8,50 +8,48 @@
   >
     <div class="text-center pb-2">
       <span v-if="hits.length > 0">
-        <b-button
-          size="sm"
-          variant="ghost-dark-no-bg"
+        <!-- Navigation Buttons -->
+        <SimpleButton
           :disabled="hitIndex === 0"
-          @click="goToPrevHit"
+          iconClass="fas fa-step-backward"
           title="Previous Clip"
-          :class="{ '': true, disabled: hitIndex === 0 }"
-        >
-          <i class="fas fa-step-backward" />
-        </b-button>
-        <b-button
-          variant="ghost-dark-no-bg"
-          size="sm"
+          @click="goToPrevHit"
+        />
+        <SimpleButton
+          :disabled="hitIndex >= hits.length - 1"
+          iconClass="fas fa-step-forward"
+          title="Next Clip"
+          @click="goToNextHit"
+        />
+
+        <!-- Filter and List -->
+        <SimpleButton
           v-if="!showFilter"
+          iconClass="fas fa-filter"
           title="Filter Clips by Keywords"
           @click="showFilter = true"
-        >
-          <i class="fas fa-filter" />
-        </b-button>
-        <b-button
-          size="sm"
-          variant="ghost-dark-no-bg"
-          class="playlist-toggle"
-          @click="showPlaylistModal"
+        />
+        <SimpleButton
+          iconClass="fa-solid fa-list mr-1"
           title="List All Clips"
-        >
-          <i class="fa-solid fa-list mr-1"></i>
-          {{ $t("List") }}
-        </b-button>
+          @click="showPlaylistModal"
+        />
+
+        <!-- Search Input -->
         <b-form-input
-          v-if="!checking && (hits.length > 0 || regex) && showFilter"
+          v-if="showFilter && (hits.length > 0 || regex)"
           type="text"
           class="d-inline-block"
           size="sm"
           v-model="regex"
           placeholder="Filter..."
-          style="width: 6em"
-          :variant="skin === 'light' ? 'gray' : 'ghost-dark-no-bg'"
-          :lazy="true"
           @blur="showFilter = false"
         />
-        <span class="search-subs-hit-index ml-2 mr-2 d-inline-block">
-          {{ hitIndex + 1 }} of {{ hits.length }}
-        </span>
+
+        <!-- Current Hit Index -->
+        <span class="ml-2 mr-2"> {{ hitIndex + 1 }} of {{ hits.length }} </span>
+
+        <!-- Open Full Video -->
         <router-link
           v-if="currentHit"
           :to="{
@@ -70,67 +68,9 @@
           <i class="fa-solid fa-arrows-maximize mr-1"></i>
           {{ $t("Open Full") }}
         </router-link>
-        <b-button
-          size="sm"
-          :disabled="hitIndex >= hits.length - 1"
-          variant="ghost-dark-no-bg"
-          @click="goToNextHit"
-          title="Next Clip"
-          :class="{
-            disabled: hitIndex >= hits.length - 1,
-          }"
-        >
-          <i class="fas fa-step-forward" />
-        </b-button>
-        <div class="float-right mr-1" v-if="$adminMode">
-          <SmallStar
-            class="small-star ml-0 mr-0"
-            :item="currentHit"
-            :saved="(hit) => hit.saved"
-            :save="saveHit"
-            :remove="removeSavedHit"
-          />
-          <span
-            class="num-saved ml-1 mr-0"
-            v-if="groupsRight['zthSaved'].length > 0"
-          >
-            {{ groupsRight["zthSaved"].length }}
-          </span>
-          <b-button
-            variant="ghost-dark-no-bg"
-            class="search-subs-fullscreen"
-            size="sm"
-            @click="toggleFullscreen"
-            v-if="
-              !checking &&
-              !fullscreen &&
-              fullscreenToggle &&
-              (hits.length > 0 || regex)
-            "
-          >
-            <i class="fas fa-expand"></i>
-          </b-button>
-          <b-button
-            variant="ghost-dark-no-bg"
-            size="sm"
-            class="btn search-subs-close"
-            v-if="!checking && fullscreen && fullscreenToggle"
-            @click="toggleFullscreen"
-          >
-            <i class="fas fa-times" />
-          </b-button>
-          <b-button
-            variant="ghost-dark-no-bg"
-            size="sm"
-            v-if="fullscreen"
-            @click="reels = !reels"
-            :class="{ active: reels }"
-          >
-            <i class="fa-brands fa-instagram"></i>
-          </b-button>
-        </div>
       </span>
     </div>
+
     <div
       :class="{ 'loader text-center pb-5 pt-3': true, 'd-none': !checking }"
       style="flex: 1"
@@ -491,7 +431,7 @@ export default {
             youtube_id: video.youtube_id,
             locale: l2Locale,
             name: l2Name,
-            tlang
+            tlang,
           });
         }
         if (subs && subs.length > 0) Vue.set(video, `subs_l1`, subs);
