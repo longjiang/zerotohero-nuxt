@@ -387,9 +387,10 @@ export default {
       const dictionary = await this.$getDictionary();
       let forms = (await dictionary.inflect(this.entry.head)) || [];
 
-      // Include only the first lemma form.
-      if (forms.some((f) => f.table !== "lemma")) {
-        forms = [forms[0]];
+      // If there are multiple lemma forms, include only the first one.
+      if (forms.filter((f) => f.table === "lemma").length > 1) {
+        const firstLemma = forms.find((f) => f.table === "lemma");
+        forms = forms.filter((f) => f.table !== "lemma" || f === firstLemma);
       }
 
       // Filter and map forms.
@@ -409,7 +410,11 @@ export default {
 
       terms = terms.concat(this.getEntryProperties(this.entry));
 
-      terms = terms.concat(await this.getInflectedSearchTerms());
+      let inflectedTerms = await this.getInflectedSearchTerms();
+
+      terms = terms.concat(inflectedTerms);
+
+      console.log({ terms, inflectedTerms} );
 
       // Deduplicate and sort terms.
       terms = unique([this.entry.head, ...terms]);
