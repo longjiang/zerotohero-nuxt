@@ -152,6 +152,7 @@
         get,
         goToHit,
       }"
+      @updateSort="newSortValue => sort = newSortValue"
     />
   </div>
 </template>

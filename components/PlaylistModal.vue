@@ -17,7 +17,7 @@
             'bg-dark': sort === 'length',
             'text-white': sort === 'length',
           }"
-          @click.stop.prevent="sort = 'length'"
+          @click.stop.prevent="$emit('updateSort', 'length')"
         >
           {{ $t("Sort By Length") }}
         </button>
@@ -27,7 +27,7 @@
             'bg-dark': sort === 'left',
             'text-white': sort === 'left',
           }"
-          @click.stop.prevent="sort = 'left'"
+          @click.stop.prevent="$emit('updateSort', 'left')"
         >
           {{ $t("Sort Left") }}
         </button>
@@ -37,7 +37,7 @@
             'bg-dark': sort === 'right',
             'text-white': sort === 'right',
           }"
-          @click.stop.prevent="sort = 'right'"
+          @click.stop.prevent="$emit('updateSort', 'right')"
         >
           {{ $t("Sort Right") }}
         </button>
