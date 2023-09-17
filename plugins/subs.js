@@ -197,13 +197,7 @@ export default ({ app }, inject) => {
     },
 
     // Helper function to process videos
-    extractHitsFromVideos(
-      videos,
-      termsRegex,
-      regex,
-      excludeRegex,
-      mustIncludeYouTubeId
-    ) {
+    extractHitsFromVideos(videos, regex, excludeRegex, mustIncludeYouTubeId) {
       const hits = [];
       const seenYouTubeIds = [];
 
@@ -217,7 +211,7 @@ export default ({ app }, inject) => {
           const line = he.decode(rawLine).replace(/\n/g, " ");
 
           if (
-            this.extractTermsAndExclusions(
+            this.lineMeetsTermAndExclusionCriteria(
               line,
               regex,
               mustIncludeYouTubeId === video.youtube_id ? null : excludeRegex
@@ -261,7 +255,7 @@ export default ({ app }, inject) => {
     },
 
     // Helper function to check term and exclusion conditions
-    extractTermsAndExclusions(line, regex, excludeRegex) {
+    lineMeetsTermAndExclusionCriteria(line, regex, excludeRegex) {
       const notExcluded = !excludeRegex || !excludeRegex.test(line);
       return regex.test(line) && notExcluded;
     },
@@ -322,14 +316,13 @@ export default ({ app }, inject) => {
         continua,
         termsRegex,
       });
-      const excludeRegex = new RegExp(
-        excludeTerms.map(this.escapeRegExp).join("|"),
-        "i"
-      );
+      const excludeRegex =
+        excludeTerms?.length > 0
+          ? new RegExp(excludeTerms.map(this.escapeRegExp).join("|"), "i")
+          : null;
 
       let hits = this.extractHitsFromVideos(
         videos,
-        termsRegex,
         regex,
         excludeRegex,
         mustIncludeYouTubeId

@@ -195,6 +195,10 @@ export default {
     context: {
       type: Object, // { form, text, starttime = undefined, youtube_id = undefined }
     },
+    excludeTerms: {
+      type: Array,
+      default: undefined,
+    },
   },
   data() {
     return {
@@ -204,7 +208,6 @@ export default {
       groupsLeft: {},
       foundHits: [],
       groupsLength: {},
-      excludeTerms: [],
       navigated: false,
       checking: true,
       videos: [],
@@ -288,7 +291,6 @@ export default {
         this.loadSettings();
       }
     });
-    this.excludeTerms = await this.getExcludeTerms();
     await this.searchSubsAndProcessHits();
   },
   activated() {
@@ -365,15 +367,6 @@ export default {
       this.$emit("updated", hits);
       this.goToHitIndex(index);
     },
-    simplifyExcludeTerms(excludeTerms) {
-      excludeTerms = excludeTerms.map((t) =>
-        t
-          .replace(new RegExp(`.*?((${this.terms.join("|")}).).*`), "$1")
-          .replace(new RegExp(`.*?(.(${this.terms.join("|")})).*`), "$1")
-          .trim()
-      );
-      return excludeTerms;
-    },
     calculateLimit() {
       // No limit unless set
       if (this.$store.state.settings.subsSearchLimit) {
@@ -381,26 +374,6 @@ export default {
       } else {
         return this.maxNumOfHitsForSanity;
       }
-    },
-    async getExcludeTerms() {
-      let excludeTerms = [];
-      let dictionary = await this.$getDictionary();
-      if (dictionary && this.terms.length > 0) {
-        for (let term of this.terms) {
-          let t = await dictionary.getWordsThatContain(term);
-          t = this.simplifyExcludeTerms(t);
-          excludeTerms = excludeTerms.concat(t);
-        }
-        excludeTerms = unique(excludeTerms);
-      }
-      return excludeTerms.filter(
-        (s) =>
-          s !== "" &&
-          !this.terms
-            .filter((t) => t)
-            .map((t) => t.toLowerCase())
-            .includes(s.toLowerCase())
-      );
     },
     async searchSubsAndProcessHits() {
       this.checking = true;
