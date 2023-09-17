@@ -414,8 +414,6 @@ export default {
 
       terms = terms.concat(inflectedTerms);
 
-      console.log({ terms, inflectedTerms} );
-
       // Deduplicate and sort terms.
       terms = unique([this.entry.head, ...terms]);
       const optimalLength = this.entry.head.length - 1;

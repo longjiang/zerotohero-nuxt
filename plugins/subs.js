@@ -2,10 +2,15 @@ import { sify } from "chinese-conv";
 import { parseSync } from "subtitle";
 import Papa from "papaparse";
 import he from "he"; // html entities
-import { mutuallyExclusive, uniqueByValue, characterClass, escapeRegExp } from '@/lib/utils'
+import {
+  mutuallyExclusive,
+  uniqueByValue,
+  characterClass,
+  escapeRegExp,
+} from "@/lib/utils";
 
 export default ({ app }, inject) => {
-  inject('subs', {
+  inject("subs", {
     parseNotes(csv) {
       let parsed = Papa.parse(csv, { header: true }).data;
       for (let line of parsed) {
@@ -19,7 +24,7 @@ export default ({ app }, inject) => {
         let parsed = isJSON
           ? JSON.parse(jsonOrCSV)
           : Papa.parse(jsonOrCSV, { header: true }).data;
-        parsed = parsed.filter(line => line.starttime);
+        parsed = parsed.filter((line) => line.starttime);
         for (let line of parsed) {
           line.starttime = Number(line.starttime);
           if (line.duration) line.duration = Number(line.duration);
@@ -57,13 +62,13 @@ export default ({ app }, inject) => {
     },
     unparseSubs(subs, l2 = "en") {
       let lines = subs
-        .filter(l => l)
+        .filter((l) => l)
         .map((l, index) => {
           let line = l.line;
           if (["he", "hbo"].includes(l2)) line = this.stripHebrewVowels(line);
           if (l2 === "got") line = he.encode(line);
-          const starttime =  l.starttime
-          let duration
+          const starttime = l.starttime;
+          let duration;
           if (l.duration) {
             duration = l.duration;
           } else if (index < subs.length - 1) {
@@ -73,16 +78,16 @@ export default ({ app }, inject) => {
             // Set duration to undefined or a default value for the last line
             duration = undefined; // or set a default value here
           }
-    
+
           const obj = { starttime, duration, line };
           return obj;
         });
-    
+
       let csv = Papa.unparse(lines);
       return csv;
-    },    
+    },
     unparseNotes(notes) {
-      notes = notes.filter(note => note);
+      notes = notes.filter((note) => note);
       let csv = Papa.unparse(notes);
       return csv;
     },
@@ -98,13 +103,13 @@ export default ({ app }, inject) => {
       exact = false,
       apostrophe = false,
       convertToSimplified = false,
-      mustIncludeYouTubeId = undefined
+      mustIncludeYouTubeId = undefined,
     } = {}) {
-      let tv_show = tvShowFilter === "all" ? "nnull" : tvShowFilter.join(",")
-      let talk = talkFilter === "all" ? "nnull" : talkFilter.join(",")
+      let tv_show = tvShowFilter === "all" ? "nnull" : tvShowFilter.join(",");
+      let talk = talkFilter === "all" ? "nnull" : talkFilter.join(",");
       let hits = [];
-      terms = terms.filter(t => t).map(t => t.replace(/'/g, "&#39;"));
-      terms = mutuallyExclusive(terms) // So if terms are ['dièdres', 'dièdre'], we search only 'dièdre' since results of the plural will be included automatically.
+      terms = terms.filter((t) => t).map((t) => t.replace(/'/g, "&#39;"));
+      terms = mutuallyExclusive(terms); // So if terms are ['dièdres', 'dièdre'], we search only 'dièdre' since results of the plural will be included automatically.
       let timestamp = adminMode ? Date.now() : 0;
       let params = {
         l2Id: langId,
@@ -112,25 +117,28 @@ export default ({ app }, inject) => {
         talk,
         terms,
         limit,
-        timestamp
-      }
-      let videos = await app.$directus.searchCaptions(params)
+        timestamp,
+      };
+      let videos = await app.$directus.searchCaptions(params);
       if (mustIncludeYouTubeId) {
-        let matchedVideo = videos.find(v => v.youtube_id === mustIncludeYouTubeId)
+        let matchedVideo = videos.find(
+          (v) => v.youtube_id === mustIncludeYouTubeId
+        );
         if (!matchedVideo) {
-          let matchedVideos = await app.$directus.getVideos({ l2Id: langId, query: `filter[youtube_id][eq]=${mustIncludeYouTubeId}` })
+          let matchedVideos = await app.$directus.getVideos({
+            l2Id: langId,
+            query: `filter[youtube_id][eq]=${mustIncludeYouTubeId}`,
+          });
           if (matchedVideos?.length > 0) {
-            videos = [matchedVideos[0], ...videos]
+            videos = [matchedVideos[0], ...videos];
           }
         }
       }
-      if (
-        videos?.length > 0
-      ) {
+      if (videos?.length > 0) {
         for (let video of videos) {
           if (video.subs_l2)
             video.subs_l2 = this.parseSavedSubs(video.subs_l2).filter(
-              line => line.starttime
+              (line) => line.starttime
             );
           if (video.subs_l1) video.subs_l1 = this.parseSavedSubs(video.subs_l1);
           if (video.notes) video.notes = this.parseNotes(video.notes);
@@ -162,7 +170,7 @@ export default ({ app }, inject) => {
       exact = false,
       apostrophe = false,
       convertToSimplified = false,
-      mustIncludeYouTubeId = undefined
+      mustIncludeYouTubeId = undefined,
     } = {}) {
       let hits = [];
       if (tvShowFilter !== []) {
@@ -179,15 +187,84 @@ export default ({ app }, inject) => {
             exact,
             apostrophe,
             convertToSimplified,
-            mustIncludeYouTubeId
+            mustIncludeYouTubeId,
           })
         );
       }
       hits = uniqueByValue(hits, "id");
-      if (limit) hits = hits.slice(0, limit );
+      if (limit) hits = hits.slice(0, limit);
       return hits.sort((a, b) => a.lineIndex - b.lineIndex);
     },
 
+    // Helper function to process videos
+    processVideos(
+      videos,
+      termsRegex,
+      regex,
+      excludeRegex,
+      mustIncludeYouTubeId
+    ) {
+      const hits = [];
+      const seenYouTubeIds = [];
+
+      for (const video of videos) {
+        if (!video || seenYouTubeIds.includes(video.youtube_id)) continue;
+        seenYouTubeIds.push(video.youtube_id);
+
+        for (const [index, { line: rawLine }] of Object.entries(
+          video.subs_l2 || {}
+        )) {
+          const line = he.decode(rawLine).replace(/\n/g, " ");
+
+          if (
+            this.extractTermsAndExclusions(
+              line,
+              regex,
+              mustIncludeYouTubeId === video.youtube_id ? null : excludeRegex
+            )
+          ) {
+            hits.push({
+              video,
+              lineIndex: index,
+              id: `${video.youtube_id}#${index}`,
+            });
+          }
+        }
+      }
+
+      return hits;
+    },
+    // Helper function to escape regular expressions
+    escapeRegExp(text) {
+      return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    },
+
+    // Helper function to create a regex based on conditions
+    createRegex({ exact, apostrophe, continua, termsRegex }) {
+      if (exact) {
+        const punctuations =
+          characterClass(
+            apostrophe ? "PunctuationNoApostropheNoHyphen" : "Punctuation"
+          ) + (continua ? " " : "");
+        const punctuationsRegex = new RegExp(`[${punctuations}]`, "g");
+        return [
+          new RegExp(`^s*(${termsRegex.join("|")})s*$`, "i"),
+          punctuationsRegex,
+        ];
+      }
+      const boundary = continua ? "" : `(^|[^${characterClass("L")}]+)`;
+      const termsStr = termsRegex
+        .join("|")
+        .replace(/\\\*/g, ".+")
+        .replace(/[_]/g, ".");
+      return new RegExp(`${boundary}(${termsStr})`, "i");
+    },
+
+    // Helper function to check term and exclusion conditions
+    extractTermsAndExclusions(line, regex, excludeRegex) {
+      const notExcluded = !excludeRegex || !excludeRegex.test(line);
+      return regex.test(line) && notExcluded;
+    },
     getHits(
       videos,
       terms,
@@ -198,86 +275,25 @@ export default ({ app }, inject) => {
       apostrophe = false,
       mustIncludeYouTubeId
     ) {
-      let seenYouTubeIds = [];
-      let hits = [];
-      let punctuations, punctuationsRegex, boundary, termsStr, regexStr, regex;
-      const termsRegex = terms.map(t => escapeRegExp(t))
-      const excludeTermsRegex = excludeTerms.map(t => escapeRegExp(t))
-      if (exact) {
-        punctuations = characterClass(
-          apostrophe ? "PunctuationNoApostropheNoHyphen" : "Punctuation"
-        );
-        if (continua) {
-          punctuations = punctuations + " ";
-        }
-        punctuationsRegex = new RegExp(`[${punctuations}]`, "g");
-        regexStr =
-          "^s*(" + termsRegex.join("|") + ")s*$";
-        regex = new RegExp(regexStr, "i");
-      } else {
-        boundary = continua ? "" : `(^|[^${characterClass("L")}]+)`;
-        termsStr = termsRegex
-          .join("|")
-          .replace(/\\\*/g, ".+")
-          .replace(/[_]/g, ".");
-        regexStr = `${boundary}(${termsStr})`;
-        regex = new RegExp(regexStr, "i");
-      }
-      for (let video of videos) {
-        if (video && !seenYouTubeIds.includes(video.youtube_id)) {
-          seenYouTubeIds.push(video.youtube_id);
-          for (let index in video.subs_l2) {
-            let line = video.subs_l2[index].line;
-            line = he.decode(line).replace(/\n/g, " ");
-            let passed = false;
-            if (exact) {
-              let segs = line
-                .replace(punctuationsRegex, "\n")
-                .split("\n")
-                .map(line => line.replace(/^\s*[-–]\s*/, "").trim())
-                .filter(line => line && line !== "");
-              for (let seg of segs) {
-                let test = regex.test(seg);
-                if (test) passed = true;
-              }
-            } else {
-              let excludeRegex = new RegExp(excludeTermsRegex.join("|"), "i")
-              let notExcluded = excludeTerms.length === 0 || !excludeRegex.test(line);
-              if (mustIncludeYouTubeId === video.youtube_id) notExcluded = true // Do not use exclude terms on "must include" videos
-              passed = regex.test(line)
-              passed = passed && notExcluded;
-            }
-            if (passed) {
-              hits.push({
-                video: video,
-                lineIndex: index,
-                id: `${video.youtube_id}#${index}`
-              });
-            }
-          }
-        }
-      }
-      let emptyLine = {
-        starttime: 0,
-        line: ""
-      };
-      for (let video of videos) {
-        let matchedHits = hits.filter(hit => hit.video === video);
-        let matchedLineIndexes = matchedHits.map(hit => Number(hit.lineIndex));
-        if (!video.subs_l2) continue;
-        let keptIndexes = video.subs_l2
-          .map((l, i) => i)
-          .filter(i => {
-            for (let index of matchedLineIndexes) {
-              if (i > index - 10 && i < index + 10) return true;
-            }
-          });
-        for (let lineIndex in video.subs_l2) {
-          if (!keptIndexes.includes(Number(lineIndex))) {
-            video.subs_l2[lineIndex] = emptyLine;
-          }
-        }
-      }
+      const termsRegex = terms.map(this.escapeRegExp);
+      const regex = this.createRegex({
+        exact,
+        apostrophe,
+        continua,
+        termsRegex,
+      });
+
+      const excludeTermsRegex = excludeTerms.map(escapeRegExp);
+      const excludeRegex = new RegExp(excludeTermsRegex.join("|"), "i");
+
+      let hits = this.processVideos(
+        videos,
+        termsRegex,
+        regex,
+        excludeRegex,
+        mustIncludeYouTubeId
+      );
+      
       for (let hit of hits) {
         if (convertToSimplified) {
           if (hit.video.subs_l2[hit.lineIndex - 1])
@@ -306,11 +322,7 @@ export default ({ app }, inject) => {
 
           let leftContext =
             (prev ? prev.line.trim() : "") + hit.line.replace(regex, "");
-          hit.leftContext = leftContext
-            .split("")
-            .reverse()
-            .join("")
-            .trim();
+          hit.leftContext = leftContext.split("").reverse().join("").trim();
         }
         if (!hit.rightContext) {
           let next = hit.video.subs_l2[Number(hit.lineIndex) + 1];
@@ -332,5 +344,5 @@ export default ({ app }, inject) => {
       );
       return hits;
     },
-  })
-}
+  });
+};

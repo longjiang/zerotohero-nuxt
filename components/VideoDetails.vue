@@ -167,7 +167,6 @@ export default {
       this.retranslating = true
       let response = await proxy(`${PYTHON_SERVER}/translate_video_and_save?l1=${this.$l1.code}&l2=${this.$l2.code}&video_id=${this.video.id}`)
       let subs_l1 = this.$subs.parseSavedSubs(response)
-      console.log({subs_l1})
       this.video.subs_l1 = subs_l1
       this.$emit('updateVideo', this.video)
       this.$toast.success(
