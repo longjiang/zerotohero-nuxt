@@ -22,9 +22,22 @@
       modal-class="safe-padding-top mt-4"
       @hide="onModalHide"
     >
+      <p>✅ {{ $t('Include results containing:') }}</p>
       <b-form-checkbox-group id="search-terms-checkbox-group" v-model="selectedSearchTerms">
         <b-form-checkbox
           v-for="term in allSearchTerms"
+          :key="`term-${term}`"
+          :value="term"
+          class="d-block mb-1"
+        >
+          {{ term }}
+        </b-form-checkbox>
+      </b-form-checkbox-group>
+      <hr />
+      <p>❌ {{ $t('Exclude results containing:') }}</p>
+      <b-form-checkbox-group id="search-terms-checkbox-group" v-model="selectedExcludeTerms">
+        <b-form-checkbox
+          v-for="term in allExcludeTerms"
           :key="`term-${term}`"
           :value="term"
           class="d-block mb-1"
@@ -48,6 +61,7 @@
 export default {
   props: {
     allSearchTerms: Array,
+    allExcludeTerms: Array,
     initialSelectedTerms: Array,
     initialWholePhraseOnly: {
       type: Boolean,
@@ -57,12 +71,14 @@ export default {
   data() {
     return {
       selectedSearchTerms: this.initialSelectedTerms,
+      selectedExcludeTerms: this.allExcludeTerms,
       wholePhraseOnly: this.initialWholePhraseOnly
     };
   },
   methods: {
     onModalHide() {
       this.$emit('selectedSearchTerms', this.selectedSearchTerms)
+      this.$emit('selectedExcludeTerms', this.selectedExcludeTerms)
       this.$emit('wholePhraseOnly', this.wholePhraseOnly)
     },
     showModal() {

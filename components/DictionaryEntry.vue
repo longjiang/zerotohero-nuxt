@@ -9,9 +9,11 @@
         <template #title>
           <ChooseSearchTerms
             @selectedSearchTerms="selectedSearchTerms = $event"
+            @selectedExcludeTerms="selectedExcludeTerms = $event"
             @wholePhraseOnly="wholePhraseOnly = $event"
             :initialSelectedTerms="selectedSearchTerms"
             :allSearchTerms="allSearchTerms"
+            :allExcludeTerms="allExcludeTerms"
           />
           — {{ $t("Search in:") }}
           <span v-if="tvShow">
@@ -29,6 +31,7 @@
               entry.id
             }-${wholePhraseOnly}-${selectedSearchTerms.join('-')}`"
             :terms="selectedSearchTerms"
+            :excludeTerms="selectedExcludeTerms"
             :tvShow="tvShow"
             :exact="wholePhraseOnly"
             :context="context"
@@ -238,7 +241,9 @@ export default {
   data() {
     return {
       selectedSearchTerms: undefined,
+      selectedExcludeTerms: undefined,
       allSearchTerms: undefined,
+      allExcludeTerms: undefined,
       character: {},
       unsplashSrcs: [],
       unsplashSearchTerm: "",
@@ -337,6 +342,7 @@ export default {
   },
   async mounted() {
     let allSearchTerms = await this.getSearchTerms();
+    this.allExcludeTerms = await this.getExcludeTerms(allSearchTerms);
     if (this.context?.form) {
       allSearchTerms = unique([this.context.form, ...allSearchTerms]);
     }
@@ -345,6 +351,7 @@ export default {
       0,
       3
     );
+    this.selectedExcludeTerms = this.allExcludeTerms;
     this.searchTermsWatcherActivated = true;
     let dictionary = await this.$getDictionary();
     if (dictionary.findPhrases) {
@@ -358,6 +365,43 @@ export default {
     },
   },
   methods: {
+    simplifyExcludeTerms(excludeTerms) {
+      excludeTerms = excludeTerms.map((t) =>
+        t
+          .replace(
+            new RegExp(`.*?((${this.selectedSearchTerms?.join("|")}).).*`),
+            "$1"
+          )
+          .replace(
+            new RegExp(`.*?(.(${this.selectedSearchTerms?.join("|")})).*`),
+            "$1"
+          )
+          .trim()
+      );
+      return excludeTerms;
+    },
+    async getExcludeTerms(allSearchTerms) {
+      let excludeTerms = [];
+      let dictionary = await this.$getDictionary();
+      if (dictionary && allSearchTerms?.length > 0) {
+        for (let term of allSearchTerms) {
+          let t = await dictionary.getWordsThatContain(term);
+          t = this.simplifyExcludeTerms(t);
+          excludeTerms = excludeTerms.concat(t);
+        }
+        excludeTerms = unique(excludeTerms);
+        return excludeTerms.filter(
+          (s) =>
+            s !== "" &&
+            !allSearchTerms
+              .filter((t) => t)
+              .map((t) => t.toLowerCase())
+              .includes(s.toLowerCase())
+        );
+      } else {
+        return [];
+      }
+    },
     reloadSearchSubs() {
       this.renderSearchSubs = false;
       this.$nextTick(() => {
