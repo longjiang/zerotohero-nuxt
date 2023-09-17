@@ -265,6 +265,9 @@
       <Toggle v-model="useSmoothScroll" label="Smooth Scrolling">
         <i class="fas fa-up-down"></i>
       </Toggle>
+      <Toggle v-model="karaokeAnimation" label="Karaoke Animation">
+        <i class="fa-sharp fa-solid fa-stars"></i>
+      </Toggle>
       <div>
         <button
           :class="{
@@ -372,6 +375,7 @@ export default {
       currentTime: this.initialTime,
       progressPercentage: 0,
       transcriptMode: false,
+      karaokeAnimation: false,
     };
   },
   computed: {
@@ -429,6 +433,7 @@ export default {
       this.speed = this.$store.state.settings.speed || 1;
       this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
       this.transcriptMode = this.$store.state.settings.mode !== "subtitles";
+      this.karaokeAnimation = this.$store.state.settings.karaokeAnimation;
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "settings/LOAD_SETTINGS") {
@@ -436,6 +441,7 @@ export default {
         this.speed = this.$store.state.settings.speed || 1;
         this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
         this.transcriptMode = this.$store.state.settings.mode !== "subtitles";
+        this.karaokeAnimation = this.$store.state.settings.karaokeAnimation;
       }
     });
     this.bindKeys();
@@ -471,6 +477,11 @@ export default {
         useSmoothScroll: this.useSmoothScroll,
       });
       this.$emit("updateSmoothScroll", this.useSmoothScroll);
+    },
+    karaokeAnimation() {
+      this.$store.dispatch("settings/setGeneralSettings", {
+        karaokeAnimation: this.karaokeAnimation,
+      });
     },
   },
   methods: {

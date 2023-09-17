@@ -91,6 +91,7 @@
 import { ContainerQuery } from "vue-container-query";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 import { highlightMultiple } from "@/lib/utils";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -205,6 +206,9 @@ export default {
       }
     },
   },
+  computed: {
+    ...mapState("settings", ["karaokeAnimation"]),
+  },
   methods: {
     getSavedWords() {
       return this.$refs.annotate?.getSavedWords() || [];
@@ -217,7 +221,7 @@ export default {
       this.annotated = annotated;
     },
     playAnimation() {
-      if (!this.showAnimation) return
+      if (!this.showAnimation || !this.karaokeAnimation) return
       const startFrom = Math.max(this.currentTime - this.line.starttime, 0)
       if (this.$refs["annotate"]) {
         this.$refs["annotate"].playAnimation(startFrom);

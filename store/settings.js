@@ -67,6 +67,7 @@ export const defaultGeneralSettings = {
   subsSearchLimit: true,
   openAIToken: undefined,
   muteAutoplay: false,
+  karaokeAnimation: true,
   l2Settings: {}, // keyed by language
 };
 

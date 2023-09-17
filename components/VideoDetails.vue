@@ -38,7 +38,7 @@
       <span>
         <a :href="`https://www.youtube.com/watch?v=${video.youtube_id}`" target="_blank">View on YouTube</a>
       </span>
-      <span @click="retranslate" v-if="this.video.id" class="text-success" style="{cursor: pointer;}">
+      <span @click="retranslate" v-if="this.video.id" class="text-success cursor-pointer">
         <template v-if="this.retranslating">{{ $t('Retranslating...') }}</template>
         <template v-else>{{ $t('Retranslate') }}</template>
       </span>
