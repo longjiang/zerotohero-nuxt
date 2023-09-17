@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="d-inline-block"
-    ref="popover"
-  >
+  <div class="d-inline-block" ref="popover">
     <div
       v-on="usePopup ? { click: wordBlockClick } : {}"
       @mouseenter="wordblockHover = true"
@@ -195,11 +192,11 @@ export default {
       let definition, hanAnnotation, mappedPronunciation;
       if (this.$l2Settings.showDefinition || this.$l2Settings.showQuickGloss)
         definition = this.shortDefinition;
-      if (this.$l2Settings.showByeonggi && ['ko', 'vi'].includes(this.$l2.code))
+      if (this.$l2Settings.showByeonggi && ["ko", "vi"].includes(this.$l2.code))
         hanAnnotation = this.getHanAnnotation(this.bestWord);
       if (this.$l2.code === "ja")
         mappedPronunciation = this.getMappedPronunciation();
-      let level = this.bestWord?.level || "outside"
+      let level = this.bestWord?.level || "outside";
       let attributes = {
         usePopup,
         isSaved,
@@ -210,7 +207,7 @@ export default {
         hanAnnotation,
         useZoom: this.useZoom,
         mappedPronunciation,
-        "data-hover-level": level
+        "data-hover-level": level,
       };
       return attributes;
     },
@@ -253,20 +250,20 @@ export default {
       this.animate = false;
     },
     getHanAnnotation(word) {
-      let hanja = word?.hanja
-      if (!hanja) return
+      let hanja = word?.hanja;
+      if (!hanja) return;
       let head = word.head;
       let isValid = true;
       if (hanja.length <= 1) isValid = false;
-      if (hanja.includes(',')) isValid = false;
+      if (hanja.includes(",")) isValid = false;
       if (this.$l2.code === "ko") {
         let bannedEndings = "이히하해한고가기는은도의로를";
         let bannedWords = ["지난", "진자", "가야", "주시", "거야", "위해"];
-        if ((new RegExp("[" + bannedEndings + "]$")).test(head)) isValid = false;
+        if (new RegExp("[" + bannedEndings + "]$").test(head)) isValid = false;
         if (bannedWords.includes(head)) isValid = false;
       }
       if (isValid) {
-        return hanja ? hanja.split(/[,\-]/)[0] : ""; 
+        return hanja ? hanja.split(/[,\-]/)[0] : "";
       }
     },
     async getDisplayText(text) {
@@ -482,26 +479,29 @@ export default {
       ) {
         speakComponent.speak(speed, volume);
       } else {
-        speak(this.text, this.$l2, speed, volume);
+        if (this.$l2.code === "ja" && this.token?.pronunciation) {
+          speak(this.token.pronunciation, this.$l2, speed, volume);
+        } else speak(this.text, this.$l2, speed, volume);
       }
     },
     async closePopup() {
-      this.hideMenuModal()
+      this.hideMenuModal();
       this.$nuxt.$emit("popupClosed");
     },
     async lookup() {
       this.lookupInProgress = true;
       let dictionary = await this.$getDictionary();
       let words = uniqueByValue(
-        [...( this.token.candidates || [] ), ...this.words],
+        [...(this.token.candidates || []), ...this.words],
         "id"
       );
       if (words.length === 0) {
         // addCandidatesToToken is already done by the tokenizer, but sometimes this doesn't happen in time. Let's do it again so we don't override the candidates.
-        if (this.token && ! this.token.candidates?.length > 0) {
+        if (this.token && !this.token.candidates?.length > 0) {
           let token = await dictionary.addCandidatesToToken(this.token);
           words = token?.candidates || [];
-          if (!words.length) words = (await dictionary.lookupFuzzy(this.text, 20)) || [];
+          if (!words.length)
+            words = (await dictionary.lookupFuzzy(this.text, 20)) || [];
         }
       }
       // if (this.$l2.code === "ru") this.stylizeRussian(words)
