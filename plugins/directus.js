@@ -372,7 +372,7 @@ export default ({ app }, inject) => {
     async fetchUserData(token) {
       const user = app.$auth.user;
       const userDataRes = await this.get(
-        `items/user_data?filter[owner][eq]=${user.id}&timestamp=${Date.now()}`,
+        `items/user_data?filter[owner][eq]=${user.id}&limit=1&timestamp=${Date.now()}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
     

@@ -25,12 +25,14 @@
 
 <script>
 import { mapState } from "vuex";
-const defaultSettings = {
-  preferredCategories: []
-}
+import { timeout } from "@/lib/utils";
+
 export default {
   data() {
-    return defaultSettings
+    return {
+      preferredCategories: [],
+      watcherActive: false,
+    }
   },
   computed: {
     ...mapState("shows", ["categories"]),
@@ -38,7 +40,7 @@ export default {
   watch: {
     // set up in setupWatchers()
   },
-  mounted() {
+  async mounted() {
     if (typeof this.$store.state.settings !== "undefined") {
       this.preferredCategories = this.$store.state.settings.preferredCategories;
     }
@@ -47,23 +49,22 @@ export default {
         this.preferredCategories = this.$store.state.settings.preferredCategories;
       }
     });
-    this.setupWatchers()
+    await timeout(2000);
+    this.watcherActive = true;
   },
   methods: {
     clickCheckBox(event) {
       let checkbox = event.target.querySelector('input')
       if (checkbox) checkbox.click()
     },
-    setupWatchers() {
-      for (let property in defaultSettings) {
-        this.$watch(property, (newValue, oldValue) => {
-          let payload = {}
-          payload[property] = newValue
-          this.$store.dispatch("settings/setGeneralSettings", payload);
-        });
-      }
-    }
-  }
+  },
+  watch: {
+    preferredCategories() {
+      this.$store.dispatch("settings/setGeneralSettings", {
+        preferredCategories: this.preferredCategories,
+      });
+    },
+  },
 };
 </script>
 

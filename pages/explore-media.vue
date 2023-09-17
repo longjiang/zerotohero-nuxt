@@ -298,28 +298,15 @@ export default {
     };
   },
   async mounted() {
-    if (
-      LANGS_WITH_LEVELS.includes(this.$l2.code) &&
-      this.progressLoaded &&
-      !this.languageLevel
-    )
-      this.$router.push({
-        name: "set-language-level",
-        params: { l1: this.$l1.code, l2: this.$l2.code },
-      });
-    else if (this.settingsLoaded && this.preferredCategories.length === 0)
-      this.$router.push({
-        name: "set-content-preferences",
-        params: { l1: this.$l1.code, l2: this.$l2.code },
-      });
     if (this.$store.state.shows.showsLoaded[this.$l2.code]) this.loadShows();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows")) {
         this.loadShows();
       }
     });
+    this.redirectToContentPreferencesIfMissing();
     await timeout(5000);
-    this.loading = false; // Incase resources fail to load, at least show them
+    this.loading = false; // In case resources fail to load, at least show them
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -352,6 +339,22 @@ export default {
     },
   },
   methods: {
+    redirectToContentPreferencesIfMissing() {
+      if (
+        LANGS_WITH_LEVELS.includes(this.$l2.code) &&
+        this.progressLoaded &&
+        !this.languageLevel
+      )
+        this.$router.push({
+          name: "set-language-level",
+          params: { l1: this.$l1.code, l2: this.$l2.code },
+        });
+      else if (this.settingsLoaded && this.preferredCategories.length === 0)
+        this.$router.push({
+          name: "set-content-preferences",
+          params: { l1: this.$l1.code, l2: this.$l2.code },
+        });
+    },
     onVideosLoaded(videos) {
       this.videos = videos;
     },
