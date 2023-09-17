@@ -265,7 +265,7 @@
       <Toggle v-model="useSmoothScroll" label="Smooth Scrolling">
         <i class="fas fa-up-down"></i>
       </Toggle>
-      <Toggle v-model="karaokeAnimation" label="Karaoke Animation">
+      <Toggle v-model="karaokeAnimation" label="Karaoke Highlighting">
         <i class="fa-sharp fa-solid fa-stars"></i>
       </Toggle>
       <div>
