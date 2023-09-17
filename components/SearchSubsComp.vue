@@ -352,22 +352,6 @@ export default {
     showPlaylistModal() {
       this.$refs["playlist-modal"].show();
     },
-    hitIndexFromSlideIndex(slideIndex) {
-      let currentSlideIndex = this.slideIndex;
-      let s;
-      let i = this.hitIndex;
-      if (currentSlideIndex === 0) s = [i, i + 1, i - 1];
-      else if (currentSlideIndex === 1) s = [i - 1, i, i + 1];
-      else if (currentSlideIndex === 2) s = [i + 1, i - 1, i];
-      let hitIndex = s[slideIndex];
-      if (hitIndex > this.hits.length - 1) hitIndex = 0;
-      if (hitIndex < 0) hitIndex = this.hits.length - 1;
-      return hitIndex;
-    },
-    vueSlickCarouselAfterChange(slideIndex) {
-      this.goToHitIndex(this.hitIndexFromSlideIndex(slideIndex));
-      this.slideIndex = slideIndex;
-    },
     removeCurrentHitAndGoToNext() {
       let hits = [];
       let index = this.hitIndex;
@@ -380,11 +364,6 @@ export default {
       this.collectContext(hits);
       this.$emit("updated", hits);
       this.goToHitIndex(index);
-    },
-    updatePaused(paused) {
-      if (paused !== this.paused) {
-        this.paused = paused;
-      }
     },
     simplifyExcludeTerms(excludeTerms) {
       excludeTerms = excludeTerms.map((t) =>
@@ -604,23 +583,6 @@ export default {
       }
       return hits;
     },
-    findAndRemoveHit(groups, hit) {
-      for (let c in groups) {
-        if (c !== "zthSaved") {
-          let group = groups[c];
-          let index = group.findIndex((h) => h === hit);
-          if (index !== -1) group.splice(index, 1);
-        }
-      }
-    },
-    putHitBack(groups, hit, leftOrRight) {
-      for (let c in groups) {
-        if (hit[`${leftOrRight}Context`].startsWith(c)) {
-          groups[c].push(hit);
-          break;
-        }
-      }
-    },
     goToPrevHit() {
       this.currentHit = this.prevHit;
       this.navigated = true;
@@ -642,9 +604,6 @@ export default {
       index = Math.max(index, 0);
       this.currentHit = this.hits[index];
       this.navigated = true;
-    },
-    toggleFullscreen() {
-      if (this.hits.length > 0) this.fullscreen = !this.fullscreen;
     },
   },
 };

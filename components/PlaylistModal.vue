@@ -170,6 +170,23 @@ export default {
       this.findAndRemoveHit(this.groupsLeft, hit);
       this.findAndRemoveHit(this.groupsRight, hit);
     },
+    findAndRemoveHit(groups, hit) {
+      for (let c in groups) {
+        if (c !== "zthSaved") {
+          let group = groups[c];
+          let index = group.findIndex((h) => h === hit);
+          if (index !== -1) group.splice(index, 1);
+        }
+      }
+    },
+    putHitBack(groups, hit, leftOrRight) {
+      for (let c in groups) {
+        if (hit[`${leftOrRight}Context`].startsWith(c)) {
+          groups[c].push(hit);
+          break;
+        }
+      }
+    },
     removeSavedHit(hit) {
       this.$store.dispatch("savedHits/remove", {
         terms: this.terms,
