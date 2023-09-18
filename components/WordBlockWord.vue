@@ -214,17 +214,15 @@ export default {
 @keyframes shinedark {
   0% {
     color: inherit;
-    transform: scale(1);
   }
 
   10% {
     color: #54ff7c;
-    transform: scale(1.1);
+    transform: translateY(-0.1em);
   }
 
   100% {
     color: inherit;
-    transform: scale(1);
   }
 }
 

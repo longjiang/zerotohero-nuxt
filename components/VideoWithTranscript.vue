@@ -1017,11 +1017,7 @@ export default {
       }
 
       transition: opacity 0.3s;
-      background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.8) 100%
-      );
+      background: rgba(0, 0, 0, 0.99);
 
       :deep(.video-controls-time:not([disabled])),
       :deep(.btn-video-controls:not([disabled])) {
