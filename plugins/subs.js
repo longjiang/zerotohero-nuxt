@@ -197,7 +197,7 @@ export default ({ app }, inject) => {
     },
 
     // Helper function to process videos
-    extractHitsFromVideos(videos, regex, excludeRegex, mustIncludeYouTubeId) {
+    extractHitsFromVideos(videos, exact, regex, punctuationsRegex, excludeRegex, mustIncludeYouTubeId) {
       const hits = [];
       const seenYouTubeIds = [];
 
@@ -213,7 +213,9 @@ export default ({ app }, inject) => {
           if (
             this.lineMeetsTermAndExclusionCriteria(
               line,
+              exact,
               regex,
+              punctuationsRegex,
               mustIncludeYouTubeId === video.youtube_id ? null : excludeRegex
             )
           ) {
@@ -251,13 +253,27 @@ export default ({ app }, inject) => {
         .join("|")
         .replace(/\\\*/g, ".+")
         .replace(/[_]/g, ".");
-      return new RegExp(`${boundary}(${termsStr})`, "i");
+      return [new RegExp(`${boundary}(${termsStr})`, "i")];
     },
 
     // Helper function to check term and exclusion conditions
-    lineMeetsTermAndExclusionCriteria(line, regex, excludeRegex) {
+    lineMeetsTermAndExclusionCriteria(line, exact, regex, punctuationsRegex, excludeRegex) {
       const notExcluded = !excludeRegex || !excludeRegex.test(line);
-      return regex.test(line) && notExcluded;
+      let matchesTerms = false
+      if (exact) {
+        let segs = line
+          .replace(punctuationsRegex, "\n")
+          .split("\n")
+          .map(line => line.replace(/^\s*[-–]\s*/, "").trim())
+          .filter(line => line && line !== "");
+        for (let seg of segs) {
+          let test = regex.test(seg);
+          if (test) matchesTerms = true;
+        }
+      } else {
+        if (regex.test(line)) matchesTerms = true;
+      }
+      return matchesTerms && notExcluded;
     },
 
     // Helper function to update hit contexts
@@ -310,7 +326,7 @@ export default ({ app }, inject) => {
       mustIncludeYouTubeId
     ) {
       const termsRegex = terms.map(this.escapeRegExp);
-      const regex = this.createRegex({
+      const [regex, punctuationsRegex] = this.createRegex({
         exact,
         apostrophe,
         continua,
@@ -323,7 +339,9 @@ export default ({ app }, inject) => {
 
       let hits = this.extractHitsFromVideos(
         videos,
+        exact,
         regex,
+        punctuationsRegex,
         excludeRegex,
         mustIncludeYouTubeId
       );
