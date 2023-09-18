@@ -288,6 +288,7 @@ export default {
 
     .word-block-pinyin {
       position: relative;
+      bottom: -0.3em;
     }
 
     /* Hide by default */
@@ -331,7 +332,6 @@ export default {
 .show-pinyin .word-block-segment .word-block-text,
 .show-definition .word-block-segment .word-block-text {
   position: relative;
-  top: -0.1em;
 }
 
 .word-block-segment .word-block-pinyin,
