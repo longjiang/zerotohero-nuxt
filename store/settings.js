@@ -68,6 +68,7 @@ export const defaultGeneralSettings = {
   openAIToken: undefined,
   muteAutoplay: false,
   karaokeAnimation: true,
+  useSmoothScroll: false,
   l2Settings: {}, // keyed by language
 };
 

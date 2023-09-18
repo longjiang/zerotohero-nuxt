@@ -35,7 +35,9 @@
           'btn-video-controls btn-video-controls-info text-center': true,
         }"
         @click="showInfoModal"
-        :title="$t(show ? 'Episodes' : 'More Info' ) + ' (' + (show ? 'E': 'I') + ')'"
+        :title="
+          $t(show ? 'Episodes' : 'More Info') + ' (' + (show ? 'E' : 'I') + ')'
+        "
       >
         <i class="fa-regular fa-rectangle-history" v-if="show"></i>
         <i class="fa-solid fa-circle-info" v-else></i>
@@ -73,7 +75,10 @@
         @click="goToPreviousLine()"
         :title="$t('Previous Line') + ' (←)'"
       >
-        <i v-if="(forceMode || mode) === 'transcript'" class="fas fa-arrow-up"></i>
+        <i
+          v-if="(forceMode || mode) === 'transcript'"
+          class="fas fa-arrow-up"
+        ></i>
         <i v-else class="fas fa-arrow-left"></i>
       </button>
       <button
@@ -82,7 +87,9 @@
           'btn-video-controls btn-video-controls-play play-pause text-center': true,
         }"
         @click="togglePaused()"
-        :title="(paused ? $t('Play') : $t('Pause'))  + ' (' + $t('SPACE BAR') + ')'"
+        :title="
+          (paused ? $t('Play') : $t('Pause')) + ' (' + $t('SPACE BAR') + ')'
+        "
       >
         <i v-if="paused" class="fas fa-play text-success"></i>
         <i v-else class="fas fa-pause text-success"></i>
@@ -92,7 +99,10 @@
         @click="goToNextLine()"
         :title="$t('Next Line')"
       >
-        <i v-if="(forceMode || mode) === 'transcript'" class="fas fa-arrow-down"></i>
+        <i
+          v-if="(forceMode || mode) === 'transcript'"
+          class="fas fa-arrow-down"
+        ></i>
         <i v-else class="fas fa-arrow-right"></i>
       </button>
       <button
@@ -173,13 +183,16 @@
       hide-footer
       modal-class="safe-padding-top mt-4"
       size="md"
-      :title="playlist ? $t('Playlist: {title}', { title: playlist.title }) : show ? show.title : $t('Video Information')"
+      :title="
+        playlist
+          ? $t('Playlist: {title}', { title: playlist.title })
+          : show
+          ? show.title
+          : $t('Video Information')
+      "
     >
       <div class="video-info-inner">
-        <VideoDetails
-          :video="video"
-          ref="videoDetails"
-        />
+        <VideoDetails :video="video" ref="videoDetails" />
         <VideoAdmin
           :video="video"
           ref="videoAdmin1"
@@ -188,8 +201,15 @@
         <div class="mt-3">
           <h6 v-if="show">
             <hr class="mb-3" />
-            {{ $t(playlist ? $t("{num} Videos", { num: playlist.videos.length }) : "More Episodes") }}
-            <router-link v-if="playlist"
+            {{
+              $t(
+                playlist
+                  ? $t("{num} Videos", { num: playlist.videos.length })
+                  : "More Episodes"
+              )
+            }}
+            <router-link
+              v-if="playlist"
               :to="{
                 name: 'playlist',
                 params: {
@@ -200,7 +220,6 @@
             >
               {{ $t("Open Playlist") }}
               <i class="fas fa-chevron-right"></i>
-
             </router-link>
             <router-link
               v-else
@@ -292,6 +311,7 @@
 <script>
 import { toHHMMSS } from "@/lib/date-helper";
 import { shuffle, uniqueByValue } from "@/lib/utils/array";
+import { timeout } from "@/lib/utils/timeout";
 
 export default {
   props: {
@@ -376,6 +396,7 @@ export default {
       progressPercentage: 0,
       transcriptMode: false,
       karaokeAnimation: false,
+      watcherActive: false
     };
   },
   computed: {
@@ -429,19 +450,11 @@ export default {
       this.sortedLines = this.getSortedLines();
     }
     if (typeof this.$store.state.settings !== "undefined") {
-      this.autoPause = this.$store.state.settings.autoPause;
-      this.speed = this.$store.state.settings.speed || 1;
-      this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
-      this.transcriptMode = this.$store.state.settings.mode !== "subtitles";
-      this.karaokeAnimation = this.$store.state.settings.karaokeAnimation;
+      this.loadSettings();
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "settings/LOAD_SETTINGS") {
-        this.autoPause = this.$store.state.settings.autoPause;
-        this.speed = this.$store.state.settings.speed || 1;
-        this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
-        this.transcriptMode = this.$store.state.settings.mode !== "subtitles";
-        this.karaokeAnimation = this.$store.state.settings.karaokeAnimation;
+        this.loadSettings();
       }
     });
     this.bindKeys();
@@ -461,30 +474,44 @@ export default {
       this.progressPercentage = newPercentage;
     },
     collapsed() {
+      if (!this.watcherActive) return;
       this.$emit("updateCollapsed", this.collapsed);
     },
     transcriptMode() {
+      if (!this.watcherActive) return;
       this.$emit("updateTranscriptMode", this.transcriptMode);
     },
     autoPause() {
+      if (!this.watcherActive) return;
       this.$store.dispatch("settings/setGeneralSettings", {
         autoPause: this.autoPause,
       });
       this.$emit("updateAutoPause", this.autoPause);
     },
-    useSmoothScroll() {
+    useSmoothScroll(oldValue, newValue) {
+      if (!this.watcherActive) return;
       this.$store.dispatch("settings/setGeneralSettings", {
         useSmoothScroll: this.useSmoothScroll,
       });
       this.$emit("updateSmoothScroll", this.useSmoothScroll);
     },
-    karaokeAnimation() {
+    karaokeAnimation(oldValue, newValue) {
+      if (!this.watcherActive) return;
       this.$store.dispatch("settings/setGeneralSettings", {
         karaokeAnimation: this.karaokeAnimation,
       });
     },
   },
   methods: {
+    async loadSettings() {
+      this.autoPause = this.$store.state.settings.autoPause;
+      this.speed = this.$store.state.settings.speed || 1;
+      this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
+      this.transcriptMode = this.$store.state.settings.mode !== "subtitles";
+      this.karaokeAnimation = this.$store.state.settings.karaokeAnimation;
+      await timeout(5000);
+      this.watcherActive = true;
+    },
     bindKeys() {
       window.addEventListener("keydown", this.handleKeydown);
     },
@@ -519,7 +546,7 @@ export default {
             return false;
           }
           if (e.code === "Space") {
-            this.togglePaused()
+            this.togglePaused();
             e.preventDefault(); // Prevent the default spacebar behavior
             return false;
           }
@@ -548,25 +575,25 @@ export default {
             return false;
           }
         }
-      };
+      }
     },
     open() {
-      this.$emit('open')
+      this.$emit("open");
     },
     previous() {
-      this.$emit('previous')
+      this.$emit("previous");
     },
     next() {
-      this.$emit('next')
+      this.$emit("next");
     },
     goToPreviousLine() {
-      this.$emit('goToPreviousLine')
+      this.$emit("goToPreviousLine");
     },
     goToNextLine() {
-      this.$emit('goToNextLine')
+      this.$emit("goToNextLine");
     },
     toggleFullscreen() {
-      this.$emit('fullscreen', !this.fullscreen)
+      this.$emit("fullscreen", !this.fullscreen);
     },
     toHHMMSS(duration) {
       return toHHMMSS(duration);
