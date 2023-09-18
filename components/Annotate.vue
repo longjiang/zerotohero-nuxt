@@ -349,7 +349,7 @@ export default {
         if (slot.elm) text += slot.elm.textContent + " ";
       }
     }
-    text = text.replace(/[\n\s]+/g, this.$l2.continua ? "" : " ");
+    text = text.replace(/[\n\s]+/g, " ");
     this.text = text.trim(); // This cannot be a computed property because slot element is not available of the server side
     if (this.$l2.code === "my" && typeof google_myanmar_tools !== "undefined") {
       this.myanmarZawgyiDetector = new google_myanmar_tools.ZawgyiDetector();
@@ -714,7 +714,7 @@ export default {
     async annotateRecursive(node) {
       if (node?.classList?.contains("sentence")) {
         // .sentence node
-        let sentence = node.innerText;
+        let sentence = node.innerText.replace(/[\s\n]+/g, " ");
         // If the language is does not use apostrophes as part of the word (like Klingon)
         if (!this.$l2.apostrophe) sentence = SmartQuotes.string(sentence);
         // We MUST do that otherwise the data-sentence-text attribute (10 lines down) will mess up the markup!

@@ -261,7 +261,6 @@ export default {
           }"></PopupNote>`;
         });
       }
-      html = html.replace(/\n/g, " ");
       return html;
     },
     highlightMultiple() {
