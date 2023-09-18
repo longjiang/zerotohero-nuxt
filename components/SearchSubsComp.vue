@@ -129,6 +129,7 @@
         }"
         @previous="goToPrevHit"
         @next="goToNextHit"
+        @videoUnavailable="onVideoUnavailable"
       />
     </template>
     <template v-if="!pro">
@@ -278,8 +279,15 @@ export default {
       this.collectContext(hits);
       this.$emit("updated", hits);
     },
-    async currentHit() {
-      this.loadL1SubsIfNeeded();
+    currentHit: {
+      async handler(newVal, oldVal) {
+        let unavailable = await YouTube.videoUnavailable(this.currentHit?.video?.youtube_id)
+        if (unavailable) {
+          this.onVideoUnavailable(this.currentHit.video.youtube_id);
+        }
+        this.loadL1SubsIfNeeded();
+      },
+      deep: false // Watch only for object reference changes
     },
   },
   async mounted() {

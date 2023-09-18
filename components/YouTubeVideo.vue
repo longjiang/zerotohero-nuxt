@@ -51,6 +51,7 @@
 
 <script>
 import { timeout } from "@/lib/utils";
+import YouTube from "@/lib/youtube";
 
 export default {
   props: {
@@ -173,6 +174,11 @@ export default {
       this.loadYouTubeiFrame();
     }
     this.time = this.starttime;
+    YouTube.videoUnavailable(this.video.youtube_id).then((unavailable) => {
+      if (unavailable) {
+        this.$emit("videoUnavailable", this.video.youtube_id);
+      }
+    });
     await timeout(5000);
     this.showPlaceholderMessage = true;
   },
@@ -289,7 +295,6 @@ export default {
                 }
               }
               if (this.muted && this.player) this.player.mute();
-              this.reportIfVideoUnavailableUponAutoload(this.video.youtube_id);
             },
           },
         });
@@ -310,29 +315,6 @@ export default {
         this.youtubeScriptLoaded = true;
       });
       document.head.appendChild(script);
-    },
-    async reportIfVideoUnavailableUponAutoload(youtube_id) {
-      if (!this.autoload) return;
-      // playerState of -1 means video is unstarted, but if a user skips the video as soon as it is loaded the video state is still -1
-      // which will trigger a 'videoUnavailable' false alarm
-      if (
-        this.video.youtube_id === youtube_id && // Make sure the video hasn't changed on us
-        this.player &&
-        this.player.getPlayerState &&
-        this.player.getPlayerState() === -1
-      ) {
-        await timeout(1000); // So le'ts make sure we give it a second before doing anything
-        if (
-          this.video.youtube_id === youtube_id &&
-          this.player.getPlayerState() === -1
-        ) {
-          console.log(
-            "😭 Looks like this video is unavailable:",
-            `https://www.languageplayer.io/${this.$l1.code}/${this.$l2.code}/video-view/youtube/${youtube_id}`
-          );
-          this.$emit("videoUnavailable", youtube_id);
-        }
-      }
     },
     playerIsThisPlayerNotSomeOtherPlayer() {
       if (this.player && this.player.getVideoData) {
