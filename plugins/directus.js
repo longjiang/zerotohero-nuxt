@@ -43,6 +43,16 @@ export const YOUTUBE_VIDEOS_TABLES = {
       2601, // Indonesian
       6325, // Thai
   ],
+  11: [
+      2351, // Hebrew
+      5332, // Portuguese
+      1800, // Greek
+      6736, // Ukrainian
+      1222, // Czech
+      346,  // Arabic
+      5892, // Slovak
+      4247, // Malay
+  ],
 }
 
 export default ({ app }, inject) => {
