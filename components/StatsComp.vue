@@ -62,7 +62,7 @@
               <router-link
                 :to="{
                   name: 'explore-media',
-                  params: { l1: 'en', l2: row.language.code },
+                  params: { l1: supportedL1s(row.language['iso639-3'], $browserLanguage)?.[0]?.code, l2: row.language.code },
                 }"
               >
                 {{ $tb(row.language.name) }}
@@ -109,6 +109,9 @@ export default {
     },
   },
   methods: {
+    supportedL1s(iso639_3, preferredL1Code) {
+      return this.$languages.supportedL1s(iso639_3, preferredL1Code);
+    },
     async getStats(refresh = false) {
       let data = await proxy(
         `${DIRECTUS_URL}count-all.php${

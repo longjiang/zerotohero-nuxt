@@ -99,11 +99,7 @@ export default {
 
       // Filter the supported L1 languages based on whether they are included
       // in the commonLangs list and have a dictionary for the given L2 language
-      let supportedL1s = this.$languages.l1s.filter(
-        (language) =>
-          this.$languages.commonLangs.includes(language.code) &&
-          language.dictionaries?.[l2["iso639-3"]]
-      );
+      let supportedL1s = this.$languages.supportedL1s(l2["iso639-3"])
 
       // Map the supported L1 languages to an array of objects with 'value' and 'text' properties
       let options = supportedL1s.map((language) => {
