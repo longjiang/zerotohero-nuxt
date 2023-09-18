@@ -51,7 +51,7 @@
       centered
       hide-footer
       modal-class="safe-padding-top mt-4"
-      body-class="dropdown-menu-modal-wrapper"
+      body-class="nav-menu-modal-wrapper"
       :title="$t(this.item.title)"
       v-if="isDropdown"
     >
@@ -419,6 +419,12 @@ export default {
     height: 2rem;
     align-items: center;
     justify-content: center;
+  }
+}
+
+.nav-menu-modal-wrapper {
+  .nav-item-icon {
+    width: 1rem;
   }
 }
 </style>

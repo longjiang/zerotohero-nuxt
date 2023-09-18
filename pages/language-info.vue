@@ -104,7 +104,7 @@
               <p class="text-center">
                 {{ $t("Bar graph shows number of speakers.") }}
               </p>
-              <Dialects skin="light" />
+              <Dialects :skin="$skin" />
             </div>
             <div class="pb-2 pt-5" v-if="$l2.han">
               <h4 class="text-center">{{ $t("56 Ethnic Groups of China") }}</h4>
@@ -112,7 +112,7 @@
                 {{ $t("Bar graph shows number of speakers.") }}
                 ( {{ $t("2010 Numbers") }})
               </p>
-              <FiftySixEthnic skin="light" />
+              <FiftySixEthnic :skin="$skin" />
             </div>
             <div class="pb-2 pt-2">
               <hr />

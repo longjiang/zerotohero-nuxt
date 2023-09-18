@@ -28,7 +28,7 @@
         ></b-progress-bar>
       </b-progress>
       <div style="width: 5rem; margin-top: 0.15rem" class="ml-2 small">
-        {{ $n(Number(Math.ceil(group.population / 1000))) }} K
+        {{ formatK(group.population) }}
       </div>
     </div>
   </div>
@@ -37,7 +37,7 @@
 <script>
 import Papa from "papaparse";
 import axios from "axios";
-import { SERVER, logError } from "@/lib/utils";
+import { SERVER, logError, formatK } from "@/lib/utils";
 
 export default {
   props: {
@@ -83,6 +83,9 @@ export default {
       this.groups = groups.sort((a, b) => b.population - a.population);
     }
   },
+  methods: {
+    formatK
+  }
 };
 </script>
 
