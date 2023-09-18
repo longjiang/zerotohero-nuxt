@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { normalizeCircleNumbers } from "@/lib/utils";
+import { normalizeStylizedNumbersInText } from "@/lib/utils";
 
 export default {
   // layout: "test-layout",
@@ -67,7 +67,7 @@ export default {
     },
     normalizeNotes(text) {
       let normalized = text.replace(/[(（【［\[]*(\d+)[)）】］\]]*/g, "[$1]");
-      normalized = normalizeCircleNumbers(normalized);
+      normalized = normalizeStylizedNumbersInText(normalized);
       return normalized;
     },
   },

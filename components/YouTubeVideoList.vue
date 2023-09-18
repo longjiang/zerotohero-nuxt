@@ -217,7 +217,7 @@ import {
   timeout,
   unique,
   uniqueByValue,
-  reduceTags
+  normalizeStylizedNumbersInText
 } from "@/lib/utils";
 import { Drag, Drop } from "vue-drag-drop";
 import { ContainerQuery } from "vue-container-query";
@@ -579,8 +579,8 @@ export default {
       for (let file of files) {
         for (let videoIndex in this.$refs.youTubeVideoCard) {
           let card = this.$refs.youTubeVideoCard[videoIndex];
-          let numsInFileName = file.name.match(/\d+/g);
-          let numsInVideoTitle = card.video.title.match(/\d+/g);
+          let numsInFileName = normalizeStylizedNumbersInText(file.name).match(/\d+/g);
+          let numsInVideoTitle = normalizeStylizedNumbersInText(card.video.title).match(/\d+/g);
           let found = false;
           if (numsInFileName && numsInVideoTitle) {
             for (let n of numsInFileName) {

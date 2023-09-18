@@ -286,7 +286,7 @@ import {
   formatK,
   TOPICS,
   PYTHON_SERVER,
-  normalizeCircleNumbers,
+  normalizeStylizedNumbersInText,
   logError,
   timeout,
 } from "@/lib/utils";
@@ -437,13 +437,13 @@ export default {
         /[(（【［\[〔]*(\d+)[)）〕】］\]]*/g,
         "[$1]"
       );
-      normalized = normalizeCircleNumbers(normalized);
+      normalized = normalizeStylizedNumbersInText(normalized);
       normalized = SmartQuotes.string(normalized);
       return normalized;
     },
     normalizeNoteStart(line) {
       let notes = line;
-      notes = normalizeCircleNumbers(notes);
+      notes = normalizeStylizedNumbersInText(notes);
       notes = notes
         .trim()
         .replace(/^[\d【】\[\]〔〕［］\(\)（）]+[.．、]*\s*/, "");
