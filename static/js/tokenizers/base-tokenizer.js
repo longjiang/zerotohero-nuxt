@@ -1,12 +1,12 @@
 class BaseTokenizer {
-  constructor({ l2, words = [], indexKeys = ['search'] }) {
+  constructor({ l2, words = [], indexKeys = ["search"] }) {
     this.l2 = l2;
     this.tokenizationCache = {};
     this.words = words;
     this.indexKeys = indexKeys;
   }
 
-  static async load({ l2, words = [], indexKeys = ['search'] }) {
+  static async load({ l2, words = [], indexKeys = ["search"] }) {
     const instance = new this({ l2, words, indexKeys });
     await instance.loadData();
     return instance;
@@ -18,7 +18,6 @@ class BaseTokenizer {
 
   async tokenizeWithCache(text) {
     if (this.tokenizationCache[text]) {
-
       return this.tokenizationCache[text];
     }
 
@@ -31,12 +30,15 @@ class BaseTokenizer {
   async tokenize(text) {
     const tokenizationType = this.tokenizationType(this.l2);
     let tokenized = [];
+
     switch (tokenizationType) {
       // tokenizationType passed in from <Annotate>
       case "integral":
         tokenized = this.tokenizeIntegral(text);
         break;
       case "agglutenative":
+        tokenized = await this.tokenizeContinua(text);
+        break;
       case "continua":
         tokenized = await this.tokenizeContinua(text);
         break;
@@ -63,15 +65,46 @@ class BaseTokenizer {
   }
 
   tokenizeIntegral(text) {
-    const tokens = text.match(/[\p{L}\p{M}]+|[^\p{L}\p{M}\s]+|\s+/gu);
+    let modifiedText = text;
+    let apostrophePatterns = null;
+
+    // If language is "apostrophe-sensitive" like Klingon and Welsh
+    if (this.l2 && this.l2.apostrophe) {
+      // Identify and replace patterns where the apostrophe is part of a word
+      apostrophePatterns = text.match(
+        /[\p{L}\p{M}][’']|[’'][\p{L}\p{M}]/gu
+      );
+      if (apostrophePatterns) {
+        apostrophePatterns.forEach((pattern, index) => {
+          modifiedText = modifiedText.replace(
+            pattern,
+            `APOSTROPHEWORD${index}`
+          );
+        });
+      }
+    }
+
+    // Continue with the usual tokenization
+    let tokens = modifiedText.match(/[\p{L}\p{M}\d]+|[^\p{L}\p{M}\d\s]+|\s+/gu);
+
+    // If language is "apostrophe-sensitive", restore the original words with apostrophes
+    if (this.l2 && this.l2.apostrophe && apostrophePatterns) {
+      tokens = tokens.map((token) => {
+        const match = token.match(/APOSTROPHEWORD(\d+)/);
+        return match ? apostrophePatterns[parseInt(match[1], 10)] : token;
+      });
+    }
+
+    // Label the tokens
     const labeledTokens = tokens.map((tokenString) => {
-      let isWord = /^[\p{L}\p{M}]+$/u.test(tokenString);
+      let isWord = /[\p{L}\p{M}]+/u.test(tokenString);
       if (isWord) {
         return { text: tokenString };
       } else {
         return tokenString;
       }
     });
+
     return labeledTokens;
   }
 
@@ -81,7 +114,7 @@ class BaseTokenizer {
       matches: [],
     };
     for (let word of filteredWords) {
-      let match = text.match(new RegExp(word.head, 'i'));
+      let match = text.match(new RegExp(word.head, "i"));
       if (match) {
         if (match[0].length > longest.text.length) {
           longest.text = match[0];
@@ -98,9 +131,9 @@ class BaseTokenizer {
     const textLowerCase = text.toLowerCase();
     return this.words.filter((row) => {
       for (let key of this.indexKeys) {
-        if (textLowerCase.includes(row[key])) return true // row.search, for example
-      }      
-    })
+        if (textLowerCase.includes(row[key])) return true; // row.search, for example
+      }
+    });
   }
 
   async tokenizeContinua(text, filteredWords) {
@@ -144,7 +177,10 @@ class BaseTokenizer {
       var tokens = [];
       for (let item of result) {
         if (typeof item === "string" && item !== text) {
-          let recursiveResult = await this.tokenizeContinua(item, filteredWords)
+          let recursiveResult = await this.tokenizeContinua(
+            item,
+            filteredWords
+          );
           for (let token of recursiveResult) {
             tokens.push(token);
           }
@@ -167,31 +203,29 @@ class BaseTokenizer {
     }
     if (!token.lemmas) {
       if (token.lemma) {
-
         token.lemmas = [
           {
             lemma: token.lemma,
             pos: token.pos,
-          }
-        ]
-        delete token.lemma
-        delete token.pos
+          },
+        ];
+        delete token.lemma;
+        delete token.pos;
       } else {
-        token.lemmas = []
+        token.lemmas = [];
       }
     } else {
       for (let lemma of token.lemmas) {
-        if (typeof lemma === 'string') {
+        if (typeof lemma === "string") {
           lemma = {
             lemma,
             pos: token.pos,
-          }
+          };
         }
       }
     }
-    return token
+    return token;
   }
-
 
   recoverSpaces(tokens, text) {
     let recoveredTokens = [];

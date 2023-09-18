@@ -369,7 +369,7 @@ export default {
     },
     onCopyClick(text) {
       let tempInput = document.createElement("input");
-      let popover = document.querySelector(".popover");
+      let popover = document.querySelector(".word-block-popup");
       tempInput.style = "position: absolute; left: -1000px; top: -1000px";
       tempInput.value = text;
       popover.appendChild(tempInput);
