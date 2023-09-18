@@ -665,6 +665,11 @@ export default {
     await this.$languagesPromise;
   },
   methods: {
+    redirectToDashboardIfAppropriate() {
+      if (this.$auth.loggedIn && this.$lastL1L2) {
+        this.$router.push({ name: "explore-media", params: this.$lastL1L2 });
+      }
+    },
     language(code) {
       if (this.$languages) return this.$languages.getSmart(code);
     },

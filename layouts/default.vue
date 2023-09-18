@@ -195,8 +195,12 @@ export default {
       }
     },
     redirectToDashboardIfAppropriate() {
-      if (this.$auth.loggedIn && this.$lastL1L2) {
-        this.$router.push({ name: "explore-media", params: this.$lastL1L2 });
+      // Check if the current route is '/'
+      if (this.$route.path === "/") {
+        // Check if the user is logged in and we know their last language pair
+        if (this.$auth.loggedIn && this.$lastL1L2) {
+          this.$router.push({ name: "explore-media", params: this.$lastL1L2 });
+        }
       }
     },
     setClientEnvironment() {

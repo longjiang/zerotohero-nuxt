@@ -43,7 +43,6 @@ ltc,zho,hsk-cedict
 lzh,eng,hsk-cedict
 lzh,zho,hsk-cedict
 mnp,eng,hsk-cedict
-nan,eng,hsk-cedict
 nan,zho,chinese-dialect
 och,eng,hsk-cedict
 och,zho,hsk-cedict
