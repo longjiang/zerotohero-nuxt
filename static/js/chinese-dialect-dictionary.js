@@ -4,6 +4,9 @@ class ChineseDialectDictionary extends BaseDictionary {
   
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     super({l1, l2});
+    this.indexKeys = ['traditional', 'simplified'];
+    this.traditionalIndex = {};
+    this.simplifiedIndex = {};
     this.files = {
       yue: 'cc-canto/cccanto-webdist.csv.txt',
       hak: 'dict-hakka/dict-hakka.csv.txt',

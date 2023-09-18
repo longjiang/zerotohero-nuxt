@@ -8,7 +8,6 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <b-button @click="testTokenizer">Tokenize</b-button>
         </div>
       </div>
     </div>
@@ -19,15 +18,17 @@
 import { IMAGE_PROXY } from "@/lib/utils";
 export default {
   async mounted() {
-    console.log('Available: ', await this.videoUnavailable("8SHf6wmX5MU")); // available
-    console.log('Unavailable: ', await this.videoUnavailable("yx8NF4EF9iA")); // unavailable
+    this.testTokenizer();
   },
   methods: {
+    async testVideoUnavailable() {
+      console.log('Available: ', await this.videoUnavailable("8SHf6wmX5MU")); // available
+      console.log('Unavailable: ', await this.videoUnavailable("yx8NF4EF9iA")); // unavailable
+    },
     async testTokenizer() {
-      const tokenizer = await this.$getTokenizer();
-      console.log("testing tokenizer", { tokenizer });
-      if (tokenizer.tokenize) {
-        let tokens = await tokenizer.tokenize("Hello, world!");
+      let dictionary = await this.$getDictionary();
+      if (dictionary.tokenizeWithCache) {
+      let tokens = await dictionary.tokenizeWithCache("水雞泅泡茶");
         console.log({ tokens });
       }
     },

@@ -127,7 +127,7 @@ class BaseTokenizer {
     return longest;
   }
 
-  textContainsWords(text) {
+  wordsContainedInText(text) {
     const textLowerCase = text.toLowerCase();
     return this.words.filter((row) => {
       for (let key of this.indexKeys) {
@@ -138,7 +138,7 @@ class BaseTokenizer {
 
   async tokenizeContinua(text, filteredWords) {
     if (!filteredWords) {
-      filteredWords = this.textContainsWords(text);
+      filteredWords = this.wordsContainedInText(text);
     }
     const longest = this.longest(text, filteredWords);
     if (this.l2 === "tha") {
