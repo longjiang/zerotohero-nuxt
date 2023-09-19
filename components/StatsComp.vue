@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import { proxy, DIRECTUS_URL } from "@/lib/utils";
+import { proxy, LP_DIRECTUS_TOOLS_URL } from "@/lib/utils";
 
 export default {
   props: {
