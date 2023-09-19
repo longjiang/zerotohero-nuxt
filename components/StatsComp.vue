@@ -114,7 +114,7 @@ export default {
     },
     async getStats(refresh = false) {
       let data = await proxy(
-        `${DIRECTUS_URL}count-all.php${
+        `${LP_DIRECTUS_TOOLS_URL}count-all.php${
           refresh ? "?timestamp=" + Date.now() : ""
         }`,
         { cacheLife: refresh ? 0 : 86400 } // cache the count for one day (86400 seconds)
