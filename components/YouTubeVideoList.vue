@@ -122,6 +122,14 @@
             <b-form-checkbox class="mr-1 d-inline-block" v-model="generated">
               Use Auto-Generated Subs
             </b-form-checkbox>
+            <!-- Add a sort by dropdown -->
+            <b-form-select
+              v-model="sort"
+              :options="sortOptions"
+              class="d-inline-block"
+              size="sm"
+              style="width: 150px"
+            />
             <!-- <a
               class="link-unstyled"
               @click="removeAllUnavailable()"
@@ -309,6 +317,14 @@ export default {
       videosInfoKey: 0,
       params: {},
       cachedVideoMetaFromYouTube: [],
+      sort: undefined,
+      sortOptions: [
+        { value: "title", text: "Title" },
+        { value: "date", text: "Date" },
+        { value: "views", text: "Views" },
+        { value: "likes", text: "Likes" },
+        { value: "comments", text: "Comments" },
+      ],
       query: {
         xs: {
           minWidth: 0,
@@ -350,6 +366,21 @@ export default {
       });
       if (!this.$adminMode)
         filteredVideos = uniqueByValue(filteredVideos, "youtube_id");
+      if (this.sort) {
+        filteredVideos = filteredVideos.sort((a, b) => {
+          if (this.sort === "title") {
+            return a.title.localeCompare(b.title);
+          } else if (this.sort === "date") {
+            return new Date(b.date) - new Date(a.date);
+          } else if (this.sort === "views") {
+            return b.views - a.views;
+          } else if (this.sort === "likes") {
+            return b.likes - a.likes;
+          } else if (this.sort === "comments") {
+            return b.comments - a.comments;
+          }
+        });
+      }
       return filteredVideos;
     },
     videosWithSubs() {
