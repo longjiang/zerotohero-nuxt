@@ -23,34 +23,42 @@
       </div>
     </div>
     <div class="stats-full" v-if="variant === 'full'">
-      <div
-        class="stats-summary"
-        style="margin: 0 auto; width: 15rem; line-height: 1.1"
-      >
-        <div class="d-flex">
-          <div style="flex: 1" class="text-center">
-            <b class="stat-big-number">{{ formatNumber(stats.totalCount) }}</b>
-            <br />
-            {{ $tb("Videos") }}
-          </div>
-          <div style="flex: 1" class="text-center">
-            <b class="stat-big-number">{{ stats.langs.length }}</b>
-            <br />
-            {{ $tb("Languages") }}
+      <div class="stats-header bg-light-or-dark p-2">
+        <div
+          class="stats-summary"
+          style="margin: 0 auto; width: 15rem; line-height: 1.1"
+        >
+          <div class="d-flex">
+            <div style="flex: 1" class="text-center">
+              <b class="stat-big-number">{{
+                formatNumber(stats.totalCount)
+              }}</b>
+              <br />
+              {{ $tb("Videos") }}
+            </div>
+            <div style="flex: 1" class="text-center">
+              <b class="stat-big-number">{{ stats.langs.length }}</b>
+              <br />
+              {{ $tb("Languages") }}
+            </div>
           </div>
         </div>
-      </div>
-      <div class="text-center mt-3" v-if="$adminMode">
-        <b-button :variant="$skin" size="sm" @click="getStats(true)">
-          <i class="fas fa-sync mr-1"></i>
-          {{ $tb('Refresh') }}
-        </b-button>
+        <div class="text-center mt-3" v-if="$adminMode">
+          <b-button :variant="$skin" size="sm" @click="getStats(true)">
+            <template v-if="gettingStats">
+              <b-spinner small />
+            </template>
+            <template v-else>
+              <i class="fas fa-sync mr-1"></i> {{ $tb("Refresh") }}
+            </template>
+          </b-button>
+        </div>
       </div>
       <table :class="`mt-4 table table-${$skin}`">
         <thead>
           <tr>
-            <th>{{ $tb('Language') }}</th>
-            <th>{{ $tb('Video Count') }}</th>
+            <th>{{ $tb("Language") }}</th>
+            <th>{{ $tb("Video Count") }}</th>
           </tr>
         </thead>
         <tbody>
@@ -62,7 +70,13 @@
               <router-link
                 :to="{
                   name: 'explore-media',
-                  params: { l1: supportedL1s(row.language['iso639-3'], $browserLanguage)?.[0]?.code, l2: row.language.code },
+                  params: {
+                    l1: supportedL1s(
+                      row.language['iso639-3'],
+                      $browserLanguage
+                    )?.[0]?.code,
+                    l2: row.language.code,
+                  },
                 }"
               >
                 {{ $tb(row.language.name) }}
@@ -94,6 +108,7 @@ export default {
   data: () => ({
     stats: undefined,
     languageData: [],
+    gettingStats: false,
   }),
   async created() {
     await this.getStats();
@@ -113,6 +128,7 @@ export default {
       return this.$languages.supportedL1s(iso639_3, preferredL1Code);
     },
     async getStats(refresh = false) {
+      this.gettingStats = true;
       let data = await proxy(
         `${LP_DIRECTUS_TOOLS_URL}count-all.php${
           refresh ? "?timestamp=" + Date.now() : ""
@@ -135,6 +151,11 @@ export default {
           this.languageData = languageData.sort((a, b) => b.count - a.count);
         }
       }
+      this.gettingStats = false;
+      this.$toast.success(this.$tb("Stats updated"), {
+        position: "top-center",
+        duration: 5000,
+      });
     },
     // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
     formatNumber(num) {
@@ -168,5 +189,10 @@ export default {
 }
 .total-count {
   margin-top: 1rem;
+}
+
+.stats-header {
+  position:sticky;
+  top: 0; 
 }
 </style>

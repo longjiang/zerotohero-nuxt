@@ -57,6 +57,9 @@ a {
       background-color: $bg-color-light-3;
     }
   }
+  .bg-light-or-dark {
+    background-color: $bg-color-light-1;
+  }
   .bg-accent {
     background-color: $bg-color-light-1;
   }
@@ -77,6 +80,9 @@ a {
     &:hover {
       background-color: $bg-color-dark-3;
     }
+  }
+  .bg-light-or-dark {
+    background-color: $bg-color-dark-1;
   }
   .bg-accent {
     background-color: $bg-color-dark-3;
