@@ -82,8 +82,9 @@ export default {
     async unassignShow(type) {
       let payload = {};
       payload[type] = null;
+      let l2Id = this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id;
       let data = await this.$directus.patchVideo({
-        l2Id: this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id,
+        l2Id,
         id: this.video.id,
         payload,
       });

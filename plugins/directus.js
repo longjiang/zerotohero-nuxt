@@ -1,8 +1,17 @@
 import DateHelper from "@/lib/date-helper";
-import axios from 'axios'
+import axios from "axios";
 import SmartQuotes from "smartquotes";
 import he from "he"; // html entities
-import { randBase64, proxy, escapeRegExp, logError, DIRECTUS_API_URL, LP_DIRECTUS_TOOLS_URL, WEB_URL, reduceTags } from '@/lib/utils'
+import {
+  randBase64,
+  proxy,
+  escapeRegExp,
+  logError,
+  DIRECTUS_API_URL,
+  LP_DIRECTUS_TOOLS_URL,
+  WEB_URL,
+  reduceTags,
+} from "@/lib/utils";
 
 export const YOUTUBE_VIDEOS_TABLES = {
   2: [
@@ -10,20 +19,20 @@ export const YOUTUBE_VIDEOS_TABLES = {
     6858, // Vietnamese
   ],
   3: [
-    3179 // Korean
+    3179, // Korean
   ],
   4: [
-    7731 // Chinese
+    7731, // Chinese
   ],
   5: [
-    1824 // English
+    1824, // English
   ],
   6: [
-    1540 // German
+    1540, // German
   ],
   7: [
     2645, // Italian
-    2780 // Japanese
+    2780, // Japanese
   ],
   8: [
     1943, // French
@@ -34,92 +43,123 @@ export const YOUTUBE_VIDEOS_TABLES = {
     5644, // Russian
   ],
   10: [
-      6615, // Turkish
-      4677, // Dutch
-      6115, // Swedish
-      5326, // Polish
-      4448, // Min Nan
-      4759, // Norwegian
-      2601, // Indonesian
-      6325, // Thai
+    6615, // Turkish
+    4677, // Dutch
+    6115, // Swedish
+    5326, // Polish
+    4448, // Min Nan
+    4759, // Norwegian
+    2601, // Indonesian
+    6325, // Thai
   ],
   11: [
-      2351, // Hebrew
-      5332, // Portuguese
-      1800, // Greek
-      6736, // Ukrainian
-      1222, // Czech
-      346,  // Arabic
-      5892, // Slovak
-      4247, // Malay
+    2351, // Hebrew
+    5332, // Portuguese
+    1800, // Greek
+    6736, // Ukrainian
+    1222, // Czech
+    346, // Arabic
+    5892, // Slovak
+    4247, // Malay
   ],
-}
+};
 
 export default ({ app }, inject) => {
-  inject('directus', {
-    host: process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + ':' + window.location.port,
+  inject("directus", {
+    host: process.server
+      ? process.env.baseUrl
+      : window.location.protocol +
+        "//" +
+        window.location.hostname +
+        ":" +
+        window.location.port,
 
     tokenOptions(options = {}) {
-      let token = app.$auth.strategy.token.get()
+      let token = app.$auth.strategy.token.get();
       if (token) {
-        if (!options.headers) options.headers = {}
-        options.headers.Authorization = token
-        return options
-      } else return options
+        if (!options.headers) options.headers = {};
+        options.headers.Authorization = token;
+        return options;
+      } else return options;
     },
 
     /**
      * We append a cors=... query string because directus server caching seems to 'remember' cors header, causing problems when multiple doamins try ti access
-     * @param {String} url 
+     * @param {String} url
      * @returns Url with cors string attached
      */
     appendHostCors(url) {
-      let joiner = url.includes('?') ? '&' : '?'
-      return url + joiner + `cors=${this.host}`
+      let joiner = url.includes("?") ? "&" : "?";
+      return url + joiner + `cors=${this.host}`;
     },
 
     async patch(path, payload) {
-      let res = await axios.patch(this.appendHostCors(DIRECTUS_API_URL + path), payload, this.tokenOptions()).catch(err => logError(err))
-      if (res) return res
+      let res = await axios
+        .patch(
+          this.appendHostCors(DIRECTUS_API_URL + path),
+          payload,
+          this.tokenOptions()
+        )
+        .catch((err) => logError(err));
+      if (res) return res;
     },
 
     async post(path, payload) {
-      let res = await axios.post(this.appendHostCors(DIRECTUS_API_URL + path), payload, this.tokenOptions()).catch(err => logError(err))
-      if (res) return res
+      let res = await axios
+        .post(
+          this.appendHostCors(DIRECTUS_API_URL + path),
+          payload,
+          this.tokenOptions()
+        )
+        .catch((err) => logError(err));
+      if (res) return res;
     },
 
     async delete(path) {
-      let res = await axios.delete(this.appendHostCors(DIRECTUS_API_URL + path), this.tokenOptions()).catch(err => logError(err))
-      if (res) return res
+      let res = await axios
+        .delete(
+          this.appendHostCors(DIRECTUS_API_URL + path),
+          this.tokenOptions()
+        )
+        .catch((err) => logError(err));
+      if (res) return res;
     },
 
     async get(path, params = {}) {
-      let res = await axios.get(this.appendHostCors(DIRECTUS_API_URL + path), this.tokenOptions({ params })).catch(err => logError(err))
-      if (res) return res
+      let res = await axios
+        .get(
+          this.appendHostCors(DIRECTUS_API_URL + path),
+          this.tokenOptions({ params })
+        )
+        .catch((err) => logError(err));
+      if (res) return res;
     },
 
     async getData(path, params = {}) {
-      let res = await this.get(path, params)
+      let res = await this.get(path, params);
       if (res?.data?.data) {
-        let data = res.data.data
-        return data
+        let data = res.data.data;
+        return data;
       }
     },
 
     /**
      * Count the number of episodes in a show
      * @param {string} showType 'tv_show' or 'talk'
-     * @param {number} showId 
-     * @param {number} l2Id 
-     * @returns 
+     * @param {number} showId
+     * @param {number} l2Id
+     * @returns
      */
     async countShowEpisodes(showType, showId, l2Id, adminMode = false) {
-      let tableSuffix = this.youtubeVideosTableName(l2Id).replace(`items/youtube_videos`, '')
+      let tableSuffix = this.youtubeVideosTableName(l2Id).replace(
+        `items/youtube_videos`,
+        ""
+      );
       let data = await proxy(
         `${LP_DIRECTUS_TOOLS_URL}count.php?table_suffix=${tableSuffix}&lang_id=${l2Id}&type=${showType}&id=${showId}`,
         { cacheLife: adminMode ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
-      if (data) return data
+      if (data) return data;
     },
 
     async getRandomEpisodeYouTubeId(langId, type) {
@@ -142,70 +182,68 @@ export default ({ app }, inject) => {
     },
 
     async deleteVideo({ id, l2Id }) {
-      let res = await this.delete(`${this.youtubeVideosTableName(l2Id)}/${id}`)
+      let res = await this.delete(`${this.youtubeVideosTableName(l2Id)}/${id}`);
       if (res?.status === 204) {
-        return true
+        return true;
       }
     },
 
     async patchVideo({ id, l2Id, payload, query }) {
-      query = query ? `?${query}` : ''
-      let res = await this.patch(`${this.youtubeVideosTableName(l2Id)}/${id}${query}`, payload)
+      query = query ? `?${query}` : "";
+      let queryURL = `${this.youtubeVideosTableName(l2Id)}/${id}${query}`;
+      let res = await this.patch(queryURL, payload);
       if (res?.data?.data) {
-        let data = res.data.data
-        return data
+        let data = res.data.data;
+        return data;
       }
     },
 
     async getVideo({ id, l2Id }) {
-      const suffix = this.youtubeVideosTableSuffix(l2Id)
-      const url = LP_DIRECTUS_TOOLS_URL + `video/${suffix ? suffix : 0}/${id}`
-      let res = await axios.get(url).catch(err => logError(err))
+      const suffix = this.youtubeVideosTableSuffix(l2Id);
+      const url = LP_DIRECTUS_TOOLS_URL + `video/${suffix ? suffix : 0}/${id}`;
+      let res = await axios.get(url).catch((err) => logError(err));
       if (res?.data) {
-        let video = res.data
-        return video
+        let video = res.data;
+        return video;
       }
     },
 
-    async getVideos({ l2Id, query = '' } = {}) {
+    async getVideos({ l2Id, query = "" } = {}) {
       if (this.youtubeVideosTableHasOnlyOneLanguage(l2Id)) {
         // No language filter is necessary since the table only has one language
       } else {
-        if (query !== '') query += `&`
-        query += `filter[l2][eq]=${l2Id}`
+        if (query !== "") query += `&`;
+        query += `filter[l2][eq]=${l2Id}`;
       }
-      query = query ? '?' + query : ''
-      let res = await this.get(`${this.youtubeVideosTableName(l2Id)}${query}`)
+      query = query ? "?" + query : "";
+      let res = await this.get(`${this.youtubeVideosTableName(l2Id)}${query}`);
       if (res?.data?.data) {
-        let videos = res.data.data
-        return videos
-      } else return []
+        let videos = res.data.data;
+        return videos;
+      } else return [];
     },
 
-    async searchCaptions({ l2Id,
-      tv_show,
-      talk,
-      terms,
-      limit,
-      timestamp }) {
-      let params = {}
-      let suffix = this.youtubeVideosTableSuffix(l2Id)
-      params.suffix = suffix ? '_' + this.youtubeVideosTableSuffix(l2Id) : ''
+    async searchCaptions({ l2Id, tv_show, talk, terms, limit, timestamp }) {
+      let params = {};
+      let suffix = this.youtubeVideosTableSuffix(l2Id);
+      params.suffix = suffix ? "_" + this.youtubeVideosTableSuffix(l2Id) : "";
       if (this.youtubeVideosTableHasOnlyOneLanguage(l2Id)) {
         // No language filter is necessary since the table only has one language
       } else {
-        params.l2 = l2Id
+        params.l2 = l2Id;
       }
-      if (tv_show) params.tv_show = tv_show
-      if (talk) params.talk = talk
-      if (terms) params.terms = terms.join(',')
-      if (timestamp) params.timestamp = timestamp
-      if (limit) params.limit = limit
-      let res = await axios.get(this.appendHostCors(LP_DIRECTUS_TOOLS_URL + 'videos'), { params }).catch(err => logError(err))
+      if (tv_show) params.tv_show = tv_show;
+      if (talk) params.talk = talk;
+      if (terms) params.terms = terms.join(",");
+      if (timestamp) params.timestamp = timestamp;
+      if (limit) params.limit = limit;
+      let res = await axios
+        .get(this.appendHostCors(LP_DIRECTUS_TOOLS_URL + "videos"), { params })
+        .catch((err) => logError(err));
       if (res?.data) {
-        let videos = res.data
-        return videos
-      } else return []
+        let videos = res.data;
+        return videos;
+      } else return [];
     },
 
     async postVideo(video, l2, limit = false, tries = 0) {
@@ -217,7 +255,21 @@ export default ({ app }, inject) => {
         line.line = qline;
       }
       let csv = app.$subs.unparseSubs(lines, l2.code);
-      let { youtube_id, title, channel, channel_id, date, tags, category, locale, duration, made_for_kids, views, likes, comments } = video
+      let {
+        youtube_id,
+        title,
+        channel,
+        channel_id,
+        date,
+        tags,
+        category,
+        locale,
+        duration,
+        made_for_kids,
+        views,
+        likes,
+        comments,
+      } = video;
       tags = tags ? tags.split(",") : [];
       let data = {
         youtube_id,
@@ -256,91 +308,86 @@ export default ({ app }, inject) => {
     },
 
     youtubeVideosTableSuffix(langId) {
-      if (!langId) throw 'Directus.youtubeVideosTableSuffix: langId is not set!'
-      let suffix = ''
+      langId = parseInt(langId);
+      if (!langId)
+        throw "Directus.youtubeVideosTableSuffix: langId is not set!";
+      let suffix = "";
       for (let key in YOUTUBE_VIDEOS_TABLES) {
         if (YOUTUBE_VIDEOS_TABLES[key].includes(langId)) {
-          suffix = key
+          suffix = key;
         }
       }
-      return suffix
+      return suffix;
     },
 
     youtubeVideosTableHasOnlyOneLanguage(langId) {
-      if (!langId) throw 'Directus.youtubeVideosTableHasOnlyOneLanguage: langId is not set!'
+      if (!langId)
+        throw "Directus.youtubeVideosTableHasOnlyOneLanguage: langId is not set!";
       for (let key in YOUTUBE_VIDEOS_TABLES) {
         if (YOUTUBE_VIDEOS_TABLES[key].includes(langId)) {
-          return YOUTUBE_VIDEOS_TABLES[key].length === 1
+          return YOUTUBE_VIDEOS_TABLES[key].length === 1;
         }
       }
     },
-    
+
     youtubeVideosTableName(langId) {
-      let suffix = this.youtubeVideosTableSuffix(langId)
-      if (suffix) suffix = '_' + suffix
-      return `items/youtube_videos${suffix}`
+      let suffix = this.youtubeVideosTableSuffix(langId);
+      if (suffix) suffix = "_" + suffix;
+      return `items/youtube_videos${suffix}`;
     },
 
     async checkShows(videos, langId, adminMode = false) {
       let response = await this.get(
-        `items/tv_shows?filter[l2][eq]=${langId}&limit=500&timestamp=${adminMode ? Date.now() : 0
+        `items/tv_shows?filter[l2][eq]=${langId}&limit=500&timestamp=${
+          adminMode ? Date.now() : 0
         }`
       );
       let shows = response.data?.data || [];
-      let showTitles = shows.map(show => show.title);
-      let regex = new RegExp(
-        showTitles.map(t => escapeRegExp(t)).join("|")
-      );
+      let showTitles = shows.map((show) => show.title);
+      let regex = new RegExp(showTitles.map((t) => escapeRegExp(t)).join("|"));
       for (let video of videos) {
         if (regex.test(video.title)) {
-          video.show = shows.find(show => video.title.includes(show.title));
+          video.show = shows.find((show) => video.title.includes(show.title));
         }
       }
       return videos;
     },
 
     async sendPasswordResetEmail({ email }) {
-      let host = WEB_URL 
-      if (process.server) host = process.env.baseUrl
-      let reset_url = `${host}/password-reset`
-      let res = await this.post(
-        `auth/password/request`,
-        {
-          email,
-          reset_url,
-        }
-      );
-      return res && res.status === 200
+      let host = WEB_URL;
+      if (process.server) host = process.env.baseUrl;
+      let reset_url = `${host}/password-reset`;
+      let res = await this.post(`auth/password/request`, {
+        email,
+        reset_url,
+      });
+      return res && res.status === 200;
     },
 
     async resetPassword({ token, password }) {
-      let res = await this.post(
-        `auth/password/reset`,
-        {
-          token,
-          password,
-        }
-      );
-      return res && res.status === 200
+      let res = await this.post(`auth/password/reset`, {
+        token,
+        password,
+      });
+      return res && res.status === 200;
     },
 
     // Initialize the user data record if there isn't one
     async createNewUserDataRecord(token, payload = {}) {
-      let res = await this.post(`items/user_data`, payload)
-        .catch((err) => {
-          console.log(
-            "Axios error in savedWords.js: err, url, payload",
-            err,
-            url,
-            payload
-          );
-        });
+      let res = await this.post(`items/user_data`, payload).catch((err) => {
+        console.log(
+          "Axios error in savedWords.js: err, url, payload",
+          err,
+          url,
+          payload
+        );
+      });
       if (res && res.data && res.data.data) {
         let userDataId = res.data.data.id;
         return userDataId;
       }
     },
-    
+
     /**
      * Initialize and fetch the user data if they are logged in.
      * If no user data is found, create and store it.
@@ -370,16 +417,16 @@ export default ({ app }, inject) => {
         this.storeUserData(userData);
       }
     },
-    
+
     isLoggedIn() {
       return app.$auth && app.$auth.loggedIn && app.$auth.user;
     },
-    
+
     getToken() {
       const token = app.$auth.strategy.token.get();
       return token ? token.replace("Bearer ", "") : undefined;
     },
-    
+
     logoutAndRedirect() {
       app.$auth.setUser(null);
       app.$toast.error($tb("Sorry, but you need to login again."), {
@@ -388,23 +435,37 @@ export default ({ app }, inject) => {
       });
       app.$router.push({ name: "login" });
     },
-    
+
     async fetchUserData(token) {
       const user = app.$auth.user;
       const userDataRes = await this.get(
-        `items/user_data?filter[owner][eq]=${user.id}&limit=1&timestamp=${Date.now()}`,
+        `items/user_data?filter[owner][eq]=${
+          user.id
+        }&limit=1&timestamp=${Date.now()}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-    
-      return userDataRes && userDataRes.data && userDataRes.data.data && userDataRes.data.data[0];
+
+      return (
+        userDataRes &&
+        userDataRes.data &&
+        userDataRes.data.data &&
+        userDataRes.data.data[0]
+      );
     },
-    
+
     async createAndStoreUserData(token) {
       const dataId = await this.createNewUserDataRecord(token);
       app.$auth.$storage.setUniversal("dataId", dataId);
     },
-    
-    storeUserData({ id, saved_words, saved_phrases, history, progress, settings }) {
+
+    storeUserData({
+      id,
+      saved_words,
+      saved_phrases,
+      history,
+      progress,
+      settings,
+    }) {
       app.$auth.$storage.setUniversal("dataId", id);
       app.store.dispatch("savedWords/importFromJSON", saved_words);
       app.store.dispatch("savedPhrases/importFromJSON", saved_phrases);
@@ -415,7 +476,9 @@ export default ({ app }, inject) => {
 
     async checkSubscription() {
       let res = await this.get(
-        `items/subscriptions?filter[owner][eq]=${app.$auth.user.id}&timestamp=${Date.now()}`
+        `items/subscriptions?filter[owner][eq]=${
+          app.$auth.user.id
+        }&timestamp=${Date.now()}`
       );
       if (res && res.data && res.data.data) {
         if (res.data.data[0]) {
@@ -429,15 +492,15 @@ export default ({ app }, inject) => {
     },
 
     async subscriptionExpired() {
-      let subscription = await this.checkSubscription()
+      let subscription = await this.checkSubscription();
       if (subscription) {
-        if (subscription.type === 'lifetime') return false;
+        if (subscription.type === "lifetime") return false;
         let now = new Date();
         let expires = new Date(subscription.expires_on);
         let expired = now > expires;
-        return expired
+        return expired;
       }
       return true;
     },
-  })
-}
+  });
+};
