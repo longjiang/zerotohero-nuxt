@@ -135,8 +135,8 @@
             :type="type"
             :key="`shows-filtered-${this.keyword}`"
           />
-          <b-button v-if="filteredShows && filteredShows.length > 12" :to="{name: routeType}" variant="outline-success" class="mt-3 d-block w-100" size="lg">
-            {{ $t('See All {type}', { type: routeTitles[routeType] }) }}
+          <b-button v-if="limit && filteredShows && filteredShows.length > limit" :to="{name: routeType}" variant="outline-success" class="mt-3 d-block w-100" size="lg">
+            {{ $t('See All {num} {type}', { type: routeTitles[routeType], num: filteredShows.length }) }}
           </b-button>
           <div
             v-if="
