@@ -29,9 +29,12 @@
       </h4>
       <SimpleSearch
         :placeholder="
-          $t('Enter {l2} keywords to search, or a YouTube ID or URL to import', {
-            l2: $t($l2.name),
-          })
+          $t(
+            'Enter {l2} keywords to search, or a YouTube ID or URL to import',
+            {
+              l2: $t($l2.name),
+            }
+          )
         "
         :skin="$skin"
         :action="
@@ -92,16 +95,20 @@
       </client-only>
       <div v-if="!term" class="mt-3">
         {{ $t("Popular search terms in {l2}:", { l2: $t($l2.name) }) }}
-        <router-link
-          v-for="topic in popularTopics"
-          :key="`topic-${topic[$l2.code]}`"
-          :to="{
-            name: 'youtube-search',
-            params: { term: topic[$l2.code], start: 0 },
-          }"
-          class="mr-2"
-          >{{ topic[$l2.code] }}</router-link
-        >
+        <span v-for="topic in popularTopics" class="mr-2">
+          <router-link
+            :key="`topic-${topic['en']}`"
+            :to="{
+              name: 'youtube-search',
+              params: { term: topic[$l2.code] || topic['en'], start: 0 },
+            }"
+            >{{ topic[$l2.code] || topic["en"] }}</router-link
+          >
+          <small
+            v-if="topic[$l2.code] && topic[$l2.code] !== topic[$l1.code]" class="text-muted"
+            >'{{ topic[$l1.code] }}'</small
+          >
+        </span>
       </div>
       <div v-if="term">
         <div class="d-block text-right mt-3">
@@ -191,20 +198,14 @@ export default {
       long: false,
       maxPages: 30,
       moreLoaded: false,
+      popularTopics: [],
     };
   },
   computed: {
     ...mapState("stats", ["stats"]),
-    popularTopics() {
-      const topics = this.loadCSVString(popularTopicsCSV);
-      if (topics && topics[0][this.$l2.code]) {
-        return topics;
-      } else {
-        return [];
-      }
-    },
   },
   mounted() {
+    this.popularTopics = this.loadCSVString(popularTopicsCSV);
     this.updateSearchText();
     this.detectYouTubeEntitiesAndRedirect();
     this.long = this.$route.query.long === "true" ? true : false;
@@ -213,9 +214,7 @@ export default {
   methods: {
     detectYouTubeEntitiesAndRedirect() {
       if (!this.term) return;
-      let { youtube_id, playlist_id } = YouTube.detectYouTubeEntity(
-        this.term
-      );
+      let { youtube_id, playlist_id } = YouTube.detectYouTubeEntity(this.term);
       if (playlist_id) {
         this.$toast.success(this.$t("Redirecting to playlist..."), {
           duration: 1000,
@@ -230,7 +229,7 @@ export default {
         });
         this.$router.push({
           name: "video-view",
-          params: { youtube_id, type: "youtube",},
+          params: { youtube_id, type: "youtube" },
         });
       }
     },
