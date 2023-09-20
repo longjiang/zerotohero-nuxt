@@ -108,6 +108,7 @@ export default {
       l1Locale: undefined,
       l2Locale: undefined,
       l2Name: undefined,
+      episodeSort: 'title',
     };
   },
   computed: {
@@ -168,6 +169,7 @@ export default {
     },
   },
   async mounted() {
+    this.episodeSort = this.$route.query.sort || 'title'
     await this.loadVideo(this.youtube_id, this.directus_id);
   },
   methods: {
@@ -258,8 +260,6 @@ export default {
     async getEpisodes(episodeCount, limit) {
       // If we already have the episodes stored in the show (in Vuex), and the episodes include the current video, just return the episodes
       let videos = [];
-      let sort =
-        this.showType === "tv_show" || this.show.audiobook ? "title" : "-date";
       if (
         this.show.episodes &&
         this.show.episodes.find((s) => s.youtube_id === this.video.youtube_id)
@@ -275,7 +275,7 @@ export default {
             fields +
             ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";
         let timestamp = this.$adminMode ? Date.now() : 0;
-        let params = { limit, sort, fields, timestamp };
+        let params = { limit, sort: this.episodeSort, fields, timestamp };
         params[`filter[${this.showType}][eq]`] = this.show.id;
 
         let postParams = Object.assign({}, params);
@@ -285,11 +285,14 @@ export default {
         // If sort is '-date', the user wants to see contents that are around the same date.
         // If sort is 'title', the user wants to see contents with similar alpha-sorted titles
         if (episodeCount > limit) {
-          if (sort === "title") {
+          if (this.episodeSort === "title") {
             postParams["filter[title][gt]"] = this.video.title;
           }
-          if (sort === "-date") {
+          if (this.episodeSort === "-date") {
             postParams["filter[date][lt]"] = this.video.date;
+          }
+          if (this.episodeSort === "-views") {
+            postParams["filter[views][lt]"] = this.video.views;
           }
         }
 
@@ -305,11 +308,7 @@ export default {
         videos = [this.video, ...videos];
       }
       videos = uniqueByValue(videos, "youtube_id");
-      if (sort === "-date") {
-        videos = videos.sort((a, b) =>
-          b.date ? b.date.localeCompare(a.date) : 0
-        );
-      } else {
+      if (this.episodeSort === "title") {
         videos = videos.sort((a, b) =>
           a.title
             ? a.title.localeCompare(b.title, this.$l2.locales[0], {
@@ -317,6 +316,12 @@ export default {
               })
             : 0
         );
+      } else if (this.episodeSort === "-date") {
+        videos = videos.sort((a, b) =>
+          b.date ? b.date.localeCompare(a.date) : 0
+        );
+      } else if (this.episodeSort === "-views") {
+        videos = videos.sort((a, b) => b.views - a.views);
       }
 
       this.$store.dispatch("shows/addEpisodesToShow", {
@@ -324,7 +329,7 @@ export default {
         collection: this.showType === "tv_show" ? "tvShows" : "talks",
         showId: this.show.id,
         episodes: videos,
-        sort,
+        sort: this.episodeSort,
       });
       return videos;
     },

@@ -206,6 +206,7 @@
             :showPlayButton="showPlayButton"
             :showLanguage="multilingual"
             :playlist="playlist"
+            :sort="sort"
           >
             <template v-slot:footer>
               <slot name="footer" :video="video"></slot>
@@ -296,6 +297,9 @@ export default {
     playlist: {
       type: Object,
     },
+    initialSort: {
+      type: String, // One of 'title', '-date', '-views', '-likes', '-comments'
+    },
   },
 
   data() {
@@ -317,13 +321,13 @@ export default {
       videosInfoKey: 0,
       params: {},
       cachedVideoMetaFromYouTube: [],
-      sort: undefined,
+      sort: this.initialSort,
       sortOptions: [
         { value: "title", text: "Title" },
-        { value: "date", text: "Date" },
-        { value: "views", text: "Views" },
-        { value: "likes", text: "Likes" },
-        { value: "comments", text: "Comments" },
+        { value: "-date", text: "Date" },
+        { value: "-views", text: "Views" },
+        { value: "-likes", text: "Likes" },
+        { value: "-comments", text: "Comments" },
       ],
       query: {
         xs: {
@@ -370,13 +374,13 @@ export default {
         filteredVideos = filteredVideos.sort((a, b) => {
           if (this.sort === "title") {
             return a.title.localeCompare(b.title);
-          } else if (this.sort === "date") {
+          } else if (this.sort === "-date") {
             return new Date(b.date) - new Date(a.date);
-          } else if (this.sort === "views") {
+          } else if (this.sort === "-views") {
             return b.views - a.views;
-          } else if (this.sort === "likes") {
+          } else if (this.sort === "-likes") {
             return b.likes - a.likes;
-          } else if (this.sort === "comments") {
+          } else if (this.sort === "-comments") {
             return b.comments - a.comments;
           }
         });

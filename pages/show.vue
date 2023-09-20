@@ -159,6 +159,7 @@
                   :showDate="showDate"
                   :showProgress="true"
                   :showPlayButton="false"
+                  :initialSort="sort"
                 />
                 <div v-observe-visibility="visibilityChanged"></div>
               </template>
@@ -214,7 +215,7 @@ export default {
       perPage: 96,
       show: undefined,
       showDiscover: false,
-      sort: "title",
+      sort: "title", // "title", "-date", "-views"
       titleUpdated: false,
       tries: 0,
       videos: undefined,

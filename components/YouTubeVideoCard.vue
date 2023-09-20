@@ -44,6 +44,7 @@
       }"
     >
       <div class="youtube-thumbnail-wrapper aspect-wrapper d-block">
+        {{ sort }}
         <router-link :to="to">
           <button class="btn btn-unstyled play-button" v-if="showPlayButton">
             <i class="fa fa-play"></i>
@@ -270,6 +271,9 @@ export default {
     l1: undefined,
     l2: undefined,
     delay: 0,
+    sort: {
+      type: String, // One of 'title', '-date', '-views', '-likes', '-comments'
+    },
     checkSaved: {
       default: false,
     },
@@ -352,7 +356,9 @@ export default {
             ? this.videoL2.code
             : this.$l2.code,
         },
-        query: {},
+        query: {
+          sort: this.sort,
+        },
       };
 
       if (this.video.lesson) {
