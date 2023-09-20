@@ -11,26 +11,27 @@
       v-if="video"
       ref="youtube"
       v-bind="{
-        type: 'youtube',
-        cc: false,
-        video,
-        skin,
-        related,
-        starttime,
-        startLineIndex,
-        show,
-        showType,
-        episodes: playlist?.videos?.length ? playlist.videos : episodes,
-        largeEpisodeCount,
-        useAutoTextSize: true,
-        showInfoButton: true,
         autoload: true,
         autoplay: true,
+        cc: false,
+        checkingSubs,
+        episodes: playlist?.videos?.length ? playlist.videos : episodes,
+        episodeSort,
         forcePortrait: false,
         initialMode,
-        checkingSubs,
         initialSize: this.mini ? 'mini' : 'regular',
-        playlist
+        largeEpisodeCount,
+        playlist,
+        related,
+        show,
+        showInfoButton: true,
+        showType,
+        skin,
+        startLineIndex,
+        starttime,
+        type: 'youtube',
+        useAutoTextSize: true,
+        video,
       }"
       :key="`transcript-${video.youtube_id}`"
       @ended="onEnded"
@@ -108,7 +109,7 @@ export default {
       l1Locale: undefined,
       l2Locale: undefined,
       l2Name: undefined,
-      episodeSort: 'title',
+      episodeSort: "title",
     };
   },
   computed: {
@@ -150,10 +151,7 @@ export default {
           .sort((a, b) => b.views - a.views);
         related = [
           ...shuffle([
-            ...this.episodes.slice(
-              this.itemIndex + 2,
-              this.itemIndex + 16
-            ),
+            ...this.episodes.slice(this.itemIndex + 2, this.itemIndex + 16),
             ...shuffle(popularEpisodes.slice(0, 16)),
           ]),
         ];
@@ -169,7 +167,7 @@ export default {
     },
   },
   async mounted() {
-    this.episodeSort = this.$route.query.sort || 'title'
+    this.episodeSort = this.$route.query.sort || "title";
     await this.loadVideo(this.youtube_id, this.directus_id);
   },
   methods: {
@@ -201,13 +199,12 @@ export default {
       const video = await this.getVideoFromDB(youtube_id, directus_id);
       this.video = video || this.video;
 
-      if (this.video.tv_show || this.video.talk)
-        this.loadShowAndEpisodes();
+      if (this.video.tv_show || this.video.talk) this.loadShowAndEpisodes();
 
       // Retrieve missing information from YouTube
-      await this.loadTranscriptLocalesFromYouTube(this.video)
-      await this.loadMissingSubsFromYouTube(this.video)
-      await this.loadMissingMetaFromYouTube(this.video)
+      await this.loadTranscriptLocalesFromYouTube(this.video);
+      await this.loadMissingSubsFromYouTube(this.video);
+      await this.loadMissingMetaFromYouTube(this.video);
 
       this.checkingSubs = false;
     },
@@ -224,7 +221,7 @@ export default {
     getShowTypeAndShow(video) {
       let foundShowType, showId, foundShow;
 
-      for (let showType of ['tv_show', 'talk']) {
+      for (let showType of ["tv_show", "talk"]) {
         if (video[showType]) {
           showId = video[showType];
           foundShowType = showType;
@@ -424,20 +421,19 @@ export default {
       }
     },
     async loadMissingSubsFromYouTube(video) {
-
       // If the video doesn't have L1 or L2 subtitles, we load it from YouTube
       // Do not load L1 subs if the current $l1 and $l2 are the same
-      let generated = false
+      let generated = false;
       for (let l1OrL2 of this.$l1 === this.$l2 ? ["l2"] : ["l2", "l1"]) {
         if (!(video?.[`subs_${l1OrL2}`]?.length > 0)) {
-          let subs
-          let locale = this[`${l1OrL2}Locale`]
-          generated = locale ? false : true // If we don't have the locale from YouTube, that means that the subs are generated
+          let subs;
+          let locale = this[`${l1OrL2}Locale`];
+          generated = locale ? false : true; // If we don't have the locale from YouTube, that means that the subs are generated
           subs = await this.getSubs({
             youtube_id: video.youtube_id,
             locale: this[`${l1OrL2}Locale`] || this[`$${l1OrL2}`].code,
             name: this[`${l1OrL2}Name`],
-            generated
+            generated,
           });
           // In the case of L1 subtitles, if we still don't have it, we get translated ones
           if (l1OrL2 === "l1" && !(subs?.length > 0)) {
@@ -447,7 +443,7 @@ export default {
               locale: this.l2Locale || this.$l2.code,
               name: this.l2Name,
               tlang,
-              generated
+              generated,
             });
           }
           if (subs && subs.length > 0) Vue.set(video, `subs_${l1OrL2}`, subs);
@@ -505,7 +501,7 @@ export default {
             directus_id: this.previousItem.id,
             lesson: this.previousItem.lesson,
           },
-          query: { p: this.playlist?.id },
+          query: { p: this.playlist?.id, sort: this.episodeSort },
         });
     },
     goToNextItem() {
@@ -518,26 +514,29 @@ export default {
             directus_id: this.nextItem.id,
             lesson: this.nextItem.lesson,
           },
-          query: { p: this.playlist?.id },
+          query: { p: this.playlist?.id, sort: this.episodeSort },
         });
     },
     updateCurrentTimeQueryString() {
       if (this.size === "mini") return;
       if (typeof window !== "undefined") {
-        const params = new URLSearchParams(window.location.search);
+        const url = new URL(window.location.href);
+        const params = new URLSearchParams(url.search);
         const queryStringTime = params.get("t") ? Number(params.get("t")) : 0;
+
         if (this.currentTimeEvery10Seconds !== queryStringTime) {
-          window.history.replaceState(
-            "",
-            "",
-            `?t=${this.currentTimeEvery10Seconds}`
-          );
-          if (this.currentTimeEvery10Seconds % 60 === 0)
+          // update the t value while retaining other query string parameters
+          params.set("t", this.currentTimeEvery10Seconds);
+          const newUrl = `${url.origin}${url.pathname}?${params.toString()}`;
+          window.history.replaceState("", "", newUrl);
+
+          if (this.currentTimeEvery10Seconds % 60 === 0) {
             this.saveHistory({
               type: "youtube",
               video: this.video,
               duration: this.duration,
             }); // Only update history (and push to the server) every minute
+          }
         }
       }
     },

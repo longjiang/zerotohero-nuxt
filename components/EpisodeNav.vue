@@ -107,6 +107,10 @@ export default {
     largeEpisodeCount: {
       type: Number, // Mannually set the number of episode displayed in the episode navigator
     },
+    episodeSort: {
+      type: String,
+      default: "title", // or '-views' or '-date'
+    },
   },
   data() {
     return {
@@ -144,6 +148,9 @@ export default {
           directus_id: video.id,
           lesson: video.lesson,
         },
+        query: {
+          sort: this.episodeSort,
+        }
       };
     },
   },

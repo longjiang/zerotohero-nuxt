@@ -57,6 +57,7 @@
           v-bind="{
             duration,
             episodes,
+            episodeSort,
             fullscreen,
             initialTime: starttime ? starttime : 0,
             largeEpisodeCount,
@@ -126,13 +127,16 @@
           />
           <EpisodeNav
             v-if="episodes"
-            :video="video"
-            :episodes="episodes"
-            :showType="showType"
-            :skin="skin"
-            :show="show"
-            :largeEpisodeCount="largeEpisodeCount"
             class="mt-3"
+            v-bind="{
+              video,
+              skin,
+              episodes,
+              episodeSort,
+              show,
+              showType,
+              largeEpisodeCount,
+            }"
           />
         </div>
       </div>
@@ -397,6 +401,10 @@ export default {
     },
     playlist: {
       type: Object,
+    },
+    episodeSort: {
+      type: String,
+      default: "title", // or '-views' or '-date'
     },
   },
   data() {

@@ -200,11 +200,14 @@
         />
         <EpisodeNav
           skin="light"
-          :video="video"
-          :episodes="episodes"
-          :showType="showType"
-          :show="show"
-          :largeEpisodeCount="largeEpisodeCount"
+          v-bind="{
+            video,
+            episodes,
+            episodeSort,
+            showType,
+            show,
+            largeEpisodeCount,
+          }"
           class="mt-3"
         />
         <div class="mt-3">
@@ -258,6 +261,7 @@
         <YouTubeVideoList
           :videos="show ? episodes : related.slice(0, 24)"
           :showDate="true"
+          :initialSort="episodeSort"
           skin="light"
           class="p-2"
         />
@@ -367,6 +371,10 @@ export default {
     },
     episodes: {
       type: Array,
+    },
+    episodeSort: {
+      type: String,
+      default: "title", // or '-views' or '-date'
     },
     largeEpisodeCount: {
       type: Number, // Mannually set the number of episode displayed in the episode navigator

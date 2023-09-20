@@ -44,7 +44,6 @@
       }"
     >
       <div class="youtube-thumbnail-wrapper aspect-wrapper d-block">
-        {{ sort }}
         <router-link :to="to">
           <button class="btn btn-unstyled play-button" v-if="showPlayButton">
             <i class="fa fa-play"></i>
