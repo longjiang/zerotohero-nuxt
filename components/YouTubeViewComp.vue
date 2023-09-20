@@ -12,7 +12,7 @@
       ref="youtube"
       v-bind="{
         type: 'youtube',
-        cc: true,
+        cc: false,
         video,
         skin,
         related,
@@ -25,7 +25,7 @@
         useAutoTextSize: true,
         showInfoButton: true,
         autoload: true,
-        autoplay: false,
+        autoplay: true,
         forcePortrait: false,
         initialMode,
         checkingSubs,

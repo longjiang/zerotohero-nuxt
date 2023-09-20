@@ -37,7 +37,7 @@
       }"
     >
       {{ $t(show.title) }}
-      {{ largeEpisodeCount ? "(" + $n(largeEpisodeCount) + ")" : "" }}
+      {{ largeEpisodeCount ? "(" + (episodeIndex + 1) + '/' + $n(largeEpisodeCount) + ")" : "" }}
       <i class="fa-solid fa-chevron-right ml-1"></i>
     </router-link>
     <router-link

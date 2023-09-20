@@ -198,6 +198,15 @@
           ref="videoAdmin1"
           style="font-size: 0.8em; line-height: 2em"
         />
+        <EpisodeNav
+          skin="light"
+          :video="video"
+          :episodes="episodes"
+          :showType="showType"
+          :show="show"
+          :largeEpisodeCount="largeEpisodeCount"
+          class="mt-3"
+        />
         <div class="mt-3">
           <h6 v-if="show">
             <hr class="mb-3" />
@@ -251,15 +260,6 @@
           :showDate="true"
           skin="light"
           class="p-2"
-        />
-        <EpisodeNav
-          skin="light"
-          :video="video"
-          :episodes="episodes"
-          :showType="showType"
-          :show="show"
-          :largeEpisodeCount="largeEpisodeCount"
-          class="mt-3"
         />
       </div>
     </b-modal>
