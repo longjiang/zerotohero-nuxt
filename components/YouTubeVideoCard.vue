@@ -42,6 +42,10 @@
         'youtube-video-card-grid': view === 'grid',
         'youtube-video-card-list': view === 'list',
       }"
+      v-observe-visibility="{
+        callback: visibilityChanged,
+        once: true,
+      }"
     >
       <div class="youtube-thumbnail-wrapper aspect-wrapper d-block">
         <router-link :to="to">
@@ -406,13 +410,6 @@ export default {
     //   this.$store.dispatch("history/load");
     // }
   },
-  async created() {
-    let unavailable = await YouTube.videoUnavailable(this.video.youtube_id)
-    if (unavailable) {
-      this.unavailable = true
-      this.$emit('unavailable', this.video)
-    }
-  },
   watch: {
     firstLineTime(newTime, oldTime) {
       this.shiftSubs();
@@ -428,6 +425,15 @@ export default {
     },
   },
   methods: {
+    async visibilityChanged(visible) {
+      if (visible) {
+        let unavailable = await YouTube.videoUnavailable(this.video.youtube_id)
+        if (unavailable) {
+          this.unavailable = true
+          this.$emit('unavailable', this.video)
+        }
+      }
+    },
     parseDuration(...args) {
       return parseDuration(...args);
     },
