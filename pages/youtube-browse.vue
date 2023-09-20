@@ -27,6 +27,64 @@
           />
         </div>
       </div>
+      <div
+        v-show="
+          $refs['talks'] &&
+          $refs['talks'].filteredShows &&
+          $refs['talks'].filteredShows.length > 0
+        "
+        class="mb-5"
+      >
+        <h5>
+          {{ $t("YouTube Channels") }}
+        </h5>
+        <hr />
+        <Shows
+          v-bind="{
+            kidsOnly,
+            category,
+            level,
+            showFilter: false,
+            showHero: false,
+            routeType: 'talks',
+            tag: 'all',
+            limit: 12,
+          }"
+          ref="talks"
+        />
+      </div>
+      <div
+        v-show="
+          (category !== 'all' || level !== 'all' || kidsOnly) &&
+          $refs['tv-shows'] &&
+          $refs['tv-shows'].filteredShows &&
+          $refs['tv-shows'].filteredShows.length > 0
+        "
+        class="mb-5"
+      >
+        <h5>
+          {{ $t("TV Shows") }}
+        </h5>
+        <hr />
+        <Shows
+          v-bind="{
+            kidsOnly,
+            category,
+            level,
+            showFilter: false,
+            showHero: false,
+            routeType: 'tv-shows',
+            tag: 'all',
+          }"
+          ref="tv-shows"
+        />
+      </div>
+      <div>
+        <h5>
+          {{ $t("Videos") }}
+        </h5>
+        <hr class="mb-4" />
+      </div>
       <div class="row mb-4">
         <div class="col-sm-12 text-center">
           <div v-show="kidsOnly" class="mb-2">
@@ -87,64 +145,6 @@
             </router-link>
           </i18n>
         </div>
-      </div>
-      <div
-        v-show="
-          $refs['talks'] &&
-          $refs['talks'].filteredShows &&
-          $refs['talks'].filteredShows.length > 0
-        "
-        class="mb-5"
-      >
-        <h5>
-          {{ $t("YouTube Channels") }}
-        </h5>
-        <hr />
-        <Shows
-          v-bind="{
-            kidsOnly,
-            category,
-            level,
-            showFilter: false,
-            showHero: false,
-            routeType: 'talks',
-            tag: 'all',
-            limit: 12,
-          }"
-          ref="talks"
-        />
-      </div>
-      <div
-        v-show="
-          (category !== 'all' || level !== 'all' || kidsOnly) &&
-          $refs['tv-shows'] &&
-          $refs['tv-shows'].filteredShows &&
-          $refs['tv-shows'].filteredShows.length > 0
-        "
-        class="mb-5"
-      >
-        <h5>
-          {{ $t("TV Shows") }}
-        </h5>
-        <hr />
-        <Shows
-          v-bind="{
-            kidsOnly,
-            category,
-            level,
-            showFilter: false,
-            showHero: false,
-            routeType: 'tv-shows',
-            tag: 'all',
-          }"
-          ref="tv-shows"
-        />
-      </div>
-      <div>
-        <h5>
-          {{ $t("Videos") }}
-        </h5>
-        <hr class="mb-4" />
       </div>
       <MediaSearchResults
         v-bind="{
