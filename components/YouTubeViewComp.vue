@@ -245,7 +245,7 @@ export default {
       }
     },
     async setEpisodesAndEpisodeCount() {
-      let limit = 100;
+      let limit = 500;
       let episodeCount = await this.getEpisodeCount();
       if (episodeCount > limit && this.$refs.youtube)
         this.largeEpisodeCount = episodeCount;
