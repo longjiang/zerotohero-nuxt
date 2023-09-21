@@ -241,7 +241,7 @@ export default {
         if (l2.lat && l2.long) this.$refs.languageMap.goToLang(l2);
         else {
           let l1Code = this.l1;
-          let path = `/${l1Code}/${l2.code}/`;
+          let path = `/${l1Code}/${l2.code}/language-info`;
           this.$router.push(path);
         }
       }

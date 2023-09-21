@@ -29,7 +29,7 @@ export default {
     },
     placeholder: {
       type: String,
-      default: 'Search languages'
+      default: "Search languages",
     },
     nav: {
       default: true,
@@ -42,13 +42,20 @@ export default {
     },
     button: {
       default: true,
-    }
+    },
   },
   data() {
     return {
       languages: [],
       enLanguages: [],
       random: undefined,
+      featureList: {
+        'youtube': 'YouTube',
+        'dictionary': 'Dictionary',
+        'omniglot': 'Omniglot',
+        'transliteration': 'Transliteration',
+        'live-tv': 'Live TV',
+      }
     };
   },
   mounted() {
@@ -95,7 +102,7 @@ export default {
         let randomLanguage = randomArrayItem(preferredLanguages);
         return `/${randomLanguage.code === "en" ? "zh" : "en"}/${
           randomLanguage.code
-        }/explore-media`;
+        }/language-info`;
       }
     },
     suggestionsFunc(text) {
@@ -143,26 +150,28 @@ export default {
             let dfi = features.findIndex((f) => f === "dictionary");
             features[dfi] = `${language.wiktionary} dictionary words`;
           }
+          return {language, features, english, codes};
+        })
+        .slice(0, 30)
+        .map(({language, features, english, codes}) => {
           return {
-            head: `${language.name} (${(language.otherNames || [])
+            head: `${this.$tb(language.name)} (${(language.otherNames || [])
               .concat(codes)
               .join(", ")})`,
-            definitions: features,
+            definitions: features.map(feature => this.$tb(this.featureList[feature] || feature)),
             l1: english,
             l2: language,
           };
-        })
-        .slice(0, 30);
+        });
       return filteredLanguages;
     },
     hrefFunc(suggestion) {
       if (suggestion && suggestion.l1 && suggestion.l2) {
-        return `/${suggestion.l1.code}/${suggestion.l2.code}/explore-media`;
+        return `/${suggestion.l1.code}/${suggestion.l2.code}/language-info`;
       }
     },
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>
