@@ -57,6 +57,8 @@
       <table :class="`mt-4 table table-${$skin}`">
         <thead>
           <tr>
+            <th style="width: 3.5rem;">{{ $tb("Code") }}</th>
+            <th style="width: 3.5rem;">{{ $tb("ID") }}</th>
             <th>{{ $tb("Language") }}</th>
             <th>{{ $tb("Video Count") }}</th>
           </tr>
@@ -66,6 +68,8 @@
             v-for="row in languageData"
             :key="`lang-count-${row.language.id}`"
           >
+            <td><small>{{ row.language.code }}</small></td>
+            <td><small>{{ row.language.id }}</small></td>
             <td>
               <router-link
                 :to="{
@@ -80,7 +84,6 @@
                 }"
               >
                 {{ $tb(row.language.name) }}
-                <small>({{ row.language.code }}, #{{ row.language.id }})</small>
               </router-link>
             </td>
             <td>{{ formatNumber(row.count) }}</td>
@@ -192,7 +195,7 @@ export default {
 }
 
 .stats-header {
-  position:sticky;
-  top: 0; 
+  position: sticky;
+  top: 0;
 }
 </style>

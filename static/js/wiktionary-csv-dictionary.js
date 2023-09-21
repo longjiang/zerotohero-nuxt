@@ -16,7 +16,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
       spa: '2.18.0',
       est: '2.18.0',
     };
-    this.l2_mappings = {
+    this.l2Code_mappings = {
       "hrv": "hbs", // Serbian uses Serbo-Croatian
       "nor": "nob", // Default Norwegian to Bokmål (which is supplemented with Nynorsk)
       "srp": "hbs", // Croatian uses Serbo-Croatian
@@ -71,11 +71,8 @@ class WiktionaryCsvDictionary extends BaseDictionary {
 
   dictionaryFile({ l1Code = undefined, l2Code = undefined } = {}) {
     if (l1Code && l2Code) {
-      for (const key in this.l2Code_mappings) {
-        if (l2Code === key) {
-          l2Code = mappings[key];
-          break;
-        }
+      if (l2Code in this.l2Code_mappings) {
+        l2Code = this.l2Code_mappings[l2Code];
       }
       const baseUrl = this.useLocal.includes(`${l2Code}-${l1Code}`) ? "/" : SERVER;
       let filename = `${baseUrl}data/wiktionary-csv/${l2Code}-${l1Code}.csv.txt`;
