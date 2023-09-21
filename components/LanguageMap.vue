@@ -274,9 +274,7 @@ export default {
       let l1Code = this.l1;
       if (["hak", "nan", "lzh", "ltc", "och"].includes(l2.code))
         l1Code = "zh";
-      let name = LANGS_WITH_CONTENT.includes(l2.code)
-        ? "explore-media"
-        : "language-info";
+      let name = "language-info";
       return {
         name,
         params: { l1: l1Code, l2: l2.code },

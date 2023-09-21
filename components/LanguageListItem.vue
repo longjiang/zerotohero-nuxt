@@ -174,9 +174,11 @@ export default {
       return formatK(number, 1, this.$browserLanguage);
     },
     languagePath(language) {
-      return `/${this.from ? this.from.code : "en"}/${
+      const path = `/${this.from ? this.from.code : "en"}/${
         language.code
-      }/language-info`;
+      }/language-info`
+      console.log(path)
+      return path;
     },
     hasDictionary(l1, l2) {
       return (
