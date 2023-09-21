@@ -15,91 +15,110 @@
                 {{ $t("About the {l2} language", { l2: $t($l2.name) }) }}
               </h4>
               <LazyLanguageInfoBox :lang="$l2" class="mb-4" />
-              <p v-if="$l2['iso639-1']">
-                <b>{{ $t("ISO639-1:") }}</b>
-                {{ $l2["iso639-1"] || $t("Not available") }}
-              </p>
-              <p>
-                <b>{{ $t("ISO639-3:") }}</b>
-                {{ $l2["iso639-3"] || $t("Not available") }}
-              </p>
-              <p v-if="$l2['glottologId']">
-                <b>{{ $t("Glottolog ID:") }}</b>
-                {{ $l2["glottologId"] }}
-              </p>
-              <p v-if="$l2['glottologFamilyId']">
-                <b>{{ $t("Glottolog Family ID:") }}</b>
-                {{ $l2["glottologFamilyId"] }}
-              </p>
-              <p v-if="$l2['glottologParentId']">
-                <b>{{ $t("glottologParentId:") }}</b>
-                {{ $l2["Glottolog Parent ID"] }}
-              </p>
-              <p>
-                <b>{{ $t("Language Player Language ID:") }}</b>
-                {{ $l2.id || $t("Not available") }}
-              </p>
-              <p v-if="$l2.lat && $l2.long">
-                <b>{{ $t("Location (lat, long):") }}</b>
-                {{ $l2.lat }}, {{ $l2.long }}
-              </p>
-              <p v-if="$l2.scope">
-                <b>{{ $t("Language Scope:") }}</b>
-                {{ scope[$l2.scope] }}
-              </p>
-              <p v-if="$l2.scope">
-                <b>{{ $t("Language Type:") }}</b>
-                {{ type[$l2.type] }}
-              </p>
-              <p v-if="$l2.scripts && $l2.scripts.length > 0">
-                <b>{{ $t("Orthography Code:") }}</b>
-                {{
-                  $l2.scripts
-                    ? $l2.scripts.map((s) => s.script).join(", ")
-                    : $t("Not available")
-                }}
-              </p>
-              <p v-if="$l2.otherNames?.length > 0">
-                <b>{{ $t("Other names:") }}</b>
-                {{ $l2.otherNames.join(",") }}
-              </p>
-              <p v-if="$l2.speakers">
-                <b>{{ $t("Number of Speakers:") }}</b>
-                {{ $l2.speakers ? $n($l2.speakers, $l1.code || 'en') : $t("Not available") }}
-              </p>
-              <p>
-                <b>{{ $t("Native to:") }}</b>
-                <span
-                  v-for="c in $l2.country"
-                  :key="`lang-country-${c.alpha2Code}`"
-                  style="margin-right: 0.5rem"
-                >
-                  <img
-                    :src="`/vendor/flag-svgs/${c.alpha2Code}.svg`"
-                    class="flag-icon mr-1"
-                  />
-                  {{ c.name }}
-                  <span v-if="c.languages?.length > 0">
-                    ({{ $t("Also speaks:") }}
-                    <span
-                      v-for="(language, index) in c.languages"
-                      :key="`c-${c.name}-l-${language}`"
-                    >
-                      <router-link
-                        :to="{
-                          name: 'language-info',
-                          params: { l1: 'en', l2: language },
-                        }"
+              <div class="language-data">
+                <p v-if="$l2['iso639-1']">
+                  <b>{{ $t("ISO639-1:") }}</b>
+                  {{ $l2["iso639-1"] || $t("Not available") }}
+                </p>
+                <p>
+                  <b>{{ $t("ISO639-3:") }}</b>
+                  {{ $l2["iso639-3"] || $t("Not available") }}
+                </p>
+                <p v-if="$l2['glottologId']">
+                  <b>{{ $t("Glottolog ID:") }}</b>
+                  {{ $l2["glottologId"] }}
+                </p>
+                <p v-if="$l2['glottologFamilyId']">
+                  <b>{{ $t("Glottolog Family ID:") }}</b>
+                  {{ $l2["glottologFamilyId"] }}
+                </p>
+                <p v-if="$l2['glottologParentId']">
+                  <b>{{ $t("glottologParentId:") }}</b>
+                  {{ $l2["Glottolog Parent ID"] }}
+                </p>
+                <p>
+                  <b>{{ $t("Language Player Language ID:") }}</b>
+                  {{ $l2.id || $t("Not available") }}
+                </p>
+                <p v-if="$l2.lat && $l2.long">
+                  <b>{{ $t("Location (lat, long):") }}</b>
+                  {{ $l2.lat }}, {{ $l2.long }}
+                </p>
+                <p v-if="$l2.scope">
+                  <b>{{ $t("Language Scope:") }}</b>
+                  {{ scope[$l2.scope] }}
+                </p>
+                <p v-if="$l2.scope">
+                  <b>{{ $t("Language Type:") }}</b>
+                  {{ type[$l2.type] }}
+                </p>
+                <p v-if="$l2.scripts && $l2.scripts.length > 0">
+                  <b>{{ $t("Orthography Code:") }}</b>
+                  {{
+                    $l2.scripts
+                      ? $l2.scripts.map((s) => s.script).join(", ")
+                      : $t("Not available")
+                  }}
+                </p>
+                <p v-if="$l2.otherNames?.length > 0">
+                  <b>{{ $t("Other names:") }}</b>
+                  {{ $l2.otherNames.join(",") }}
+                </p>
+                <p v-if="$l2.speakers">
+                  <b>{{ $t("Number of Speakers:") }}</b>
+                  {{
+                    $l2.speakers
+                      ? $n($l2.speakers, $l1.code || "en")
+                      : $t("Not available")
+                  }}
+                </p>
+                <p>
+                  <b>{{ $t("Native to:") }}</b>
+                  <span
+                    v-for="c in $l2.country"
+                    :key="`lang-country-${c.alpha2Code}`"
+                    style="margin-right: 0.5rem"
+                  >
+                    <img
+                      :src="`/vendor/flag-svgs/${c.alpha2Code}.svg`"
+                      class="flag-icon mr-1"
+                    />
+                    {{ c.name }}
+                    <span v-if="c.languages?.length > 0">
+                      ({{ $t("Also speaks:") }}
+                      <span
+                        v-for="(language, index) in c.languages"
+                        :key="`c-${c.name}-l-${language}`"
                       >
-                        {{ $t(languageName(language)) }} </router-link
-                      ><span v-if="index + 1 < c.languages.length">,</span>
+                        <router-link
+                          :to="{
+                            name: 'language-info',
+                            params: { l1: 'en', l2: language },
+                          }"
+                        >
+                          {{ $t(languageName(language)) }} </router-link
+                        ><span v-if="index + 1 < c.languages.length">,</span>
+                      </span>
+                      )
                     </span>
-                    )
                   </span>
-                </span>
-              </p>
+                </p>
+              </div>
             </div>
-            <div class="pb-2 pt-5" v-if="$l2.han">
+            <hr/>
+            <div class="pt-3 pb-2">
+              <client-only>
+                <NavPage
+                  :l1="$l1"
+                  :l2="$l2"
+                  class="youtube-browse-nav"
+                  :showOnly="['About']"
+                  :showOnlyChildren="['More']"
+                  :limit="12"
+                />
+              </client-only>
+            </div>
+            <div class="pb-3 pt-3" v-if="$l2.han">
               <h4 class="text-center mb-4">{{ $t("Dialects of Chinese") }}</h4>
               <p class="text-center">
                 {{ $t("Bar graph shows number of speakers.") }}
@@ -118,7 +137,12 @@
               <hr />
               <h5 class="mt-3 mb-3 text-center">{{ $t("Ask ChatGPT") }}</h5>
               <div class="alert alert-danger text-center">
-                <b>{{ $t("Note:") }}</b> {{ $t('Some information about lesser-known languages may not be accurate.') }}
+                <b>{{ $t("Note:") }}</b>
+                {{
+                  $t(
+                    "Some information about lesser-known languages may not be accurate."
+                  )
+                }}
               </div>
               <ChatGPT
                 :initialMessages="[
@@ -184,8 +208,7 @@ export default {
     await this.$languages.loadFull();
   },
   beforeDestroy() {},
-  computed: {
-  },
+  computed: {},
   methods: {
     getSmart(...args) {
       let language = this.$languages.getSmart(...args);
@@ -196,8 +219,7 @@ export default {
       if (language?.name) {
         let name = language.name.replace(/ \(.*\)/gi, "");
         return name;
-      }
-      else return l2Code;
+      } else return l2Code;
     },
   },
 };
@@ -220,5 +242,12 @@ h3 {
   margin-left: 1rem;
   display: inline-block;
   color: $primary-color;
+}
+
+// Show .language-data as two columns on medium to large displays
+@media (min-width: 640px) {
+  .language-data {
+    column-count: 2;
+  }
 }
 </style>
