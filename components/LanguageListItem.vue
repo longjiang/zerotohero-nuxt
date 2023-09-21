@@ -176,7 +176,7 @@ export default {
     languagePath(language) {
       return `/${this.from ? this.from.code : "en"}/${
         language.code
-      }/explore-media`;
+      }/language-info`;
     },
     hasDictionary(l1, l2) {
       return (

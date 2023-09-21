@@ -91,7 +91,7 @@
                           params: { l1: 'en', l2: language },
                         }"
                       >
-                        {{ language }} </router-link
+                        {{ $t(languageName(language)) }} </router-link
                       ><span v-if="index + 1 < c.languages.length">,</span>
                     </span>
                     )
@@ -180,15 +180,24 @@ export default {
       },
     };
   },
-  async mounted() {},
+  async mounted() {
+    await this.$languages.loadFull();
+  },
   beforeDestroy() {},
   computed: {
   },
   methods: {
-    async getSmart(...args) {
-      await this.$languages.loadFull();
+    getSmart(...args) {
       let language = this.$languages.getSmart(...args);
       return language;
+    },
+    languageName(l2Code) {
+      let language = this.$languages.getSmart(l2Code);
+      if (language?.name) {
+        let name = language.name.replace(/ \(.*\)/gi, "");
+        return name;
+      }
+      else return l2Code;
     },
   },
 };
