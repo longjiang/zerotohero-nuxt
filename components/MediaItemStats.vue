@@ -13,11 +13,11 @@
       <i class="fa-solid fa-comment"></i>
       {{ formatK(item.avg_comments || item.comments) }}
     </span>
-    <span class="statistics-item" v-if="item.locale && localeDescription">
+    <span class="statistics-item" v-if="item.locale">
       <img v-if="country" :alt="`Flag of ${country.name}`" :title="`Flag of ${country.name} (${country.alpha2Code})`"
         :src="`/vendor/flag-svgs/${country.alpha2Code}.svg`" class="flag-icon mr-1"
         style="width: 1rem; position: relative; bottom: 0.1rem" />
-      {{ localeDescription }}
+      {{ localeDescription || item.locale }}
     </span>
     <span class="statistics-item" v-if="item.category">
       {{ $t(categories[item.category]) }}
@@ -57,20 +57,26 @@ export default {
     }
   },
   async mounted() {
-    if (this.item?.locale) {
-      let { country, language, description } = await this.getLocaleDescription(
-        this.item.locale
-      );
-      if (description) this.localeDescription = description;
-      if (country) this.country = country;
-      if (language) this.language = language;
-    }
+    this.updateLocaleDescription();
   },
   computed: {
     ...mapState("shows", ["categories"]),
   },
+  watch: {
+    async item() {
+      this.updateLocaleDescription();
+    },
+  },
   methods: {
     formatK,
+    async updateLocaleDescription() {
+      if (this.item?.locale) {
+        const { country, language, description } = await this.getLocaleDescription(this.item.locale);
+        this.country = country;
+        this.language = language;
+        this.localeDescription = description;
+      }
+    },
     async getLocaleDescription(locale) {
       let language, country, script;
       let [langCode, countryCodeOrScript] = locale.split("-");
