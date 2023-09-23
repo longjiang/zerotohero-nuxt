@@ -23,7 +23,6 @@ class BurmeseTokenizer extends BaseTokenizer {
         tokens.push(this.normalizeToken(token));
       }
     }
-    console.log({ tokenized, tokens });
     return tokens;
   }
 }

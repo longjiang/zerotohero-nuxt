@@ -52,7 +52,7 @@ class BaseDictionary {
 
   async tokenizeWithCache(text) {
     const tokens = await this.tokenizer.tokenizeWithCache(text);
-    tokens.forEach(token => this.addCandidatesToToken(token))
+    if (tokens) tokens.forEach(token => this.addCandidatesToToken(token))
     return tokens;
   }
 
