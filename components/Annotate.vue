@@ -233,7 +233,6 @@ import readerlink from "@/components/ReaderLink";
 import VRuntimeTemplate from "v-runtime-template";
 import SmartQuotes from "smartquotes";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
-import { transliterate as tr } from "transliteration";
 import { getClient } from "iframe-translator";
 import {
   highlightMultiple,
@@ -784,11 +783,7 @@ export default {
         youtube_id: this.youtube_id,
         starttime: this.starttime,
       }; // { text, starttime = undefined, youtube_id = undefined}
-      let phonetics = token.pronunciation
-        ? token.pronunciation
-        : tr(text).replace(/"/g, "");
       let attrs = {
-        phonetics,
         ref: "word-block",
         usePopup: this.usePopup,
         sticky: this.sticky,

@@ -60,6 +60,7 @@
 import { timeout, unique, speak, uniqueByValue, isMobile } from "@/lib/utils";
 import { mapState } from "vuex";
 import { tify, sify } from "chinese-conv";
+import { transliterate as tr } from "transliteration";
 import WordPhotos from "@/lib/word-photos";
 import Klingon from "@/lib/klingon";
 
@@ -155,9 +156,13 @@ export default {
       return word;
     },
     bestPhonetics() {
-      let phonetics =
-        this.token?.pronunciation || this.phoneticsFromWord(this.bestWord); // Prop
-      return phonetics;
+      if (this.token?.pronunciation) {
+        return this.token.pronunciation;
+      } else if (this.bestWord) {
+        return this.phoneticsFromWord(this.bestWord);
+      } else {
+        return tr(this.text).replace(/"/g, "");
+      }
     },
   },
   asyncComputed: {
