@@ -4,6 +4,8 @@ class BaseTokenizer {
     this.tokenizationCache = {};
     this.words = words;
     this.indexKeys = indexKeys;
+    this.tokenizationType = this.getTokenizationType(this.l2);
+    console.log("Base Tokenizer tokenization type:", this.tokenizationType);
   }
 
   static async load({ l2, words = [], indexKeys = ["search"] }) {
@@ -28,7 +30,7 @@ class BaseTokenizer {
   }
 
   async tokenize(text) {
-    const tokenizationType = this.tokenizationType(this.l2);
+    const tokenizationType = this.tokenizationType
     let tokenized = [];
 
     switch (tokenizationType) {
@@ -47,7 +49,7 @@ class BaseTokenizer {
     return tokenized;
   }
 
-  tokenizationType(l2) {
+  getTokenizationType(l2) {
     let tokenizationType = "integral"; // default
     if (l2.continua) {
       tokenizationType = "continua";

@@ -9,6 +9,7 @@ const TokenizerFactory = {
     ChineseTokenizer: ["zho"], // remotely tokenized and lemmatized by jieba
     EnglishTokenizer: ["eng"], // locally tokenized by splitting, locally lemmatized by javascript-lemmatizer
     RussianTokenizer: ["rus"], // remotely tokenized and lemmatized by pymorphy2
+    BurmeseTokenizer: ["mya"], // remotely tokenized and lemmatized by pyidaungsu
     // We remove 'cym' from SimplemmaTokenizer because it does not treat apostrophes correctly
     // We remove 'hin' from SimplemmaTokenizer because it breaks too many words
     SimplemmaTokenizer: ['ast', 'bul', 'cat', 'ces', 'dan', 'deu', 'ell', 'eng', 'enm', 'est', 'fin', 'fra', 'fra', 'gla', 'gle', 'glg', 'glv', 'hbs', 'hun', 'hye', 'ind', 'isl', 'ita', 'kat', 'lat', 'lav', 'lit', 'ltz', 'mkd', 'msa', 'nld', 'nno', 'nob', 'pol', 'por', 'por', 'ron', 'rus', 'slk', 'slv', 'sme', 'spa', 'sqi', 'swa', 'swe', 'tgl', 'tur', 'ukr'], // tokenized and lemmatized by simplemma-tokenizer.js
