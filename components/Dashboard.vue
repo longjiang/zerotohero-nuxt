@@ -22,6 +22,7 @@
             </div>
             <LanguageProgress
               :l2="l2Progress.language"
+              :showRemove="true"
             />
           </router-link>
         </div>
@@ -77,9 +78,11 @@ export default {
           return l2Progress;
         })
         .filter((item) => item && item.language && item.language.code && item.language.name && item.time !== undefined);
-      sorted = sorted
-        .sort((a, b) => b.time - a.time)
-        .sort((a, b) => b.level - a.level);
+      sorted.sort((a, b) => {
+        let aName = this.$tb(a.language.name);
+        let bName = this.$tb(b.language.name);
+        return aName.localeCompare(bName, this.$browserLanguage);
+      });
       return sorted;
     },
   },

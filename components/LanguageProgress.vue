@@ -2,8 +2,10 @@
   <div class="language-progress">
     <div>
       <h5 class="hours-display">
+      
         {{ formatDuration(time) }}
         <span v-if="dot" class="dot"></span>
+        <b-button v-if="showRemove" @click.prevent="removeProgress" variant="light" size="small" class="float-right"><i class="fa fa-times text-muted"></i></b-button>
         <span
           v-if="edit"
           @click="showManuallySetHoursModal = !showManuallySetHoursModal"
@@ -185,6 +187,9 @@ export default {
     progressBarShowValue: {
       default: false,
     },
+    showRemove: {
+      default: false,
+    },
   },
   computed: {
     time() {
@@ -275,6 +280,20 @@ export default {
     });
   },
   methods: {
+    async removeProgress() {
+      if (
+        confirm(
+          `Are you sure you want to remove your progress and saved items for ${this.l2.name}?`
+        )
+      ) {
+        // Save it!
+        this.$store.dispatch("progress/removeL2Progress", { l2: this.l2 });
+        this.$toast.success(
+          `${this.l2.name} has been removed from your languages.`,
+          { duration: 2000 }
+        );
+      }
+    },
     setHours() {
       this.$store.dispatch("progress/setTime", {
         l2: this.l2,

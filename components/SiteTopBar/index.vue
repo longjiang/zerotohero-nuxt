@@ -129,16 +129,15 @@
         size="xl"
         centered
         hide-footer
-        :title="$t('Switch languages')"
+        :title="$t('Learning {l2}' || 'Switch languages', {l2: $t($l2?.name)})"
         modal-class="safe-padding-top mt-4"
         body-class="languages-modal-wrapper"
       >
         <div class="languages-modal">
-          <div class="mb-3">
-            <router-link to="/dashboard" class="text-success">
-              <i class="fas fa-chevron-left"></i>
-              {{ $t("Back to Dashboard") }}
-            </router-link>
+          <div class="pb-2">
+            <h5 class="text-center mb-2">
+              {{ $t("Switch languages") }}
+            </h5>
           </div>
           <LazyDashboard class="mb-5" v-show="hasDashboard" />
           <div class="pb-5">
