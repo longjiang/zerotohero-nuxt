@@ -177,7 +177,6 @@ export default {
       const path = `/${this.from ? this.from.code : "en"}/${
         language.code
       }/language-info`
-      console.log(path)
       return path;
     },
     hasDictionary(l1, l2) {

@@ -5,8 +5,10 @@
       'secondary-nav-item': variant !== 'page' && level === 2,
       'nav-item-menu-bar': variant === 'menu-bar',
       'nav-item-bottom-bar': variant === 'bottom-bar',
-      'nav-item-page nav-item-page-dark': variant === 'page',
+      'nav-item-page': variant === 'page',
       'nav-item-active': active,
+      'nav-item-light': skin === 'light',
+      'nav-item-dark': skin === 'dark',
     }"
     @click="wrapperClick"
   >
@@ -32,7 +34,7 @@
       <span class="nav-item-title">
         {{
           $t(isDropdown ? selfOrCurrentChild.title : item.title, {
-            l2: $t($l2.name),
+            l2: $t($l2?.name),
           })
         }}
         <i class="fas fa-wrench ml-2" v-if="item.title === 'Me' && $adminMode"></i>
@@ -109,6 +111,9 @@ export default {
     },
     level: {
       default: 1,
+    },
+    skin: {
+      default: "light",
     },
   },
   computed: {
@@ -384,28 +389,14 @@ export default {
     display: none;
   }
 
-  &:hover {
+  &.nav-item-dark.nav-item-count {
     transition: 200ms ease-in-out;
     background-color: hsla(0deg, 100%, 100%, 0.1);
   }
 
-  &.nav-item-page-light {
-    background-color: hsla(0deg, 100%, 100%, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    color: #333;
-
-    &:hover {
-      color: #444;
-    }
-  }
-
-  &.nav-item-page-dark {
-    border: 1px solid rgba(255, 255, 255, 0.366);
-    color: rgba(255, 255, 255, 0.8);
-
-    &:hover {
-      color: white;
-    }
+  &.nav-item-light:hover {
+    transition: 200ms ease-in-out;
+    background-color: hsla(0, 0%, 0%, 0.1);
   }
 
   .icon-wrapper {

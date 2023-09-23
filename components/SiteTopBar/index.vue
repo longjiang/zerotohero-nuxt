@@ -146,6 +146,19 @@
             </h5>
             <Triage />
           </div>
+          <div class="pt-3 pb-2">
+            <client-only>
+              <NavPage
+                :l1="$l1"
+                :l2="$l2"
+                class="youtube-browse-nav"
+                :showOnly="['About']"
+                :showOnlyChildren="['More']"
+                :limit="12"
+                skin="light"
+              />
+            </client-only>
+          </div>
         </div>
       </b-modal>
     </div>

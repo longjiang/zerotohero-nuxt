@@ -38,6 +38,7 @@ feature-card-name-${item.name}`"
               <NavItem
                 :to="last(item) || item"
                 :item="item"
+                :skin="skin"
                 variant="page"
               ></NavItem>
             </div>
