@@ -19,8 +19,8 @@
         style="width: 1rem; position: relative; bottom: 0.1rem" />
       {{ localeDescription || item.locale }}
     </span>
-    <span class="statistics-item" v-if="item.category">
-      {{ $t(categories[item.category]) }}
+    <span class="statistics-item" v-if="item.category && CATEGORIES[item.category]">
+      {{ $t(CATEGORIES[item.category]) }}
     </span>
     <span
       class="statistics-item"
@@ -37,6 +37,7 @@
 <script>
 import { mapState } from "vuex";
 import { formatK } from "@/lib/utils";
+import { CATEGORIES } from "@/lib/youtube";
 
 export default {
   props: {
@@ -54,6 +55,7 @@ export default {
       localeDescription: undefined,
       country: undefined,
       language: undefined,
+      CATEGORIES
     }
   },
   async mounted() {
