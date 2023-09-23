@@ -39,7 +39,7 @@ class BaseTokenizer {
         tokenized = this.tokenizeIntegral(text);
         break;
       case "agglutenative":
-        tokenized = await this.tokenizeContinua(text);
+        tokenized = await this.tokenizeIntegral(text); // Using continua for agglutenative does not make sense because it may break the words into too many segments
         break;
       case "continua":
         tokenized = await this.tokenizeContinua(text);
