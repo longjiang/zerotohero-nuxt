@@ -17,20 +17,21 @@ class WiktionaryCsvDictionary extends BaseDictionary {
       est: '2.18.0',
     };
     this.l2Code_mappings = {
-      "hrv": "hbs", // Serbian uses Serbo-Croatian
-      "nor": "nob", // Default Norwegian to Bokmål (which is supplemented with Nynorsk)
-      "srp": "hbs", // Croatian uses Serbo-Croatian
-      "bos": "hbs", // Bosnian uses Serbo-Croatian
-      "cnr": "hbs", // Montenegrin uses Serbo-Croatian
-      "run": "kin", // Rundi uses Rwanda-Rundi
-      "hbo": "heb", // Ancient Hebrew uses Hebrew
-      "grc": "ell", // Ancient Greek uses Greek
-      "hmn": "mww", // Hmong uses white Hmong
-      "prs": "fas", // Dari uses Persian
-      "arb": "ara", // Modern Standard Arabic uses Arabic
-      "zsm": "msa", // Standard Malaysian uses Malaysian
-      "lvs": "lav", // Standard Latvian uses Latvian
-      "ekk": "est", // Standard Estonian uses Estonian
+      hrv: "hbs", // Serbian uses Serbo-Croatian
+      nor: "nob", // Default Norwegian to Bokmål (which is supplemented with Nynorsk)
+      srp: "hbs", // Croatian uses Serbo-Croatian
+      bos: "hbs", // Bosnian uses Serbo-Croatian
+      cnr: "hbs", // Montenegrin uses Serbo-Croatian
+      run: "kin", // Rundi uses Rwanda-Rundi
+      hbo: "heb", // Ancient Hebrew uses Hebrew
+      grc: "ell", // Ancient Greek uses Greek
+      hmn: "mww", // Hmong uses white Hmong
+      prs: "fas", // Dari uses Persian
+      arb: "ara", // Modern Standard Arabic uses Arabic
+      zsm: "msa", // Standard Malaysian uses Malaysian
+      lvs: "lav", // Standard Latvian uses Latvian
+      ekk: "est", // Standard Estonian uses Estonian
+      kur: "kmr", // Kurdish uses Northern Kurdish
     };
     this.supplementalLangs = {
       arz: "ara",
