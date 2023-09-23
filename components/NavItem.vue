@@ -35,7 +35,8 @@
             l2: $t($l2.name),
           })
         }}
-        <i class="fas fa-pro" v-if="item.title === 'Me' && pro"></i>
+        <i class="fas fa-wrench ml-2" v-if="item.title === 'Me' && $adminMode"></i>
+        <i class="fas fa-pro ml-2" v-else-if="item.title === 'Me' && pro"></i>
         <span class="nav-item-count" v-cloak v-if="item.count">{{
           $n(item.count)
         }}</span>
@@ -309,9 +310,9 @@ export default {
       padding-left: 0.5rem;
       margin: 0.3rem 0;
       display: block;
-      i {
-        width: 2rem;
-        text-align: center;
+      .nav-item-link > i {
+        width: 1.25rem;
+        text-align: left;
       }
     }
   }
