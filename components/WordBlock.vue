@@ -43,7 +43,6 @@
             token,
             words,
             images,
-            shouldLoadImages,
             lookupInProgress,
             loadingImages,
             context,
@@ -441,21 +440,6 @@ export default {
       }
       this.loadingImages = false;
     },
-    shouldLoadImages() {
-      let hasImageWorthyWords = false;
-      if (this.words) {
-        if (this.words.length === 0) return true;
-        hasImageWorthyWords = this.words.find((w) => {
-          if (this.$l2.code === "ja") return true;
-          else if (
-            w.pos &&
-            ["proper noun", "noun", "Noun", "name", "n"].includes(w.pos)
-          )
-            return true;
-        });
-      }
-      return hasImageWorthyWords;
-    },
     async openPopup() {
       if (!this.usePopup) return; // Not using popup
       if (this.open) return; // Already open
@@ -463,7 +447,7 @@ export default {
       if (this.lookupInProgress === false && !(this.words?.length > 0)) {
         await this.lookup();
       }
-      if (this.shouldLoadImages()) this.loadImages();
+      this.loadImages();
       if (this.$l2Settings.autoPronounce) {
         if (!this.quizMode || this.reveal) {
           this.playWordAudio();
