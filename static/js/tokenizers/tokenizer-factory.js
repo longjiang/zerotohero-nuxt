@@ -6,7 +6,7 @@ const TokenizerFactory = {
     HazmTokenizer: ["fas"], // remotely tokenized and lemmatized by zeyrek
     MeCabTokenizer: ["jpn"], // remotely tokenized and lemmatized by MeCab
     OpenKoreanTextTokenizer: ["kor"], // remotely tokenized and lemmatized by Open Korean Text
-    JiebaTokenizer: ["zho"], // remotely tokenized and lemmatized by jieba
+    // JiebaTokenizer: ["zho"], // remotely tokenized and lemmatized by jieba
     JavaScriptLemmatizerTokenizer: ["eng"], // locally tokenized by splitting, locally lemmatized by javascript-lemmatizer
     Pymorphy2Tokenizer: ["rus"], // remotely tokenized and lemmatized by pymorphy2
     PyidaungsuTokenizer: ["mya"], // remotely tokenized and lemmatized by pyidaungsu

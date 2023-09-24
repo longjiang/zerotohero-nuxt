@@ -116,7 +116,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
   }
 
   normalizeWord(item) {
-    let bare = !isAccentCritical(this.l2) ? stripAccents(item.word) : item.word;
+    let bare = stripAccents(item.word)
     item.search = bare.toLowerCase();
     if (this.l2.agglutinative) item.search = item.search.replace(/^-/, "");
     item.head = item.word;

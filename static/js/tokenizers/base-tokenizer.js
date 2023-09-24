@@ -99,7 +99,13 @@ class BaseTokenizer {
       matches: [],
     };
     for (let word of filteredWords) {
-      let match = text.match(new RegExp(word.head, "i"));
+      let regex = word.head;
+      for (let key of ['simplified', 'traditional', 'head', 'search', 'kana']) {
+        if (word[key]) {
+          regex += "|" + word[key];
+        }
+      }
+      let match = text.match(new RegExp(regex, "i"));
       if (match) {
         if (match[0].length > longest.text.length) {
           longest.text = match[0];
