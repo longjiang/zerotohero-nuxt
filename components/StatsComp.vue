@@ -34,12 +34,17 @@
                 formatNumber(stats.totalCount)
               }}</b>
               <!-- show delta -->
-              <small v-if="previousStats" :set="delta = stats.totalCount - previousStats.totalCount">
+              <small
+                v-if="previousStats"
+                :set="(delta = stats.totalCount - previousStats.totalCount)"
+              >
                 <span v-if="delta > 0" class="text-success">
-                  <i class="fas fa-arrow-up"></i> {{ formatNumber(Math.abs(delta)) }}
+                  <i class="fas fa-arrow-up"></i>
+                  {{ formatNumber(Math.abs(delta)) }}
                 </span>
                 <span v-else-if="delta < 0" class="text-danger">
-                  <i class="fas fa-arrow-down"></i> {{ formatNumber(Math.abs(delta)) }}
+                  <i class="fas fa-arrow-down"></i>
+                  {{ formatNumber(Math.abs(delta)) }}
                 </span>
               </small>
               <br />
@@ -66,10 +71,13 @@
       <table :class="`mt-4 table table-${$skin}`">
         <thead>
           <tr>
-            <th style="width: 3.5rem;">{{ $tb("Code") }}</th>
-            <th style="width: 3.5rem;">{{ $tb("ID") }}</th>
+            <th style="width: 3.5rem">{{ $tb("Code") }}</th>
+            <th style="width: 3.5rem">{{ $tb("ID") }}</th>
             <th>{{ $tb("Language") }}</th>
             <th>{{ $tb("Video Count") }}</th>
+            <th v-if="languageData[0]?.tokenizerName">
+              {{ $tb("Lemmatizer") }}
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -77,8 +85,12 @@
             v-for="row in languageData"
             :key="`lang-count-${row.language.id}`"
           >
-            <td><small>{{ row.language.code }}</small></td>
-            <td><small>{{ row.language.id }}</small></td>
+            <td>
+              <small>{{ row.language.code }}</small>
+            </td>
+            <td>
+              <small>{{ row.language.id }}</small>
+            </td>
             <td>
               <router-link
                 :to="{
@@ -95,16 +107,33 @@
                 {{ $tb(row.language.name) }}
               </router-link>
             </td>
-            <td>{{ formatNumber(row.count) }}
+            <td>
+              {{ formatNumber(row.count) }}
               <!-- Show delta from previously loaded stats with green and red arrows and numbers -->
-              <small v-if="previousLanguageData" :set="delta = row.count - previousLanguageData.find(l => l.language.id === row.language.id)?.count">
+              <small
+                v-if="previousLanguageData"
+                :set="
+                  (delta =
+                    row.count -
+                    previousLanguageData.find(
+                      (l) => l.language.id === row.language.id
+                    )?.count)
+                "
+              >
                 <span v-if="delta > 0" class="text-success">
-                  <i class="fas fa-arrow-up"></i> {{ formatNumber(Math.abs(delta)) }}
+                  <i class="fas fa-arrow-up"></i>
+                  {{ formatNumber(Math.abs(delta)) }}
                 </span>
                 <span v-else-if="delta < 0" class="text-danger">
-                  <i class="fas fa-arrow-down"></i> {{ formatNumber(Math.abs(delta)) }}
+                  <i class="fas fa-arrow-down"></i>
+                  {{ formatNumber(Math.abs(delta)) }}
                 </span>
               </small>
+            </td>
+            <td v-if="row.tokenizerName">
+              <small v-if="row.tokenizerName !== 'Base'">{{
+                row.tokenizerName
+              }}</small>
             </td>
           </tr>
         </tbody>
@@ -134,7 +163,18 @@ export default {
     languageData: [],
     gettingStats: false,
   }),
-  async created() {
+  async mounted() {
+    if (process.client) {
+      const scriptSrc = "/js/tokenizers/tokenizer-factory.js";
+
+      // Check if the script is already in the document
+      if (!document.querySelector(`script[src="${scriptSrc}"]`)) {
+        const script = document.createElement("script");
+        script.src = scriptSrc;
+        script.async = true;
+        document.head.appendChild(script);
+      }
+    }
     await this.getStats();
   },
   computed: {
@@ -169,19 +209,30 @@ export default {
         for (let langId in this.stats.langCounts) {
           const count = this.stats.langCounts[langId];
           const language = languages.getById(langId);
-          if (language)
+          if (language) {
+            let tokenizerName;
+            if (typeof TokenizerFactory !== "undefined") {
+              tokenizerName = TokenizerFactory.getTokenizerName(
+                language["iso639-3"] || language["glottologId"]
+              );
+              if (tokenizerName)
+                tokenizerName = tokenizerName.replace("Tokenizer", "");
+            }
             languageData.push({
               count,
               language,
+              tokenizerName,
             });
+          }
           this.languageData = languageData.sort((a, b) => b.count - a.count);
         }
       }
       this.gettingStats = false;
-      this.$toast.success(this.$tb("Stats updated"), {
-        position: "top-center",
-        duration: 5000,
-      });
+      if (this.previousStats)
+        this.$toast.success(this.$tb("Stats updated"), {
+          position: "top-center",
+          duration: 5000,
+        });
     },
     // https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
     formatNumber(num) {

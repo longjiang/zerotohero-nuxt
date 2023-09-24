@@ -1,6 +1,6 @@
 importScripts('../js/tokenizers/base-tokenizer.js')
 
-class PersianTokenizer extends BaseTokenizer {
+class HazmTokenizer extends BaseTokenizer {
   async tokenize(text) {
     text = text.replace(/-/g, "- ");
     let url = `${PYTHON_SERVER}lemmatize-persian?text=${encodeURIComponent(

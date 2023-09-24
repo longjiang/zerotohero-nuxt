@@ -1,6 +1,6 @@
 importScripts('../js/tokenizers/base-tokenizer.js')
 
-class TurkishTokenizer extends BaseTokenizer {
+class ZeyrekTokenizer extends BaseTokenizer {
   
   async tokenize(text) {
     text = text.replace(/-/g, "- ");

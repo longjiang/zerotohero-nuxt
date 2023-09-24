@@ -1,6 +1,6 @@
 importScripts('../js/tokenizers/base-tokenizer.js')
 
-class ChineseTokenizer extends BaseTokenizer {
+class JiebaTokenizer extends BaseTokenizer {
   async tokenize(text) {
     text = text.replace(/-/g, "- ");
     let url = `${PYTHON_SERVER}lemmatize-chinese?text=${encodeURIComponent(

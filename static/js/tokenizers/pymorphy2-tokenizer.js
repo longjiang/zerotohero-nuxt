@@ -1,6 +1,6 @@
 importScripts('../js/tokenizers/base-tokenizer.js')
 
-class RussianTokenizer extends BaseTokenizer {
+class Pymorphy2Tokenizer extends BaseTokenizer {
   async tokenize(text) {
     let url = `${PYTHON_SERVER}lemmatize-russian?text=${encodeURIComponent(text)}`;
     let tokenized = await proxy(url);

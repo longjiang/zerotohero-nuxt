@@ -1,6 +1,6 @@
 importScripts('../js/tokenizers/base-tokenizer.js')
 
-class KoreanTokenizer extends BaseTokenizer {
+class OpenKoreanTextTokenizer extends BaseTokenizer {
   async tokenize(text) {
     let url = `http://py.zerotohero.ca:4567/tokenize?text=${encodeURIComponent(text)}`;
     let res = await proxy(url, { timeout: 5000 });

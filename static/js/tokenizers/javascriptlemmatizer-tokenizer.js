@@ -1,6 +1,6 @@
 importScripts('../js/tokenizers/base-tokenizer.js')
 
-class EnglishTokenizer extends BaseTokenizer {
+class JavaScriptLemmatizerTokenizer extends BaseTokenizer {
   
   async loadData() {
     console.log('Loading English lemmatizer "javascript-lemmatizer"...');
