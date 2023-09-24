@@ -509,7 +509,6 @@ export default {
             words = (await dictionary.lookupFuzzy(this.text, 20)) || [];
         }
       }
-      // if (this.$l2.code === "ru") this.stylizeRussian(words)
       words = words
         ? words.sort((a, b) => {
             let asaved = this.$store.getters["savedWords/has"]({

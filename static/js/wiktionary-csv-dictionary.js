@@ -148,7 +148,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
       ignoreAccents = !isAccentCritical
     }
     if (ignoreAccents) textLower = stripAccents(textLower);
-    let words = this.searchIndex[textLower];
+    let words = ignoreAccents ? this.searchIndex[textLower] : this.headIndex[textLower]; // searchIndex is accent insensitive, headIndex is accent sensitive
     return words || [];
   }  
 };
