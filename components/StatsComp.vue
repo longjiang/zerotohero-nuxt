@@ -134,6 +134,9 @@
               <small v-if="row.tokenizerName !== 'Base'">{{
                 row.tokenizerName
               }}</small>
+              <small v-else>
+                Default ({{ row.tokenizationType }})
+              </small>
             </td>
           </tr>
         </tbody>
@@ -210,18 +213,22 @@ export default {
           const count = this.stats.langCounts[langId];
           const language = languages.getById(langId);
           if (language) {
-            let tokenizerName;
+            let tokenizerName, tokenizationType;
             if (typeof TokenizerFactory !== "undefined") {
               tokenizerName = TokenizerFactory.getTokenizerName(
                 language["iso639-3"] || language["glottologId"]
               );
               if (tokenizerName)
                 tokenizerName = tokenizerName.replace("Tokenizer", "");
+              tokenizationType = TokenizerFactory.getTokenizationType(
+                language
+              );
             }
             languageData.push({
               count,
               language,
               tokenizerName,
+              tokenizationType
             });
           }
           this.languageData = languageData.sort((a, b) => b.count - a.count);

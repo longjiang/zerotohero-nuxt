@@ -12,7 +12,7 @@ const TokenizerFactory = {
     PyidaungsuTokenizer: ["mya"], // remotely tokenized and lemmatized by pyidaungsu
     // We remove 'cym' from SimplemmaTokenizer because it does not treat apostrophes correctly
     // We remove 'hin' from SimplemmaTokenizer because it breaks too many words
-    SimplemmaTokenizer: ['ast', 'bul', 'cat', 'ces', 'dan', 'deu', 'ell', 'eng', 'enm', 'est', 'fin', 'fra', 'fra', 'gla', 'gle', 'glg', 'glv', 'hbs', 'hun', 'hye', 'ind', 'isl', 'ita', 'kat', 'lat', 'lav', 'lit', 'ltz', 'mkd', 'msa', 'nld', 'nno', 'nob', 'pol', 'por', 'por', 'ron', 'rus', 'slk', 'slv', 'sme', 'spa', 'sqi', 'swa', 'swe', 'tgl', 'tur', 'ukr'], // tokenized and lemmatized by simplemma-tokenizer.js
+    SimplemmaTokenizer: ['ast', 'bul', 'cat', 'ces', 'dan', 'deu', 'ell', 'eng', 'enm', 'est', 'fin', 'fra', 'fra', 'gla', 'gle', 'glg', 'glv', 'hbs', 'hun', 'hye', 'ind', 'isl', 'ita', 'kat', 'lat', 'lav', 'lit', 'ltz', 'mkd', 'msa', 'nld', 'nno', 'nor', 'nob', 'pol', 'por', 'por', 'ron', 'rus', 'slk', 'slv', 'sme', 'spa', 'sqi', 'swa', 'swe', 'tgl', 'tur', 'ukr'], // tokenized and lemmatized by simplemma-tokenizer.js
     LemmatizationListTokenizer: ["ast", "bul", "cat", "ces", "cym", "deu", "eng", "est", "fas", "fra", "gla", "gle", "glg", "glv", "hun", "ita", "por", "ron", "rus", "slk", "slv", "spa", "swe", "ukr"], // tokenized and lemmatized by lemmatization list
     SpacyTokenizer: [
       // "hrv", // tokenized and lemmatized by spacy // too slow
@@ -31,6 +31,23 @@ const TokenizerFactory = {
     return 'BaseTokenizer';
   },
 
+  getTokenizationType(l2) {
+    let tokenizationType = "integral"; // default
+    if (l2.continua || ["vi"].includes(l2.code)) {
+      tokenizationType = "continua";
+    } else if (
+      (l2.scripts && l2.scripts[0] && l2.scripts[0].script === "Arab") ||
+      ["hu", "et"].includes(l2.code)
+    ) {
+      tokenizationType = "integral";
+    } else if (["de", "gsw", "no", "hy"].includes(l2.code)) {
+      tokenizationType = "integral"; // Used to be 'agglutenative', but we treat them as integral for now
+    } else if (l2.agglutinative && l2.wiktionary && l2.wiktionary > 2000) {
+      tokenizationType = "integral"; // Used to be 'agglutenative', but we treat them as integral for now
+    }
+    return tokenizationType;
+  },
+
   async createTokenizer({l2, words = [], indexKeys = ['search']}) {
     let languageCode = l2["iso639-3"] || l2["glottologId"];
     const tokenizer = this.getTokenizerName(languageCode);
@@ -42,9 +59,10 @@ const TokenizerFactory = {
 
     // Initialize the tokenizer class
     const TokenizerClass = tokenizer === 'BaseTokenizer' ? BaseTokenizer : eval(tokenizer);
+    const tokenizationType = this.getTokenizationType(l2);
     return tokenizer === 'BaseTokenizer'
-      ? new TokenizerClass({l2, words, indexKeys})
-      : await TokenizerClass.load({l2, words, indexKeys});
+      ? new TokenizerClass({l2, words, indexKeys, tokenizationType})
+      : await TokenizerClass.load({l2, words, indexKeys, tokenizationType});
   },
 
 }

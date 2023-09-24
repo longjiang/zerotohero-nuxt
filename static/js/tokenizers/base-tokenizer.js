@@ -1,10 +1,10 @@
 class BaseTokenizer {
-  constructor({ l2, words = [], indexKeys = ["search"] }) {
+  constructor({ l2, words = [], indexKeys = ["search"], tokenizationType = "integral" }) {
     this.l2 = l2;
     this.tokenizationCache = {};
     this.words = words;
     this.indexKeys = indexKeys;
-    this.tokenizationType = this.getTokenizationType(this.l2);
+    this.tokenizationType = tokenizationType;
     console.log("Base Tokenizer tokenization type:", this.tokenizationType);
   }
 
@@ -47,23 +47,6 @@ class BaseTokenizer {
       default:
     }
     return tokenized;
-  }
-
-  getTokenizationType(l2) {
-    let tokenizationType = "integral"; // default
-    if (l2.continua || ["vi"].includes(l2.code)) {
-      tokenizationType = "continua";
-    } else if (
-      (l2.scripts && l2.scripts[0] && l2.scripts[0].script === "Arab") ||
-      ["hu", "et"].includes(l2.code)
-    ) {
-      tokenizationType = "integral";
-    } else if (["de", "gsw", "no", "hy"].includes(l2.code)) {
-      tokenizationType = "agglutenative";
-    } else if (l2.agglutinative && l2.wiktionary && l2.wiktionary > 2000) {
-      tokenizationType = "agglutenative";
-    }
-    return tokenizationType;
   }
 
   tokenizeIntegral(text) {
