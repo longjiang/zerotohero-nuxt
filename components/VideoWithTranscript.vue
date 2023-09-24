@@ -11,9 +11,9 @@
       [`mode-${(forceMode || mode)}`]: true,
       [`aspect-${aspect}`]: true,
     }"
-    @mouseenter="resetHoverTimeout"
-    @mouseleave="hovering = false"
-    @mousemove="resetHoverTimeout"
+    @mouseenter="handleMouseMove"
+    @mouseleave="handleMouseMove"
+    @mousemove="handleMouseMove"
     @touchstart.passive="resetHoverTimeout"
     @touchend="resetHoverTimeout"
   >
