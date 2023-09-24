@@ -6,6 +6,7 @@
       overlay: useOverlay,
       collapsed,
       hovering,
+      'hide-cursor': !hovering,
       [`size-${size}`]: true,
       [`mode-${(forceMode || mode)}`]: true,
       [`aspect-${aspect}`]: true,
@@ -409,6 +410,7 @@ export default {
   },
   data() {
     return {
+      lastMousePosition: { x: 0, y: 0 },
       audioMode: false,
       autoPause: false,
       useSmoothScroll: false,
@@ -632,10 +634,23 @@ export default {
       }
     },
 
+    handleMouseMove(event) {
+      if (event.clientX !== this.lastMousePosition.x || event.clientY !== this.lastMousePosition.y) {
+        this.resetHoverTimeout();
+      }
+      
+      this.lastMousePosition = {
+        x: event.clientX,
+        y: event.clientY
+      };
+    },
+    stopHovering() {
+      this.hovering = false;
+      clearTimeout(this.hoverTimeout);
+    },
     resetHoverTimeout() {
       clearTimeout(this.hoverTimeout);
       this.hovering = true;
-
       this.hoverTimeout = setTimeout(() => {
         this.hovering = false;
       }, 3000);
@@ -1188,4 +1203,9 @@ export default {
   padding-left: 0.667rem;
   padding-right: 0.667rem;
 }
+
+.hide-cursor {
+  cursor: none !important;
+}
+
 </style>
