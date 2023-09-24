@@ -5,16 +5,10 @@
       'text-auto-size': useAutoTextSize,
       overlay: useOverlay,
       collapsed,
-      hovering,
       [`size-${size}`]: true,
       [`mode-${(forceMode || mode)}`]: true,
       [`aspect-${aspect}`]: true,
     }"
-    @mouseenter="resetHoverTimeout"
-    @mouseleave="hovering = false"
-    @mousemove="resetHoverTimeout"
-    @touchstart.passive="resetHoverTimeout"
-    @touchend="resetHoverTimeout"
   >
     <div class="video-with-transcript-inner">
       <div
@@ -416,8 +410,6 @@ export default {
       currentTime: 0,
       duration: undefined,
       enableTranslationEditing: false,
-      hovering: false, // If the mouse is hovering over the video
-      hoverTimeout: null, // Timeout for hiding the video controls
       mode: this.initialMode,
       neverPlayed: true,
       paused: true,
@@ -455,7 +447,7 @@ export default {
     },
 
     overlayControlsVisible() {
-      return this.hovering || this.paused;
+      return this.paused;
     },
 
     startTimeOrLineIndex() {
@@ -632,14 +624,6 @@ export default {
       }
     },
 
-    resetHoverTimeout() {
-      clearTimeout(this.hoverTimeout);
-      this.hovering = true;
-
-      this.hoverTimeout = setTimeout(() => {
-        this.hovering = false;
-      }, 3000);
-    },
     onUpdateVideo(video) {
       this.$emit("updateVideo", video);
     },
