@@ -44,23 +44,22 @@
         <span class="copy-button">
           <i class="ml-1 fa-regular fa-copy" @click="onCopyClick(text)"></i>
         </span>
+        <Saved
+          :item="phraseObj"
+          store="savedPhrases"
+          icon="bookmark"
+          class="d-inline-block annotator-button focus-exclude ml-1"
+          title="Save Phrase"
+          ref="savePhrase"
+          :saveText="$t('Save as Phrase')"
+          :removeText="$t('Saved')"
+          style="font-size: 0.8em; text-transform: uppercase"
+        />
       </div>
-      <Saved
-        :item="phraseObj"
-        store="savedPhrases"
-        icon="bookmark"
-        class="d-block annotator-button focus-exclude"
-        title="Save Phrase"
-        ref="savePhrase"
-        :saveText="$t('Save as Phrase')"
-        :removeText="$t('Saved')"
-      />
-      <span>
-        {{ $t("No precise match found.") }}
-      </span>
-      <span v-if="words?.length > 0">
-        {{ $t("Similar words are listed below.") }}
-      </span>
+      <div v-if="translation">
+        {{ translation }}
+        <small class="text-muted"> ({{ $t("machine translated") }}) </small>
+      </div>
       <hr class="mt-2 mb-2" />
     </div>
     <div
@@ -225,11 +224,11 @@
           :showSpeak="false"
         />
       </div>
+      <hr class="mt-2 mb-2" />
     </div>
     <div v-if="loading === true">
       <Loader :sticky="true" message="Looking up the dictionary..." />
     </div>
-    <hr v-if="words?.length > 0" class="mt-2 mb-2" />
     <TranslatorLinks v-bind="{ text }" class="mt-2" />
     <LookUpIn
       v-if="text || token"
@@ -243,6 +242,7 @@
 <script>
 import { transliterate as tr } from "transliteration";
 import { IMAGE_PROXY } from "@/lib/config";
+import { timeout, PYTHON_SERVER } from "@/lib/utils";
 import Klingon from "@/lib/klingon";
 import pinyin2ipa from "pinyin2ipa";
 
@@ -276,6 +276,7 @@ export default {
   },
   data() {
     return {
+      translation: undefined,
       IMAGE_PROXY,
       entryClasses: { "tooltip-entry": true }, // Other classes are added upon update
     };
@@ -295,13 +296,31 @@ export default {
       return false;
     },
   },
-  mounted() {
+  async mounted() {
     if (this.$l1) this.entryClasses[`l1-${this.$l1.code}`] = true;
     if (this.$l2) this.entryClasses[`l2-${this.$l2.code}`] = true;
     if (this.$l2.han) this.entryClasses["l2-zh"] = true;
+    if (!this.preciseMatchFound) {
+      await timeout(1000);
+      this.translate(this.text);
+    }
   },
   methods: {
     tr,
+    async translate(text) {
+      let translator = this.$languages.getTranslator(this.$l1, this.$l2) || [];
+      console.log(translator)
+      this.translation = await translator.translateWithBing({text, l1Code: this.$l1.code, l2Code: this.$l2.code});
+    },
+    async translateWithApi() {
+      // post to api
+      let res = await axios.post(`${PYTHON_SERVER}/translate`, {
+        text: this.text,
+        l1: this.$l1.code,
+        l2: this.$l2.code,
+      });
+      if (res?.data?.translated_text) return res.data.translated_text;
+    },
     segment(text) {
       return text
         .replace(
@@ -397,9 +416,6 @@ export default {
 
 <style lang="scss">
 @import "~@/assets/scss/variables.scss";
-$tooltip-background-dark: #312d2d;
-$tooltip-background-light: #fff;
-$tooltip-border-dark: #474545;
 
 .word-block-popup {
   .word-block-pinyin,
@@ -447,11 +463,6 @@ $tooltip-border-dark: #474545;
       width: auto;
       margin: 0 0.2rem;
     }
-  }
-
-  .tooltip-entry + .tooltip-entry {
-    margin-top: 1rem;
-    padding-top: 1rem;
   }
 
   .word-pronunciation,

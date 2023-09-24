@@ -142,27 +142,26 @@ export default {
       if (pos) return pos.replace(/\-.*/, "").replace(/\s/g, "-");
     },
     bestWord() {
-      let word = this.savedWord;
-      if (!word) {
-        word = this.token?.candidates?.[0];
+      if (this.savedWord) return this.savedWord
+      let firstCandidate = this.token?.candidates?.[0]
+      if (firstCandidate) return firstCandidate
+      let firstFuzzyWord = this.words?.[0]
+      if (firstFuzzyWord) {
+        for (let key in ['head', 'simplified', 'traditional', 'kana']) {
+          if (firstFuzzyWord[key] === this.text) {
+            return firstFuzzyWord
+          }
+        }
       }
-      if (!word) {
-        word = this.words?.[0];
-      }
-      if (word && this.$l2.han) {
-        if (!(word.simplified === this.text || word.traditional === this.text))
-          word = undefined;
-      }
-      return word;
     },
     bestPhonetics() {
       if (this.token?.pronunciation) {
         return this.token.pronunciation;
       } else if (this.bestWord) {
-        return this.phoneticsFromWord(this.bestWord);
-      } else {
-        return tr(this.text).replace(/"/g, "");
+        let phonetics = this.phoneticsFromWord(this.bestWord);
+        if (phonetics) return phonetics;
       }
+      return tr(this.text).replace(/"/g, "");
     },
   },
   asyncComputed: {

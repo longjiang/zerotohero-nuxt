@@ -325,7 +325,6 @@ export default {
       annotatedSlots: [],
       annotated: false,
       annotating: false,
-      translate: false,
       translationLoading: false,
       fullscreenMode: false,
       selectedText: undefined,
@@ -476,43 +475,13 @@ export default {
       this.hideMenuModal();
       this.translationLoading = true;
       this.$emit("translationLoading", true);
-      let translation = await this.translateWithApi(this.text)
+      let translation = await this.translate(this.text)
       // let translation = await this.trnslateWithIframe(this.text)
       this.setTranslation(translation);
     },
-    async translateWithApi() {
-      // post to api
-      let res = await axios.post(`${PYTHON_SERVER}/translate`, {
-        text: this.text,
-        l1: this.$l1.code,
-        l2: this.$l2.code,
-      })
-      if (res?.data?.translated_text) return res.data.translated_text
-    },
-    async trnslateWithIframe(text) {
-      let translation;
-      let iframeTranslationClient;
-      try {
-        // https://www.npmjs.com/package/iframe-translator
-        const timeout = setTimeout(() => {
-          this.setTranslation(translation);
-          clearTimeout(timeout);
-        }, 10000);
-        iframeTranslationClient = await getClient();
-        translation = await iframeTranslationClient.translate(
-          text,
-          this.$l1.code === "zh" ? "zh-CN" : this.$l1.code
-        );
-        iframeTranslationClient.destroy();
-      } catch (err) {
-        try {
-          iframeTranslationClient.destroy();
-        } catch (err) {
-          logError(err);
-        }
-        logError(err);
-      }
-      return translation;
+    async translate(text) {
+      let translator = this.$languages.getTranslator(this.$l1, this.$l2);
+      return await translator.translateWithBing({text, l1Code: this.$l1.code, l2Code: this.$l2.code});
     },
     /**
      * @param {Number} startFrom Starting time in seconds
