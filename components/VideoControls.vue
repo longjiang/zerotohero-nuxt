@@ -555,23 +555,35 @@ export default {
           }
           if (e.code === "Space") {
             this.togglePaused();
-            e.preventDefault(); // Prevent the default spacebar behavior
+            e.preventDefault(); // Prevent the default behavior
             return false;
           }
           if (["ArrowUp"].includes(e.code)) {
             this.goToPreviousLine();
+            e.preventDefault(); // Prevent the default behavior
             return false;
           }
           if (["ArrowDown"].includes(e.code)) {
             this.goToNextLine();
+            e.preventDefault(); // Prevent the default behavior
             return false;
           }
-          if (["ArrowLeft"].includes(e.code)) {
-            this.$adminMode ? this.rewind(2) : this.goToPreviousLine();
+          // Option/Alt Arrow Left
+          if (e.code === "ArrowLeft" && e.altKey) {
+            this.rewind(2);
             return false;
           }
-          if (["ArrowRight"].includes(e.code)) {
-            this.$adminMode ? this.fastforward(2) : this.goToNextLine();
+          // Option/Alt Arrow Right
+          if (e.code === "ArrowRight" && e.altKey) {
+            this.fastforward(2);
+            return false;
+          }
+          if (["ArrowLeft"].includes(e.code) && !e.altKey) {
+            this.goToPreviousLine();
+            return false;
+          }
+          if (["ArrowRight"].includes(e.code) && !e.altKey) {
+            this.goToNextLine();
             return false;
           }
           if (["KeyR"].includes(e.code)) {

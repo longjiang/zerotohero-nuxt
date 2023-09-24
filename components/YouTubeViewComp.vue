@@ -40,6 +40,32 @@
       @currentTime="onCurrentTime"
       @updateLayout="onUpdateLayout"
     />
+    <!-- Modal for a countdown after the video finishes playing, vertically centered -->
+    <b-modal
+      id="countdown-modal"
+      :title="
+        $t('Next video in {seconds} seconds', {
+          seconds: nextVideoCountDownSeconds,
+        })
+      "
+      @ok="goToNextItem"
+      @cancel="stopNextEpisodeCountdown"
+      @hidden="stopNextEpisodeCountdown"
+      :hide-footer="true"
+      centered
+    >
+      <LazyYouTubeVideoCard
+        ref="nextYouTubeVideoCard"
+        skin="light"
+        :video="nextItem"
+        :playlist="playlist"
+        :sort="episodeSort"
+      >
+        <template v-slot:footer>
+          <slot name="footer" :video="video"></slot>
+        </template>
+      </LazyYouTubeVideoCard>
+    </b-modal>
   </div>
 </template>
 
@@ -54,6 +80,7 @@ import {
   shuffle,
   uniqueByValue,
   toCamelCase,
+  parseDuration,
 } from "@/lib/utils";
 
 export default {
@@ -94,6 +121,7 @@ export default {
   },
   data() {
     return {
+      nextVideoCountDownSeconds: 10,
       currentTime: 0,
       episodes: [],
       extrasLoaded: false,
@@ -169,6 +197,13 @@ export default {
   async mounted() {
     this.episodeSort = this.$route.query.sort || "title";
     await this.loadVideo(this.youtube_id, this.directus_id);
+  },
+  filters: {
+    formatDuration(duration) {
+      if (duration) {
+        return parseDuration(duration);
+      }
+    },
   },
   methods: {
     /**
@@ -489,7 +524,30 @@ export default {
     async onEnded(ended) {
       if (ended !== this.ended) {
         this.ended = ended;
+        this.$emit("ended", this.ended);
+        if (this.ended && this.episodes?.length) {
+          if (this.itemIndex !== this.episodes.length - 1) {
+            // If this is not the last video in the playlist, we show the countdown modal
+            this.$bvModal.show("countdown-modal");
+            // Start the countdown
+            this.nextVideoCountDownSeconds = 10;
+            let interval = setInterval(() => {
+              if (!this.ended) clearInterval(interval);
+              this.nextVideoCountDownSeconds--;
+              if (this.nextVideoCountDownSeconds === 0) {
+                clearInterval(interval);
+                this.$bvModal.hide("countdown-modal");
+                this.goToNextItem();
+              }
+            }, 1000);
+          }
+        }
       }
+    },
+    stopNextEpisodeCountdown() {
+      this.$bvModal.hide("countdown-modal");
+      this.nextVideoCountDownSeconds = 10;
+      this.ended = false;
     },
     goToPreviousItem() {
       if (this.previousItem)
