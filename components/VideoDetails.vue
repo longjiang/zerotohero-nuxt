@@ -36,8 +36,32 @@
         {{ localeDescription }}
       </span> -->
       <span>
-        <a :href="`https://www.youtube.com/watch?v=${video.youtube_id}`" target="_blank">View on YouTube</a>
+        <a :href="`https://www.youtube.com/watch?v=${video.youtube_id}`" target="_blank"><i class="fab fa-youtube"></i></a>
       </span>
+      <template
+        v-if="video.category == 10 || video.tv_show?.title === 'Music'"
+      >
+        <span>
+          <a
+            :href="`https://play.spotify.com/search/${encodeURIComponent(
+              video.title
+            )}`"
+            target="_blank"
+          >
+            <i class="fab fa-spotify"></i>
+          </a>
+        </span>
+        <span>
+          <a
+            :href="`https://music.apple.com/us/search?term=${encodeURIComponent(
+              video.title
+            )}`"
+            target="_blank"
+          >
+            <i class="fab fa-apple"></i>
+          </a>
+        </span>
+      </template>
       <span @click="retranslate" v-if="this.video.id" class="text-success cursor-pointer">
         <template v-if="this.retranslating">{{ $t('Retranslating...') }}</template>
         <template v-else>{{ $t('Retranslate') }}</template>
@@ -55,30 +79,6 @@
           {{ video.channel.title || $t("Channel") }}
         </router-link>
       </span>
-      <template
-        v-if="video.category === 10 || video.tv_show?.title === 'Music'"
-      >
-        <span>
-          <a
-            :href="`https://play.spotify.com/search/${encodeURIComponent(
-              video.title
-            )}`"
-            target="_blank"
-          >
-            Spotify
-          </a>
-        </span>
-        <span>
-          <a
-            :href="`https://music.apple.com/us/search?term=${encodeURIComponent(
-              video.title
-            )}`"
-            target="_blank"
-          >
-            Apple Music
-          </a>
-        </span>
-      </template>
       <span>
         <span @click="downloadSubtitles" class="text-primary cursor-pointer">{{ $t('Download Subs') }}</span>
       </span>

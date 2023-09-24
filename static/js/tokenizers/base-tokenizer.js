@@ -51,14 +51,14 @@ class BaseTokenizer {
 
   getTokenizationType(l2) {
     let tokenizationType = "integral"; // default
-    if (l2.continua) {
+    if (l2.continua || ["vi"].includes(l2.code)) {
       tokenizationType = "continua";
     } else if (
       (l2.scripts && l2.scripts[0] && l2.scripts[0].script === "Arab") ||
       ["hu", "et"].includes(l2.code)
     ) {
       tokenizationType = "integral";
-    } else if (["de", "gsw", "no", "hy", "vi"].includes(l2.code)) {
+    } else if (["de", "gsw", "no", "hy"].includes(l2.code)) {
       tokenizationType = "agglutenative";
     } else if (l2.agglutinative && l2.wiktionary && l2.wiktionary > 2000) {
       tokenizationType = "agglutenative";

@@ -29,10 +29,19 @@
           style="margin: 0 auto; width: 15rem; line-height: 1.1"
         >
           <div class="d-flex">
-            <div style="flex: 1" class="text-center">
+            <div style="flex: 1; white-space: nowrap" class="text-center">
               <b class="stat-big-number">{{
                 formatNumber(stats.totalCount)
               }}</b>
+              <!-- show delta -->
+              <small v-if="previousStats" :set="delta = stats.totalCount - previousStats.totalCount">
+                <span v-if="delta > 0" class="text-success">
+                  <i class="fas fa-arrow-up"></i> {{ formatNumber(Math.abs(delta)) }}
+                </span>
+                <span v-else-if="delta < 0" class="text-danger">
+                  <i class="fas fa-arrow-down"></i> {{ formatNumber(Math.abs(delta)) }}
+                </span>
+              </small>
               <br />
               {{ $tb("Videos") }}
             </div>
@@ -86,7 +95,17 @@
                 {{ $tb(row.language.name) }}
               </router-link>
             </td>
-            <td>{{ formatNumber(row.count) }}</td>
+            <td>{{ formatNumber(row.count) }}
+              <!-- Show delta from previously loaded stats with green and red arrows and numbers -->
+              <small v-if="previousLanguageData" :set="delta = row.count - previousLanguageData.find(l => l.language.id === row.language.id)?.count">
+                <span v-if="delta > 0" class="text-success">
+                  <i class="fas fa-arrow-up"></i> {{ formatNumber(Math.abs(delta)) }}
+                </span>
+                <span v-else-if="delta < 0" class="text-danger">
+                  <i class="fas fa-arrow-down"></i> {{ formatNumber(Math.abs(delta)) }}
+                </span>
+              </small>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -109,7 +128,9 @@ export default {
     },
   },
   data: () => ({
+    previousStats: undefined,
     stats: undefined,
+    previousLanguageData: [],
     languageData: [],
     gettingStats: false,
   }),
@@ -138,6 +159,8 @@ export default {
         }`,
         { cacheLife: refresh ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
+      if (this.stats) this.previousStats = this.stats;
+      if (this.languageData) this.previousLanguageData = this.languageData;
       if (data?.langCounts) {
         this.stats = data;
         let languages = await this.$languagesPromise;
