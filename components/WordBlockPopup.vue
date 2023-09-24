@@ -309,7 +309,6 @@ export default {
     tr,
     async translate(text) {
       let translator = this.$languages.getTranslator(this.$l1, this.$l2) || [];
-      console.log(translator)
       this.translation = await translator.translateWithBing({text, l1Code: this.$l1.code, l2Code: this.$l2.code});
     },
     async translateWithApi() {
