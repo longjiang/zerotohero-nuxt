@@ -3,12 +3,12 @@ importScripts('../js/tokenizers/base-tokenizer.js')
 class OpenKoreanTextTokenizer extends BaseTokenizer {
   async tokenize(text) {
     let url = `http://py.zerotohero.ca:4567/tokenize?text=${encodeURIComponent(text)}`;
-    let res = await proxy(url, { timeout: 5000 });
+    let res = await proxy(url, { timeout: 2000 }); // dictionary-utils.js
     let tokenized = res?.tokens;
     // Check if the tokenized is an array and not a string
     if (!tokenized || typeof tokenized === 'string') {
       // Try again without caching
-      tokenized = await proxy(url, 0);
+      tokenized = await proxy(url, {cacheLife: 0, timeout: 5000});
       if (!tokenized || typeof tokenized === 'string') {
         return this.tokenizeContinua(text);
       }

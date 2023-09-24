@@ -30,6 +30,10 @@ class BaseTokenizer {
   }
 
   async tokenize(text) {
+    return await this.tokenizeLocally(text);
+  }
+
+  async tokenizeLocally(text) {
     const tokenizationType = this.tokenizationType
     let tokenized = [];
 
