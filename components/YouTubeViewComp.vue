@@ -121,7 +121,7 @@ export default {
   },
   data() {
     return {
-      nextVideoCountDownSeconds: 10,
+      nextVideoCountDownSeconds: 8,
       currentTime: 0,
       episodes: [],
       extrasLoaded: false,
@@ -530,7 +530,7 @@ export default {
             // If this is not the last video in the playlist, we show the countdown modal
             this.$bvModal.show("countdown-modal");
             // Start the countdown
-            this.nextVideoCountDownSeconds = 10;
+            this.nextVideoCountDownSeconds = 8;
             let interval = setInterval(() => {
               if (!this.ended) clearInterval(interval);
               this.nextVideoCountDownSeconds--;
@@ -546,7 +546,7 @@ export default {
     },
     stopNextEpisodeCountdown() {
       this.$bvModal.hide("countdown-modal");
-      this.nextVideoCountDownSeconds = 10;
+      this.nextVideoCountDownSeconds = 8;
       this.ended = false;
     },
     goToPreviousItem() {
