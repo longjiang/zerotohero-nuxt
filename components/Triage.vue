@@ -65,7 +65,7 @@ export default {
       let allLanguages = this.$languages.l1s.filter((language) =>
         this.$languages.commonLangs.includes(language.code)
       );
-      let commonCodes = "zh en ko it es fr ja de tr da ru fi nl vi pl sv nan no id yue hi th el ase sk"
+      let commonCodes = "zh en ko it es fr ja de tr da ru fi nl vi pl sv no id yue hi th el ase sk ar"
           .split(" ")
       let commonLanguages = commonCodes.map(code => {
           return allLanguages.find(language => language.code === code);
