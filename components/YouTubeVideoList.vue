@@ -300,6 +300,9 @@ export default {
     initialSort: {
       type: String, // One of 'title', '-date', '-views', '-likes', '-comments'
     },
+    limit: {
+      type: Number,
+    },
   },
 
   data() {
@@ -385,6 +388,7 @@ export default {
           }
         });
       }
+      if (this.limit) filteredVideos = filteredVideos.slice(0, this.limit);
       return filteredVideos;
     },
     videosWithSubs() {

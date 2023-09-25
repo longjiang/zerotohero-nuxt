@@ -210,7 +210,7 @@ export default {
       this.$l2Settings.autoPronounce &&
       !this.hidePhonetics
     ) {
-      this.$refs.speak.speak(0.75, 0.5); // Speed and volume
+      this.$refs.speak.speak({ rate: 0.75, volume: 0.5 }); // Speed and volume
     }
   },
   methods: {

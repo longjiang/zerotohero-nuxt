@@ -16,7 +16,7 @@
 </template>
 <script>
 import commons from "wikimedia-commons-file-path";
-import { speak } from "@/lib/utils/speak";
+import { speak } from "@/lib/utils";
 
 export default {
   props: {
@@ -76,7 +76,7 @@ export default {
       else
         window.open(`https://forvo.com/search/${this.text}/${this.$l2.code}`);
     },
-    speak(speed = 0.75, volume = 1) {
+    speak({ rate = 0.75, volume = 1 } = {}) {
       if (this.mp3) {
         let url = this.wiktionary ? commons(`File:${this.mp3}`) : this.mp3;
         if (url.endsWith(".ogg")) {
@@ -87,7 +87,7 @@ export default {
       } else if (this.text) {
         if (this.canSpeak) {
           const l2 = this.l2 || this.$l2
-          if (l2) speak(this.text, l2, speed, volume);
+          if (l2) speak({text: this.text, l2, rate, volume});
         }
       }
     },

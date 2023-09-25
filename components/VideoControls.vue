@@ -259,9 +259,10 @@
           </h6>
         </div>
         <YouTubeVideoList
-          :videos="show ? episodes : related.slice(0, 24)"
+          :videos="show ? episodes : related"
           :showDate="true"
           :initialSort="episodeSort"
+          :limit="12"
           skin="light"
           class="p-2"
         />

@@ -8,6 +8,11 @@
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
+          <Speak
+            :class="{ 'ml-1 mr-2': true }"
+            ref="speak"
+            text="Hola, ¿cómo estás hoy?"
+          />
         </div>
       </div>
     </div>
@@ -16,9 +21,9 @@
 
 <script>
 import { IMAGE_PROXY } from "@/lib/utils";
+
 export default {
   async mounted() {
-    this.testTokenizer();
   },
   methods: {
     async testVideoUnavailable() {

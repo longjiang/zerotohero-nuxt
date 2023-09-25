@@ -456,7 +456,7 @@ export default {
       this.$nuxt.$emit("popupOpened");
     },
     playWordAudio() {
-      let speed = 0.75;
+      let rate = 0.75;
       let volume = 0.5;
       // Only wiktionary has real human audio
       let speakComponent = this.$refs.popup?.$refs.speak?.[0];
@@ -465,11 +465,11 @@ export default {
         this.$dictionaryName === "wiktionary-csv" &&
         this.words?.[0].head?.toLowerCase() === this.text.toLowerCase()
       ) {
-        speakComponent.speak(speed, volume);
+        speakComponent.speak({ rate, volume });
       } else {
         if (this.$l2.code === "ja" && this.token?.pronunciation) {
-          speak(this.token.pronunciation, this.$l2, speed, volume);
-        } else speak(this.text, this.$l2, speed, volume);
+          speak({ text: this.token.pronunciation, l2: this.$l2, rate, volume });
+        } else speak({ text:this.text, l2: this.$l2, rate, volume });
       }
     },
     async closePopup() {
