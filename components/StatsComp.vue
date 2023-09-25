@@ -15,7 +15,7 @@
         </div>
         <div style="flex: 1" class="text-center">
           <router-link :to="{ name: 'stats' }">
-            <b class="stat-big-number">{{ stats.langs.length - 11 }}</b>
+            <b class="stat-big-number">{{ stats.languageData.length }}</b>
           </router-link>
           <br />
           {{ $tb("Languages") }}
@@ -51,7 +51,7 @@
               {{ $tb("Videos") }}
             </div>
             <div style="flex: 1" class="text-center">
-              <b class="stat-big-number">{{ stats.langs.length }}</b>
+              <b class="stat-big-number">{{ stats.languageData.length }}</b>
               <br />
               {{ $tb("Languages") }}
             </div>
@@ -205,12 +205,11 @@ export default {
       if (this.stats) this.previousStats = this.stats;
       if (this.languageData) this.previousLanguageData = this.languageData;
       if (data?.langCounts) {
-        this.stats = data;
         let languages = await this.$languagesPromise;
         if (!languages) return;
         let languageData = [];
-        for (let langId in this.stats.langCounts) {
-          const count = this.stats.langCounts[langId];
+        for (let langId in data.langCounts) {
+          const count = data.langCounts[langId];
           const language = languages.getById(langId);
           if (language) {
             let tokenizerName, tokenizationType;
@@ -233,6 +232,8 @@ export default {
           }
           this.languageData = languageData.sort((a, b) => b.count - a.count);
         }
+        data.languageData = languageData;
+        this.stats = data;
       }
       this.gettingStats = false;
       if (this.previousStats)
