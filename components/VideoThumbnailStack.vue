@@ -1,11 +1,8 @@
 <template>
   <div class="video-thumbnail-stack">
-    <div class="deck3"></div>
-    <div class="deck2"></div>
-    <div class="deck1"></div>
     <div
       :class="{
-        'tv-show-card media': true,
+        'tv-show-card': true,
         [`skin-${$skin}`]: true,
       }"
     >
@@ -55,60 +52,41 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.youtube-thumbnail-wrapper {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 0.5rem;
+  .youtube-thumbnail {
+    box-shadow: 3px 3px 6px #000c;
+  }
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.25rem;
+    background: #b3b0b0; // Change it to the desired color or add a background image
+    // Dark shadow for a stacking effect
+    box-shadow: 3px 3px 6px #000c;
+  }
+
+  &::before {
+    bottom: -3px;
+    right: -3px;
+    z-index: -1;
+  }
+
+  &::after {
+    bottom: -6px;
+    right: -6px;
+    z-index: -2;
+  }
+}
 
 .video-thumbnail-stack {
   position: relative;
 }
-
-
-.deck1,
-.deck2,
-.deck3 {
-  height: 4rem;
-  position: absolute;
-  left: 0.5rem;
-  width: calc(100% - 1rem);
-  border-radius: 0.25rem;
-}
-
-.deck1 {
-  top: -0.5rem;
-  transform: scale(0.95);
-}
-
-.deck2 {
-  top: -1rem;
-  transform: scale(0.9);
-  opacity: 0.66;
-}
-
-.deck3 {
-  top: -1.4rem;
-  transform: scale(0.85);
-  opacity: 0.33;
-}
-
-.skin-dark {
-  .deck1,
-  .deck2,
-  .deck3 {
-    background-color: #767676;
-    box-shadow: 1px -3px 4px #00000070;
-    border: 1px solid rgb(138, 138, 138);
-  }
-}
-
-.skin-light {
-  .deck1,
-  .deck2,
-  .deck3 {
-    background-color: #ffffff;
-    box-shadow: 1px -3px 4px #00000019;
-    border: 1px solid rgb(217, 217, 217);
-  }
-}
-
-
 
 
 :deep(.media-body) {
@@ -117,7 +95,7 @@ export default {
 .tv-show-card {
   position: relative;
   height: 100%;
-  margin-top: 2rem;
+  margin-bottom: 1rem;
 
   &.tv-show-card-hidden {
     opacity: 0.3;
