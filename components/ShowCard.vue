@@ -58,6 +58,15 @@ export default {
       this.unavailable = true
       this.$emit('unavailable', this.show)
     }
+    // If the show has no episodes, load them
+    if (!this.show.episodes || !this.show.episodes.length) {
+      this.$store.dispatch("shows/getEpisodesFromServer", {
+        l2: this.$l2,
+        collection: this.type === "tvShows" ? "tv_show" : "talk",
+        showId: this.show.id,
+        limit: 5,
+      });
+    }
   },
   data() {
     return {
