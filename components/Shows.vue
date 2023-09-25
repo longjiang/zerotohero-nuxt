@@ -224,6 +224,7 @@ export default {
   },
   data() {
     return {
+      heroVideo: undefined,
       sort: "recommended", // or 'views', 'title'
       type: {
         "tv-shows": "tvShows",
@@ -269,19 +270,6 @@ export default {
   computed: {
     ...mapState("progress", ["progress"]),
     ...mapState("settings", ["preferredCategories"]),
-    heroVideo() {
-      let shows = this.filteredShowsByAudiobookAndTags;
-      if (shows?.length > 0) {
-        let randomShow = shows[Math.floor(Math.random() * shows.length)];
-        let video = {
-          youtube_id: randomShow.youtube_id,
-          title: randomShow.title,
-          l2: randomShow.l2,
-          [this.routeType === 'tv-shows' ? 'tv_show' : 'talk']: randomShow.id,
-        };
-        return video
-      }
-    },
     languageLevel() {
       if (
         this.progress &&
@@ -502,12 +490,27 @@ export default {
       return shows || [];
     },
     async loadShows() {
+      if (this.shows) return
       let shows = this.$store.state.shows[this.type][this.$l2.code]
         ? this.$store.state.shows[this.type][this.$l2.code]
         : undefined;
       if (shows) {
         this.shows = this.sortShows(shows);
         this.loadFeatureShowAndEpisode();
+        if (!this.heroVideo) this.loadHeroVideo();
+      }
+    },
+    loadHeroVideo() {
+      let shows = this.filteredShowsByAudiobookAndTags;
+      if (shows?.length > 0) {
+        let randomShow = shows[Math.floor(Math.random() * shows.length)];
+        let video = {
+          youtube_id: randomShow.youtube_id,
+          title: randomShow.title,
+          l2: randomShow.l2,
+          [this.routeType === 'tv-shows' ? 'tv_show' : 'talk']: randomShow.id,
+        };
+        this.heroVideo = video
       }
     },
     getRandomShow() {
