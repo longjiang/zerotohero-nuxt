@@ -223,7 +223,7 @@ export default ({ app }, inject) => {
       } else return [];
     },
 
-    async searchCaptions({ l2Id, tv_show, talk, terms, limit, timestamp }) {
+    async searchCaptions({ l2Id, tv_show, talk, terms, limit, sort, timestamp }) {
       let params = {};
       let suffix = this.youtubeVideosTableSuffix(l2Id);
       params.suffix = suffix ? "_" + this.youtubeVideosTableSuffix(l2Id) : "";
@@ -237,6 +237,7 @@ export default ({ app }, inject) => {
       if (terms) params.terms = terms.join(",");
       if (timestamp) params.timestamp = timestamp;
       if (limit) params.limit = limit;
+      if (sort) params.sort = sort;
       let res = await axios
         .get(this.appendHostCors(LP_DIRECTUS_TOOLS_URL + "videos"), { params })
         .catch((err) => logError(err));

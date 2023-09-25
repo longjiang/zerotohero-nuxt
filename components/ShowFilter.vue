@@ -297,7 +297,7 @@ export default {
       });
     },
     getTvShowFilter() {
-      if (this.allVideosChecked) return "all";
+      if (this.allVideosChecked) return;
       if (this.allTVShowsChecked) {
         let all = true;
         if (this.musicShow && !this.musicChecked) all = false;
@@ -325,7 +325,7 @@ export default {
       }
     },
     getTalkFilter() {
-      if (this.allVideosChecked) return "all";
+      if (this.allVideosChecked) return;
       if (this.allTalksChecked) {
         let all = true;
         if (this.newsShow && !this.newsChecked) all = false;

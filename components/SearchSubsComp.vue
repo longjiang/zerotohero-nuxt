@@ -226,12 +226,17 @@ export default {
       speed: 1,
       slideIndex: 0,
       sort: "length",
-      tvShowFilter: this.tvShow ? [this.tvShow.id] : "all",
-      talkFilter: "all",
+      tvShowFilter: this.tvShow ? [this.tvShow.id] : undefined,
+      talkFilter: undefined,
       NON_PRO_MAX_SUBS_SEARCH_HITS,
     };
   },
   computed: {
+
+    // Determines if we can sort by views without too much of a performance hit
+    canSortByViews() {
+      return !this.talkFilter && !this.tvShowFilter
+    },
     hitIndex() {
       let hits = this.hits;
       return hits.findIndex((hit) => hit === this.currentHit);
@@ -394,6 +399,7 @@ export default {
         langId: this.$l2.id,
         adminMode: false,
         continua: this.$l2.continua,
+        sort: this.canSortByViews ? '-views' : undefined,
         limit,
         tvShowFilter: this.tvShowFilter,
         talkFilter: this.talkFilter,
@@ -402,6 +408,7 @@ export default {
         convertToSimplified: this.$l2.han,
         mustIncludeYouTubeId,
       };
+
       let hits = await this.$subs.searchSubs(options);
       if (hits.length === 0) {
         options.limit = this.maxNumOfHitsForSanity;

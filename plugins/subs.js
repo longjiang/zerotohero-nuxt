@@ -97,16 +97,18 @@ export default ({ app }, inject) => {
       adminMode,
       excludeTerms = [],
       continua,
+      sort,
       limit = 20,
-      tvShowFilter = "all",
-      talkFilter = "all",
+      tvShowFilter,
+      talkFilter,
       exact = false,
       apostrophe = false,
       convertToSimplified = false,
       mustIncludeYouTubeId = undefined,
     } = {}) {
-      let tv_show = tvShowFilter === "all" ? "nnull" : tvShowFilter.join(",");
-      let talk = talkFilter === "all" ? "nnull" : talkFilter.join(",");
+      let tv_show, talk; // Undefined by default
+      if (tvShowFilter) tv_show = tvShowFilter === "all" ? "nnull" : tvShowFilter.join(",");
+      if (talkFilter) talk = talkFilter === "all" ? "nnull" : talkFilter.join(",");
       let hits = [];
       terms = terms.filter((t) => t).map((t) => t.replace(/'/g, "&#39;"));
       terms = mutuallyExclusive(terms); // So if terms are ['dièdres', 'dièdre'], we search only 'dièdre' since results of the plural will be included automatically.
@@ -116,6 +118,7 @@ export default ({ app }, inject) => {
         tv_show,
         talk,
         terms,
+        sort,
         limit,
         timestamp,
       };
@@ -162,10 +165,11 @@ export default ({ app }, inject) => {
       terms,
       excludeTerms = [],
       langId = 1824,
-      tvShowFilter = "all",
-      talkFilter = "all",
+      tvShowFilter,
+      talkFilter,
       adminMode = false,
       continua = true,
+      sort,
       limit = 20,
       exact = false,
       apostrophe = false,
@@ -173,24 +177,23 @@ export default ({ app }, inject) => {
       mustIncludeYouTubeId = undefined,
     } = {}) {
       let hits = [];
-      if (tvShowFilter !== []) {
-        hits = hits.concat(
-          await this.searchWithLike({
-            terms,
-            langId,
-            tvShowFilter,
-            talkFilter,
-            adminMode,
-            excludeTerms,
-            continua,
-            limit,
-            exact,
-            apostrophe,
-            convertToSimplified,
-            mustIncludeYouTubeId,
-          })
-        );
-      }
+      hits = hits.concat(
+        await this.searchWithLike({
+          terms,
+          langId,
+          tvShowFilter,
+          talkFilter,
+          adminMode,
+          excludeTerms,
+          continua,
+          sort,
+          limit,
+          exact,
+          apostrophe,
+          convertToSimplified,
+          mustIncludeYouTubeId,
+        })
+      );
       hits = uniqueByValue(hits, "id");
       if (limit) hits = hits.slice(0, limit);
       return hits.sort((a, b) => a.lineIndex - b.lineIndex);
@@ -218,6 +221,7 @@ export default ({ app }, inject) => {
               punctuationsRegex,
               mustIncludeYouTubeId === video.youtube_id ? null : excludeRegex
             )
+            && hits.length < 2
           ) {
             hits.push({
               video,
@@ -228,7 +232,7 @@ export default ({ app }, inject) => {
         }
       }
 
-      return hits;
+      return hits
     },
     // Helper function to escape regular expressions
     escapeRegExp(text) {
