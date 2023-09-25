@@ -66,7 +66,7 @@
           <div
             :class="{
               'loader text-center pt-5 pb-5': true,
-              'd-none': videos,
+              'd-none': hasEpisodes,
             }"
             style="flex: 1"
           >
@@ -74,7 +74,7 @@
           </div>
           <div class="col-sm-12 mt-3 mb-5">
             <div class="episode-list-wrapper">
-              <div class="episode-filter row mb-3" v-if="videos">
+              <div class="episode-filter row mb-3" v-if="hasEpisodes">
                 <div class="col-sm-12 mb-2">
                   <div class="d-flex">
                     <b-input-group class="flex-1 input-group-ghost-dark">
@@ -146,11 +146,11 @@
                   </div>
                 </div>
               </div>
-              <template v-if="videos && videos.length > 0">
+              <template v-if="hasEpisodes">
                 <LazyYouTubeVideoList
                   ref="youtubeVideoList"
                   :skin="$skin"
-                  :videos="videos"
+                  :videos="show.episodes"
                   :checkSubs="false"
                   :checkSaved="false"
                   :key="`videos-filtered-${this.keyword}-${this.sort}`"
@@ -218,15 +218,17 @@ export default {
       sort: "title", // "title", "-date", "-views"
       titleUpdated: false,
       tries: 0,
-      videos: undefined,
       view: "grid",
       musicOffset: 0,
     };
   },
   computed: {
+    hasEpisodes() {
+      return this.show && this.show.episodes && this.show.episodes.length > 0;
+    },
     randomEpisodeYouTubeId() {
-      if (this.videos?.length > 0) {
-        let episode = randomArrayItem(this.videos);
+      if (this.show.episodes?.length > 0) {
+        let episode = randomArrayItem(this.show.episodes);
         return episode.youtube_id;
       }
     },
@@ -271,11 +273,12 @@ export default {
       if (this.show.title === "Movies") this.sort = "-views";
       this.episodeCount = await this.getEpisodeCount();
       this.musicOffset = Math.ceil(Math.random() * this.episodeCount);
-      this.videos = await this.getVideos({
+      await this.getEpisodes({
         limit: this.perPage,
         offset: this.moreVideos,
         sort: this.sort,
       });
+      this.show.episodes;
       this.loadFeaturedVideo();
     },
     async keyword() {
@@ -288,19 +291,16 @@ export default {
       let videos = [];
 
       for (let keyword of keywords) {
-        videos = videos.concat(
-          await this.getVideos({
-            keyword,
-            sort: this.sort,
-          })
-        );
+        await this.getEpisodes({
+          keyword,
+          sort: this.sort,
+        })
       }
-      this.videos = videos;
     },
     async sort() {
       this.moreVideos = 0;
       this.videos = undefined;
-      this.videos = await this.getVideos({
+      this.videos = await this.getEpisodes({
         limit: this.perPage,
         offset: this.moreVideos,
         sort: this.sort,
@@ -396,7 +396,7 @@ export default {
     async visibilityChanged(isVisible) {
       if (this.videos && isVisible && !this.keyword) {
         this.moreVideos = 1 + this.moreVideos + this.perPage;
-        let newVideos = await this.getVideos({
+        let newVideos = await this.getEpisodes({
           limit: this.perPage,
           offset: this.moreVideos,
           sort: this.sort,
@@ -410,7 +410,7 @@ export default {
         return response.data.data;
       }
     },
-    async getVideos({
+    async getEpisodes({
       keyword,
       limit = this.perPage,
       offset = 0,
@@ -418,7 +418,7 @@ export default {
     } = {}) {
       // if (this.show.title === "Music" && this.episodeCount > 500)
       //   offset = offset + this.musicOffset;
-      return await this.getVideosFromServer({ keyword, limit, offset, sort });
+      return await this.getEpisodesFromServer({ keyword, limit, offset, sort });
     },
     async getEpisodeCount() {
       if (this.show.episodeCount) return this.show.episodeCount;
@@ -449,49 +449,19 @@ export default {
         });
       return episodeCount;
     },
-    async getVideosFromServer({ keyword, limit, offset, sort } = {}) {
-      let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
-      let fields = "id,title,l2,youtube_id,date,tv_show,talk,channel_id";
-      if (LANGS_WITH_CONTENT.includes(this.$l2.code))
-        fields =
-          fields +
-          ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";
-      let response = await this.$directus.get(
-        `${this.$directus.youtubeVideosTableName(this.$l2.id)}?filter[l2][eq]=${
-          this.$l2.id
-        }&filter[${this.collection}][eq]=${
-          this.show.id
-        }${keywordFilter}&fields=${fields}&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
-          this.$adminMode ? Date.now() : 0
-        }`
-      );
-      let videos = response.data.data || [];
-      videos = uniqueByValue(videos, "youtube_id");
-      if (sort === "title") {
-        videos =
-          videos.sort((x, y) =>
-            (x.title || "").localeCompare(y.title, this.$l2.locales[0], {
-              numeric: true,
-            })
-          ) || [];
-      } else if (sort === "-date") {
-        videos =
-          videos.sort((y, x) =>
-            x.date
-              ? x.date.localeCompare(y.date, this.$l2.locales[0], {
-                  numeric: true,
-                })
-              : -1
-          ) || [];
-      }
-      this.$store.dispatch("shows/addEpisodesToShow", {
+    async getEpisodesFromServer({ keyword, limit, offset, sort } = {}) {
+      this.$store.dispatch("shows/getEpisodesFromServer", {
         l2: this.$l2,
-        collection: this.collection === "tv_show" ? "tvShows" : "talks",
+        collection: this.collection,
         showId: this.show.id,
-        episodes: videos,
         sort,
+        forceRefresh: this.$adminMode,
+        keyword,
+        limit,
+        offset,
+        sort
       });
-      return videos;
+      return
     },
   },
 };

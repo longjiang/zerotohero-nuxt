@@ -28,6 +28,8 @@ export const categories = (l2, tvShows, talks) => {
 
 export const mutations = {
   LOAD_SHOWS(state, { l2, tvShows, talks }) {
+    tvShows.forEach(show => { show.episodes = show.episodes || [] }) // So that they are reactive
+    talks.forEach(show => { show.episodes = show.episodes || [] }) // So that they are reactive
     state.tvShows[l2.code] = tvShows;
     state.talks[l2.code] = talks;
     state.showsLoaded[l2.code] = true
@@ -185,7 +187,52 @@ export const actions = {
   },
   async setEpisodeCount({ commit }, { l2, collection = 'tvShows', showId, episodeCount }) {
     commit('SET_EPISODE_COUNT', { l2, collection, showId, episodeCount })
+  },
+  async getEpisodesFromServer({ dispatch }, { l2, collection = 'tvShows', showId, forceRefresh, keyword, limit, offset, sort } = {}
+  ) {
+    let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
+    let fields = "id,title,l2,youtube_id,date,tv_show,talk,channel_id";
+  
+    if (LANGS_WITH_CONTENT.includes(l2.code))
+      fields +=
+        ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";
+  
+    let response = await this.$directus.get(
+      `${this.$directus.youtubeVideosTableName(l2.id)}?filter[l2][eq]=${
+        l2.id
+      }&filter[${collection}][eq]=${
+        showId
+      }${keywordFilter}&fields=${fields}&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
+        forceRefresh ? Date.now() : 0
+      }`
+    );
+  
+    let videos = response.data.data || [];
+    videos = uniqueByValue(videos, "youtube_id");
+  
+    if (sort === "title") {
+      videos = videos.sort((x, y) =>
+        (x.title || "").localeCompare(y.title, l2.locales[0], { numeric: true })
+      ) || [];
+    } else if (sort === "-date") {
+      videos = videos.sort((y, x) =>
+        x.date
+          ? x.date.localeCompare(y.date, l2.locales[0], { numeric: true })
+          : -1
+      ) || [];
+    }
+  
+    dispatch("addEpisodesToShow", {
+      l2,
+      collection: collection === "tv_show" ? "tvShows" : "talks",
+      showId,
+      episodes: videos,
+      sort,
+    });
+  
+    return videos;
   }
+  
 }
 
 

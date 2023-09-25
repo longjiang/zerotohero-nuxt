@@ -1,5 +1,5 @@
 <template>
-  <div class="video-thumbnail-stack">
+  <div class="video-thumbnail-stack" @mouseenter="startCycling" @mouseleave="stopCycling">
     <div
       :class="{
         'tv-show-card': true,
@@ -11,7 +11,7 @@
         :to="to"
       >
         <img
-          :src="thumbnail"
+          :src="currentThumbnail"
           class="youtube-thumbnail aspect"
         />
       </router-link>
@@ -47,6 +47,31 @@ export default {
     },
     description: {
       type: String,
+    },
+    videos: {
+      type: Array,
+    },
+  },
+  data() {
+    return {
+      currentThumbnail: this.thumbnail, // For cycling thumbnails upon hover
+      interval: null,
+    };
+  },
+  methods: {
+    cycleThumbnails() {
+      // Cycle through the thumbnails upon hover, every 300ms
+      const thumbnails = this.videos.map((video) => `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`);
+      const index = thumbnails.indexOf(this.currentThumbnail);
+      const nextIndex = index === thumbnails.length - 1 ? 0 : index + 1;
+      this.currentThumbnail = thumbnails[nextIndex];
+    },
+    startCycling() {
+      this.cycleThumbnails();
+      this.interval = setInterval(this.cycleThumbnails, 300);
+    },
+    stopCycling() {
+      clearInterval(this.interval);
     },
   },
 };

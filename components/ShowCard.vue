@@ -1,6 +1,6 @@
 <template>
   <div class="show-card" :class="{ 'tv-show-card-hidden': show.hidden }">
-    <VideoThumbnailStack :thumbnail="thumbnail" :to="to" :title="show.title">
+    <VideoThumbnailStack :thumbnail="thumbnail" :to="to" :title="show.title" :videos="show.episodes || []">
       <template #afterTitle
         ><span
           v-if="show.level"
