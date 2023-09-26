@@ -393,6 +393,7 @@ export default {
         return excludeTerms.filter(
           (s) =>
             s !== "" &&
+            !s.includes(' ') &&
             !allSearchTerms
               .filter((t) => t)
               .map((t) => t.toLowerCase())

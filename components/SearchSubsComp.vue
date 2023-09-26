@@ -218,6 +218,7 @@ export default {
       groupIndexRight: [],
       groupIndexLength: [],
       fullscreen: false,
+      subsSearchLimit: 50,
       maxNumOfHitsForSanity: 500,
       showFilter: false,
       regex: undefined,
@@ -383,7 +384,7 @@ export default {
     calculateLimit() {
       // No limit unless set
       if (this.$store.state.settings.subsSearchLimit) {
-        return 150;
+        return this.subsSearchLimit;
       } else {
         return this.maxNumOfHitsForSanity;
       }

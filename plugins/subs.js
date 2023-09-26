@@ -221,7 +221,6 @@ export default ({ app }, inject) => {
               punctuationsRegex,
               mustIncludeYouTubeId === video.youtube_id ? null : excludeRegex
             )
-            && hits.length < 2
           ) {
             hits.push({
               video,
