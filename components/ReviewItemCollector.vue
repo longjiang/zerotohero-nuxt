@@ -29,10 +29,10 @@ export default {
     };
   },
   mounted() {
-    // If there are review items, show them every 10 seconds
+    // If there are review items, show them every two minutes
     setInterval(() => {
       this.showQuizIfThereAreUnansweredItems();
-    }, 1000 * 60 * 5);
+    }, 1000 * 60 * 2);
   },
   methods: {
     onPopQuizModalShown() {
