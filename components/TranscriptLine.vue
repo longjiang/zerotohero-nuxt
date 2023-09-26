@@ -56,7 +56,8 @@
             @translation="onTranslation"
             @translationLoading="translationLoading = true"
             @textChanged="lineChanged(line, ...arguments)"
-            @annotated="updateAnnotated"
+            @annotated="onAnnotated"
+            @savedWordsFound="onSavedWordsFound"
           >
             <span v-html="lineHtml(line).trim()" />
           </Annotate>
@@ -210,15 +211,17 @@ export default {
     ...mapState("settings", ["karaokeAnimation"]),
   },
   methods: {
-    getSavedWords() {
-      return this.$refs.annotate?.getSavedWords() || [];
-    },
     onTranslation(translation) {
       this.translation = translation;
       this.translationLoading = false;
     },
-    updateAnnotated(annotated) {
+    onAnnotated(annotated) {
       this.annotated = annotated;
+    },
+    onSavedWordsFound(savedWords) {
+      if (savedWords?.length > 0) {
+        this.$emit("savedWordsFound", savedWords);
+      }
     },
     playAnimation() {
       if (!this.showAnimation || !this.karaokeAnimation) return

@@ -41,13 +41,13 @@
               v-if="$l2.han && $l2.code !== 'ja'"
               v-html="
                 highlightMultiple(
-                  line.line,
-                  unique([simplified, traditional]),
+                  reviewItem.line.line,
+                  unique([reviewItem.simplified, reviewItem.traditional]),
                   hsk
                 )
               "
             />
-            <span v-else v-html="highlight(line.line, text, hsk)" />
+            <span v-else v-html="highlight(reviewItem.line.line, reviewItem.text, reviewItem.hsk)" />
           </Annotate>
           <div
             :dir="$l1.direction === 'rtl' ? 'rtl' : 'ltr'"
@@ -61,8 +61,8 @@
             style="opacity: 0.7"
           >
             <span
-              v-if="$l2.code !== $l1.code && parallelLines"
-              v-html="parallelLines"
+              v-if="$l2.code !== $l1.code && reviewItem.parallelLines"
+              v-html="reviewItem.parallelLines"
             />
             <small class="ml-1" style="cursor: pointer" @click="scrollToLine">
               <i class="fa fa-arrow-up"></i>
@@ -100,27 +100,14 @@ export default {
   computed: {
     ...mapState("savedWords", ["savedWords"]),
   },
+// 
+// text: savedForm,
+// word: savedWord,
+
   props: {
-    line: {
-      type: Object, // {"starttime":89.14,"duration":3.5,"line":". . . ","count":1},
-    },
-    lineIndex: {
-      type: [Number, String],
-    },
-    parallelLines: {
-      type: String, // "Shouldn&#39;t respect for the living world, for nature, be enough?"
-    },
-    text: {
-      type: String, // "suffire"
-    },
-    word: {
-      type: Object, // Word object from the dictionary
-    },
-    simplified: {
-      type: String, // simplified form of the saved word (Han script only)
-    },
-    traditional: {
-      type: String, // traditional form of the saved word (Han script only)
+    reviewItem: {
+      type: Object,
+      required: true,
     },
     hsk: {
       default: "outside",
@@ -130,11 +117,11 @@ export default {
     },
   },
   async mounted() {
-    this.answers = await this.generateAnswers(this.text, this.word);
+    this.answers = await this.generateAnswers(this.reviewItem.text, this.reviewItem.word);
   },
   methods: {
     scrollToLine() {
-      this.$parent.$parent.seekVideoTo(this.line.starttime);
+      this.$parent.$parent.seekVideoTo(this.reviewItem.line.starttime);
       this.$parent.$parent.play();
     },
     async findSimilarWords(text) {
@@ -205,10 +192,10 @@ export default {
       return shuffle(answers);
     },
     async speak() {
-      if (this.parallelLines) {
-        await speak(this.parallelLines, this.$l1, 1.1);
+      if (this.reviewItem.parallelLines) {
+        await speak(this.reviewItem.parallelLines, this.$l1, 1.1);
       }
-      await speak(this.line.line, this.$l2, 1);
+      await speak(this.reviewItem.line.line, this.$l2, 1);
     },
     async answered(answer) {
       if (answer.correct) {
@@ -222,6 +209,7 @@ export default {
         await timeout(100);
         this.wrong = true;
       }
+      this.reviewItem.answered = true;
     },
     highlightMultiple() {
       return highlightMultiple(...arguments);

@@ -8,6 +8,7 @@
     }"
   >
     <client-only>
+      <ReviewItemCollector ref="reviewItemCollector" @showQuiz="pause" />
       <div class="transcript-wrapper">
         <client-only>
           <Loader class="text-center w-100" />
@@ -68,17 +69,7 @@
               @removeLineClick="removeLine(index + visibleMin)"
               @trasnlationLineBlur="trasnlationLineBlur"
               @trasnlationLineKeydown="trasnlationLineKeydown"
-            />
-            <PopQuiz
-              v-if="quizChunks[index]"
-              :key="`pop-quiz-${index}`"
-              class="pl-4"
-              v-bind="{
-                lines,
-                quizContent: quizChunks[index]
-                  .filter((i) => $refs[`transcript-line-${i + visibleMin}`])
-                  .map((i) => $refs[`transcript-line-${i + visibleMin}`][0]),
-              }"
+              @savedWordsFound="addLineToReview($event, line, index + visibleMin, matchedParallelLines ? matchedParallelLines[index + visibleMin] : null)"
             />
           </template>
           <div
@@ -253,33 +244,6 @@ export default {
       }
       return showYouNeedPro;
     },
-    /**
-     * A map of line indices after which to show a pop quiz to the lines this quiz is based on.
-     * Key is the transcript line number (starting from 0) after which the quiz is shown
-     * Values are the transcript line indices on which the quiz is based
-     */
-    quizChunks() {
-      let quizChunks = {};
-      let seenLineIndices = [];
-      let lastIndex = 0;
-      let MIN_SEPARATION = 10; // minimum number of lines that separate two quizzes
-      for (let index in this.lines) {
-        index = Number(index);
-        seenLineIndices.push(index);
-        if (
-          this.longPauseAfterLine(index) ||
-          index > lastIndex + MIN_SEPARATION * 2
-        ) {
-          if (index > lastIndex + MIN_SEPARATION) {
-            quizChunks[index + 1] = seenLineIndices; // Quiz the lines at the next checkpoint
-            seenLineIndices = [];
-            lastIndex = index;
-          }
-        }
-      }
-      quizChunks[this.lines.length - 1] = [...Array(this.lines.length).keys()];
-      return quizChunks;
-    },
     previousLine() {
       let previousIndex = Math.max(this.currentLineIndex - 1, 0);
       return this.lines && this.lines[previousIndex]
@@ -354,6 +318,15 @@ export default {
     },
   },
   methods: {
+    addLineToReview(savedWords, line, lineIndex, parallelLine) {
+      this.$refs.reviewItemCollector.addLineToReview({
+        savedWords,
+        line,
+        lineIndex,
+        parallelLine,
+        video: this.video,
+      });
+    },
     async tokenizeNextLines() {
       let dictionary = await this.$getDictionary();
       if (this.lines) {

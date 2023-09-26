@@ -353,6 +353,7 @@ export default {
       this.myanmarZawgyiDetector = new google_myanmar_tools.ZawgyiDetector();
       this.myanmarZawgyiConverter = new google_myanmar_tools.ZawgyiConverter();
     }
+    this.checkSavedWords();
   },
   beforeDestroy() {
     try {
@@ -661,12 +662,11 @@ export default {
       }
       this.annotating = false;
       this.annotated = true;
-      this.onAnnotated();
-    },
-    onAnnotated() {
       this.$emit("annotated", true);
+      await timeout(300); // Give time for the runtime template to render
+      this.checkSavedWords();
     },
-    getSavedWords() {
+    checkSavedWords() {
       if (this.$refs["run-time-template"]?.length > 0) {
         let savedWords = [];
         for (let template of this.$refs["run-time-template"]) {
@@ -676,7 +676,9 @@ export default {
             .map((wb) => wb.savedWord);
           savedWords = [...savedWords, ...moreSavedWords];
         }
-        return savedWords;
+        if (savedWords.length > 0) {
+          this.$emit("savedWordsFound", savedWords);
+        }
       }
     },
     async annotateRecursive(node) {
