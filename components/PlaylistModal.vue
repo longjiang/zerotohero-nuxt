@@ -11,6 +11,17 @@
   >
     <div class="playlist-modal">
       <div class="pt-3 pl-3 pr-3">
+        <small class="mr-1">{{ $t("Sort By:") }}</small>
+        <button
+          :class="{
+            'btn btn-small': true,
+            'bg-dark': sort === 'views',
+            'text-white': sort === 'views',
+          }"
+          @click.stop.prevent="$emit('updateSort', 'views')"
+        >
+          {{ $t("Popularity") }}
+        </button>
         <button
           :class="{
             'btn btn-small': true,
@@ -19,7 +30,7 @@
           }"
           @click.stop.prevent="$emit('updateSort', 'length')"
         >
-          {{ $t("Sort By Length") }}
+          {{ $t("Length") }}
         </button>
         <button
           :class="{
@@ -29,7 +40,7 @@
           }"
           @click.stop.prevent="$emit('updateSort', 'left')"
         >
-          {{ $t("Sort Left") }}
+          {{ $t("Left Context") }}
         </button>
         <button
           :class="{
@@ -39,7 +50,7 @@
           }"
           @click.stop.prevent="$emit('updateSort', 'right')"
         >
-          {{ $t("Sort Right") }}
+          {{ $t("Right Context") }}
         </button>
       </div>
       <template v-for="c in get(`groupIndex${ucFirst(sort)}`)">
@@ -115,11 +126,7 @@
 </template>
 
 <script>
-import {
-  ucFirst,
-  timeout,
-  highlightMultiple,
-} from "@/lib/utils";
+import { ucFirst, timeout, highlightMultiple } from "@/lib/utils";
 
 export default {
   props: {
@@ -134,7 +141,7 @@ export default {
     },
     currentHit: {
       type: Object,
-      default: undefined
+      default: undefined,
     },
     get: {
       type: Function,

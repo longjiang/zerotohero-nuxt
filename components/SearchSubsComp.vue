@@ -77,18 +77,26 @@
     >
       <Loader :sticky="true" message="Searching through video captions..." />
     </div>
-    <div class="text-center p-3" v-if="!checking && hits.length === 0">
-      <p>{{ $t("Sorry, no hits found.") }}</p>
-      <p v-if="$store.state.settings.subsSearchLimit">
-        {{
-          $t(
-            "Try turning off ‘Limit “this word in TV Shows” search result (faster)’ in Settings."
-          )
-        }}
-        <router-link :to="{ name: 'settings' }">
-          {{ $t("Go to settings") }}
-        </router-link>
-      </p>
+    <div class="p-3" v-if="!checking && hits.length === 0">
+      <p>{{ $t("Sorry, no hits found.") }} {{ $t("To see more results:") }}</p>
+      <ol>
+        <li>
+          {{ $t("Select different search terms from the dropdown above.") }}
+        </li>
+        <li>
+          {{ $t("Select more video categories and shows from the dropdown above.") }}
+        </li>
+        <li v-if="$store.state.settings.subsSearchLimit">
+          {{
+            $t(
+              "Turn off ‘Limit “this word in TV Shows” search result (faster)’ in Settings."
+            )
+          }}
+          <router-link :to="{ name: 'settings' }">
+            {{ $t("Go to settings") }}
+          </router-link>
+        </li>
+      </ol>
       <b-button
         v-if="$adminMode"
         size="sm"
@@ -153,7 +161,7 @@
         get,
         goToHit,
       }"
-      @updateSort="newSortValue => sort = newSortValue"
+      @updateSort="(newSortValue) => (sort = newSortValue)"
     />
   </div>
 </template>
@@ -209,6 +217,7 @@ export default {
       groupsLeft: {},
       foundHits: [],
       groupsLength: {},
+      groupsViews: {},
       navigated: false,
       checking: true,
       videos: [],
@@ -217,6 +226,7 @@ export default {
       groupIndexLeft: [],
       groupIndexRight: [],
       groupIndexLength: [],
+      groupIndexViews: [],
       fullscreen: false,
       subsSearchLimit: 50,
       maxNumOfHitsForSanity: 500,
@@ -226,17 +236,16 @@ export default {
       excludeArr: [],
       speed: 1,
       slideIndex: 0,
-      sort: "length",
+      sort: "views",
       tvShowFilter: this.tvShow ? [this.tvShow.id] : undefined,
       talkFilter: undefined,
       NON_PRO_MAX_SUBS_SEARCH_HITS,
     };
   },
   computed: {
-
     // Determines if we can sort by views without too much of a performance hit
     canSortByViews() {
-      return !this.talkFilter && !this.tvShowFilter
+      return !this.talkFilter && !this.tvShowFilter;
     },
     hitIndex() {
       let hits = this.hits;
@@ -244,8 +253,16 @@ export default {
     },
     hits() {
       let hits = [];
-      for (let index of this[`groupIndex${ucFirst(this.sort)}`]) {
-        for (let hit of this[`groups${ucFirst(this.sort)}`][index]) {
+      let groups = this[`groups${ucFirst(this.sort)}`];
+      let groupIndex = this[`groupIndex${ucFirst(this.sort)}`];
+      for (let index of groupIndex) {
+        if (!groups[index]) {
+          console.log(
+            `this.groups${ucFirst(this.sort)}[${index}] is undefined`
+          );
+          continue;
+        }
+        for (let hit of groups[index]) {
           hits.push(hit);
         }
       }
@@ -287,13 +304,15 @@ export default {
     },
     currentHit: {
       async handler(newVal, oldVal) {
-        let unavailable = await YouTube.videoUnavailable(this.currentHit?.video?.youtube_id)
+        let unavailable = await YouTube.videoUnavailable(
+          this.currentHit?.video?.youtube_id
+        );
         if (unavailable) {
           this.onVideoUnavailable(this.currentHit.video.youtube_id);
         }
         this.loadL1SubsIfNeeded();
       },
-      deep: false // Watch only for object reference changes
+      deep: false, // Watch only for object reference changes
     },
   },
   async mounted() {
@@ -400,7 +419,7 @@ export default {
         langId: this.$l2.id,
         adminMode: false,
         continua: this.$l2.continua,
-        sort: this.canSortByViews ? '-views' : undefined,
+        sort: this.canSortByViews ? "-views" : undefined,
         limit,
         tvShowFilter: this.tvShowFilter,
         talkFilter: this.talkFilter,
@@ -411,17 +430,6 @@ export default {
       };
 
       let hits = await this.$subs.searchSubs(options);
-      if (hits.length === 0) {
-        options.limit = this.maxNumOfHitsForSanity;
-        hits = await this.$subs.searchSubs(options);
-      }
-      if (hits.length === 0) {
-        this.tvShowFilter = "all";
-        this.talkFilter = "all";
-        options.tvShowFilter = "all";
-        options.talkFilter = "all";
-        hits = await this.$subs.searchSubs(options);
-      }
 
       hits = this.updateSaved(hits);
       hits = this.setShows(hits);
@@ -471,9 +479,11 @@ export default {
       this.groupsLeft = this.groupContext(this.contextLeft, hits, "left");
       this.groupsRight = this.groupContext(this.contextRight, hits, "right");
       this.groupsLength = this.groupByLength(hits);
+      this.groupsViews = this.groupByViews(hits);
       this.groupIndexLeft = this.sortGroupIndex(this.groupsLeft);
       this.groupIndexRight = this.sortGroupIndex(this.groupsRight);
       this.groupIndexLength = this.sortGroupIndex(this.groupsLength, false);
+      this.groupIndexViews = this.sortGroupIndex(this.groupsViews, false);
       this.Length = this.sortGroupIndex(this.groupsRight);
       this.currentHit = this.hits[0];
     },
@@ -523,6 +533,14 @@ export default {
           (a, b) => a.leftContext.length - b.leftContext.length
         );
       }
+      return hitGroups;
+    },
+    groupByViews(hits) {
+      let hitGroups = {};
+      let { savedHits, matchedHits, remainingHits } =
+        this.getSavedAndMatchedHits(hits);
+      // Only one group
+      hitGroups = { zthSaved: savedHits, contextMatched: matchedHits, views: remainingHits.sort((a, b) => b.video.views - a.video.views) };
       return hitGroups;
     },
     groupContext(context, hits, leftOrRight) {
