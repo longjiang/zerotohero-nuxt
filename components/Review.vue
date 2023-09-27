@@ -201,8 +201,9 @@ export default {
       if (answer.correct) {
         this.showAnswer = true;
         this.wrong = false;
-        var audio = new Audio("/audio/correct-ding.mp3");
-        audio.volume = 0.2;
+        let audio = new Audio("/audio/correct-ding.mp3");
+        // play the audio but very quietly
+        audio.volume = 0.01;
         audio.play();
       } else {
         this.wrong = false;

@@ -338,6 +338,7 @@ export default {
       text: undefined,
       wordblocks: [],
       matchedGrammar: [],
+      isVisible: false,
     };
   },
   mounted() {
@@ -353,6 +354,12 @@ export default {
       this.myanmarZawgyiDetector = new google_myanmar_tools.ZawgyiDetector();
       this.myanmarZawgyiConverter = new google_myanmar_tools.ZawgyiConverter();
     }
+    // Listen to new saved words vuex mutation
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "savedWords/ADD_SAVED_WORD") {
+        if (this.isVisible) this.checkSavedWords();
+      }
+    });
     this.checkSavedWords();
   },
   beforeDestroy() {
@@ -594,11 +601,13 @@ export default {
     },
     async visibilityChanged(isVisible) {
       if (isVisible) {
+        this.isVisible = true
         this.convertToSentencesAndAnnotate(this.$slots.default[0]);
         if (this.showGrammar) {
           this.getGrammar();
         }
       } else {
+        this.isVisible = false
         // We unset the annotations to save memory and battery, but we set the height and width to prevent the annotated text from shifting up and down.
         // this.$el.style.minHeight = this.$el.clientHeight + "px";
         // this.$el.style.minWidth = this.$el.clientWidth + "px";
