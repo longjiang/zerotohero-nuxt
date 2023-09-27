@@ -230,7 +230,7 @@
     </div>
     <TranslatorLinks v-bind="{ text }" class="mt-2" />
     <LookUpIn
-      v-if="text || token"
+      v-if="text || token?.candidates?.[0]"
       :term="text ? text : token.candidates[0].head"
       :sticky="false"
       class="mt-2"
