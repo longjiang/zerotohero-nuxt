@@ -15,9 +15,7 @@
       <PopQuiz
         class="pl-4"
         skin="light"
-        v-bind="{
-          reviewItems: reviewItems.filter(reviewItem => !reviewItem.answered),
-        }"
+        v-bind="{ reviewItems }"
       />
     </b-modal>
   </div>
@@ -39,8 +37,8 @@ export default {
   mounted() {
     // If there are review items, show them every two minutes
     setInterval(() => {
-      this.showQuizIfThereAreUnansweredItems();
-    }, 1000 * 5);
+      this.showQuizIfThereAreReviewItems();
+    }, 1000 * 60 * 2);
     // listen to vuex savedWords removed mutation
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
@@ -53,20 +51,18 @@ export default {
   beforeDestroy() {
     this.unsubscribe();
   },
-  computed: {
-    unansweredReviewItems() {
-      return this.reviewItems.filter((reviewItem) => !reviewItem.answered);
-    },
-  },
   methods: {
     onPopQuizModalShown() {
       this.$emit("showQuiz");
     },
     onPopQuizModalHidden() {
+      // Clear the answered review items
+      this.reviewItems = this.reviewItems.filter((reviewItem) => !reviewItem.answered);
       this.$emit("hideQuiz");
     },
-    showQuizIfThereAreUnansweredItems() {
-      if (this.unansweredReviewItems.length > 0) {
+    async showQuizIfThereAreReviewItems() {
+      await this.$nextTick();
+      if (this.reviewItems.length > 0) {
         this.$bvModal.show("quiz-modal");
       }
     },

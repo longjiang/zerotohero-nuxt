@@ -6,6 +6,7 @@
         :key="`review-${currentIndex}`"
         :reviewItem="reviewItems[currentIndex]"
         :skin="skin"
+        @reviewItemAnswered="onReviewItemAnswered(reviewItems[currentIndex])"
       />
       <div
         class="pl-2 pr-2 pt-1 pb-3"
@@ -48,6 +49,9 @@ export default {
     }
   },
   methods: {
+    onReviewItemAnswered() {
+      this.$emit('reviewItemAnswered', this.reviewItems[this.currentIndex])
+    },
     prevQuestion() {
       this.currentIndex--;
     },

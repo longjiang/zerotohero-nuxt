@@ -211,6 +211,7 @@ export default {
         this.wrong = true;
       }
       this.reviewItem.answered = true;
+      this.$emit("reviewItemAnswered", this.reviewItem);
     },
     highlightMultiple() {
       return highlightMultiple(...arguments);

@@ -8,7 +8,7 @@
     }"
   >
     <client-only>
-      <ReviewItemCollector ref="reviewItemCollector" @showQuiz="pause" @hideQuiz="play" />
+      <ReviewItemCollector ref="reviewItemCollector" @showQuiz="pause" @hideQuiz="play" :active="paused" />
       <div class="transcript-wrapper">
         <client-only>
           <Loader class="text-center w-100" />
