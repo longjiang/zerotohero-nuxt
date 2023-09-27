@@ -3,6 +3,7 @@
     <div class="text-center mt-2 mb-2" v-if="reviewItems.length > 0 && !showQuiz"><b-button @click="showQuiz = true" variant="success"><i class="fa-solid fa-ballot-check mr-2"></i> {{ $t('Do Pop Quiz ({n})', {n: reviewItems.length}) }} <i class="ml-2 fa-solid fa-chevron-down"></i></b-button></div>
     <div v-if="reviewItems.length > 0 && showQuiz">
       <Review
+        v-if="reviewItems[currentIndex]"
         :key="`review-${currentIndex}`"
         :reviewItem="reviewItems[currentIndex]"
         :skin="skin"

@@ -238,6 +238,12 @@ export default {
     // you may call unsubscribe to stop the subscription
     this.unsubscribe();
   },
+  // Hide the modal when we navigate to a new route
+  watch: {
+    $route() {
+      this.closePopup();
+    },
+  },
   methods: {
     unique,
     speak,
