@@ -1,7 +1,13 @@
 <template>
   <div>
     <!-- show the quiz in a modal-->
-    <b-modal
+    <PopQuiz
+      class="pl-4"
+      v-bind="{
+        reviewItems
+      }"
+    />
+    <!-- <b-modal
       id="quiz-modal"
       size="lg"
       centered
@@ -18,7 +24,7 @@
           reviewItems: reviewItems.filter(reviewItem => !reviewItem.answered),
         }"
       />
-    </b-modal>
+    </b-modal> -->
   </div>
 </template>
 <script>
@@ -30,9 +36,21 @@ export default {
   },
   mounted() {
     // If there are review items, show them every two minutes
-    setInterval(() => {
-      this.showQuizIfThereAreUnansweredItems();
-    }, 1000 * 60 * 2);
+    // setInterval(() => {
+    //   this.showQuizIfThereAreUnansweredItems();
+    // }, 1000 * 60 * 2);
+    // listen to vuex savedWords removed mutation
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
+        this.reviewItems = this.reviewItems.filter(
+          (reviewItem) => reviewItem.word.id !== mutation.payload.word.id
+        );
+      }
+    });
+  },
+  beforeDestroy() {
+    // you may call unsubscribe to stop the subscription
+    this.unsubscribe();
   },
   methods: {
     onPopQuizModalShown() {
@@ -69,7 +87,7 @@ export default {
             lineIndex,
             parallelLines: parallelLine,
             text: savedForm,
-            word: savedWord,
+            word: savedWord, // A full word object
             hsk: savedWord.hsk,
             simplified: savedWord.simplified,
             traditional: savedWord.traditional,
