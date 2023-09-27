@@ -1,13 +1,7 @@
 <template>
   <div>
     <!-- show the quiz in a modal-->
-    <PopQuiz
-      class="pl-4"
-      v-bind="{
-        reviewItems
-      }"
-    />
-    <!-- <b-modal
+    <b-modal
       id="quiz-modal"
       size="lg"
       centered
@@ -16,6 +10,7 @@
       body-class="playlist-modal-wrapper"
       modal-class="safe-padding-top mt-4"
       @show="onPopQuizModalShown"
+      @hide="onPopQuizModalHidden"
     >
       <PopQuiz
         class="pl-4"
@@ -24,11 +19,18 @@
           reviewItems: reviewItems.filter(reviewItem => !reviewItem.answered),
         }"
       />
-    </b-modal> -->
+    </b-modal>
   </div>
 </template>
 <script>
 export default {
+  props: {
+    // If false, do not periodically show the quiz (as in the case when the video is paused and the user may be reading the transcript)
+    active: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       reviewItems: [],
@@ -36,9 +38,9 @@ export default {
   },
   mounted() {
     // If there are review items, show them every two minutes
-    // setInterval(() => {
-    //   this.showQuizIfThereAreUnansweredItems();
-    // }, 1000 * 60 * 2);
+    setInterval(() => {
+      this.showQuizIfThereAreUnansweredItems();
+    }, 1000 * 5);
     // listen to vuex savedWords removed mutation
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
@@ -49,16 +51,23 @@ export default {
     });
   },
   beforeDestroy() {
-    // you may call unsubscribe to stop the subscription
     this.unsubscribe();
+  },
+  computed: {
+    unansweredReviewItems() {
+      return this.reviewItems.filter((reviewItem) => !reviewItem.answered);
+    },
   },
   methods: {
     onPopQuizModalShown() {
+      this.$emit("showQuiz");
+    },
+    onPopQuizModalHidden() {
+      this.$emit("hideQuiz");
     },
     showQuizIfThereAreUnansweredItems() {
-      if (this.reviewItems?.filter(reviewItem => !reviewItem.answered).length > 0) {
+      if (this.unansweredReviewItems.length > 0) {
         this.$bvModal.show("quiz-modal");
-        this.$emit("showQuiz");
       }
     },
     async addLineToReview({
