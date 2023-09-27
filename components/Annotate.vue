@@ -672,10 +672,12 @@ export default {
       this.annotating = false;
       this.annotated = true;
       this.$emit("annotated", true);
-      await timeout(300); // Give time for the runtime template to render
       this.checkSavedWords();
     },
-    checkSavedWords() {
+    async checkSavedWords() {
+       // Give time for the runtime template to render
+      await timeout(300);
+      console.log("check saved words");
       if (this.$refs["run-time-template"]?.length > 0) {
         let savedWords = [];
         for (let template of this.$refs["run-time-template"]) {

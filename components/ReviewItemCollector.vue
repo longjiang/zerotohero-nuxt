@@ -68,18 +68,17 @@ export default {
       parallelLine,
       video,
     }) {
-      let maxInstances = 1; // Limit to two questions about the same word
+      let maxInstances = 1; // Limit to one questions about the same word
       let seen = {};
-      for (let saved of savedWords) {
-        seen[saved.id] = seen[saved.id] || 0;
+      for (let savedWord of savedWords) {
+        let saved = savedWord.saved; // The `saved` property is a object saved to the vuex store, with the properties { id, form, date, context }
+        seen[saved.id] = seen[saved.id] || 0; // e.g. { 36178: 0 } means we've seen saved word 36178 zero times
         let savedForm;
         let forms = saved.forms || [saved.head];
         for (let form of forms) {
           if (line.line.toLowerCase().includes(form.toLowerCase()))
             savedForm = form;
         }
-        let dictionary = await this.$getDictionary();
-        let savedWord = await dictionary.get(saved.id);
         if (seen[saved.id] < maxInstances && savedForm && savedWord) {
           let reviewItem = {
             video,
@@ -92,7 +91,16 @@ export default {
             simplified: savedWord.simplified,
             traditional: savedWord.traditional,
           };
-          this.reviewItems.push(reviewItem);
+          // Make sure we don't have two review items with exactly the same words and line
+          let existingReviewItem = this.reviewItems.find(
+            (r) =>
+              r.text === reviewItem.text &&
+              r.word.id === reviewItem.word.id &&
+              r.line.line === reviewItem.line.line
+          );
+          if (!existingReviewItem) {
+            this.reviewItems.push(reviewItem);
+          }          
           seen[saved.id] = seen[saved.id] + 1;
         }
       }
