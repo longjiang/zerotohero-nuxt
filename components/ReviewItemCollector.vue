@@ -72,6 +72,19 @@ export default {
       let seen = {};
       for (let savedWord of savedWords) {
         let saved = savedWord.saved; // The `saved` property is a object saved to the vuex store, with the properties { id, form, date, context }
+        if (!saved) {
+          // use vuex savedWords/has getter to retrieve it
+          saved = this.$store.getters["savedWords/has"](
+            { l2: this.$l2.code, id: savedWord.id }
+          );
+          if (!saved) {
+            console.error(
+              "Saved word does not have the `saved` property, and is not found in vuex store",
+              { savedWord },
+            );
+            continue;
+          }
+        }
         seen[saved.id] = seen[saved.id] || 0; // e.g. { 36178: 0 } means we've seen saved word 36178 zero times
         let savedForm;
         let forms = saved.forms || [saved.head];
