@@ -8,7 +8,12 @@
     }"
   >
     <client-only>
-      <ReviewItemCollector ref="reviewItemCollector" @showQuiz="pause" @hideQuiz="play" :active="paused" />
+      <ReviewItemCollector
+        ref="reviewItemCollector"
+        @showQuiz="pause"
+        @hideQuiz="play"
+        :active="paused"
+      />
       <div class="transcript-wrapper">
         <client-only>
           <Loader class="text-center w-100" />
@@ -30,11 +35,7 @@
                 hsk,
                 notes,
                 textSize: single ? textSize : 1,
-                parallelLine: matchedParallelLines
-                  ? matchedParallelLines[
-                      single ? currentLineIndex || 0 : index + visibleMin
-                    ]
-                  : null,
+                parallelLine: matchedParallelLine,
                 showParallelLine:
                   $l1.code !== $l2.code &&
                   parallellines &&
@@ -69,7 +70,14 @@
               @removeLineClick="removeLine(index + visibleMin)"
               @trasnlationLineBlur="trasnlationLineBlur"
               @trasnlationLineKeydown="trasnlationLineKeydown"
-              @savedWordsFound="addLineToReview($event, line, index + visibleMin, matchedParallelLines ? matchedParallelLines[index + visibleMin] : null)"
+              @savedWordsFound="
+                addLineToReview(
+                  $event,
+                  line,
+                  index + visibleMin,
+                  matchedParallelLine
+                )
+              "
             />
           </template>
           <div
@@ -265,6 +273,15 @@ export default {
     pro() {
       return this.forcePro || this.$store.state.subscriptions.active;
     },
+    matchedParallelLine() {
+      return this.matchedParallelLines
+        ? this.matchedParallelLines[
+            this.single
+              ? this.currentLineIndex || 0
+              : this.index + this.visibleMin
+          ]
+        : null;
+    },
   },
   async created() {
     this.lines.map((line) => {
@@ -307,7 +324,8 @@ export default {
       if (this.single) this.tokenizeNextLines();
       let shouldScroll = !this.single && !this.paused;
       if (this.showSubsEditing) {
-        if (this.currentLineVisible && Math.abs(newValue - oldValue) < 5) shouldScroll = false;
+        if (this.currentLineVisible && Math.abs(newValue - oldValue) < 5)
+          shouldScroll = false;
       }
       if (shouldScroll) {
         this.scrollTo(this.currentLineIndex);
@@ -445,12 +463,12 @@ export default {
         this.$emit("updateTranslation", updatedLines);
       }
     },
-    
+
     /**
      * Match parallel lines (translation lines) to L2 lines.
      */
-    
-     matchParallelLines() {
+
+    matchParallelLines() {
       // If there are no translated lines, set matchedParallelLines to an empty array
       if (!this.parallellines) {
         this.matchedParallelLines = [];
@@ -464,7 +482,8 @@ export default {
       );
     },
 
-    matchLines(lines, parallelLines, tolerance = 1.0) { // tolerance in seconds
+    matchLines(lines, parallelLines, tolerance = 1.0) {
+      // tolerance in seconds
       let matchedLines = [];
       let i = 0; // Counter for the parallel lines
 
@@ -476,7 +495,7 @@ export default {
         // Loop through each translated line starting from where we left off in the last iteration
         while (i < parallelLines.length) {
           let difference = line.starttime - parallelLines[i].starttime;
-          
+
           // If the start times of the original line and the parallel line are close enough
           if (Math.abs(difference) <= tolerance) {
             matchedLine += " " + parallelLines[i].line;
@@ -727,7 +746,7 @@ export default {
         let elementTop = documentOffsetTop(el); // distance from top of the document to the top of the element
         let offset = this.scrollOffset(el);
         let top = elementTop + offset;
-        const contentArea = document.querySelector('.content-area');
+        const contentArea = document.querySelector(".content-area");
         const currentScrollY = contentArea.scrollTop;
         let scrollDistanceIsLarge = Math.abs(currentScrollY - top) > 1000;
 

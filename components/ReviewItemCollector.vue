@@ -65,7 +65,6 @@ export default {
     async showQuizIfThereAreReviewItems() {
       await this.$nextTick();
       if (this.reviewItems?.length > 0) {
-        console.log(this.reviewItems);
         this.$bvModal.show("quiz-modal");
       }
     },
