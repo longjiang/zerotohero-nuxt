@@ -139,6 +139,7 @@
                 excludeKids: true,
                 sort: '-views',
                 showPreferredCategoriesFirst: true,
+                alsoLoadRecommendedVideos: true
               }"
               @videosLoaded="onVideosLoaded"
               ref="videos"
