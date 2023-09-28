@@ -165,9 +165,9 @@ export default {
     BRANCH,
     TAG,
   },
-  // server: {
-  //   host: '0.0.0.0' // default: 'localhost'
-  // },
+  server: {
+    host: '0.0.0.0' // default: 'localhost'
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'Language Player',
