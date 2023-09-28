@@ -154,7 +154,7 @@ export default {
     },
     itemIndex() {
       return this.items.findIndex(
-        (e) => e.youtube_id === this.video.youtube_id
+        (e) => e.youtube_id === this.video?.youtube_id
       );
     },
     previousItem() {

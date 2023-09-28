@@ -1,5 +1,9 @@
 <template>
-  <div v-if="wide" class="video-hero-wrapper" v-observe-visibility="visibilityChanged">
+  <div
+    v-if="wide"
+    class="video-hero-wrapper"
+    v-observe-visibility="visibilityChanged"
+  >
     <div
       :class="{
         'video-hero': true,
@@ -40,10 +44,7 @@
               <div>
                 <router-link
                   v-if="!videoUnavailable"
-                  :to="{
-                    name: 'video-view',
-                    params: { type: 'youtube', youtube_id: video.youtube_id },
-                  }"
+                  :to="to"
                   class="btn btn-success"
                 >
                   <i :class="`${playButtonIcon} mr-1`"></i>
@@ -95,6 +96,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    playlistId: {
+      type: String,
+      default: null,
+    },
   },
   data() {
     return {
@@ -114,6 +119,16 @@ export default {
   },
   computed: {
     ...mapState("settings", ["muteAutoplay"]),
+    to() {
+      let to = {
+        name: "video-view",
+        params: { type: "youtube", youtube_id: this.video.youtube_id },
+      }
+      if (this.playlistId) {
+        to.query = {p: this.playlistId};
+      }
+      return to;
+    },
     isMobile() {
       return isMobile();
     },
@@ -179,35 +194,15 @@ export default {
       }
     },
     playButtonIcon() {
-      if (this.show) {
-        if (this.show.type === "Audiobook") return "fa fa-book-open";
-        if (this.show.type === "Song") return "fas fa-headphones-alt";
-      }
       return "fas fa-play";
     },
     playButtonText() {
-      if (this.show) {
-        if (this.show.type === "Audiobook") return "Read & Listen";
-        if (this.show.type === "Song") return "Listen & Learn";
-        if (this.show.type === "TV Show") return "Play & Learn";
-        if (this.show.type === "YouTube Channel") return "Play & Learn";
-        if (this.show.type === "News Report") return "Play & Learn";
-      }
       return "Play & Learn";
     },
     episodesButtonIcon() {
-      if (this.show) {
-        if (this.show.type === "Audiobook") return "fa fa-list";
-        if (this.show.type === "Song") return "fas fa-compact-disc";
-      }
-      return "fas fa-th-large";
+      return "fa-regular fa-rectangle-history";
     },
     episodesButtonText() {
-      if (this.show) {
-        if (this.show.type === "Audiobook") return "Chapters";
-        if (this.show.type === "Song") return "Songs";
-        if (this.show.type === "YouTube Channel") return "Episodes";
-      }
       return "Episodes";
     },
   },
@@ -228,8 +223,10 @@ export default {
       }
     },
     mute() {
-      this.muted = !this.muted
-      this.$store.dispatch("settings/setGeneralSettings", { muteAutoplay: this.muted});
+      this.muted = !this.muted;
+      this.$store.dispatch("settings/setGeneralSettings", {
+        muteAutoplay: this.muted,
+      });
     },
     togglePaused() {
       this.$refs.youtube.togglePaused();
@@ -250,7 +247,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 @import "~@/assets/scss/variables.scss";
 .video-hero-wrapper {
   position: relative;
@@ -279,10 +275,16 @@ export default {
   }
   &.skin-light {
     .top-overlay {
-      background: linear-gradient(rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 100%);
+      background: linear-gradient(
+        rgb(255, 255, 255) 0%,
+        rgba(255, 255, 255, 0) 100%
+      );
     }
     .bottom-overlay {
-      background: linear-gradient(rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 100%);
+      background: linear-gradient(
+        rgba(255, 255, 255, 0) 0%,
+        rgb(255, 255, 255) 100%
+      );
     }
   }
   &.skin-dark {

@@ -31,6 +31,7 @@
             v-if="heroVideo"
             :video="heroVideo"
             @videoUnavailable="onVideoUnavailable"
+            playlistId="recommended"
             class="mb-3"
           />
           <div :class="{ 'media-section': true, 'd-none': !hasWatchHistory }">
@@ -67,6 +68,7 @@
 
           <YouTubeVideoList
             :videos="recommendedVideos?.[$l2.code]"
+            playlistId="recommended"
           />
 
           <client-only>

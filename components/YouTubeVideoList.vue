@@ -205,7 +205,7 @@
             :showProgress="showProgress"
             :showPlayButton="showPlayButton"
             :showLanguage="multilingual"
-            :playlist="playlist"
+            :playlistId="playlistId"
             :sort="sort"
           >
             <template v-slot:footer>
@@ -294,8 +294,8 @@ export default {
     multilingual: {
       default: false,
     },
-    playlist: {
-      type: Object,
+    playlistId: {
+      type: String,
     },
     initialSort: {
       type: String, // One of 'title', '-date', '-views', '-likes', '-comments'
@@ -357,6 +357,7 @@ export default {
   },
   computed: {
     filteredVideos() {
+      if (!this.videos) return [];
       let keyword = this.keyword ? this.keyword.toLowerCase() : undefined;
       let filteredVideos = this.videos.filter((video) => {
         if (this.unavailableVideos.includes(video)) return false;

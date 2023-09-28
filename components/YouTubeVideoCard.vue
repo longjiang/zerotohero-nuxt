@@ -317,8 +317,8 @@ export default {
     video: {
       type: Object,
     },
-    playlist: {
-      type: Object,
+    playlistId: {
+      type: String,
     },
   },
   data() {
@@ -372,8 +372,8 @@ export default {
       } else if (this.showProgress && this.historyItem) {
         to.query.t = this.historyItem.video.starttime;
       }
-      if (this.playlist) {
-        to.query.p = this.playlist.id;
+      if (this.playlistId) {
+        to.query.p = this.playlistId;
       }
       return to;
     },
