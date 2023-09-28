@@ -76,7 +76,7 @@
                 </router-link>
                 <router-link
                   class="index-nav-item btn btn-success"
-                  :to="{name: 'explore-media', params: $lastL1L2}"
+                  :to="{name: 'recommended-video', params: $lastL1L2}"
                   v-if="$auth.loggedIn && $lastL1L2"
                 >
                   {{ languageName($lastL1L2) }}
@@ -137,7 +137,7 @@
                     {{ $tb("Welcome back") }}
                     {{ $auth.user.first_name }}.
                   </p>
-                  <router-link class="btn btn-success" :to="{name: 'explore-media', params: $lastL1L2}" v-if="$lastL1L2">
+                  <router-link class="btn btn-success" :to="{name: 'recommended-video', params: $lastL1L2}" v-if="$lastL1L2">
                     {{ $tb("Go to {l2}", {l2: languageName($lastL1L2) }) }}
                     <i class="ml-1 fas fa-chevron-right"></i>
                   </router-link>
@@ -667,7 +667,7 @@ export default {
   methods: {
     redirectToDashboardIfAppropriate() {
       if (this.$auth.loggedIn && this.$lastL1L2) {
-        this.$router.push({ name: "explore-media", params: this.$lastL1L2 });
+        this.$router.push({ name: "recommended-video", params: this.$lastL1L2 });
       }
     },
     language(code) {

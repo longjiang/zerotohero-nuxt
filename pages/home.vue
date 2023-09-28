@@ -54,7 +54,7 @@ export default {
     },
   },
   mounted() {
-    this.$router.push({ name: "explore-media" });
+    this.$router.push({ name: "recommended-video" });
   },
   methods: {
     hasDashboardUpdate(hasDashboard) {

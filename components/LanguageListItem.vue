@@ -22,7 +22,7 @@
       </router-link>
       <router-link
         :to="{
-          name: 'explore-media',
+          name: 'explrecommended-video',
           params: { l1: from || english, l2: language.code },
         }"
         :class="{

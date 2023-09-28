@@ -62,7 +62,7 @@
             <client-only>
               <LazyIdenticalLanguages
                 class="mt-5 mb-5"
-                routeName="explore-media"
+                routeName="recommended-video"
                 v-if="!loading"
               />
             </client-only>

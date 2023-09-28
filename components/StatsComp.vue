@@ -94,7 +94,7 @@
             <td>
               <router-link
                 :to="{
-                  name: 'explore-media',
+                  name: 'recommended-video',
                   params: {
                     l1: supportedL1s(
                       row.language['iso639-3'],

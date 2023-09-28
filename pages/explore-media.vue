@@ -62,7 +62,6 @@
               :l2="$l2"
               class="youtube-browse-nav mb-5"
               :showOnly="['Media']"
-              :limit="12"
             />
           </client-only>
 

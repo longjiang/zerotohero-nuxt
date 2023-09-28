@@ -17,7 +17,7 @@
             <td>
               <router-link
                 :to="{
-                  name: 'explore-media',
+                  name: 'recommended-video',
                   params: { l1: pair.l1, l2: pair.l2 },
                 }"
               >

@@ -203,7 +203,7 @@
           <router-link
             class="link-unstyled category-btn text-left"
             :to="{
-              name: 'explore-media',
+              name: 'recommended-video',
             }"
           >
             <i class="fa-solid fa-telescope mr-1"></i>

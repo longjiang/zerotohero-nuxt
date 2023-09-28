@@ -18,7 +18,7 @@
         <div class="text-center" v-if="preferredCategories.length > 0">
           <router-link
             class="btn btn-success pl-5 pr-5 mt-4"
-            :to="{ name: 'explore-media' }"
+            :to="{ name: 'recommended-video' }"
           >
             {{ $t('Continue') }}
             <i class="fa fa-chevron-right"></i>

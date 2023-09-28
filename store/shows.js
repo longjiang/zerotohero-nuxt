@@ -208,7 +208,7 @@ export const actions = {
     const processedTvShows = processShows(tvShows, minLexDivByLevel);
     
     context.commit("LOAD_SHOWS", { l2, tvShows: processedTvShows, talks: processedTalks });
-    context.commit("ADD_RECOMMENDED_VIDEOS", { l2, videos: await fetchRecommendedVideos(this.$directus, l2, forceRefresh, 0, 32) });
+    context.commit("ADD_RECOMMENDED_VIDEOS", { l2, videos: await fetchRecommendedVideos(this.$directus, l2, forceRefresh, 0, 500) });
   },
   async add(context, { l2, type, show }) {
     let response = await this.$directus.post(

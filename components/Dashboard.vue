@@ -96,7 +96,7 @@ export default {
     },
     to(language) {
       let name = LANGS_WITH_CONTENT.includes(language.code)
-        ? "explore-media"
+        ? "recommended-video"
         : "language-info";
       return {
         name,

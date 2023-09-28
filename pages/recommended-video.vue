@@ -1,6 +1,6 @@
 <router>
   {
-    path: '/:l1/:l2/recommended',
+    path: '/:l1/:l2/recommended-video',
     props: true,
   }
 </router>
@@ -111,8 +111,7 @@ export default {
     async loadRecommendedVideos() {
       // If the previous history item was a video, redirect to 'explore-meida'
       let previousHistoryItem = this.fullHistory[this.fullHistory.length - 2];
-      console.log({previousHistoryItem});
-      if (previousHistoryItem.path.includes('video-view')) {
+      if (previousHistoryItem.path.includes(this.$l2.code + '/video-view')) {
         this.$router.push({
           name: "explore-media",
           params: { l1: this.$l1.code, l2: this.$l2.code },

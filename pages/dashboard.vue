@@ -201,7 +201,7 @@ export default {
     redirectLastL2() {
       if (this.$lastL1L2) {
         const { l1, l2 } = this.$lastL1L2;
-        this.$router.push({ name: "explore-media", params: { l1, l2 } });
+        this.$router.push({ name: "recommended-video", params: { l1, l2 } });
       }
     },
   },
