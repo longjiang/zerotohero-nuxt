@@ -64,6 +64,7 @@ export default {
     $nuxt.$on("smooth-scroll-to", this.smoothScrollTo);
     this.setVH();
     window.addEventListener("resize", this.setVH);
+    window.addEventListener("orientationchange", this.setVH); // Listen to orientationchange event
   },
   beforeDestroy() {
     $nuxt.$off("scroll-to", this.scrollTo);
