@@ -321,7 +321,6 @@ export default {
     },
     async getRecommendedVideos(query) {
       let recommendedVideos = await this.$directus.getVideos({ l2Id: this.$l2.id, query: query + `&filter[category][in]=${this.preferredCategories.join(',')}` });
-      console.log("getting recommended videos", recommendedVideos)
       return recommendedVideos;
     },
   },

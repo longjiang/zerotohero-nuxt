@@ -202,7 +202,7 @@ export default {
     return {
       videos: [],
       LANGS_WITH_LEVELS,
-      sort: "recommended",
+      sort: undefined,
       selectedHeroVideo: null,
       sortOptions: [
         { value: "recommended", text: "Sort by Recommended" },
