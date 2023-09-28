@@ -266,6 +266,14 @@
           skin="light"
           class="p-2"
         />
+        <client-only>
+          <NavPage
+            :l1="$l1"
+            :l2="$l2"
+            class="youtube-browse-nav mb-5"
+            :showOnly="['Media']"
+          />
+        </client-only>
       </div>
     </b-modal>
     <b-modal

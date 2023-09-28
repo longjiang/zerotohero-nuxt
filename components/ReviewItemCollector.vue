@@ -36,7 +36,7 @@ export default {
   },
   mounted() {
     // If there are review items, show them every two minutes
-    setInterval(() => {
+    this.interval = setInterval(() => {
       this.showQuizIfThereAreReviewItems();
     }, 1000 * 60 * 2);
     // listen to vuex savedWords removed mutation
@@ -50,6 +50,8 @@ export default {
   },
   beforeDestroy() {
     this.unsubscribe();
+    // remove the interval
+    clearInterval(this.interval);
   },
   methods: {
     onPopQuizModalShown() {
@@ -62,7 +64,8 @@ export default {
     },
     async showQuizIfThereAreReviewItems() {
       await this.$nextTick();
-      if (this.reviewItems.length > 0) {
+      if (this.reviewItems?.length > 0) {
+        console.log(this.reviewItems);
         this.$bvModal.show("quiz-modal");
       }
     },
