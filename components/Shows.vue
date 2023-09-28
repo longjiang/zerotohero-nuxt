@@ -134,6 +134,8 @@
             :shows="filteredShows.slice(0, limit || filteredShows.length)"
             :type="type"
             :key="`shows-filtered-${this.keyword}`"
+            :title="title"
+            :toMore="toMore"
           />
           <b-button v-if="limit && filteredShows && filteredShows.length > limit" :to="{name: routeType}" variant="outline-success" class="mt-3 d-block w-100" size="lg">
             {{ $t('See All {num} {type}', { type: routeTitles[routeType], num: filteredShows.length }) }}
@@ -220,6 +222,17 @@ export default {
     limit: {
       type: Number,
       default: 0, // 0 means no limit
+    },
+    title: {
+      type: String,
+      default: "",
+    },
+    showRecommendedMessage: {
+      type: Boolean,
+      default: false,
+    },
+    toMore: {
+      type: Object,
     },
   },
   data() {

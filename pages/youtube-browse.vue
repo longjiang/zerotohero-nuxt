@@ -154,7 +154,6 @@
           start,
           kidsOnly,
           sort,
-          includeTVShows: keyword ? true : false,
           showNoVideosMessage: true,
           perPage: 12,
           showSearchBar: false,

@@ -2,6 +2,21 @@
   <div class="media-search-results">
     <div class="row">
       <div class="col-sm-12">
+        <div v-show="title && videos?.length">
+          <h5>
+            {{ $t(title) }}
+            <router-link
+              v-if="toMore"
+              :to="toMore"
+              class="show-all"
+            >
+              {{ $t("More") }}
+              <i class="fas fa-chevron-right"></i>
+            </router-link>
+          </h5>
+          <RecommendedMessage class="mt-2" v-if="showRecommendedMessage" />
+          <hr class="my-4" />
+        </div>
         <client-only>
           <div v-if="showSearchBar">
             <div
@@ -112,11 +127,17 @@ export default {
     start: {
       default: 0,
     },
-    includeTVShows: {
-      default: true
+    tvShows: {
+      default: null,
     },
-    includeTalks: {
-      default: true
+    talks: {
+      default: null,
+    },
+    excludeAllTVShows: {
+      default: false
+    },
+    excludeAllTalks: {
+      default: false
     },
     kidsOnly: {
       type: Boolean,
@@ -149,7 +170,17 @@ export default {
     },
     skin: {
       default: null
-    }
+    },
+    title: {
+      type: String,
+      default: null
+    },
+    showRecommendedMessage: {
+      default: false
+    },
+    toMore: {
+      type: Object,
+    },
   },
   data() {
     let topics = [
@@ -217,11 +248,17 @@ export default {
     },
     getFilters() {
       let filters = [];
-      if (!this.includeTVShows) {
+      if (this.excludeAllTVShows) {
         filters.push("filter[tv_show][null]=1");
       }
-      if (!this.includeTalks) {
+      if (this.excludeAllTalks) {
         filters.push("filter[talk][null]=1");
+      }
+      if (this.tvShows) {
+        filters.push("filter[tv_show][in]=" + this.tvShows.join(","));
+      }
+      if (this.talks) {
+        filters.push("filter[talk][in]=" + this.talks.join(","));
       }
       if (this.topic !== "all") {
         filters.push("filter[topic][eq]=" + this.topic);

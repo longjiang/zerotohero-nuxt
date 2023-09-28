@@ -9,18 +9,12 @@
       />
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="mt-3 mb-3 text-center">{{ $t(title) }}</h3>
+          <h3 class="my-4 text-center">{{ $t(title) }}</h3>
         </div>
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <div>
-            <template v-if="$refs['talks']?.filteredShows?.length">
-              <h5>
-                {{ $t("YouTube Channels") }}
-              </h5>
-              <hr />
-            </template>
+          <div v-if="kidsOnly || category">
             <Shows
               v-bind="{
                 kidsOnly,
@@ -30,17 +24,12 @@
                 routeType: 'talks',
                 tag: 'all',
                 limit: 12,
+                title: 'YouTube Channels',
               }"
-              ref="talks"
+              class="mb-4"
             />
           </div>
-          <div>
-            <template v-if="$refs['tv-shows']?.filteredShows?.length">
-              <h5 class="mt-3">
-                {{ $t("TV Shows") }}
-              </h5>
-              <hr />
-            </template>
+          <div v-if="kidsOnly || category">
             <Shows
               v-bind="{
                 kidsOnly,
@@ -50,27 +39,26 @@
                 routeType: 'tv-shows',
                 tag: 'all',
                 limit: 12,
+                title: 'TV Shows',
               }"
-              ref="tv-shows"
+              class="mb-4"
             />
           </div>
           <div>
-            <template v-if="$refs['videos']?.videos?.length">
-              <h5 class="mt-3">
-                {{ $t("Videos") }}
-              </h5>
-              <hr />
-            </template>
             <MediaSearchResults
               v-bind="{
                 category,
+                tvShows: slug === 'movies' && movies({l2: $l2}) ? [movies({l2: $l2}).id] : slug === 'music' && music({l2: $l2}) ? [music({l2: $l2}).id] : null,
+                talks: slug === 'news' && news({l2: $l2}) ? [news({l2: $l2}).id] : null,
                 kidsOnly,
-                includeTVShows: true,
                 showNoVideosMessage: true,
                 perPage: 12,
                 showSearchBar: false,
+                sort: '-views',
+                showTitle: true,
+                title: 'Videos',
               }"
-              ref="videos"
+              :ref="`videos-${slug}`"
               class="mt-3"
             />
           </div>
@@ -81,6 +69,7 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 
 const slugToCategory = {
   'music': 10, // YouTube category ID, see lib/youtube.js
@@ -101,6 +90,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('shows', ['movies', 'music', 'news']),
     title() {
       if (!this.slug) return "";
       return this.slug

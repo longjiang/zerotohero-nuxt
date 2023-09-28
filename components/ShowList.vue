@@ -1,15 +1,32 @@
 <template>
   <container-query :query="query" v-model="params">
-    <div class="tv-shows row">
-      <ShowCard
-        v-for="show of shows"
-        v-show="!unavailableShows.includes(show)"
-        :show="show"
-        :type="type"
-        :key="`tv-show-card-wrapper-${show.id}`"
-        :class="colClasses"
-        @unavailable="unavailableShows.push(show)"
-      />
+    <div>
+      <div v-show="title && shows?.length">
+        <h5>
+          {{ $t(title) }}
+          <router-link
+            v-if="toMore"
+            :to="toMore"
+            class="show-all"
+          >
+            {{ $t("More") }}
+            <i class="fas fa-chevron-right"></i>
+          </router-link>
+        </h5>
+        <RecommendedMessage class="mt-2" v-if="showRecommendedMessage" />
+        <hr class="my-4" />
+      </div>
+      <div class="tv-shows row">
+        <ShowCard
+          v-for="show of shows"
+          v-show="!unavailableShows.includes(show)"
+          :show="show"
+          :type="type"
+          :key="`tv-show-card-wrapper-${show.id}`"
+          :class="colClasses"
+          @unavailable="unavailableShows.push(show)"
+        />
+      </div>
     </div>
   </container-query>
 </template>
@@ -24,6 +41,9 @@ export default {
   props: {
     shows: Array,
     type: String, // 'tvShows' or 'talks'
+    title: String,
+    showRecommendedMessage: Boolean,
+    toMore: Object,
   },
   data() {
     return {
@@ -65,7 +85,6 @@ export default {
       return classes;
     },
   },
-
 };
 </script>
 

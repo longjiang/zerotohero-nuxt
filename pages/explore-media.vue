@@ -100,14 +100,6 @@
           </div>
 
           <div v-if="tvShows && tvShows.length > 0" class="media-section">
-            <h3 class="media-seaction-heading">
-              {{ $t("TV Shows") }}
-              <router-link :to="{ name: 'tv-shows' }" class="show-all">
-                {{ $t("More") }}
-                <i class="fas fa-chevron-right"></i>
-              </router-link>
-              <RecommendedMessage class="mt-2" />
-            </h3>
             <ShowList
               :shows="
                 tvShows
@@ -116,22 +108,16 @@
               "
               type="tvShows"
               :key="`tv-shows`"
+              title="TV Shows"
+              :showRecommendedMessage="true"
+              :toMore="{ name: 'tv-shows'}"
             />
           </div>
 
           <div class="media-section">
-            <h3 class="media-seaction-heading">
-              {{ $t("YouTube") }}
-              <router-link :to="{ name: 'youtube-browse' }" class="show-all">
-                {{ $t("More") }}
-                <i class="fas fa-chevron-right"></i>
-              </router-link>
-              <RecommendedMessage class="mt-2" />
-            </h3>
             <MediaSearchResults
               v-bind="{
                 perPage: 24,
-                includeTVShows: false,
                 showNoVideosMessage: true,
                 showSearchBar: false,
                 infiniteScroll: false,
@@ -142,6 +128,9 @@
               }"
               @videosLoaded="onVideosLoaded"
               ref="videos"
+              title="YouTube"
+              :showRecommendedMessage="true"
+              :toMore="{ name: 'youtube-browse'}"
             />
           </div>
 
@@ -190,14 +179,6 @@
           </div>
 
           <div v-if="talks && talks.length > 0" class="media-section">
-            <h3 class="media-seaction-heading">
-              {{ $t("YouTube Channels") }}
-              <router-link :to="{ name: 'talks' }" class="show-all">
-                {{ $t("More") }}
-                <i class="fas fa-chevron-right"></i>
-              </router-link>
-              <RecommendedMessage class="mt-2" />
-            </h3>
             <ShowList
               :shows="
                 talks
@@ -206,6 +187,9 @@
               "
               type="talks"
               :key="`tv-shows`"
+              title="YouTube Channels"
+              :showRecommendedMessage="true"
+              :toMore="{ name: 'talks'}"
             />
             <div class="text-center mt-1"></div>
           </div>
@@ -216,17 +200,12 @@
             "
             class="media-section"
           >
-            <h3 class="media-seaction-heading">
-              {{ $t("Audiobooks") }}
-              <router-link :to="{ name: 'audiobooks' }" class="show-all">
-                {{ $t("More") }}
-                <i class="fas fa-chevron-right"></i>
-              </router-link>
-            </h3>
             <ShowList
               :shows="random(audiobooks, 12)"
               type="talks"
               :key="`tv-shows`"
+              title="Audiobooks"
+              :toMore="{ name: 'audiobooks' }"
             />
           </div>
 
@@ -384,9 +363,7 @@ export default {
       let talks = this.$store.state.shows.talks[this.$l2.code];
       if (talks) {
         this.talks = this.sortShows(talks);
-        this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
-          (s) => s.title === "News"
-        );
+        this.moviesShow = this.$store.getters["shows/news"]({l2: this.$l2}); 
         if (this.newsShow)
           this.news = await this.getVideos({
             limit: 25,
@@ -397,12 +374,8 @@ export default {
       let tvShows = this.$store.state.shows.tvShows[this.$l2.code];
       if (tvShows) {
         this.tvShows = this.sortShows(tvShows);
-        this.musicShow = this.$store.state.shows.tvShows[this.$l2.code].find(
-          (s) => s.title === "Music"
-        );
-        this.moviesShow = this.$store.state.shows.tvShows[this.$l2.code].find(
-          (s) => s.title === "Movies"
-        );
+        this.musicShow = this.$store.getters["shows/music"]({l2: this.$l2}); 
+        this.moviesShow = this.$store.getters["shows/movies"]({l2: this.$l2}); 
         if (this.musicShow) {
           if (this.videos)
             this.videos = this.videos.filter(
