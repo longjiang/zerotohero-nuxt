@@ -6,6 +6,7 @@ export const state = () => {
   return {
     tvShows: {},
     talks: {},
+    recommendedVideos: {},
     stats: {},
     showsLoaded: {},
     categories: {},
@@ -33,6 +34,27 @@ export const determineSortType = ({ type = "talk", show }) => {
   if (show.title === "Movies") sort = "-views";
   return sort;
 };
+
+// services/dataService.js
+
+export const fetchShows = async ($directus, type, l2, forceRefresh, limit) => {
+  try {
+    const response = await $directus.get(
+      `items/${type}?filter[l2][eq]=${l2.id}${forceRefresh ? "" : "&filter[hidden][empty]=true"}&limit=${limit}&timestamp=${forceRefresh ? Date.now() : 0}`
+    );
+    
+    if (response.data.data) {
+      const shows = response.data.data;
+      shows.forEach((show) => (show.tags = unique((show.tags || "").split(","))));
+      shows.sort((x, y) => x.title?.localeCompare(y.title, l2.locales[0]) || 0);
+      return shows;
+    }
+  } catch (err) {
+    console.error(`Error fetching ${type}`, err);
+  }
+  return [];
+};
+
 
 export const mutations = {
   LOAD_SHOWS(state, { l2, tvShows, talks }) {
@@ -141,56 +163,20 @@ export const levelByLexDiv = (lexDiv, minLexDivByLevel) => {
 
 export const actions = {
   async load(context, { l2, forceRefresh, limit = 1000 }) {
-    let tvShows = [];
-    let talks = [];
-    try {
-      let response = await this.$directus.get(
-        `items/tv_shows?filter[l2][eq]=${l2.id}${
-          forceRefresh ? "" : "&filter[hidden][empty]=true"
-        }&limit=${limit}&timestamp=${forceRefresh ? Date.now() : 0}`
-      );
-
-      if (response.data.data) {
-        tvShows = response.data.data;
-        tvShows.forEach((show) => {
-          show.tags = unique((show.tags || "").split(","));
-        });
-        tvShows = tvShows.sort((x, y) => {
-          let sort = 0;
-          if (x.title && y.title)
-            sort = (x.title || "").localeCompare(y.title, l2.locales[0]);
-          return sort;
-        });
-      }
-
-      response = await this.$directus.get(
-        `items/talks?filter[l2][eq]=${l2.id}${
-          forceRefresh ? "" : "&filter[hidden][empty]=true"
-        }&limit=${limit}&timestamp=${forceRefresh ? Date.now() : 0}`
-      );
-      if (response.data.data) {
-        talks = response.data.data;
-        talks.forEach((show) => {
-          show.tags = unique((show.tags || "").split(","));
-        });
-        talks = talks.sort((x, y) => {
-          let sort = 0;
-          if (x.title && y.title)
-            sort = (x.title || "").localeCompare(y.title, l2.locales[0]);
-          return sort;
-        });
-      }
-    } catch (err) {}
-    let minLexDivByLevel = getMinLexDivByLevel([...tvShows, ...talks]);
-    for (let show of talks) {
-      let level = levelByLexDiv(show.lex_div, minLexDivByLevel);
-      show.level = level;
-    }
-    for (let show of tvShows) {
-      let level = levelByLexDiv(show.lex_div, minLexDivByLevel);
-      show.level = level;
-    }
-    context.commit("LOAD_SHOWS", { l2, tvShows, talks });
+    const [tvShows, talks] = await Promise.all([
+      fetchShows(this.$directus, "tv_shows", l2, forceRefresh, limit),
+      fetchShows(this.$directus, "talks", l2, forceRefresh, limit)
+    ]);
+    
+    const processShows = (shows, minLexDivByLevel) => 
+      shows.map(show => ({ ...show, level: levelByLexDiv(show.lex_div, minLexDivByLevel) }));
+    
+    const minLexDivByLevel = getMinLexDivByLevel([...tvShows, ...talks]);
+    
+    const processedTalks = processShows(talks, minLexDivByLevel);
+    const processedTvShows = processShows(tvShows, minLexDivByLevel);
+    
+    context.commit("LOAD_SHOWS", { l2, tvShows: processedTvShows, talks: processedTalks });
   },
   async add(context, { l2, type, show }) {
     let response = await this.$directus.post(
