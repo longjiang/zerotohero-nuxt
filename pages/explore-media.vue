@@ -65,172 +65,6 @@
             />
           </client-only>
 
-          <div
-            :class="{
-              'loader text-center': true,
-              'd-none': showsLoaded,
-            }"
-            style="margin: 7rem 0 15rem 0"
-          >
-            <Loader :sticky="true" message="Loading videos in our library..." />
-          </div>
-
-          <div v-if="tvShows && tvShows.length > 0" class="media-section">
-            <h3 class="media-seaction-heading">
-              {{ $t("Newly Added") }}
-              <router-link :to="{ name: 'tv-shows' }" class="show-all">
-                {{ $t("More") }}
-                <i class="fas fa-chevron-right"></i>
-              </router-link>
-            </h3>
-            <ShowList
-              :shows="
-                tvShows
-                  .filter((s) => !['Movies', 'Music'].includes(s.title))
-                  .sort((a, b) => {
-                    const dateA = new Date(a.created_on);
-                    const dateB = new Date(b.created_on);
-                    return dateB - dateA; // For descending order
-                  })
-                  .slice(0, 4)
-              "
-              type="tvShows"
-              :key="`new-tv-shows`"
-            />
-          </div>
-
-          <div v-if="tvShows && tvShows.length > 0" class="media-section">
-            <ShowList
-              :shows="
-                tvShows
-                  .filter((s) => !['Movies', 'Music'].includes(s.title))
-                  .slice(0, 12)
-              "
-              type="tvShows"
-              :key="`tv-shows`"
-              title="TV Shows"
-              :showRecommendedMessage="true"
-              :toMore="{ name: 'tv-shows'}"
-            />
-          </div>
-
-          <div class="media-section">
-            <MediaSearchResults
-              v-bind="{
-                perPage: 24,
-                showNoVideosMessage: true,
-                showSearchBar: false,
-                infiniteScroll: false,
-                excludeKids: true,
-                sort: '-views',
-                showPreferredCategoriesFirst: true,
-                alsoLoadRecommendedVideos: true
-              }"
-              @videosLoaded="onVideosLoaded"
-              ref="videos"
-              title="YouTube"
-              :showRecommendedMessage="true"
-              :toMore="{ name: 'youtube-browse'}"
-            />
-          </div>
-
-          <div v-if="music && music.length > 0" class="media-section">
-            <h3 class="media-seaction-heading">
-              {{ $t("Music") }}
-              <router-link
-                :to="{
-                  name: 'show',
-                  params: { type: 'tv-show', id: musicShow.id },
-                }"
-                class="show-all"
-              >
-                {{ $t("More") }}
-                <i class="fas fa-chevron-right"></i>
-              </router-link>
-            </h3>
-            <LazyYouTubeVideoList
-              :videos="random(music).slice(0, 12)"
-              :showAdminToolsInAdminMode="false"
-              :showDate="true"
-            />
-          </div>
-
-          <div class="media-sections" v-if="!loading">
-            <div v-if="movies && movies.length > 0" class="media-section">
-              <h3 class="media-seaction-heading">
-                {{ $t("Movies") }}
-                <router-link
-                  :to="{
-                    name: 'show',
-                    params: { type: 'tv-show', id: moviesShow.id },
-                  }"
-                  class="show-all"
-                >
-                  {{ $t("More") }}
-                  <i class="fas fa-chevron-right"></i>
-                </router-link>
-              </h3>
-              <LazyYouTubeVideoList
-                :videos="random(movies).slice(0, 12)"
-                :showAdminToolsInAdminMode="false"
-                :showDate="true"
-              />
-            </div>
-          </div>
-
-          <div v-if="talks && talks.length > 0" class="media-section">
-            <ShowList
-              :shows="
-                talks
-                  .filter((s) => !['News'].includes(s.title) && !s.audiobook)
-                  .slice(0, 12)
-              "
-              type="talks"
-              :key="`tv-shows`"
-              title="YouTube Channels"
-              :showRecommendedMessage="true"
-              :toMore="{ name: 'talks'}"
-            />
-            <div class="text-center mt-1"></div>
-          </div>
-
-          <div
-            v-if="
-              talks && talks.length > 0 && audiobooks && audiobooks.length > 0
-            "
-            class="media-section"
-          >
-            <ShowList
-              :shows="random(audiobooks, 12)"
-              type="talks"
-              :key="`tv-shows`"
-              title="Audiobooks"
-              :toMore="{ name: 'audiobooks' }"
-            />
-          </div>
-
-          <div class="media-sections" v-if="!loading">
-            <div v-if="news && news.length > 0" class="media-section">
-              <h3 class="media-seaction-heading">
-                {{ $t("News") }}
-                <router-link
-                  :to="{
-                    name: 'show',
-                    params: { type: 'talk', id: newsShow.id },
-                  }"
-                  class="show-all"
-                >
-                  {{ $t("More") }}
-                  <i class="fas fa-chevron-right"></i>
-                </router-link>
-              </h3>
-              <LazyYouTubeVideoList
-                :videos="random(news).slice(0, 12)"
-                :showAdminToolsInAdminMode="false"
-                :showDate="true"
-              />
-            </div>
-          </div>
           <client-only>
             <LazyIdenticalLanguages
               class="mt-5 mb-5"
@@ -360,17 +194,7 @@ export default {
     async loadShows() {
       if (this.showsLoaded) return;
       else this.showsLoaded = true;
-      let talks = this.$store.state.shows.talks[this.$l2.code];
-      if (talks) {
-        this.talks = this.sortShows(talks);
-        this.moviesShow = this.$store.getters["shows/news"]({l2: this.$l2}); 
-        if (this.newsShow)
-          this.news = await this.getVideos({
-            limit: 25,
-            talk: this.newsShow.id,
-            sort: "-date",
-          });
-      }
+
       let tvShows = this.$store.state.shows.tvShows[this.$l2.code];
       if (tvShows) {
         this.tvShows = this.sortShows(tvShows);
@@ -387,12 +211,6 @@ export default {
             sort: "-views",
           });
         }
-        if (this.moviesShow)
-          this.movies = await this.getVideos({
-            limit: 25,
-            tvShow: this.moviesShow.id,
-            sort: "-views",
-          });
       }
       this.loading = false;
     },
