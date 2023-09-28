@@ -126,9 +126,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    showLatestIfKeywordMissing: {
-      default: false,
-    },
     showNoVideosMessage: {
       default: false,
     },
@@ -272,7 +269,6 @@ export default {
       return filters;
     },
     async getVideos(start) {
-      if (!this.keyword && !this.showLatestIfKeywordMissing) return [];
       this.noMoreVideos = false;
       let filters = this.getFilters();
       let limit = this.perPage;

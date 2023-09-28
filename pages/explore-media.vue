@@ -131,7 +131,6 @@
             <MediaSearchResults
               v-bind="{
                 perPage: 24,
-                showLatestIfKeywordMissing: true,
                 includeTVShows: false,
                 showNoVideosMessage: true,
                 showSearchBar: false,
