@@ -65,6 +65,10 @@
             />
           </client-only>
 
+          <YouTubeVideoList
+            :videos="recommendedVideos?.[$l2.code]"
+          />
+
           <client-only>
             <LazyIdenticalLanguages
               class="mt-5 mb-5"
@@ -94,28 +98,19 @@ export default {
   data() {
     return {
       videos: undefined,
-      tvShows: undefined,
-      talks: undefined,
-      musicShow: undefined,
-      moviesShow: undefined,
-      newsShow: undefined,
-      music: [],
-      movies: [],
-      news: [],
       loading: true,
       heroVideo: undefined,
       hasWatchHistory: false,
-      showsLoaded: false,
       term: undefined,
       LANGS_WITH_LEVELS,
       all: false, // If false, show users the category selection; if true, show recent videos, tv shows, youtube videos, etc.
     };
   },
   async mounted() {
-    if (this.$store.state.shows.showsLoaded[this.$l2.code]) this.loadShows();
+    if (this.recommendedVideosLoaded[this.$l2.code]) this.loadRecommendedVideos();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type.startsWith("shows")) {
-        this.loadShows();
+      if (mutation.type.startsWith("shows/ADD_RECOMMENDED_VIDEOS")) {
+        this.loadRecommendedVideos();
       }
     });
     this.redirectToContentPreferencesIfMissing();
@@ -131,9 +126,7 @@ export default {
     ...mapState("shows", ["categories"]),
     ...mapState("settings", ["preferredCategories", "settingsLoaded"]),
     ...mapState("progress", ["progress", "progressLoaded"]),
-    audiobooks() {
-      return this.talks.filter((t) => t.audiobook);
-    },
+    ...mapState("shows", ["recommendedVideosLoaded", "recommendedVideos"]),
     levels() {
       let langLevels = languageLevels(this.$l2);
       return [1, 2, 3, 4, 5, 6, 7].map((l) => langLevels[l]);
@@ -169,15 +162,12 @@ export default {
           params: { l1: this.$l1.code, l2: this.$l2.code },
         });
     },
-    onVideosLoaded(videos) {
-      this.videos = videos;
-    },
     onHasWatchHistory() {
       this.hasWatchHistory = true;
     },
     async loadHeroVideo() {
-      if (this.music?.length > 0) {
-        this.heroVideo = randomItemFromArray(this.music);
+      if (this.recommendedVideos?.[this.$l2.code]?.length) {
+        this.heroVideo = randomItemFromArray(this.recommendedVideos?.[this.$l2.code]);
       }
     },
     onVideoUnavailable(youtube_id) {
@@ -191,43 +181,9 @@ export default {
         this.loadHeroVideo();
       }
     },
-    async loadShows() {
-      if (this.showsLoaded) return;
-      else this.showsLoaded = true;
-
-      let tvShows = this.$store.state.shows.tvShows[this.$l2.code];
-      if (tvShows) {
-        this.tvShows = this.sortShows(tvShows);
-        this.musicShow = this.$store.getters["shows/music"]({l2: this.$l2}); 
-        this.moviesShow = this.$store.getters["shows/movies"]({l2: this.$l2}); 
-        if (this.musicShow) {
-          if (this.videos)
-            this.videos = this.videos.filter(
-              (v) => v.tv_show !== this.musicShow.id
-            );
-          this.music = await this.getVideos({
-            limit: 25,
-            tvShow: this.musicShow.id,
-            sort: "-views",
-          });
-        }
-      }
+    async loadRecommendedVideos() {
+      this.loadHeroVideo();
       this.loading = false;
-    },
-    sortShows(shows) {
-      shows = shows
-        .sort((x, y) => y.avg_views - x.avg_views)
-        .sort((x, y) => {
-          x = String(x.level) === this.languageLevel;
-          y = String(y.level) === this.languageLevel;
-          return x === y ? 0 : x ? -1 : 1;
-        })
-        .sort((x, y) => {
-          x = this.preferredCategories.includes(String(x.category));
-          y = this.preferredCategories.includes(String(y.category));
-          return x === y ? 0 : x ? -1 : 1;
-        });
-      return shows;
     },
     /**
      * @param statsKey key in the stats, one of: 'allVideos', 'movies', 'newVideos', 'music', 'news'
@@ -263,38 +219,6 @@ export default {
       );
       let sliced = array.slice(offset, offset + max || 12);
       return sliced;
-    },
-    /**
-     * Retrieve videos from Directus.
-     * @param limit maximum number of videos to retrieve
-     * @param tvShow id of the TV show,
-     * @param talk id of the talk
-     * @param sort how the resort should be sorted
-     */
-    async getVideos({
-      limit = 10,
-      tvShow = undefined,
-      talk = undefined,
-      sort = "-date",
-      offset = 0,
-    }) {
-      let filter = "";
-      if (tvShow) filter = `filter[tv_show][eq]=${tvShow}`;
-      if (talk) filter = `filter[talk][eq]=${talk}`;
-      // First find videos associated with a particular tv show, or talk
-      let fields = "id,title,l2,youtube_id,date,tv_show,talk,channel_id";
-      if (LANGS_WITH_CONTENT.includes(this.$l2.code))
-        fields =
-          fields +
-          ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";
-      let videos = await this.$directus.getVideos({
-        l2Id: this.$l2.id,
-        query: `sort=${sort}&${filter}&limit=${limit}&fields=${fields}&offset=${offset}`,
-      });
-      if (videos?.length > 0) {
-        videos = uniqueByValue(videos, "youtube_id");
-      }
-      return videos;
     },
     randBase64(length) {
       var result = "";

@@ -420,6 +420,8 @@ export default {
     },
     videos: {
       handler(newValue, oldValue) {
+        if (!newValue) return;
+        oldValue = oldValue || [];
         const changed =
           sha256(newValue.map((video) => video.youtube_id).join(",")) !==
           sha256(oldValue.map((video) => video.youtube_id).join(","));

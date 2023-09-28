@@ -9,6 +9,7 @@ export const state = () => {
     recommendedVideos: {},
     stats: {},
     showsLoaded: {},
+    recommendedVideosLoaded: {},
     categories: {},
   };
 };
@@ -55,6 +56,28 @@ export const fetchShows = async ($directus, type, l2, forceRefresh, limit) => {
   return [];
 };
 
+export const fetchRecommendedVideos = async ($directus, l2, forceRefresh, start, limit) => {
+  try {
+    let fields = "fields=id,l2,title,youtube_id,tv_show.*,talk.*,date";
+    if (LANGS_WITH_CONTENT.includes(l2.code))
+      fields =
+        fields +
+        ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";
+    let timestamp = `timestamp=${forceRefresh ? Date.now() : 0}`;
+    let offset = `offset=${start}`;
+    let limitStr = `limit=${limit}`;
+    let sort = "sort=-views";
+    let query = [limitStr, fields, offset, sort, timestamp]
+      .filter((f) => f && f !== "")
+      .join("&");
+    let videos = await $directus.getVideos({ l2Id: l2.id, query });
+    return videos
+  } catch (err) {
+    console.error("Error fetching recommended videos", err);
+  }
+  return [];
+}
+
 
 export const mutations = {
   LOAD_SHOWS(state, { l2, tvShows, talks }) {
@@ -73,6 +96,14 @@ export const mutations = {
     state.showsLoaded[l2.code] = true;
 
     state.categories = categories(l2, state.tvShows, state.talks);
+  },
+  ADD_RECOMMENDED_VIDEOS(state, { l2, videos }) {
+    let existingVideos = state.recommendedVideos[l2.code] || [];
+    state.recommendedVideos[l2.code] = uniqueByValue(
+      [...existingVideos, ...videos],
+      "youtube_id"
+    );
+    state.recommendedVideosLoaded[l2.code] = true;
   },
   ADD_SHOW(state, { l2, type, show }) {
     state[type][l2.code].push(show);
@@ -177,6 +208,7 @@ export const actions = {
     const processedTvShows = processShows(tvShows, minLexDivByLevel);
     
     context.commit("LOAD_SHOWS", { l2, tvShows: processedTvShows, talks: processedTalks });
+    context.commit("ADD_RECOMMENDED_VIDEOS", { l2, videos: await fetchRecommendedVideos(this.$directus, l2, forceRefresh, 0, 96) });
   },
   async add(context, { l2, type, show }) {
     let response = await this.$directus.post(
