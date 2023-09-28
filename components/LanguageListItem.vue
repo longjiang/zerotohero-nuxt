@@ -22,7 +22,7 @@
       </router-link>
       <router-link
         :to="{
-          name: 'explrecommended-video',
+          name: 'recommended-video',
           params: { l1: from || english, l2: language.code },
         }"
         :class="{
