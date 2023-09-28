@@ -32,7 +32,7 @@
                 class="select-ghost-dark"
                 style="width: 7rem"
               >
-                Category
+                {{ $t('Cateogry') }}
               </b-form-select>
             </div>
             <router-link
@@ -48,7 +48,7 @@
               v-if="keyword"
               class="ml-2 btn btn-small btn-ghost-dark"
             >
-              Clear Search
+              {{ $t('Clear Search') }}
             </router-link>
           </div>
         </client-only>
@@ -136,7 +136,10 @@ export default {
       default: false,
     },
     sort: {
-      default: 'views' // or 'recommended', 'date', 'title'
+      default: undefined, // '-views', '-date', 'title', '-date_created'
+    },
+    showPreferredCategoriesFirst: {
+      default: false
     },
     perPage: {
       default: 96
@@ -174,15 +177,6 @@ export default {
     this.$emit("videosLoaded", this.videos);
   },
   watch: {
-    async includeTVShows() {
-      this.videos = await this.getVideos(this.start);
-    },
-    async includeTalks() {
-      this.videos = await this.getVideos(this.start);
-    },
-    async sort() {
-      this.videos = await this.getVideos(this.start);
-    },
     topicData() {
       this.$router.push({
         name: "youtube-browse",
@@ -219,9 +213,7 @@ export default {
         this.loading = false;
       }
     },
-    async getVideos(start) {
-      if (!this.keyword && !this.showLatestIfKeywordMissing) return [];
-      this.noMoreVideos = false;
+    getFilters() {
       let filters = [];
       if (!this.includeTVShows) {
         filters.push("filter[tv_show][null]=1");
@@ -272,6 +264,12 @@ export default {
         filters.push('filter[made_for_kids][eq]=0')
         filters.push('filter[tags][ncontains]=kids')
       }
+      return filters;
+    },
+    async getVideos(start) {
+      if (!this.keyword && !this.showLatestIfKeywordMissing) return [];
+      this.noMoreVideos = false;
+      let filters = this.getFilters();
       let limit = this.perPage;
       filters = filters.join("&");
       let fields = "fields=id,l2,title,youtube_id,tv_show.*,talk.*,date";
@@ -282,57 +280,35 @@ export default {
       let timestamp = `timestamp=${this.$adminMode ? Date.now() : 0}`;
       let offset = `offset=${start}`;
       let limitStr = `limit=${limit}`;
-      let sortOpts = {
-        id: '-id',
-        date: '-date',
-        views: '-views',
-        title: 'title',
-        recommended: '-views'
-      }
-      let sort = `sort=${sortOpts[this.sort]}`
+      let sort = this.sort ? `sort=${this.sort}` : "";
       let query = [filters, limitStr, fields, offset, sort, timestamp]
-        .filter((f) => f !== "")
+        .filter((f) => f && f !== "")
         .join("&");
       let videos = await this.$directus.getVideos({ l2Id: this.$l2.id, query });
-      if (this.sort === 'recommended' && this.preferredCategories?.length > 0) {
-        let recommendedVideos = await this.$directus.getVideos({ l2Id: this.$l2.id, query: query + `&filter[category][in]=${this.preferredCategories.join(',')}` });
-        videos = videos.concat(recommendedVideos)
-      }
+      videos = this.sortVideos(videos);
       if (videos && this.$adminMode) {
         videos = await this.$directus.checkShows(videos, this.$l2.id);
-        for (let video of videos) {
-          try {
-            if (video.subs_l2)
-              video.subs_l2 = this.$subs.parseSavedSubs(video.subs_l2);
-          } catch (err) {}
-        }
       }
-      videos = videos
-          .sort((x, y) => {
-            x = this.preferredCategories.includes(String(x.category));
-            y = this.preferredCategories.includes(String(y.category));
-            return x === y ? 0 : x ? -1 : 1;
-          });
+      if (this.showPreferredCategoriesFirst) {
+        videos = videos.sort((a, b) => {
+          if (this.preferredCategories.includes(a.category)) {
+            return -1;
+          }
+          if (this.preferredCategories.includes(b.category)) {
+            return 1;
+          }
+          return 0;
+        });
+      }
       return videos;
     },
-    async getChannels() {
-      let response = await this.$directus.get(
-        `items/youtube_channels?filter[language][eq]=${this.$l2.id}&fields=*,avatar.*`
-      );
-      if (response.data && response.data.length > 0) {
-        let channels = response.data.data.map((channel) => {
-          return {
-            id: channel.channel_id,
-            avatar:
-              channel.avatar && channel.avatar !== null
-                ? channel.avatar.data.full_url
-                : undefined,
-            title: channel.name,
-            description: channel.description,
-          };
-        });
-        return uniqueByValue(channels, "youtube_id");
+    sortVideos(videos) {
+      if (this.sort === 'recommended') {
+        return videos.sort((a, b) => {
+          return b.views - a.views
+        })
       }
+      return videos
     },
     route() {
       let canonical = `/${this.$l1.code}/${this.$l2.code}/youtube/browse/${this.topic}/${this.level}/${this.start}`;

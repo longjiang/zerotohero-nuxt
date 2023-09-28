@@ -130,7 +130,6 @@
             </h3>
             <MediaSearchResults
               v-bind="{
-                sort: 'recommended',
                 perPage: 24,
                 showLatestIfKeywordMissing: true,
                 includeTVShows: false,
@@ -138,6 +137,8 @@
                 showSearchBar: false,
                 infiniteScroll: false,
                 excludeKids: true,
+                sort: '-views',
+                showPreferredCategoriesFirst: true,
               }"
               @videosLoaded="onVideosLoaded"
               ref="videos"
