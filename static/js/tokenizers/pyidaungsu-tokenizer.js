@@ -1,6 +1,6 @@
 importScripts('../js/tokenizers/base-tokenizer.js')
 
-class BurmeseTokenizer extends BaseTokenizer {
+class PyidaungsuTokenizer extends BaseTokenizer {
   async tokenize(text) {
     text = text.replace(/-/g, "- ");
     let url = `${PYTHON_SERVER}lemmatize-burmese?text=${encodeURIComponent(
