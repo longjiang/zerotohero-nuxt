@@ -12,7 +12,14 @@
         :description="`Learn ${$l2.name} with Videos`"
         :image="'/img/tv-shows.jpg'"
       />
-      <div class="row" v-if="!progressLoaded || !settingsLoaded || !this.recommendedVideosLoaded[this.$l2.code]">
+      <div
+        class="row"
+        v-if="
+          !progressLoaded ||
+          !settingsLoaded ||
+          !this.recommendedVideosLoaded[this.$l2.code]
+        "
+      >
         <div class="col-sm-12">
           <div class="text-center mt-4 mb-4">
             <Loader
@@ -54,7 +61,8 @@ export default {
     };
   },
   async mounted() {
-    if (this.recommendedVideosLoaded[this.$l2.code]) this.loadRecommendedVideos();
+    if (this.recommendedVideosLoaded[this.$l2.code])
+      this.loadRecommendedVideos();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type.startsWith("shows/ADD_RECOMMENDED_VIDEOS")) {
         this.loadRecommendedVideos();
@@ -111,7 +119,7 @@ export default {
     async loadRecommendedVideos() {
       // If the previous history item was a video, redirect to 'explore-meida'
       let previousHistoryItem = this.fullHistory[this.fullHistory.length - 2];
-      if (previousHistoryItem.path.includes(this.$l2.code + '/video-view')) {
+      if (previousHistoryItem?.path.includes(this.$l2.code + "/video-view")) {
         this.$router.push({
           name: "explore-media",
           params: { l1: this.$l1.code, l2: this.$l2.code },
@@ -120,20 +128,23 @@ export default {
       }
       // Otherwise, load the recommended video
       if (this.recommendedVideos?.[this.$l2.code]?.length) {
-        let firstRecommendedVideo = this.recommendedVideos?.[this.$l2.code]?.[0];
-        if (firstRecommendedVideo) 
+        let firstRecommendedVideo =
+          this.recommendedVideos?.[this.$l2.code]?.[0];
+        if (firstRecommendedVideo && typeof firstRecommendedVideo === "object")
           this.$router.push({
             name: "video-view",
-            params: { type: "youtube", youtube_id: firstRecommendedVideo.youtube_id },
-            query: { p: 'recommended' },
+            params: {
+              type: "youtube",
+              youtube_id: firstRecommendedVideo.youtube_id,
+            },
+            query: { p: "recommended" },
           });
-        else {
-          this.$router.push({
-            name: "explore-media",
-            params: { l1: this.$l1.code, l2: this.$l2.code },
-          });
-        }
+          return;
       }
+      this.$router.push({
+        name: "explore-media",
+        params: { l1: this.$l1.code, l2: this.$l2.code },
+      });
       this.loading = false;
     },
     random(array, max) {

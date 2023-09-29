@@ -58,8 +58,20 @@ export const fetchShows = async ($directus, type, l2, forceRefresh, limit) => {
 
 export const fetchRecommendedVideos = async (userId, l2, forceRefresh, start, limit) => {
   try {
-    let videos = await proxy(`${PYTHON_SERVER}recommend-videos?l2=${l2.code}&&limit=${limit}&user_id=${userId}`, { cacheLife: 0 });
-    return videos
+    let parmas = {
+      l2: l2.code,
+      limit,
+      user_id: userId,
+      start,
+    };
+    // unset params with empty values
+    Object.keys(parmas).forEach((key) => parmas[key] === undefined && delete parmas[key]);
+    const queryString = Object.keys(parmas).map((key) => key + '=' + parmas[key]).join('&');
+    let videos = await proxy(`${PYTHON_SERVER}recommend-videos?${queryString}`, { cacheLife: 0 });
+    if (typeof videos !== "string") 
+      return videos
+    else
+      return [];
   } catch (err) {
     console.error("Error fetching recommended videos", err);
   }
