@@ -1,7 +1,7 @@
 importScripts('../js/tokenizers/base-tokenizer.js')
 
 // arabic-tokenizer.js
-class ArabicTokenizer extends BaseTokenizer {
+class QalsadiTokenizer extends BaseTokenizer {
 
   async tokenize(text) {
     text = text.replace(/-/g, "- ");
