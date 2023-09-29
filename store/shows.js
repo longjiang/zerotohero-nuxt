@@ -1,5 +1,5 @@
 import { CATEGORIES } from "@/lib/youtube";
-import { LANGS_WITH_CONTENT, uniqueByValue, unique } from "@/lib/utils";
+import { LANGS_WITH_CONTENT, uniqueByValue, unique, PYTHON_SERVER, proxy } from "@/lib/utils";
 import Vue from "vue";
 
 export const state = () => {
@@ -56,21 +56,9 @@ export const fetchShows = async ($directus, type, l2, forceRefresh, limit) => {
   return [];
 };
 
-export const fetchRecommendedVideos = async ($directus, l2, forceRefresh, start, limit) => {
+export const fetchRecommendedVideos = async (userId, l2, forceRefresh, start, limit) => {
   try {
-    let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date";
-    if (LANGS_WITH_CONTENT.includes(l2.code))
-      fields =
-        fields +
-        ",views,category,locale,duration,made_for_kids,views,likes,comments";
-    let timestamp = `timestamp=${forceRefresh ? Date.now() : 0}`;
-    let offset = `offset=${start}`;
-    let limitStr = `limit=${limit}`;
-    let sort = "sort=-views";
-    let query = [limitStr, fields, offset, sort, timestamp]
-      .filter((f) => f && f !== "")
-      .join("&");
-    let videos = await $directus.getVideos({ l2Id: l2.id, query });
+    let videos = await proxy(`${PYTHON_SERVER}recommend-videos?l2=${l2.code}&&limit=${limit}&user_id=${userId}`, { cacheLife: 0 });
     return videos
   } catch (err) {
     console.error("Error fetching recommended videos", err);
@@ -208,7 +196,9 @@ export const actions = {
     const processedTvShows = processShows(tvShows, minLexDivByLevel);
     
     context.commit("LOAD_SHOWS", { l2, tvShows: processedTvShows, talks: processedTalks });
-    context.commit("ADD_RECOMMENDED_VIDEOS", { l2, videos: await fetchRecommendedVideos(this.$directus, l2, forceRefresh, 0, 500) });
+  },
+  async loadRecommendedVideos(context, { userId, l2, forceRefresh, start = 0, limit = 10 }) {
+    context.commit("ADD_RECOMMENDED_VIDEOS", { l2, videos: await fetchRecommendedVideos(userId, l2, forceRefresh, start, limit) });
   },
   async add(context, { l2, type, show }) {
     let response = await this.$directus.post(

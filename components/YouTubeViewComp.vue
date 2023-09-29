@@ -197,6 +197,14 @@ export default {
   async mounted() {
     this.episodeSort = this.$route.query.sort || "title";
     await this.loadVideo(this.youtube_id, this.directus_id);
+    // If the playlist is 'recommended', and this is near last video in the playlist, we load more recommended videos
+    if (this.playlist?.id === "recommended" && this.itemIndex === this.items.length - 3) {
+      this.$store.dispatch("shows/loadRecommendedVideos", {
+        userId: this.$auth.user?.id,
+        l2: this.$l2,
+        limit: this.items.length + 10,
+      });
+    }
   },
   filters: {
     formatDuration(duration) {

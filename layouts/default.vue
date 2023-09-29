@@ -429,6 +429,11 @@ export default {
           l2: this.$l2,
           forceRefresh: this.$adminMode,
         });
+        this.$store.dispatch("shows/loadRecommendedVideos", {
+          userId: this.$auth.user?.id,
+          l2: this.$l2,
+          adminMode: this.$adminMode,
+        });
       }
       if (!this.phrasebooksLoaded[this.$l2.code]) {
         this.$store.dispatch("phrasebooks/load", {

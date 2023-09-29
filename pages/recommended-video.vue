@@ -120,12 +120,19 @@ export default {
       }
       // Otherwise, load the recommended video
       if (this.recommendedVideos?.[this.$l2.code]?.length) {
-        let randomRecommendedVideo = randomItemFromArray(this.recommendedVideos?.[this.$l2.code]);
-        this.$router.push({
-          name: "video-view",
-          params: { type: "youtube", youtube_id: randomRecommendedVideo.youtube_id },
-          query: { p: 'recommended' },
-        });
+        let firstRecommendedVideo = this.recommendedVideos?.[this.$l2.code]?.[0];
+        if (firstRecommendedVideo) 
+          this.$router.push({
+            name: "video-view",
+            params: { type: "youtube", youtube_id: firstRecommendedVideo.youtube_id },
+            query: { p: 'recommended' },
+          });
+        else {
+          this.$router.push({
+            name: "explore-media",
+            params: { l1: this.$l1.code, l2: this.$l2.code },
+          });
+        }
       }
       this.loading = false;
     },
