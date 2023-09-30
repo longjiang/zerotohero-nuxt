@@ -60,6 +60,7 @@
             episodes,
             episodeSort,
             fullscreen,
+            size,
             initialTime: starttime ? starttime : 0,
             largeEpisodeCount,
             mode,
@@ -1097,7 +1098,7 @@ export default {
 
     :deep(.video-controls) {
       position: absolute;
-      top: 0.7rem;
+      top: 0.25rem;
       left: 9.5rem;
 
       .video-controls-progress,

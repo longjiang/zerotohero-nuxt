@@ -36,17 +36,20 @@
           $t(show ? 'Episodes' : 'More Info') + ' (' + (show ? 'E' : 'I') + ')'
         "
         @click="showInfoModal"
+        v-show="!size === 'mini'"
       />
       <SimpleButton
         v-if="showOpenButton"
         iconClass="fa-solid fa-folder-open"
         :title="$t('Open Another Video...') + ' (O)'"
         @click="open()"
+        v-show="!size === 'mini'"
       />
       <SimpleButton
         iconClass="fa-solid fa-rotate-left"
         :title="$t('Rewind') + ' (R)'"
         @click="rewind()"
+        v-show="!size === 'mini'"
       />
       <SimpleButton
         v-if="episodes"
@@ -60,6 +63,7 @@
         :iconClass="`fas fa-arrow-${(forceMode || mode) === 'transcript' ? 'up' : 'left'}`"
         :title="$t('Previous Line') + ' (←)'"
         @click="goToPreviousLine()"
+        v-show="!size === 'mini'"
       />
       <SimpleButton
         v-if="showPlayPauseButton"
@@ -75,6 +79,7 @@
         :iconClass="`fas fa-arrow-${(forceMode || mode) === 'transcript' ? 'down' : 'right'}`"
         :title="$t('Next Line') + ' (→)'"
         @click="goToNextLine()"
+        v-show="!size === 'mini'"
       />
       <SimpleButton
         v-if="episodes"
@@ -88,12 +93,14 @@
         :iconClass="`fa-solid ${ fullscreen ? 'fa-down-left-and-up-right-to-center' :  'fa-up-right-and-down-left-from-center'}`"
         :title="$t('Fullscreen') + ' (F)'"
         @click="toggleFullscreen()"
+        v-show="!size === 'mini'"
       />
       <SimpleButton
         v-if="showFullscreenModeToggle"
         iconClass="fa-solid fa-cog"
         :title="$t('More Options')"
         @click="showSettingsModal"
+        v-show="!size === 'mini'"
       />
 
       <div
@@ -354,6 +361,10 @@ export default {
     },
     playlist: {
       type: Object,
+    },
+    size: {
+      type: String,
+      default: "regular", // or 'fullscreen' or 'mini'
     },
   },
   data() {
