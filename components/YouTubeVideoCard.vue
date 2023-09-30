@@ -426,7 +426,7 @@ export default {
   },
   methods: {
     async visibilityChanged(visible) {
-      if (visible) {
+      if (visible && !this.$adminMode) {
         let unavailable = await YouTube.videoUnavailable(this.video.youtube_id)
         if (unavailable) {
           this.unavailable = true

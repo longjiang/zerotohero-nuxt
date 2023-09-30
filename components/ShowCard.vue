@@ -1,6 +1,18 @@
 <template>
-  <div class="show-card" :class="{ 'tv-show-card-hidden': show.hidden }">
-    <VideoThumbnailStack :thumbnail="thumbnail" :to="to" :title="show.title" :videos="show.episodes || []">
+  <div
+    class="show-card"
+    :class="{ 'tv-show-card-hidden': show.hidden }"
+    v-observe-visibility="{
+      callback: visibilityChanged,
+      once: true,
+    }"
+  >
+    <VideoThumbnailStack
+      :thumbnail="thumbnail"
+      :to="to"
+      :title="show.title"
+      :videos="show.episodes || []"
+    >
       <template #afterTitle
         ><span
           v-if="show.level"
@@ -53,11 +65,6 @@ import { mapState } from "vuex";
 import Vue from "vue";
 export default {
   async created() {
-    let unavailable = await YouTube.videoUnavailable(this.show.youtube_id)
-    if (unavailable) {
-      this.unavailable = true
-      this.$emit('unavailable', this.show)
-    }
     // If the show has no episodes, load them
     if (!this.show.episodes || !this.show.episodes.length) {
       this.$store.dispatch("shows/getEpisodesFromServer", {
@@ -106,6 +113,15 @@ export default {
     },
   },
   methods: {
+    async visibilityChanged(visible) {
+      if (visible && !this.$adminMode) {
+        let unavailable = await YouTube.videoUnavailable(this.show.youtube_id);
+        if (unavailable) {
+          this.unavailable = true;
+          this.$emit("unavailable", this.show);
+        }
+      }
+    },
     async remove(show) {
       if (
         confirm(
