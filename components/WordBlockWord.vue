@@ -289,6 +289,7 @@ export default {
     .word-block-pinyin {
       position: relative;
       bottom: -0.3em;
+      font-family: AndikaW, Andika, Arial, sans-serif;
     }
 
     /* Hide by default */
