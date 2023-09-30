@@ -6,12 +6,12 @@
     @click="$emit('click')"
     :title="title"
   >
-    <i :class="iconClass" />
+    <i :class="iconClass" /> {{ text }}
   </b-button>
 </template>
 
 <script>
 export default {
-  props: ['iconClass', 'disabled', 'title'],
+  props: ['iconClass', 'disabled', 'title', 'text'],
 };
 </script>

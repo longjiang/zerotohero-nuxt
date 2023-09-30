@@ -29,112 +29,72 @@
       </div>
     </div>
     <div class="video-controls-buttons">
-      <button
+      <SimpleButton
         v-if="showInfoButton"
-        :class="{
-          'btn-video-controls btn-video-controls-info text-center': true,
-        }"
-        @click="showInfoModal"
+        :iconClass="`fa-regular ${show ? 'fa-rectangle-history' : 'fa-solid  fa-circle-info'}`"
         :title="
           $t(show ? 'Episodes' : 'More Info') + ' (' + (show ? 'E' : 'I') + ')'
         "
-      >
-        <i class="fa-regular fa-rectangle-history" v-if="show"></i>
-        <i class="fa-solid fa-circle-info" v-else></i>
-      </button>
-      <button
+        @click="showInfoModal"
+      />
+      <SimpleButton
         v-if="showOpenButton"
-        :class="{
-          'btn-video-controls btn-video-controls-open text-center': true,
-        }"
-        @click="open()"
+        iconClass="fa-solid fa-folder-open"
         :title="$t('Open Another Video...') + ' (O)'"
-      >
-        <i class="fa-solid fa-folder-open"></i>
-      </button>
-      <button
-        :class="{
-          'btn-video-controls btn-video-controls-transcript-mode text-center': true,
-        }"
-        @click="rewind()"
+        @click="open()"
+      />
+      <SimpleButton
+        iconClass="fa-solid fa-rotate-left"
         :title="$t('Rewind') + ' (R)'"
-      >
-        <i class="fa-solid fa-rotate-left"></i>
-      </button>
-      <button
+        @click="rewind()"
+      />
+      <SimpleButton
         v-if="episodes"
-        :disabled="!previousEpisode"
-        class="btn-video-controls btn-video-controls-previous text-center"
-        @click="previous()"
+        iconClass="fas fa-step-backward"
         :title="$t('Previous Video') + ' (⇧ + ←)'"
-      >
-        <i class="fas fa-step-backward"></i>
-      </button>
-      <button
-        class="btn-video-controls btn-video-controls-previous-line text-center"
-        @click="goToPreviousLine()"
+        @click="previous()"
+        :disabled="!previousEpisode"
+      />
+      <SimpleButton
+        v-if="episodes"
+        :iconClass="`fas fa-arrow-${(forceMode || mode) === 'transcript' ? 'up' : 'left'}`"
         :title="$t('Previous Line') + ' (←)'"
-      >
-        <i
-          v-if="(forceMode || mode) === 'transcript'"
-          class="fas fa-arrow-up"
-        ></i>
-        <i v-else class="fas fa-arrow-left"></i>
-      </button>
-      <button
+        @click="goToPreviousLine()"
+      />
+      <SimpleButton
         v-if="showPlayPauseButton"
-        :class="{
-          'btn-video-controls btn-video-controls-play play-pause text-center': true,
-        }"
-        @click="togglePaused()"
+        class="btn-video-controls-play play-pause"
+        :iconClass="`fas fa-${paused ? 'play' : 'pause'} text-success`"
         :title="
           (paused ? $t('Play') : $t('Pause')) + ' (' + $t('SPACE BAR') + ')'
         "
-      >
-        <i v-if="paused" class="fas fa-play text-success"></i>
-        <i v-else class="fas fa-pause text-success"></i>
-      </button>
-      <button
-        class="btn-video-controls btn-video-controls-next-line text-center"
+        @click="togglePaused()"
+      />
+      <SimpleButton
+        v-if="episodes"
+        :iconClass="`fas fa-arrow-${(forceMode || mode) === 'transcript' ? 'down' : 'right'}`"
+        :title="$t('Next Line') + ' (→)'"
         @click="goToNextLine()"
-        :title="$t('Next Line')"
-      >
-        <i
-          v-if="(forceMode || mode) === 'transcript'"
-          class="fas fa-arrow-down"
-        ></i>
-        <i v-else class="fas fa-arrow-right"></i>
-      </button>
-      <button
+      />
+      <SimpleButton
         v-if="episodes"
         :disabled="!nextEpisode"
-        class="btn-video-controls btn-video-controls-next text-center"
-        @click="next()"
+        iconClass="fas fa-step-forward"
         :title="$t('Next Video' + ' (⇧ + →)')"
-      >
-        <i class="fas fa-step-forward"></i>
-      </button>
-      <button
+        @click="next()"
+      />
+      <SimpleButton
         v-if="showFullscreenModeToggle"
-        :class="{
-          'btn-video-controls btn-video-controls-fullscreen-mode text-center': true,
-          'btn-video-controls-active': fullscreen === true,
-        }"
-        @click="toggleFullscreen()"
+        :iconClass="`fa-solid ${ fullscreen ? 'fa-down-left-and-up-right-to-center' :  'fa-up-right-and-down-left-from-center'}`"
         :title="$t('Fullscreen') + ' (F)'"
-      >
-        <i class="fa-solid fa-expand" v-if="!fullscreen"></i>
-        <i class="fa-solid fa-times" v-if="fullscreen"></i>
-      </button>
-      <button
-        :class="{
-          'btn-video-controls btn-video-controls-transcript-mode text-center': true,
-        }"
-        @click="showSettingsModal"
+        @click="toggleFullscreen()"
+      />
+      <SimpleButton
+        v-if="showFullscreenModeToggle"
+        iconClass="fa-solid fa-cog"
         :title="$t('More Options')"
-      >
-        <i class="fa-solid fa-cog"></i>
-      </button>
+        @click="showSettingsModal"
+      />
 
       <div
         v-if="video && showLineList"
@@ -766,24 +726,8 @@ export default {
   max-width: 40rem;
   margin: 0 auto;
   min-height: 3.75rem;
-
-  .btn-video-controls {
-    border: none;
-    padding: 0 0.5rem;
-    background: none;
-    margin: 0 0.2rem;
-
-    &:disabled {
-      color: #cccccc44;
-    }
-
-    &.btn-video-controls-active {
-      color: $primary-color;
-    }
-
-    &.play-pause {
-      font-size: 2.5em;
-    }
+  .play-pause {
+    font-size: 2.5em;
   }
 }
 

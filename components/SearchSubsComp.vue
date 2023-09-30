@@ -12,13 +12,13 @@
         <SimpleButton
           :disabled="hitIndex === 0"
           iconClass="fas fa-step-backward"
-          title="Previous Clip"
+          :title="$t('Previous Clip')"
           @click="goToPrevHit"
         />
         <SimpleButton
           :disabled="hitIndex >= hits.length - 1"
           iconClass="fas fa-step-forward"
-          title="Next Clip"
+          :title="$t('Next Clip')"
           @click="goToNextHit"
         />
 
@@ -26,13 +26,16 @@
         <SimpleButton
           v-if="!showFilter"
           iconClass="fas fa-filter"
-          title="Filter Clips by Keywords"
+          :title="$t('Filter Clips by Keywords')"
           @click="showFilter = true"
         />
+        
+        <!-- Show playlist modal, showing current Hit Index -->
         <SimpleButton
           iconClass="fa-solid fa-list mr-1"
-          title="List All Clips"
+          :title="$t('List All Clips')"
           @click="showPlaylistModal"
+          :text="$t('{num} of {total}', {num: hitIndex + 1, total: hits.length})"
         />
 
         <!-- Search Input -->
@@ -42,12 +45,9 @@
           class="d-inline-block"
           size="sm"
           v-model="regex"
-          placeholder="Filter..."
+          :placeholder="$t('Filter...')"
           @blur="showFilter = false"
         />
-
-        <!-- Current Hit Index -->
-        <span class="ml-2 mr-2"> {{ hitIndex + 1 }} of {{ hits.length }} </span>
 
         <!-- Open Full Video -->
         <router-link
