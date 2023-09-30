@@ -245,8 +245,9 @@ export default {
   computed: {
     // Determines if we can sort by views without too much of a performance hit
     canSortByViews() {
-      return false; // Stilll figuring out how this can be done without SQL filesort which is too slow
-      return !this.talkFilter && !this.tvShowFilter;
+      return true; // It seems like performance is not too bad for most common words in most languages
+      // return false; // Stilll figuring out how this can be done without SQL filesort which is too slow
+      // return !this.talkFilter && !this.tvShowFilter;
     },
     hitIndex() {
       let hits = this.hits;
