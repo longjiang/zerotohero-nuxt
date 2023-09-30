@@ -245,6 +245,7 @@ export default {
   computed: {
     // Determines if we can sort by views without too much of a performance hit
     canSortByViews() {
+      if (this.$l2.continua && !['zh'].includes(this.$l2.code)) return false; // continua script without ngram index, so this filters out japanse and thai among other languages
       return true; // It seems like performance is not too bad for most common words in most languages
       // return false; // Stilll figuring out how this can be done without SQL filesort which is too slow
       // return !this.talkFilter && !this.tvShowFilter;
