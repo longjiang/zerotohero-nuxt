@@ -80,7 +80,7 @@
         v-if="episodes"
         :disabled="!nextEpisode"
         iconClass="fas fa-step-forward"
-        :title="$t('Next Video' + ' (⇧ + →)')"
+        :title="$t('Next Video') + ' (⇧ + →)'"
         @click="next()"
       />
       <SimpleButton

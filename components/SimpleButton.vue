@@ -15,3 +15,9 @@ export default {
   props: ['iconClass', 'disabled', 'title', 'text'],
 };
 </script>
+
+<style scoped lang="scss">
+.btn:disabled {
+  opacity: 0.2;
+}
+</style>
