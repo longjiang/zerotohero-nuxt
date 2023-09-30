@@ -36,7 +36,7 @@
                 hsk,
                 notes,
                 textSize: single ? textSize : 1,
-                parallelLine: matchedParallelLine,
+                parallelLine: matchedParallelLine(index),
                 showParallelLine:
                   $l1.code !== $l2.code &&
                   parallellines &&
@@ -76,7 +76,7 @@
                   $event,
                   line,
                   index + visibleMin,
-                  matchedParallelLine
+                  matchedParallelLine(index)
                 )
               "
             />
@@ -277,15 +277,6 @@ export default {
     pro() {
       return this.forcePro || this.$store.state.subscriptions.active;
     },
-    matchedParallelLine() {
-      return this.matchedParallelLines
-        ? this.matchedParallelLines[
-            this.single
-              ? this.currentLineIndex || 0
-              : this.index + this.visibleMin
-          ]
-        : null;
-    },
   },
   async created() {
     this.lines.map((line) => {
@@ -340,6 +331,15 @@ export default {
     },
   },
   methods: {
+    matchedParallelLine(index) {
+      return this.matchedParallelLines
+        ? this.matchedParallelLines[
+            this.single
+              ? this.currentLineIndex || 0
+              : index + this.visibleMin
+          ]
+        : null;
+    },
     addLineToReview(savedWords, line, lineIndex, parallelLine) {
       if (this.showQuiz) this.$refs.reviewItemCollector?.addLineToReview({
         savedWords,
