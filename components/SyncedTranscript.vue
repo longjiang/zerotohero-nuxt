@@ -9,6 +9,7 @@
   >
     <client-only>
       <ReviewItemCollector
+        v-if="showQuiz"
         ref="reviewItemCollector"
         @showQuiz="pause"
         @hideQuiz="play"
@@ -193,6 +194,9 @@ export default {
     video: {
       type: Object,
     },
+    showQuiz: {
+      default: false,
+    },
   },
   data() {
     return {
@@ -337,7 +341,7 @@ export default {
   },
   methods: {
     addLineToReview(savedWords, line, lineIndex, parallelLine) {
-      this.$refs.reviewItemCollector.addLineToReview({
+      if (this.showQuiz) this.$refs.reviewItemCollector?.addLineToReview({
         savedWords,
         line,
         lineIndex,

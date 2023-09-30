@@ -25,6 +25,7 @@
         related,
         show,
         showInfoButton: true,
+        showQuiz: true,
         showType,
         skin,
         startLineIndex,
