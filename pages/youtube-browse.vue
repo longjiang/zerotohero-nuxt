@@ -161,6 +161,7 @@
         @videosLoaded="onVideosLoaded"
         ref="videos"
         class="mt-3"
+        :key="`${category}-${level}-${keyword}-${start}-${kidsOnly}-${sort}`"
       />
       <client-only>
         <NavPage
@@ -205,8 +206,8 @@ export default {
       sortOptions: [
         { value: "recommended", text: "Sort by Recommended" },
         { value: "id", text: "Sort by Date Added" },
-        { value: "date", text: "Sort by Date Uploaded" },
-        { value: "views", text: "Sort by Views" },
+        { value: "-date", text: "Sort by Date Uploaded" },
+        { value: "-views", text: "Sort by Views" },
         { value: "title", text: "Sort by Title" },
       ],
     };
