@@ -225,7 +225,7 @@
           class="video-info video-info-bottom"
           v-if="(forceMode || mode) === 'transcript' && size !== 'mini'"
         >
-          <div class="text-center mt-2 mb-2" v-if="checkingSubs">
+          <div class="text-center mt-2 mb-2" v-show="checkingSubs">
             <Loader :sticky="true" message="Loading subtitles..." />
           </div>
           <client-only>
