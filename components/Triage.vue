@@ -49,6 +49,11 @@ export default {
     return {
       l1: undefined, // Object
       l2: undefined, // Object
+      popularCodes:
+        "en zh ko it es fr de ja pt ru".split(
+          " "
+        ),
+      bannedCodes: "arb cmn nn nb prs".split(" "), // These languages are equivalent to their parent language (e.g. cmn is equivalent to zh)
     };
   },
   mounted() {},
@@ -61,36 +66,46 @@ export default {
         return langsWithEnDict;
       }
     },
+    allLanguages() {
+      return this.$languages.l1s.filter((language) => {
+        if (this.bannedCodes.includes(language.code)) return false;
+        return this.$languages.commonLangs.includes(language.code);
+      });
+    },
+    popularLanguages() {
+      let popularLanguages = this.popularCodes
+        .map((code) => {
+          return this.allLanguages.find((language) => language.code === code);
+        })
+        .filter((language) => language !== undefined);
+      return popularLanguages || [];
+    },
     l2Options() {
-      let allLanguages = this.$languages.l1s.filter((language) =>
-        this.$languages.commonLangs.includes(language.code)
-      );
-      let commonCodes = "zh en ko it es fr ja de tr da ru fi nl vi pl sv no id yue hi th el ase sk ar"
-          .split(" ")
-      let commonLanguages = commonCodes.map(code => {
-          return allLanguages.find(language => language.code === code);
-        }).filter(language => language !== undefined);
-      let options = allLanguages
+      let allLanguages = this.allLanguages;
+      let popularOptions = this.popularLanguages
+        .map((language) => {
+          let flagEmoji = this.languageCountryFlagEmoji(language);
+          return {
+            value: language,
+            text: `${this.$tb(language.name)} (${language.code}) ${flagEmoji}`,
+          };
+        })
+        .sort((a, b) => a.text.localeCompare(b.text, this.$browserLanguage));
+      let allOptions = allLanguages
         .sort((a, b) => a.name.localeCompare(b.name))
         .map((language) => {
           let flagEmoji = this.languageCountryFlagEmoji(language);
           return {
             value: language,
-            text: (flagEmoji ? flagEmoji + " " : "") + language.name + ' - ' + language.vernacularName + ` (${ language.code })`,
+            text: `${this.$tb(language.name)} (${language.code}) ${flagEmoji}`,
           };
         })
-      let commonOptions = commonLanguages.map((language) => {
-        let flagEmoji = this.languageCountryFlagEmoji(language);
-        return {
-          value: language,
-          text: (flagEmoji ? flagEmoji + " " : "") + this.$tb(language.name) + ` (${ language.code })`,
-        };
-      });
+        .sort((a, b) => a.text.localeCompare(b.text, this.$browserLanguage));
       return [
-        ...commonOptions,
+        ...popularOptions,
         { text: "------------------------" },
         { text: this.$tb("More Languages:") },
-        ...options,
+        ...allOptions,
       ];
     },
     l1Options() {
@@ -99,14 +114,17 @@ export default {
 
       // Filter the supported L1 languages based on whether they are included
       // in the commonLangs list and have a dictionary for the given L2 language
-      let supportedL1s = this.$languages.supportedL1s(l2["iso639-3"])
+      let supportedL1s = this.$languages.supportedL1s(l2["iso639-3"]);
 
       // Map the supported L1 languages to an array of objects with 'value' and 'text' properties
       let options = supportedL1s.map((language) => {
         let flagEmoji = this.languageCountryFlagEmoji(language);
         return {
           value: language,
-          text: (flagEmoji ? flagEmoji + " " : "") + this.$tb(language.name) + ` (${this.$tb(language.code)})`,
+          text:
+            (flagEmoji ? flagEmoji + " " : "") +
+            this.$tb(language.name) +
+            ` (${this.$tb(language.code)})`,
         };
       });
 

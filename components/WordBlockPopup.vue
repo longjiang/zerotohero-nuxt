@@ -345,7 +345,8 @@ export default {
       return text;
     },
     getSupplementalLang(word) {
-      return this.$languages.getSmart(word.supplementalLang).name;
+      const supplementalLang = this.$languages.getSmart(word.supplementalLang)
+      return supplementalLang?.name || word.supplementalLang
     },
     klingonIPA(text) {
       return Klingon.latinToIPA(text);
