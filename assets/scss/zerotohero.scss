@@ -880,6 +880,26 @@ button.bg-primary:focus {
   }
 }
 
+.btn-no-bg {
+  background: none;
+  border: none;
+  &:hover,
+  &:active {
+    background: #80808026;
+  }
+}
+
+.skin-light {
+  .btn-no-bg {
+    color: $text-color-on-light;
+  }
+}
+.skin-dark {
+  .btn-no-bg {
+    color: $text-color-on-dark;
+  }
+}
+
 .btn-medium {
   display: inline-block;
   border: none;

@@ -1,7 +1,8 @@
 <template>
   <b-button
     size="sm"
-    variant="ghost-dark-no-bg"
+    variant="no-bg"
+    :class="`skin-${$skin}`"
     :disabled="disabled"
     @click="$emit('click')"
     :title="title"
@@ -12,12 +13,15 @@
 
 <script>
 export default {
-  props: ['iconClass', 'disabled', 'title', 'text'],
+  props: ["iconClass", "disabled", "title", "text", "skin"],
 };
 </script>
 
 <style scoped lang="scss">
+@import "~@/assets/scss/variables.scss";
+
 .btn:disabled {
   opacity: 0.2;
 }
+
 </style>
