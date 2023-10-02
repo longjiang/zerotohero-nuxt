@@ -21,7 +21,7 @@
       <div
         :class="{
           'video-wrapper col-sm-12 p-0': true,
-          'order-2': aspect === 'landscape' && $l2.direction === 'rtl',
+          'order-2': $l2.direction === 'rtl' && aspect === 'landscape' && size !== 'mini',
         }"
         :key="`video-${type}-${video.youtube_id}`"
       >
