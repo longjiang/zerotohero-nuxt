@@ -28,13 +28,13 @@
                   <b>{{ $t("Glottolog ID:") }}</b>
                   {{ $l2["glottologId"] }}
                 </p>
-                <p v-if="$l2['glottologFamilyId']">
+                <p v-if="$l2['glottologFamilyId']?.length">
                   <b>{{ $t("Glottolog Family ID:") }}</b>
                   {{ $l2["glottologFamilyId"] }}
                 </p>
-                <p v-if="$l2['glottologParentId']">
+                <p v-if="$l2['glottologParentId']?.length">
                   <b>{{ $t("glottologParentId:") }}</b>
-                  {{ $l2["Glottolog Parent ID"] }}
+                  {{ $l2["glottologParentId"] }}
                 </p>
                 <p>
                   <b>{{ $t("Language Player Language ID:") }}</b>
@@ -42,7 +42,10 @@
                 </p>
                 <p v-if="$l2.lat && $l2.long">
                   <b>{{ $t("Location (lat, long):") }}</b>
-                  {{ $l2.lat }}, {{ $l2.long }}
+                  <router-link :to="{
+                    name: 'ling-language-map',
+                    query: { c: `${$l2.lat},${$l2.long}`, z: 7 }
+                  }"> {{ $l2.lat }}, {{ $l2.long }} </router-link>
                 </p>
                 <p v-if="$l2.scope">
                   <b>{{ $t("Language Scope:") }}</b>
@@ -64,11 +67,15 @@
                   <b>{{ $t("Other names:") }}</b>
                   {{ $l2.otherNames.join(",") }}
                 </p>
-                <p v-if="$l2.speakers">
+                <p v-if="$l2.vernacularName">
+                  <b>{{ $t("Vernacular name:") }}</b>
+                  {{ $l2.vernacularName }}
+                </p>
+                <p v-if="$l2.speakers > 0">
                   <b>{{ $t("Number of Speakers:") }}</b>
                   {{
                     $l2.speakers
-                      ? $n($l2.speakers, $l1.code || "en")
+                      ? $l2.speakers.toLocaleString()
                       : $t("Not available")
                   }}
                 </p>
