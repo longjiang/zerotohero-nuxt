@@ -612,8 +612,8 @@ export default {
       if (this.video?.youtube_id) {
         let data = {
           date: DateHelper.unparseDate(new Date()),
-          l2: this.$l2.id,
-          video_id: this.video.id,
+          l2: Number(this.$l2.id),
+          video_id: Number(this.video.id),
           last_position: this.currentTimeEvery10Seconds,
           video: this.video, // This is not saved to the server, but it's used to display the video in the history
         };

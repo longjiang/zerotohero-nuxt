@@ -134,7 +134,9 @@ export const getters = {
     if (state.watchHistory) {
       let hasHistoryItem = false
       hasHistoryItem = state.watchHistory.find(
-        item => item.video_id && item.video_id === historyItem.video_id
+        item => {
+          return item.video_id && item.video_id === historyItem.video_id
+        }
       )
       return hasHistoryItem
     }
