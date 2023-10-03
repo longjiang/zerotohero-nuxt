@@ -181,6 +181,7 @@ export default {
           "subscriptions/checkSubscription",
           this.$auth.user.id
         );
+        this.$store.dispatch("userLikes/fetchUserLikes");
         this.$gtag.event(
           "login",
           this.$auth.user.id

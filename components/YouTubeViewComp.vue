@@ -490,7 +490,12 @@ export default {
               generated,
             });
           }
-          if (subs && subs.length > 0) Vue.set(video, `subs_${l1OrL2}`, subs);
+          if (subs && subs.length > 0)
+            this.$store.commit("shows/MODIFY_ITEM", {
+              item: video,
+              key: `subs_${l1OrL2}`,
+              value: subs,
+            });
           this.$emit(`${l1OrL2}TranscriptLoaded`);
         }
       }

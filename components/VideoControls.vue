@@ -31,7 +31,9 @@
     <div class="video-controls-buttons">
       <SimpleButton
         v-if="showInfoButton"
-        :iconClass="`fa-regular ${show ? 'fa-rectangle-history' : 'fa-solid  fa-circle-info'}`"
+        :iconClass="`fa-regular ${
+          show ? 'fa-rectangle-history' : 'fa-solid  fa-circle-info'
+        }`"
         :title="
           $t(show ? 'Episodes' : 'More Info') + ' (' + (show ? 'E' : 'I') + ')'
         "
@@ -46,10 +48,19 @@
         v-show="size !== 'mini'"
       />
       <SimpleButton
+        v-if="showOpenButton"
         iconClass="fa-solid fa-rotate-left"
         :title="$t('Rewind') + ' (R)'"
         @click="rewind()"
         v-show="size !== 'mini'"
+      />
+      <SimpleButton
+        v-if="!showOpenButton"
+        :iconClass="`fa-${liked ? 'solid' : 'regular'} fa-heart`"
+        :title="$t('Like') + ' (L)'"
+        @click="toggleLike()"
+        v-show="size !== 'mini'"
+        :class="{ 'text-danger': liked }"
       />
       <SimpleButton
         v-if="episodes"
@@ -60,7 +71,9 @@
       />
       <SimpleButton
         v-if="episodes"
-        :iconClass="`fas fa-arrow-${(forceMode || mode) === 'transcript' ? 'up' : 'left'}`"
+        :iconClass="`fas fa-arrow-${
+          (forceMode || mode) === 'transcript' ? 'up' : 'left'
+        }`"
         :title="$t('Previous Line') + ' (←)'"
         @click="goToPreviousLine()"
         v-show="size !== 'mini'"
@@ -76,7 +89,9 @@
       />
       <SimpleButton
         v-if="episodes"
-        :iconClass="`fas fa-arrow-${(forceMode || mode) === 'transcript' ? 'down' : 'right'}`"
+        :iconClass="`fas fa-arrow-${
+          (forceMode || mode) === 'transcript' ? 'down' : 'right'
+        }`"
         :title="$t('Next Line') + ' (→)'"
         @click="goToNextLine()"
         v-show="size !== 'mini'"
@@ -90,7 +105,11 @@
       />
       <SimpleButton
         v-if="showFullscreenModeToggle"
-        :iconClass="`fa-solid ${ fullscreen ? 'fa-down-left-and-up-right-to-center' :  'fa-up-right-and-down-left-from-center'}`"
+        :iconClass="`fa-solid ${
+          fullscreen
+            ? 'fa-down-left-and-up-right-to-center'
+            : 'fa-up-right-and-down-left-from-center'
+        }`"
         :title="$t('Fullscreen') + ' (F)'"
         @click="toggleFullscreen()"
         v-show="size !== 'mini'"
@@ -367,6 +386,7 @@ export default {
       default: "regular", // or 'fullscreen' or 'mini'
     },
   },
+
   data() {
     return {
       showList: false,
@@ -384,10 +404,17 @@ export default {
       progressPercentage: 0,
       transcriptMode: false,
       karaokeAnimation: false,
-      watcherActive: false
+      watcherActive: false,
     };
   },
   computed: {
+    // assume there is a vuex store 'userLikes' with a getter liked(l2Id, videoId) that returns true if the user has liked the video
+    liked() {
+      return this.$store.getters["userLikes/liked"]({
+        l2Id: this.$l2.id,
+        videoId: this.video.id,
+      });
+    },
     episodeIndex() {
       if (this.episodes) {
         return this.episodes.findIndex(
@@ -491,6 +518,21 @@ export default {
     },
   },
   methods: {
+    toggleLike() {
+      // dispatch a 'userLikes/like' action if this.liked is true
+      // dispatch a 'userLikes/unlike' action if this.liked is false
+      if (this.liked) {
+        this.$store.dispatch("userLikes/unlike", {
+          l2Id: this.$l2.id,
+          videoId: this.video.id,
+        });
+      } else {
+        this.$store.dispatch("userLikes/like", {
+          l2Id: this.$l2.id,
+          videoId: this.video.id,
+        });
+      }
+    },
     async loadSettings() {
       this.autoPause = this.$store.state.settings.autoPause;
       this.speed = this.$store.state.settings.speed || 1;
