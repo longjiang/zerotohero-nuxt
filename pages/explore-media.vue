@@ -34,31 +34,11 @@
             playlistId="recommended"
             class="mb-3"
           />
-          <div :class="{ 'media-section': true, 'd-none': !hasWatchHistory }">
-            <h3 class="media-seaction-heading mt-5">
-              {{ $t("Continue Studying") }}
-              <router-link :to="{ name: 'watch-history' }" class="show-all">
-                {{ $t("More") }}
-                <i class="fas fa-chevron-right"></i>
-              </router-link>
-            </h3>
-            <WatchHistoryComp
-              :l2="$l2"
-              ref="watch-history"
-              :class="{ 'mt-3': true, 'd-none': !hasWatchHistory }"
-              :showDate="false"
-              :showClear="false"
-              :limit="4"
-              :showLanguage="false"
-              :showRemove="true"
-              @hasWatchHistory="onHasWatchHistory"
-            />
-          </div>
           <client-only>
             <NavPage
               :l1="$l1"
               :l2="$l2"
-              class="youtube-browse-nav mb-5"
+              class="youtube-browse-nav mb-5 row"
               :showOnly="['Media']"
             />
           </client-only>
@@ -67,6 +47,8 @@
             :videos="recommendedVideos?.[$l2.code]"
             playlistId="recommended"
           />
+
+          <div v-observe-visibility="visibilityChanged"></div>
 
           <client-only>
             <LazyIdenticalLanguages
@@ -145,6 +127,15 @@ export default {
     },
   },
   methods: {
+    visibilityChanged(isVisible, entry) {
+      if (isVisible) {
+        this.$store.dispatch("shows/loadRecommendedVideos", {
+          userId: this.$auth.user?.id,
+          l2: this.$l2,
+          limit: 20,
+        });
+      }
+    },
     redirectToContentPreferencesIfMissing() {
       if (
         LANGS_WITH_LEVELS.includes(this.$l2.code) &&

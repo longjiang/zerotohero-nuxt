@@ -85,10 +85,10 @@ export default {
       query: {
         xs: {
           minWidth: 0,
-          maxWidth: 423,
+          maxWidth: 320,
         },
         sm: {
-          minWidth: 423,
+          minWidth: 320,
           maxWidth: 720,
         },
         md: {
