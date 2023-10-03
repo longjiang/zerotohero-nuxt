@@ -51,7 +51,6 @@
                 :video="Object.assign({}, item.video)"
                 :l2="itemL2"
                 :showProgress="true"
-                :showPlayButton="showPlayButton"
                 :showAdmin="false"
               />
               <button

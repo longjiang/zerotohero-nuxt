@@ -203,7 +203,6 @@
             :showBadges="showBadges"
             :showDate="showDate"
             :showProgress="showProgress"
-            :showPlayButton="showPlayButton"
             :showLanguage="multilingual"
             :playlistId="playlistId"
             :sort="sort"
@@ -277,9 +276,6 @@ export default {
       default: null,
     },
     showProgress: {
-      default: false,
-    },
-    showPlayButton: {
       default: false,
     },
     showAdminToolsInAdminMode: {

@@ -78,7 +78,6 @@
             :checkSubs="false"
             :checkSaved="false"
             :showProgress="true"
-            :showPlayButton="false"
             :showDate="true"
           />
         </template>

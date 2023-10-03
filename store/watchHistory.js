@@ -63,9 +63,7 @@ export const actions = {
           let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments";
           let filter = `filter[id][in]=${watchHistoryItems.map(item => item.video_id).join(',')}`
           let query = `${fields}&${filter}`
-          console.log('query', query)
           let videos = await this.$directus.getVideos({ l2Id, query })
-          console.log('videos', videos)
           watchHistoryItems.forEach(item => {
             let video = videos.find(video => video.id === item.video_id)
             if (video) {

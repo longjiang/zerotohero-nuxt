@@ -49,9 +49,6 @@
     >
       <div class="youtube-thumbnail-wrapper aspect-wrapper d-block">
         <router-link :to="to">
-          <button class="btn btn-unstyled play-button" v-if="showPlayButton">
-            <i class="fa fa-play"></i>
-          </button>
           <client-only>
             <b-progress
               class="youtube-video-card-progress"
@@ -263,7 +260,7 @@ import languageEncoding from "detect-file-encoding-and-language";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import { mapState } from "vuex";
-import { parseDuration, timeout, logError, level, TOPICS } from "@/lib/utils";
+import { parseDuration, convertDurationToSeconds, timeout, logError, level, TOPICS } from "@/lib/utils";
 
 export default {
   components: {
@@ -304,9 +301,6 @@ export default {
     showProgress: {
       default: false,
     },
-    showPlayButton: {
-      default: false,
-    },
     skin: {
       default: null,
     },
@@ -336,7 +330,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("history", ["history"]),
+    ...mapState("watchHistory", ["watchHistory"]),
     ...mapState("settings", ["l2Settings"]),
     language() {
       let language = this.$languages.l1s.find((l1) => l1.id === this.video.l2);
@@ -377,16 +371,13 @@ export default {
       }
       return to;
     },
-    historyId() {
-      return `${this.$l2.code}-video-${this.video.youtube_id}`;
-    },
     historyItem() {
-      if (this.history)
-        return this.history.find((i) => i.id === this.historyId);
+      if (this.watchHistory)
+        return this.watchHistory.find((i) => i.video_id === this.video.id);
     },
     progress() {
       if (this.showProgress && this.historyItem) {
-        return this.historyItem.video.progress;
+        return this.historyItem.last_position / convertDurationToSeconds(this.video.duration);
       }
     },
     thumbnail() {

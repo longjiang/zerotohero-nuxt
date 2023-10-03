@@ -158,7 +158,6 @@
                   :showBadges="false"
                   :showDate="showDate"
                   :showProgress="true"
-                  :showPlayButton="false"
                   :initialSort="sort"
                 />
                 <div v-observe-visibility="visibilityChanged"></div>

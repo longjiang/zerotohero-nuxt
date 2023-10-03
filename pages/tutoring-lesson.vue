@@ -81,10 +81,9 @@
               <h4>Watch and Learn</h4>
               <p>Watch any one of the videos and study the subtitles:</p>
               <LazyYouTubeVideoList v-if="lesson.youtubeVideos.length > 0" :videos="lesson.youtubeVideos"
-                :showProgress="true" :showPlayButton="true" />
+                :showProgress="true" />
               <LazyYouTubeSearchResults v-if="lesson.youtubeVideos.length === 0" :term="`${$l2.name} ${lesson.name}`"
-                :start="0" :hideVideosWithoutSubs="true" :showPaginator="false" :showProgress="true"
-                :showPlayButton="true" :showBadges="true" />
+                :start="0" :hideVideosWithoutSubs="true" :showPaginator="false" :showProgress="true" />
             </div>
             <div class="lesson-section">
               <h4>Read Together</h4>

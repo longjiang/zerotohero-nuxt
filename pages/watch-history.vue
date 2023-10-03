@@ -16,7 +16,6 @@
             class="mt-3"
             :l2="$l2"
             :limit="50"
-            :showPlayButton="false"
             :showLanguage="false"
           />
         </div>
