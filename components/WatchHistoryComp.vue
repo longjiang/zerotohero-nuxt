@@ -192,7 +192,7 @@ export default {
     },
     clearHistoryWithConfirmation() {
       if (confirm('Are you sure you want to clear history?')) {
-        this.$store.dispatch('history/removeAll');
+        this.$store.dispatch('watchHistory/removeAll');
       }
     },
   },

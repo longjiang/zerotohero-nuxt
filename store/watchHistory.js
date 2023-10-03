@@ -107,14 +107,14 @@ export const actions = {
     }    
   },
   // Remove a history item from the Vuex state and sync it to the backend.
-  async remove({ commit, dispatch }, historyItem) {
+  async remove({ commit }, historyItem) {
     // Remove the history item from the Directus server
     let path = `items/user_watch_history/${historyItem.id}`
     await this.$directus.delete(path)
     commit('REMOVE_HISTORY_ITEM', historyItem)
   },
   // Remove all history items from the Vuex state and sync it to the backend.
-  async removeAll({ commit, dispatch }) {
+  async removeAll({ state, dispatch }) {
     // Using the remove action, remove all history items one by one, from the last to the first.
     let historyItems = state.watchHistory
     for (let i = historyItems.length - 1; i >= 0; i--) {
