@@ -94,7 +94,7 @@ export const actions = {
       // Add the history item to the Directus server
       let path = 'items/user_watch_history'
       // Do not save the `video` property to the server. We clone it and delte it from the clone.
-      payload = { ...historyItem }
+      let payload = { ...historyItem }
       delete payload.video
       let response = await this.$directus.post(path, payload)
       if (response.status !== 200) {
