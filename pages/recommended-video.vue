@@ -118,20 +118,20 @@ export default {
     },
     async loadRecommendedVideos() {
       // If the previous history item was a video, redirect to 'explore-meida'
-      let previousHistoryItem = this.fullHistory[this.fullHistory.length - 2];
-      if (previousHistoryItem?.path.includes(this.$l2.code + "/video-view")) {
-        this.$router.push({
-          name: "explore-media",
-          params: { l1: this.$l1.code, l2: this.$l2.code },
-        });
-        return;
-      }
+      // let previousHistoryItem = this.fullHistory[this.fullHistory.length - 2];
+      // if (previousHistoryItem?.path.includes(this.$l2.code + "/video-view")) {
+      //   this.$router.push({
+      //     name: "explore-media",
+      //     params: { l1: this.$l1.code, l2: this.$l2.code },
+      //   });
+      //   return;
+      // }
       // Otherwise, load the recommended video
       if (this.recommendedVideos?.[this.$l2.code]?.length) {
         let firstRecommendedVideo =
           this.recommendedVideos?.[this.$l2.code]?.[0];
         if (firstRecommendedVideo && typeof firstRecommendedVideo === "object")
-          this.$router.push({
+          this.$router.replace({
             name: "video-view",
             params: {
               type: "youtube",
@@ -141,7 +141,7 @@ export default {
           });
           return;
       }
-      this.$router.push({
+      this.$router.replace({
         name: "explore-media",
         params: { l1: this.$l1.code, l2: this.$l2.code },
       });

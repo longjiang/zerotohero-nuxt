@@ -56,13 +56,14 @@ export const fetchShows = async ($directus, type, l2, forceRefresh, limit) => {
   return [];
 };
 
-export const fetchRecommendedVideos = async (userId, l2, forceRefresh, start, limit) => {
+export const fetchRecommendedVideos = async (userId, l2, forceRefresh, start, limit, excludeIds) => {
   try {
     let parmas = {
       l2: l2.code,
       limit,
       user_id: userId,
       start,
+      exclude_ids: excludeIds?.join(","),
     };
     // unset params with empty values
     Object.keys(parmas).forEach((key) => parmas[key] === undefined && delete parmas[key]);
@@ -209,8 +210,12 @@ export const actions = {
     
     context.commit("LOAD_SHOWS", { l2, tvShows: processedTvShows, talks: processedTalks });
   },
-  async loadRecommendedVideos(context, { userId, l2, forceRefresh, start = 0, limit = 10 }) {
-    context.commit("ADD_RECOMMENDED_VIDEOS", { l2, videos: await fetchRecommendedVideos(userId, l2, forceRefresh, start, limit) });
+  async loadRecommendedVideos({state, commit}, { userId, l2, forceRefresh, start = 0, limit = 48 }) {
+    console.log({limit})
+    // Do not load those videos that are already loaded
+    const excludeIds = state.recommendedVideos[l2.code] ? state.recommendedVideos[l2.code].map((v) => v.id) : [];
+    let videos = await fetchRecommendedVideos(userId, l2, forceRefresh, start, limit, excludeIds);
+    commit("ADD_RECOMMENDED_VIDEOS", { l2, videos });
   },
   async add(context, { l2, type, show }) {
     let response = await this.$directus.post(

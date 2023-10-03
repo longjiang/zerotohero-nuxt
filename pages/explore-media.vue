@@ -48,7 +48,16 @@
             playlistId="recommended"
           />
 
-          <div v-observe-visibility="visibilityChanged"></div>
+          <div v-observe-visibility="visibilityChanged" class="text-center">
+            <Loader
+              key="rec-loader"
+              :sticky="true"
+              :message="
+                $t('Loading more video recommendations...')
+              "
+              class="text-white"
+            />
+          </div>
 
           <client-only>
             <LazyIdenticalLanguages
@@ -132,7 +141,6 @@ export default {
         this.$store.dispatch("shows/loadRecommendedVideos", {
           userId: this.$auth.user?.id,
           l2: this.$l2,
-          limit: 20,
         });
       }
     },

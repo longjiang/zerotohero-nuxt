@@ -204,7 +204,6 @@ export default {
       this.$store.dispatch("shows/loadRecommendedVideos", {
         userId: this.$auth.user?.id,
         l2: this.$l2,
-        limit: this.items.length + 10,
       });
     }
   },
