@@ -337,7 +337,7 @@ export default {
           this.$l2.id
         )}?sort=-id&limit=${limit}&offset=${start}&filter[l2][eq]=${
           this.$l2.id
-        }${showFilter}&fields=*,tv_show.*,talk.*`
+        }${showFilter}&fields=*,tv_show,talk`
       );
       let videos = response.data.data || [];
       if (["all-tv-shows", "all-videos"].includes(show)) {

@@ -611,6 +611,7 @@ export default {
           l2: this.$l2.id,
           video_id: this.video.id,
           last_position: this.currentTimeEvery10Seconds,
+          video: this.video, // This is not saved to the server, but it's used to display the video in the history
         };
         await this.$store.dispatch("watchHistory/addOrUpdate", data);
         console.log(`Video View: YouTube video saved to watch history.`);

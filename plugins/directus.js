@@ -292,7 +292,7 @@ export default ({ app }, inject) => {
       if (video.talk) data.talk = video.talk.id;
       try {
         let response = await this.post(
-          `${this.youtubeVideosTableName(l2.id)}?fields=id,tv_show.*,talk.*`,
+          `${this.youtubeVideosTableName(l2.id)}?fields=id,tv_show,talk`,
           data
         );
         response = response.data;

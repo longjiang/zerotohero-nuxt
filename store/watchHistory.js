@@ -1,4 +1,4 @@
-import { logError, uniqueByValue } from '@/lib/helper'
+import { logError } from '@/lib/helper'
 
 export const state = () => {
   return {
@@ -12,16 +12,18 @@ export const state = () => {
      * @property {number} date - Timestamp. This indicates when the user viewed the video. You can use this to show the user's most recently watched videos.
      * @property {number} last_position - Integer. This represents the timestamp (in seconds) where the user last stopped/paused the video. This can be useful if you want to allow users to continue watching from where they left off.
      */
-    watchHistory: [], // Array of historyItem objects
-    watchHistoryLoaded: false
+    l2Id: null, // The internal language ID of the current language
+    watchHistory: [], // Array of historyItem objects for the current language
+    watchHistoryLoaded: false // Whether the user's history has been loaded from the server for the current language
   }
 }
 export const mutations = {
   // Load the user's history from Directus and store it in the Vuex state.
-  LOAD_WATCH_HISTORY(state, watchHistoryItems) {
+  LOAD_WATCH_HISTORY(state, { l2Id, watchHistoryItems }) {
     // Load the user's history from the Directus server
-    state.watchHistoryItems = watchHistoryItems
+    state.watchHistory = watchHistoryItems
     state.watchHistoryLoaded = true
+    state.l2Id = l2Id
   },
   // Add a new history item to the user's history.
   ADD_HISTORY_ITEM(state, historyItem) {
@@ -45,20 +47,32 @@ export const mutations = {
 }
 export const actions = {
   // Load the user's history if it hasn't been loaded yet.
-  async load({ commit, rootState }) {
+  async load({ commit, rootState }, l2Id) {
     if (!state.watchHistoryLoaded) {
       if (!$nuxt.$auth.loggedIn) return
       let user = rootState.auth.user
       let token = $nuxt.$auth.strategy.token.get()
       if (user && user.id && token) {
         let path = 'items/user_watch_history'
-        const response = await this.$directus.get(path, { 'filter[owner][eq]': user.id })
+        let response = await this.$directus.get(path, { 'filter[owner][eq]': user.id, 'filter[l2][eq]': l2Id })
         if (response.status !== 200) {
           logError('Error loading watch history from the server', response)
           return
         } else {
-          const watchHistoryItems = response.data || []
-          commit('LOAD_WATCH_HISTORY', watchHistoryItems)
+          const watchHistoryItems = response.data?.data || []
+          let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments";
+          let filter = `filter[id][in]=${watchHistoryItems.map(item => item.video_id).join(',')}`
+          let query = `${fields}&${filter}`
+          console.log('query', query)
+          let videos = await this.$directus.getVideos({ l2Id, query })
+          console.log('videos', videos)
+          watchHistoryItems.forEach(item => {
+            let video = videos.find(video => video.id === item.video_id)
+            if (video) {
+              item.video = video
+            }
+          })
+          commit('LOAD_WATCH_HISTORY', { watchHistoryItems, l2Id })
         }
       }
     }
@@ -66,7 +80,7 @@ export const actions = {
   // Add a history item to the Vuex state and sync it to the backend.
   async addOrUpdate({ state, commit, dispatch, getters }, historyItem) {
     if (!state.watchHistoryLoaded) {
-      dispatch('load')
+      dispatch('load', historyItem.l2)
     }
     // First, check if this history item already exists in the user's history. If so, update it; otherwise, add it.
     let hasHistoryItem = getters.has(historyItem)
@@ -74,12 +88,17 @@ export const actions = {
       // Update the history item in the Directus server
       let path = `items/user_watch_history/${hasHistoryItem.id}`
       let mergedHistoryItem = { ...hasHistoryItem, ...historyItem }
+      // Do not save the `video` property to the server
+      delete mergedHistoryItem.video
       await this.$directus.patch(path, mergedHistoryItem)
       commit('UPDATE_HISTORY_ITEM', mergedHistoryItem)
     } else {
       // Add the history item to the Directus server
       let path = 'items/user_watch_history'
-      let response = await this.$directus.post(path, historyItem)
+      // Do not save the `video` property to the server. We clone it and delte it from the clone.
+      payload = { ...historyItem }
+      delete payload.video
+      let response = await this.$directus.post(path, payload)
       if (response.status !== 200) {
         logError('Error adding watch history item to the server', response)
         return

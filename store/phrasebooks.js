@@ -44,7 +44,7 @@ export const actions = {
   async load(context, { l2, adminMode }) {
     let response = await this.$directus.get(
       `items/phrasebook?sort=title&filter[l2][eq]=${l2.id
-      }&fields=id,description,exact,title,l2,tv_show.*&limit=500&timestamp=${adminMode ? Date.now() : 0}`
+      }&fields=id,description,exact,title,l2,tv_show&limit=500&timestamp=${adminMode ? Date.now() : 0}`
     );
     let phrasebooks =
       response.data.data
@@ -54,7 +54,7 @@ export const actions = {
     context.commit('LOAD_PHRASEBOOKS', { l2, phrasebooks })
   },
   async loadPhrases(context, { l2, bookId, adminMode }) {
-    let path = `items/phrasebook/${bookId}?fields=*,tv_show.*&timestamp=${adminMode ? Date.now() : 0}`;
+    let path = `items/phrasebook/${bookId}?fields=*,tv_show&timestamp=${adminMode ? Date.now() : 0}`;
     let response = await this.$directus.get(path);
     if (response.data && response.data.data) {
       let phrasebook = response.data.data;

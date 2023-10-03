@@ -289,7 +289,7 @@ export default {
         // [contains] filter seems to be case INSENSITIVE
         let path = `items/phrasebook?sort=title&filter[phrases][contains]=${encodeURIComponent(
           term
-        )}&fields=*,tv_show.*&limit=500&timestamp=${
+        )}&fields=*,tv_show&limit=500&timestamp=${
           this.$adminMode ? Date.now() : 0
         }`;
         let res = await this.$directus.get(path);

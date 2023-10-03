@@ -377,6 +377,9 @@ export default {
       }
     },
     async onLanguageChange() {
+      await this.$store.dispatch(
+        "watchHistory/load", this.$l2.id
+      );
       let youtube = this.$refs["video-view-comp"];
       if (
         youtube &&

@@ -51,8 +51,6 @@
               :limit="4"
               :showLanguage="false"
               :showRemove="true"
-              :showPlayButton="false"
-              :includePhrasebooks="false"
               @hasWatchHistory="onHasWatchHistory"
             />
           </div>

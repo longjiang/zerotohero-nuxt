@@ -543,7 +543,7 @@ export default {
       let chunks = arrayChunk(youtube_ids, 50);
       for (let youtube_ids of chunks) {
         let filter = `filter[youtube_id][in]=${youtube_ids}`;
-        let fields = `fields=id,title,channel_id,youtube_id,tv_show.*,talk.*`;
+        let fields = `fields=id,title,channel_id,youtube_id,tv_show,talk`;
         if (this.showSubsEditing) fields += ",subs_l2";
         let timestamp = `timestamp=${this.$adminMode ? Date.now() : 0}`;
         let query = [filter, fields, timestamp].join("&");

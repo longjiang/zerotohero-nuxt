@@ -1,11 +1,12 @@
 <template>
   <container-query :query="query" v-model="params">
+    
     <div :class="`watch-history watch-history-${skin}`">
       <div class="history-items" v-if="itemsFiltered.length > 0">
         <div class="row" v-if="showClear">
           <div
             class="col-12 text-right"
-            v-if="videosFiltered && videosFiltered.length > 0"
+            v-if="itemsFiltered && itemsFiltered.length > 0"
           >
             <button
               :class="`btn text-danger bg-none btn-md p-0 ${
@@ -46,20 +47,11 @@
                 {{ $t(itemL2.name) }}
               </div>
               <LazyYouTubeVideoCard
-                v-if="itemL1 && itemL2 && item.type === 'video'"
                 :skin="skin === 'dark' ? 'dark' : 'card'"
                 :video="Object.assign({}, item.video)"
                 :l2="itemL2"
                 :showProgress="true"
                 :showPlayButton="showPlayButton"
-                :showAdmin="false"
-              />
-              <LazyPhrasebookCard
-                v-if="itemL1 && itemL2 && item.type === 'phrasebook'"
-                skin="light"
-                size="lg"
-                :l2="itemL2"
-                :phrasebook="Object.assign({}, item.phrasebook)"
                 :showAdmin="false"
               />
               <button
@@ -128,14 +120,6 @@ export default {
       type: Boolean,
       default: true,
     },
-    showPlayButton: {
-      type: Boolean,
-      default: true,
-    },
-    includePhrasebooks: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -167,7 +151,7 @@ export default {
     this.emitHasWatchHistory();
   },
   computed: {
-    ...mapState("history", ["history"]),
+    ...mapState("watchHistory", ["watchHistory"]),
     groups() {
       let history = this.itemsFiltered
         .sort((a, b) => b.date.localeCompare(a.date))
@@ -189,30 +173,10 @@ export default {
       return groups
     },
     itemsFiltered() {
-      if (typeof this.history !== "undefined") {
-        return this.history.filter((i) => {
-          if (this.l2 && i.l2 !== this.l2.code) return false;
-          if (i.type === "video") return typeof i.video !== "undefined" && i.video.youtube_id;
-          if (i.type === "phrasebook")
-            return (
-              this.includePhrasebooks && typeof i.phrasebook !== "undefined" && i.phrasebook.id !== "saved"
-            );
-        });
-      }
-    },
-    videosFiltered() {
-      if (typeof this.history !== "undefined") {
-        return this.history.filter((i) => {
-          if (this.l2 && i.l2 !== this.l2.code) return false;
-          return i.type === "video" && i.video;
-        });
-      }
-    },
-    phrasebooksFiltered() {
-      if (typeof this.history !== "undefined") {
-        return this.history.filter((i) => {
-          if (this.l2 && i.l2 !== this.l2.code) return false;
-          return i.type === "phrasebook" && i.phrasebook;
+      if (typeof this.watchHistory !== "undefined") {
+        return this.watchHistory.filter((i) => {
+          if (this.l2 && i.l2 !== this.l2.id) return false;
+          return i.video_id
         });
       }
     },
@@ -242,8 +206,7 @@ export default {
     background: rgba(37, 36, 44, 0.651);
   }
 }
-:deep(.youtube-title),
-:deep(.phrasebook-title) {
+:deep(.youtube-title) {
   font-size: 1rem;
   line-height: 1.33rem !important;
 }
