@@ -1,4 +1,5 @@
 import { logError } from '@/lib/helper';
+import Vue from 'vue';
 
 export const state = () => ({
   userLikes: []
@@ -10,6 +11,9 @@ export const mutations = {
   },
   ADD_LIKE(state, like) {
     state.userLikes.push(like);
+  },
+  ADD_VIDEO_DETAILS(state, { userLike, video }) {
+    Vue.set( userLike, 'video', video )
   },
   REMOVE_LIKE(state, likeId) {
     state.userLikes = state.userLikes.filter(like => like.id !== likeId);
@@ -108,6 +112,19 @@ export const actions = {
         console.log(`User Likes: Unliked video ${videoId} and L2 ${l2Id}`);
       }
     }
+  },
+
+  async fetchVideoDetails({ commit, state }, { l2Id, videoId }) {
+    // Find the userLike item for this video in the state
+    let userLike = state.userLikes.find(like => like.video_id === videoId && like.l2 === l2Id)
+    if (userLike && ! userLike.video) {
+      let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments";
+      let filter = `filter[id][eq]=${videoId}`
+      let query = `${fields}&${filter}`
+      
+      let videos = await this.$directus.getVideos({ l2Id, query })
+      commit('ADD_VIDEO_DETAILS', { userLike, video: videos[0] })
+    }
   }
 }
 
@@ -117,5 +134,8 @@ export const getters = {
     return state.userLikes?.some(like => 
       like.l2 === l2Id && like.video_id === videoId
     );
+  },
+  likedVideos: (state) => (l2Id) => {
+    return state.userLikes?.filter(like => like.l2 === l2Id);
   }
 }
