@@ -14,6 +14,7 @@ export const state = () => {
      */
     l2Id: null, // The internal language ID of the current language
     watchHistory: [], // Array of historyItem objects for the current language
+    watchHistoryLoading: false, // Whether the user's history is currently being loaded from the server
     watchHistoryLoadedForL2Id: false // Whether the user's history has been loaded from the server for the current language
   }
 }
@@ -48,8 +49,9 @@ export const mutations = {
 export const actions = {
   // Load the user's history if it hasn't been loaded yet.
   async load({ commit, rootState }, l2Id) {
-    if (state.watchHistoryLoadedForL2Id !== l2Id) {
+    if (state.watchHistoryLoadedForL2Id !== l2Id && !state.watchHistoryLoading) {
       if (!$nuxt.$auth.loggedIn) return
+      state.watchHistoryLoading = true
       let user = rootState.auth.user
       let token = $nuxt.$auth.strategy.token.get()
       if (user && user.id && token) {
@@ -71,14 +73,16 @@ export const actions = {
             }
           })
           commit('LOAD_WATCH_HISTORY', { watchHistoryItems, l2Id })
+          console.log(`Watch History: ${watchHistoryItems.length} items loaded for L2 ${l2Id}`)
         }
       }
+      state.watchHistoryLoading = false
     }
   },
   // Add a history item to the Vuex state and sync it to the backend.
   async addOrUpdate({ state, commit, dispatch, getters }, historyItem) {
-    if (!state.watchHistoryLoadedForL2Id === historyItem.l2) {
-      dispatch('load', historyItem.l2)
+    if (state.watchHistoryLoadedForL2Id !== historyItem.l2) {
+      await dispatch('load', historyItem.l2)
     }
     // First, check if this history item already exists in the user's history. If so, update it; otherwise, add it.
     let hasHistoryItem = getters.has(historyItem)
