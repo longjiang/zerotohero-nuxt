@@ -14,7 +14,7 @@ export const state = () => {
      */
     l2Id: null, // The internal language ID of the current language
     watchHistory: [], // Array of historyItem objects for the current language
-    watchHistoryLoaded: false // Whether the user's history has been loaded from the server for the current language
+    watchHistoryLoadedForL2Id: false // Whether the user's history has been loaded from the server for the current language
   }
 }
 export const mutations = {
@@ -22,7 +22,7 @@ export const mutations = {
   LOAD_WATCH_HISTORY(state, { l2Id, watchHistoryItems }) {
     // Load the user's history from the Directus server
     state.watchHistory = watchHistoryItems
-    state.watchHistoryLoaded = true
+    state.watchHistoryLoadedForL2Id = l2Id
     state.l2Id = l2Id
   },
   // Add a new history item to the user's history.
@@ -48,7 +48,7 @@ export const mutations = {
 export const actions = {
   // Load the user's history if it hasn't been loaded yet.
   async load({ commit, rootState }, l2Id) {
-    if (!state.watchHistoryLoaded) {
+    if (state.watchHistoryLoadedForL2Id !== l2Id) {
       if (!$nuxt.$auth.loggedIn) return
       let user = rootState.auth.user
       let token = $nuxt.$auth.strategy.token.get()
@@ -77,7 +77,7 @@ export const actions = {
   },
   // Add a history item to the Vuex state and sync it to the backend.
   async addOrUpdate({ state, commit, dispatch, getters }, historyItem) {
-    if (!state.watchHistoryLoaded) {
+    if (!state.watchHistoryLoadedForL2Id === historyItem.l2) {
       dispatch('load', historyItem.l2)
     }
     // First, check if this history item already exists in the user's history. If so, update it; otherwise, add it.
@@ -90,6 +90,7 @@ export const actions = {
       delete mergedHistoryItem.video
       await this.$directus.patch(path, mergedHistoryItem)
       commit('UPDATE_HISTORY_ITEM', historyItem)
+      console.log(`Watch History: YouTube video ${historyItem.video_id} updated with new position ${historyItem.last_position}`)
     } else {
       // Add the history item to the Directus server
       let path = 'items/user_watch_history'
@@ -103,6 +104,7 @@ export const actions = {
       } else {
         historyItem.id = response.data.data.id
       }
+      console.log(`Watch History: YouTube video ${historyItem.video_id} added with position ${historyItem.last_position}`)
       commit('ADD_HISTORY_ITEM', historyItem)
     }    
   },
