@@ -102,7 +102,7 @@ export const actions = {
       let payload = { ...historyItem }
       delete payload.video
       let response = await this.$directus.post(path, payload)
-      if (response.status !== 200) {
+      if (response?.status !== 200) {
         logError('Error adding watch history item to the server', response)
         return
       } else {
