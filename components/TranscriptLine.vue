@@ -75,6 +75,7 @@
         >
           <beat-loader v-if="translationLoading" class="d-inline-block" color="#28a745" size="5px"></beat-loader>
           <span
+            class="limit-to-three-lines"
             v-else-if="(showParallelLine && line.line.length > 0 && parallelLine) || translation"
             :data-line-index="lineIndex"
             v-html="translation || parallelLine"
@@ -461,5 +462,16 @@ export default {
 .transcript-line-edit-time {
   font-size: 0.5em;
   color: #ccc
+}
+
+.limit-to-three-lines {
+    display: -webkit-box;  /* Converts the span to a block-level container */
+    -webkit-line-clamp: 3;  /* Limits to 3 lines */
+    -webkit-box-orient: vertical;  /* Sets the direction of children inline boxes */
+    overflow: hidden;  /* Hides the overflow */
+    text-overflow: ellipsis;  /* Adds the ellipsis at the end */
+    max-width: 100%;  /* Or any other width */
+    line-height: 1.5em;  /* This will depend on your font size */
+    max-height: 4.5em;  /* line-height multiplied by the number of lines you want to display. This is 20*3 in our case */
 }
 </style>
