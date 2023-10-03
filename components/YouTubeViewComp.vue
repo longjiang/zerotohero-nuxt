@@ -607,27 +607,16 @@ export default {
         }
       }
     },
-    saveHistory({ type, video, duration }) {
+    saveHistory({ type, video }) {
       if (this.size === "mini") return;
       if (type === "youtube" && video && video.youtube_id) {
         let data = {
-          type: "video",
-          id: `${this.$l2.code}-video-${video.youtube_id}`,
           date: DateHelper.unparseDate(new Date()),
-          l1: this.$l1.code,
-          l2: this.$l2.code,
-          video: {
-            id: video.id,
-            title: video.title,
-            youtube_id: video.youtube_id,
-            starttime: this.currentTimeEvery10Seconds,
-          },
+          l2: this.$l2.id,
+          video_id: video.id,
+          last_position: this.currentTimeEvery10Seconds,
         };
-        if (duration) {
-          data.video.duration = duration;
-          data.video.progress = data.video.starttime / duration;
-        }
-        this.$store.dispatch("history/add", data); // history's ADD_HISTORY_ITEM mutation automatically checks if this item is already in the history based on it's id (e.g. zh-video-Y23x9L4)
+        this.$store.dispatch("watchHistory/addOrUpdate", data);
         console.log(`Video View: YouTube video saved to watch history.`);
       }
     },
