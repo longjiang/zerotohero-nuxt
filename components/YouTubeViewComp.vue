@@ -139,6 +139,7 @@ export default {
       l2Locale: undefined,
       l2Name: undefined,
       episodeSort: "title",
+      savedToHistory: false
     };
   },
   computed: {
@@ -249,7 +250,6 @@ export default {
       await this.loadTranscriptLocalesFromYouTube(this.video);
       await this.loadMissingSubsFromYouTube(this.video);
       await this.loadMissingMetaFromYouTube(this.video);
-
       this.checkingSubs = false;
     },
     loadShowAndEpisodes() {
@@ -526,6 +526,10 @@ export default {
     onCurrentTime(currentTime) {
       if (this.currentTime !== currentTime) {
         this.currentTime = currentTime;
+        if (this.currentTime > 0 && !this.savedToHistory) {
+          this.saveHistory(); // Save history to the server the first time the user starts watching the video
+          this.savedToHistory = true;
+        }
         this.updateCurrentTimeQueryString();
         this.$emit("currentTime", this.currentTime);
       }

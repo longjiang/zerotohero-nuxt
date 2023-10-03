@@ -363,8 +363,8 @@ export default {
       }
       if (this.video.starttime) {
         to.query.t = this.video.starttime;
-      } else if (this.showProgress && this.historyItem) {
-        to.query.t = this.historyItem.video.starttime;
+      } else if (this.showProgress && this.historyItem?.last_position) {
+        to.query.t = this.historyItem.last_position;
       }
       if (this.playlistId) {
         to.query.p = this.playlistId;

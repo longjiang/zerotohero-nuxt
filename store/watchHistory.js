@@ -89,7 +89,7 @@ export const actions = {
       // Do not save the `video` property to the server
       delete mergedHistoryItem.video
       await this.$directus.patch(path, mergedHistoryItem)
-      commit('UPDATE_HISTORY_ITEM', mergedHistoryItem)
+      commit('UPDATE_HISTORY_ITEM', historyItem)
     } else {
       // Add the history item to the Directus server
       let path = 'items/user_watch_history'

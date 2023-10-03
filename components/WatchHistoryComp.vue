@@ -61,7 +61,7 @@
                   ml-0
                   history-item-remove-btn
                 "
-                @click.stop.prevent="$store.dispatch('history/remove', item)"
+                @click.stop.prevent="$store.dispatch('watchHistory/remove', item)"
                 v-if="showRemove"
               >
                 <i class="fa fa-times"></i>
