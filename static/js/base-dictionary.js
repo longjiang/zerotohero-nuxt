@@ -27,7 +27,7 @@ class BaseDictionary {
     await instance.loadData();
     console.log(`${this.name}: Indexing...`);
     instance.createIndices();
-    console.log(`${this.name}: Indexing finsed.`);
+    console.log(`${this.name}: Indexing finished.`);
     instance.createSearcher();
     instance.tokenizer = await TokenizerFactory.createTokenizer({
       l2,

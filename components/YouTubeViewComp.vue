@@ -598,25 +598,21 @@ export default {
           window.history.replaceState("", "", newUrl);
 
           if (this.currentTimeEvery10Seconds % 60 === 0) {
-            this.saveHistory({
-              type: "youtube",
-              video: this.video,
-              duration: this.duration,
-            }); // Only update history (and push to the server) every minute
+            this.saveHistory(); // Only update history (and push to the server) every minute
           }
         }
       }
     },
-    saveHistory({ type, video }) {
+    async saveHistory() {
       if (this.size === "mini") return;
-      if (type === "youtube" && video && video.youtube_id) {
+      if (this.video?.youtube_id) {
         let data = {
           date: DateHelper.unparseDate(new Date()),
           l2: this.$l2.id,
-          video_id: video.id,
+          video_id: this.video.id,
           last_position: this.currentTimeEvery10Seconds,
         };
-        this.$store.dispatch("watchHistory/addOrUpdate", data);
+        await this.$store.dispatch("watchHistory/addOrUpdate", data);
         console.log(`Video View: YouTube video saved to watch history.`);
       }
     },

@@ -72,13 +72,20 @@ export const actions = {
     let hasHistoryItem = getters.has(historyItem)
     if (hasHistoryItem) {
       // Update the history item in the Directus server
-      let path = `items/user_watch_history/${historyItem.id}`
-      await this.$directus.patch(path, historyItem)
-      commit('UPDATE_HISTORY_ITEM', historyItem)
+      let path = `items/user_watch_history/${hasHistoryItem.id}`
+      let mergedHistoryItem = { ...hasHistoryItem, ...historyItem }
+      await this.$directus.patch(path, mergedHistoryItem)
+      commit('UPDATE_HISTORY_ITEM', mergedHistoryItem)
     } else {
       // Add the history item to the Directus server
       let path = 'items/user_watch_history'
-      await this.$directus.post(path, historyItem)
+      let response = await this.$directus.post(path, historyItem)
+      if (response.status !== 200) {
+        logError('Error adding watch history item to the server', response)
+        return
+      } else {
+        historyItem.id = response.data.data.id
+      }
       commit('ADD_HISTORY_ITEM', historyItem)
     }    
   },
@@ -104,7 +111,7 @@ export const getters = {
     if (state.watchHistory) {
       let hasHistoryItem = false
       hasHistoryItem = state.watchHistory.find(
-        item => item.path && item.path === historyItem.path
+        item => item.video_id && item.video_id === historyItem.video_id
       )
       return hasHistoryItem
     }
