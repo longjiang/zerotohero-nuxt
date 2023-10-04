@@ -435,7 +435,7 @@ export default {
       let randomEntry = await dictionary.random();
       if (randomEntry) {
         let randomId = randomEntry.id;
-        this.$router.push({
+        this.$router.replace({
           path: `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$store.state.settings.dictionaryName}/${randomId}`,
         });
       }
