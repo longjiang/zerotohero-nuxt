@@ -81,6 +81,7 @@ export const actions = {
   },
   // Add a history item to the Vuex state and sync it to the backend.
   async addOrUpdate({ state, commit, dispatch, getters }, historyItem) {
+    if (!historyItem.video_id) return
     if (state.watchHistoryLoadedForL2Id !== historyItem.l2) {
       await dispatch('load', historyItem.l2)
     }

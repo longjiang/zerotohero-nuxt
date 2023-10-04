@@ -64,6 +64,7 @@ export const fetchRecommendedVideos = async (userId, l2, forceRefresh, start, li
       user_id: userId,
       start,
       exclude_ids: excludeIds?.join(","),
+      made_for_kids: 0,
     };
     // unset params with empty values
     Object.keys(parmas).forEach((key) => parmas[key] === undefined && delete parmas[key]);
