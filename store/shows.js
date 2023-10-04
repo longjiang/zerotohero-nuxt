@@ -211,7 +211,6 @@ export const actions = {
     context.commit("LOAD_SHOWS", { l2, tvShows: processedTvShows, talks: processedTalks });
   },
   async loadRecommendedVideos({state, commit}, { userId, l2, forceRefresh, start = 0, limit = 48 }) {
-    console.log({limit})
     // Do not load those videos that are already loaded
     const excludeIds = state.recommendedVideos[l2.code] ? state.recommendedVideos[l2.code].map((v) => v.id) : [];
     let videos = await fetchRecommendedVideos(userId, l2, forceRefresh, start, limit, excludeIds);
