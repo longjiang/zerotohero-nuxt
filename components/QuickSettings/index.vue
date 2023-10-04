@@ -81,8 +81,11 @@
       <Toggle v-model="darkMode" label="Dark Mode">
         <i class="fa fa-moon"></i>
       </Toggle>
-      <Toggle v-model="quizMode" label="Quiz Mode">
-        <i class="far fa-rocket-launch"></i>
+      <Toggle v-model="showQuiz" label="Show Pop Quizzes">
+        <i class="fa-solid fa-rocket"></i>
+      </Toggle>
+      <Toggle v-model="quizMode" label="Saved Words as Blanks">
+        <i class="fa-solid fa-pen-line"></i>
       </Toggle>
       <Toggle v-if="userIsAdmin" v-model="adminMode" label="Admin Mode">
         <i class="fa fa-wrench"></i>
