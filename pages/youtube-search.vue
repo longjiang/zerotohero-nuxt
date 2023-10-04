@@ -219,7 +219,7 @@ export default {
         this.$toast.success(this.$t("Redirecting to playlist..."), {
           duration: 1000,
         });
-        this.$router.push({
+        this.$router.replace({
           name: "youtube-playlist",
           params: { playlist_id },
         });
@@ -227,7 +227,7 @@ export default {
         this.$toast.success(this.$t("Redirecting to video..."), {
           duration: 1000,
         });
-        this.$router.push({
+        this.$router.replace({
           name: "video-view",
           params: { youtube_id, type: "youtube" },
         });
