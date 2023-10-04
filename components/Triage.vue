@@ -122,9 +122,9 @@ export default {
         return {
           value: language,
           text:
-            (flagEmoji ? flagEmoji + " " : "") +
             this.$tb(language.name) +
-            ` (${this.$tb(language.code)})`,
+            ` (${language.code})` +
+            ` ${flagEmoji}`,
         };
       });
 
