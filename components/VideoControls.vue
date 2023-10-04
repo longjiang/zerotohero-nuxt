@@ -58,9 +58,10 @@
         v-if="!showOpenButton"
         :iconClass="`fa-${liked ? 'solid' : 'regular'} fa-heart`"
         :title="$t('Like') + ' (L)'"
+        :class="{ 'text-danger': liked }"
+        :pending="likePending"
         @click="toggleLike()"
         v-show="size !== 'mini'"
-        :class="{ 'text-danger': liked }"
       />
       <SimpleButton
         v-if="episodes"
@@ -405,6 +406,7 @@ export default {
       transcriptMode: false,
       karaokeAnimation: false,
       watcherActive: false,
+      likePending: false
     };
   },
   computed: {
@@ -479,6 +481,9 @@ export default {
     this.unsubscribe();
   },
   watch: {
+    liked() {
+      this.likePending = false
+    },
     initialTime() {
       this.currentTime = this.initialTime; // so that the progress bar updates at the start
     },
@@ -521,6 +526,7 @@ export default {
     toggleLike() {
       // dispatch a 'userLikes/like' action if this.liked is true
       // dispatch a 'userLikes/unlike' action if this.liked is false
+      this.likePending = true
       if (this.liked) {
         this.$store.dispatch("userLikes/unlike", {
           l2Id: this.$l2.id,
