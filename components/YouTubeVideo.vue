@@ -39,6 +39,7 @@
               :href="vpn.url"
               target="_blank"
               class="vpn-link"
+              :key="vpn.name"
             >
               {{ vpn.name }}
             </a>
@@ -113,7 +114,7 @@ export default {
       currentTime: 0,
       interval: undefined,
       duration: undefined,
-      loading: false,
+      loading: undefined,
       randomSeeked: false,
       youtubeScriptLoaded: false,
       showPlaceholderMessage: false,
@@ -192,17 +193,10 @@ export default {
     speed() {
       this.setSpeed(this.speed);
     },
-    youtube() {
-      if (this.autoload) {
-        this.loadYouTubeiFrame();
-      }
-      this.duration = undefined;
-      this.randomSeeked = false;
-    },
   },
   watch: {
     'video.youtube_id'() {
-      this.loadYouTubeiFrame()
+      if (video.youtube_id) this.loadYouTubeiFrame()
     }
   },
   methods: {
@@ -219,8 +213,9 @@ export default {
       if (this.player) this.player.unMute();
     },
     loadYouTubeiFrame() {
+      if (this.loading === this.youtubeIframeID) return;
       if (this.posterOnly) return;
-      this.loading = true;
+      this.loading = this.youtubeIframeID;
       let id = this.youtubeIframeID;
       this.removeYouTubeAPIVars();
       let start = parseInt(this.starttime);
@@ -242,7 +237,7 @@ export default {
         disablekb: 1,
         id,
       };
-      window.onYouTubePlayerAPIReady = () => {
+      window.onYouTubePlayerAPIReady = async () => {
         if (!YT) return;
         this.player = new YT.Player(id, {
           height: screen.height,
@@ -307,6 +302,7 @@ export default {
           window.onYouTubePlayerAPIReady();
         }
       }
+      this.loading = undefined;
     },
     loadYouTubeAPIScript() {
       const script = document.createElement("script");
