@@ -195,6 +195,15 @@ export default {
     "video.subs_l2"() {
       if (this.video?.subs_l2?.lenghth > 0) this.checkingSubs = false;
     },
+    playlist() {
+      if (!this.playlist?.videos?.length) return;
+      // If this is a recommended videos playlist, when the page refreshes, a new batch of videos is loaded and this video may not be one of them
+      // If this is the case, we prepend this.video to the playlist
+      if (this.itemIndex === -1 && this.playlist?.videos?.length) {
+        // Prepend this.video to the playlist
+        this.playlist.videos.unshift(this.video);
+      }
+    },
   },
   async mounted() {
     this.episodeSort = this.$route.query.sort || "title";
