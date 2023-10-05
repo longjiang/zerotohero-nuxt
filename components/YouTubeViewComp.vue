@@ -58,9 +58,7 @@
       <LazyYouTubeVideoCard
         ref="nextYouTubeVideoCard"
         skin="light"
-        :video="nextItem"
-        :playlist="playlist"
-        :sort="episodeSort"
+        v-bind="nextVideoProps"
       >
         <template v-slot:footer>
           <slot name="footer" :video="video"></slot>
@@ -171,6 +169,14 @@ export default {
       if (this.items && this.itemIndex > -1) {
         return this.items[this.itemIndex + 1];
       }
+    },
+    nextVideoProps() {
+      let props = {
+        video: this.nextItem,
+        episodeSort: this.episodeSort,
+      };
+      if (this.playlist?.id) props.playlistId = this.playlist.id;
+      return props;
     },
     related() {
       let related = [];
