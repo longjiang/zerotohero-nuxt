@@ -30,7 +30,8 @@ export const actions = {
     if (user && user.id && token) {
       let path = 'items/user_likes';
       let response = await this.$directus.get(path, { 
-        'filter[owner][eq]': user.id 
+        'filter[owner][eq]': user.id,
+        'limit': -1
       });
 
       if (response.status !== 200) {
