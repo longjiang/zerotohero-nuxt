@@ -251,9 +251,7 @@ export default ({ app }, inject) => {
       let lines = video.subs_l2 || [];
       if (limit) lines = lines.slice(0, limit);
       for (let line of lines) {
-        let hline = he.decode(line.line); // parse html entities
-        let qline = l2.apostrophe ? hline : SmartQuotes.string(hline); // convert to smartquotes
-        line.line = qline;
+        line.line = he.decode(line.line); // parse html entities
       }
       let csv = app.$subs.unparseSubs(lines, l2.code);
       let {
