@@ -55,7 +55,7 @@
                 :showFeatures="false"
                 :l1="l1"
               />
-              <span class="word-count" v-if="language.wiktionary">{{  $tb('{num} words', {num: formatK(language.wiktionary || 0, 1, $browserLanguage) }) }}</span>
+              <span class="word-count" v-if="language.wiktionary">{{  $tb('{num} word(s)', {num: formatK(language.wiktionary || 0, 1, $browserLanguage) }) }}</span>
               <div
                 v-if="phrases"
                 :class="{
