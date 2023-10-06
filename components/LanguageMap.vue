@@ -55,6 +55,7 @@
                 :showFeatures="false"
                 :l1="l1"
               />
+              <span class="word-count" v-if="language.wiktionary">{{  $tb('{num} words', {num: formatK(language.wiktionary || 0, 1, $browserLanguage) }) }}</span>
               <div
                 v-if="phrases"
                 :class="{
@@ -149,7 +150,7 @@ import axios from "axios";
 import { SERVER } from "@/lib/utils";
 import Papa from "papaparse";
 import "leaflet/dist/leaflet.css";
-import { LANGS_WITH_CONTENT, uniqueByValue } from "@/lib/utils";
+import { LANGS_WITH_CONTENT, uniqueByValue, formatK } from "@/lib/utils";
 
 export default {
   components: {
@@ -234,6 +235,7 @@ export default {
     },
   },
   methods: {
+    formatK,
     uniqueByValue() {
       return uniqueByValue(...arguments);
     },
@@ -428,6 +430,7 @@ export default {
     margin-left: -5rem;
     text-shadow: 0 1px 10px rgba(0, 0, 0, 1);
     font-size: 1.2em;
+    line-height: 1;
     // background-color: #00000088;
     padding: 0.3rem 0.6rem;
     border-radius: 0.3rem;
@@ -550,5 +553,10 @@ export default {
       font-style: italic;
     }
   }
+}
+
+.word-count {
+  font-size: 0.8em;
+  opacity: 0.5;
 }
 </style>
