@@ -8,7 +8,7 @@ class QalsadiTokenizer extends BaseTokenizer {
     let url = `${PYTHON_SERVER}lemmatize-arabic?text=${encodeURIComponent(
       text
     )}`;
-    let tokenized = await proxy(url);
+    let tokenized = await proxy(url, { cacheLife: 10800 }); // cache for 3 hours
     let tokens = [];
     for (let lemmas of tokenized) {
       if (!lemmas[0]) {
@@ -27,6 +27,7 @@ class QalsadiTokenizer extends BaseTokenizer {
           text: lemmas[0].word,
           lemmas,
           pos: lemmas[0].pos,
+          pronunciation: lemmas[0].pronunciation,
         }
         tokens.push(this.normalizeToken(token));
         tokens.push(" ");
