@@ -56,12 +56,13 @@ class BaseTokenizer {
   tokenizeIntegral(text) {
     let modifiedText = text;
     let apostrophePatterns = null;
+    console.log("text", text);
 
     // If language is "apostrophe-sensitive" like Klingon and Welsh
     if (this.l2 && this.l2.apostrophe) {
       // Identify and replace patterns where the apostrophe is part of a word
       apostrophePatterns = text.match(
-        /[\p{L}\p{M}][’']|[’'][\p{L}\p{M}]/gu
+        /[\p{L}\p{M}]+[’']|[’'][\p{L}\p{M}]+/gu
       );
       if (apostrophePatterns) {
         apostrophePatterns.forEach((pattern, index) => {
@@ -72,6 +73,7 @@ class BaseTokenizer {
         });
       }
     }
+    console.log("modifiedText", modifiedText);
 
     // Continue with the usual tokenization
     let tokens = modifiedText.match(/[\p{L}\p{M}\d]+|[^\p{L}\p{M}\d\s]+|\s+/gu);
@@ -83,6 +85,7 @@ class BaseTokenizer {
         return match ? apostrophePatterns[parseInt(match[1], 10)] : token;
       });
     }
+    console.log("tokens", tokens);
 
     // Label the tokens
     const labeledTokens = tokens.map((tokenString) => {
