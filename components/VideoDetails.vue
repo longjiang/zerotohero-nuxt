@@ -167,7 +167,11 @@ export default {
       this.retranslating = true
       let response = await proxy(`${PYTHON_SERVER}/translate_video_and_save?l1=${this.$l1.code}&l2=${this.$l2.code}&video_id=${this.video.id}`)
       let subs_l1 = this.$subs.parseSavedSubs(response)
-      this.video.subs_l1 = subs_l1
+      this.$store.commit("shows/MODIFY_ITEM", {
+        item: this.video,
+        key: "subs_l1",
+        value: subs_l1,
+      });
       this.$emit('updateVideo', this.video)
       this.$toast.success(
         this.$t('The subtitles have been retranslated.'),
