@@ -1,13 +1,13 @@
 importScripts('../js/tokenizers/base-tokenizer.js')
 
-class SimplemmaTokenizer extends BaseTokenizer {
+class SpacyTokenizer extends BaseTokenizer {
   
   async tokenize(text) {
     let tokens = [];
     text = text.replace(/-/g, "- ");
     let langCode = this.l2["iso639-3"] || this.l2["glottologId"];
     if (langCode === "nor") langCode = "nob"; // Use Bokmål for Norwegian
-    let url = `${PYTHON_SERVER}lemmatize-simple?lang=${langCode}&text=${encodeURIComponent(text)}`;
+    let url = `${PYTHON_SERVER}lemmatize-spacy?lang=${langCode}&text=${encodeURIComponent(text)}`;
     let tokenized = await proxy(url, { timeout: 5000 });
     // Check if the tokenized is an array and not a string
     if (!tokenized || typeof tokenized === 'string') {

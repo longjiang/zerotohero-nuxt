@@ -10,16 +10,37 @@ const TokenizerFactory = {
     JavaScriptLemmatizerTokenizer: ["eng"], // locally tokenized by splitting, locally lemmatized by javascript-lemmatizer
     Pymorphy2Tokenizer: ["rus"], // remotely tokenized and lemmatized by pymorphy2
     PyidaungsuTokenizer: ["mya"], // remotely tokenized and lemmatized by pyidaungsu
+    SpacyTokenizer: [
+      'cat',
+      'dan',
+      'deu',
+      'ell',
+      'eng',
+      'spa',
+      'fin',
+      'fra',
+      'hrv',
+      'ita',
+      // 'jpn', // too slow
+      // 'kor', // too slow
+      'lit',
+      'mkd',
+      'nob',
+      'nld',
+      'pol',
+      'por',
+      'ron',
+      'rus',
+      'swe',
+      'ukr',
+      // 'zho' // too slow
+    ],
     // We remove 'cym' from SimplemmaTokenizer because it does not treat apostrophes correctly
     // We remove 'hin' from SimplemmaTokenizer because it breaks too many words
-    SimplemmaTokenizer: ['ast', 'bul', 'cat', 'ces', 'dan', 'deu', 'ell', 'eng', 'enm', 'est', 'fin', 'fra', 'fra', 'gla', 'gle', 'glg', 'glv', 'hbs', 'hun', 'hye', 'ind', 'isl', 'ita', 'kat', 'lat', 'lav', 'lit', 'ltz', 'mkd', 'msa', 'nld', 'nno', 'nor', 'nob', 'pol', 'por', 'por', 'ron', 'rus', 'slk', 'slv', 'sme', 'spa', 'sqi', 'swa', 'swe', 'tgl', 'tur', 'ukr'], // tokenized and lemmatized by simplemma-tokenizer.js
+    // We remove 'fra' from SimplemmaTokenizer because it's not getting lemmas for verbs
+    SimplemmaTokenizer: ['ast', 'bul', 'cat', 'ces', 'dan', 'deu', 'ell', 'eng', 'enm', 'est', 'fin', 'gla', 'gle', 'glg', 'glv', 'hbs', 'hun', 'hye', 'ind', 'isl', 'ita', 'kat', 'lat', 'lav', 'lit', 'ltz', 'mkd', 'msa', 'nld', 'nno', 'nor', 'nob', 'pol', 'por', 'por', 'ron', 'rus', 'slk', 'slv', 'sme', 'spa', 'sqi', 'swa', 'swe', 'tgl', 'tur', 'ukr'], // tokenized and lemmatized by simplemma-tokenizer.js
     LemmatizationListTokenizer: ["ast", "bul", "cat", "ces", "cym", "deu", "eng", "est", "fas", "fra", "gla", "gle", "glg", "glv", "hun", "ita", "por", "ron", "rus", "slk", "slv", "spa", "swe", "ukr"], // tokenized and lemmatized by lemmatization list
-    SpacyTokenizer: [
-      // "hrv", // tokenized and lemmatized by spacy // too slow
-      // "jpn", // tokenized and lemmatized by spacy // too slow
-      // "kor", // tokenized and lemmatized by spacy // too slow
-      // "zho", // tokenized and lemmatized by spacy // too slow
-    ]
+
   },
 
   getTokenizerName(languageCode) {
