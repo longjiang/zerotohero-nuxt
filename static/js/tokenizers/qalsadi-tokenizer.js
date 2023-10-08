@@ -8,7 +8,16 @@ class QalsadiTokenizer extends BaseTokenizer {
     let url = `${PYTHON_SERVER}lemmatize-arabic?text=${encodeURIComponent(
       text
     )}`;
-    let tokenized = await proxy(url, { cacheLife: 10800 }); // cache for 3 hours
+    let tokenized = await proxy(url, { timeout: 5000 });
+    // Check if the tokenized is an array and not a string
+    if (!tokenized || typeof tokenized === 'string') {
+      // Try again without caching
+      tokenized = await proxy(url, {cacheLife: 0, timeout: 5000});
+      if (!tokenized || typeof tokenized === 'string') {
+        return this.tokenizeLocally(text);
+      }
+    }
+    if (!tokenized) return this.tokenizeIntegral(text);
     let tokens = [];
     for (let lemmas of tokenized) {
       if (!lemmas[0]) {
