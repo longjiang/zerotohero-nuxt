@@ -136,6 +136,8 @@ export default {
             params: {
               type: "youtube",
               youtube_id: firstRecommendedVideo.youtube_id,
+              directus_id: firstRecommendedVideo.id,
+
             },
             query: { p: "recommended" },
           });
