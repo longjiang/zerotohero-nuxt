@@ -462,20 +462,17 @@ export default {
       this.$nuxt.$emit("popupOpened");
     },
     playWordAudio() {
-      let rate = 0.75;
-      let volume = 0.5;
-      // Only wiktionary has real human audio
-      let speakComponent = this.$refs.popup?.$refs.speak?.[0];
-      if (
-        speakComponent &&
-        this.$dictionaryName === "wiktionary-csv" &&
-        this.words?.[0].head?.toLowerCase() === this.text.toLowerCase()
-      ) {
-        speakComponent.speak({ rate, volume });
-      } else {
-        if (this.$l2.code === "ja" && this.token?.pronunciation) {
-          speak({ text: this.token.pronunciation, l2: this.$l2, rate, volume });
-        } else speak({ text:this.text, l2: this.$l2, rate, volume });
+      const canGenerateSpeech = this.$l1 && this.$l2 ? this.$languages.hasFeature(this.$l1, this.$l2, "speech") : false;
+      const speakComponent = this.$refs.popup?.$refs.speak?.[0];
+      console.log({ canGenerateSpeech, speakComponent })
+      const hasRecordedAudio = speakComponent && speakComponent.mp3 && this.words?.[0].head?.toLowerCase() === this.text.toLowerCase()
+      if (hasRecordedAudio) speakComponent.speak({ rate, volume });
+      else if (canGenerateSpeech) {
+        const rate = 0.75;
+        const volume = 0.5;
+        let text = this.text
+        if (this.$l2.code === "ja" && this.token?.pronunciation) text = this.token.pronunciation
+        speak({ text, l2: this.$l2, rate, volume });
       }
     },
     async closePopup() {
