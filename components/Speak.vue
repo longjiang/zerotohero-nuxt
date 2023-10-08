@@ -1,14 +1,16 @@
 <template>
   <client-only>
     <button class="speak focus-exclude" @click.stop.prevent="onClick">
-      <i class="fas fa-volume-up" v-if="canSpeak"></i>
+      <i :class="`fas fa-${mp3 ? 'headphones': 'volume-up'}`" v-if="canSpeak"></i>
       <span v-else-if="forvo">
-        <img
+        <i class="fas fa-headphones"></i>
+        <small style="font-size: 0.66em"><i class="fa-solid fa-arrow-up-right-from-square"></i></small>
+        <!-- <img
           src="/img/logo-forvo-circle.png"
           alt="Forvo"
           data-not-lazy
           style="height: 1rem; opacity: 0.5; margin-bottom: 0.2rem"
-        />
+        /> -->
       </span>
       <div ref="player" class="hidden"></div>
     </button>

@@ -464,7 +464,6 @@ export default {
     playWordAudio() {
       const canGenerateSpeech = this.$l1 && this.$l2 ? this.$languages.hasFeature(this.$l1, this.$l2, "speech") : false;
       const speakComponent = this.$refs.popup?.$refs.speak?.[0];
-      console.log({ canGenerateSpeech, speakComponent })
       const hasRecordedAudio = speakComponent && speakComponent.mp3 && this.words?.[0].head?.toLowerCase() === this.text.toLowerCase()
       if (hasRecordedAudio) speakComponent.speak({ rate, volume });
       else if (canGenerateSpeech) {
