@@ -519,7 +519,11 @@ export default {
           id: this.video.id,
         });
         if (deleted) {
-          Vue.delete(this.video, "id");
+          this.$store.commit("shows/MODIFY_ITEM", {
+            item: this.video,
+            key: "id",
+            value: null,
+          });
         }
       }
       return true;

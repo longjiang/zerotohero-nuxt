@@ -142,6 +142,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
   }
 
   lookupMultiple(text, ignoreAccents = false) {
+    if (!text) return [];
     let textLower = text.toLowerCase();
     if (ignoreAccents) textLower = stripAccents(textLower);
     let words = ignoreAccents ? this.searchIndex[textLower] : this.headIndex[textLower]; // searchIndex is accent insensitive, headIndex is accent sensitive
