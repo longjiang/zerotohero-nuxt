@@ -10,30 +10,31 @@ const TokenizerFactory = {
     JavaScriptLemmatizerTokenizer: ["eng"], // locally tokenized by splitting, locally lemmatized by javascript-lemmatizer
     Pymorphy2Tokenizer: ["rus"], // remotely tokenized and lemmatized by pymorphy2
     PyidaungsuTokenizer: ["mya"], // remotely tokenized and lemmatized by pyidaungsu
+    // spaCy lemmatizer is generally very slow on the server and can lead to unrendered text. We avoid it if we can use SimplemmaTokenizer instead.
     SpacyTokenizer: [
-      'cat',
-      'dan',
-      'deu',
-      'ell',
-      'eng',
-      'spa',
-      'fin',
-      'fra',
-      'hrv',
-      'ita',
-      // 'jpn', // too slow
-      // 'kor', // too slow
-      'lit',
-      'mkd',
-      'nob',
-      'nld',
-      'pol',
-      'por',
-      'ron',
-      'rus',
-      'swe',
-      'ukr',
-      // 'zho' // too slow
+      // 'cat',
+      // 'dan',
+      // 'deu',
+      // 'ell',
+      // 'eng',
+      // 'spa',
+      // 'fin',
+      // 'fra',
+      // 'hrv',
+      // 'ita',
+      // 'jpn',
+      // 'kor',
+      // 'lit',
+      // 'mkd',
+      // 'nob',
+      // 'nld',
+      // 'pol',
+      // 'por',
+      // 'ron',
+      // 'rus',
+      // 'swe',
+      // 'ukr',
+      // 'zho'
     ],
     // We remove 'cym' from SimplemmaTokenizer because it does not treat apostrophes correctly
     // We remove 'hin' from SimplemmaTokenizer because it breaks too many words

@@ -146,8 +146,8 @@
           :data-bg-level="word.level"
           class="pl-1 pr-1 ml-1 rounded d-inline-block"
           style="font-size: 0.8em; position: relative; bottom: 0.1rem"
-        >
-          {{ $dictionaryName === "hsk-cedict" ? "HSK " : "" }}{{ word.level }}
+        > 
+          {{ levels && levels[word.level] ? levels[word.level].level : word.level }}
         </span>
         <span
           v-if="word.newHSK"
@@ -241,7 +241,7 @@
 <script>
 import { transliterate as tr } from "transliteration";
 import { IMAGE_PROXY } from "@/lib/config";
-import { timeout, PYTHON_SERVER } from "@/lib/utils";
+import { timeout, PYTHON_SERVER, languageLevels } from "@/lib/utils";
 import Klingon from "@/lib/klingon";
 import pinyin2ipa from "pinyin2ipa";
 
@@ -275,6 +275,7 @@ export default {
       translation: undefined,
       IMAGE_PROXY,
       entryClasses: { "tooltip-entry": true }, // Other classes are added upon update
+      levels: undefined,
     };
   },
   computed: {
@@ -296,6 +297,7 @@ export default {
     if (this.$l1) this.entryClasses[`l1-${this.$l1.code}`] = true;
     if (this.$l2) this.entryClasses[`l2-${this.$l2.code}`] = true;
     if (this.$l2.han) this.entryClasses["l2-zh"] = true;
+    if (this.$l2) this.levels = languageLevels(this.$l2);
     if (!this.preciseMatchFound) {
       await timeout(1000);
       this.translate(this.text);

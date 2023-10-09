@@ -488,8 +488,8 @@ export default {
       if (words.length === 0) {
         // addCandidatesToToken is already done by the tokenizer, but sometimes this doesn't happen in time. Let's do it again so we don't override the candidates.
         if (this.token && !this.token.candidates?.length > 0) {
-          let token = await dictionary.addCandidatesToToken(this.token);
-          words = token?.candidates || [];
+          this.token.candidates = await dictionary.addCandidatesToToken(this.token);
+          words = this.token?.candidates || [];
           if (!words.length)
             words = (await dictionary.lookupFuzzy(this.text, 20)) || [];
         }
