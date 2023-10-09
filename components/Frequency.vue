@@ -4,11 +4,15 @@
       <div
         class="frequency-fill"
         :data-bg-level="entry.level"
-        :style="`width: ${(entry.frequency - 2.5) / 4.5 * 100}%`"
+        :style="`width: ${Math.min((entry.frequency - 2.5) / 4.5, 1) * 100}%`"
       ></div>
     </div>
     <small v-if="showText" class="text-center mt-2 frequency-text">
-      <b >Frequency: {{ entry.frequency }}</b> <small> – appears 10<sup>{{ entry.frequency }}</sup> times in a billion words, or once every {{ formatK(Math.ceil(1000000000 / Math.pow(10, entry.frequency)), 2, this.$l1.code) }} words.</small>
+      <i18n path="Frequency: {freq} – appears 10{freqpow} times in a billion words, or once every {occurrence} words." class="mt-1 small" tag="p">
+        <template v-slot:freq>{{ entry.frequency }}</template>
+        <template v-slot:freqpow><sup>{{ entry.frequency }}</sup></template>
+        <template v-slot:occurrence>{{ formatK(Math.ceil(1000000000 / Math.pow(10, entry.frequency)), 2, $l1.code) }}</template>
+      </i18n>
     </small>
   </div>
 </template>
