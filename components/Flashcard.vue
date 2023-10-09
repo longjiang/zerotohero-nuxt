@@ -41,6 +41,10 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/scss/variables.scss";
 .flashcard {
+  .flip-prompt {
+    position: absolute;
+    bottom: 1rem;
+  }
   &.skin-light {
     filter: drop-shadow(2px 2px 5px rgba(0, 0, 0, 0.33));
     .front,

@@ -4,18 +4,6 @@
     <div>
       <div>
         <span
-          v-if="
-            entry.level &&
-            entry.level !== 'outside' &&
-            $dictionaryName === 'hsk-cedict'
-          "
-          class="entry-level p-1 rounded font-weight-bold"
-          style="position: relative; bottom: 0.5em; font-size: 0.8em"
-          :data-level="entry.level"
-        >
-          HSK {{ entry.level }}
-        </span>
-        <span
           v-if="entry.newHSK"
           class="entry-level p-1 rounded font-weight-bold"
           :style="`position: relative; bottom: 0.5em; font-size: 0.8em; color: ${
@@ -41,7 +29,7 @@
           style="position: relative; bottom: 0.2em; font-size: 0.8em"
           :data-bg-level="entry.level"
         >
-          {{ entry.level }}
+        {{ levels && levels[entry.level] ? levels[entry.level].name : entry.level }}
         </span>
       </div>
       <Annotate
@@ -153,6 +141,7 @@
 import Klingon from "@/lib/klingon";
 import { transliterate as tr } from "transliteration";
 import pinyin2ipa from "pinyin2ipa";
+import { languageLevels } from "@/lib/utils/language-levels";
 
 export default {
   props: {
@@ -177,7 +166,9 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      levels: null,
+    };
   },
   asyncComputed: {
     async formattedPronunciation() {
@@ -212,6 +203,7 @@ export default {
     ) {
       this.$refs.speak.speak({ rate: 0.75, volume: 0.5 }); // Speed and volume
     }
+    if (this.$l2) this.levels = languageLevels(this.$l2);
   },
   methods: {
     pinyin2ipa(...args) {

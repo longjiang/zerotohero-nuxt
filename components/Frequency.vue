@@ -1,26 +1,21 @@
 <template>
   <div :class="{'frequency-wrapper': true, 'd-inline-block': true, mini: mini}">
-    <div
-      class="frequency-level text-center"
-      :data-bg-level="entry.hsk"
-      v-if="showHsk"
-    >
-      {{ entry.hsk === 'outside' ? 'Non-HSK' : 'HSK ' + entry.hsk }}
-    </div>
     <div class="frequency mt-1">
       <div
         class="frequency-fill"
-        :data-bg-level="entry.hsk"
-        :style="`width: ${(Math.log10(1 + entry.rank * 10000) * 100) / 4}%`"
+        :data-bg-level="entry.level"
+        :style="`width: ${(entry.frequency - 2.5) / 4.5 * 100}%`"
       ></div>
     </div>
-    <div v-if="showText" class="text-center mt-1 frequency-text">
-      Frequency index: <b>{{ Math.round((Math.log10(1 + entry.rank * 10000) * 100) / 4) }}%</b>
-    </div>
+    <small v-if="showText" class="text-center mt-2 frequency-text">
+      <b >Frequency: {{ entry.frequency }}</b> <small> – appears 10<sup>{{ entry.frequency }}</sup> times in a billion words, or once every {{ formatK(Math.ceil(1000000000 / Math.pow(10, entry.frequency)), 2, this.$l1.code) }} words.</small>
+    </small>
   </div>
 </template>
 
 <script>
+import { formatK } from '@/lib/utils'
+
 export default {
   props: {
     entry: {
@@ -35,19 +30,24 @@ export default {
     showHsk: {
       default: true
     }
+  },
+  methods: {
+    formatK
   }
 }
 </script>
 
 <style scoped>
-.frequency-wrapper:not(:hover) .frequency-text {
-  opacity: 0;
-}
 
 .frequency {
   background: #ccc;
   height: 0.3rem;
   width: 100%;
+}
+
+.frequency-text {
+  line-height: 1.33;
+  display: block;
 }
 
 .frequency-fill {
