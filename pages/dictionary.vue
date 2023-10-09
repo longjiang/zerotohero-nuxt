@@ -157,9 +157,12 @@
                         transparent: true,
                       }"
                     ></DefinitionsList>
-                    <Frequency :entry="entry" 
+                    <Frequency 
+                      v-if="entry.frequency"
+                      :entry="entry" 
                       :showText="true"
-                      class="mt-2 transparent" />
+                      class="mt-2 transparent"
+                    />
                   </div>
                 </template>
                 <template v-slot:back>
@@ -174,7 +177,12 @@
                         'pl-3 pr-3 mt-3': true,
                       }"
                     ></DefinitionsList>
-                    <Frequency :entry="entry" :showText="true" class="mt-2" />
+                    <Frequency 
+                      v-if="entry.frequency"
+                      :entry="entry"
+                      :showText="true"
+                      class="mt-2"
+                    />
                   </div>
                 </template>
               </Flashcard>

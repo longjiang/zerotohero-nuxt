@@ -4,9 +4,20 @@
     <div>
       <div>
         <span
+          v-if="
+            entry.level &&
+            entry.level !== 'outside'
+          "
+          class="entry-level p-1 rounded ml-2 mr-2"
+          style="position: relative; bottom: 0.2em; font-size: 0.8em"
+          :data-bg-level="entry.level"
+        >
+        {{ levels && levels[entry.level] ? levels[entry.level].name : entry.level }}
+        </span>
+        <span
           v-if="entry.newHSK"
           class="entry-level p-1 rounded font-weight-bold"
-          :style="`position: relative; bottom: 0.5em; font-size: 0.8em; color: ${
+          :style="`position: relative; bottom: 0.3em; font-size: 0.8em; color: ${
             entry.newHSK === '7-9' ? '#00716B' : 'inherit'
           }`"
         >
@@ -18,18 +29,6 @@
           >
             #{{ entry.newHSKMatches[0].num }}
           </span>
-        </span>
-        <span
-          v-if="
-            entry.level &&
-            entry.level !== 'outside' &&
-            $dictionaryName !== 'hsk-cedict'
-          "
-          class="entry-level p-1 rounded ml-2 mr-2"
-          style="position: relative; bottom: 0.2em; font-size: 0.8em"
-          :data-bg-level="entry.level"
-        >
-        {{ levels && levels[entry.level] ? levels[entry.level].name : entry.level }}
         </span>
       </div>
       <Annotate
