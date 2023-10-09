@@ -6,6 +6,7 @@ importScripts("../vendor/fuse.js@6.6.2/fuse.min.js");
 importScripts("../js/dictionary-utils.js");
 importScripts("../js/tokenizers/tokenizer-factory.js");
 importScripts("../js/inflectors/inflector-factory.js");
+importScripts("../js/frequency-assigner.js");
 
 class BaseDictionary {
   constructor({ l1 = undefined, l2 = undefined } = {}) {
@@ -15,6 +16,7 @@ class BaseDictionary {
     this.name = this.constructor.name;
     this.version = null;
     this.tokenizer = null;
+    this.frequencyAssigner = null;
     this.indexDbVerByLang = {};
     this.indexKeys = ['search'];
     this.searchIndex = {};
@@ -24,6 +26,7 @@ class BaseDictionary {
 
   static async load({ l1 = undefined, l2 = undefined } = {}) {
     const instance = new this({ l1, l2 });
+    instance.frequencyAssigner = await FrequencyAssigner.load({ l1, l2 }); // We need to load the frequency assigner first
     await instance.loadData();
     console.log(`${this.name}: Indexing...`);
     instance.createIndices();
@@ -84,7 +87,10 @@ class BaseDictionary {
   async loadAndNormalizeDictionaryData({ name, file, delimiter = "," }) {
     let words = await this.loadDictionaryData({ name, file, delimiter });
     console.log(`${this.name}: Normalizing dictionary data...`);
-    words.forEach((item) => this.normalizeWord(item));
+    words.forEach((item) => {
+      this.normalizeWord(item)
+      item.frequency = this.frequencyAssigner.getFrequency(item.head)
+    });
     words = words.filter((w) => w.head);
     console.log(`${this.name}: ${file} loaded.`);
     return words;
