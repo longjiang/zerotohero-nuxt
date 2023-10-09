@@ -71,6 +71,11 @@ class BaseDictionary {
       for (let lemma of token.lemmas) {
         if (lemma.lemma && lemma.lemma !== token.text) {
           const lemmaCandidates = await this.lookupMultiple(lemma.lemma)
+          lemmaCandidates.forEach(c => {
+            let morphology = lemma.morphology
+            if (lemma.morphologies) morphology = lemma.morphologies.join("; ")
+            c.morphology = morphology
+          })
           candidates = [...candidates, ...lemmaCandidates]
         }
       }
