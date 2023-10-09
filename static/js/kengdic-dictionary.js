@@ -24,8 +24,8 @@ class KengdicDictionary extends BaseDictionary {
     const l1Code = this.l1['iso639-3']
     let words = l1Code === 'eng' ? await this.loadDictionaryData({ name: `kengdic`, file: this.file }) : []; // If l1Code is 'eng', load kengdic data, otherwise load nothing
     let wiktionaryWords = await this.loadDictionaryData({ name: `wiktionary-kor-${l1Code}`, file: this.wiktionaryFiles[l1Code] })
-    words.forEach(this.normalizeKengdicWord)
-    wiktionaryWords.forEach(this.normalizeWiktionaryWord)
+    words.forEach((item) => this.normalizeKengdicWord(item))
+    wiktionaryWords.forEach((item) => this.normalizeWiktionaryWord(item))
     this.words = [...words, ...wiktionaryWords];
     words = null
     wiktionaryWords = null
@@ -50,6 +50,7 @@ class KengdicDictionary extends BaseDictionary {
     delete item.word;
     delete item.stems
     delete item.phrases
+    this.addFrequencyAndLevel(item)
   }
 
   normalizeKengdicWord(row) {
@@ -74,6 +75,7 @@ class KengdicDictionary extends BaseDictionary {
     delete row.k;
     delete row.l;
     delete row.username;
+    this.addFrequencyAndLevel(item)
   }
 
   lookupByCharacter(char) {

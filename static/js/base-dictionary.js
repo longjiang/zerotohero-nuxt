@@ -90,14 +90,18 @@ class BaseDictionary {
     console.log(`${this.name}: Normalizing dictionary data...`);
     words.forEach((item) => {
       this.normalizeWord(item)
-      if (this.frequencyAssigner) {
-        item.frequency = this.frequencyAssigner.getFrequency(item.head)
-        if (!item.level) item.level = this.frequencyAssigner.getLevelByFrequency(item.frequency) // Sometimes the dictionary already has level info
-      }
+      this.addFrequencyAndLevel(item)
     });
     words = words.filter((w) => w.head);
     console.log(`${this.name}: ${file} loaded.`);
     return words;
+  }
+
+  addFrequencyAndLevel(item) {
+    if (this.frequencyAssigner) {
+      item.frequency = this.frequencyAssigner.getFrequency(item.head)
+      if (!item.level) item.level = this.frequencyAssigner.getLevelByFrequency(item.frequency) // Sometimes the dictionary already has level info
+    }
   }
 
   /**
