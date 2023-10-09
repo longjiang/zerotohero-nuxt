@@ -10,7 +10,10 @@ class FrequencyAssigner {
     this.searchIndex = {}; // This holds the frequency data
     this.indexDbVerByLang = {};
     this.lemmatized = false; // Whether this is a lemmatized and folded frequency list
+    this.wordKey = "lemma"
+    this.frequencyKey = "frequency"
     this.name = 'FrequencyAssigner';
+    this.levelThresholds = {1: 5.79, 2: 5.35, 3: 4.99, 4: 4.56, 5: 4.09, 6: 3.57, 7: 3.01};
   }
 
   static hasFrequencyData(l2) {
@@ -35,17 +38,20 @@ class FrequencyAssigner {
       file,
     }).then((data) => {
       if (data?.[0]?.lemma) this.lemmatized = true;
+      this.wordKey = this.lemmatized ? "lemma" : "word";
+      this.frequencyKey = this.lemmatized ? "folded_frequency" : "frequency";
+      data = data.filter((word) => word[this.frequencyKey] > 3); // Remove words with frequency <= 3
       this.createIndices(data);
+      this.levelThresholds = this.determineLevelThresholds(data);
       data = null;
     });
   }
 
   createIndices(data) {
     console.log(`${this.name}: Indexing...`);
-    let wordKey = this.lemmatized ? "lemma" : "word";
-    let frequencyKey = this.lemmatized ? "folded_frequency" : "frequency";
     for (let word of data) {
-      this.searchIndex[word[wordKey]] = Number(word[frequencyKey]);
+      let frequency = word[this.frequencyKey];
+      this.searchIndex[word[this.wordKey]] = Number(frequency);
     }
   }
 
@@ -95,7 +101,31 @@ class FrequencyAssigner {
     return results.data;
   }
 
+  // Determine the minimum Zipf frequency for each level
+  determineLevelThresholds(data) {
+    // Calculate the number of words for each level
+    const totalWords = data.length;
+    let level1Words = Math.floor(totalWords / 127); // 2^0 + 2^1 + 2^2 + ... + 2^6 = 127
+
+    let levelThresholds = {};
+    let wordsSoFar = 0;
+
+    for (let i = 0; i < 7; i++) {
+        wordsSoFar += level1Words * Math.pow(2, i);
+        let threashold = data[wordsSoFar]?.[this.frequencyKey] || data[data.length - 1]?.[this.frequencyKey];
+        levelThresholds[i + 1] = Number(threashold);
+    }
+
+    return levelThresholds;
+  }
+
   getFrequency(word) {
     return this.searchIndex[word];
+  }
+
+  getLevelByFrequency(frequency) {
+    return Object.keys(this.levelThresholds).find((level) => {
+      return frequency >= this.levelThresholds[level];
+    });
   }
 }

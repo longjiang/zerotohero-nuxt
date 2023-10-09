@@ -90,7 +90,10 @@ class BaseDictionary {
     console.log(`${this.name}: Normalizing dictionary data...`);
     words.forEach((item) => {
       this.normalizeWord(item)
-      if (this.frequencyAssigner) item.frequency = this.frequencyAssigner.getFrequency(item.head)
+      if (this.frequencyAssigner) {
+        item.frequency = this.frequencyAssigner.getFrequency(item.head)
+        item.level = this.frequencyAssigner.getLevelByFrequency(item.frequency)
+      }
     });
     words = words.filter((w) => w.head);
     console.log(`${this.name}: ${file} loaded.`);
