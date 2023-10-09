@@ -2,10 +2,7 @@
   <div class="youtube">
     <div
       :style="{
-        backgroundImage:
-          posterOnly || (!autoplay && !loading)
-            ? `url(https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg)`
-            : 'none',
+        backgroundImage: posterOnly || (!autoplay && !loading && !player) ? `url(https://img.youtube.com/vi/${video.youtube_id}/maxresdefault.jpg)` : 'none',
         'background-repeat': 'no-repeat',
         'background-size': 'cover',
         'background-position': 'center',
@@ -16,7 +13,7 @@
       <div :id="youtubeIframeID" class="youtube-iframe"></div>
       <div
         class="youtube-icon"
-        v-if="!posterOnly && !autoplay && !loading"
+        v-if="!posterOnly && !autoplay && !player"
       ></div>
       <!-- <div class="youtube-screen-blocker" @click="togglePaused" v-if="!neverPlayed"></div> -->
     </div>
