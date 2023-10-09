@@ -26,7 +26,8 @@ class BaseDictionary {
 
   static async load({ l1 = undefined, l2 = undefined } = {}) {
     const instance = new this({ l1, l2 });
-    instance.frequencyAssigner = await FrequencyAssigner.load({ l1, l2 }); // We need to load the frequency assigner first
+    if (FrequencyAssigner.hasFrequencyData(l2))
+      instance.frequencyAssigner = await FrequencyAssigner.load({ l1, l2 }); // We need to load the frequency assigner first
     await instance.loadData();
     console.log(`${this.name}: Indexing...`);
     instance.createIndices();
@@ -89,7 +90,7 @@ class BaseDictionary {
     console.log(`${this.name}: Normalizing dictionary data...`);
     words.forEach((item) => {
       this.normalizeWord(item)
-      item.frequency = this.frequencyAssigner.getFrequency(item.head)
+      if (this.frequencyAssigner) item.frequency = this.frequencyAssigner.getFrequency(item.head)
     });
     words = words.filter((w) => w.head);
     console.log(`${this.name}: ${file} loaded.`);

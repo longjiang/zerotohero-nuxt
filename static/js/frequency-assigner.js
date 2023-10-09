@@ -13,6 +13,15 @@ class FrequencyAssigner {
     this.name = 'FrequencyAssigner';
   }
 
+  static hasFrequencyData(l2) {
+    const langsWithFrequencyData = [
+      "ar", "bn", "bs", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "fi", "fr", "de",
+      "el", "he", "hi", "hu", "is", "id", "it", "ja", "ko", "lv", "lt", "mk", "ms", "nb",
+      "fa", "pl", "pt", "ro", "ru", "sl", "sk", "sr", "es", "sv", "fi", "ta", "tr", "uk", "ur", "vi"
+    ];
+    return langsWithFrequencyData.includes(l2.code);
+  }
+
   static async load({ l1, l2 }) {
     const instance = new this({ l1, l2 });
     await instance.loadData();
@@ -28,7 +37,6 @@ class FrequencyAssigner {
       if (data?.[0]?.lemma) this.lemmatized = true;
       this.createIndices(data);
       data = null;
-      console.log(this.searchIndex);
     });
   }
 
