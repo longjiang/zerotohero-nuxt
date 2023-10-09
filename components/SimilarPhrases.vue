@@ -372,6 +372,7 @@ export default {
         this.youInOtherLangs = youInOtherLangs;
       }
       this.vousInOtherLangs = phrases.filter((p) => {
+        if (!p.l2) return
         let phraseMatches =
           (p.normalizedPhrase || "") === (this.normalizedPhrase || "");
         let noL2 = typeof this.$l2 === "undefined";
