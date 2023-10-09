@@ -147,7 +147,7 @@
           class="pl-1 pr-1 ml-1 rounded d-inline-block"
           style="font-size: 0.8em; position: relative; bottom: 0.1rem"
         > 
-          {{ levels && levels[word.level] ? levels[word.level].level : word.level }}
+          {{ levels && levels[word.level] ? levels[word.level].name : word.level }}
         </span>
         <span
           v-if="word.newHSK"

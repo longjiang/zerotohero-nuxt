@@ -92,7 +92,7 @@ class BaseDictionary {
       this.normalizeWord(item)
       if (this.frequencyAssigner) {
         item.frequency = this.frequencyAssigner.getFrequency(item.head)
-        item.level = this.frequencyAssigner.getLevelByFrequency(item.frequency)
+        if (!item.level) item.level = this.frequencyAssigner.getLevelByFrequency(item.frequency) // Sometimes the dictionary already has level info
       }
     });
     words = words.filter((w) => w.head);
