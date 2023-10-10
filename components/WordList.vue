@@ -283,8 +283,9 @@ export default {
       color: #779bb5;
     }
 
+    .wordlist-item-word[data-level="outside"],
     .wordlist-item-l1 {
-      color: #666;
+      color: #666 !important;
     }
 
     .wordlist-item-byeonggi {
@@ -299,8 +300,9 @@ export default {
     .wordlist-item-pinyin * {
       color: rgba(255, 255, 255, 0.589);
     }
+    .wordlist-item-word[data-level="outside"],
     .wordlist-item-l1 {
-      color: rgba(255, 255, 255, 0.781);
+      color: rgba(255, 255, 255, 0.781) !important;
     }
   }
 }
@@ -310,9 +312,8 @@ export default {
 
   .wordlist-item {
     a {
-      color: $primary-color;
+      // color: inherit;
     }
-
     a:hover {
       text-decoration: none;
     }
