@@ -117,6 +117,10 @@ export default {
       type: Object,
       required: false,
     },
+    showQuiz: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -143,9 +147,6 @@ export default {
   computed: {
     ...mapState("stats", ["stats"]),
     ...mapState("shows", ["showsLoaded"]),
-    showQuiz() {
-      return this.$l2Settings.showQuiz;
-    },
     currentTimeEvery10Seconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
       return t;
