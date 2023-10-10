@@ -71,7 +71,6 @@
         :disabled="!previousEpisode"
       />
       <SimpleButton
-        v-if="episodes"
         :iconClass="`fas fa-arrow-${
           (forceMode || mode) === 'transcript' ? 'up' : 'left'
         }`"
@@ -89,7 +88,6 @@
         @click="togglePaused()"
       />
       <SimpleButton
-        v-if="episodes"
         :iconClass="`fas fa-arrow-${
           (forceMode || mode) === 'transcript' ? 'down' : 'right'
         }`"
