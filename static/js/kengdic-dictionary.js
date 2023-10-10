@@ -75,7 +75,7 @@ class KengdicDictionary extends BaseDictionary {
     delete row.k;
     delete row.l;
     delete row.username;
-    this.addFrequencyAndLevel(item)
+    this.addFrequencyAndLevel(row)
   }
 
   lookupByCharacter(char) {
