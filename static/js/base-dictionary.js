@@ -189,7 +189,8 @@ class BaseDictionary {
     return results.slice(0, limit);
   }
 
-  lookupBySearch(text, limit = 10) {
+  lookupBySearch(text, limit = 10, caseSensitive = false) {
+    if (!caseSensitive) text = text.toLowerCase().trim();
     let words = this.words.filter(w => w.search.includes(text) || w.head.includes(text))
     words = words.sort((a, b) => a.search.length - b.search.length).slice(0, limit)
     words = words.map(word => Object.assign({ score: 1 / (text.length + 1) }, word))

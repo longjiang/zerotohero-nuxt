@@ -57,7 +57,7 @@ export const actions = {
       if (user && user.id && token) {
         let path = 'items/user_watch_history'
         let response = await this.$directus.get(path, { 'filter[owner][eq]': user.id, 'filter[l2][eq]': l2Id })
-        if (response.status !== 200) {
+        if (response?.status !== 200) {
           logError('Error loading watch history from the server', response)
           return
         } else {

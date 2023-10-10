@@ -34,7 +34,7 @@ export const actions = {
         'limit': -1
       });
 
-      if (response.status !== 200) {
+      if (response?.status !== 200) {
         logError('Error loading likes from the server', response);
         return;
       } else {
@@ -70,7 +70,7 @@ export const actions = {
         const postResponse = await this.$directus.post(path, data);
         const id = postResponse.data?.data?.id;
         
-        if (postResponse.status !== 200) {
+        if (postResponse?.status !== 200) {
           logError('Error creating a new like', postResponse);
           return;
         }
