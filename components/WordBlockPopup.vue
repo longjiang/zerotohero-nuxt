@@ -1,9 +1,6 @@
 <template>
-  <div class="word-block-popup">
-    <div
-      class="tooltip-images"
-      :key="`tooltip-images-${text}`"
-    >
+  <div class="word-block-popup skin-light">
+    <div class="tooltip-images" :key="`tooltip-images-${text}`">
       <img
         alt
         class="image-wall-image"
@@ -37,9 +34,8 @@
           data-level="outside"
           :to="{ name: 'phrase', params: { term: text } }"
           style="font-size: 1.5rem; font-weight: bold"
-          >{{ text }}</router-link
-        >
-        <i class="fa fa-chevron-right text-success"></i>
+          >{{ text }} <i class="fa fa-chevron-right"></i
+        ></router-link>
         <span class="copy-button">
           <i class="ml-1 fa-regular fa-copy" @click="onCopyClick(text)"></i>
         </span>
@@ -107,18 +103,20 @@
         >
           <b
             :data-level="word.level || 'outside'"
-            style="font-size: 1.5rem"
             :class="{
               klingon: $l2.code === 'tlh',
             }"
           >
-            <span v-if="$l2.code === 'de' && word.gender">
-              {{ { n: "das", m: "der", f: "die" }[word.gender] }}
+            <span style="font-size: 1.5rem">
+              <template v-if="$l2.code === 'de' && word.gender">
+                {{ { n: "das", m: "der", f: "die" }[word.gender] }}
+              </template>
+              {{ transform(word.accented || word.head) }}
             </span>
-            <span>{{ transform(word.accented || word.head) }}</span>
+            <small><i class="fas fa-chevron-right"></i></small>
           </b>
         </router-link>
-        <i class="fas fa-chevron-right text-success"></i>
+
         <span class="copy-button">
           <i
             class="ml-1 fa-regular fa-copy"
@@ -146,8 +144,10 @@
           :data-bg-level="word.level"
           class="pl-1 pr-1 ml-1 rounded d-inline-block"
           style="font-size: 0.8em; position: relative; bottom: 0.1rem"
-        > 
-          {{ levels && levels[word.level] ? levels[word.level].name : word.level }}
+        >
+          {{
+            levels && levels[word.level] ? levels[word.level].name : word.level
+          }}
         </span>
         <span
           v-if="word.newHSK"
@@ -307,7 +307,11 @@ export default {
     tr,
     async translate(text) {
       let translator = this.$languages.getTranslator(this.$l1, this.$l2) || [];
-      this.translation = await translator.translateWithBing({text, l1Code: this.$l1.code, l2Code: this.$l2.code});
+      this.translation = await translator.translateWithBing({
+        text,
+        l1Code: this.$l1.code,
+        l2Code: this.$l2.code,
+      });
     },
     async translateWithApi() {
       // post to api
@@ -347,8 +351,8 @@ export default {
       return text;
     },
     getSupplementalLang(word) {
-      const supplementalLang = this.$languages.getSmart(word.supplementalLang)
-      return supplementalLang?.name || word.supplementalLang
+      const supplementalLang = this.$languages.getSmart(word.supplementalLang);
+      return supplementalLang?.name || word.supplementalLang;
     },
     klingonIPA(text) {
       return Klingon.latinToIPA(text);
