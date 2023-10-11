@@ -3,7 +3,6 @@ $primary-color-dark: #1e9239;
 
 // $color-c2: #005f58;
 $color-hsk-1: #f8b51e;
-$color-hsk-2: $primary-color;
 $color-hsk-2: #267f94;
 $color-hsk-3: #fd4f1c;
 $color-hsk-4: #bb1718;
@@ -16,7 +15,8 @@ $color-a2: $color-hsk-3;
 $color-b1: $color-hsk-4;
 $color-b2: $color-hsk-5;
 $color-c1: $color-hsk-6;
-$color-c2: #00837b;
+$color-c2: $primary-color;
+// $color-c2: #00837b;
 
 // $color-pre-a1: #b51700;
 // $color-a1: #0076ba;
