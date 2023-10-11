@@ -22,6 +22,8 @@
       modal-class="safe-padding-top mt-4"
       :title="$tb('Dictionary')"
       :body-class="`popup-dictionary-modal-wrapper l2-${$l2.code}`"
+      @show="$nuxt.$emit('popupOpened')"
+      @hide="$nuxt.$emit('popupClosed')"
     >
       <div
         v-if="
@@ -459,7 +461,6 @@ export default {
           this.playWordAudio();
         }
       }
-      this.$nuxt.$emit("popupOpened");
     },
     playWordAudio() {
       const canGenerateSpeech = this.$l1 && this.$l2 ? this.$languages.hasFeature(this.$l1, this.$l2, "speech") : false;
@@ -476,7 +477,6 @@ export default {
     },
     async closePopup() {
       this.hideMenuModal();
-      this.$nuxt.$emit("popupClosed");
     },
     async lookup() {
       this.lookupInProgress = true;

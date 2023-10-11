@@ -290,6 +290,8 @@ export default {
       this.currentLineIndex = startLineIndex;
       this.nextLine = this.lines[startLineIndex + 1];
     }
+  },
+  mounted() {
     this.attachPopupEventListeners();
   },
   beforeDestroy() {
