@@ -42,13 +42,6 @@
       />
       <SimpleButton
         v-if="showOpenButton"
-        iconClass="fa-solid fa-folder-open"
-        :title="$t('Open Another Video...') + ' (O)'"
-        @click="open()"
-        v-show="size !== 'mini'"
-      />
-      <SimpleButton
-        v-if="showOpenButton"
         iconClass="fa-solid fa-rotate-left"
         :title="$t('Rewind') + ' (R)'"
         @click="rewind()"
@@ -177,6 +170,15 @@
       "
     >
       <div class="video-info-inner">
+        <SimpleButton
+          v-if="showOpenButton"
+          iconClass="fa-solid fa-folder-open"
+          :title="$t('Open Another Video...') + ' (O)'"
+          :text="$t('Open Another Video...')"
+          @click="open()"
+          v-show="size !== 'mini'"
+          skin="light"
+        />
         <VideoDetails :video="video" ref="videoDetails" />
         <VideoAdmin
           :video="video"
@@ -184,6 +186,7 @@
           style="font-size: 0.8em; line-height: 2em"
         />
         <EpisodeNav
+          v-if="episodes"
           skin="light"
           v-bind="{
             video,
@@ -244,6 +247,7 @@
           </h6>
         </div>
         <YouTubeVideoList
+          v-if="episodes?.length || related?.length"
           :videos="show ? episodes : related"
           :showDate="true"
           :initialSort="episodeSort"

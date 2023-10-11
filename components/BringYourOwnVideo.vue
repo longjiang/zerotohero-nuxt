@@ -50,9 +50,6 @@ export default {
     skin: {
       default: null,
     },
-    video: {
-      type: Object,
-    },
     starttime: {
       type: Number,
       default: 0,
@@ -184,6 +181,7 @@ export default {
     onLoadedMetadata() {
       if (this.$refs.videoPlayer) {
         this.$emit("duration", this.$refs.videoPlayer.duration);
+        this.$emit("updateVideo", {...this.video, duration: this.$refs.videoPlayer.duration, width: this.$refs.videoPlayer.videoWidth, height: this.$refs.videoPlayer.videoHeight });
         this.$refs.videoPlayer.play();
       }
     },
@@ -191,7 +189,9 @@ export default {
       const file = event.target.files[0];
       if (file) {
         const url = URL.createObjectURL(file);
-        this.$emit("updateVideo", { ...this.video, url });
+        this.video = { url };
+          
+        this.$emit("updateVideo", this.video);
         this.loaded = true;
       }
     },

@@ -10,7 +10,7 @@
       startLineIndex,
       skin: $skin,
       useAutoTextSize: true,
-      showInfoButton: false,
+      showInfoButton: true,
       showOpenButton: true,
       autoload: true,
       autoplay: false,

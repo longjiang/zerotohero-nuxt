@@ -6,13 +6,26 @@
           'd-none': video.subs_l2 && video.subs_l2.length > 0,
           'subs-drop drop p-4 mt-3': true,
         }"
-        :key="`drop-${transcriptKey}`"
+        :key="`l2-subs-upload-${transcriptKey}`"
       >
         <p>
           <i class="fa fa-file mr-2"></i>
-          {{ $t("Upload subtitles (.srt or .ass)") }}
+          {{ $t("Upload original subtitles (.srt or .ass)") }}
         </p>
-        <input type="file" accept=".srt,.ass" @change="handleDrop" />
+        <input type="file" accept=".srt,.ass" @change="uploadSubs($event, 'l2')" />
+      </div>
+      <div
+        :class="{
+          'd-none': video.subs_l1 && video.subs_l1.length > 0,
+          'subs-drop drop p-4 mt-3': true,
+        }"
+        :key="`l1-subs-upload-${transcriptKey}`"
+      >
+        <p>
+          <i class="fa fa-file mr-2"></i>
+          {{ $t("Upload translation subtitles (.srt or .ass)") }}
+        </p>
+        <input type="file" accept=".srt,.ass" @change="uploadSubs($event, 'l1')" />
       </div>
       <div
         class="mt-4 mb-5 rounded"
@@ -34,83 +47,23 @@
           }}
         </div>
       </div>
-      <div class="video-edit-public" v-if="$adminMode">
-        <b-button
-          size="small"
-          :class="{
-            'd-none bg-success text-white': true,
-            'd-inline-block':
-              !saving &&
-              !(video && video.id) &&
-              ((video.subs_l2 && video.subs_l2.length > 0) || $adminMode),
-          }"
-          @click="save"
-          variant="success"
-        >
-          <i class="fas fa-plus mr-1"></i>
-          {{ $t("Add Video") }}
-        </b-button>
-        <span v-if="saving">
-          <i class="fas fa-hourglass mr-2 text-secondary"></i>
-          {{ $t("Adding...") }}
-        </span>
-        <span v-if="video && video.id && isNewVideo">
-          <i class="fas fa-check-circle mr-2 text-success"></i>
-          {{ $t("Added") }}
-        </span>
-        <div
-          v-if="
-            !saving &&
-            !(video && video.id) &&
-            ((video.subs_l2 && video.subs_l2.length > 0) || $adminMode)
-          "
-          style="font-size: 0.7em; opacity: 0.7"
-          class="mt-2"
-        >
-          {{
-            $t(
-              "Once saved, the video will be available for everyone to see. You can find it from Media > YouTube, then arrange the videos by date."
-            )
-          }}
-        </div>
-      </div>
       <div
         :class="{
           'video-edit-admin rounded p-2 mt-2 mb-2 d-none': true,
           'd-block': $adminMode && video && video.id,
         }"
       >
+        <b-button
+          size="small"
+          @click="save"
+          variant="success"
+          v-if="video.subs_l2 && video.subs_l2.length > 0"
+        >
+          <b-spinner small v-if="saving" />
+          <template v-else><i class="fas fa-plus mr-1"></i>{{ $t("Add Video") }}</template>
+        </b-button>
         <div class="video-edit-admin-first-line">
-          <!-- <b-dropdown
-            size="sm"
-            id="dropdown-1"
-            :text="video.topic ? topics[video.topic] : 'Topic'"
-            :variant="video.topic ? 'success' : undefined"
-            class="ml-1"
-          >
-            <b-dropdown-item
-              v-for="(title, slug) in topics"
-              :key="`change-topic-item-${slug}`"
-              @click="changeTopic(slug)"
-            >
-              {{ title }}
-            </b-dropdown-item>
-          </b-dropdown> -->
           <template v-if="!video.lesson">
-            <!-- <b-dropdown
-              id="dropdown-1"
-              size="sm"
-              :text="video.level ? levels[video.level] : 'Level'"
-              :variant="video.level ? 'success' : undefined"
-            >
-              <b-dropdown-item
-                v-for="(title, slug) in levels"
-                :key="`change-level-item-${slug}`"
-                @click="changeLevel(slug)"
-              >
-                {{ title }}
-              </b-dropdown-item>
-            </b-dropdown> -->
             <AssignShow
               @assignShow="saveShow"
               v-if="!video.tv_show && !video.talk"
@@ -470,6 +423,13 @@ export default {
           this.saving = false;
           this.isNewVideo = true;
           this.videoInfoKey++;
+          this.$toast.success(
+            this.$tb("Video added."),
+            {
+              position: "top-center",
+              duration: 5000,
+            }
+          );
         }
       } catch (err) {
         logError(err);
@@ -494,17 +454,22 @@ export default {
         }
       }
     },
-    handleDrop(event) {
+    uploadSubs(event, l1OrL2) {
       event.preventDefault();
       let file = event.target.files[0];
       let reader = new FileReader();
       reader.readAsText(file);
-      let parsed = [];
       reader.onload = (event) => {
         let srt = event.target.result;
-        this.video.subs_l2 = this.$subs.parseSrt(srt);
-        this.firstLineTime = this.video.subs_l2[0].starttime;
-        this.originalText = this.text; // Update the text in the textarea
+        this.$store.commit("shows/MODIFY_ITEM", {
+          item: this.video,
+          key: `subs_${l1OrL2}`,
+          value: this.$subs.parseSrt(srt),
+        });
+        if (l1OrL2 === 'l2') {
+          this.originalText = this.text; // Update the text in the textarea
+          this.firstLineTime = this.video[`subs_${l1OrL2}`][0].starttime;
+        }
         this.transcriptKey++;
         this.$emit("updateTranscript", true);
       };
