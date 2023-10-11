@@ -31,6 +31,7 @@ export const actions = {
       let path = 'items/user_likes';
       let response = await this.$directus.get(path, { 
         'filter[owner][eq]': user.id,
+        'sort': '-id',
         'limit': -1
       });
 

@@ -83,7 +83,11 @@ export default {
   },
   computed: {
     likedVideos() {
-      return this.$store.getters["userLikes/likedVideos"](this.$l2.id);
+      let likes = this.$store.getters["userLikes/likedVideos"](this.$l2.id);
+      likes = likes.sort((a, b) => {
+        return b.id - a.id;
+      });
+      return likes
     },
   },
   async mounted() {
@@ -92,13 +96,10 @@ export default {
   methods: {
     onVisibilityChange(isVisible, entry, like) {
       if (isVisible) {
-        console.log(`Visible. Fetching video details for ${like.video_id}`);
         this.$store.dispatch("userLikes/fetchVideoDetails", {
           l2Id: this.$l2.id,
           videoId: like.video_id,
         });
-      } else {
-        console.log("not visible");
       }
     },
   },

@@ -58,11 +58,18 @@
             ></b-progress>
           </client-only>
           <img
+            v-if="video.youtube_id"
             class="youtube-thumbnail aspect"
             ref="thumbnail"
             @load="thumbnailLoaded"
             @error="thumbnailError"
             :src="thumbnail"
+          />
+          <img
+            v-else
+            class="youtube-thumbnail aspect"
+            ref="thumbnail"
+            src="/img/placeholder-faded.png"
           />
         </router-link>
         <AddToPlaylist class="add-to-playlist" :video="video">
