@@ -193,7 +193,7 @@ export default {
   },
   watch: {
     'video.youtube_id'() {
-      if (video.youtube_id) this.loadYouTubeiFrame()
+      if (video?.youtube_id) this.loadYouTubeiFrame()
     }
   },
   methods: {

@@ -163,6 +163,7 @@
           Unit {{ word.unit }}
         </span>
       </div>
+      <Frequency v-if="word.frequency" :entry="word" :showText="false" class="mb-1" />
       <div>
         <span
           class="word-type"
@@ -192,7 +193,6 @@
         >
           {{ getSupplementalLang(word) }}
         </span>
-        <Frequency v-if="word.frequency" :entry="word" :showText="false" class="mb-1" />
         <DefinitionsList
           v-if="word.definitions"
           class="word-translation"
