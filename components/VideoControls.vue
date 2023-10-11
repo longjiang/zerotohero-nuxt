@@ -64,6 +64,13 @@
         :disabled="!previousEpisode"
       />
       <SimpleButton
+        v-if="showOpenButton"
+        iconClass="fa-solid fa-backward"
+        :title="$t('Shift Subs Back 1s')"
+        skin="light"
+        @click="shiftSubs(-1)"
+      />
+      <SimpleButton
         :iconClass="`fas fa-arrow-${
           (forceMode || mode) === 'transcript' ? 'up' : 'left'
         }`"
@@ -87,6 +94,13 @@
         :title="$t('Next Line') + ' (→)'"
         @click="goToNextLine()"
         v-show="size !== 'mini'"
+      />
+      <SimpleButton
+        v-if="showOpenButton"
+        iconClass="fa-solid fa-forward"
+        :title="$t('Shift Subs Forward 1s')"
+        skin="light"
+        @click="shiftSubs(+1)"
       />
       <SimpleButton
         v-if="episodes"
@@ -170,15 +184,29 @@
       "
     >
       <div class="video-info-inner">
-        <SimpleButton
-          v-if="showOpenButton"
-          iconClass="fa-solid fa-folder-open"
-          :title="$t('Open Another Video...') + ' (O)'"
-          :text="$t('Open Another Video...')"
-          @click="open()"
-          v-show="size !== 'mini'"
-          skin="light"
-        />
+        <div v-if="showOpenButton">
+          <SimpleButton
+            iconClass="fa-solid fa-folder-open"
+            :title="$t('Open Another Video...') + ' (O)'"
+            :text="$t('Open Another Video...')"
+            @click="open()"
+            skin="light"
+          />
+          <div>
+            <SimpleButton
+              iconClass="fa-solid fa-backward"
+              :text="$t('Shift Subs Back 1s')"
+              skin="light"
+              @click="shiftSubs(-1)"
+            />
+            <SimpleButton
+              iconClass="fa-solid fa-forward"
+              :text="$t('Shift Subs Forward 1s')"
+              skin="light"
+              @click="shiftSubs(+1)"
+            />
+          </div>
+        </div>
         <VideoDetails :video="video" ref="videoDetails" />
         <VideoAdmin
           :video="video"
@@ -408,7 +436,7 @@ export default {
       transcriptMode: false,
       karaokeAnimation: false,
       watcherActive: false,
-      likePending: false
+      likePending: false,
     };
   },
   computed: {
@@ -525,6 +553,15 @@ export default {
     },
   },
   methods: {
+    shiftSubs(subsShift) {
+      if (this.video.subs_l2 && this.video.subs_l2.length > 0) {
+        for (let line of this.video.subs_l2) {
+          line.starttime =  Number(line.starttime) + subsShift
+        }
+      }
+      this.goToLine(this.currentLine);
+      this.play();
+    },
     toggleLike() {
       // dispatch a 'userLikes/like' action if this.liked is true
       // dispatch a 'userLikes/unlike' action if this.liked is false
