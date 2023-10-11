@@ -536,7 +536,7 @@ export default {
       "MSFullscreenChange",
     ];
     fullscreenEvents.forEach((event) => {
-      document.addEventListener(event, this.updateFullscreenState);
+      if (typeof document !== "undefined") document.addEventListener(event, this.updateFullscreenState);
     });
     this.updateFullscreenState();
   },
@@ -550,7 +550,7 @@ export default {
       "MSFullscreenChange",
     ];
     fullscreenEvents.forEach((event) => {
-      document.removeEventListener(event, this.updateFullscreenState);
+      if (typeof document !== "undefined") document.removeEventListener(event, this.updateFullscreenState);
     });
   },
   async updated() {
@@ -590,6 +590,7 @@ export default {
   methods: {
 
     getContainerElementWidth() {
+      if (typeof document === "undefined") return;
       let containerElement = document.querySelector(".video-view-content");
       if (containerElement) {
         return containerElement.offsetWidth;
@@ -597,6 +598,7 @@ export default {
     },
 
     getContainerElementHeight() {
+      if (typeof document === "undefined") return;
       let containerElement = document.querySelector(".video-view-content");
       if (containerElement) {
         return containerElement.offsetHeight;
@@ -852,6 +854,7 @@ export default {
       }
     },
     requestFullscreen() {
+      if (typeof document === "undefined") return;
       const docEl = document.documentElement;
 
       if (docEl.requestFullscreen) {
@@ -870,6 +873,7 @@ export default {
       }
     },
     exitFullscreen() {
+      if (typeof document === "undefined") return;
       if (document.exitFullscreen) {
         document.exitFullscreen();
       } else if (document.mozCancelFullScreen) {
@@ -886,6 +890,7 @@ export default {
       }
     },
     updateFullscreenState() {
+      if (typeof document === "undefined") return;
       const fullscreen = !!(
         document.fullscreenElement ||
         document.webkitFullscreenElement ||
@@ -896,6 +901,7 @@ export default {
     },
 
     handleMouseDown(e) {
+      if (typeof document === "undefined") return;
       const videoTranscriptWrapper = this.$refs.videoTranscriptWrapper;
       e.preventDefault();
       const startY = e.clientY;
@@ -926,6 +932,7 @@ export default {
       };
 
       const handleMouseUp = () => {
+        if (typeof document === "undefined") return;
         document.removeEventListener("mousemove", handleMouseMove);
         document.removeEventListener("mouseup", handleMouseUp);
       };

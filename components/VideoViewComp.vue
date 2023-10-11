@@ -46,7 +46,8 @@
           initialMode: mode,
           landscape,
           starttime,
-          playlist
+          playlist,
+          showQuiz
         }"
         @updateLayout="onUpdateLayout"
         @videoLoaded="onVideoLoaded"
@@ -97,6 +98,9 @@ export default {
   },
   computed: {
     ...mapState("shows", ["recommendedVideosLoaded", "recommendedVideos"]),
+    showQuiz() {
+      return this.$l2Settings.showQuiz;
+    },
     currentComponent() {
       switch (this.type) {
         case "youtube":
