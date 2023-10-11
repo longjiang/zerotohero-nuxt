@@ -65,7 +65,7 @@
       />
       <SimpleButton
         v-if="showOpenButton"
-        iconClass="fa-solid fa-backward"
+        iconClass="fa-solid fa-angles-left"
         :title="$t('Shift Subs Back 1s')"
         skin="light"
         @click="shiftSubs(-1)"
@@ -97,7 +97,7 @@
       />
       <SimpleButton
         v-if="showOpenButton"
-        iconClass="fa-solid fa-forward"
+        iconClass="fa-solid fa-angles-right"
         :title="$t('Shift Subs Forward 1s')"
         skin="light"
         @click="shiftSubs(+1)"
@@ -194,13 +194,13 @@
           />
           <div>
             <SimpleButton
-              iconClass="fa-solid fa-backward"
+              iconClass="fa-solid fa-angles-left"
               :text="$t('Shift Subs Back 1s')"
               skin="light"
               @click="shiftSubs(-1)"
             />
             <SimpleButton
-              iconClass="fa-solid fa-forward"
+              iconClass="fa-solid fa-angles-right"
               :text="$t('Shift Subs Forward 1s')"
               skin="light"
               @click="shiftSubs(+1)"

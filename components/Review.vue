@@ -64,9 +64,9 @@
               v-if="$l2.code !== $l1.code && reviewItem.parallelLines"
               v-html="reviewItem.parallelLines"
             />
-            <small class="ml-1" style="cursor: pointer" @click="scrollToLine">
-              <i class="fa fa-arrow-up"></i>
-            </small>
+            <b-button class="ml-1 btn-small" style="border: 1px solid #ccc" variant="light"  @click="scrollToLine">
+              <i class="fa-solid fa-rotate-left"></i> Seek Video to Line
+            </b-button>
           </div>
         </div>
       </div>
@@ -121,8 +121,7 @@ export default {
   },
   methods: {
     scrollToLine() {
-      this.$parent.$parent.seekVideoTo(this.reviewItem.line.starttime);
-      this.$parent.$parent.play();
+      this.$emit("goToLine", this.reviewItem.line);
     },
     async findSimilarWords(text) {
       let words = [];

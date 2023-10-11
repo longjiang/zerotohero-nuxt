@@ -7,15 +7,15 @@
       centered
       hide-footer
       :title="$t('Pop Quiz')"
-      body-class="playlist-modal-wrapper"
+      body-class="playlist-modal-wrapper p-4"
       modal-class="safe-padding-top mt-4"
       @show="onPopQuizModalShown"
       @hide="onPopQuizModalHidden"
     >
       <PopQuiz
-        class="pl-4"
         skin="light"
         v-bind="{ reviewItems }"
+        @goToLine="$emit('goToLine', $event); $bvModal.hide('quiz-modal');"
       />
     </b-modal>
   </div>

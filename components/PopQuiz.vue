@@ -8,9 +8,10 @@
         :reviewItem="reviewItems[currentIndex]"
         :skin="skin"
         @reviewItemAnswered="onReviewItemAnswered(reviewItems[currentIndex])"
+        @goToLine="$emit('goToLine', $event)"
       />
       <div
-        class="pl-2 pr-2 pt-1 pb-3"
+        class="pl-2 pr-2 pt-1"
         style="display: flex; justify-content: space-between; align-items: center"
       >
         <button :class="`btn btn-sm btn-${$skin} text-gray`" @click="prevQuestion" v-if="currentIndex > 0"><i class="fa fa-chevron-left mr-1" />{{ $t('Prev Question') }}</button>
