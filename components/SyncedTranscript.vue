@@ -807,7 +807,6 @@ export default {
       this.goToLine(this.nextLine || this.lines[0]);
     },
     goToLine(line) {
-      console.log("goToLine", line);
       if (!line) return;
       this.currentLineIndex = this.lines.findIndex((l) => l === line);
       this.currentLine = line;

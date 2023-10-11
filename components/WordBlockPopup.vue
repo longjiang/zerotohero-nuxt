@@ -192,6 +192,7 @@
         >
           {{ getSupplementalLang(word) }}
         </span>
+        <Frequency v-if="word.frequency" :entry="word" :showText="false" class="mb-1" />
         <DefinitionsList
           v-if="word.definitions"
           class="word-translation"
@@ -223,7 +224,7 @@
           :showSpeak="false"
         />
       </div>
-      <hr class="mt-2 mb-2" />
+      <div class="mt-2 mb-2" />
     </div>
     <div v-if="loading === true">
       <Loader :sticky="true" message="Looking up the dictionary..." />

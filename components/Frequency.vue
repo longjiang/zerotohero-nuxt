@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'frequency-wrapper': true, 'd-inline-block': true, mini: mini}">
+  <div :class="{'frequency-wrapper': true, 'd-block': true, mini: mini}">
     <div class="frequency mt-1">
       <div
         class="frequency-fill"
@@ -47,6 +47,7 @@ export default {
   background: #ccc;
   height: 0.3rem;
   width: 100%;
+  border-radius: 0.15rem;
 }
 
 .frequency-text {
@@ -57,6 +58,7 @@ export default {
 .frequency-fill {
   background: #88b1a2;
   height: 0.3rem;
+  border-radius: 0.15rem;
 }
 
 .frequency-level {
