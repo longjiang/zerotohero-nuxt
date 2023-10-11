@@ -56,7 +56,7 @@ export const actions = {
       let token = $nuxt.$auth.strategy.token.get()
       if (user && user.id && token) {
         let path = 'items/user_watch_history'
-        let response = await this.$directus.get(path, { 'filter[owner][eq]': user.id, 'filter[l2][eq]': l2Id })
+        let response = await this.$directus.get(path, { 'filter[owner][eq]': user.id, 'filter[l2][eq]': l2Id, 'sort': '-id' })
         if (response?.status !== 200) {
           logError('Error loading watch history from the server', response)
           return
