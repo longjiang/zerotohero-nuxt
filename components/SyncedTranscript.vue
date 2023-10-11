@@ -517,9 +517,9 @@ export default {
           }
         }
 
-        // If no match is found, add an empty line to represent no corresponding match
+        // If no match is found, duplicate the last matched line
         if (!hasMatched) {
-          matchedLine = "";
+          matchedLine = matchedLines[matchedLines.length - 1] || "";
         }
 
         // Add the matched line (translated line or empty string) to the array of all matched lines
