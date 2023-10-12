@@ -141,11 +141,32 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     if (words && words[0]) return words[0];
   }
 
-  lookupMultiple(text, ignoreAccents = false) {
+  lookupMultiple(text, ignoreAccents = false, ignoreCase = true) {
     if (!text) return [];
-    let textLower = text.toLowerCase();
-    if (ignoreAccents) textLower = stripAccents(textLower);
-    let words = ignoreAccents ? this.searchIndex[textLower] : this.headIndex[textLower]; // searchIndex is accent insensitive, headIndex is accent sensitive
+
+    const textNoAccent = stripAccents(text);
+    const textLower = text.toLowerCase();
+    const textNoAccentLower = textNoAccent.toLowerCase();
+
+    let targetForms = [ text ];
+    if (ignoreAccents) targetForms.push(textNoAccent);
+    if (ignoreCase) targetForms.push(textLower);
+    if (ignoreCase && ignoreAccents) targetForms.push(textNoAccentLower);
+    // Make sure targetForms are unique
+    targetForms = [...new Set(targetForms)];
+
+    let words = [];
+    for (let form of targetForms) {
+      // searchIndex is accent insensitive
+      if (this.searchIndex[form]) {
+        words = words.concat(this.searchIndex[form]);
+      }
+      // headIndex is accent sensitive
+      if (this.headIndex[form]) {
+        words = words.concat(this.headIndex[form]);
+      }
+    }
+
     return words || [];
   }  
 };

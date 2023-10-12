@@ -175,7 +175,10 @@ class FrequencyAssigner {
   }
 
   addFrequencyAndLevel(item) {
-    item.frequency = this.getFrequency(item.search || item.head);
+    item.frequency = this.getFrequency(item.head);
+    if (!item.frequency) {
+      item.frequency = this.getFrequency(item.search);
+    }
     if (!item.level) item.level = this.getLevelByFrequency(item.frequency); // Sometimes the dictionary already has level info
   }
 
