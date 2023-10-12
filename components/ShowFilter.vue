@@ -268,17 +268,17 @@ export default {
     checkSpecials() {
       if (this.musicShow) {
         let musicId = Number(this.musicShow.id);
-        this.musicChecked = this.tvShowFilter.includes(musicId);
+        this.musicChecked = this.tvShowFilter?.includes(musicId);
         this.tvShowChecked = this.tvShowChecked.filter(id => id !== musicId);
       }
       if (this.moviesShow) {
         let moviesId = Number(this.moviesShow.id);
-        this.moviesChecked = this.tvShowFilter.includes(moviesId);
+        this.moviesChecked = this.tvShowFilter?.includes(moviesId);
         this.tvShowChecked = this.tvShowChecked.filter(id => id !== moviesId);
       }
       if (this.newsShow) {
         let newsId = Number(this.newsShow.id);
-        this.newsChecked = this.talkFilter.includes(Number(this.newsShow.id));
+        this.newsChecked = this.talkFilter?.includes(Number(this.newsShow.id));
         this.talkChecked = this.talkChecked.filter(id => id !== newsId);
       }
     },

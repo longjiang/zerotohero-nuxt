@@ -19,9 +19,9 @@ class FrequencyAssigner {
   static hasFrequencyData(l2) {
     const langsWithFrequencyData = [
       "ar", "bn", "bs", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "fi", "fr", "de",
-      "el", "he", "hi", "hu", "is", "id", "it", "ja", "ko", "lv", "lt", "mk", "ms", "nb",
-      "fa", "pl", "pt", "ro", "ru", "sl", "sk", "sr", "es", "sv", "fi", "ta", "tr", "uk",
-      "ur", "vi"
+      "el", "he", "hi", "hu", "is", "id", "it", "ja", "ko", "lv", "lt", "mk", "ms", "no",
+      "nn", "nb", "fa", "pl", "pt", "ro", "ru", "sl", "sk", "sr", "es", "sv", "fi", "ta",
+      "tr", "uk", "ur", "vi"
     ];
     return langsWithFrequencyData.includes(l2.code);
   }
@@ -33,7 +33,9 @@ class FrequencyAssigner {
   }
 
   async loadData() {
-    const file = "/data/frequency-lists/zipf_frequency_list_" + this.l2.code + ".csv";
+    let code = this.l2.code
+    if (["no", "nb", "nn"].includes(code)) code = "nb"; // Use Norwegian Bokmål frequency list for all Norwegian variants
+    const file = "/data/frequency-lists/zipf_frequency_list_" + code + ".csv";
     this.loadFrequencyData({
       name: "zipf_frequency_list_" + this.l2.code,
       file,

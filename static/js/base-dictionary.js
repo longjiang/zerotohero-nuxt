@@ -28,7 +28,7 @@ class BaseDictionary {
     const instance = new this({ l1, l2 });
     if (FrequencyAssigner.hasFrequencyData(l2))
       instance.frequencyAssigner = await FrequencyAssigner.load({ l1, l2 }); // We need to load the frequency assigner first
-    await instance.loadData();
+    await instance.loadData(); // We must await this otherwise we have no words
     console.log(`${this.name}: Indexing...`);
     instance.createIndices();
     console.log(`${this.name}: Indexing finished.`);

@@ -57,7 +57,7 @@
         </span>
       </router-link>
       <a
-        class="suggestion"
+        class="suggestion skin-light"
         v-for="(suggestion, index) in suggestions.filter(
           (suggestion) => suggestion
         )"

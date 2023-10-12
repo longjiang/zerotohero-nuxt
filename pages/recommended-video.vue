@@ -25,7 +25,7 @@
             <Loader
               :sticky="true"
               :message="
-                $t('Loading your learning progress and content preferences...')
+                $t('Loading your recommended videos...')
               "
               class="text-white"
             />
