@@ -26,8 +26,6 @@ class BaseDictionary {
 
   static async load({ l1 = undefined, l2 = undefined } = {}) {
     const instance = new this({ l1, l2 });
-    if (FrequencyAssigner.hasFrequencyData(l2))
-      instance.frequencyAssigner = await FrequencyAssigner.load({ l1, l2 }); // We need to load the frequency assigner first
     await instance.loadData(); // We must await this otherwise we have no words
     console.log(`${this.name}: Indexing...`);
     instance.createIndices();
@@ -39,6 +37,11 @@ class BaseDictionary {
       indexKeys: instance.indexKeys,
     });
     instance.inflector = await InflectorFactory.createInflector(l2);
+    if (FrequencyAssigner.hasFrequencyData(l2)) {
+      instance.frequencyAssigner = await FrequencyAssigner.load({ l1, l2 });
+      instance.frequencyAssigner.addFrequencyAndLevelToItems(instance.words);
+      console.log(`${this.name}: Frequency and level data added.`, instance.words);
+    }
     return instance;
   }
 
@@ -98,18 +101,10 @@ class BaseDictionary {
     console.log(`${this.name}: Normalizing dictionary data...`);
     words.forEach((item) => {
       this.normalizeWord(item)
-      this.addFrequencyAndLevel(item)
     });
     words = words.filter((w) => w.head);
     console.log(`${this.name}: ${file} loaded.`);
     return words;
-  }
-
-  addFrequencyAndLevel(item) {
-    if (this.frequencyAssigner) {
-      item.frequency = this.frequencyAssigner.getFrequency(item.head)
-      if (!item.level) item.level = this.frequencyAssigner.getLevelByFrequency(item.frequency) // Sometimes the dictionary already has level info
-    }
   }
 
   /**

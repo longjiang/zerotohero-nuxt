@@ -10,18 +10,68 @@ class FrequencyAssigner {
     this.searchIndex = {}; // This holds the frequency data
     this.indexDbVerByLang = {};
     this.lemmatized = false; // Whether this is a lemmatized and folded frequency list
-    this.wordKey = "lemma"
-    this.frequencyKey = "frequency"
-    this.name = 'FrequencyAssigner';
-    this.levelThresholds = {1: 5.79, 2: 5.35, 3: 4.99, 4: 4.56, 5: 4.09, 6: 3.57, 7: 3.01};
+    this.wordKey = "lemma";
+    this.frequencyKey = "frequency";
+    this.name = "FrequencyAssigner";
+    this.levelThresholds = {
+      1: 5.79,
+      2: 5.35,
+      3: 4.99,
+      4: 4.56,
+      5: 4.09,
+      6: 3.57,
+      7: 3.01,
+    };
   }
 
   static hasFrequencyData(l2) {
     const langsWithFrequencyData = [
-      "ar", "bn", "bs", "bg", "ca", "zh", "hr", "cs", "da", "nl", "en", "fi", "fr", "de",
-      "el", "he", "hi", "hu", "is", "id", "it", "ja", "ko", "lv", "lt", "mk", "ms", "no",
-      "nn", "nb", "fa", "pl", "pt", "ro", "ru", "sl", "sk", "sr", "es", "sv", "fi", "ta",
-      "tr", "uk", "ur", "vi"
+      "ar",
+      "bn",
+      "bs",
+      "bg",
+      "ca",
+      "zh",
+      "hr",
+      "cs",
+      "da",
+      "nl",
+      "en",
+      "fi",
+      "fr",
+      "de",
+      "el",
+      "he",
+      "hi",
+      "hu",
+      "is",
+      "id",
+      "it",
+      "ja",
+      "ko",
+      "lv",
+      "lt",
+      "mk",
+      "ms",
+      "no",
+      "nn",
+      "nb",
+      "fa",
+      "pl",
+      "pt",
+      "ro",
+      "ru",
+      "sl",
+      "sk",
+      "sr",
+      "es",
+      "sv",
+      "fi",
+      "ta",
+      "tr",
+      "uk",
+      "ur",
+      "vi",
     ];
     return langsWithFrequencyData.includes(l2.code);
   }
@@ -33,21 +83,21 @@ class FrequencyAssigner {
   }
 
   async loadData() {
-    let code = this.l2.code
+    let code = this.l2.code;
     if (["no", "nb", "nn"].includes(code)) code = "nb"; // Use Norwegian Bokmål frequency list for all Norwegian variants
     const file = "/data/frequency-lists/zipf_frequency_list_" + code + ".csv";
-    this.loadFrequencyData({
+    let data = await this.loadFrequencyData({
       name: "zipf_frequency_list_" + this.l2.code,
       file,
-    }).then((data) => {
-      if (data?.[0]?.lemma) this.lemmatized = true;
-      this.wordKey = this.lemmatized ? "lemma" : "word";
-      this.frequencyKey = this.lemmatized ? "folded_frequency" : "frequency";
-      data = data.filter((word) => word[this.frequencyKey] > 3); // Remove words with frequency <= 3
-      this.createIndices(data);
-      this.levelThresholds = this.determineLevelThresholds(data);
-      data = null;
     });
+    if (data?.[0]?.lemma) this.lemmatized = true;
+    this.wordKey = this.lemmatized ? "lemma" : "word";
+    this.frequencyKey = this.lemmatized ? "folded_frequency" : "frequency";
+    data = data.filter((word) => word[this.frequencyKey] > 3); // Remove words with frequency <= 3
+    this.createIndices(data);
+    this.levelThresholds = this.determineLevelThresholds(data);
+    data = null;
+    return this;
   }
 
   createIndices(data) {
@@ -114,12 +164,25 @@ class FrequencyAssigner {
     let wordsSoFar = 0;
 
     for (let i = 0; i < 7; i++) {
-        wordsSoFar += level1Words * Math.pow(2, i);
-        let threashold = data[wordsSoFar]?.[this.frequencyKey] || data[data.length - 1]?.[this.frequencyKey];
-        levelThresholds[i + 1] = Number(threashold);
+      wordsSoFar += level1Words * Math.pow(2, i);
+      let threashold =
+        data[wordsSoFar]?.[this.frequencyKey] ||
+        data[data.length - 1]?.[this.frequencyKey];
+      levelThresholds[i + 1] = Number(threashold);
     }
 
     return levelThresholds;
+  }
+
+  addFrequencyAndLevel(item) {
+    item.frequency = this.getFrequency(item.search || item.head);
+    if (!item.level) item.level = this.getLevelByFrequency(item.frequency); // Sometimes the dictionary already has level info
+  }
+
+  addFrequencyAndLevelToItems(items) {
+    for (let item of items) {
+      this.addFrequencyAndLevel(item);
+    }
   }
 
   getFrequency(word) {
