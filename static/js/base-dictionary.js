@@ -40,7 +40,6 @@ class BaseDictionary {
     if (FrequencyAssigner.hasFrequencyData(l2)) {
       instance.frequencyAssigner = await FrequencyAssigner.load({ l1, l2 });
       instance.frequencyAssigner.addFrequencyAndLevelToItems(instance.words);
-      console.log(`${this.name}: Frequency and level data added.`, instance.words);
     }
     return instance;
   }
