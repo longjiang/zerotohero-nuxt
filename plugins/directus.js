@@ -31,7 +31,6 @@ export const YOUTUBE_VIDEOS_TABLES = {
     1540, // German
   ],
   7: [
-    2645, // Italian
     2780, // Japanese
   ],
   8: [
@@ -46,11 +45,6 @@ export const YOUTUBE_VIDEOS_TABLES = {
     6615, // Turkish - 32,150 videos
     5326, // Polish - 27,971 videos
     4677, // Dutch - 22,453 videos
-    2601, // Indonesian - 19,154 videos
-    6325, // Thai - 15,576 videos
-    6115, // Swedish - 15,236 videos
-    4759, // Norwegian - 12,061 videos
-    4448, // Min Nan - 8,717 videos
   ],
   11: [
     2351, // Hebrew
@@ -62,6 +56,19 @@ export const YOUTUBE_VIDEOS_TABLES = {
     5892, // Slovak
     4247, // Malay
   ],
+  12: [
+    2645, // Italian
+  ],
+  13: [
+    2601, // Indonesian - 19,154 videos
+    6115, // Swedish - 15,236 videos
+    4759, // Norwegian - 12,061 videos
+    4448, // Min Nan - 8,717 videos
+  ],
+  14: [
+    6325, // Thai - 15,576 videos
+    4392, // Burmese
+  ]
 };
 
 export default ({ app }, inject) => {
