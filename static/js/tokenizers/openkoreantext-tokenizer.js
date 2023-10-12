@@ -20,18 +20,13 @@ class OpenKoreanTextTokenizer extends BaseTokenizer {
       if (!token) {
         tokens.push(" ");
       } else {
-        const tokenText = token.word || token.text
-        // Find token.text's position in text.
-        const position = text.indexOf(tokenText, currentPosition);
-        console.log(tokenText, position, currentPosition);
-
         // Check if there's a gap between the current position and the token's offset.
-        if (position > currentPosition) {
+        if (token.offset > currentPosition) {
           tokens.push(" ");
         }
 
-        if (token.pos === 'Punctuation' && !isHangul(tokenText)) {
-          tokens.push(tokenText);
+        if (token.pos === 'Punctuation' && !isHangul(token.text)) {
+          tokens.push(token.text);
         } else {
           token.lemmas = [];
           if (token.stem) token.lemmas = [ { lemma: token.stem, pos: token.pos } ];
@@ -39,7 +34,7 @@ class OpenKoreanTextTokenizer extends BaseTokenizer {
         }
 
         // Update currentPosition to the position right after the current token.
-        currentPosition = position + tokenText.length;
+        currentPosition = token.offset + token.text.length;
       }
     }
 
