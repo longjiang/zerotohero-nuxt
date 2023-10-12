@@ -360,8 +360,9 @@ export default {
           this.currentLineIndex + 5
         );
         for (let line of nextLines) {
-          let tokens = await dictionary.tokenizeWithCache(
-            line.line.replace(/\n/g, " ")
+          // console.log('💣 line.line', line.line)
+          await dictionary.tokenizeWithCache(
+            line.line
           );
         }
       }

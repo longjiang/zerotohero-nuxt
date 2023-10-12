@@ -59,7 +59,7 @@
             @annotated="onAnnotated"
             @savedWordsFound="onSavedWordsFound"
           >
-            <span v-html="lineHtml(line).trim()" />
+            <span v-html="lineHtml(line)" />
           </Annotate>
           <div v-else v-html="lineHtml(line)" />
           <div class="dot-wrapper-rtl" v-if="!single && $l2.direction === 'rtl'">

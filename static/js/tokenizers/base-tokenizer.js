@@ -41,12 +41,15 @@ class BaseTokenizer {
         this.serverCache[this.l2.code] = {};
       }
       this.serverCache[this.l2.code][key] = data[key];
+      // console.log("Loading server cache for", this.l2.code, key);
     }
   }
 
   loadFromServerCache(text) {
     const key = CryptoJS.MD5(text).toString();
-    return this.serverCache[this.l2.code]?.[key];
+    const tokens = this.serverCache[this.l2.code]?.[key];
+    // console.log("Loading from server cache for", this.l2.code, key, tokens, {text});
+    return tokens
   }
 
   async tokenize(text) {
