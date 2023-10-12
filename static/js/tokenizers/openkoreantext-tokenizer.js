@@ -20,8 +20,11 @@ class OpenKoreanTextTokenizer extends BaseTokenizer {
       if (!token) {
         tokens.push(" ");
       } else {
+        // Find token.text's position in text.
+        const position = text.indexOf(token.text, currentPosition);
+
         // Check if there's a gap between the current position and the token's offset.
-        if (token.offset > currentPosition) {
+        if (position > currentPosition) {
           tokens.push(" ");
         }
 
@@ -34,7 +37,7 @@ class OpenKoreanTextTokenizer extends BaseTokenizer {
         }
 
         // Update currentPosition to the position right after the current token.
-        currentPosition = token.offset + token.text.length;
+        currentPosition = position + token.text.length;
       }
     }
 
