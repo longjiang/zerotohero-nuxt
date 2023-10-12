@@ -4,18 +4,18 @@ class SimplemmaTokenizer extends BaseTokenizer {
   
   async tokenize(text) {
     let tokens = [];
-    text = text.replace(/-/g, "- ");
+    
     let langCode = this.l2["iso639-3"] || this.l2["glottologId"];
     if (langCode === "nor") langCode = "nob"; // Use Bokmål for Norwegian
-    let url = `${PYTHON_SERVER}lemmatize-simple?lang=${langCode}&text=${encodeURIComponent(text)}`;
-    let tokenized = await proxy(url, { timeout: 5000 });
+
+    let tokenized = this.loadFromServerCache(text); // L2 is taken care of in the base class
+    if (!tokenized) { 
+      let url = `${PYTHON_SERVER}lemmatize-simple?lang=${langCode}&text=${encodeURIComponent(text)}`;
+      tokenized = await proxy(url, { timeout: 5000 });
+    }
     // Check if the tokenized is an array and not a string
     if (!tokenized || typeof tokenized === 'string') {
-      // Try again without caching
-      tokenized = await proxy(url, {cacheLife: 0, timeout: 5000});
-      if (!tokenized || typeof tokenized === 'string') {
-        return this.tokenizeLocally(text);
-      }
+      return this.tokenizeLocally(text);
     }
     for (let token of tokenized) {
       if (!token) {

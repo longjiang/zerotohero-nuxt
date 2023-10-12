@@ -694,15 +694,11 @@ export default {
     async annotateRecursive(node) {
       if (node?.classList?.contains("sentence")) {
         // .sentence node
-        let sentence = node.innerText;
-        // If the language is does not use apostrophes as part of the word (like Klingon)
-        if (!this.$l2.apostrophe) sentence = SmartQuotes.string(sentence);
-        // We MUST do that otherwise the data-sentence-text attribute (10 lines down) will mess up the markup!
-        else {
-          sentence = SmartQuotes.string(
+        let sentence = node.innerText;        
+        sentence = SmartQuotes.string(
             sentence.replace(/'/g, "--do-not-smart-quote-single-quotes--")
           ).replace(/--do-not-smart-quote-single-quotes--/g, "'");
-        }
+        // We MUST do that otherwise the data-sentence-text attribute (10 lines down) will mess up the markup!
         if (
           this.$l2.code === "my" &&
           this.myanmarZawgyiDetector &&
@@ -743,6 +739,15 @@ export default {
       for (let index in this.tokenized[batchId]) {
         let token = this.tokenized[batchId][index];
         if (typeof token === "object") {
+          if (token.text === '\n') {
+            html += `<br />`;
+            continue;
+          }
+          // If token.text is multiple spaces
+          if (token.text?.match(/^\s+$/)) {
+            html += token.text;
+            continue;
+          }
           html += `<WordBlock v-bind="wordBlockAttributes(${batchId},${index})">${token.text}</WordBlock>`;
         } else {
           html += `<span class="word-block-unknown ${

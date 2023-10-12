@@ -60,6 +60,9 @@ class BaseDictionary {
     return tokens;
   }
 
+  loadTokenizationServerCache(data) {
+    this.tokenizer.loadServerCache(data);
+  }
 
   async addCandidatesToToken(token) {
     if (typeof token !== "object") return;

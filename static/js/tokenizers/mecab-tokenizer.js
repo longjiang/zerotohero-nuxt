@@ -3,12 +3,14 @@ importScripts('../js/tokenizers/base-tokenizer.js')
 class MeCabTokenizer extends BaseTokenizer {
 
   async tokenize(text) {
+    let tokenized = this.loadFromServerCache(text);
+    if (!tokenized) {
+      let url = `${PYTHON_SERVER}lemmatize-japanese?text=${encodeURIComponent(
+        text
+      )}`;
+      tokenized = await proxy(url);
+    }
 
-    text = text.replace(/-/g, "- ");
-    let url = `${PYTHON_SERVER}lemmatize-japanese?text=${encodeURIComponent(
-      text
-    )}`;
-    let tokenized = await proxy(url);
     let tokens = [];
     for (let token of tokenized) {
       if (!token) {

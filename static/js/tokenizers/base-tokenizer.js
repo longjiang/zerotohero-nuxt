@@ -1,7 +1,10 @@
+importScripts("../vendor/crypto-js/crypto-js.js");
+
 class BaseTokenizer {
   constructor({ l2, words = [], indexKeys = ["search"], tokenizationType = "integral" }) {
     this.l2 = l2;
     this.tokenizationCache = {};
+    this.serverCache = {};
     this.words = words;
     this.indexKeys = indexKeys;
     this.tokenizationType = tokenizationType;
@@ -19,14 +22,31 @@ class BaseTokenizer {
   }
 
   async tokenizeWithCache(text) {
-    if (this.tokenizationCache[text]) {
-      return this.tokenizationCache[text];
+    // Create a md5 hash of the text
+    const hash = CryptoJS.MD5(text).toString();
+    if (this.tokenizationCache[hash]) {
+      return this.tokenizationCache[hash];
     }
 
     const tokenized = await this.tokenize(text);
-    this.tokenizationCache[text] = tokenized;
+    this.tokenizationCache[hash] = tokenized;
 
     return tokenized;
+  }
+
+  loadServerCache(data) {
+    for (let key in data) {
+      // Initialize the serverCache object if it doesn't exist
+      if (!this.serverCache[this.l2.code]) {
+        this.serverCache[this.l2.code] = {};
+      }
+      this.serverCache[this.l2.code][key] = data[key];
+    }
+  }
+
+  loadFromServerCache(text) {
+    const key = CryptoJS.MD5(text).toString();
+    return this.serverCache[this.l2.code]?.[key];
   }
 
   async tokenize(text) {

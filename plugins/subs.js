@@ -28,7 +28,6 @@ export default ({ app }, inject) => {
         for (let line of parsed) {
           line.starttime = Number(line.starttime);
           if (line.duration) line.duration = Number(line.duration);
-          if (line.line) line.line = he.decode(line.line);
         }
         parsed = parsed.sort((a, b) => a.starttime - b.starttime);
         return parsed;

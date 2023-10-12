@@ -2,11 +2,13 @@ importScripts('../js/tokenizers/base-tokenizer.js')
 
 class HazmTokenizer extends BaseTokenizer {
   async tokenize(text) {
-    text = text.replace(/-/g, "- ");
-    let url = `${PYTHON_SERVER}lemmatize-persian?text=${encodeURIComponent(
-      text
-    )}`;
-    let tokens = await proxy(url);
+    let tokens = this.loadFromServerCache(text);
+    if (!tokens) {
+      let url = `${PYTHON_SERVER}lemmatize-persian?text=${encodeURIComponent(
+        text
+      )}`;
+      tokens = await proxy(url);
+    }
     tokens = tokens.map((token) => {
       return this.normalizeToken(token);
     });

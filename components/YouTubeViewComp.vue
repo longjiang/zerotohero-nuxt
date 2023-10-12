@@ -75,11 +75,13 @@ import Vue from "vue";
 import { mapState } from "vuex";
 import {
   LANGS_WITH_CONTENT,
+  PYTHON_SERVER,
   queryString,
   shuffle,
   uniqueByValue,
   toCamelCase,
   parseDuration,
+  proxy
 } from "@/lib/utils";
 
 export default {
@@ -260,6 +262,7 @@ export default {
 
       // Retrieve video info and subs from our database
       const video = await this.getVideoFromDB(youtube_id, directus_id);
+      await this.loadTokenizationServerCache(video);
       this.video = video || this.video;
 
       if (this.video.tv_show || this.video.talk) this.loadShowAndEpisodes();
@@ -269,6 +272,16 @@ export default {
       await this.loadMissingSubsFromYouTube(this.video);
       await this.loadMissingMetaFromYouTube(this.video);
       this.checkingSubs = false;
+    },
+    async loadTokenizationServerCache(video) {
+      if (!video?.id) return
+      let url = `${PYTHON_SERVER}lemmatize-video?video_id=${video.id}&lang=${this.$l2.code}`;
+      const data = await proxy(url, { timeout: 5000 });
+      // Check if data is an object with content
+      if (data && typeof data === "object" && Object.keys(data).length > 0) {
+        const dictionary = await this.$getDictionary()
+        dictionary.loadTokenizationServerCache(data);
+      }
     },
     loadShowAndEpisodes() {
       if (this.showsLoaded?.[this.$l2.code]) {

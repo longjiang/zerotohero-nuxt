@@ -4,18 +4,16 @@ importScripts('../js/tokenizers/base-tokenizer.js')
 class QalsadiTokenizer extends BaseTokenizer {
 
   async tokenize(text) {
-    text = text.replace(/-/g, "- ");
-    let url = `${PYTHON_SERVER}lemmatize-arabic?text=${encodeURIComponent(
-      text
-    )}`;
-    let tokenized = await proxy(url, { timeout: 5000 });
+    let tokenized = this.loadFromServerCache(text);
+    if (!tokenized) {
+      let url = `${PYTHON_SERVER}lemmatize-arabic?text=${encodeURIComponent(
+        text
+      )}`;
+      tokenized = await proxy(url, { timeout: 5000 });
+    }
     // Check if the tokenized is an array and not a string
     if (!tokenized || typeof tokenized === 'string') {
-      // Try again without caching
-      tokenized = await proxy(url, {cacheLife: 0, timeout: 5000});
-      if (!tokenized || typeof tokenized === 'string') {
-        return this.tokenizeLocally(text);
-      }
+      return this.tokenizeLocally(text);
     }
     if (!tokenized) return this.tokenizeIntegral(text);
     let tokens = [];

@@ -253,7 +253,6 @@ export default {
     },
     lineHtml(line) {
       let html = line.line;
-      html = this.decodeHtmlEntities(html);
       if (this.notes) {
         html = html.replace(/\[(\d+)\]/g, (_, num) => {
           let note;
@@ -265,7 +264,6 @@ export default {
           }"></PopupNote>`;
         });
       }
-      html = html.replace(/\n/g, " ");
       return html;
     },
     highlightMultiple() {
