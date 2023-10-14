@@ -355,7 +355,7 @@ export default {
           filters["filter[views][lt]"] = this.video.views;
         }
       }
-      return await this.$store.dispatch("shows/getEpisodesFromServer", {
+      let videos = await this.$store.dispatch("shows/getEpisodesFromServer", {
         l2: this.$l2,
         collection: this.collection,
         showId: this.show.id,
@@ -364,6 +364,29 @@ export default {
         limit,
         sort: this.episodeSort
       });
+
+
+      // Make sure this video is included in the collection
+      videos = [this.video, ...videos];
+
+      videos = uniqueByValue(videos, "youtube_id");
+      if (this.episodeSort === "title") {
+        videos = videos.sort((a, b) =>
+          a.title
+            ? a.title.localeCompare(b.title, this.$l2.locales[0], {
+                numeric: true,
+              })
+            : 0
+        );
+      } else if (this.episodeSort === "-date") {
+        videos = videos.sort((a, b) =>
+          b.date ? b.date.localeCompare(a.date) : 0
+        );
+      } else if (this.episodeSort === "-views") {
+        videos = videos.sort((a, b) => b.views - a.views);
+      }
+
+      return videos;
     },
     async getEpisodeCount() {
       if (this.show.episodeCount) return this.show.episodeCount;
