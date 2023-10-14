@@ -13,7 +13,8 @@
       :title="show.title"
       :videos="show.episodes || []"
     >
-      <template #afterTitle
+      <!-- Turn off levels for now before we refresh difficulty score averages -->
+      <!-- <template #afterTitle
         ><span
           v-if="show.level"
           :data-bg-level="levels[show.level].level"
@@ -21,7 +22,7 @@
         >
           {{ levels[show.level].name }}
         </span></template
-      >
+      > -->
       <template #belowTitle
         ><MediaItemStats
           :item="show"

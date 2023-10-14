@@ -32,7 +32,8 @@
             default-text="All Categories"
             @filter="handleCategoryFilter"
           />
-          <FilterDropdown
+          <!-- Turn off levels filter for now before we refresh difficulty score averages -->
+          <!-- <FilterDropdown
             v-if="
               LANGS_WITH_LEVELS.includes($l2.code) && levelOptions.length > 0
             "
@@ -42,7 +43,7 @@
             title="Levels"
             default-text="All Levels"
             @filter="handleLevelFilter"
-          />
+          /> -->
           <FilterDropdown
             v-if="sortOptions.length > 0"
             :items="sortOptions"
