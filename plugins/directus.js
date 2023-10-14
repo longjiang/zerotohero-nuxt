@@ -205,12 +205,25 @@ export default ({ app }, inject) => {
       }
     },
 
+    normalizeDifficulty(video) {
+      if (!video.difficulty) {
+        if (video.lex_div && video.word_freq) {
+          let lex_div = video.lex_div;
+          let word_freq = video.word_freq;
+          let difficulty = lex_div / word_freq
+          video.difficulty = difficulty;
+        }
+      }
+      return video;
+    },
+
     async getVideo({ id, l2Id }) {
       const suffix = this.youtubeVideosTableSuffix(l2Id);
       const url = LP_DIRECTUS_TOOLS_URL + `video/${suffix ? suffix : 0}/${id}`;
       let res = await axios.get(url).catch((err) => logError(err));
       if (res?.data) {
         let video = res.data;
+        video = this.normalizeDifficulty(video);
         return video;
       }
     },
@@ -227,6 +240,7 @@ export default ({ app }, inject) => {
       let res = await this.get(`${this.youtubeVideosTableName(l2Id)}`, params);
       if (res?.data?.data) {
         let videos = res.data.data;
+        videos = videos.map((video) => this.normalizeDifficulty(video));
         return videos;
       } else return [];
     },

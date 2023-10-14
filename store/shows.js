@@ -56,6 +56,18 @@ export const fetchShows = async ($directus, type, l2, forceRefresh, limit) => {
   return [];
 };
 
+const normalizeDifficulty = (video) => {
+  if (!video.difficulty) {
+    if (video.lex_div && video.word_freq) {
+      let lex_div = video.lex_div;
+      let word_freq = video.word_freq;
+      let difficulty = lex_div / word_freq
+      video.difficulty = difficulty;
+    }
+  }
+  return video;
+}
+
 export const fetchRecommendedVideos = async (userId, l2, forceRefresh, start, limit, excludeIds) => {
   try {
     let parmas = {
@@ -70,8 +82,10 @@ export const fetchRecommendedVideos = async (userId, l2, forceRefresh, start, li
     Object.keys(parmas).forEach((key) => parmas[key] === undefined && delete parmas[key]);
     const queryString = Object.keys(parmas).map((key) => key + '=' + parmas[key]).join('&');
     let videos = await proxy(`${PYTHON_SERVER}recommend-videos?${queryString}`, { cacheLife: 0 });
-    if (typeof videos !== "string") 
+    if (typeof videos !== "string") {
+      videos = videos.map((video) => normalizeDifficulty(video));
       return videos
+    }
     else
       return [];
   } catch (err) {
@@ -290,7 +304,7 @@ export const actions = {
 
     filters[`filter[${showType}][eq]`] = showId;
 
-    let fields = "id,title,l2,youtube_id,date,tv_show,talk,channel_id,difficulty";
+    let fields = "id,title,l2,youtube_id,date,tv_show,talk,channel_id,lex_div,word_freq,difficulty";
 
     if (LANGS_WITH_CONTENT.includes(l2.code))
       fields +=
@@ -307,7 +321,6 @@ export const actions = {
     }
 
     if (keyword) params['filter[title][contains]'] = keyword;
-
     let videos = await this.$directus.getVideos({ l2Id :l2.id, params });
     videos = uniqueByValue(videos, "youtube_id");
 
