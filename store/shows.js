@@ -274,31 +274,38 @@ export const actions = {
     { dispatch },
     {
       l2,
-      collection = "tvShows",
+      collection = "tv_show",
       showId,
       forceRefresh = false,
       keyword,
+      filters = {},
       limit = 96,
       offset = 0,
       sort = "-views",
     } = {}
   ) {
-    let keywordFilter = keyword ? `&filter[title][contains]=${keyword}` : "";
-    let fields = "id,title,l2,youtube_id,date,tv_show,talk,channel_id";
+
+    filters[`filter[${collection}][eq]`] = showId;
+
+    let fields = "id,title,l2,youtube_id,date,tv_show,talk,channel_id,difficulty";
 
     if (LANGS_WITH_CONTENT.includes(l2.code))
       fields +=
         ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";
+  
+    let params = {
+      fields,
+      'filter[l2][eq]': l2.id,
+      ...filters,
+      sort,
+      limit,
+      offset,
+      timestamp: forceRefresh ? Date.now() : 0
+    }
 
-    let response = await this.$directus.get(
-      `${this.$directus.youtubeVideosTableName(l2.id)}?filter[l2][eq]=${
-        l2.id
-      }&filter[${collection}][eq]=${showId}${keywordFilter}&fields=${fields}&sort=${sort}&limit=${limit}&offset=${offset}&timestamp=${
-        forceRefresh ? Date.now() : 0
-      }`
-    );
-    if (!response || !response.data) return [];
-    let videos = response.data.data || [];
+    if (keyword) params['filter[title][contains]'] = keyword;
+
+    let videos = await this.$directus.getVideos({ l2Id :l2.id, params });
     videos = uniqueByValue(videos, "youtube_id");
 
     if (sort === "title") {

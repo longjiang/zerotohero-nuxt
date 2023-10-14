@@ -1,6 +1,5 @@
 import DateHelper from "@/lib/date-helper";
 import axios from "axios";
-import SmartQuotes from "smartquotes";
 import he from "he"; // html entities
 import {
   randBase64,
@@ -11,6 +10,7 @@ import {
   LP_DIRECTUS_TOOLS_URL,
   WEB_URL,
   reduceTags,
+  parseQueryString,
 } from "@/lib/utils";
 
 export const YOUTUBE_VIDEOS_TABLES = {
@@ -215,15 +215,16 @@ export default ({ app }, inject) => {
       }
     },
 
-    async getVideos({ l2Id, query = "" } = {}) {
-      if (this.youtubeVideosTableHasOnlyOneLanguage(l2Id)) {
-        // No language filter is necessary since the table only has one language
-      } else {
-        if (query !== "") query += `&`;
-        query += `filter[l2][eq]=${l2Id}`;
+    async getVideos({ l2Id, query = "", params = {} } = {}) {
+      // You can use either a query string or params object
+      if (query) {
+        params = parseQueryString(query);
       }
-      query = query ? "?" + query : "";
-      let res = await this.get(`${this.youtubeVideosTableName(l2Id)}${query}`);
+      // No language filter is necessary since the table only has one language
+      if (!this.youtubeVideosTableHasOnlyOneLanguage(l2Id)) {
+        params['`filter[l2][eq]'] = l2Id;
+      }
+      let res = await this.get(`${this.youtubeVideosTableName(l2Id)}`, params);
       if (res?.data?.data) {
         let videos = res.data.data;
         return videos;

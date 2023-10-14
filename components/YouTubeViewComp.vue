@@ -149,6 +149,9 @@ export default {
   computed: {
     ...mapState("stats", ["stats"]),
     ...mapState("shows", ["showsLoaded"]),
+    collection() {
+      this.showType === "tv_show" ? "tvShows" : "talks"
+    },
     currentTimeEvery10Seconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
       return t;
@@ -329,81 +332,38 @@ export default {
         `YouTube View: Show "${this.show.title}" loaded with ${episodeCount} episodes.`
       );
     },
+    /**
+     * Get the episodes for this show
+     * @param {number} episodeCount - The number of episodes in this show (used to determine if we need to get more episodes)
+     * @param {number} limit - The number of episodes to get
+     */
     async getEpisodes(episodeCount, limit) {
-      // If we already have the episodes stored in the show (in Vuex), and the episodes include the current video, just return the episodes
-      let videos = [];
-      if (
-        this.show.episodes &&
-        this.show.episodes.find((s) => s.youtube_id === this.video.youtube_id)
-      )
-        videos = this.show.episodes;
 
-      // News and YouTube channels are sorted by date
-      // Audiobooks and TV Shows are sorted by title
-      if (videos.length === 0) {
-        let fields = "id,youtube_id,title,date";
-        if (LANGS_WITH_CONTENT.includes(this.$l2.code))
-          fields =
-            fields +
-            ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";
-        let timestamp = this.$adminMode ? Date.now() : 0;
-        let params = { limit, sort: this.episodeSort, fields, timestamp };
-        params[`filter[${this.showType}][eq]`] = this.show.id;
-
-        let postParams = Object.assign({}, params);
-
-        // We assume that this is a LONG show with hundreds or even thousands of episodes (like News, Music, or some TV station show
-        // Let's grab the videos immediately PRIOR and AFTER the current video, so the user can eventually paginate through all the episodes.
-        // If sort is '-date', the user wants to see contents that are around the same date.
-        // If sort is 'title', the user wants to see contents with similar alpha-sorted titles
-        if (episodeCount > limit) {
-          if (this.episodeSort === "title") {
-            postParams["filter[title][gt]"] = this.video.title;
-          }
-          if (this.episodeSort === "-date") {
-            postParams["filter[date][lt]"] = this.video.date;
-          }
-          if (this.episodeSort === "-views") {
-            postParams["filter[views][lt]"] = this.video.views;
-          }
+      // We assume that this is a LONG show with hundreds or even thousands of episodes (like News, Music, or some TV station show
+      // Let's grab the videos immediately PRIOR and AFTER the current video, so the user can eventually paginate through all the episodes.
+      // If sort is '-date', the user wants to see contents that are around the same date.
+      // If sort is 'title', the user wants to see contents with similar alpha-sorted titles
+      let filters = {};
+      if (episodeCount > limit) {
+        if (this.episodeSort === "title") {
+          filters["filter[title][gt]"] = this.video.title;
         }
-
-        let moreVideos = await this.$directus.getVideos({
-          l2Id: this.$l2.id,
-          query: queryString(postParams),
-        });
-        if (moreVideos) {
-          videos = [...videos, ...moreVideos];
+        if (this.episodeSort === "-date") {
+          filters["filter[date][lt]"] = this.video.date;
         }
-
-        // Make sure this video is included in the collection
-        videos = [this.video, ...videos];
+        if (this.episodeSort === "-views") {
+          filters["filter[views][lt]"] = this.video.views;
+        }
       }
-      videos = uniqueByValue(videos, "youtube_id");
-      if (this.episodeSort === "title") {
-        videos = videos.sort((a, b) =>
-          a.title
-            ? a.title.localeCompare(b.title, this.$l2.locales[0], {
-                numeric: true,
-              })
-            : 0
-        );
-      } else if (this.episodeSort === "-date") {
-        videos = videos.sort((a, b) =>
-          b.date ? b.date.localeCompare(a.date) : 0
-        );
-      } else if (this.episodeSort === "-views") {
-        videos = videos.sort((a, b) => b.views - a.views);
-      }
-
-      this.$store.dispatch("shows/addEpisodesToShow", {
+      return await this.$store.dispatch("shows/getEpisodesFromServer", {
         l2: this.$l2,
-        collection: this.showType === "tv_show" ? "tvShows" : "talks",
+        collection: this.collection,
         showId: this.show.id,
-        episodes: videos,
-        sort: this.episodeSort,
+        filters,
+        forceRefresh: this.$adminMode,
+        limit,
+        sort: this.episodeSort
       });
-      return videos;
     },
     async getEpisodeCount() {
       if (this.show.episodeCount) return this.show.episodeCount;
@@ -428,7 +388,7 @@ export default {
       if (episodeCount)
         this.$store.dispatch("shows/setEpisodeCount", {
           l2: this.$l2,
-          collection: this.showType === "tv_show" ? "tvShows" : "talks",
+          collection: this.collection,
           showId: this.show.id,
           episodeCount,
         });
