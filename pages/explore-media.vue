@@ -48,7 +48,7 @@
             playlistId="recommended"
           />
 
-          <div v-observe-visibility="visibilityChanged" class="text-center">
+          <div v-observe-visibility="visibilityChanged" class="text-center" v-if="recommendedVideos == []">
             <Loader
               key="rec-loader"
               :sticky="true"
