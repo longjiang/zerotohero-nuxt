@@ -50,7 +50,6 @@ class KengdicDictionary extends BaseDictionary {
     delete item.word;
     delete item.stems
     delete item.phrases
-    this.addFrequencyAndLevel(item)
   }
 
   normalizeKengdicWord(row) {
@@ -75,7 +74,6 @@ class KengdicDictionary extends BaseDictionary {
     delete row.k;
     delete row.l;
     delete row.username;
-    this.addFrequencyAndLevel(row)
   }
 
   lookupByCharacter(char) {
