@@ -1,6 +1,12 @@
 <template>
   <div class="statistics">
-
+    <div
+      v-if="item.difficulty"
+      :data-bg-level="levelByDifficulty(item.difficulty)"
+      class="level-tag mr-1"
+    >
+      {{ level(levelByDifficulty(item.difficulty), $l2).name }}
+    </div>
     <span class="statistics-item" v-if="item.avg_views || item.views">
       <i class="fa-solid fa-eye"></i>
       {{ formatK(item.avg_views || item.views) }}
@@ -36,8 +42,8 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { formatK } from "@/lib/utils";
-import { CATEGORIES } from "@/lib/youtube";
+import { formatK, level, levelByDifficulty } from "@/lib/utils";
+import { CATEGORIES, } from "@/lib/youtube";
 
 export default {
   props: {
@@ -70,6 +76,8 @@ export default {
     },
   },
   methods: {
+    level,
+    levelByDifficulty,
     formatK,
     async updateLocaleDescription() {
       if (this.item?.locale) {

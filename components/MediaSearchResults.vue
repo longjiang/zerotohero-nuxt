@@ -309,7 +309,7 @@ export default {
       let filters = this.getFilters();
       let limit = this.perPage;
       filters = filters.join("&");
-      let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date";
+      let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,difficulty";
       if (LANGS_WITH_CONTENT.includes(this.$l2.code))
         fields =
           fields +

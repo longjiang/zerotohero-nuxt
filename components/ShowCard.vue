@@ -162,13 +162,4 @@ export default {
 .show-tags {
   line-height: 1;
 }
-
-.level-tag {
-  font-size: 0.7em;
-  border-radius: 0.25rem;
-  display: inline-block;
-  padding: 0.1rem 0.5rem;
-  position: relative;
-  bottom: 0.1rem;
-}
 </style>

@@ -62,7 +62,7 @@ export const actions = {
           return
         } else {
           const watchHistoryItems = response.data?.data || []
-          let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments";
+          let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments,difficulty";
           let filter = `filter[id][in]=${watchHistoryItems.map(item => item.video_id).join(',')}`
           let query = `${fields}&${filter}`
           let videos = await this.$directus.getVideos({ l2Id, query })

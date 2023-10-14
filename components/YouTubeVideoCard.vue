@@ -152,18 +152,6 @@
               Add
             </b-button>
             <ShowBadge :video="video" :showSaved="showSaved" />
-            <div
-              v-if="video.id && video.topic && topics"
-              class="youtube-video-card-badge"
-            >
-              {{ topics[video.topic] }}
-            </div>
-            <div
-              v-if="video.id && video.level"
-              class="youtube-video-card-badge"
-            >
-              {{ level(video.level, $l2).name }}
-            </div>
             <b-button
               v-if="showAdmin && $adminMode && video.id"
               class="youtube-video-card-badge border-0"
