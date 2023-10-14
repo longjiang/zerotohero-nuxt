@@ -168,6 +168,7 @@ export const mutations = {
   },
   SET_EPISODE_COUNT(state, { l2, collection, showId, episodeCount }) {
     let show = state[collection][l2.code].find((s) => s.id === Number(showId));
+    if (!show) return;
     show.episodeCount = episodeCount;
   },
 };
@@ -274,7 +275,7 @@ export const actions = {
     { dispatch },
     {
       l2,
-      collection = "tv_show",
+      collection = "tvShows",
       showId,
       forceRefresh = false,
       keyword,
@@ -285,7 +286,9 @@ export const actions = {
     } = {}
   ) {
 
-    filters[`filter[${collection}][eq]`] = showId;
+    const showType = collection === "tvShows" ? "tv_show" : "talk";
+
+    filters[`filter[${showType}][eq]`] = showId;
 
     let fields = "id,title,l2,youtube_id,date,tv_show,talk,channel_id,difficulty";
 
@@ -326,7 +329,7 @@ export const actions = {
 
     dispatch("addEpisodesToShow", {
       l2,
-      collection: collection === "tv_show" ? "tvShows" : "talks",
+      collection,
       showId,
       episodes: videos,
       sort,

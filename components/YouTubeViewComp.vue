@@ -74,9 +74,9 @@ import DateHelper from "@/lib/date-helper";
 import Vue from "vue";
 import { mapState } from "vuex";
 import {
-  LANGS_WITH_CONTENT,
   PYTHON_SERVER,
-  queryString,
+  level,
+  levelByDifficulty,
   shuffle,
   uniqueByValue,
   toCamelCase,
@@ -150,7 +150,7 @@ export default {
     ...mapState("stats", ["stats"]),
     ...mapState("shows", ["showsLoaded"]),
     collection() {
-      this.showType === "tv_show" ? "tvShows" : "talks"
+      return this.showType === "tv_show" ? "tvShows" : "talks"
     },
     currentTimeEvery10Seconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
@@ -230,6 +230,18 @@ export default {
         l2: this.$l2,
       });
     }
+    if (this.video?.difficulty) {
+      const l = levelByDifficulty(this.video.difficulty)
+      const levelName = level(l, this.$l2).name;
+      this.$toast.show(
+        this.$tb("This is a {level} level video.", { level: levelName }),
+        {
+          position: "top-center",
+          className: `level${level}`,
+          duration: 5000,
+        }
+      );
+    }
   },
   filters: {
     formatDuration(duration) {
@@ -297,11 +309,10 @@ export default {
       });
     },
     getShowTypeAndShow(video) {
-      let foundShowType, showId, foundShow;
+      let foundShowType, foundShow;
 
       for (let showType of ["tv_show", "talk"]) {
         if (video[showType]) {
-          showId = video[showType];
           foundShowType = showType;
           const camelCaseShowType = toCamelCase(showType);
           foundShow = this.$store.getters[`shows/${camelCaseShowType}`]({
@@ -325,6 +336,13 @@ export default {
     async setEpisodesAndEpisodeCount() {
       let limit = 500;
       let episodeCount = await this.getEpisodeCount();
+      if (episodeCount)
+        this.$store.dispatch("shows/setEpisodeCount", {
+          l2: this.$l2,
+          collection: this.collection,
+          showId: this.show.id,
+          episodeCount,
+        });
       if (episodeCount > limit && this.$refs.youtube)
         this.largeEpisodeCount = episodeCount;
       this.episodes = await this.getEpisodes(episodeCount, limit);
@@ -408,13 +426,6 @@ export default {
           print(err);
         }
       }
-      if (episodeCount)
-        this.$store.dispatch("shows/setEpisodeCount", {
-          l2: this.$l2,
-          collection: this.collection,
-          showId: this.show.id,
-          episodeCount,
-        });
       return episodeCount;
     },
     async getVideoFromDB(youtube_id, directus_id) {
