@@ -107,7 +107,8 @@
               default-text="All Categories"
               @filter="handleCategoryFilter"
             />
-            <FilterDropdown
+            <!-- We disable this for now -->
+            <!-- <FilterDropdown
               v-if="
                 LANGS_WITH_LEVELS.includes($l2.code) && levelOptions.length > 0
               "
@@ -117,7 +118,7 @@
               title="Levels"
               default-text="All Levels"
               @filter="handleLevelFilter"
-            />
+            /> -->
             <FilterDropdown
               v-if="sortOptions.length > 0"
               :items="sortOptions"
@@ -128,22 +129,6 @@
               @filter="handleSortFilter"
             />
           </div>
-          <i18n
-            path="Recommendations based on your {0}."
-            tag="div"
-            style="font-weight: normal; font-size: 0.8em; text-align: center"
-            v-if="sort === 'recommended'"
-          >
-            <router-link
-              :to="{
-                name: LANGS_WITH_LEVELS.includes(this.$l2.code)
-                  ? 'set-language-level'
-                  : 'set-content-preferences',
-              }"
-            >
-              <u>{{ $t("content preferences") }}</u>
-            </router-link>
-          </i18n>
         </div>
       </div>
       <MediaSearchResults
@@ -201,10 +186,9 @@ export default {
     return {
       videos: [],
       LANGS_WITH_LEVELS,
-      sort: undefined,
+      sort: "-views",
       selectedHeroVideo: null,
       sortOptions: [
-        { value: "recommended", text: "Sort by Recommended" },
         { value: "id", text: "Sort by Date Added" },
         { value: "-date", text: "Sort by Date Uploaded" },
         { value: "-views", text: "Sort by Views" },

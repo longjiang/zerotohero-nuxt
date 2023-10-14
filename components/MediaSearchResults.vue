@@ -155,9 +155,6 @@ export default {
     sort: {
       default: undefined, // '-views', '-date', 'title', '-date_created'
     },
-    alsoLoadRecommendedVideos: {
-      default: false
-    },
     showPreferredCategoriesFirst: {
       default: false
     },
@@ -322,9 +319,6 @@ export default {
         .filter((f) => f && f !== "")
         .join("&");
       let videos = await this.$directus.getVideos({ l2Id: this.$l2.id, query });
-      if (this.alsoLoadRecommendedVideos === true && this.preferredCategories?.length > 0) {
-        videos = videos.concat(await this.getRecommendedVideos(query))
-      }
       videos = this.sortVideos(videos);
       if (videos && this.$adminMode) {
         videos = await this.$directus.checkShows(videos, this.$l2.id);
@@ -350,10 +344,6 @@ export default {
       if (!this.$router.currentRoute.path.startsWith(canonical)) {
         this.$router.push({ path: canonical });
       }
-    },
-    async getRecommendedVideos(query) {
-      let recommendedVideos = await this.$directus.getVideos({ l2Id: this.$l2.id, query: query + `&filter[category][in]=${this.preferredCategories.join(',')}` });
-      return recommendedVideos;
     },
   },
 };
