@@ -374,6 +374,7 @@ h6,
   color: #838888 !important;
 }
 
+.level1,
 .levelPreA1,
 [data-level="1"],
 [data-level="PreA1"],
@@ -387,6 +388,8 @@ h6,
   color: $color-pre-a1 !important;
 }
 
+
+.level2,
 .levelA1,
 [data-level="2"],
 [data-level="A1"],
@@ -397,6 +400,8 @@ h6,
   color: $color-a1 !important;
 }
 
+
+.level3,
 .levelA2,
 [data-level="3"],
 [data-level="A2"],
@@ -407,6 +412,8 @@ h6,
   color: $color-a2 !important;
 }
 
+
+.level4,
 .levelB1,
 [data-level="4"],
 [data-level="B1"],
@@ -417,6 +424,7 @@ h6,
   color: $color-b1 !important;
 }
 
+.level5,
 .levelB2,
 [data-level="5"],
 [data-level="B2"],
@@ -427,6 +435,7 @@ h6,
   color: $color-b2 !important;
 }
 
+.level6,
 .levelC1,
 [data-level="6"],
 [data-level="C1"],
@@ -437,6 +446,7 @@ h6,
   color: $color-c1 !important;
 }
 
+.level7,
 .levelC2,
 [data-level="7"],
 [data-level="C2"],
@@ -475,6 +485,8 @@ h6,
   opacity: 0.8;
 }
 
+
+.bg-level1,
 .bg-levelPreA1,
 [data-bg-level="PreA1"],
 [data-bg-level="Pre-A1"],
@@ -483,6 +495,7 @@ h6,
   color: white !important;
 }
 
+.bg-level2,
 .bg-levelA1,
 [data-bg-level="A1"],
 [data-bg-level="2"] {
@@ -490,6 +503,7 @@ h6,
   color: white !important;
 }
 
+.bg-level3,
 .bg-levelA2,
 [data-bg-level="A2"],
 [data-bg-level="3"] {
@@ -497,6 +511,7 @@ h6,
   color: white !important;
 }
 
+.bg-level4,
 .bg-levelB1,
 [data-bg-level="B1"],
 [data-bg-level="4"] {
@@ -504,6 +519,7 @@ h6,
   color: white !important;
 }
 
+.bg-level5,
 .bg-levelB2,
 [data-bg-level="B2"],
 [data-bg-level="5"] {
@@ -511,6 +527,8 @@ h6,
   color: white !important;
 }
 
+
+.bg-level6,
 .bg-levelC1,
 [data-bg-level="C1"],
 [data-bg-level="6"] {
@@ -518,6 +536,8 @@ h6,
   color: white !important;
 }
 
+
+.bg-level7,
 .bg-levelC2,
 [data-bg-level="C2"],
 [data-bg-level="7"] {
