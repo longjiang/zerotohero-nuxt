@@ -50,10 +50,10 @@ export default {
     },
     updateOverlayPlayerProps() {
       if (this.$route.name === "video-view") {
-        this.overlayPlayerType = this.$route.params.type;
-        this.overlayPlayerYouTubeId = this.$route.query.v;
-        this.overlayPlayerDirectusId = this.$route.query.id;
-        this.overlayPlayerLesson = this.$route.query.lesson;
+        this.overlayPlayerType = this.$route.params.type
+        this.overlayPlayerYouTubeId = this.$route.query.v || this.$route.params.youtube_id;
+        this.overlayPlayerLesson = this.$route.query.lesson || this.$route.params.lesson;
+        this.overlayPlayerDirectusId = this.$route.query.id || this.$route.params.directus_id;
       }
     },
   },
