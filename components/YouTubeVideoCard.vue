@@ -78,6 +78,13 @@
         <div class="duration" v-if="video.duration">
           {{ parseDuration(video.duration) }}
         </div>
+        <div
+          v-if="video.difficulty"
+          :data-bg-level="levelByDifficulty(video.difficulty)"
+          class="level-tag"
+        >
+          {{ level(levelByDifficulty(video.difficulty), $l2).name }}
+        </div>
       </div>
       <div class="media-body">
         <div class="youtube-title">
@@ -104,6 +111,7 @@
         <MediaItemStats
           :item="video"
           :showDate="showDate"
+          :showLevel="false"
           style="font-size: 0.8em; margin-top: 0.25rem; opacity: 0.8"
         />
         <client-only>
@@ -255,7 +263,7 @@ import languageEncoding from "detect-file-encoding-and-language";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import { mapState } from "vuex";
-import { parseDuration, convertDurationToSeconds, timeout, logError, level, TOPICS } from "@/lib/utils";
+import { parseDuration, convertDurationToSeconds, levelByDifficulty, timeout, logError, level, TOPICS } from "@/lib/utils";
 
 export default {
   components: {
@@ -411,6 +419,7 @@ export default {
     },
   },
   methods: {
+    levelByDifficulty,
     async visibilityChanged(visible) {
       if (visible && !this.$adminMode) {
         let unavailable = await YouTube.videoUnavailable(this.video.youtube_id)
@@ -747,6 +756,18 @@ export default {
         font-weight: bold;
         padding: 0.08rem 0.3rem;
         border-radius: 0.15rem;
+      }
+
+      .level-tag {
+        position: absolute;
+        top: 0.2rem;
+        left: 0.2rem;
+        font-size: 0.8rem;
+        font-weight: bold;
+        padding: 0.08rem 0.3rem;
+        border-radius: 0.15rem;
+        display: block;
+        bottom: inherit;
       }
     }
     .youtube-video-card-progress {

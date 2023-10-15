@@ -1,7 +1,7 @@
 <template>
   <div class="statistics">
     <div
-      v-if="item.difficulty"
+      v-if="showLevel && item.difficulty"
       :data-bg-level="levelByDifficulty(item.difficulty)"
       class="level-tag mr-1"
     >
@@ -54,6 +54,10 @@ export default {
     showDate: {
       type: Boolean,
       default: false,
+    },
+    showLevel: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

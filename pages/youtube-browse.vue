@@ -27,7 +27,7 @@
           />
         </div>
       </div>
-      <div
+      <!-- <div
         v-show="
           $refs['talks'] &&
           $refs['talks'].filteredShows &&
@@ -84,7 +84,7 @@
           {{ $t("Videos") }}
         </h5>
         <hr class="mb-4" />
-      </div>
+      </div> -->
       <div class="row mb-4">
         <div class="col-sm-12 text-center">
           <div v-show="kidsOnly" class="mb-2">
