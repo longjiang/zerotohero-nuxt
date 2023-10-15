@@ -139,7 +139,7 @@
           start,
           kidsOnly,
           sort,
-          showNoVideosMessage: true,
+          noVideosMessage: 'No videos found meeting your filter criteria.',
           perPage: 12,
           showSearchBar: false,
         }"

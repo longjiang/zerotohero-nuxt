@@ -47,11 +47,11 @@
           <div>
             <MediaSearchResults
               v-bind="{
-                category,
+                category: categoryId,
                 tvShows: slug === 'movies' && movies({l2: $l2}) ? [movies({l2: $l2}).id] : slug === 'music' && music({l2: $l2}) ? [music({l2: $l2}).id] : null,
                 talks: slug === 'news' && news({l2: $l2}) ? [news({l2: $l2}).id] : null,
                 kidsOnly,
-                showNoVideosMessage: true,
+                noVideosMessage: 'No videos found in this category.',
                 perPage: 12,
                 showSearchBar: false,
                 sort: '-views',
@@ -68,37 +68,38 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { CATEGORIES, SLUG_TO_CATEGORY_ID } from '@/lib/youtube';
 
-const slugToCategory = {
-  'music': 10, // YouTube category ID, see lib/youtube.js
-  'news': 25,
-  'sports': 17,
-  'gaming': 20,
-  'how-to': 26,
-  'learning': 27,
-}
 export default {
   props: {
-    slug: String,
+    slug: String, // Either the category id, or a custom slug like 'music' that maps to category 10
   },
   data() {
     return {
       kidsOnly: this.slug === 'kids',
-      category: slugToCategory[this.slug]?.toString(),
     };
   },
   computed: {
     ...mapGetters('shows', ['movies', 'music', 'news']),
+    categoryId() {
+      let categoryId = SLUG_TO_CATEGORY_ID[this.slug]?.toString()
+      if (!categoryId) categoryId = this.slug
+      return categoryId
+    },
     title() {
       if (!this.slug) return "";
-      return this.slug
-        .split("-")
-        .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-        .join(" ");
+      if (this.slug in SLUG_TO_CATEGORY_ID) {
+        // A custom slug
+        return this.slug
+          .split("-")
+          .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+          .join(" ");
+      } else {
+        // A category id
+        return CATEGORIES[this.slug];
+      }
     },
   },
-  methods: {
-  }
 };
 </script>
 

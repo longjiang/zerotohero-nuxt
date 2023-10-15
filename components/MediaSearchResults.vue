@@ -92,6 +92,8 @@
         </div>
         <div v-if="videos?.length > 0" v-observe-visibility="visibilityChanged"></div>
         </div>
+        <div v-if="videos && videos.length === 0 && noVideosMessage" class="no-videos-message">
+          {{ $t(noVideosMessage) }}
       </div>
     </div>
   </div>
@@ -146,7 +148,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    showNoVideosMessage: {
+    noVideosMessage: {
       default: false,
     },
     showSearchBar: {
@@ -256,10 +258,12 @@ export default {
       if (this.talks) {
         filters.push("filter[talk][in]=" + this.talks.join(","));
       }
-      if (this.topic !== "all") {
+      if (this.topic !== "all" && !this.tvShows && !this.talk) {
+        // Having tv show or talk filters overrides the topic filter
         filters.push("filter[topic][eq]=" + this.topic);
       }
-      if (this.category !== "all") {
+      if (this.category !== "all" && !this.tvShows && !this.talks) {
+        // Having tv show or talk filters overrides the category filter
         filters.push("filter[category][eq]=" + this.category);
       }
       if (this.level !== "all") {
@@ -355,9 +359,10 @@ export default {
   }
 }
 .no-videos-message {
-  border: 2px dashed rgba(136, 136, 136, 0.5);
   color: rgba(255, 255, 255, 0.767);
   border-radius: 0.25rem;
   padding: 2rem;
+  width: 100%;
+  text-align: center;
 }
 </style>
