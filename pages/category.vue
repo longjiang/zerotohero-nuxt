@@ -54,7 +54,7 @@
                 noVideosMessage: 'No videos found in this category.',
                 perPage: 12,
                 showSearchBar: false,
-                sort: '-views',
+                sort: slug === 'news' ? '-date' : '-views',
               }"
               :ref="`videos-${slug}`"
               class="mt-3"
