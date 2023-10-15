@@ -229,7 +229,8 @@ export default {
         });
         this.$router.replace({
           name: "video-view",
-          params: { youtube_id, type: "youtube" },
+          params: { type: "youtube" },
+          query: { v: youtube_id },
         });
       }
     },

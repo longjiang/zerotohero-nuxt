@@ -22,7 +22,8 @@ export default {
           .replace(/.*\?v=([^&]*).*/, "$1");
         this.$router.push({
           name: "video-view",
-          params: { type: "youtube", youtube_id: id },
+          params: { type: "youtube" },
+          query: { v: id },
         });
       }
     },

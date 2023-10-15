@@ -122,7 +122,8 @@ export default {
     to() {
       let to = {
         name: "video-view",
-        params: { type: "youtube", youtube_id: this.video.youtube_id },
+        params: { type: "youtube" },
+        query: { v: this.video.youtube_id },
       }
       if (this.playlistId) {
         to.query = {p: this.playlistId};

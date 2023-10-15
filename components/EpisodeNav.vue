@@ -144,12 +144,12 @@ export default {
         name: "video-view",
         params: {
           type: "youtube",
-          youtube_id: video.youtube_id,
-          directus_id: video.id,
-          lesson: video.lesson,
         },
         query: {
           sort: this.episodeSort,
+          v: video.youtube_id,
+          id: video.id,
+          lesson: video.lesson,
         }
       };
     },

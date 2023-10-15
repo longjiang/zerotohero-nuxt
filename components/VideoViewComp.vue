@@ -132,8 +132,10 @@ export default {
         name: "video-view",
         params: {
           type: this.type,
-          youtube_id: this.youtube_id,
-          directus_id: this.directus_id,
+        },
+        query: {
+          v: this.youtube_id,
+          id: this.directus_id,
           lesson: this.lesson,
         },
       };

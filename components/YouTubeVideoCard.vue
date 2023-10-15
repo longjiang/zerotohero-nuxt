@@ -339,8 +339,6 @@ export default {
         name: "video-view",
         params: {
           type: "youtube",
-          youtube_id: this.video.youtube_id,
-          directus_id: this.video.id,
           l1: this.l1 ? this.l1.code : this.$l1 ? this.$l1.code : "en",
           l2: this.l2
             ? this.l2.code
@@ -350,6 +348,8 @@ export default {
         },
         query: {
           sort: this.sort,
+          v: this.video.youtube_id,
+          id: this.video.id,
         },
       };
 

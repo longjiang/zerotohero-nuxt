@@ -279,6 +279,7 @@ export default {
 
       // Retrieve video info and subs from our database
       const video = await this.getVideoFromDB(youtube_id, directus_id);
+
       this.loadTokenizationServerCache(video);
       this.video = video || this.video;
 
@@ -437,7 +438,14 @@ export default {
           id: directus_id,
           l2Id: this.$l2.id,
         });
-      } else {
+        // We assume the video's youtube_id, if present, is always correct.
+        // So if this video's youtube_id does not match the youtube_id, we look for the video with the youtube_id in our database.
+        if (youtube_id && video?.youtube_id !== youtube_id) {
+          video = null
+        }
+      }
+      // If we still don't have a video, we look for the video with the youtube_id in our database.
+      if (!video && youtube_id) {
         let videos = await this.$directus.getVideos({
           l2Id: this.$l2.id,
           query: `filter[youtube_id][eq]=${youtube_id}`,
@@ -600,11 +608,14 @@ export default {
           name: "video-view",
           params: {
             type: "youtube",
-            youtube_id: this.previousItem.youtube_id,
-            directus_id: this.previousItem.id,
-            lesson: this.previousItem.lesson,
           },
-          query: { p: this.playlist?.id, sort: this.episodeSort },
+          query: {
+            v: this.previousItem.youtube_id,
+            id: this.previousItem.id,
+            lesson: this.previousItem.lesson,
+            p: this.playlist?.id,
+            sort: this.episodeSort
+          },
         });
     },
     goToNextItem() {
@@ -613,11 +624,14 @@ export default {
           name: "video-view",
           params: {
             type: "youtube",
-            youtube_id: this.nextItem.youtube_id,
-            directus_id: this.nextItem.id,
-            lesson: this.nextItem.lesson,
           },
-          query: { p: this.playlist?.id, sort: this.episodeSort },
+          query: {
+            v: this.nextItem.youtube_id,
+            id: this.nextItem.id,
+            lesson: this.nextItem.lesson,
+            p: this.playlist?.id,
+            sort: this.episodeSort
+          },
         });
     },
     updateCurrentTimeQueryString() {

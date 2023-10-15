@@ -135,11 +135,12 @@ export default {
             name: "video-view",
             params: {
               type: "youtube",
-              youtube_id: firstRecommendedVideo.youtube_id,
-              directus_id: firstRecommendedVideo.id,
-
             },
-            query: { p: "recommended" },
+            query: {
+              v: firstRecommendedVideo.youtube_id,
+              id: firstRecommendedVideo.id,
+              p: "recommended"
+            },
           });
           return;
       }

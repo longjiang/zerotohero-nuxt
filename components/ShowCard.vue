@@ -106,7 +106,8 @@ export default {
       };
       const firstEpisode = {
         name: "video-view",
-        params: { type: "youtube", youtube_id: this.show.youtube_id },
+        params: { type: "youtube" },
+        query: { v: this.show.youtube_id },
       };
       const to =
         this.$adminMode || !this.show.youtube_id ? showList : firstEpisode;
