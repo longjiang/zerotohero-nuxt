@@ -14,7 +14,7 @@
       </div>
       <div class="row">
         <div class="col-sm-12">
-          <div v-if="kidsOnly || category">
+          <!-- <div v-if="kidsOnly || category">
             <Shows
               v-bind="{
                 kidsOnly,
@@ -43,7 +43,7 @@
               }"
               class="mb-4"
             />
-          </div>
+          </div> -->
           <div>
             <MediaSearchResults
               v-bind="{
@@ -55,8 +55,6 @@
                 perPage: 12,
                 showSearchBar: false,
                 sort: '-views',
-                showTitle: true,
-                title: 'Videos',
               }"
               :ref="`videos-${slug}`"
               class="mt-3"
