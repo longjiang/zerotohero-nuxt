@@ -10,16 +10,7 @@
         <div class="container">
           <div class="row">
             <div
-              v-for="(item, index) in flattenList(
-                menu.filter(
-                  (item) =>
-                    item.show &&
-                    to(item) &&
-                    !['Admin', 'Contact', 'Settings'].includes(item.title)
-                )
-              )
-                .filter((item) => item.show && !item.children)
-                .slice(0, limit ? limit : 10000)"
+              v-for="(item, index) in filteredItems"
               :key="`subnav-${item.name || item.href}-${index}`"
               :class="`${
                 params.xs
@@ -71,13 +62,6 @@ export default {
     showOnly: {
       type: Array,
     },
-    showOnlyChildren: {
-      type: Array,
-    },
-    limit: {
-      type: Number,
-      default: 0,
-    },
   },
   data() {
     return {
@@ -106,6 +90,36 @@ export default {
       hidden: false,
       collapsed: false,
     };
+  },
+  computed: {
+    filteredItems() {
+      let topLevelItems = this.menu.filter((item) => {
+        const isNotHidden = item.show !== false;
+        const isRouteResolvable = this.to(item) !== undefined;
+        return isNotHidden && isRouteResolvable;
+      });
+
+      let terminalItems = this.flattenList(topLevelItems);
+
+      let filteredTerminalItems = terminalItems.filter((item) => {
+        const isTerminal = !item.children;
+        return item.show && isTerminal;
+      });
+      
+      if (this.showOnly) {
+        let showOnlyItems = []
+        for (let title of this.showOnly) {
+          const foundItem = filteredTerminalItems.find(item => item.title === title)
+          if (foundItem) showOnlyItems.push(foundItem) // This way we preserve the order of the showOnly array
+          else {
+            console.error(`Could not find item with title "${title}" in menu`)
+          }
+        }
+        return showOnlyItems;
+      }
+
+      return filteredTerminalItems;
+    },
   },
 };
 </script>

@@ -39,7 +39,7 @@
               :l1="$l1"
               :l2="$l2"
               class="youtube-browse-nav mb-5 row"
-              :showOnly="['Media']"
+              :showOnly="['Discover', 'Music', 'TV Shows', 'Movies', 'YouTube', 'Live TV', 'News', 'Kids', 'Categories', 'Open MP4...', 'Import from YouTube']"
             />
           </client-only>
 
