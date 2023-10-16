@@ -79,7 +79,7 @@
           {{ parseDuration(video.duration) }}
         </div>
         <div
-          v-if="video.difficulty"
+          v-if="video.difficulty > 0 && levelByDifficulty(video.difficulty, $l2.code)"
           :data-bg-level="levelByDifficulty(video.difficulty, $l2.code)"
           class="level-tag"
         >
