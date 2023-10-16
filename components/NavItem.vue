@@ -50,7 +50,7 @@
     </component>
     <b-modal
       ref="dropdownMenuModal"
-      size="lg"
+      size="sm"
       centered
       hide-footer
       modal-class="safe-padding-top mt-4"
@@ -62,7 +62,7 @@
         <div
           v-for="(child, index) in item.children.filter((c) => c.show)"
           :key="`dropdown-menu-item-${index}`"
-          class="mb-1 col-6 col-lg-4"
+          class="mb-1 col-12 my-1"
         >
           <router-link
             :to="

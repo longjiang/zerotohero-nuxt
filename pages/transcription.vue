@@ -7,15 +7,15 @@
   <div class="main">
     <SocialHead
       title="Phonetic Transcription | Language Player"
-      :description="`Enter ${this.$l2.name} text and convert it into phonetic transcription.`"
+      :description="$t('Enter {lang} text and get a phonetic transcripton.', { lang: $t(this.$l2.name) })"
     />
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="text-center">{{ $l2.name }} Phonetic Transcription</h3>
+          <h3 class="text-center"> {{ $t('{lang} Phonetic Transcription', { lang: $t($l2.name) }) }}</h3>
           <p class="text-center">
-            Paste your {{ $l2.name }} text into the text box and get a phonetic
-            transcripton.
+            
+            {{ $t('Paste your {lang} text into the text box and get a phonetic transcripton.', { lang: $t($l2.name) }) }}
           </p>
         </div>
       </div>
@@ -23,25 +23,26 @@
         <div
           :class="{ 'col-sm-6': transcription, 'col-sm-12': !transcription }"
         >
-          <h5 class="mt-4 mb-4">Enter {{ $l2.name }} Text Here:</h5>
+          <h5 class="mt-4 mb-4">{{ $t('Enter {lang} Text Here:', {lang: $t($l2.name)}) }}</h5>
           <textarea
             v-model="text"
             class="mt-2 mb-2 form-control"
             cols="30"
             rows="10"
-            :placeholder="`Paste your list or ${$l2.name} words here to generate phonetic transcription.`"
+            :placeholder="$t('Paste your list or {lang} words here to generate phonetic transcription.', {lang: $t($l2.name)})"
           ></textarea>
         </div>
         <div class="col-sm-6" v-if="transcription">
           <h5 class="mt-4 mb-4">
-            Transcription<span v-if="showIpa"> (IPA)</span>:
+            {{ $t('Transcription') }}
+            <template v-if="showIpa">
+              ( {{ $t('IPA') }} )
+            </template>
           </h5>
-          <textarea
+          <div
             class="mt-2 mb-2 form-control transcription"
-            style="overflow: visible"
-            cols="30"
-            rows="10"
-            >{{ showIpa ? ipa : transcription }}</textarea
+            style="overflow: visible; height: 16rem"
+            >{{ showIpa ? ipa : transcription }}</div
           >
         </div>
       </div>
@@ -56,13 +57,13 @@
               id="showIpa"
               v-model="showIpa"
             />
-            <label class="form-check-label" for="showIpa"> Force IPA </label>
+            <label class="form-check-label" for="showIpa">{{ $t('Use IPA') }}</label>
           </div>
           <button
             class="btn btn-success btn-block"
             v-on:click="getTranscriptionClick"
           >
-            Get Transcription
+            {{ $t('Get Transcription') }}
           </button>
         </div>
       </div>

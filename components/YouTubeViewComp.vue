@@ -231,7 +231,7 @@ export default {
       });
     }
     if (this.video?.difficulty) {
-      const l = levelByDifficulty(this.video.difficulty, $l2.code)
+      const l = levelByDifficulty(this.video.difficulty, this.$l2.code)
       const levelName = level(l, this.$l2).name;
       this.$toast.show(
         this.$tb("This is a {level} level video.", { level: levelName }),
