@@ -242,7 +242,7 @@ class BaseDictionary {
    */
   get(id, head) {
     let word;
-    word = this.words.find((w) => w.id === id);
+    word = this.words.find((w) => w.id == id);
     if (head && word && word.head !== head) {
       word = this.lookup(head);
     }

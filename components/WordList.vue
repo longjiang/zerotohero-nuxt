@@ -8,7 +8,7 @@
             matchedWords &&
             matchedWords.map((word) => word.id).includes(word.id),
         }"
-        v-for="(word, index) in words || wordFromIds || []"
+        v-for="(word, index) in asyncComputedWords"
         :key="`word-list-word-${index}-${word.id}`"
       >
         <Star
@@ -123,8 +123,8 @@
       </li>
     </ul>
     <ShowMoreButton
-      v-if="collapse > 0"
-      :length="words.length"
+      v-if="collapse > 0 && asyncComputedWords?.length > collapse"
+      :length="asyncComputedWords?.length"
       :min="collapse"
     />
   </div>
@@ -200,20 +200,44 @@ export default {
     },
   },
   asyncComputed: {
-    async wordFromIds() {
+    async asyncComputedWords() {
+      let allWords = []
+      let dictionary = await this.$getDictionary();
+      if (this.words) allWords = this.words
+      
       if (this.ids) {
-        let dictionary = await this.$getDictionary();
-        let words = await Promise.all(
+        let wordFromIds = await Promise.all(
           this.ids.map(async (id) => {
-            let word = await dictionary.get(id);
-            if (this.$l2.code === "ja")
-              word.romaji = await dictionary.transliterate(word.kana);
+            return await dictionary.get(id);
+          })
+        );
+        wordFromIds = wordFromIds?.filter((w) => w) || []
+        allWords = allWords.concat(wordFromIds)
+      }
+
+      if (this.texts) {
+        // This returns an array of arrays
+        let wordFromTexts = await Promise.all(
+          this.texts.map(async (text) => {
+            return await dictionary.lookupMultiple(text);
+          })
+        );
+        // Flatten it
+        wordFromTexts = wordFromTexts.reduce((acc, val) => acc.concat(val), []);
+        wordFromTexts = wordFromTexts.filter((w) => w) || []
+        allWords = allWords.concat(wordFromTexts)
+      }
+
+      // Transliterate to Romaji if Japanese
+      if (this.$l2.code === "ja") {
+        allWords = await Promise.all(
+          allWords.map(async (word) => {
+            word.romaji = await dictionary.transliterate(word.kana);
             return word;
           })
         );
-        words = words ? words.filter((w) => w) : [];
-        return words;
       }
+      return allWords;
     },
   },
   methods: {

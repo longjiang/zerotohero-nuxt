@@ -152,9 +152,10 @@
                   </router-link>
                 </h5>
                 <WordList
-                  :ids="wordIds.slice(0, 7)"
-                  skin="light"
+                  :ids="wordIds"
+                  :skin="skin"
                   class="mt-3"
+                  :collapse="7"
                 ></WordList>
               </div>
               <div>
