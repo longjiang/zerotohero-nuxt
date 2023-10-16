@@ -68,18 +68,18 @@ const normalizeDifficulty = (video) => {
   return video;
 }
 
-export const fetchRecommendedVideos = async (userId, l2, level, preferredCategories, forceRefresh, start, limit, excludeIds) => {
+export const fetchRecommendedVideos = async (userId, l2, level, preferredCategories, start, limit, excludeIds) => {
   try {
     let parmas = {
       l2: l2.code,
       limit,
-      level,
-      preferred_categories: preferredCategories?.join(','),
-      user_id: userId,
       start,
-      exclude_ids: excludeIds?.join(","),
       made_for_kids: 0,
     };
+    if (level) parmas.level = level;
+    if (userId) parmas.user_id = userId;
+    if (preferredCategories) parmas.preferred_categories = preferredCategories.join(',');
+    if (excludeIds) parmas.exclude_ids = excludeIds.join(',');
     // unset params with empty values
     Object.keys(parmas).forEach((key) => parmas[key] === undefined && delete parmas[key]);
     const queryString = Object.keys(parmas).map((key) => key + '=' + parmas[key]).join('&');
@@ -237,7 +237,7 @@ export const actions = {
     }
     // Do not load those videos that are already loaded
     const excludeIds = state.recommendedVideos[l2.code] ? state.recommendedVideos[l2.code].map((v) => v.id) : [];
-    let videos = await fetchRecommendedVideos(userId, l2, level, preferredCategories, forceRefresh, start, limit, excludeIds);
+    let videos = await fetchRecommendedVideos(userId, l2, level, preferredCategories, start, limit, excludeIds);
     commit("ADD_RECOMMENDED_VIDEOS", { l2, videos });
   },
   async add(context, { l2, type, show }) {
