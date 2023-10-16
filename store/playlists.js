@@ -31,10 +31,12 @@ export const mutations = {
 
 export const actions = {
   async loadPlaylists({ commit }, { l2, forceRefresh }) {
+    const userId = this.$auth.user?.id;
+    if (!userId) return;
     const response = await this.$directus.get(
       `items/playlists?sort=title&filter[l2][eq]=${
         l2.id
-      }&fields=owner,id,title,videos,l2&limit=500&timestamp=${
+      }&fields=owner,id,title,videos,l2&filter[owner][eq]=${userId}&limit=500&timestamp=${
         forceRefresh ? Date.now() : 0
       }`
     );
