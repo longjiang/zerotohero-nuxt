@@ -26,7 +26,7 @@
         :class="colClasses"
       >
         <VideoThumbnailStack
-          :thumbnail="thumbnail(playlist.videos?.[0].youtube_id)"
+          :thumbnail="thumbnail(playlist.videos?.[0]?.youtube_id)"
           :title="playlist.title"
           :to="{
             name: 'playlist',

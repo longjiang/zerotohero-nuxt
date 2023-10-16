@@ -61,7 +61,9 @@ export default {
   methods: {
     cycleThumbnails() {
       // Cycle through the thumbnails upon hover, every 300ms
-      const thumbnails = this.videos.map((video) => `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`);
+      if (!this.videos?.length) return;
+      let videos = this.videos.filter((video) => video?.youtube_id);
+      const thumbnails = videos.map((video) => `https://img.youtube.com/vi/${video.youtube_id}/hqdefault.jpg`);
       const index = thumbnails.indexOf(this.currentThumbnail);
       const nextIndex = index === thumbnails.length - 1 ? 0 : index + 1;
       this.currentThumbnail = thumbnails[nextIndex];
