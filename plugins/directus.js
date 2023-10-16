@@ -247,6 +247,7 @@ export default ({ app }, inject) => {
     },
 
     async searchCaptions({ l2Obj, tv_show, talk, terms, limit, sort, timestamp }) {
+      if (!l2Obj) throw "Directus.searchCaptions: l2Obj is not set!";
       let url
       let params = {}
       // const server = 'php' // 'python' or 'php'
