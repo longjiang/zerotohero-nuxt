@@ -126,7 +126,7 @@ export default {
         query: { v: this.video.youtube_id },
       }
       if (this.playlistId) {
-        to.query = {p: this.playlistId};
+        to.query.p = this.playlistId;
       }
       return to;
     },
