@@ -92,7 +92,7 @@ export default ({ app }, inject) => {
     },
     async searchWithLike({
       terms,
-      langId,
+      l2_code,
       adminMode,
       excludeTerms = [],
       continua,
@@ -113,7 +113,7 @@ export default ({ app }, inject) => {
       terms = mutuallyExclusive(terms); // So if terms are ['dièdres', 'dièdre'], we search only 'dièdre' since results of the plural will be included automatically.
       let timestamp = adminMode ? Date.now() : 0;
       let params = {
-        l2Id: langId,
+        l2_code: l2_code,
         tv_show,
         talk,
         terms,
@@ -163,7 +163,7 @@ export default ({ app }, inject) => {
     async searchSubs({
       terms,
       excludeTerms = [],
-      langId = 1824,
+      l2_code = "en",
       tvShowFilter,
       talkFilter,
       adminMode = false,
@@ -179,7 +179,7 @@ export default ({ app }, inject) => {
       hits = hits.concat(
         await this.searchWithLike({
           terms,
-          langId,
+          l2_code,
           tvShowFilter,
           talkFilter,
           adminMode,

@@ -7,6 +7,7 @@ import {
   escapeRegExp,
   logError,
   DIRECTUS_API_URL,
+  PYTHON_SERVER,
   LP_DIRECTUS_TOOLS_URL,
   WEB_URL,
   reduceTags,
@@ -245,15 +246,8 @@ export default ({ app }, inject) => {
       } else return [];
     },
 
-    async searchCaptions({ l2Id, tv_show, talk, terms, limit, sort, timestamp }) {
-      let params = {};
-      let suffix = this.youtubeVideosTableSuffix(l2Id);
-      params.suffix = suffix ? "_" + this.youtubeVideosTableSuffix(l2Id) : "";
-      if (this.youtubeVideosTableHasOnlyOneLanguage(l2Id)) {
-        // No language filter is necessary since the table only has one language
-      } else {
-        params.l2 = l2Id;
-      }
+    async searchCaptions({ l2_code, tv_show, talk, terms, limit, sort, timestamp }) {
+      let params = {l2: l2_code};
       if (tv_show) params.tv_show = tv_show;
       if (talk) params.talk = talk;
       if (terms) params.terms = terms.join(",");
@@ -261,7 +255,7 @@ export default ({ app }, inject) => {
       if (limit) params.limit = limit;
       if (sort) params.sort = sort;
       let res = await axios
-        .get(this.appendHostCors(LP_DIRECTUS_TOOLS_URL + "videos"), { params })
+        .get(this.appendHostCors(PYTHON_SERVER + "subs-search"), { params })
         .catch((err) => logError(err));
       if (res?.data) {
         let videos = res.data;
