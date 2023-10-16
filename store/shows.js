@@ -83,7 +83,8 @@ export const fetchRecommendedVideos = async (userId, l2, level, preferredCategor
     // unset params with empty values
     Object.keys(parmas).forEach((key) => parmas[key] === undefined && delete parmas[key]);
     const queryString = Object.keys(parmas).map((key) => key + '=' + parmas[key]).join('&');
-    let videos = await proxy(`${PYTHON_SERVER}recommend-videos?${queryString}`, { cacheLife: 0 });
+    let res = await axios(`${PYTHON_SERVER}recommend-videos?${queryString}`);
+    let videos = res.data;
     if (typeof videos !== "string") {
       videos = videos.map((video) => normalizeDifficulty(video));
       return videos
