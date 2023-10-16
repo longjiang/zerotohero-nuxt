@@ -194,15 +194,8 @@ export const mutations = {
   },
   RESET_SHOW_FILTERS(state) {
     if (!state.l2Settings[state.l2.code]) return;
-    state.l2Settings[state.l2.code].tvShowFilter = "all";
-    if (
-      state.l2?.code &&
-      "zh en it ko es fr ja de tr ru nl".split(" ").includes(state.l2.code)
-    ) {
-      state.l2Settings[state.l2.code].talkFilter = []; // For languages with lots of content, only include tv shows in dictionary video search by default so as to give the user a faster experience.
-    } else {
-      state.l2Settings[state.l2.code].talkFilter = "all";
-    }
+    state.l2Settings[state.l2.code].tvShowFilter = null;
+    state.l2Settings[state.l2.code].talkFilter = null;
   },
 };
 
