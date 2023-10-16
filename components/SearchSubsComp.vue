@@ -419,7 +419,7 @@ export default {
       let options = {
         terms,
         excludeTerms: this.excludeTerms,
-        l2_code: this.$l2.code,
+        l2Obj: this.$l2,
         adminMode: false,
         continua: this.$l2.continua,
         sort: this.canSortByViews ? "-views" : undefined,

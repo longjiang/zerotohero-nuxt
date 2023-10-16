@@ -246,8 +246,23 @@ export default ({ app }, inject) => {
       } else return [];
     },
 
-    async searchCaptions({ l2_code, tv_show, talk, terms, limit, sort, timestamp }) {
-      let params = {l2: l2_code};
+    async searchCaptions({ l2Obj, tv_show, talk, terms, limit, sort, timestamp }) {
+      let url
+      let params = {}
+      // const server = 'php' // 'python' or 'php'
+      const server = 'python' // 'python' or 'php'
+      if (server === 'python') {
+        const l2_code = l2Obj.code;
+        params.l2 = l2_code;
+        url = PYTHON_SERVER + "subs-search";
+      }
+      else if (server === 'php') {
+        const l2Id = l2Obj.id;
+        let suffix = this.youtubeVideosTableSuffix(l2Id);
+        params.l2 = l2Id
+        params.suffix = suffix ? '_' + suffix : ''
+        url = LP_DIRECTUS_TOOLS_URL + "videos";
+      }
       if (tv_show) params.tv_show = tv_show;
       if (talk) params.talk = talk;
       if (terms) params.terms = terms.join(",");
@@ -255,7 +270,7 @@ export default ({ app }, inject) => {
       if (limit) params.limit = limit;
       if (sort) params.sort = sort;
       let res = await axios
-        .get(this.appendHostCors(PYTHON_SERVER + "subs-search"), { params })
+        .get(this.appendHostCors(url), { params })
         .catch((err) => logError(err));
       if (res?.data) {
         let videos = res.data;
@@ -322,6 +337,7 @@ export default ({ app }, inject) => {
       }
     },
 
+    // Returns '' (empty string), '1', '2, '3', etc.
     youtubeVideosTableSuffix(langId) {
       langId = parseInt(langId);
       if (!langId)

@@ -236,7 +236,7 @@ export default {
         allWordForms = unique(allWordForms);
 
         let params = {
-          l2_code: this.$l2.code,
+          l2Obj: this.$l2,
           terms: allWordForms,
           limit: 1000,
         };

@@ -147,7 +147,7 @@ export default {
       try {
         let hits = await this.$subs.searchSubs({
           terms: [this.savedWord.forms[0]],
-          l2_code: this.$l2.code,
+          l2Obj: this.$l2,
           continua: this.$l2.continua,
           limit: 1,
           tvShowFilter: "all",
