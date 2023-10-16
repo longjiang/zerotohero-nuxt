@@ -128,7 +128,7 @@ export default ({ app }, inject) => {
         );
         if (!matchedVideo) {
           let matchedVideos = await app.$directus.getVideos({
-            l2Id: langId,
+            l2Id: l2Obj.id,
             query: `filter[youtube_id][eq]=${mustIncludeYouTubeId}`,
           });
           if (matchedVideos?.length > 0) {
