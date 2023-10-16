@@ -323,7 +323,7 @@ export default {
       let timestamp = `timestamp=${this.$adminMode ? Date.now() : 0}`;
       let offset = `offset=${start}`;
       let limitStr = `limit=${limit}`;
-      let sort = this.sort ? `sort=${this.sort}` : "";
+      let sort = this.sort && this.sort !== '-views' ? `sort=${this.sort}` : ""; // Table is already sorted by views
       let query = [filters, limitStr, fields, offset, sort, timestamp]
         .filter((f) => f && f !== "")
         .join("&");
