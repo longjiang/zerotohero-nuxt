@@ -80,10 +80,10 @@
         </div>
         <div
           v-if="video.difficulty"
-          :data-bg-level="levelByDifficulty(video.difficulty)"
+          :data-bg-level="levelByDifficulty(video.difficulty, $l2.code)"
           class="level-tag"
         >
-          {{ level(levelByDifficulty(video.difficulty), $l2).name }}
+          {{ level(levelByDifficulty(video.difficulty, $l2.code), $l2).name }}
         </div>
       </div>
       <div class="media-body">

@@ -2,10 +2,10 @@
   <div class="statistics">
     <div
       v-if="showLevel && item.difficulty"
-      :data-bg-level="levelByDifficulty(item.difficulty)"
+      :data-bg-level="levelByDifficulty(item.difficulty, $l2.code)"
       class="level-tag mr-1"
     >
-      {{ level(levelByDifficulty(item.difficulty), $l2).name }}
+      {{ level(levelByDifficulty(item.difficulty, $l2.code), $l2).name }}
     </div>
     <span class="statistics-item" v-if="item.avg_views || item.views">
       <i class="fa-solid fa-eye"></i>
