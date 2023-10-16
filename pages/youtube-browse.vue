@@ -107,8 +107,7 @@
               default-text="All Categories"
               @filter="handleCategoryFilter"
             />
-            <!-- We disable this for now -->
-            <!-- <FilterDropdown
+            <FilterDropdown
               v-if="
                 LANGS_WITH_LEVELS.includes($l2.code) && levelOptions.length > 0
               "
@@ -118,7 +117,7 @@
               title="Levels"
               default-text="All Levels"
               @filter="handleLevelFilter"
-            /> -->
+            />
             <FilterDropdown
               v-if="sortOptions.length > 0"
               :items="sortOptions"

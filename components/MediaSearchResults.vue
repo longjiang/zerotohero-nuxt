@@ -103,7 +103,7 @@
 import YouTubeNav from "@/components/YouTubeNav";
 import YouTubeChannelCard from "@/components/YouTubeChannelCard";
 import SimpleSearch from "@/components/SimpleSearch";
-import { uniqueByValue, LANGS_WITH_CONTENT, TOPICS } from "@/lib/utils";
+import { uniqueByValue, LANGS_WITH_CONTENT, TOPICS, maxDifficultyByLevel, minDifficultyByLevel } from "@/lib/utils";
 import { mapState } from "vuex";
 
 export default {
@@ -272,7 +272,9 @@ export default {
       }
 
       if (this.level !== "all") {
-        filters.push("filter[level][eq]=" + this.level);
+        const minDifficultyLevel = minDifficultyByLevel(this.level, this.$l2.code);
+        const maxDifficultyLevel = maxDifficultyByLevel(this.level, this.$l2.code);
+        filters.push("filter[difficulty][between]=" + minDifficultyLevel + "," + maxDifficultyLevel);
       }
       if (this.keyword !== "") {
         const words = this.keyword.split(' ');
