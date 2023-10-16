@@ -447,7 +447,7 @@ export default {
     async getEpisodesFromServer({ keyword, limit, offset, sort } = {}) {
       this.$store.dispatch("shows/getEpisodesFromServer", {
         l2: this.$l2,
-        collection: this.collection,
+        collection: this.collection === "tv_show" ? "tvShows" : "talks",
         showId: this.show.id,
         sort,
         forceRefresh: this.$adminMode,

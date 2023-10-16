@@ -70,7 +70,7 @@ export default {
     if (!this.show.episodes || !this.show.episodes.length) {
       this.$store.dispatch("shows/getEpisodesFromServer", {
         l2: this.$l2,
-        collection: this.type === "tvShows" ? "tv_show" : "talk",
+        collection: this.type,
         showId: this.show.id,
         limit: 5,
       });
