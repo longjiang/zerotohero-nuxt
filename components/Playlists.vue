@@ -27,6 +27,7 @@
       >
         <VideoThumbnailStack
           :thumbnail="thumbnail(playlist.videos?.[0]?.youtube_id)"
+          :videos="playlist.videos"
           :title="playlist.title"
           :to="{
             name: 'playlist',
@@ -96,7 +97,9 @@ export default {
   },
   methods: {
     thumbnail(youtube_id) {
-      return `https://img.youtube.com/vi/${youtube_id}/mqdefault.jpg`;
+      if (youtube_id)
+        return `https://img.youtube.com/vi/${youtube_id}/mqdefault.jpg`;
+      else return "/img/placeholder-faded.png";
     },
   },
   async created() {
