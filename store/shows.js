@@ -68,11 +68,13 @@ const normalizeDifficulty = (video) => {
   return video;
 }
 
-export const fetchRecommendedVideos = async (userId, l2, forceRefresh, start, limit, excludeIds) => {
+export const fetchRecommendedVideos = async (userId, l2, level, preferredCategories, forceRefresh, start, limit, excludeIds) => {
   try {
     let parmas = {
       l2: l2.code,
       limit,
+      level,
+      preferred_categories: preferredCategories?.join(','),
       user_id: userId,
       start,
       exclude_ids: excludeIds?.join(","),
@@ -155,7 +157,7 @@ export const mutations = {
   ) {
     let show = state[collection][l2.code].find((s) => s.id === showId);
     if (!show) {
-      console.log(`Trying to add episodes to show '${showId}' but it doesn't exist in state.${collection}:`, state[collection][l2.code]);
+      console.error(`Trying to add episodes to show '${showId}' but it doesn't exist in state.${collection}:`, state[collection][l2.code]);
       return
     }
     if (show.episodes && show.episodes.length > 0)
@@ -226,10 +228,16 @@ export const actions = {
     
     context.commit("LOAD_SHOWS", { l2, tvShows: processedTvShows, talks: processedTalks });
   },
-  async loadRecommendedVideos({state, commit}, { userId, l2, forceRefresh, start = 0, limit = 48 }) {
+  async loadRecommendedVideos({state, commit, rootState, rootGetters}, { userId, l2, level, preferredCategories, forceRefresh, start = 0, limit = 48 }) {
+    if (!level && rootState.progress.progressLoaded) {
+      level =  Number(rootGetters["progress/level"](l2));
+    }
+    if (!preferredCategories && rootState.settings.settingsLoaded) {
+      preferredCategories = rootState.settings.preferredCategories;
+    }
     // Do not load those videos that are already loaded
     const excludeIds = state.recommendedVideos[l2.code] ? state.recommendedVideos[l2.code].map((v) => v.id) : [];
-    let videos = await fetchRecommendedVideos(userId, l2, forceRefresh, start, limit, excludeIds);
+    let videos = await fetchRecommendedVideos(userId, l2, level, preferredCategories, forceRefresh, start, limit, excludeIds);
     commit("ADD_RECOMMENDED_VIDEOS", { l2, videos });
   },
   async add(context, { l2, type, show }) {

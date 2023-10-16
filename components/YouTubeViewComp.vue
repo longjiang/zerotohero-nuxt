@@ -236,7 +236,7 @@ export default {
       this.$toast.show(
         this.$tb("This is a {level} level video.", { level: levelName }),
         {
-          position: "top-right",
+          position: "top-center",
           className: `toasted toasted-primary default bg-level${l}`,
           iconPack: 'custom-class',
           icon: 'fa-solid fa-signal-bars mr-1',
