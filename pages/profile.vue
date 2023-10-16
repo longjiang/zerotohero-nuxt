@@ -97,6 +97,8 @@
             </div>
           </div>
         </div>
+        <hr class="mt-3 mb-3" />
+        <NavPage :showOnly="['My Words', 'My Phrases', 'My Watch History', 'My Liked Videos', 'My Bookshelf', 'My Texts']" class="my-3" />
         <template v-if="level">
           <hr class="mt-3 mb-3" />
           <div class="row">
@@ -153,7 +155,7 @@
                 </h5>
                 <WordList
                   :ids="wordIds"
-                  :skin="skin"
+                  :skin="$skin"
                   class="mt-3"
                   :collapse="7"
                 ></WordList>

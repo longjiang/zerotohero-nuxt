@@ -42,6 +42,7 @@ feature-card-name-${item.name}`"
 
 <script>
 import navMixin from "@/lib/mixins/nav-mixin";
+import { uniqueByValue } from '@/lib/utils';
 import { ContainerQuery } from "vue-container-query";
 
 export default {
@@ -117,8 +118,8 @@ export default {
         }
         return showOnlyItems;
       }
-
-      return filteredTerminalItems;
+      
+      return uniqueByValue(filteredTerminalItems, 'title');
     },
   },
 };

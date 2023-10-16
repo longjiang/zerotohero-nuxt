@@ -130,7 +130,7 @@
   </div>
 </template>
 <script>
-import { unique } from "@/lib/utils";
+import { unique, uniqueByValue } from "@/lib/utils";
 
 export default {
   props: {
@@ -237,6 +237,7 @@ export default {
           })
         );
       }
+      allWords = uniqueByValue(allWords, "id");
       return allWords;
     },
   },
