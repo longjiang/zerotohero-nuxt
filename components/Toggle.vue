@@ -39,7 +39,7 @@ export default {
   methods: {
     toggleSwitch() {
       this.$emit("input", this.isActive);
-      this.$emit("change");
+      this.$emit("change", this.isActive);
     },
   },
 };

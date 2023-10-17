@@ -30,7 +30,6 @@
             @change="updateL2Settings"
           ></b-form-input>
         </div>
-        {{ $l2Settings.showPinyin }}
         <Toggle
           v-model="localL2Settings.showPinyin"
           label="Show Phonetics"
@@ -191,17 +190,17 @@ export default {
     },
     annotationSettingsClass() {
       return {
-        "show-pinyin": this.localL2Settings.showPinyin,
+        "show-pinyin": this.$l2Settings.showPinyin,
         "show-pinyin-for-saved":
-          !this.localL2Settings.showPinyin && this.$l2 && this.$l2.han,
-        "show-simplified": !this.localL2Settings.useTraditional,
-        "show-traditional": this.localL2Settings.useTraditional,
-        "show-definition": this.localL2Settings.showDefinition,
-        "show-translation": this.localL2Settings.showTranslation,
-        "show-quick-gloss": this.localL2Settings.showQuickGloss,
-        "show-byeonggi": this.localL2Settings.showByeonggi,
-        "use-serif": this.localL2Settings.useSerif,
-        [`zerotohero-zoom-${this.localL2Settings.zoomLevel}`]: true,
+          !this.$l2Settings.showPinyin && this.$l2 && this.$l2.han,
+        "show-simplified": !this.$l2Settings.useTraditional,
+        "show-traditional": this.$l2Settings.useTraditional,
+        "show-definition": this.$l2Settings.showDefinition,
+        "show-translation": this.$l2Settings.showTranslation,
+        "show-quick-gloss": this.$l2Settings.showQuickGloss,
+        "show-byeonggi": this.$l2Settings.showByeonggi,
+        "use-serif": this.$l2Settings.useSerif,
+        [`zerotohero-zoom-${this.$l2Settings.zoomLevel}`]: true,
       };
     },
   },
