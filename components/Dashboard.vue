@@ -78,11 +78,7 @@ export default {
           return l2Progress;
         })
         .filter((item) => item && item.language && item.language.code && item.language.name && item.time !== undefined);
-      sorted.sort((a, b) => {
-        let aName = this.$tb(a.language.name);
-        let bName = this.$tb(b.language.name);
-        return aName.localeCompare(bName, this.$browserLanguage);
-      });
+      sorted.sort((a, b) => b.time - a.time);
       return sorted;
     },
   },
