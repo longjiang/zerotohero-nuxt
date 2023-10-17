@@ -96,7 +96,9 @@ export default async ({ app, store, route }, inject) => {
   inject('getDictionary', async () => {
     if (store.state.settings.l1 && store.state.settings.l2 && store.state.settings.dictionaryName) {
       if (process.client) {
-        let dictionary = WorkerModuleLoader.load(store.state.settings.dictionaryName + '-dictionary', { l1: store.state.settings.l1, l2: store.state.settings.l2 })
+        let l1 = store.state.settings.l1
+        if (store.state.settings.useMachineTranslatedDictionary === true) l1 = app.$languages.getSmart('en')
+        let dictionary = WorkerModuleLoader.load(store.state.settings.dictionaryName + '-dictionary', { l1, l2: store.state.settings.l2 })
         return dictionary
       }
       /* We disable this for now to save bandwidth on Vercel

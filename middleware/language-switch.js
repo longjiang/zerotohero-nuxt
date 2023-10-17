@@ -1,3 +1,5 @@
+import { LANGS_WITH_AZURE_TRANSLATE } from '@/lib/utils'
+
 export default async function ({ error, route, app, store, params, i18n }) {
   if (params.l1 && params.l2) {
     if (store.state.settings.l1 && store.state.settings.l1.code === params.l1 && store.state.settings.l2 && store.state.settings.l2.code === params.l2) {
@@ -32,10 +34,24 @@ export default async function ({ error, route, app, store, params, i18n }) {
         let dictionaries = l1.dictionaries // ['freedict']
           ? l1.dictionaries[l2["iso639-3"] || l2["glottologId"]]
           : undefined;
-
+        
         if (dictionaries) {
           console.log('Setting dictionary name to', dictionaries[0])
           store.dispatch('settings/setDictionaryName', dictionaries[0])
+        }
+
+        // For all the languages that can be learned from English, also add the languages that Azure translate supports
+        if (!dictionaries) {
+          if (LANGS_WITH_AZURE_TRANSLATE.includes(l1.code)) {
+            let englishLanguage = app.$languages.getSmart('en')
+            const code = l2["iso639-3"] || l2["glottologId"]
+            dictionaries = englishLanguage.dictionaries?.[code]
+            if (dictionaries) {
+              console.log('Setting dictionary name to', dictionaries[0], ' (Azure translated)')
+              store.dispatch('settings/setDictionaryName', dictionaries[0])
+              store.dispatch('settings/setUseMachineTranslatedDictionary', true)
+            }
+          }
         }
       }
     }
