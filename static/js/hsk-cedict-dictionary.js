@@ -38,7 +38,6 @@ class HskCedictDictionary extends BaseDictionary {
     ]);
     for (let row of words) {
       row.rank = row.weight / this.maxWeight;
-      this.groupWordsByLevelAndLesson(row);
     }
     this.words = words;
     this.characters = characters;

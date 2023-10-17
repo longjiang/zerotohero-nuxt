@@ -41,6 +41,10 @@ class BaseDictionary {
     if (FrequencyAssigner.hasFrequencyData(l2)) {
       instance.frequencyAssigner = await FrequencyAssigner.load({ l1, l2 });
       instance.frequencyAssigner.addFrequencyAndLevelToItems(instance.words);
+      // make this.words into an array
+      for (let row of Object.values(instance.words)) {
+        instance.groupWordsByLevelAndLesson(row);
+      }
     }
     return instance;
   }

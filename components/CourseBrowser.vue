@@ -121,6 +121,7 @@ export default {
   async created() {
     const dictionary = await this.$getDictionary();
     this.books = await dictionary.getWordGroupsByLevelLessonDialog();
+    console.log(this.books);
   },
   methods: {
     toggleBook(bookIndex) {
