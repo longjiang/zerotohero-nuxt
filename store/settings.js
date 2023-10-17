@@ -150,14 +150,8 @@ export const mutations = {
     state.l1 = null;
     state.l2 = null;
   },
-  SET_DICTIONARY_NAME(state, dictionaryName) {
-    state.dictionaryName = dictionaryName;
-  },
   SET_USE_MACHINE_TRANSLATED_DICTIONARY(state, value) {
     state.useMachineTranslatedDictionary = value;
-  },
-  SET_FULLSCREEN(state, fullscreen) {
-    state.fullscreen = fullscreen;
   },
   SET_GENERAL_SETTINGS(state, generalSettings) {
     for (let property in generalSettings) {
@@ -217,20 +211,27 @@ export const actions = {
   setL1L2({ commit }, { l1, l2 }) {
     commit("SET_L1_L2", { l1, l2 });
   },
-  setDictionaryName({ commit }, dictionaryName) {
-    commit("SET_DICTIONARY_NAME", dictionaryName);
+  setDictionaryName({ dispatch }, dictionaryName) {
+    dispatch("setTransientSettings", { dictionaryName });
   },
-  setUseMachineTranslatedDictionary({ commit }, value) {
-    commit("SET_USE_MACHINE_TRANSLATED_DICTIONARY", value);
+  setUseMachineTranslatedDictionary({ dispatch }, useMachineTranslatedDictionary) {
+    dispatch("setTransientSettings", { useMachineTranslatedDictionary });
   },
   setFullscreen({ dispatch, commit }, fullscreen) {
-    commit("SET_FULLSCREEN", fullscreen);
+    dispatch("setTransientSettings", { fullscreen });
+  },
+  setTransientSettings({ commit }, generalSettings) {
+    console.log("⚙️ Setting transient settings...", generalSettings);
+    commit("SET_GENERAL_SETTINGS", generalSettings);
+    // Do not push
   },
   setGeneralSettings({ dispatch, commit }, generalSettings) {
+    console.log("⚙️ Setting general settings...", generalSettings);
     commit("SET_GENERAL_SETTINGS", generalSettings);
     dispatch("push");
   },
   setL2Settings({ dispatch, commit }, l2Settings) {
+    console.log("⚙️ Setting L2 settings...", generalSettings);
     commit("SET_L2_SETTINGS", l2Settings);
     // sync changes (except adminMode)
     if (!l2Settings.adminMode) dispatch("push");
@@ -266,9 +267,14 @@ export const actions = {
         // For some reason sometimes settings is 'undefined', never push that to the server
         let payload = { settings };
         let path = `items/user_data/${dataId}?fields=id`;
-        console.log("⚙️ Saving settings to the server...");
+        console.log("⚙️ Saving settings to the server...", payload);
         await this.$directus.patch(path, payload).catch(async (err) => {
           logError(err, "settings.js: push()");
+        });
+        this.$toast.success("Settings saved.",
+        {
+          position: "top-center",
+          duration: 1000,
         });
       }
     }
