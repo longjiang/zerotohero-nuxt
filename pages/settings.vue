@@ -109,45 +109,9 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import settingsMixin from '@/lib/mixins/settings-mixin'
 
 export default {
-  data() {
-    return {
-      localSettings: {},
-    };
-  },
-  created() {
-    if (this.settingsLoaded) {
-      this.initializeLocalSettings();
-    }
-  },
-  computed: {
-    ...mapState("settings", ["l2Settings", "l1", "l2", "settingsLoaded"]),
-  },
-  watch: {
-    settingsLoaded(loaded) {
-      if (loaded) {
-        this.initializeLocalSettings();
-      }
-    },
-  },
-  methods: {
-    initializeLocalSettings() {
-      for (let key in this.$store.state.settings) {
-        if (!["l1", "l2"].includes(key)) {
-          // We don't want to serialize big objects
-          const value = this.$store.state.settings[key];
-          // We clone it to the local state so we don't get vuex warnings
-          this.localSettings[key] = value
-            ? JSON.parse(JSON.stringify(value))
-            : value;
-        }
-      }
-    },
-    updateSettings() {
-      this.$store.dispatch("settings/setGeneralSettings", this.localSettings);
-    },
-  },
+  mixins: [ settingsMixin ],
 };
 </script>

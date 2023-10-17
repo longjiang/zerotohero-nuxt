@@ -1,5 +1,5 @@
 <template>
-  <div :class="`annotation-settings annotation-settings-${variant}`">
+  <div class="annotation-settings">
     <div class="mt-3">
       <b-form-checkbox class="my-1" v-model="localL2Settings.showDefinition" @change="updateL2Settings" switch>
         {{ $t("Show definition above words") }}
@@ -16,78 +16,10 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import settingsMixin from '@/lib/mixins/settings-mixin'
+
 export default {
-  props: {
-    variant: {
-      default: "page", // or 'toolbar'
-    },
-  },
-  data() {
-    return {
-      localL2Settings: {
-        showDefinition: false,
-        disableAnnotation: false,
-        useSerif: false // default
-      },
-    };
-  },
-  computed: {
-    ...mapState("settings", ["l2Settings", "l1", "l2", "settingsLoaded"]),
-    userIsAdmin() {
-      return this.$auth.user && this.$auth.user.role == 1;
-    },
-  },
-  created() {
-    if (this.settingsLoaded) {
-      this.initializeLocalL2Settings();
-    }
-  },
-  watch: {
-    settingsLoaded(loaded) {
-      if (loaded) {
-        this.initializeLocalL2Settings();
-      }
-    },
-    adminMode() {
-      this.$store.dispatch("settings/setGeneralSettings", {
-        adminMode: this.adminMode,
-      });
-    },
-    skin() {
-      this.$store.dispatch("settings/setGeneralSettings", {
-        skin: this.skin,
-      });
-    },
-    // More watchers are set up in setupWatchers()
-  },
-  methods: {
-    setupWatchers() {
-      for (let property in defaultSettings) {
-        this.$watch(property, (newValue, oldValue) => {
-          let payload = {};
-          payload[property] = newValue;
-          this.$store.dispatch("settings/setL2Settings", payload);
-        });
-      }
-    },
-    initializeLocalL2Settings() {
-      console.log("initializeLocalL2Settings");
-      if (!this.$l2Settings) return;
-      for (let key in this.$l2Settings) {
-        // mapped to $store.state.settings.l2Settings[l2Code]
-        const value = this.$l2Settings[key];
-        // We clone it to the local state so we don't get vuex warnings
-        this.localL2Settings[key] = value
-          ? JSON.parse(JSON.stringify(value))
-          : value;
-      }
-    },
-    updateL2Settings(payload) {
-      if (!payload) payload = this.localL2Settings;
-      this.$store.dispatch("settings/setL2Settings", payload);
-    },
-  },
+  mixins: [ settingsMixin ],
 };
 </script>
 <style lang="scss" scoped>

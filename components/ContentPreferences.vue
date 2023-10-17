@@ -59,11 +59,6 @@ export default {
     },
   },
   watch: {
-    preferredCategories() {
-      this.$store.dispatch("settings/setGeneralSettings", {
-        preferredCategories: this.preferredCategories,
-      });
-    },
   },
 };
 </script>
