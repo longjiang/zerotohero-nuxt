@@ -83,24 +83,11 @@ export default {
     l2Options() {
       let allLanguages = this.allLanguages;
       let popularOptions = this.popularLanguages
-        .map((language) => {
-          let flagEmoji = this.languageCountryFlagEmoji(language);
-          return {
-            value: language,
-            text: `${this.$tb(language.name)} (${language.code}) ${flagEmoji}`,
-          };
-        })
-        .sort((a, b) => a.text.localeCompare(b.text, this.$browserLanguage));
+        .map(this.languageOption)
+        .sort((a, b) => a.code - b.code)
       let allOptions = allLanguages
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .map((language) => {
-          let flagEmoji = this.languageCountryFlagEmoji(language);
-          return {
-            value: language,
-            text: `${this.$tb(language.name)} (${language.code}) ${flagEmoji}`,
-          };
-        })
-        .sort((a, b) => a.text.localeCompare(b.text, this.$browserLanguage));
+        .map(this.languageOption)
+        .sort((a, b) => a.code - b.code)
       return [
         ...popularOptions,
         { text: "------------------------" },
@@ -115,18 +102,21 @@ export default {
       // Filter the supported L1 languages based on whether they are included
       // in the commonLangs list and have a dictionary for the given L2 language
       let supportedL1s = this.$languages.supportedL1s(l2["iso639-3"]);
+      let popularL1s = supportedL1s.filter((l1) =>
+        this.popularCodes.includes(l1.code)
+      );
 
       // Map the supported L1 languages to an array of objects with 'value' and 'text' properties
-      let options = supportedL1s.map((language) => {
-        let flagEmoji = this.languageCountryFlagEmoji(language);
-        return {
-          value: language,
-          text:
-            this.$tb(language.name) +
-            ` (${language.code})` +
-            ` ${flagEmoji}`,
-        };
-      });
+
+      let popularOptions = popularL1s.map(this.languageOption).sort((a, b) => a.code - b.code)
+      let allOptions = supportedL1s.map(this.languageOption).sort((a, b) => a.code - b.code)
+
+      return [
+        ...popularOptions,
+        { text: "------------------------" },
+        { text: this.$tb("More Languages:") },
+        ...allOptions,
+      ];
 
       // If there's only one L1 option, automatically set l1 to that option
       if (options.length === 1) this.l1 = options[0].value;
@@ -139,6 +129,13 @@ export default {
     },
   },
   methods: {
+    languageOption(language) {
+      let flagEmoji = this.languageCountryFlagEmoji(language);
+      return {
+        value: language,
+        text: `${this.$tb(language.name)} (${language.code}) ${flagEmoji}`,
+      };
+    },
     languageCountryFlagEmoji(language) {
       let typicalCountryCode = this.$languages.countryCode(language);
       let typicalCountry = country(typicalCountryCode);
