@@ -208,7 +208,7 @@ export default {
     async route() {
       if (this.method) {
         const dictionary = await this.$getDictionary();
-        if (this.method === "hsk" && this.argsProp) {
+        if (["hsk", "level"].includes(this.method) && this.argsProp) {
           this.args = this.$route.params.argsProp.split(",");
           this.words = await dictionary.getByBookLessonDialog(this.args[0], this.args[1], this.args[2]); // this.args[2] (i.e. the dialog or part) can be undefined, which will return the entire lesson rather than just that dialog or part
           return;

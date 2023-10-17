@@ -414,9 +414,20 @@ class BaseDictionary {
     // Only implemented for Chinese
   }
 
-  getByBookLessonDialog() {
-    // Only implemented for Chinese
+
+  getByBookLessonDialog(book, lesson, dialog) {
+    let words = this.words.filter(
+      (row) =>
+        (parseInt(row.book) === parseInt(book) || parseInt(row.level) === parseInt(book)) &&
+        parseInt(row.lesson) === parseInt(lesson)
+    );
+    if (dialog)
+      words = words.filter(
+        (row) => row.dialog.toString() === dialog.toString()
+      );
+    return words;
   }
+
 
   async getWordGroupsByLevelLessonDialog() {
     // Only implemented for Chinese

@@ -161,20 +161,6 @@ class HskCedictDictionary extends BaseDictionary {
     let word = this.words.find((row) => row.hskId === hskId);
     return this.addNewHSK(word);
   }
-
-  getByBookLessonDialog(book, lesson, dialog) {
-    let words = this.words.filter(
-      (row) =>
-        parseInt(row.book) === parseInt(book) &&
-        parseInt(row.lesson) === parseInt(lesson)
-    );
-    if (dialog)
-      words = words.filter(
-        (row) => row.dialog.toString() === dialog.toString()
-      );
-    return words;
-  }
-
   lookupByLesson(level, lesson) {
     level = String(level);
     lesson = String(lesson);
