@@ -23,7 +23,7 @@
               v-if="method === 'hsk'"
             >
               <i class="fa fa-chevron-left"></i>
-              {{ $t("HSK Standard Course") }}
+              {{ $t("Words by Level") }}
             </router-link>
             <component
               class="h3 mb-4 d-block text-center"
@@ -42,7 +42,7 @@
               class="link-unstyled"
             >
               <h4 class="page-title text-center mb-4" v-if="method === 'hsk'">
-                <b :data-level="args[0]" class="mr-1">HSK {{ args[0] }}</b>
+                <b :data-level="args[0]" class="mr-1">{{ l2LevelNameByLevel($l2, args[0]) }}</b>
                 <b>{{ $t("Lesson {num}", { num: args[1] }) }}</b>
                 <template v-if="args[2]">({{ $t("Part {num}", { num: args[2] }) }})</template>
                 {{ $t("Vocabulary") }}
@@ -171,6 +171,7 @@
 
 <script>
 import { ContainerQuery } from "vue-container-query";
+import { l2LevelNameByLevel } from "@/lib/utils";
 
 export default {
   components: {
@@ -198,6 +199,7 @@ export default {
     this.route();
   },
   methods: {
+    l2LevelNameByLevel,
     saveAllClick() {
       let wordList = this.$refs.wordList;
       if (wordList) {
