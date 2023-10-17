@@ -21,6 +21,7 @@ export default async function ({ error, route, app, store, params, i18n }) {
           return
         }
       }
+      store.dispatch('settings/setUseMachineTranslatedDictionary', false)
       store.dispatch('settings/setL1L2', { l1, l2 })
       if (l1) {
         i18n.locale = l1.code;

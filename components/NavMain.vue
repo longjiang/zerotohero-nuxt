@@ -295,6 +295,11 @@ export default {
   text-align: center;
   .nav-item-bottom-bar {
     padding: 0.5rem;
+    overflow: hidden;
+  }
+
+  :deep(.nav-item-title) {
+    display: none;
   }
 }
 
