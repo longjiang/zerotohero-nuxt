@@ -413,7 +413,7 @@ class BaseDictionary {
     // Only implemented for Chinese
   }
 
-  async getHSKStandardCourseWords() {
+  async getWordGroupsByLevelLessonDialog() {
     // Only implemented for Chinese
   }
 

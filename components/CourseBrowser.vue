@@ -120,7 +120,7 @@ export default {
   },
   async created() {
     const dictionary = await this.$getDictionary();
-    this.books = await dictionary.getHSKStandardCourseWords();
+    this.books = await dictionary.getWordGroupsByLevelLessonDialog();
   },
   methods: {
     toggleBook(bookIndex) {
