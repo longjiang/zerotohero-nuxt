@@ -79,7 +79,7 @@ Vue.mixin({
     // Translate into the browser language
     $tb(text, data = {}) {
       let code = this.$l1 ? this.$l1.code : this.$browserLanguage ? this.$browserLanguage : 'en'
-      if (code && this.$languages) return this.$languages.translate(text, code, data);
+      if (code && this.$languages) return this.$t(text, code, data);
       else return text;
     },
     // Localize a date into the browser language

@@ -673,10 +673,10 @@ export default {
     language(code) {
       if (this.$languages) return this.$languages.getSmart(code);
     },
-    languageName({ l1, l2 }) {
+    languageName({ l1, l2 }) { // l1 and l2 are codes
       let language = this.language(l2);
       if (language) {
-        return this.$languages.translate(language.name, l1);
+        return this.$t(language.name, l1);
       }
     },
     scrollTo(selector) {

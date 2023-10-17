@@ -370,12 +370,10 @@ export default {
     onResize() {
       this.wide = wide();
     },
-    updatei18n() {
+    async updatei18n() {
       this.$i18n.locale = this.$l1.code;
-      this.$i18n.silentTranslationWarn = true;
-      if (this.$l1.translations) {
-        this.$i18n.setLocaleMessage(this.$l1.code, this.$l1.translations);
-      }
+      const messages = await axios.get(`/locales/${this.$l1.code}.json`);
+      this.$i18n.setLocaleMessage(this.$l1.code, messages.data);
     },
     async onLanguageChange() {
       await this.$store.dispatch(
