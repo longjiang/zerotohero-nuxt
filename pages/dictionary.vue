@@ -130,8 +130,8 @@
                   menu-class="disambiguation-dropdown"
                 >
                   <b-dropdown-item
-                    v-for="w in words"
-                    :key="`phrase-word-disambiguation-${w.id}`"
+                    v-for="(w, index) in words"
+                    :key="`phrase-word-disambiguation-${w.id}-${index}`"
                     @click="
                       $router.push(
                         `/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${w.id}`

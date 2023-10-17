@@ -83,21 +83,24 @@ export default {
       augmentedDefinitions: [],
     };
   },
+  async mounted() {
+    this.augmentedDefinitions = this.definitions;
+    await this.loadAugmentedDefinitions();
+  },
   methods: {
-    async visibilityChanged(visible) {
+    visibilityChanged(visible) {
       if (visible) {
-        await this.loadAugmentedDefinitions();
+        if (this.translated) this.loadAugmentedDefinitions(true)
       }
     },
-    async loadAugmentedDefinitions() {
+    async loadAugmentedDefinitions(translate = false) {
       let augmentedDefinitions = this.definitions;
-      if (this.translated) {
+      if (translate)
         augmentedDefinitions = await translators.translateArrayWithBing({
           textArray: augmentedDefinitions,
           l1Code: this.$l1.code,
           l2Code: this.$l2.code,
         });
-      }
       // augmentedDefinitions = this.parseCircleNumbersInDefinitions(augmentedDefinitions)
       augmentedDefinitions = await Promise.all(
         unique(augmentedDefinitions).map(async (definition) => {
