@@ -15,7 +15,7 @@
           :style="`border: none;  background: linear-gradient(#00000077, #00000077), url(/img/categories/bg-category-${index}.jpg); background-size: cover; background-position: center center; padding-top: 2.5rem; padding-bottom: 0.5rem;`"
           class="category-btn"
         >
-          <input type="checkbox" v-model="localSettings.preferredCategories" @change="updateL2Settings" :id="'category_' + index" :value="index"  />
+          <input type="checkbox" v-model="localSettings.preferredCategories" @change="updateSettings" :id="'category_' + index" :value="index"  />
           {{ $t(category) }}
         </div>
       </div>
@@ -31,6 +31,7 @@ export default {
   mixins: [ settingsMixin ],
   computed: {
     ...mapState("shows", ["categories"]),
+    ...mapState("settings", ["preferredCategories"]),
   },
   methods: {
 

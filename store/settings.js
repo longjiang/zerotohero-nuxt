@@ -162,14 +162,14 @@ export const mutations = {
   SET_TRANSIENT_SETTINGS(state, transientSettings) {
     for (let property in transientSettings) {
       if (property in defaultTransientSettings) {
-        state[property] = transientSettings[property];
+        Vue.set(state, property, transientSettings[property]);
       }
     }
   },
   SET_GENERAL_SETTINGS(state, generalSettings) {
     for (let property in generalSettings) {
       if (property in defaultGeneralSettings) {
-        state[property] = generalSettings[property];
+        Vue.set(state, property, generalSettings[property]);
       }
     }
     saveSettingsToStorage(state);
