@@ -17,23 +17,6 @@
 
 <script>
 import { mapState } from "vuex";
-const defaultSettings = {
-  zoomLevel: 0,
-  autoPronounce: true,
-  adminMode: false,
-  onceAdmin: false,
-  showDefinition: undefined,
-  showTranslation: undefined,
-  showQuickGloss: undefined,
-  showPinyin: undefined,
-  useTraditional: undefined,
-  showQuiz: undefined,
-  useSerif: undefined,
-  showByeonggi: undefined,
-  disableAnnotation: undefined,
-  quizMode: false,
-  skin: null,
-};
 export default {
   props: {
     variant: {
@@ -47,7 +30,6 @@ export default {
         disableAnnotation: false,
         useSerif: false // default
       },
-      ...defaultSettings,
     };
   },
   computed: {
@@ -80,15 +62,6 @@ export default {
     // More watchers are set up in setupWatchers()
   },
   methods: {
-    loadSettings() {
-      if (!this.$l2.code) return;
-      if (!this.$l2Settings) return;
-      for (let property in defaultSettings) {
-        if (this[property] !== this.$l2Settings[property])
-          this[property] = this.$l2Settings[property];
-      }
-      if (this.adminMode) this.onceAdmin = true;
-    },
     setupWatchers() {
       for (let property in defaultSettings) {
         this.$watch(property, (newValue, oldValue) => {
