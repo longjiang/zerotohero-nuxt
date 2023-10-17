@@ -381,14 +381,6 @@ export default {
       await this.$store.dispatch(
         "watchHistory/load", this.$l2.id
       );
-      let youtube = this.$refs["video-view-comp"];
-      if (
-        youtube &&
-        youtube.video &&
-        youtube.video.l2 !== String(this.$l2.id)
-      ) {
-        this.overlayPlayerClose(); // Close the mini player unless the language matches
-      }
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
       if (this.$l1) this.updatei18n();
       if (this.$l1 && this.$l2) {

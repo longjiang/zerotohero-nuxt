@@ -33,6 +33,9 @@ export default {
     overlayPlayerMinimized() {
       return this.$route.name !== "video-view";
     },
+    combinedLanguages() {
+      return `${this.$l1?.code}-${this.$l2?.code}`;
+    },
   },
   created() {
     this.updateOverlayPlayerProps();
@@ -40,9 +43,15 @@ export default {
   watch: {
     $route() {
       this.updateOverlayPlayerProps();
-    }
+    },
+    combinedLanguages() {
+      this.onLanguageChange();
+    },
   },
   methods: {
+    onLanguageChange() {
+      this.overlayPlayerClose();
+    },
     overlayPlayerClose() {
       this.overlayPlayerType = undefined;
       this.overlayPlayerYouTubeId = undefined;

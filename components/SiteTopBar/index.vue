@@ -152,10 +152,15 @@
                 :l1="$l1"
                 :l2="$l2"
                 class="youtube-browse-nav"
-                :showOnly="['About']"
-                :showOnlyChildren="['More']"
+                :showOnly="[
+                  'Map of Languages',
+                  'Face of the Language',
+                  'Phonological Features',
+                  'Compare Languages',
+                  'Web Translators',
+                  'Language Player Stats',
+                ]"
                 :limit="12"
-                skin="light"
               />
             </client-only>
           </div>

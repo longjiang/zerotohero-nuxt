@@ -42,10 +42,14 @@
                 </p>
                 <p v-if="$l2.lat && $l2.long">
                   <b>{{ $t("Location (lat, long):") }}</b>
-                  <router-link :to="{
-                    name: 'ling-language-map',
-                    query: { c: `${$l2.lat},${$l2.long}`, z: 7 }
-                  }"> {{ $l2.lat }}, {{ $l2.long }} </router-link>
+                  <router-link
+                    :to="{
+                      name: 'ling-language-map',
+                      query: { c: `${$l2.lat},${$l2.long}`, z: 7 },
+                    }"
+                  >
+                    {{ $l2.lat }}, {{ $l2.long }}
+                  </router-link>
                 </p>
                 <p v-if="$l2.scope">
                   <b>{{ $t("Language Scope:") }}</b>
@@ -112,15 +116,21 @@
                 </p>
               </div>
             </div>
-            <hr/>
+            <hr />
             <div class="pt-3 pb-2">
               <client-only>
                 <NavPage
                   :l1="$l1"
                   :l2="$l2"
                   class="youtube-browse-nav"
-                  :showOnly="['About']"
-                  :showOnlyChildren="['More']"
+                  :showOnly="[
+                    'Map of Languages',
+                    'Face of the Language',
+                    'Phonological Features',
+                    'Compare Languages',
+                    'Web Translators',
+                    'Language Player Stats',
+                  ]"
                   :limit="12"
                 />
               </client-only>
