@@ -8,7 +8,7 @@
       </div>
       <div class="mb-4" style="overflow: hidden; position: relative;">
         <h6>{{ $t('Character Definitions') }}</h6>
-        <DefinitionsList class="mt-2" :definitions="character.definition.split(';')"></DefinitionsList>
+        <DefinitionsList class="mt-2" :definitions="character.definition.split(';')" :translated="$store.state.settings.useMachineTranslatedDictionary"></DefinitionsList>
       </div>
     </div>
     <hr style="clear: both" />

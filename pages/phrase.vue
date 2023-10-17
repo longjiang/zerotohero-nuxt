@@ -97,6 +97,7 @@
                 v-if="word.definitions"
                 class="mt-3"
                 :definitions="word.definitions"
+                :translated="$store.state.settings.useMachineTranslatedDictionary"
               ></DefinitionsList>
               <EntryExternal
                 :term="word.head"

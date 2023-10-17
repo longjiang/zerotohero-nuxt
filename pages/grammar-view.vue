@@ -68,6 +68,7 @@
                 v-if="entry.definitions"
                 class="mt-3"
                 :definitions="entry.definitions"
+                :translated="$store.state.settings.useMachineTranslatedDictionary"
               ></DefinitionsList>
               <EntryExample
                 :entry="entry"

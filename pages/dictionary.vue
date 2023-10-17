@@ -152,6 +152,7 @@
                       :entry="entry"
                       :key="`def-list-${entry.id}`"
                       :definitions="entry.definitions"
+                      :translated="$store.state.settings.useMachineTranslatedDictionary"
                       :class="{
                         'pl-3 pr-3 mt-3': true,
                         transparent: true,
@@ -173,6 +174,7 @@
                       :entry="entry"
                       :key="`def-list-${entry.id}`"
                       :definitions="entry.definitions"
+                      :translated="$store.state.settings.useMachineTranslatedDictionary"
                       :class="{
                         'pl-3 pr-3 mt-3': true,
                       }"

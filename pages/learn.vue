@@ -92,6 +92,7 @@
                       v-if="words[index].definitions"
                       class="mt-3 transparent"
                       :definitions="words[index].definitions"
+                      :translated="$store.state.settings.useMachineTranslatedDictionary"
                     ></DefinitionsList>
                   </div>
                 </template>
@@ -103,6 +104,7 @@
                       v-if="words[index].definitions"
                       class="mt-3"
                       :definitions="words[index].definitions"
+                      :translated="$store.state.settings.useMachineTranslatedDictionary"
                     ></DefinitionsList>
                   </div>
                 </template>

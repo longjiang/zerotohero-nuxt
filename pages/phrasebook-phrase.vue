@@ -163,6 +163,7 @@
                         v-if="word.definitions"
                         :class="{ 'mt-3': true, transparent: true }"
                         :definitions="word.definitions"
+                        :translated="$store.state.settings.useMachineTranslatedDictionary"
                       ></DefinitionsList>
                     </div>
                   </template>
@@ -177,6 +178,7 @@
                         v-if="word.definitions"
                         :class="{ 'mt-3': true, transparent: false }"
                         :definitions="word.definitions"
+                        :translated="$store.state.settings.useMachineTranslatedDictionary"
                       ></DefinitionsList>
                     </div>
                   </template>

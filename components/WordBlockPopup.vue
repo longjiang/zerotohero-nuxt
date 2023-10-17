@@ -198,6 +198,7 @@
           class="word-translation"
           :entry="word"
           :definitions="word.definitions"
+          :translated="$store.state.settings.useMachineTranslatedDictionary"
           :singleColumn="true"
           :alwaysShowAsList="true"
         />

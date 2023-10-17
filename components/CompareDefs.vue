@@ -6,6 +6,7 @@
         <DefinitionsList
           v-if="defCommon"
           :definitions="defCommon"
+          :translated="$store.state.settings.useMachineTranslatedDictionary"
           :nodef="$t('(no common definitions)')"
           class="mt-2 mb-2"
         ></DefinitionsList>
@@ -17,6 +18,7 @@
         <DefinitionsList
           v-if="defDistinctA"
           :definitions="defDistinctA"
+          :translated="$store.state.settings.useMachineTranslatedDictionary"
           :singleColumn="true"
         ></DefinitionsList>
       </div>
@@ -24,6 +26,7 @@
         <DefinitionsList
           v-if="defDistinctB"
           :definitions="defDistinctB"
+          :translated="$store.state.settings.useMachineTranslatedDictionary"
           :singleColumn="true"
         ></DefinitionsList>
       </div>

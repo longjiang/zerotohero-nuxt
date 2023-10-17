@@ -76,11 +76,7 @@
             class="suggestion-alternate"
             v-if="getAlternate(suggestion)"
           >[{{ getAlternate(suggestion) }}]</span>
-          <span
-            class="suggestion-l1"
-            v-if="suggestion.definitions"
-            v-html="highlight(suggestion.definitions.slice(0,3).join(', '), text)"
-          ></span>
+          <DefinitionsList v-if="suggestion.definitions" class="suggestion-l1" :definitions="suggestion.definitions" :translated="true" :singleColumn="true" :neverShowAsList="true" />
         </span>
       </a>
       <div
@@ -267,6 +263,7 @@ a.suggestion {
 }
 
 .suggestion-l1 {
+  display: inline;
   font-style: italic;
   color: #777;
 }
@@ -281,6 +278,7 @@ a.suggestion {
 }
 
 .suggestion-l1 :deep(.highlight) {
+  display: inline;
   font-weight: bold;
 }
 

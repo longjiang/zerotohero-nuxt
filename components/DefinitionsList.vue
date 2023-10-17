@@ -1,12 +1,19 @@
 <template>
-  <div class="definitions-list" style="max-width: 50rem; margin: 0 auto">
+  <div
+    class="definitions-list"
+    style="max-width: 50rem; margin: 0 auto"
+    v-observe-visibility="{
+      callback: visibilityChanged,
+      once: true,
+    }"
+  >
     <template v-if="augmentedDefinitions.length > 0">
       <ol
         :class="{
           'definitions mb-2': true,
           single: singleColumn,
           'definitions-many':
-            alwaysShowAsList || augmentedDefinitions.length > 3,
+            alwaysShowAsList || (augmentedDefinitions.length > 3 && !neverShowAsList),
         }"
       >
         <li
@@ -52,6 +59,7 @@
 <script>
 import VRuntimeTemplate from "v-runtime-template";
 import { unique } from "@/lib/utils";
+import translators from "@/lib/translators";
 
 export default {
   components: {
@@ -63,29 +71,43 @@ export default {
     singleColumn: false,
     showPOS: true,
     alwaysShowAsList: false,
+    neverShowAsList: false,
     nodef: {
       type: String,
       default: "",
     },
+    translated: false,
   },
   data() {
     return {
       augmentedDefinitions: [],
     };
   },
-  async mounted() {
-    let augmentedDefinitions = this.definitions;
-    // augmentedDefinitions = this.parseCircleNumbersInDefinitions(augmentedDefinitions)
-    augmentedDefinitions = await Promise.all(
-      unique(augmentedDefinitions).map(async (definition) => {
-        if (typeof definition === "string") definition = { text: definition };
-        definition.html = await this.definitionHtml(definition.text);
-        return definition;
-      })
-    );
-    this.augmentedDefinitions = augmentedDefinitions;
-  },
   methods: {
+    async visibilityChanged(visible) {
+      if (visible) {
+        await this.loadAugmentedDefinitions();
+      }
+    },
+    async loadAugmentedDefinitions() {
+      let augmentedDefinitions = this.definitions;
+      if (this.translated) {
+        augmentedDefinitions = await translators.translateArrayWithBing({
+          textArray: augmentedDefinitions,
+          l1Code: this.$l1.code,
+          l2Code: this.$l2.code,
+        });
+      }
+      // augmentedDefinitions = this.parseCircleNumbersInDefinitions(augmentedDefinitions)
+      augmentedDefinitions = await Promise.all(
+        unique(augmentedDefinitions).map(async (definition) => {
+          if (typeof definition === "string") definition = { text: definition };
+          definition.html = await this.definitionHtml(definition.text);
+          return definition;
+        })
+      );
+      this.augmentedDefinitions = augmentedDefinitions;
+    },
     async getWord(term) {
       const dictionary = await this.$getDictionary();
       let words = dictionary.lookupMultiple(term, true);
@@ -133,12 +155,14 @@ export default {
 .definitions {
   padding-left: 0;
   list-style: none;
+  display: inline;
 
   .definition-list-item {
     display: inline;
   }
   &.definitions-many {
     list-style: decimal;
+    display: block;
     .definition-list-item {
       text-align: left;
       display: list-item;
