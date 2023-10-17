@@ -15,7 +15,7 @@
           @click="toggleBook(bookIndex)"
           :data-bg-level="bookIndex"
         >
-          HSK {{ bookIndex }}
+        {{ l2LevelName($l2.code) }} {{ bookIndex }}
         </div>
         <div class="lessons collapsed" v-if="!bookOpen[bookIndex]"></div>
         <ul class="lessons" v-else>
@@ -108,6 +108,8 @@
 </template>
 
 <script>
+import { l2LevelName } from "@/lib/utils"
+
 export default {
   data() {
     return {
@@ -124,6 +126,7 @@ export default {
     console.log(this.books);
   },
   methods: {
+    l2LevelName,
     toggleBook(bookIndex) {
       let open = this.bookOpen[bookIndex];
       this.$set(this.bookOpen, bookIndex, open ? false : true);

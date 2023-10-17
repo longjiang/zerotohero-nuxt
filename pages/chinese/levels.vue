@@ -24,17 +24,9 @@
         <div class="col-sm-12">
           <div>
             <!-- <Sale class="mb-4" /> -->
-            <h3 class="text-center">Browse Words by HSK Courses</h3>
+            <h3 class="text-center">{{ $t('Browse Words by {level} Courses', { level: l2LevelName($l2.code) }) }} </h3>
             <p class="text-center">
-              Each tiny square represents a word in the
-              <a
-                href="https://en.wikipedia.org/wiki/Hanyu_Shuiping_Kaoshi"
-                target="_blank"
-              >
-                HSK
-                <i class="glyphicon glyphicon-new-window"></i>
-              </a>
-              curriculum.
+              {{ $t('Each tiny square represents a word in the {level} curriculum.', { level: l2LevelName($l2.code) }) }}
             </p>
             <client-only>
               <div class="text-center">
@@ -43,7 +35,7 @@
               <CourseBrowser class="mt-5 mb-5" />
             </client-only>
           </div>
-          <div>
+          <div v-if="$l2.code === 'zh'">
             <h5 class="text-center mt-5 mb-3">
               All HSK words on a big, interactive chart:
             </h5>
@@ -62,6 +54,7 @@
 
 <script>
 import CourseBrowser from "@/components/CourseBrowser.vue";
+import { l2LevelName } from '@/lib/utils'
 
 export default {
   components: {
@@ -71,7 +64,9 @@ export default {
     return {};
   },
   mounted() {},
-  methods: {},
+  methods: {
+    l2LevelName
+  },
 };
 </script>
 <style>
