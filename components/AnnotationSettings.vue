@@ -1,30 +1,16 @@
 <template>
   <div :class="`annotation-settings annotation-settings-${variant}`">
     <div class="mt-3">
-      <b-form-checkbox
-        class="mb-2"
-        v-model="showDefinition"
-      >
+      <b-form-checkbox class="my-1" v-model="localL2Settings.showDefinition" @change="updateL2Settings" switch>
         {{ $t("Show definition above words") }}
       </b-form-checkbox>
-      <b-form-checkbox class="mb-2" v-model="disableAnnotation">
+      <b-form-checkbox class="my-1" v-model="localL2Settings.disableAnnotation" @change="updateL2Settings" switch>
         {{ $t("Disable popup dictionary") }}
       </b-form-checkbox>
-      <b-button-group class="d-block">
-        <b-button
-          :variant="!useSerif ? 'secondary' : 'outline-secondary'"
-          @click="useSerif = false"
-        >
-          {{ $t("Use Sans-Serif") }}
-        </b-button>
-        <b-button
-          :variant="useSerif ? 'secondary' : 'outline-secondary'"
-          style="font-family: serif"
-          @click="useSerif = true"
-        >
-          {{ $t("Use Serif") }}
-        </b-button>
-      </b-button-group>
+      <b-form-checkbox class="my-1" v-model="localL2Settings.useSerif" @change="updateL2Settings" switch>
+        <template v-if="localL2Settings.useSerif">{{ $t('Use Serif') }}</template>
+        <template v-else>{{ $t('Use Sans-Serif') }}</template>
+      </b-form-checkbox>
     </div>
   </div>
 </template>
@@ -55,21 +41,43 @@ export default {
     },
   },
   data() {
-    return defaultSettings;
-  },
-  mounted() {
-    this.loadSettings();
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "settings/LOAD_JSON_FROM_LOCAL") {
-        this.loadSettings();
-      }
-    });
-    this.setupWatchers();
+    return {
+      localL2Settings: {
+        showDefinition: false,
+        disableAnnotation: false,
+        useSerif: false // default
+      },
+      ...defaultSettings,
+    };
   },
   computed: {
+    ...mapState("settings", ["l2Settings", "l1", "l2", "settingsLoaded"]),
     userIsAdmin() {
       return this.$auth.user && this.$auth.user.role == 1;
     },
+  },
+  created() {
+    if (this.settingsLoaded) {
+      this.initializeLocalL2Settings();
+    }
+  },
+  watch: {
+    settingsLoaded(loaded) {
+      if (loaded) {
+        this.initializeLocalL2Settings();
+      }
+    },
+    adminMode() {
+      this.$store.dispatch("settings/setGeneralSettings", {
+        adminMode: this.adminMode,
+      });
+    },
+    skin() {
+      this.$store.dispatch("settings/setGeneralSettings", {
+        skin: this.skin,
+      });
+    },
+    // More watchers are set up in setupWatchers()
   },
   methods: {
     loadSettings() {
@@ -90,19 +98,22 @@ export default {
         });
       }
     },
-  },
-  watch: {
-    adminMode() {
-      this.$store.dispatch("settings/setGeneralSettings", {
-        adminMode: this.adminMode,
-      });
+    initializeLocalL2Settings() {
+      console.log("initializeLocalL2Settings");
+      if (!this.$l2Settings) return;
+      for (let key in this.$l2Settings) {
+        // mapped to $store.state.settings.l2Settings[l2Code]
+        const value = this.$l2Settings[key];
+        // We clone it to the local state so we don't get vuex warnings
+        this.localL2Settings[key] = value
+          ? JSON.parse(JSON.stringify(value))
+          : value;
+      }
     },
-    skin() {
-      this.$store.dispatch("settings/setGeneralSettings", {
-        skin: this.skin,
-      });
+    updateL2Settings(payload) {
+      if (!payload) payload = this.localL2Settings;
+      this.$store.dispatch("settings/setL2Settings", payload);
     },
-    // More watchers are set up in setupWatchers()
   },
 };
 </script>

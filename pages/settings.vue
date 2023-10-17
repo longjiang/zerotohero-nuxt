@@ -26,7 +26,10 @@
           <div class="col-sm-12">
             <div>
               <h5 class="my-4">{{ $t("General settings") }}</h5>
-              <b-form-checkbox v-model="localSettings.subsSearchLimit" @change="updateSettings">
+              <b-form-checkbox
+                v-model="localSettings.subsSearchLimit"
+                @change="updateSettings"
+              >
                 {{ $t('Limit "this word in TV Shows" search result (faster)') }}
               </b-form-checkbox>
               <hr class="my-4" />
@@ -36,7 +39,8 @@
               <p>{{ $t("Enter your ChatGPT API token:") }}</p>
               <b-form-input
                 type="password"
-                v-model="localSettings.openAIToken" @change="updateSettings"
+                v-model="localSettings.openAIToken"
+                @change="updateSettings"
                 :lazy="true"
               ></b-form-input>
               <i18n
@@ -57,7 +61,7 @@
               <h5 class="my-4">
                 {{ $t("Settings specific to {l2}", { l2: $t($l2.name) }) }}:
               </h5>
-              <!-- <AnnotationSettings /> -->
+              <AnnotationSettings />
             </div>
             <hr class="my-4" />
             <div class="my-4">
@@ -111,10 +115,12 @@ export default {
   data() {
     return {
       localSettings: {},
-      openAIToken: undefined,
-      subsSearchLimit: true,
-      adminMode: false,
     };
+  },
+  created() {
+    if (this.settingsLoaded) {
+      this.initializeLocalSettings();
+    }
   },
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2", "settingsLoaded"]),
@@ -129,17 +135,19 @@ export default {
   methods: {
     initializeLocalSettings() {
       for (let key in this.$store.state.settings) {
-        if (!['l1', 'l2'].includes(key)) {
+        if (!["l1", "l2"].includes(key)) {
           // We don't want to serialize big objects
-          const value = this.$store.state.settings[key]
+          const value = this.$store.state.settings[key];
           // We clone it to the local state so we don't get vuex warnings
-          this.localSettings[key] = value ? JSON.parse(JSON.stringify(value)) : value;
+          this.localSettings[key] = value
+            ? JSON.parse(JSON.stringify(value))
+            : value;
         }
       }
     },
     updateSettings() {
-      this.$store.dispatch('settings/setGeneralSettings', this.localSettings);
-    }
+      this.$store.dispatch("settings/setGeneralSettings", this.localSettings);
+    },
   },
 };
 </script>
