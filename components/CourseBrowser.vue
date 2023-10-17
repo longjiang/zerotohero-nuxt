@@ -15,7 +15,7 @@
           @click="toggleBook(bookIndex)"
           :data-bg-level="bookIndex"
         >
-        {{ l2LevelName($l2.code) }} {{ bookIndex }}
+        {{ l2LevelNameByLevel($l2, bookIndex) }}
         </div>
         <div class="lessons collapsed" v-if="!bookOpen[bookIndex]"></div>
         <ul class="lessons" v-else>
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { l2LevelName } from "@/lib/utils"
+import { l2LevelName, l2LevelNameByLevel } from "@/lib/utils"
 
 export default {
   data() {
@@ -127,6 +127,7 @@ export default {
   },
   methods: {
     l2LevelName,
+    l2LevelNameByLevel,
     toggleBook(bookIndex) {
       let open = this.bookOpen[bookIndex];
       this.$set(this.bookOpen, bookIndex, open ? false : true);
@@ -255,6 +256,13 @@ export default {
 .book[data-book="6"] > .book-title.collapsed {
   width: 100%;
   height: 10rem;
+  line-height: 9rem;
+  background-size: 1% 4.16%;
+}
+
+.book[data-book="7"] > .book-title.collapsed {
+  width: 100%;
+  height: 20rem;
   line-height: 9rem;
   background-size: 1% 4.16%;
 }

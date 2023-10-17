@@ -37,7 +37,7 @@
           </div>
           <div v-if="$l2.code === 'zh'">
             <h5 class="text-center mt-5 mb-3">
-              All HSK words on a big, interactive chart:
+              {{ $t('All HSK words on a big, interactive chart:') }}
             </h5>
             <a
               href="https://www.chinesezerotohero.com/hsk-word-vis/"
