@@ -17,7 +17,7 @@
           :key="`corpora-select-row-${index}`"
         >
           <td>
-            <b-form-radio :value="corpus.corpname" v-model="corpname" />
+            <b-form-radio :value="corpus.corpname" v-model="localL2Settings.corpname" @change="updateL2Settings" />
           </td>
           <td>{{ corpus.name }}</td>
           <td>
@@ -50,25 +50,21 @@
 </template>
 
 <script>
+
+import settingsMixin from '@/lib/mixins/settings-mixin'
 import SketchEngine from "@/lib/sketch-engine";
+
 export default {
+  mixins: [ settingsMixin ],
   data() {
     return {
       SketchEngine,
-      corpname: undefined,
-      corpora: undefined,
+      corpora: null,
     };
   },
   async mounted() {
     this.corpora = await this.getCorpora();
-    this.corpname = await SketchEngine.corpname(this.$l2);
-  },
-  watch: {
-    corpname() {
-      let corpnames = JSON.parse(localStorage.getItem("zthCorpnames")) || {};
-      corpnames[this.$l2.code] = this.corpname;
-      localStorage.setItem("zthCorpnames", JSON.stringify(corpnames));
-    },
+    this.localL2Settings.corpname = await SketchEngine.corpname(this.$l2);
   },
   methods: {
     async getCorpora() {

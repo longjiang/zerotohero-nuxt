@@ -66,7 +66,7 @@
             <hr class="my-4" />
             <div class="my-4">
               <h5>{{ $t("Content Preferences") }}</h5>
-              <!-- <ContentPreferences /> -->
+              <ContentPreferences />
             </div>
             <hr class="my-4" />
             <div>
@@ -102,7 +102,7 @@
         </div>
       </div>
       <div class="container-fluid">
-        <!-- <CorpusSelect /> -->
+        <CorpusSelect />
       </div>
     </div>
   </div>

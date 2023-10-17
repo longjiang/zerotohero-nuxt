@@ -42,6 +42,7 @@ export const defaultL2Settings = {
   quizMode: false,
   disableAnnotation: false,
   zoomLevel: 0,
+  corpname: null,
 };
 
 // These settings are not saved to storage
@@ -158,6 +159,13 @@ export const mutations = {
   SET_USE_MACHINE_TRANSLATED_DICTIONARY(state, value) {
     state.useMachineTranslatedDictionary = value;
   },
+  SET_TRANSIENT_SETTINGS(state, transientSettings) {
+    for (let property in transientSettings) {
+      if (property in defaultTransientSettings) {
+        state[property] = transientSettings[property];
+      }
+    }
+  },
   SET_GENERAL_SETTINGS(state, generalSettings) {
     for (let property in generalSettings) {
       if (property in defaultGeneralSettings) {
@@ -170,10 +178,11 @@ export const mutations = {
     // This method might be called (by showfilter.vue) before the settings are loaded from storage
     // Make sure this does not overwrite what's in storage!
     if (!state.l2 || !state.l2Settings[state.l2.code]) return;
-    state.l2Settings[state.l2.code] = Object.assign(
-      state.l2Settings[state.l2.code],
-      l2Settings
-    );
+    for (let key in l2Settings) {
+      if (key in defaultL2Settings) {
+        Vue.set(state.l2Settings[state.l2.code], key, l2Settings[key]);
+      }
+    }
     if (typeof localStorage !== "undefined") {
       let loadedSettings = loadSettingsFromStorage();
       // Edge case: localStorage does not have l2Settings key
@@ -225,18 +234,15 @@ export const actions = {
   setFullscreen({ dispatch, commit }, fullscreen) {
     dispatch("setTransientSettings", { fullscreen });
   },
-  setTransientSettings({ commit }, generalSettings) {
-    console.log("⚙️ Setting transient settings...", generalSettings);
-    commit("SET_GENERAL_SETTINGS", generalSettings);
+  setTransientSettings({ commit }, transientSettings) {
+    commit("SET_TRANSIENT_SETTINGS", transientSettings);
     // Do not push
   },
   setGeneralSettings({ dispatch, commit }, generalSettings) {
-    console.log("⚙️ Setting general settings...", generalSettings);
     commit("SET_GENERAL_SETTINGS", generalSettings);
     dispatch("syncSettingsToServer");
   },
   setL2Settings({ dispatch, commit }, l2Settings) {
-    console.log("⚙️ Setting L2 settings...", l2Settings);
     commit("SET_L2_SETTINGS", l2Settings);
     // sync changes (except adminMode)
     if (!l2Settings.adminMode) dispatch("syncSettingsToServer");

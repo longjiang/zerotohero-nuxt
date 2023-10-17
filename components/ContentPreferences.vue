@@ -15,7 +15,7 @@
           :style="`border: none;  background: linear-gradient(#00000077, #00000077), url(/img/categories/bg-category-${index}.jpg); background-size: cover; background-position: center center; padding-top: 2.5rem; padding-bottom: 0.5rem;`"
           class="category-btn"
         >
-          <input type="checkbox" v-model="preferredCategories" :id="'category_' + index" :value="index"  />
+          <input type="checkbox" v-model="localSettings.preferredCategories" @change="updateL2Settings" :id="'category_' + index" :value="index"  />
           {{ $t(category) }}
         </div>
       </div>
@@ -24,42 +24,21 @@
 </template>
 
 <script>
+import settingsMixin from '@/lib/mixins/settings-mixin'
 import { mapState } from "vuex";
-import { timeout } from "@/lib/utils";
 
 export default {
-  data() {
-    return {
-      preferredCategories: [],
-      watcherActive: false,
-    }
-  },
+  mixins: [ settingsMixin ],
   computed: {
     ...mapState("shows", ["categories"]),
   },
-  watch: {
-    // set up in setupWatchers()
-  },
-  async mounted() {
-    if (typeof this.$store.state.settings !== "undefined") {
-      this.preferredCategories = this.$store.state.settings.preferredCategories;
-    }
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "settings/LOAD_JSON_FROM_LOCAL") {
-        this.preferredCategories = this.$store.state.settings.preferredCategories;
-      }
-    });
-    await timeout(2000);
-    this.watcherActive = true;
-  },
   methods: {
+
     clickCheckBox(event) {
       let checkbox = event.target.querySelector('input')
       if (checkbox) checkbox.click()
     },
-  },
-  watch: {
-  },
+  }
 };
 </script>
 
