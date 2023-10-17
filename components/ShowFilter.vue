@@ -174,7 +174,7 @@ export default {
       this.loadSettings();
     }
     this.unsubscribeSettings = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "settings/LOAD_SETTINGS") {
+      if (mutation.type === "settings/LOAD_JSON_FROM_LOCAL") {
         this.loadSettings();
       }
     });

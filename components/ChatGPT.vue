@@ -88,7 +88,7 @@ export default {
       this.openAIToken = this.$store.state.settings.openAIToken;
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "settings/LOAD_SETTINGS") {
+      if (mutation.type === "settings/LOAD_JSON_FROM_LOCAL") {
         this.openAIToken = this.$store.state.settings.openAIToken;
       }
     });

@@ -63,7 +63,7 @@ export default {
       this.hidePhonetics = this.$store.state.settings.hidePhonetics;
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "settings/LOAD_SETTINGS") {
+      if (mutation.type === "settings/LOAD_JSON_FROM_LOCAL") {
         this.hideWord = this.$store.state.settings.hideWord;
         this.hideDefinitions = this.$store.state.settings.hideDefinitions;
         this.hidePhonetics = this.$store.state.settings.hidePhonetics;

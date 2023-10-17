@@ -45,7 +45,7 @@ export default {
       this.preferredCategories = this.$store.state.settings.preferredCategories;
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "settings/LOAD_SETTINGS") {
+      if (mutation.type === "settings/LOAD_JSON_FROM_LOCAL") {
         this.preferredCategories = this.$store.state.settings.preferredCategories;
       }
     });

@@ -110,7 +110,8 @@ export const loadSettingsFromStorage = () => {
 // Vuex mutations...
 
 export const mutations = {
-  IMPORT_FROM_JSON(state, json) {
+  // default.vue calls $directus to fetch user's data, including the settings, then loaded it into the store, and save to localStorage
+  SAVE_JSON_FROM_SERVER_TO_LOCAL(state, json) {
     if (typeof localStorage !== "undefined") {
       let importedData;
       try {
@@ -123,21 +124,10 @@ export const mutations = {
           state[property] = importedData[property];
         saveSettingsToStorage(state);
       }
-      state.settingsLoaded = true;
     }
   },
-  // This commit cannot use localStorage because it's called from the language switch middleware
-  SET_L1_L2(state, { l1, l2 }) {
-    state.l1 = l1;
-    if (typeof l2 === "undefined") return;
-    state.l2 = l2;
-    // Make sure to initialize a default l2Settings if not present
-    if (!state.l2Settings[l2.code]) {
-      Vue.set(state.l2Settings, l2.code, getDefaultL2Settings(l1, l2));
-    }
-  },
-  // This assumes that SET_L1_L2 has already been called
-  LOAD_SETTINGS(state, { l1, l2 }) {
+  // Default.vue then calls this mutation directly, which loads settings from localstorage. This assumes that SET_L1_L2 has already been called
+  LOAD_JSON_FROM_LOCAL(state, { l1, l2 }) {
     if (typeof localStorage !== "undefined") {
       let loadedSettings = loadSettingsFromStorage();
       for (let property in loadedSettings) {
@@ -150,6 +140,16 @@ export const mutations = {
     // Remember the L1 the user picked, so next time when switching L2, this L1 is used.
     if (state.l2Settings[l2.code]) state.l2Settings[l2.code].l1 = l1.code;
     state.settingsLoaded = true;
+  },
+  // This commit cannot use localStorage because it's called from the language switch middleware
+  SET_L1_L2(state, { l1, l2 }) {
+    state.l1 = l1;
+    if (typeof l2 === "undefined") return;
+    state.l2 = l2;
+    // Make sure to initialize a default l2Settings if not present
+    if (!state.l2Settings[l2.code]) {
+      Vue.set(state.l2Settings, l2.code, getDefaultL2Settings(l1, l2));
+    }
   },
   SET_L1_L2_TO_NULL(state) {
     state.l1 = null;
@@ -245,8 +245,9 @@ export const actions = {
     commit("RESET_SHOW_FILTERS");
   },
   async importFromJSON({ commit }, json) {
-    commit("IMPORT_FROM_JSON", json);
+    commit("SAVE_JSON_FROM_SERVER_TO_LOCAL", json);
   },
+  // Settings are fetched from $directus.fetchOrCreateUserData from default.vue
   async syncSettingsToServer() {
     if (!$nuxt.$auth.loggedIn) return;
     let user = this.$auth.user;

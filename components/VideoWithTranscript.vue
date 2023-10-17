@@ -525,7 +525,7 @@ export default {
       this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
     }
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "settings/LOAD_SETTINGS") {
+      if (mutation.type === "settings/LOAD_JSON_FROM_LOCAL") {
         this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
       }
     });

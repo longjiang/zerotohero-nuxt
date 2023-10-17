@@ -30,7 +30,7 @@ export default {
       focus: false,
       loaded: false,
       dictionaryCredit: "",
-      settingsLoaded: undefined,
+      languageLoadedForL2: undefined,
       fullPageRoutes: ["index", "sale"],
       collapsed: false,
       l2Time: {},
@@ -393,9 +393,9 @@ export default {
       }
     },
     loadLanguageSpecificData() {
-      if (this.settingsLoaded === this.$l2.code) return;
-      this.settingsLoaded = this.$l2.code;
-      this.$store.commit("settings/LOAD_SETTINGS", {
+      if (this.languageLoadedForL2 === this.$l2.code) return;
+      this.languageLoadedForL2 = this.$l2.code;
+      this.$store.commit("settings/LOAD_JSON_FROM_LOCAL", {
         l1: this.$l1,
         l2: this.$l2,
       });
