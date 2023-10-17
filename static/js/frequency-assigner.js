@@ -181,10 +181,40 @@ class FrequencyAssigner {
     }
     if (!item.level) item.level = this.getLevelByFrequency(item.frequency); // Sometimes the dictionary already has level info
   }
-
   addFrequencyAndLevelToItems(items) {
     for (let item of items) {
-      this.addFrequencyAndLevel(item);
+      this.addFrequencyAndLevel(item); // Assuming this function assigns both frequency and level to the item
+    }
+    let filteredItems = items.sort((a, b) => {
+      return b.frequency - a.frequency; // Sorting in descending order. Reverse if needed.
+    });
+    filteredItems = filteredItems.filter((item) => item.level && item.level !== 'outside'); // Remove items without level info
+
+    let wordsByLevel = {};
+    // Initialize wordsByLevel
+    for (let level = 1; level <= 7; level++) {
+      wordsByLevel[level] = [];
+    }
+
+    for (let item of filteredItems) {
+      wordsByLevel[item.level].push(item);
+    }
+
+    for (let level = 1; level <= 7; level++) {
+      // Assign every 30 words in this level to a lesson
+      // In each lesson, every 10 words into a dialog
+      let lesson = 0;
+      let dialog = 0;
+      for (let i = 0; i < wordsByLevel[level].length; i++) {
+        if (i % 10 === 0) dialog++; // This condition should be checked first
+        if (i % 30 === 0) {
+          lesson++;
+          dialog = 1; // Reset dialog for the start of a new lesson
+        }
+        let item = wordsByLevel[level][i];
+        item.lesson = lesson;
+        item.dialog = dialog;
+      }
     }
   }
 

@@ -22,6 +22,7 @@ class BaseDictionary {
     this.searchIndex = {};
     this.phraseIndex = {};
     this.searcher = null;
+    this.wordGroupsByLevelLessonDialog = {}; // a tree structure by book, lesson, and dialog
   }
 
   static async load({ l1 = undefined, l2 = undefined } = {}) {
@@ -438,5 +439,25 @@ class BaseDictionary {
 
   lookupByTones() {
     // Only implemented for Chinese
+  }
+
+  getWordGroupsByLevelLessonDialog() {
+    return this.wordGroupsByLevelLessonDialog
+  }
+
+
+  groupWordsByLevelAndLesson(word) {
+    let { book, level, lesson, dialog } = word;
+    book = book || level; // Use 'level' if 'book' is not available
+
+    if (book && lesson && dialog) {
+      this.wordGroupsByLevelLessonDialog[book] =
+        this.wordGroupsByLevelLessonDialog[book] || {};
+      this.wordGroupsByLevelLessonDialog[book][lesson] =
+        this.wordGroupsByLevelLessonDialog[book][lesson] || {};
+      this.wordGroupsByLevelLessonDialog[book][lesson][dialog] =
+        this.wordGroupsByLevelLessonDialog[book][lesson][dialog] || [];
+      this.wordGroupsByLevelLessonDialog[book][lesson][dialog].push(word);
+    }
   }
 }

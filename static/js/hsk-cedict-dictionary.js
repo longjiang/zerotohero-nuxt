@@ -8,7 +8,6 @@ class HskCedictDictionary extends BaseDictionary {
     this.characterFile = `/data/hsk-cedict/hsk_characters.csv.txt`;
     this.newHSKFile = `/data/hsk-cedict/new_hsk.csv.txt`;
     this.version = "1.1.11";
-    this.wordGroupsByLevelLessonDialog = {}; // a tree structure by book, lesson, and dialog
     this.characters = [];
     this.newHSK = [];
     this.maxWeight = 0;
@@ -71,24 +70,6 @@ class HskCedictDictionary extends BaseDictionary {
     return words
   }
 
-  groupWordsByLevelAndLesson(word) {
-    let { book, level, lesson, dialog } = word;
-    book = book || level; // Use 'level' if 'book' is not available
-
-    if (book && lesson && dialog) {
-      this.wordGroupsByLevelLessonDialog[book] =
-        this.wordGroupsByLevelLessonDialog[book] || {};
-      this.wordGroupsByLevelLessonDialog[book][lesson] =
-        this.wordGroupsByLevelLessonDialog[book][lesson] || {};
-      this.wordGroupsByLevelLessonDialog[book][lesson][dialog] =
-        this.wordGroupsByLevelLessonDialog[book][lesson][dialog] || [];
-      this.wordGroupsByLevelLessonDialog[book][lesson][dialog].push(word);
-    }
-  }
-
-  getWordGroupsByLevelLessonDialog() {
-    return this.wordGroupsByLevelLessonDialog
-  }
 
   createIndices() {
     console.log(`${this.name}: Indexing...`);
