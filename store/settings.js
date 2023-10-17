@@ -1,4 +1,5 @@
 import { logError } from "@/lib/utils";
+import Vue from "vue";
 
 export const romanizationOffByDefault = [
   "ko",
@@ -73,36 +74,40 @@ export const defaultGeneralSettings = {
   l2Settings: {}, // keyed by language
 };
 
-export const state = () => {
-  return Object.assign({}, defaultGeneralSettings, defaultTransientSettings);
-};
 
-/**
- * EMPTY (no data in localStorage) -> initializeSettings() -> INITIALIZED
- */
+// Default settings definitions...
 
-export const saveSettingsToStorage = (state) => {
+export const state = () => ({
+  ...defaultGeneralSettings,
+  ...defaultTransientSettings
+});
+
+
+
+// Utility functions to manage localStorage...
+
+export const saveSettingsToStorage = (settings) => {
   if (typeof localStorage !== "undefined") {
-    let settingsToSave = {};
-    for (let property in state) {
-      if (!Object.keys(defaultTransientSettings).includes(property))
-        settingsToSave[property] = state[property];
-    }
-    localStorage.setItem("zthSettings", JSON.stringify(settingsToSave));
+    const persistentSettings = Object.entries(settings)
+      .filter(([key]) => !defaultTransientSettings[key])
+      .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+    
+    localStorage.setItem("zthSettings", JSON.stringify(persistentSettings));
   }
 };
 
 export const loadSettingsFromStorage = () => {
-  let loadedSettings = {};
-  if (typeof localStorage !== "undefined") {
-    try {
-      loadedSettings = JSON.parse(localStorage.getItem("zthSettings")) || {};
-    } catch (err) {
-      logError(err);
-    }
+  if (typeof localStorage === "undefined") return {};
+
+  try {
+    return JSON.parse(localStorage.getItem("zthSettings")) || {};
+  } catch (err) {
+    logError(err);
+    return {};
   }
-  return loadedSettings;
 };
+
+// Vuex mutations...
 
 export const mutations = {
   IMPORT_FROM_JSON(state, json) {
@@ -128,7 +133,7 @@ export const mutations = {
     state.l2 = l2;
     // Make sure to initialize a default l2Settings if not present
     if (!state.l2Settings[l2.code]) {
-      state.l2Settings[l2.code] = getDefaultL2Settings(l1, l2);
+      Vue.set(state.l2Settings, l2.code, getDefaultL2Settings(l1, l2));
     }
   },
   // This assumes that SET_L1_L2 has already been called
@@ -140,7 +145,7 @@ export const mutations = {
       }
     }
     if (!state.l2Settings[l2.code]) {
-      state.l2Settings[l2.code] = getDefaultL2Settings(l1, l2);
+      Vue.set(state.l2Settings, l2.code, getDefaultL2Settings(l1, l2));
     }
     // Remember the L1 the user picked, so next time when switching L2, this L1 is used.
     if (state.l2Settings[l2.code]) state.l2Settings[l2.code].l1 = l1.code;
@@ -228,13 +233,13 @@ export const actions = {
   setGeneralSettings({ dispatch, commit }, generalSettings) {
     console.log("⚙️ Setting general settings...", generalSettings);
     commit("SET_GENERAL_SETTINGS", generalSettings);
-    dispatch("push");
+    dispatch("syncSettingsToServer");
   },
   setL2Settings({ dispatch, commit }, l2Settings) {
-    console.log("⚙️ Setting L2 settings...", generalSettings);
+    console.log("⚙️ Setting L2 settings...", l2Settings);
     commit("SET_L2_SETTINGS", l2Settings);
     // sync changes (except adminMode)
-    if (!l2Settings.adminMode) dispatch("push");
+    if (!l2Settings.adminMode) dispatch("syncSettingsToServer");
   },
   resetShowFilters({ dispatch, commit }, value) {
     commit("RESET_SHOW_FILTERS");
@@ -242,23 +247,9 @@ export const actions = {
   async importFromJSON({ commit }, json) {
     commit("IMPORT_FROM_JSON", json);
   },
-  async fetchSettingsFromServer() {
+  async syncSettingsToServer() {
     if (!$nuxt.$auth.loggedIn) return;
-    let dataId = this.$auth.$storage.getUniversal("dataId");
-    let path = `items/user_data/${dataId}?fields=id,settings`;
-    let res = await this.$directus.get(path).catch(async (err) => {
-      logError(err, "settings.js: fetchSettingsFromServer()");
-    });
-    if (res && res.data && res.data.data) {
-      let settings = JSON.parse(res.data.data.settings);
-      return settings;
-    } else {
-      return false;
-    }
-  },
-  async push({ rootState }) {
-    if (!$nuxt.$auth.loggedIn) return;
-    let user = rootState.auth.user;
+    let user = this.$auth.user;
     let token = $nuxt.$auth.strategy.token.get();
     let dataId = this.$auth.$storage.getUniversal("dataId");
     if (user && user.id && dataId && token) {

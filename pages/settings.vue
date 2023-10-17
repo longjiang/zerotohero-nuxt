@@ -18,14 +18,14 @@
       <div class="row">
         <div class="col-sm-12">
           <div>
-            <h5>{{ $t("General settings") }}</h5>
+            <h5 class="my-4">{{ $t("General settings") }}</h5>
             <b-form-checkbox v-model="subsSearchLimit">
               {{ $t('Limit "this word in TV Shows" search result (faster)') }}
             </b-form-checkbox>
-            <hr />
+            <hr class="my-4"/>
           </div>
           <div>
-            <h5>{{ $t("ChatGPT Settings") }}</h5>
+            <h5 class="my-4">{{ $t("ChatGPT Settings") }}</h5>
             <p>{{ $t("Enter your ChatGPT API token:") }}</p>
             <b-form-input
               type="password"
@@ -44,30 +44,20 @@
                 {{ $t("here") }}
               </a>
             </i18n>
-            <hr />
+            <hr class="my-4"/>
           </div>
           <div>
-            <h5>
+            <h5 class="my-4">
               {{ $t("Settings specific to {l2}", { l2: $t($l2.name) }) }}:
             </h5>
             <AnnotationSettings />
-            <client-only>
-              <div class="text-right">
-                <b-form-checkbox
-                  v-model="adminMode"
-                  style="display: inline-block"
-                  v-if="userIsAdmin"
-                  class="mt-2 mb-4"
-                >
-                  {{ $t("Admin Mode") }}
-                </b-form-checkbox>
-              </div>
-            </client-only>
           </div>
-          <div class="mb-3">
+          <hr class="my-4"/>
+          <div class="my-4">
             <h5>{{ $t("Content Preferences") }}</h5>
             <ContentPreferences />
           </div>
+          <hr class="my-4"/>
           <div>
             <h5>{{ $t("Text Corpus Settings") }}</h5>
             <p v-if="$l1.code === 'zh'">
