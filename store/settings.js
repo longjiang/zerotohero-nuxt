@@ -132,7 +132,8 @@ export const mutations = {
     if (typeof localStorage !== "undefined") {
       let loadedSettings = loadSettingsFromStorage();
       for (let property in loadedSettings) {
-        state[property] = loadedSettings[property];
+        if (property in defaultGeneralSettings) // Never set L1 and L2 otherwise we go back to the last language
+          state[property] = loadedSettings[property];
       }
     }
     if (!state.l2Settings[l2.code]) {
