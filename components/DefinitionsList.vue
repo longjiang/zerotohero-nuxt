@@ -99,7 +99,7 @@ export default {
         augmentedDefinitions = await translators.translateArrayWithBing({
           textArray: augmentedDefinitions,
           l1Code: this.$l1.code,
-          l2Code: this.$l2.code,
+          l2Code: 'en',
         });
       // augmentedDefinitions = this.parseCircleNumbersInDefinitions(augmentedDefinitions)
       augmentedDefinitions = await Promise.all(
