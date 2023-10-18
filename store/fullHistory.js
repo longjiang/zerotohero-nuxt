@@ -29,7 +29,6 @@ export const mutations = {
       state.fullHistory = history || state.fullHistory
       state.lastL1L2 = lastL1L2 || state.lastL1L2
       state.fullHistoryLoaded = true
-      console.log('🍉 full history loaded.');
     }
   },
   ADD(state, path) {
