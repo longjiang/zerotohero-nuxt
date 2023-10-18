@@ -94,15 +94,20 @@ export default {
     this.$nuxt.$on("animateStar", this.onAnimateStar);
   },
   async mounted() {
+    // Set client environment variables, like whether the user is using the app in a browser or in Electron
     this.setClientEnvironment();
+
+    // Subscribe to Vuex mutations, such as when the user's time on site is updated, 
+    // or when the user's progress is updated, when the shows are loaded 
     this.subscribeToVuexMutations();
+
+    // Fetch the user's data from the server, such as their subscription status,
     await this.getUserDataAndSubscription();
-    this.loadGeneralData();
+
+    // If the landing page's url has l1 and l2
     if (this.$l1 && this.$l2) {
       this.onLanguageChange();
-    } else {
-      this.redirectToDashboardIfAppropriate();
-    }
+    } 
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -166,14 +171,8 @@ export default {
     },
   },
   methods: {
-    loadGeneralData()  {
-      if (!this.historyLoaded) {
-        this.$store.dispatch("history/load");
-      }
-      if (!this.fullHistoryLoaded) {
-        this.$store.dispatch("fullHistory/load");
-      }
-    },
+
+    // Fetch the user's data from the server, such as their subscription status,
     async getUserDataAndSubscription() {
       await this.$directus.fetchOrCreateUserData(); // Make sure user data is fetched from the server
       if (this.$auth.loggedIn) {
@@ -194,16 +193,14 @@ export default {
               }
         );
       }
-    },
-    redirectToDashboardIfAppropriate() {
-      // Check if the current route is '/'
-      if (this.$route.path === "/") {
-        // Check if the user is logged in and we know their last language pair
-        if (this.$auth.loggedIn && this.$lastL1L2) {
-          this.$router.push({ name: "recommended-video", params: this.$lastL1L2 });
-        }
+      if (!this.historyLoaded) {
+        this.$store.dispatch("history/load");
+      }
+      if (!this.fullHistoryLoaded) {
+        this.$store.dispatch("fullHistory/load");
       }
     },
+    // Set client environment variables, like whether the user is using the app in a browser or in Electron
     setClientEnvironment() {
       this.wide = wide();
       smoothscroll.polyfill(); // Safari does not support smoothscroll
@@ -244,6 +241,8 @@ export default {
         this.classes;
       }
     },
+    // Subscribe to Vuex mutations, such as when the user's time on site is updated, 
+    // or when the user's progress is updated, when the shows are loaded 
     subscribeToVuexMutations() {
       this.unsubscribe = this.$store.subscribe((mutation) => {
         if (
