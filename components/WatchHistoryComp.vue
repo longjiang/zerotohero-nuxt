@@ -52,6 +52,10 @@
                 :l2="itemL2"
                 :showProgress="true"
                 :showAdmin="false"
+                v-observe-visibility="{
+                  callback: (isVisible, entry) =>
+                    onVisibilityChange(isVisible, entry, item),
+                }"
               />
               <button
                 class="
@@ -188,6 +192,14 @@ export default {
     },
   },
   methods: {
+    onVisibilityChange(isVisible, entry, item) {
+      if (isVisible) {
+        this.$store.dispatch("watchHistory/fetchVideoDetails", {
+          l2Id: this.$l2.id,
+          videoId: item.video_id,
+        });
+      }
+    },
     emitHasWatchHistory() {
       if (this.itemsFiltered && this.itemsFiltered.length > 0)
         this.$emit("hasWatchHistory");

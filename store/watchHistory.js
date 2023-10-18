@@ -1,4 +1,6 @@
 import { logError } from '@/lib/helper'
+import Vue from 'vue';
+
 
 export const state = () => {
   return {
@@ -44,7 +46,11 @@ export const mutations = {
   // Remove all history items from the user's history.
   REMOVE_ALL_HISTORY(state) {
     state.watchHistory = []
-  }
+  },
+
+  ADD_VIDEO_DETAILS(state, { watchHistory, video }) {
+    Vue.set( watchHistory, 'video', video )
+  },
 }
 export const actions = {
   // Load the user's history if it hasn't been loaded yet.
@@ -62,16 +68,16 @@ export const actions = {
           return
         } else {
           const watchHistoryItems = response.data?.data || []
-          let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments,lex_div,word_freq,difficulty";
-          let filter = `filter[id][in]=${watchHistoryItems.map(item => item.video_id).join(',')}`
-          let query = `${fields}&${filter}`
-          let videos = await this.$directus.getVideos({ l2Id, query })
-          watchHistoryItems.forEach(item => {
-            let video = videos.find(video => video.id === item.video_id)
-            if (video) {
-              item.video = video
-            }
-          })
+          // let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments,lex_div,word_freq,difficulty";
+          // let filter = `filter[id][in]=${watchHistoryItems.map(item => item.video_id).join(',')}`
+          // let query = `${fields}&${filter}`
+          // let videos = await this.$directus.getVideos({ l2Id, query })
+          // watchHistoryItems.forEach(item => {
+          //   let video = videos.find(video => video.id === item.video_id)
+          //   if (video) {
+          //     item.video = video
+          //   }
+          // })
           commit('LOAD_WATCH_HISTORY', { watchHistoryItems, l2Id })
           console.log(`Watch History: ${watchHistoryItems.length} items loaded for L2 ${l2Id}`)
         }
@@ -79,6 +85,20 @@ export const actions = {
       state.watchHistoryLoading = false
     }
   },
+
+  async fetchVideoDetails({ commit, state }, { l2Id, videoId }) {
+    // Find the watchHistory item for this video in the state
+    let watchHistory = state.watchHistory.find(like => like.video_id === videoId && like.l2 === l2Id)
+    if (watchHistory && ! watchHistory.video) {
+      let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments";
+      let filter = `filter[id][eq]=${videoId}`
+      let query = `${fields}&${filter}`
+      
+      let videos = await this.$directus.getVideos({ l2Id, query })
+      commit('ADD_VIDEO_DETAILS', { watchHistory, video: videos[0] })
+    }
+  },
+
   // Add a history item to the Vuex state and sync it to the backend.
   async addOrUpdate({ state, commit, dispatch, getters }, historyItem) {
     if (!historyItem.video_id) return
