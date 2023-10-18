@@ -18,7 +18,7 @@
         </b-button>
       </div>
       <div class="site-top-bar-center">
-        <span
+        <!-- <span
           :class="{
             'logo flex-1 text-center': true,
           }"
@@ -37,7 +37,7 @@
             />
             <span>Language Player</span>
           </router-link>
-        </span>
+        </span> -->
       </div>
       <div class="site-top-bar-right">
         <client-only>
