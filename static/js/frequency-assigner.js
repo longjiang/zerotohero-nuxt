@@ -185,12 +185,13 @@ class FrequencyAssigner {
     for (let item of items) {
       this.addFrequencyAndLevel(item); // Assuming this function assigns both frequency and level to the item
     }
-    let filteredItems = items.sort((a, b) => {
-      return b.frequency - a.frequency; // Sorting in descending order. Reverse if needed.
+    let filteredItems = items.filter((item) => item.level && item.level !== 'outside'); // Remove items without level info
+    filteredItems = filteredItems.sort((a, b) => {
+      return b.frequency - a.frequency; // Sorting in descending order.
     });
-    filteredItems = filteredItems.filter((item) => item.level && item.level !== 'outside'); // Remove items without level info
 
     let wordsByLevel = {};
+
     // Initialize wordsByLevel
     for (let level = 1; level <= 7; level++) {
       wordsByLevel[level] = [];
