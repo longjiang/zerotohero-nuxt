@@ -490,7 +490,7 @@ export default {
         },
       };
       data.phrasebook.progress = data.phrasebook.index / data.phrasebook.length;
-      this.$store.dispatch("history/add", data);
+      // this.$store.dispatch("history/add", data);
     },
     getPhrasebookFromStore() {
       let phrasebooks, phrasebook;

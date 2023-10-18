@@ -210,9 +210,9 @@ export default {
   },
   mounted() {
     this.emitHasDashboard();
-    if (!this.$store.state.history.historyLoaded) {
-      this.$store.dispatch("history/load");
-    }
+    // if (!this.$store.state.history.historyLoaded) {
+    //   this.$store.dispatch("history/load");
+    // }
   },
   computed: {
     ...mapState("savedWords", ["savedWords"]),

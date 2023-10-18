@@ -472,7 +472,7 @@ export default ({ app }, inject) => {
     async fetchUserData(token) {
       const user = app.$auth.user;
       const userDataRes = await this.get(
-        `items/user_data?filter[owner][eq]=${
+        `items/user_data?fields=id,owner,saved_words,saved_phrases,saved_hits,saved_collocations,settings,progress,bookshelf&filter[owner][eq]=${
           user.id
         }&limit=1&timestamp=${Date.now()}`,
         { headers: { Authorization: `Bearer ${token}` } }
@@ -502,7 +502,7 @@ export default ({ app }, inject) => {
       app.$auth.$storage.setUniversal("dataId", id);
       app.store.dispatch("savedWords/importFromJSON", saved_words);
       app.store.dispatch("savedPhrases/importFromJSON", saved_phrases);
-      app.store.dispatch("history/importFromJSON", history);
+      // app.store.dispatch("history/importFromJSON", history);
       app.store.dispatch("progress/importFromJSON", progress);
       app.store.dispatch("settings/importFromJSON", settings);
     },
