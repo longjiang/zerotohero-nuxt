@@ -48,7 +48,7 @@
             playlistId="recommended"
           />
 
-          <div v-observe-visibility="visibilityChanged" class="text-center" >
+          <div v-observe-visibility="visibilityChanged" class="text-center" v-if="recommendedVideos?.[$l2.code]?.length" >
             <Loader
               key="rec-loader"
               :sticky="true"
@@ -56,9 +56,9 @@
                 $t('Loading more video recommendations...')
               "
               class="text-white"
-              v-if="recommendedVideos?.[$l2.code]?.length"
             />
           </div>
+          <MediaSearchResults v-else />
 
           <client-only>
             <LazyIdenticalLanguages

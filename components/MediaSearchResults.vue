@@ -140,6 +140,9 @@ export default {
     excludeAllTalks: {
       default: false
     },
+    excludeMusicVideos: {
+      default: false
+    },
     kidsOnly: {
       type: Boolean,
       default: false,
@@ -254,8 +257,8 @@ export default {
       }
       if (this.tvShows) {
         filters.push("filter[tv_show][in]=" + this.tvShows.join(","));
-      } else if (!this.keyword) {
-        filters.push("filter[tv_show][null]=1"); // By default we filter out videos in tv shows
+      } else if (this.excludeAllTVShows) {
+        filters.push("filter[tv_show][null]=1");
       }
       if (this.talks) {
         filters.push("filter[talk][in]=" + this.talks.join(","));
@@ -267,8 +270,8 @@ export default {
       if (this.category !== "all" && !this.tvShows && !this.talks) {
         // Having tv show or talk filters overrides the category filter
         filters.push("filter[category][eq]=" + this.category);
-      } else if (this.category === "all" && !this.keyword) {
-        filters.push("filter[category][nin]=10,24"); // By default we filter out music videos
+      } else if (this.excludeMusicVideos) {
+        filters.push("filter[category][nin]=10,24");
       }
 
       if (this.level !== "all") {

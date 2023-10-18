@@ -138,6 +138,8 @@
           start,
           kidsOnly,
           sort,
+          excludeMusicVideos: this.categry === 'all' && !this.keyword,
+          excludeAllTVShows: true,
           noVideosMessage: 'No videos found meeting your filter criteria.',
           perPage: 12,
           showSearchBar: false,
