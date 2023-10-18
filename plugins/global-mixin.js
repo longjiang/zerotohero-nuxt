@@ -4,7 +4,7 @@ import { mapState } from "vuex";
 
 Vue.mixin({
   computed: {
-    ...mapState("fullHistory", ["fullHistory"]),
+    ...mapState("fullHistory", ["fullHistory", "lastL1L2", "fullHistoryLoaded"]),
     ...mapState("settings", ["l2Settings"]),
     $l2Settings() {
       let l2 = this.$store.state.settings.l2
@@ -54,25 +54,7 @@ Vue.mixin({
     },
     $lastL1L2() {
       // Find last l2 from full history
-      if (this.fullHistory) {
-        let lastL1;
-        let lastL2;
-        // find the last item in fullHistory that has l1 and l2 params
-        for (let i = this.fullHistory.length - 1; i >= 0; i--) {
-          let item = this.fullHistory[i];
-          // resolve item.path
-          const route = this.$router.resolve(item.path);
-          if (route.route?.params?.l1 && route.route?.params?.l2) {
-            lastL1 = route.route?.params?.l1;
-            lastL2 = route.route?.params?.l2;
-            break;
-          }
-        }
-
-        if (lastL1 && lastL2) {
-          return { l1: lastL1, l2: lastL2 };
-        }
-      }
+      return this.lastL1L2; // Mapped from store/fullHistory.js
     },
   },
   methods: {

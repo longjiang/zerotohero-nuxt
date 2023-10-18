@@ -715,16 +715,17 @@ export default {
       // Check if the user is logged in. Usually this is available early.
       if (this.$auth.loggedIn) {
         this.showRedirectingLoader = true;
-        // Wait for lastL1L2 to be available, which depends on vuex store state fullHistory/loaded
+        // Wait for lastL1L2 to be available, which depends on vuex store state fullHistory/fullHistoryLoaded
         const interval = setInterval(() => {
           // We now know their last language pair
-          if (this.$lastL1L2) {
+          if (this.$lastL1L2 || this.fullHistoryLoaded) {
             clearInterval(interval);
             // The computed property is truthy. Execute your logic here.
-            this.$router.push({
+            if (this.$lastL1L2) this.$router.push({
               name: "recommended-video",
               params: this.$lastL1L2,
             });
+            this.showRedirectingLoader = false;
           }
         }, 100); // checks every 100 milliseconds
       }

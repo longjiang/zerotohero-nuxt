@@ -3,7 +3,8 @@ import { logError } from '@/lib/helper'
 export const state = () => {
   return {
     fullHistory: [],
-    loaded: false
+    fullHistoryLoaded: false,
+    lastL1L2: null, // The last language pair the user used. e.g. {l1: 'en', l2: 'zh'}
   }
 }
 export const mutations = {
@@ -19,14 +20,16 @@ export const mutations = {
         state.fullHistory = history
         localStorage.setItem('zthFullHistory', JSON.stringify(state.fullHistory))
       }
-      state.loaded = true
     }
   },
   LOAD(state) {
     if (typeof localStorage !== 'undefined') {
       let history = JSON.parse(localStorage.getItem('zthFullHistory') || '[]')
+      let lastL1L2 = JSON.parse(localStorage.getItem('zthLastL1L2'))
       state.fullHistory = history || state.fullHistory
-      state.loaded = true
+      state.lastL1L2 = lastL1L2 || state.lastL1L2
+      state.fullHistoryLoaded = true
+      console.log('🍉 full history loaded.');
     }
   },
   ADD(state, path) {
@@ -63,14 +66,19 @@ export const mutations = {
       localStorage.setItem('zthFullHistory', JSON.stringify(history))
       this._vm.$set(state, 'history', history)
     }
+  },
+  SET_LAST_L1_L2(state, { l1, l2 }) {
+    state.lastL1L2 = { l1, l2 }
+    console.log('🍉 last l1 l2 set to', state.lastL1L2);
+    localStorage.setItem('zthLastL1L2', JSON.stringify(state.lastL1L2))
   }
 }
 export const actions = {
   load({ commit }) {
-    if (!state.loaded) commit('LOAD')
+    if (!state.fullHistoryLoaded) commit('LOAD')
   },
   add({ state, commit, dispatch }, path) {
-    if (!state.loaded) {
+    if (!state.fullHistoryLoaded) {
       dispatch('load')
     }
     commit('ADD', path)
@@ -84,6 +92,9 @@ export const actions = {
   async importFromJSON({ commit }, json) {
     commit('IMPORT_FROM_JSON', json)
   },
+  setLastL1L2({ commit }, { l1, l2 }) {
+    commit('SET_LAST_L1_L2', { l1, l2 })
+  }
 }
 export const getters = {
   has: state => historyItem => {

@@ -174,6 +174,12 @@ export default {
 
     // Fetch the user's data from the server, such as their subscription status,
     async getUserDataAndSubscription() {
+      if (!this.historyLoaded) {
+        this.$store.dispatch("history/load");
+      }
+      if (!this.fullHistoryLoaded) {
+        this.$store.dispatch("fullHistory/load");
+      }
       await this.$directus.fetchOrCreateUserData(); // Make sure user data is fetched from the server
       if (this.$auth.loggedIn) {
         await this.$store.dispatch(
@@ -192,12 +198,6 @@ export default {
                 method: "anonymous",
               }
         );
-      }
-      if (!this.historyLoaded) {
-        this.$store.dispatch("history/load");
-      }
-      if (!this.fullHistoryLoaded) {
-        this.$store.dispatch("fullHistory/load");
       }
     },
     // Set client environment variables, like whether the user is using the app in a browser or in Electron
@@ -362,6 +362,12 @@ export default {
     },
     addFullHistoryItem(path) {
       this.$store.dispatch("fullHistory/add", path);
+      if (this.$l1 && this.$l2) {
+        this.$store.dispatch("fullHistory/setLastL1L2", {
+          l1: this.$l1.code,
+          l2: this.$l2.code,
+        });
+      }
     },
     onSkin(skin) {
       this.skin = skin;
