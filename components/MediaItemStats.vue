@@ -1,12 +1,5 @@
 <template>
   <div class="statistics">
-    <div
-      v-if="showLevel && item.difficulty"
-      :data-bg-level="levelByDifficulty(item.difficulty, $l2.code)"
-      class="level-tag mr-1"
-    >
-      {{ level(levelByDifficulty(item.difficulty, $l2.code), $l2).name }}
-    </div>
     <span class="statistics-item" v-if="item.avg_views || item.views">
       <i class="fa-solid fa-eye"></i>
       {{ formatK(item.avg_views || item.views) }}
@@ -18,6 +11,13 @@
     <span v-if="item.avg_comments || item.comments">
       <i class="fa-solid fa-comment"></i>
       {{ formatK(item.avg_comments || item.comments) }}
+    </span>
+    <span
+      v-if="showLevel && item.difficulty"
+      :data-level="levelByDifficulty(item.difficulty, $l2.code)"
+      class="text-bold"
+    >
+      {{ level(levelByDifficulty(item.difficulty, $l2.code), $l2).name }}
     </span>
     <span class="statistics-item" v-if="item.locale">
       <img v-if="country" :alt="`Flag of ${country.name}`" :title="`Flag of ${country.name} (${country.alpha2Code})`"
