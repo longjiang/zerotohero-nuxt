@@ -89,11 +89,13 @@ export const state = () => ({
 
 export const saveSettingsToStorage = (settings) => {
   if (typeof localStorage !== "undefined") {
-    const persistentSettings = Object.entries(settings)
-      .filter(([key]) => !defaultTransientSettings[key])
-      .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
-    
-    localStorage.setItem("zthSettings", JSON.stringify(persistentSettings));
+    let settingsToSave = {};
+    for (let property in settings) {
+      if (property in defaultGeneralSettings) {
+        settingsToSave[property] = settings[property];
+      }
+    }
+    localStorage.setItem("zthSettings", JSON.stringify(settingsToSave));
   }
 };
 
@@ -255,16 +257,22 @@ export const actions = {
     commit("SAVE_JSON_FROM_SERVER_TO_LOCAL", json);
   },
   // Settings are fetched from $directus.fetchOrCreateUserData from default.vue
-  async syncSettingsToServer() {
+  async syncSettingsToServer({ state }) {
     if (!$nuxt.$auth.loggedIn) return;
     let user = this.$auth.user;
     let token = $nuxt.$auth.strategy.token.get();
     let dataId = this.$auth.$storage.getUniversal("dataId");
     if (user && user.id && dataId && token) {
-      let settings = localStorage.getItem("zthSettings");
-      if (settings && settings !== "undefined") {
-        // For some reason sometimes settings is 'undefined', never push that to the server
-        let payload = { settings };
+      let settings = state
+      // For some reason sometimes settings is 'undefined', never push that to the server
+      if (settings) {
+        let settingsToSave = {}; 
+        for (let property in settings) {
+          if (property in defaultGeneralSettings) {
+            settingsToSave[property] = settings[property];
+          }
+        }
+        const payload = { settings: JSON.stringify(settingsToSave) };
         let path = `items/user_data/${dataId}?fields=id`;
         console.log("⚙️ Saving settings to the server...");
         await this.$directus.patch(path, payload).catch(async (err) => {

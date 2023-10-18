@@ -69,7 +69,6 @@ export const mutations = {
   },
   SET_LAST_L1_L2(state, { l1, l2 }) {
     state.lastL1L2 = { l1, l2 }
-    console.log('🍉 last l1 l2 set to', state.lastL1L2);
     localStorage.setItem('zthLastL1L2', JSON.stringify(state.lastL1L2))
   }
 }
