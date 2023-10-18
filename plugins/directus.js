@@ -236,7 +236,7 @@ export default ({ app }, inject) => {
       }
       // No language filter is necessary since the table only has one language
       if (!this.youtubeVideosTableHasOnlyOneLanguage(l2Id)) {
-        params['`filter[l2][eq]'] = l2Id;
+        params['filter[l2][eq]'] = l2Id;
       }
       let res = await this.get(`${this.youtubeVideosTableName(l2Id)}`, params);
       if (res?.data?.data) {
