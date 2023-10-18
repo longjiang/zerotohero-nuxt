@@ -2072,12 +2072,13 @@
   "Witchcraft": "巫术",
   "World War I": "第一次世界大战",
   "All Topics": "所有主题",
-  "Lesson {0} Vocabulary": "第 {0} 课 词汇",
+  "Lesson {0} Vocabulary": "第{0}课 词汇",
   "Each tiny square represents a word in the {level} curriculum.": "每个小方块代表{level}课程中的一个单词。",
-  "{level} Words": "{level}的话",
+  "{level} Words": "{level}单词",
   "Lesson {0} (Part {1}) Vocabulary": "第 {0} 课 （第 {1} 部分） 词汇",
   "Learn All Words in Lesson {num}": "学习第 {num} 课中的所有单词",
   "Browse Words by {level} Courses": "按 {level} 课程浏览单词",
-  "All HSK words on a big, interactive chart:": "所有HSK单词都在一个大的交互式图表上：",
-  "Learn These Words": "学习这些单词"
+  "All HSK words on a big, interactive chart:": "所有HSK单词都在一个交互式大图表上：",
+  "Learn These Words": "学习这些单词",
+  "Words by Level": "按级别划分的单词"
 }
