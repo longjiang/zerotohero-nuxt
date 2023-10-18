@@ -120,10 +120,9 @@ export default {
       browseKey: 0, // used to force re-render this component
     };
   },
-  async created() {
+  async mounted() {
     const dictionary = await this.$getDictionary();
     this.books = await dictionary.getWordGroupsByLevelLessonDialog();
-    console.log(this.books);
   },
   methods: {
     l2LevelName,
