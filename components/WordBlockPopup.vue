@@ -243,7 +243,7 @@
 <script>
 import { transliterate as tr } from "transliteration";
 import { IMAGE_PROXY } from "@/lib/config";
-import { timeout, PYTHON_SERVER, languageLevels } from "@/lib/utils";
+import { timeout, PYTHON_SERVER, LANGS_WITH_AZURE_TRANSLATE, languageLevels } from "@/lib/utils";
 import Klingon from "@/lib/klingon";
 import pinyin2ipa from "pinyin2ipa";
 
@@ -302,7 +302,7 @@ export default {
     if (this.$l2) this.levels = languageLevels(this.$l2);
     if (!this.preciseMatchFound) {
       await timeout(1000);
-      this.translate(this.text);
+      if (LANGS_WITH_AZURE_TRANSLATE.includes(this.$l2.code)) this.translate(this.text);
     }
   },
   methods: {
@@ -314,15 +314,6 @@ export default {
         l1Code: this.$l1.code,
         l2Code: this.$l2.code,
       });
-    },
-    async translateWithApi() {
-      // post to api
-      let res = await axios.post(`${PYTHON_SERVER}/translate`, {
-        text: this.text,
-        l1: this.$l1.code,
-        l2: this.$l2.code,
-      });
-      if (res?.data?.translated_text) return res.data.translated_text;
     },
     segment(text) {
       return text
