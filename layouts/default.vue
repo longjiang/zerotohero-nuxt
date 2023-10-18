@@ -104,6 +104,9 @@ export default {
     // Fetch the user's data from the server, such as their subscription status,
     await this.getUserDataAndSubscription();
 
+    // Set the locale to the browser's locale
+    this.updatei18n();
+
     // If the landing page's url has l1 and l2
     if (this.$l1 && this.$l2) {
       this.onLanguageChange();
@@ -376,16 +379,20 @@ export default {
       this.wide = wide();
     },
     async updatei18n() {
-      this.$i18n.setLocale(this.$l1.code);
-      const messages = await axios.get(`/locales/${this.$l1.code}.json`);
-      this.$i18n.setLocaleMessage(this.$l1.code, messages.data);
+      const locale = this.$l1?.code || this.$browserLanguage
+      if (locale) {
+        this.$i18n.setLocale(locale);
+        const messages = await axios.get(`/locales/${locale}.json`);
+        this.$i18n.setLocaleMessage(locale, messages.data);
+      }
     },
     async onLanguageChange() {
+      // Set the locale
+      if (this.$l1) this.updatei18n();
       await this.$store.dispatch(
         "watchHistory/load", this.$l2.id
       );
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
-      if (this.$l1) this.updatei18n();
       if (this.$l1 && this.$l2) {
         this.loadLanguageSpecificData(); // This will trigger updateL2SettingsClasses()
         let dictionary = await this.$getDictionary();

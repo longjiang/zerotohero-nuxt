@@ -104,15 +104,16 @@ export default {
 
       // Filter the supported L1 languages based on whether they are included
       // in the commonLangs list and have a dictionary for the given L2 language
-      let supportedL1s = this.$languages.supportedL1s(l2["iso639-3"]);
-      let popularL1s = supportedL1s.filter((l1) =>
-        this.popularCodes.includes(l1.code)
-      );
+      let supportedL1s = this.$languages.supportedL1s(l2["iso639-3"]); // Already sorted by popularity and browser language
+      let popularL1s = supportedL1s.slice(0, 10);
 
       // Map the supported L1 languages to an array of objects with 'value' and 'text' properties
 
       let popularOptions = popularL1s.map(this.languageOption).sort((a, b) => a.code - b.code)
       let allOptions = supportedL1s.map(this.languageOption).sort((a, b) => a.code - b.code)
+      console.log(allOptions)
+
+      this.l1 = popularOptions[0].value;
 
       return [
         ...popularOptions,
