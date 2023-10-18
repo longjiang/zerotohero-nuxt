@@ -32,7 +32,7 @@
               }"
               @click="toggleLesson(bookIndex, lessonIndex)"
             >
-              Lesson {{ lessonIndex }}
+              {{ $t('Lesson {num}', { num: lessonIndex }) }}
               <br />
               <span
                 class="tile"
@@ -59,7 +59,7 @@
                   }"
                   @click="toggleDialog(bookIndex, lessonIndex, dialogIndex)"
                 >
-                  Part {{ dialogIndex }}
+                  {{ $t('Part {num}', { num: dialogIndex }) }}
                   <br />
                   <span
                     class="tile"
@@ -85,7 +85,7 @@
                     :to="`/${$l1.code}/${$l2.code}/learn/hsk/${bookIndex},${lessonIndex},${dialogIndex}`"
                   >
                     <i class="fas fa-chalkboard"></i>
-                    Learn These Words
+                    {{ $t('Learn These Words') }}
                   </router-link>
                 </ul>
               </li>
@@ -97,7 +97,7 @@
                 style="margin-left: 2rem"
               >
                 <i class="fas fa-chalkboard"></i>
-                Learn All Words in Lesson {{ lessonIndex }}
+                {{ $t('Learn All Words in Lesson {num}', { num: lessonIndex }) }}
               </router-link>
             </ul>
           </li>

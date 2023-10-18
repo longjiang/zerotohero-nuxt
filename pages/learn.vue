@@ -41,11 +41,14 @@
               :to="`/${$l1.code}/${$l2.code}/learn/${method}/${argsProp}`"
               class="link-unstyled"
             >
-              <h4 class="page-title text-center mb-4" v-if="method === 'hsk'">
+              <h4 class="page-title text-center mb-4" v-if="method">
                 <b :data-level="args[0]" class="mr-1">{{ l2LevelNameByLevel($l2, args[0]) }}</b>
-                <b>{{ $t("Lesson {num}", { num: args[1] }) }}</b>
-                <template v-if="args[2]">({{ $t("Part {num}", { num: args[2] }) }})</template>
-                {{ $t("Vocabulary") }}
+                <template v-if="args[1] && args[2]">{{ $t("Lesson {0} (Part {1}) Vocabulary", { 0: args[1], 1: args[2] }) }}</template>
+                <template v-else-if="args[1]">{{ $t("Lesson {0} Vocabulary", { 0: args[1] }) }}</template>
+                <template v-else>{{ $t("Vocabulary") }}</template>
+                
+
+
               </h4>
             </router-link>
             <div class="text-center" v-if="!index">
