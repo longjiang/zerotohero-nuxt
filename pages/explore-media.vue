@@ -56,7 +56,7 @@
                 $t('Loading more video recommendations...')
               "
               class="text-white"
-              v-if="recommendedVideos?.[$l2.code].length"
+              v-if="recommendedVideos?.[$l2.code]?.length"
             />
           </div>
 
