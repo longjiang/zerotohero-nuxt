@@ -44,6 +44,8 @@
 
 <script>
 import { country } from "@/lib/utils/countries";
+import { LANGS_WITH_CONTENT } from '@/lib/utils';
+
 export default {
   data() {
     return {
@@ -69,6 +71,7 @@ export default {
     allLanguages() {
       return this.$languages.l1s.filter((language) => {
         if (this.bannedCodes.includes(language.code)) return false;
+        if (!LANGS_WITH_CONTENT.includes(language.code)) return false;
         return this.$languages.commonLangs.includes(language.code);
       });
     },

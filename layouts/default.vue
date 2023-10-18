@@ -376,7 +376,7 @@ export default {
       this.wide = wide();
     },
     async updatei18n() {
-      this.$i18n.locale = this.$l1.code;
+      this.$i18n.setLocale(this.$l1.code);
       const messages = await axios.get(`/locales/${this.$l1.code}.json`);
       this.$i18n.setLocaleMessage(this.$l1.code, messages.data);
     },
