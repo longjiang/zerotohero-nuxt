@@ -58,7 +58,11 @@
               class="text-white"
             />
           </div>
-          <MediaSearchResults v-else />
+          <div v-else>
+            <p>We have limited content for {{ $l2.name}}. Below are all the videos in our library: </p>
+            <MediaSearchResults  />  
+          </div>
+          
 
           <client-only>
             <LazyIdenticalLanguages
