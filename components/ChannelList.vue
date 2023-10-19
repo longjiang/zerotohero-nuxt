@@ -81,6 +81,9 @@ export default {
   },
   mounted() {
     this.loadMore();
+    if (!this.collapse) {
+      this.loadMore();
+    }
   },
   computed: {
     colClasses() {
