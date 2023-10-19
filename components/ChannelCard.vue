@@ -1,5 +1,5 @@
 <template>
-  <div class="channel-card">
+  <router-link class="channel-card link-unstyled" :to="{ name: 'youtube-channel', params: { title, channel_id } }">
     <img :src="thumbnail" alt="Channel Thumbnail" class="channel-thumbnail" />
 
     <div class="channel-info">
@@ -12,7 +12,7 @@
 
       <!-- <small class="channel-description" style="opacity: 0.5">{{ description }}</small> -->
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
@@ -36,12 +36,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .channel-card {
   display: flex;
   align-items: flex-start;
   border-radius: 5px;
   overflow: hidden;
+  padding: 1rem;
+  /* Add a filter to make it a bit darker on hover */
+  &:hover {
+    background: #88888822;
+  }
 }
 
 .channel-thumbnail {

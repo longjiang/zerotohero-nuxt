@@ -16,9 +16,6 @@
   <div class="main pt-3 pb-5" v-cloak>
     <div class="container text-center my-5" v-if="!settingsLoaded">
       <Loader message="Loading settings..." :sticky="true" />
-      <div class="row">
-        <div class="col-sm-12"></div>
-      </div>
     </div>
     <div v-else>
       <div class="container">

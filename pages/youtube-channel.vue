@@ -15,8 +15,31 @@
 </router>
 <template>
   <div>
-    <div class="youtube-browse container pt-5 pb-5">
-      <div class="row">
+    <div class="container pb-5">
+      <div class="container text-center my-5" v-if="!channel">
+        <Loader message="Loading..." :sticky="true" />
+      </div>
+      <div class="row" v-if="!$adminMode && channel">
+        <div class="col-12">
+          <!-- flex box align center -->
+          <div class="d-flex align-items-center">
+            <ChannelCard v-bind="channel" style="margin: 2rem auto" />
+          </div>
+          <p style="opacity: 0.75; line-height: 1.75; font-size: 0.8rem" class="text-center">{{ channel.description }}</p>
+          <MediaSearchResults
+            v-bind="{
+              params: {
+                'filter[channel_id][eq]': channel.channel_id,
+              },
+              noVideosMessage: 'No videos found in this channel.',
+              limit: 12,
+            }"
+            :ref="`videos-${slug}`"
+            class="my-5"
+          />
+        </div>
+      </div>
+      <div class="row" v-if="$adminMode">
         <div class="col-sm-12">
           <h3 class="mb-4 text-center">
             <Annotate :buttons="true" v-if="title && title !== 'undefined'">
@@ -59,6 +82,7 @@
 
 <script>
 import YouTube from "@/lib/youtube";
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -75,18 +99,39 @@ export default {
       videos: [],
       loading: true,
       saved: false,
+      channel: null,
     };
   },
   mounted() {
-    this.loadChannel();
+    this.loadChannelPlaylists();
   },
   computed: {
+    ...mapState("channels", ["fetchedL2Ids"]),
+  },
+  watch: {
+    fetchedL2Ids(l2Ids) {
+      if (l2Ids.includes(this.$l2.id)) {
+        this.loadChannel();
+      }
+    },
+  },
+  created() {
+    if (this.fetchedL2Ids.includes(this.$l2.id)) {
+      this.loadChannel();
+    }
   },
   methods: {
     forceRefresh() {
-      this.loadChannel({ forceRefresh: true });
+      this.loadChannelPlaylists({ forceRefresh: true });
     },
-    async loadChannel(options) {
+    loadChannel() {
+      console.log("loadChannel", this.channel_id);
+      this.channel = this.$store.getters["channels/getChannelbyChannelId"](
+        this.channel_id
+      );
+      if (this.$adminMode) this.loadChannelPlaylists();
+    },
+    async loadChannelPlaylists(options) {
       options = options || {};
       options = Object.assign(
         {
