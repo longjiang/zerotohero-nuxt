@@ -94,10 +94,11 @@ export default {
       }
     },
     async translateStrings(strings) {
-      if (!this.$store.state.settings.useMachineTranslatedDictionary) return strings
-      if (!LANGS_WITH_AZURE_TRANSLATE.includes(this.$l2.code)) return strings
+      if (!this.$store.state.settings.useMachineTranslatedDictionary) return translatedStrings
+      if (!LANGS_WITH_AZURE_TRANSLATE.includes(this.$l2.code)) return translatedStrings
       const l1Code = this.$l1.code // The destination language
       const l2Code = 'en'          // The source language is English
+      let translatedStrings = strings
       if (l1Code !== l2Code) {
         translatedStrings = await translators.translateArrayWithBing({
           textArray: strings,

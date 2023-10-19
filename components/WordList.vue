@@ -94,7 +94,7 @@
                   : ""
               }}:
             </span>
-            <DefinitionsList :definitions="filterDefinitions(word)" :translated="true" :singleColumn="true" :neverShowAsList="true" />
+            <DefinitionsList class="d-inline" :definitions="filterDefinitions(word)" :translated="true" :singleColumn="true" :neverShowAsList="true" />
           </span>
           <span
             :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"

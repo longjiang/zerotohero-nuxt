@@ -26,7 +26,8 @@ class KengdicDictionary extends BaseDictionary {
     let wiktionaryWords = await this.loadDictionaryData({ name: `wiktionary-kor-${l1Code}`, file: this.wiktionaryFiles[l1Code] })
     words.forEach((item) => this.normalizeKengdicWord(item))
     wiktionaryWords.forEach((item) => this.normalizeWiktionaryWord(item))
-    this.words = [...words, ...wiktionaryWords];
+    words = [...words, ...wiktionaryWords];
+    this.words = words.filter(row => row.definitions?.length > 0)
     words = null
     wiktionaryWords = null
   }
