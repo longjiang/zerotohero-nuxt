@@ -58,7 +58,7 @@
 
 <script>
 import VRuntimeTemplate from "v-runtime-template";
-import { unique } from "@/lib/utils";
+import { unique, LANGS_WITH_AZURE_TRANSLATE } from "@/lib/utils";
 import translators from "@/lib/translators";
 
 export default {
@@ -90,17 +90,28 @@ export default {
   methods: {
     visibilityChanged(visible) {
       if (visible) {
-        if (this.translated) this.loadAugmentedDefinitions(true)
+        if (this.translated) this.loadAugmentedDefinitions({ translate: true })
       }
     },
-    async loadAugmentedDefinitions(translate = false) {
-      let augmentedDefinitions = this.definitions;
+    async translateStrings(strings) {
+      if (!this.$store.state.settings.useMachineTranslatedDictionary) translate = false
+      if (!LANGS_WITH_AZURE_TRANSLATE.includes(this.$l2.code)) translate = false
+      const l1Code = this.$l1.code // The destination language
+      const l2Code = 'en'          // The source language is English
+      if (l1Code === l2Code) translate = false
       if (translate)
-        augmentedDefinitions = await translators.translateArrayWithBing({
-          textArray: augmentedDefinitions,
-          l1Code: this.$l1.code,
-          l2Code: 'en',
+        translatedStrings = await translators.translateArrayWithBing({
+          textArray: strings,
+          l1Code,
+          l2Code,
         });
+      return translatedStrings
+    },
+    async loadAugmentedDefinitions({ translate }) {
+      let augmentedDefinitions = this.definitions;
+      if (translate) {
+        augmentedDefinitions = await this.translateStrings(augmentedDefinitions)
+      }
       // augmentedDefinitions = this.parseCircleNumbersInDefinitions(augmentedDefinitions)
       augmentedDefinitions = await Promise.all(
         unique(augmentedDefinitions).map(async (definition) => {
