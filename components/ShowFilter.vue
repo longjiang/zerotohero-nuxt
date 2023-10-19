@@ -27,7 +27,7 @@
         <b>{{ $t('All Videos') }}</b>
       </b-form-checkbox>
       <template v-if="!allVideosChecked">
-        <hr />
+        <!-- <hr />
         <b-form-checkbox v-model="musicChecked">
           <i class="fa fa-music"></i>
           <b>{{ $t('Music') }}</b>
@@ -39,7 +39,7 @@
         <b-form-checkbox v-model="newsChecked">
           <i class="fa fa-newspaper"></i>
           <b>{{ $t('News') }}</b>
-        </b-form-checkbox>
+        </b-form-checkbox> -->
         <template v-if="tvShows">
           <hr />
           <b-form-checkbox v-model="allTVShowsChecked" :class="{ 'mb-2': !allTVShowsChecked }">
