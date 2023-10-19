@@ -104,7 +104,12 @@ export default {
     loadMore() {
       const newLimit = this.params.xs ? 3 : this.params.sm ? 6 : 12;
       this.limit += newLimit;
-      const sortedChannels = this.channels.sort((a, b) => b.video_count - a.video_count);
+      const sortedChannels = this.channels.sort((a, b) => {
+        const aValue = a.video_count * (a.subscribers > 0 ? a.subscribers : 0);
+        const bValue = b.video_count * (b.subscribers > 0 ? b.subscribers : 0);
+
+        return bValue - aValue;
+      });
       this.channelsToShow = sortedChannels.slice(0, this.limit);
     }
   }

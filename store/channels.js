@@ -28,7 +28,9 @@ export const actions = {
       const channels = await this.$directus.getData(`items/youtube_channels`, {
         "fields": "id,channel_id,thumbnail,title,subscribers,video_count,l2",
         "filter[l2][eq]": l2_id,
-        limit: -1,
+        "sort": "-video_count",
+        "timestamp": Date.now(),
+        limit: 500,
       });
       if (channels?.length > 0) {
         commit("SET_CHANNELS", { channels, l2_id });

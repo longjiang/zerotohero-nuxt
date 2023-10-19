@@ -1,13 +1,26 @@
 <template>
-  <router-link class="channel-card link-unstyled" :to="{ name: 'youtube-channel', params: { title, channel_id } }">
+  <router-link
+    class="channel-card link-unstyled"
+    :to="{ name: 'youtube-channel', params: { title, channel_id } }"
+  >
     <img :src="thumbnail" alt="Channel Thumbnail" class="channel-thumbnail" />
 
     <div class="channel-info">
       <h6 class="mb-0">{{ title }}</h6>
 
-      <div class="channel-stats"  style="opacity: 0.7">
-        <div class="small">{{ $t('{count} Subscribers', { count: formatK(subscribers, 2, $l1.code) }) }}</div>
-        <div class="small">{{ $t('{count} Videos', { count: formatK(video_count, 2, $l1.code) }) }}</div>
+      <div class="channel-stats">
+        <div>
+          {{
+            $t("{count} Subscribers", {
+              count: formatK(subscribers, 2, $l1.code),
+            })
+          }}
+        </div>
+        <!-- <div>
+          {{
+            $t("{count} Videos", { count: formatK(video_count, 2, $l1.code) })
+          }}
+        </div> -->
       </div>
 
       <!-- <small class="channel-description" style="opacity: 0.5">{{ description }}</small> -->
@@ -28,15 +41,21 @@ export default {
     country: String,
     views: Number,
     video_count: Number,
-    subscribers: Number
+    subscribers: Number,
   },
   methods: {
-    formatK
-  }
-}
+    formatK,
+  },
+};
 </script>
 
 <style scoped lang="scss">
+.channel-stats {
+  opacity: 0.7;
+  line-height: 1.33;
+  margin-top: 0.2rem;
+  font-size: 0.8em;
+}
 .channel-card {
   display: flex;
   align-items: flex-start;
@@ -59,7 +78,6 @@ export default {
 .channel-info h3 {
   margin: 0;
 }
-
 
 .channel-description {
   max-width: 400px;
