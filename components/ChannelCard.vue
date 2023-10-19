@@ -6,8 +6,8 @@
       <h6 class="mb-0">{{ title }}</h6>
 
       <div class="channel-stats"  style="opacity: 0.7">
-        <small>{{ $t('{count} Subscribers', { count: formatK(subscribers, 2, $l1.code) }) }}</small>
-        <!-- <small >{{ $t('{count} Videos', { count: formatK(video_count, 2, $l1.code) }) }}</small> -->
+        <div class="small">{{ $t('{count} Subscribers', { count: formatK(subscribers, 2, $l1.code) }) }}</div>
+        <div class="small">{{ $t('{count} Videos', { count: formatK(video_count, 2, $l1.code) }) }}</div>
       </div>
 
       <!-- <small class="channel-description" style="opacity: 0.5">{{ description }}</small> -->
@@ -60,10 +60,6 @@ export default {
   margin: 0;
 }
 
-.channel-stats {
-  display: flex;
-  gap: 10px;
-}
 
 .channel-description {
   max-width: 400px;

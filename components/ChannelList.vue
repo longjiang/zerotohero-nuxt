@@ -4,19 +4,28 @@
       <client-only>
         <!-- Similar admin tools can be added here if necessary -->
 
-        <div v-if="channels && channels.length" class="row">
+        <div v-if="channels && channels.length" class="row" v-infinite-scroll="loadMore" infinite-scroll-distance="10">
           <div
-            v-for="(channel) in displayedChannels"
+            v-for="(channel) in channelsToShow"
             :key="channel.channel_id"
             :class="colClasses"
           >
             <ChannelCard v-bind="channel" />
           </div>
         </div>
-        <b-button v-if="collapse" variant="outline-success" @click="showAllChannels = !showAllChannels" class="w-100">
-          {{ $t(!showAllChannels ? 'Show More Top Channels' : 'Collapse') }}
-          <i class="fa fa-chevron-down" :class="{ 'fa-chevron-up': showAllChannels }"></i>
-        </b-button>
+        <router-link :to="{name: 'youtube-channels'}" v-if="collapse" class="btn btn-outline-success w-100">
+          {{ $t('See All Channels') }}
+          <i class="fa fa-chevron-right"></i>
+        </router-link>
+        <div v-observe-visibility="visibilityChanged" class="text-center" v-if="!collapse && channelsToShow.length < channels.length" >
+          <Loader
+            :sticky="true"
+            :message="
+              $t('Loading more channels...')
+            "
+            class="text-white"
+          />
+        </div>
       </client-only>
     </div>
   </container-query>
@@ -44,6 +53,8 @@ export default {
   data() {
     return {
       showAllChannels: false,
+      limit: 0,           // For inifinite scroll
+      channelsToShow: [], // For inifinite scroll
       params: {},
       query: {
         xs: {
@@ -68,6 +79,9 @@ export default {
       },
     };
   },
+  mounted() {
+    this.loadMore();
+  },
   computed: {
     colClasses() {
       let classes = { };
@@ -80,12 +94,20 @@ export default {
       };
       return classes;
     },
-    displayedChannels() {
-      if (this.showAllChannels || !this.collapse) return this.channels;
-      const limit = this.params.xs ? 3 : this.params.sm ? 6 : 12;
-      return this.channels.slice(0, limit); // Displaying only 3 rows of channels
-    },
   },
+  methods: {
+    visibilityChanged(visible) {
+      if (visible) {
+        this.loadMore();
+      }
+    },
+    loadMore() {
+      const newLimit = this.params.xs ? 3 : this.params.sm ? 6 : 12;
+      this.limit += newLimit;
+      const sortedChannels = this.channels.sort((a, b) => b.video_count - a.video_count);
+      this.channelsToShow = sortedChannels.slice(0, this.limit);
+    }
+  }
 };
 </script>
 

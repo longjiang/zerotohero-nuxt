@@ -34,7 +34,6 @@
               noVideosMessage: 'No videos found in this channel.',
               limit: 12,
             }"
-            :ref="`videos-${slug}`"
             class="my-5"
           />
         </div>
