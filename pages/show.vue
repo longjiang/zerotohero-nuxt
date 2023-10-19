@@ -243,11 +243,8 @@ export default {
     },
     heroButtonText() {
       if (this.collection === "tv_show") {
-        if (this.show.title === "Music") return "Play Music Video";
-        if (this.show.title === "Movies") return "Play Film";
         return "Play Episode 1";
       } else {
-        if (this.show.title === "News") return "Play Latest News";
         if (this.show.audiobook) return "Read Chapter 1";
         return "Play Latest Upload";
       }
@@ -256,10 +253,6 @@ export default {
       let what = "";
       if (this.type === "tv-show") what = `the TV show “${this.show.title}”`;
       else what = `the talk series “${this.show.title}”`;
-      // But...
-      if (["Music", "Movies", "News"].includes(this.show.title)) {
-        what = this.show.title;
-      }
       return `Learn ${this.$l2.name} with ${what} | Language Player`;
     },
   },
@@ -352,8 +345,6 @@ export default {
         if (this.videos && this.videos.length > 0) {
           // shuffle mutates the original array!
           let videos = [...this.videos];
-          if (["Movies", "Music"].includes(this.show.title))
-            videos = shuffle(videos);
           this.featuredVideo = videos[0];
         }
         this.tries++;

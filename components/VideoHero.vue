@@ -136,8 +136,7 @@ export default {
     displayTitle() {
       if (
         this.show &&
-        this.show.show &&
-        !["Music", "Movies", "News"].includes(this.show.show.title)
+        this.show.show
       ) {
         return this.show.show.title;
       } else
@@ -155,43 +154,12 @@ export default {
       ) {
         let tvShows = this.$store.state.shows.tvShows[this.$l2.code];
         let talks = this.$store.state.shows.talks[this.$l2.code];
-        if (this.video.talk) {
-          let talkId = this.video.talk.id || this.video.talk;
-          let talk = talks.find((t) => t.id === talkId);
-          if (talk) {
-            let type =
-              talk.title === "News"
-                ? "News Report"
-                : talk.audiobook
-                ? "Audiobook"
-                : "YouTube Channel";
-            let icon =
-              talk.title === "News"
-                ? "fa fa-newspaper"
-                : talk.audiobook
-                ? "fa fa-book-open"
-                : "fab fa-youtube";
-            return { type, icon, show: talk };
-          }
-        } else {
-          let tvShowId = this.video.tv_show.id || this.video.tv_show;
-          let tvShow = tvShows.find((s) => s.id === tvShowId);
-          if (tvShow) {
-            let type =
-              tvShow.title === "Movies"
-                ? "Movie"
-                : tvShow.title === "Music"
-                ? "Song"
-                : "TV Show";
-            let icon =
-              tvShow.title === "Movies"
-                ? "fa fa-film"
-                : tvShow.title === "Music"
-                ? "fa fa-music"
-                : "fa fa-tv";
-            return { type, icon, show: tvShow };
-          }
-        }
+        let talkId = this.video.talk?.id || this.video.talk;
+        let tvShowId = this.video.tv_show?.id || this.video.tv_show;
+        let tvShow = tvShows.find((s) => s.id === tvShowId);
+        let talk = talks.find((t) => t.id === talkId);
+        if (talk) return { type: 'YouTube', icon: "fab fa-youtube", show: talk };
+        if (tvShow) return { type: 'TV Show', icon: "fa fa-tv", show: tvShow };
       }
     },
     playButtonIcon() {

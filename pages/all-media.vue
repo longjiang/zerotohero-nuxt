@@ -126,65 +126,6 @@
         </div>
         <div
           class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
-          v-if="moviesShow"
-        >
-          <router-link
-            class="link-unstyled category-btn text-left"
-            :to="{
-              name: 'show',
-              params: { type: 'tv-show', id: moviesShow.id },
-            }"
-          >
-            <i class="fa-regular fa-film mr-1"></i>
-            {{ $t('Movies') }}
-          </router-link>
-        </div>
-        <div
-          class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
-          v-if="musicShow"
-        >
-          <router-link
-            class="link-unstyled category-btn text-left"
-            :to="{
-              name: 'show',
-              params: { type: 'tv-show', id: musicShow.id },
-            }"
-          >
-            <i class="fa-solid fa-music mr-1"></i>
-            {{ $t('Music') }}
-          </router-link>
-        </div>
-        <div
-          class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
-          v-if="newsShow"
-        >
-          <router-link
-            class="link-unstyled category-btn text-left"
-            :to="{
-              name: 'show',
-              params: { type: 'talk', id: newsShow.id },
-            }"
-          >
-            <i class="fa-solid fa-newspaper mr-1"></i>
-            {{ $t('News') }}
-          </router-link>
-        </div>
-        <div
-          class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
-          v-if="musicShow"
-        >
-          <router-link
-            class="link-unstyled category-btn text-left"
-            :to="{
-              name: 'audiobooks',
-            }"
-          >
-            <i class="fa-solid fa-book-open mr-1"></i>
-            {{ $t('Audiobooks') }}
-          </router-link>
-        </div>
-        <div
-          class="col-6 col-md-4 col-lg-3 category-btn-wrapper"
         >
           <router-link
             class="link-unstyled category-btn text-left"
@@ -231,9 +172,6 @@ export default {
     return {
       talks: undefined,
       tvShows: undefined,
-      musicShow: undefined,
-      moviesShow: undefined,
-      newsShow: undefined,
       showsLoaded: false,
       LANGS_WITH_LEVELS,
     };
@@ -254,18 +192,9 @@ export default {
       let talks = this.$store.state.shows.talks[this.$l2.code];
       if (tvShows) {
         this.tvShows = tvShows.sort((x, y) => y.avg_views - x.avg_views) || [];
-        this.musicShow = this.$store.state.shows.tvShows[this.$l2.code].find(
-          (s) => s.title === "Music"
-        );
-        this.moviesShow = this.$store.state.shows.tvShows[this.$l2.code].find(
-          (s) => s.title === "Movies"
-        );
       }
       if (talks) {
         this.talks = talks.sort((x, y) => y.avg_views - x.avg_views) || [];
-        this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
-          (s) => s.title === "News"
-        );
       }
       this.loading = false;
     },

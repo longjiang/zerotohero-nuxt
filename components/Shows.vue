@@ -365,9 +365,6 @@ export default {
     },
     filteredShowsByAudiobook() {
       let shows = this.shows;
-      shows = shows.filter(
-        (show) => !["News", "Music", "Movies"].includes(show.title)
-      );
       if (this.routeType === "audiobooks") {
         shows = shows.filter((s) => s.audiobook);
       } else {

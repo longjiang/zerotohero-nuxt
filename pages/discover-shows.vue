@@ -62,7 +62,7 @@ export default {
     async getLastShowId() {
       let key = this.type.replace("-", "_");
       let res = await this.$directus.get(
-        `items/${key}?filter[title][nin]=Movies,Music,News&sort=-id&limit=1`
+        `items/${key}?sort=-id&limit=1`
       );
       if (res && res.data && res.data.data && res.data.data[0]) {
         return res.data.data[0].id;
@@ -81,7 +81,7 @@ export default {
           adminMode ? "" : "&filter[hidden][empty]=true"
         }&filter[id][in]=${ids.join(
           ","
-        )}&filter[title][nin]=Movies,Music,News&timestamp=${
+        )}&timestamp=${
           adminMode ? Date.now() : 0
         }`
       );

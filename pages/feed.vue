@@ -91,9 +91,6 @@ export default {
       savedWordsShuffled: [],
       tvShows: undefined,
       talks: undefined,
-      musicShow: undefined,
-      moviesShow: undefined,
-      newsShow: undefined,
       loading: false,
       heroVideo: undefined,
       numVideosPerLoad: 6,
@@ -293,19 +290,6 @@ export default {
     async loadShows() {
       this.tvShows = this.$store.state.shows.tvShows[this.$l2.code];
       this.talks = this.$store.state.shows.talks[this.$l2.code];
-      if (this.tvShows) {
-        this.musicShow = this.$store.state.shows.tvShows[this.$l2.code].find(
-          (s) => s.title === "Music"
-        );
-        this.moviesShow = this.$store.state.shows.tvShows[this.$l2.code].find(
-          (s) => s.title === "Movies"
-        );
-      }
-      if (this.talks) {
-        this.newsShow = this.$store.state.shows.talks[this.$l2.code].find(
-          (s) => s.title === "News"
-        );
-      }
     },
     /**
      * @param statsKey key in the stats, one of: 'allVideos', 'movies', 'newVideos', 'music', 'news'

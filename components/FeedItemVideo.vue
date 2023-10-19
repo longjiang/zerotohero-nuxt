@@ -107,36 +107,19 @@ export default {
       if (this.video.l2) return this.$languages.getById(this.video.l2);
     },
     show() {
-      if (this.video.talk) {
-        let talk = this.video.talk;
-        let type =
-          videio.type === "news"
-            ? "News Report"
-            : talk.audiobook
-            ? "Audiobook"
-            : "YouTube";
-        let icon =
-          video.type === "news"
-            ? "fa fa-newspaper"
-            : talk.audiobook
-            ? "fa fa-book-open"
-            : "fab fa-youtube";
-        return { type, icon, show: talk };
-      } else if (this.video.tv_show) {
-        let tvShow = this.video.tv_show;
-        let type =
-          video.type === "movie"
-            ? "Movie"
-            : video.type === "music"
-            ? "Song"
-            : "TV Show";
-        let icon =
-          video.type === "movie"
-            ? "fa fa-film"
-            : video.type === "music"
-            ? "fa fa-music"
-            : "fa fa-tv";
-        return { type, icon, show: tvShow };
+      if (
+        (this.video.tv_show || this.video.talk) &&
+        this.$store.state.shows &&
+        this.$store.state.shows.showsLoaded[this.$l2.code]
+      ) {
+        let tvShows = this.$store.state.shows.tvShows[this.$l2.code];
+        let talks = this.$store.state.shows.talks[this.$l2.code];
+        let talkId = this.video.talk?.id || this.video.talk;
+        let tvShowId = this.video.tv_show?.id || this.video.tv_show;
+        let tvShow = tvShows.find((s) => s.id === tvShowId);
+        let talk = talks.find((t) => t.id === talkId);
+        if (talk) return { type: 'YouTube', icon: "fab fa-youtube", show: talk };
+        if (tvShow) return { type: 'TV Show', icon: "fa fa-tv", show: tvShow };
       }
     },
     to() {
