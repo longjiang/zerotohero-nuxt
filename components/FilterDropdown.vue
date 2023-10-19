@@ -7,7 +7,7 @@
     </span>
     <b-modal
       :ref="`${type}Modal`"
-      size="lg"
+      size="sm"
       centered
       hide-footer
       modal-class="safe-padding-top mt-4"
@@ -18,7 +18,7 @@
         <div
           v-for="(item, index) in items"
           :key="`dropdown-menu-item-${type}-${index}`"
-          class="mb-1 col-6 col-lg-4"
+          class="mb-1 col-12"
         >
           <span @click="emitFilter(item.value)" class="cursor-pointer">
             {{ $t(item.text) }}
