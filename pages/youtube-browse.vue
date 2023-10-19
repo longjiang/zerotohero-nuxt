@@ -85,6 +85,7 @@
         </h5>
         <hr class="mb-4" />
       </div> -->
+      <!-- Add a search field -->
       <div class="row mb-4">
         <div class="col-sm-12 text-center">
           <div v-show="kidsOnly" class="mb-2">
@@ -130,6 +131,13 @@
           </div>
         </div>
       </div>
+      <b-form-input
+        :lazy="true"
+        :placeholder="$tb('Search')"
+        class="mb-5"
+        @keyup.enter="handleSearch"
+        :value="keyword"
+      />
       <MediaSearchResults
         v-bind="{
           params: mediaSearchParams,
@@ -270,6 +278,18 @@ export default {
     },
   },
   methods: {
+    handleSearch($event) {
+      this.$router.push({
+        name: "youtube-browse",
+        params: {
+          category: this.category,
+          level: this.level,
+          start: this.start,
+          keyword: $event.target.value || null,
+          kidsOnly: this.kidsOnly,
+        },
+      });
+    },
     handleCategoryFilter(value) {
       this.$router.push({
         name: "youtube-browse",
