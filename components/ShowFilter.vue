@@ -185,8 +185,8 @@ export default {
     this.watchersActivated = true  // Do not activate watchers until after a second to avoid constanting updating settings and pushing to the server
   },
   beforeDestroy() {
-    this.unsubscribeSettings();
-    this.unsubscribeShows();
+    if (this.unsubscribeSettings) this.unsubscribeSettings();
+    if (this.unsubscribeShows) this.unsubscribeShows();
   },
   watch: {
     allVideosChecked() {
@@ -274,7 +274,7 @@ export default {
       }
       return this.tvShowChecked;
     },
-    getTvShowFilter() {
+    getTalkFilter() {
       if (this.allVideosChecked) return;
       if (this.allTalksChecked) {
         return "all";

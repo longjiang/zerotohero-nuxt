@@ -106,7 +106,7 @@ export default {
           l2Code,
         });
       }
-      return translatedStrings
+      return translatedStrings || strings
     },
     async loadAugmentedDefinitions({ translate = false } = {}) {
       let augmentedDefinitions = this.definitions;
@@ -114,13 +114,13 @@ export default {
         augmentedDefinitions = await this.translateStrings(augmentedDefinitions)
       }
       // augmentedDefinitions = this.parseCircleNumbersInDefinitions(augmentedDefinitions)
-      augmentedDefinitions = await Promise.all(
-        unique(augmentedDefinitions).map(async (definition) => {
-          if (typeof definition === "string") definition = { text: definition };
-          definition.html = await this.definitionHtml(definition.text);
-          return definition;
-        })
-      );
+      augmentedDefinitions = unique(augmentedDefinitions || [])
+      const promises = augmentedDefinitions.map(async (definition) => {
+        if (typeof definition === "string") definition = { text: definition };
+        definition.html = await this.definitionHtml(definition.text);
+        return definition;
+      })
+      augmentedDefinitions = await Promise.all(promises);
       this.augmentedDefinitions = augmentedDefinitions;
     },
     async getWord(term) {

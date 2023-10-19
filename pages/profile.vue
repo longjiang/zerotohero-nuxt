@@ -170,7 +170,7 @@
                   <router-link
                     class="text-success ml-2"
                     style="font-size: 1rem; font-weight: bold"
-                    :to="{ name: 'saved-words' }"
+                    :to="{ name: 'watch-history' }"
                   >
                     {{ $t("See All") }}
                     <i class="fas fa-angle-right ml-1"></i>
