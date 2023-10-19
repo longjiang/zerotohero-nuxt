@@ -94,7 +94,7 @@
                   : ""
               }}:
             </span>
-            {{ wordDefinition(word) }}
+            <DefinitionsList :definitions="filterDefinitions(word)" :translated="true" :singleColumn="true" :neverShowAsList="true" />
           </span>
           <span
             :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
@@ -242,14 +242,6 @@ export default {
     },
   },
   methods: {
-    wordDefinition(word) {
-      // word.definitions ? filterDefinitions(word).join(", ") : ""
-      let definitions = this.filterDefinitions(word);
-      if (definitions) {
-        return definitions.join('; ');
-      }
-      return ""
-    },
     filterDefinitions(word) {
       if (!word.definitions) return;
       let definitions = word.definitions;

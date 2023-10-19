@@ -163,7 +163,7 @@
                 <div v-observe-visibility="visibilityChanged"></div>
               </template>
               <div v-if="keyword">
-                <MediaSearchResults :keyword="keyword" class="mt-4" />
+                <MediaSearchResults :params="{'filter[title][contains]': keyword}" class="mt-4" />
                 <YouTubeSearchResults
                   :term="keyword"
                   :start="start"

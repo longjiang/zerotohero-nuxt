@@ -132,16 +132,9 @@
       </div>
       <MediaSearchResults
         v-bind="{
-          category,
-          level,
-          keyword,
-          start,
-          kidsOnly,
-          sort,
-          excludeMusicVideos: this.categry === 'all' && !this.keyword,
-          excludeAllTVShows: true,
+          params: mediaSearchParams,
           noVideosMessage: 'No videos found meeting your filter criteria.',
-          perPage: 12,
+          limit: 12,
           showSearchBar: false,
         }"
         @videosLoaded="onVideosLoaded"
@@ -163,7 +156,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { languageLevels, LANGS_WITH_LEVELS } from "@/lib/utils";
+import { languageLevels, LANGS_WITH_LEVELS, maxDifficultyByLevel, minDifficultyByLevel } from "@/lib/utils";
 
 export default {
   props: {
@@ -199,6 +192,43 @@ export default {
   },
   computed: {
     ...mapState("shows", ["categories"]),
+    mediaSearchParams() {
+      let params = {};
+
+      params["filter[tv_show][null]"] = 1 // Exclude TV Shows
+      if (this.category !== "all") {
+        params["filter[category][eq]"] = this.category;
+      }
+      if (this.level !== "all") {
+        params["filter[difficulty][between]"] = minDifficultyByLevel(this.level) + ',' + maxDifficultyByLevel(this.level);
+      }
+      if (this.keyword) {
+        const words = this.keyword.split(" ");
+        let titleKeywords = []
+        for (const word of words) {
+          if (word.startsWith("channel:")) {
+            params["filter[channel_id][eq]="] = word.replace("channel:", "")
+          } else if (word.startsWith("locale:")) {
+            params["filter[locale][contains]="] = word.replace("locale:", "")
+          } else {
+            titleKeywords.push(word);
+          }
+        }
+        params["filter[title][contains]"] = titleKeywords.join(' ');
+      }
+      if (this.kidsOnly) {
+        params["filter[made_for_kids][eq]"] = 1;
+      }
+      if (this.category === 'all' && !this.keyword) {
+        params["filter[category][nin]"] = 10 // Exclude music videos
+        params["filter[type][neq]"] = "music" // Exclude music videos
+      }
+      if (this.sort && this.sort !== "-views") {
+        params.sort = this.sort // The table is mostly already sorted by views, so we don't need to sort by views
+      }
+      params.start = this.start;
+      return params;
+    },
     heroVideo() {
       if (this.selectedHeroVideo === null && this.videos.length > 0) {
         this.selectedHeroVideo = this.videos[Math.floor(Math.random() * this.videos.length)];

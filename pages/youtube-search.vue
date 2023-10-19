@@ -135,7 +135,7 @@
           :showHero="false"
           :initialKeyword="term"
         />
-        <MediaSearchResults :keyword="term" class="mt-4" />
+        <MediaSearchResults :params="{ 'filter[title][contains]': term }" class="mt-4" />
         <YouTubeSearchResults
           :term="term"
           :start="start"

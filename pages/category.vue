@@ -47,12 +47,9 @@
           <div>
             <MediaSearchResults
               v-bind="{
-                category: categoryId,
-                kidsOnly,
+                params: mediaSearchParams,
                 noVideosMessage: 'No videos found in this category.',
-                perPage: 12,
-                showSearchBar: false,
-                sort: slug === 'news' ? '-date' : '-views',
+                limit: 12,
               }"
               :ref="`videos-${slug}`"
               class="mt-3"
@@ -78,6 +75,16 @@ export default {
     };
   },
   computed: {
+    mediaSearchParams() {
+      let params = {}
+      params['filter[category][eq]'] = this.categoryId
+      if (['new', 'music', 'movie'].includes(this.slug)) {
+        params['filter[type][eq]'] = this.slug;
+      }
+      if (this.slug === 'kids') params['filter[made_for_kids][eq]'] = 1;
+      if (this.slug === 'news') params.sort = '-date';
+      return params;
+    },
     categoryId() {
       let categoryId = SLUG_TO_CATEGORY_ID[this.slug]?.toString()
       if (!categoryId) categoryId = this.slug

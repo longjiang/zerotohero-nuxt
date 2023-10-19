@@ -138,8 +138,19 @@
             :title="title"
             :toMore="toMore"
           />
-          <b-button v-if="limit && filteredShows && filteredShows.length > limit" :to="{name: routeType}" variant="outline-success" class="mt-3 d-block w-100" size="lg">
-            {{ $t('See All {num} {type}', { type: routeTitles[routeType], num: filteredShows.length }) }}
+          <b-button
+            v-if="limit && filteredShows && filteredShows.length > limit"
+            :to="{ name: routeType }"
+            variant="outline-success"
+            class="mt-3 d-block w-100"
+            size="lg"
+          >
+            {{
+              $t("See All {num} {type}", {
+                type: routeTitles[routeType],
+                num: filteredShows.length,
+              })
+            }}
           </b-button>
           <div
             v-if="
@@ -149,7 +160,12 @@
               showExtraSearchResults
             "
           >
-            <MediaSearchResults :keyword="keyword" :perPage="12" />
+            <MediaSearchResults
+              :params="{
+                'filter[title][contains]': keyword,
+              }"
+              :perPage="12"
+            />
             <YouTubeSearchResults
               :term="keyword"
               :infinite="true"
@@ -501,7 +517,7 @@ export default {
       return shows || [];
     },
     async loadShows() {
-      if (this.shows) return
+      if (this.shows) return;
       let shows = this.$store.state.shows[this.type][this.$l2.code]
         ? this.$store.state.shows[this.type][this.$l2.code]
         : undefined;
@@ -519,9 +535,9 @@ export default {
           youtube_id: randomShow.youtube_id,
           title: randomShow.title,
           l2: randomShow.l2,
-          [this.routeType === 'tv-shows' ? 'tv_show' : 'talk']: randomShow.id,
+          [this.routeType === "tv-shows" ? "tv_show" : "talk"]: randomShow.id,
         };
-        this.heroVideo = video
+        this.heroVideo = video;
       }
     },
     getRandomShow() {
