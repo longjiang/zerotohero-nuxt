@@ -94,20 +94,20 @@ export default {
       }
     },
     async translateStrings(strings) {
-      if (!this.$store.state.settings.useMachineTranslatedDictionary) translate = false
-      if (!LANGS_WITH_AZURE_TRANSLATE.includes(this.$l2.code)) translate = false
+      if (!this.$store.state.settings.useMachineTranslatedDictionary) return strings
+      if (!LANGS_WITH_AZURE_TRANSLATE.includes(this.$l2.code)) return strings
       const l1Code = this.$l1.code // The destination language
       const l2Code = 'en'          // The source language is English
-      if (l1Code === l2Code) translate = false
-      if (translate)
+      if (l1Code !== l2Code) {
         translatedStrings = await translators.translateArrayWithBing({
           textArray: strings,
           l1Code,
           l2Code,
         });
+      }
       return translatedStrings
     },
-    async loadAugmentedDefinitions({ translate }) {
+    async loadAugmentedDefinitions({ translate = false } = {}) {
       let augmentedDefinitions = this.definitions;
       if (translate) {
         augmentedDefinitions = await this.translateStrings(augmentedDefinitions)
