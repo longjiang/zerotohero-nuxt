@@ -232,7 +232,7 @@ export default {
       if (this.$l2.code === "ja") {
         allWords = await Promise.all(
           allWords.map(async (word) => {
-            word.romaji = await dictionary.transliterate(word.kana);
+            word.romaji = await dictionary.transliterate(word?.kana);
             return word;
           })
         );
