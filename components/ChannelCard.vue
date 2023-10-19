@@ -3,19 +3,20 @@
     <img :src="thumbnail" alt="Channel Thumbnail" class="channel-thumbnail" />
 
     <div class="channel-info">
-      <h3>{{ title }}</h3>
+      <h6 class="mb-0">{{ title }}</h6>
 
-      <div class="channel-stats">
-        <span>{{ $t('{count} Subscribers', { count: subscribers }) }}</span>
-        <span>{{ $t('{count} Videos', { count: video_count }) }}</span>
+      <div class="channel-stats"  style="opacity: 0.7">
+        <small>{{ $t('{count} Subscribers', { count: formatK(subscribers, 2, $l1.code) }) }}</small>
+        <!-- <small >{{ $t('{count} Videos', { count: formatK(video_count, 2, $l1.code) }) }}</small> -->
       </div>
 
-      <div class="channel-description">{{ description }}</div>
+      <!-- <small class="channel-description" style="opacity: 0.5">{{ description }}</small> -->
     </div>
   </div>
 </template>
 
 <script>
+import { formatK } from "@/lib/utils";
 export default {
   props: {
     date: String,
@@ -28,6 +29,9 @@ export default {
     views: Number,
     video_count: Number,
     subscribers: Number
+  },
+  methods: {
+    formatK
   }
 }
 </script>
@@ -35,7 +39,7 @@ export default {
 <style scoped>
 .channel-card {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   border-radius: 5px;
   overflow: hidden;
 }
@@ -48,20 +52,15 @@ export default {
 }
 
 .channel-info h3 {
-  font-size: 18px;
   margin: 0;
 }
 
 .channel-stats {
   display: flex;
   gap: 10px;
-  font-size: 14px;
-  color: #666;
 }
 
 .channel-description {
-  font-size: 14px;
-  color: #888;
   max-width: 400px;
   overflow: hidden;
   text-overflow: ellipsis;
