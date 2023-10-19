@@ -98,7 +98,7 @@
           </span>
           <span
             :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
-            v-if="word.counters"
+            v-if="showCounters && word.counters"
           >
             :
             <span style="font-style: normal">
@@ -178,6 +178,9 @@ export default {
     },
     hidePhonetics: {
       default: false,
+    },
+    showCounters: {
+      default: true,
     },
     maxDefinitions: undefined,
     removeSymbol: {

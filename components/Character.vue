@@ -16,7 +16,7 @@
       <Decomposition :char="character.character" class="mb-4 mr-4" style="float: left; clear: left"></Decomposition>
       <div class="character-parts" style="overflow: hidden; position: relative;">
         <h6>{{ $t('Character Decomposition') }}</h6>
-        <div class="part character-example" v-for="part in character.parts" :key="`character-part-${part.character}`">
+        <div class="part character-example" v-for="(part, index) in character.parts" :key="`character-part-${part.character}-${index}`">
           <span class="part-part mr-2" v-if="part && part.character !== '？'">
             <b>{{ part.character }}</b> =
           </span>
@@ -45,7 +45,7 @@
     </div>
     <hr style="clear: both" />
     <h6 class="text-center">{{ $t('Words with this Character') }}</h6>
-    <WordList :key="examples?.length" :words="examples" :highlight="character.character" collapse="4" />
+    <WordList :key="examples?.length" :words="examples" :highlight="character.character" :showCounters="false" collapse="4" />
   </div>
 </template>
 

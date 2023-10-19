@@ -7,7 +7,7 @@
       once: true,
     }"
   >
-    <template v-if="augmentedDefinitions.length > 0">
+    <template v-if="augmentedDefinitions?.length > 0">
       <ol
         :class="{
           'definitions mb-2': true,
@@ -94,8 +94,8 @@ export default {
       }
     },
     async translateStrings(strings) {
-      if (!this.$store.state.settings.useMachineTranslatedDictionary) return translatedStrings
-      if (!LANGS_WITH_AZURE_TRANSLATE.includes(this.$l2.code)) return translatedStrings
+      if (!this.$store.state.settings.useMachineTranslatedDictionary) return strings
+      if (!LANGS_WITH_AZURE_TRANSLATE.includes(this.$l2.code)) return strings
       const l1Code = this.$l1.code // The destination language
       const l2Code = 'en'          // The source language is English
       let translatedStrings = strings
