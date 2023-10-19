@@ -148,16 +148,7 @@ export default {
     },
     getRandomShow() {
       if (this.shows) {
-        let shows = this.shows.filter((s) => {
-          if (
-            this.routeType === "tv-shows" &&
-            ["Music", "Movies"].includes(s.title)
-          )
-            return false;
-          if (this.routeType === "talks" && ["News"].includes(s.title))
-            return false;
-          return true;
-        });
+        let shows = this.shows;
         let randomShow = shows[Math.floor(Math.random() * shows.length)];
         return randomShow;
       }

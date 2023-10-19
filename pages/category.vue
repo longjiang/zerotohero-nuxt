@@ -48,8 +48,6 @@
             <MediaSearchResults
               v-bind="{
                 category: categoryId,
-                tvShows: slug === 'movies' && movies({l2: $l2}) ? [movies({l2: $l2}).id] : slug === 'music' && music({l2: $l2}) ? [music({l2: $l2}).id] : null,
-                talks: slug === 'news' && news({l2: $l2}) ? [news({l2: $l2}).id] : null,
                 kidsOnly,
                 noVideosMessage: 'No videos found in this category.',
                 perPage: 12,
@@ -80,7 +78,6 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('shows', ['movies', 'music', 'news']),
     categoryId() {
       let categoryId = SLUG_TO_CATEGORY_ID[this.slug]?.toString()
       if (!categoryId) categoryId = this.slug

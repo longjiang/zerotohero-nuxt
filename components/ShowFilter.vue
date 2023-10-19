@@ -28,15 +28,15 @@
       </b-form-checkbox>
       <template v-if="!allVideosChecked">
         <hr />
-        <b-form-checkbox v-if="musicShow" v-model="musicChecked">
+        <b-form-checkbox v-model="musicChecked">
           <i class="fa fa-music"></i>
           <b>{{ $t('Music') }}</b>
         </b-form-checkbox>
-        <b-form-checkbox v-if="moviesShow" v-model="moviesChecked">
+        <b-form-checkbox v-model="moviesChecked">
           <i class="fa fa-film"></i>
           <b>{{ $t('Movies') }}</b>
         </b-form-checkbox>
-        <b-form-checkbox v-if="newsShow" v-model="newsChecked">
+        <b-form-checkbox v-model="newsChecked">
           <i class="fa fa-newspaper"></i>
           <b>{{ $t('News') }}</b>
         </b-form-checkbox>
@@ -123,9 +123,6 @@ export default {
     return {
       tvShows: undefined,
       talks: undefined,
-      musicShow: undefined,
-      moviesShow: undefined,
-      newsShow: undefined,
       allVideosChecked: false,
       allTVShowsChecked: false,
       allTalksChecked: false,
@@ -220,14 +217,10 @@ export default {
   methods: {
     checkAll(type) {
       if (type === "tvShows") {
-        this.tvShowChecked = this.tvShows
-          .filter(s => !["Movies", "Music"].includes(s.title))
-          .map(s => Number(s.id));
+        this.tvShowChecked = this.tvShows.map(s => Number(s.id));
       }
       if (type === "talks") {
-        this.talkChecked = this.talks
-          .filter(s => !["News"].includes(s.title))
-          .map(s => Number(s.id));
+        this.talkChecked = this.talks.map(s => Number(s.id));
       }
     },
     uncheckAll(type) {
@@ -262,26 +255,6 @@ export default {
         }
       }
     },
-    /**
-     * Check if there are special shows like 'music', 'movies' or 'news'. If there are, we tick the checkboxes accordingly.
-     */
-    checkSpecials() {
-      if (this.musicShow) {
-        let musicId = Number(this.musicShow.id);
-        this.musicChecked = this.tvShowFilter?.includes(musicId);
-        this.tvShowChecked = this.tvShowChecked.filter(id => id !== musicId);
-      }
-      if (this.moviesShow) {
-        let moviesId = Number(this.moviesShow.id);
-        this.moviesChecked = this.tvShowFilter?.includes(moviesId);
-        this.tvShowChecked = this.tvShowChecked.filter(id => id !== moviesId);
-      }
-      if (this.newsShow) {
-        let newsId = Number(this.newsShow.id);
-        this.newsChecked = this.talkFilter?.includes(Number(this.newsShow.id));
-        this.talkChecked = this.talkChecked.filter(id => id !== newsId);
-      }
-    },
     updateSettings() {
       let tvShowFilter = this.getTvShowFilter();
       let talkFilter = this.getTalkFilter();
@@ -299,50 +272,16 @@ export default {
     getTvShowFilter() {
       if (this.allVideosChecked) return;
       if (this.allTVShowsChecked) {
-        let all = true;
-        if (this.musicShow && !this.musicChecked) all = false;
-        if (this.moviesShow && !this.moviesChecked) all = false;
-        if (all) return "all";
-        else {
-          let tvShowIDs = this.tvShows.map(s => s.id);
-          if (!this.musicChecked && this.musicShow) {
-            tvShowIDs = tvShowIDs.filter(id => id !== this.musicShow.id);
-          }
-          if (!this.musicChecked && this.moviesShow) {
-            tvShowIDs = tvShowIDs.filter(id => id !== this.moviesShow.id);
-          }
-          return tvShowIDs;
-        }
-      } else {
-        let tvShowFilter = [].concat(this.tvShowChecked);
-        if (this.musicChecked && this.musicShow) {
-          if (this.musicShow) tvShowFilter.push(this.musicShow.id);
-        }
-        if (this.moviesChecked && this.moviesShow) {
-          if (this.moviesShow) tvShowFilter.push(this.moviesShow.id);
-        }
-        return unique(tvShowFilter);
+        return "all";
       }
+      return this.tvShowChecked;
     },
-    getTalkFilter() {
+    getTvShowFilter() {
       if (this.allVideosChecked) return;
       if (this.allTalksChecked) {
-        let all = true;
-        if (this.newsShow && !this.newsChecked) all = false;
-        if (all) return "all";
-        else {
-          let talkShowIDs = this.talks.map(s => s.id);
-          if (!this.newsChecked) {
-            talkShowIDs = talkShowIDs.filter(id => id !== this.newsShow.id);
-          }
-          return talkShowIDs;
-        }
+        return "all";
       }
-      let talkFilter = [].concat(this.talkChecked);
-      if (this.newsChecked) {
-        if (this.newsShow) talkFilter.push(this.newsShow.id);
-      }
-      return unique(talkFilter);
+      return this.talkChecked;
     },
     showModal() {
       this.$refs["show-filter-modal"].show();
@@ -354,13 +293,6 @@ export default {
       this.talks = this.$store.state.shows.talks[this.$l2.code]
         ? this.$store.state.shows.talks[this.$l2.code]
         : undefined;
-      if (this.tvShows) {
-        this.musicShow = this.tvShows.find(s => s.title === "Music");
-        this.moviesShow = this.tvShows.find(s => s.title === "Movies");
-      }
-      if (this.talks) {
-        this.newsShow = this.talks.find(s => s.title === "News");
-      }
       this.checkSpecials();
     }
   }

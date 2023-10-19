@@ -9,7 +9,7 @@
       </div>
       <router-link
         v-if="
-          video && show && !['News', 'Movie', 'Music'].includes(show.show.title)
+          video && show
         "
         :to="{
           name: 'show',
@@ -57,7 +57,7 @@
         </router-link>
       </div>
       <div class="youtube-date mt-2" v-if="video.talk">
-        {{ $d(new Date(video.date), 'short', $l1.code) }}
+        {{ $d(new Date(video.date), "short", $l1.code) }}
       </div>
     </div>
   </div>
@@ -110,13 +110,13 @@ export default {
       if (this.video.talk) {
         let talk = this.video.talk;
         let type =
-          talk.title === "News"
+          videio.type === "news"
             ? "News Report"
             : talk.audiobook
             ? "Audiobook"
             : "YouTube";
         let icon =
-          talk.title === "News"
+          video.type === "news"
             ? "fa fa-newspaper"
             : talk.audiobook
             ? "fa fa-book-open"
@@ -125,15 +125,15 @@ export default {
       } else if (this.video.tv_show) {
         let tvShow = this.video.tv_show;
         let type =
-          tvShow.title === "Movies"
+          video.type === "movie"
             ? "Movie"
-            : tvShow.title === "Music"
+            : video.type === "music"
             ? "Song"
             : "TV Show";
         let icon =
-          tvShow.title === "Movies"
+          video.type === "movie"
             ? "fa fa-film"
-            : tvShow.title === "Music"
+            : video.type === "music"
             ? "fa fa-music"
             : "fa fa-tv";
         return { type, icon, show: tvShow };
@@ -141,9 +141,9 @@ export default {
     },
     to() {
       let to = {
-        name: 'video-view',
+        name: "video-view",
         params: {
-          type: 'youtube',
+          type: "youtube",
           youtube_id: this.video.youtube_id,
           l1: this.l1 ? this.l1.code : this.$l1 ? this.$l1.code : "en",
           l2: this.l2

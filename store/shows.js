@@ -376,24 +376,6 @@ export const getters = {
       if (state.showsLoaded[l2.code])
         return state.talks[l2.code].find((s) => s.id === Number(id));
     },
-  movies:
-    (state) =>
-    ({ l2 }) => {
-      if (state.showsLoaded[l2.code])
-        return state.tvShows[l2.code].find((s) => s.title === "Movies");
-    },
-  music:
-    (state) =>
-    ({ l2 }) => {
-      if (state.showsLoaded[l2.code])
-        return state.tvShows[l2.code].find((s) => s.title === "Music");
-    },
-  news:
-    (state) =>
-    ({ l2 }) => {
-      if (state.showsLoaded[l2.code])
-        return state.talks[l2.code].find((s) => s.title === "News");
-    },
   audiobooks:
     (state) =>
     ({ l2 }) => {
