@@ -77,17 +77,17 @@ export default {
   computed: {
     mediaSearchParams() {
       let params = {}
-      params['filter[category][eq]'] = this.categoryId
-      if (['new', 'music', 'movie'].includes(this.slug)) {
-        params['filter[type][eq]'] = this.slug;
-      }
+      if (this.categoryId)
+        params['filter[category][eq]'] = this.categoryId
+      if (this.slug === 'music') params['filter[type][eq]'] = 'music';
+      if (this.slug === 'movies') params['filter[type][eq]'] = 'movie';
+      if (this.slug === 'news') params['filter[type][eq]'] = 'news';
       if (this.slug === 'kids') params['filter[made_for_kids][eq]'] = 1;
       if (this.slug === 'news') params.sort = '-date';
       return params;
     },
     categoryId() {
       let categoryId = SLUG_TO_CATEGORY_ID[this.slug]?.toString()
-      if (!categoryId) categoryId = this.slug
       return categoryId
     },
     title() {
