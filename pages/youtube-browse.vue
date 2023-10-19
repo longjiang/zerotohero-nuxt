@@ -86,6 +86,12 @@
         <hr class="mb-4" />
       </div> -->
       <!-- Add a search field -->
+
+      <div class="row mb-4">
+        <div class="col-sm-12">
+          <ChannelList :channels="channels.filter(c => c.l2 === this.$l2.id)" />
+        </div>
+      </div>
       <div class="row mb-4">
         <div class="col-sm-12 text-center">
           <div v-show="kidsOnly" class="mb-2">
@@ -163,7 +169,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import { languageLevels, LANGS_WITH_LEVELS, maxDifficultyByLevel, minDifficultyByLevel } from "@/lib/utils";
 
 export default {
@@ -200,6 +206,7 @@ export default {
   },
   computed: {
     ...mapState("shows", ["categories"]),
+    ...mapState("channels", ["channels"]),
     mediaSearchParams() {
       let params = {};
 
@@ -278,6 +285,9 @@ export default {
     },
   },
   methods: {
+    filterChannel(channels) {
+      return channels.filter(channel => channel.l2 === this.$l2.code);
+    },
     handleSearch($event) {
       this.$router.push({
         name: "youtube-browse",

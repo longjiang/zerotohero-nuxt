@@ -2080,5 +2080,7 @@
   "Lesson {0} (Part {1}) Vocabulary": "Lesson {0} (Part {1}) Vocabulary",
   "{level} Words": "{level} Words",
   "All HSK words on a big, interactive chart:": "All HSK words on a big, interactive chart:",
-  "Learn All Words in Lesson {num}": "Learn All Words in Lesson {num}"
+  "Learn All Words in Lesson {num}": "Learn All Words in Lesson {num}",
+  "{count} Subscribers": "{count} Subscribers",
+  "{count} Videos":   "{count} Videos"
 }

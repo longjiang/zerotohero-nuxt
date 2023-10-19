@@ -425,6 +425,7 @@ export default {
       if (!this.savedHitsLoaded) {
         this.$store.commit("savedHits/LOAD_SAVED_HITS");
       }
+      this.$store.dispatch("channels/fetchChannelsByLanguage", this.$l2.id);
       if (
         !(
           this.showsLoaded[this.$l2.code] &&
