@@ -76,6 +76,7 @@ export default {
   },
   computed: {
     mediaSearchParams() {
+
       let params = {}
       if (this.categoryId)
         params['filter[category][eq]'] = this.categoryId
@@ -83,12 +84,12 @@ export default {
       if (this.slug === 'movies') params['filter[type][eq]'] = 'movie';
       if (this.slug === 'news') params['filter[type][eq]'] = 'news';
       if (this.slug === 'kids') params['filter[made_for_kids][eq]'] = 1;
-      if (this.slug === 'news') params.sort = '-date';
+      if (this.slug === 'news' || this.categoryId === 25) params.sort = '-date'; // Sort news by date
       return params;
     },
     categoryId() {
-      let categoryId = SLUG_TO_CATEGORY_ID[this.slug]?.toString()
-      return categoryId
+      if (Number(this.slug) == this.slug)
+      return Number(this.slug)
     },
     title() {
       if (!this.slug) return "";
