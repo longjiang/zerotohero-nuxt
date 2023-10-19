@@ -246,11 +246,9 @@ export default {
         this.allTVShowsChecked = this.tvShowFilter === "all";
         this.allTalksChecked = this.talkFilter === "all";
         if (!this.allTVShowsChecked) {
-          this.checkSpecials();
           this.tvShowChecked = this.tvShowFilter;
         }
         if (!this.allTalksChecked) {
-          this.checkSpecials();
           this.talkChecked = this.talkFilter;
         }
       }
@@ -293,7 +291,6 @@ export default {
       this.talks = this.$store.state.shows.talks[this.$l2.code]
         ? this.$store.state.shows.talks[this.$l2.code]
         : undefined;
-      this.checkSpecials();
     }
   }
 };
