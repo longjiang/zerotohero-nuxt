@@ -193,19 +193,21 @@
             @newShow="newShow"
             @hasSubs="onHasSubs"
             @unavailable="unavailableVideos.push(video)"
-            :skin="$skin"
-            :video="video"
-            :generated="generated"
-            :checkSubs="checkSubsData"
-            :checkSaved="checkSavedData"
-            :view="view"
-            :showSubsEditing="showSubsEditing"
-            :showBadges="showBadges"
-            :showDate="showDate"
-            :showProgress="showProgress"
-            :showLanguage="multilingual"
-            :playlistId="playlistId"
-            :sort="sort"
+            v-bind="{
+              skin: $skin,
+              video,
+              generated,
+              checkSubs: checkSubsData,
+              checkSaved: checkSavedData,
+              view,
+              showSubsEditing,
+              showBadges,
+              showDate,
+              showProgress,
+              showLanguage: multilingual,
+              playlistId: playlistId ? playlistId : videos.map((v) => v.id).join(','), // If playlistId is not provided, use the ids of videos as an ad hoc playlist, so when the the user plays the videos, the next videos in the list are automatically queued up
+              sort,
+            }"
           >
             <template v-slot:footer>
               <slot name="footer" :video="video"></slot>

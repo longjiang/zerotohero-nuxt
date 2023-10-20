@@ -229,11 +229,15 @@ export default ({ app }, inject) => {
       }
     },
 
-    async getVideos({ l2Id, query = "", params = {} } = {}) {
+    async getVideos({ l2Id, query = "", params = {}, subs = false, tags = false } = {}) {
       // You can use either a query string or params object
       if (query) {
         params = parseQueryString(query);
       }
+      let fields = 'id,l2,title,youtube_id,tv_show,talk,date,lex_div,word_freq,difficulty,views,category,locale,duration,made_for_kids,views,likes,comments,type';
+      if (subs) fields += ',subs_l2';
+      if (tags) fields += ',tags';
+      params.fields = params.fields || fields;
       // No language filter is necessary since the table only has one language
       if (!this.youtubeVideosTableHasOnlyOneLanguage(l2Id)) {
         params['filter[l2][eq]'] = l2Id;

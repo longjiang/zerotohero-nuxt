@@ -134,7 +134,7 @@ export default {
       largeEpisodeCount: undefined,
       mountedDone: false,
       nextVideoCountDownSeconds: 8,
-      playlist: null,
+      playlist: undefined,
       randomEpisodeYouTubeId: undefined,
       savedToHistory: false,
       show: undefined,
@@ -260,6 +260,20 @@ export default {
           });
         } else if (this.$route.query.p === "recommended") {
           this.handleRecommendedVideosPlaylist();
+        } else {
+          // The playlist querystring value is a comma-separated list of ids passed from YouTubeVideoList (so we can play the next videos from the list)
+          let ids = this.$route.query.p.split(",");
+          
+          let videos = await this.$directus.getVideos({
+            l2Id: this.$l2.id,
+            query: `filter[id][in]=${ids.join(",")}`,
+          });
+          playlist = {
+            l2: this.$l2.id,
+            id: this.$route.query.p,
+            title: "Playlist",
+            videos
+          };
         }
         if (playlist) {
           this.playlist = playlist;
