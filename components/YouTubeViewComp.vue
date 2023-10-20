@@ -390,7 +390,7 @@ export default {
       }
     },
     async setEpisodesAndEpisodeCount() {
-      let limit = 500;
+      let limit = 5;
       let episodeCount = await this.getEpisodeCount();
       if (episodeCount)
         this.$store.dispatch("shows/setEpisodeCount", {
