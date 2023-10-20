@@ -312,15 +312,8 @@ export const actions = {
     const showType = collection === "tvShows" ? "tv_show" : "talk";
 
     filters[`filter[${showType}][eq]`] = showId;
-
-    let fields = "id,title,l2,youtube_id,date,tv_show,talk,channel_id,lex_div,word_freq,difficulty";
-
-    if (LANGS_WITH_CONTENT.includes(l2.code))
-      fields +=
-        ",views,tags,category,locale,duration,made_for_kids,views,likes,comments";
   
     let params = {
-      fields,
       'filter[l2][eq]': l2.id,
       ...filters,
       sort,
