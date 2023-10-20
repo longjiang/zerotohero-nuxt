@@ -201,6 +201,7 @@ export default {
         { value: "-date", text: "Sort by Date Uploaded" },
         { value: "-views", text: "Sort by Views" },
         { value: "title", text: "Sort by Title" },
+        { value: "difficulty", text: "Sort by Difficulty" },
       ],
     };
   },
