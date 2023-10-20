@@ -215,7 +215,7 @@ export default {
         params["filter[category][eq]"] = this.category;
       }
       if (this.level !== "all") {
-        params["filter[difficulty][between]"] = minDifficultyByLevel(this.level) + ',' + maxDifficultyByLevel(this.level);
+        params["filter[difficulty][between]"] = minDifficultyByLevel(this.level, this.$l2.code) + ',' + maxDifficultyByLevel(this.level, this.$l2.code);
       }
       if (this.keyword) {
         const words = this.keyword.split(" ");

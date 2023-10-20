@@ -176,11 +176,7 @@
       modal-class="safe-padding-top mt-4"
       size="md"
       :title="
-        playlist
-          ? $t('Playlist: {title}', { title: playlist.title })
-          : show
-          ? show.title
-          : $t('Video Information')
+        video.title
       "
     >
       <div class="video-info-inner">
@@ -207,7 +203,8 @@
             />
           </div>
         </div>
-        <VideoDetails :video="video" ref="videoDetails" />
+        <ChannelCard :channel_id="video.channel_id" class="mb-2"/>
+        <VideoDetails :video="video" ref="videoDetails" :showTitle="false" />
         <VideoAdmin
           :video="video"
           ref="videoAdmin1"

@@ -10,7 +10,7 @@
             :key="channel.channel_id"
             :class="colClasses"
           >
-            <ChannelCard v-bind="channel" />
+            <ChannelCard :channel_id="channel.channel_id" />
           </div>
         </div>
         <router-link :to="{name: 'youtube-channels'}" v-if="collapse" class="btn btn-outline-success w-100">
@@ -87,9 +87,8 @@ export default {
   },
   computed: {
     colClasses() {
-      let classes = { };
-      classes = {
-        ...classes,
+      let classes = {
+        'pb-4': true,
         "col-12": this.params.xs,
         "col-6": this.params.sm,
         "col-4": this.params.md,

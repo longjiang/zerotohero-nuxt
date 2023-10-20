@@ -32,20 +32,40 @@
 import { formatK } from "@/lib/utils";
 export default {
   props: {
-    date: String,
-    description: String,
-    thumbnail: String,
-    title: String,
     channel_id: String,
-    custom_url: String,
-    country: String,
-    views: Number,
-    video_count: Number,
-    subscribers: Number,
   },
   methods: {
     formatK,
   },
+  data() {
+    return {
+      date: null,
+      description: null,
+      thumbnail: null,
+      title: null,
+      custom_url: null,
+      country: null,
+      views: null,
+      video_count: null,
+      subscribers: null,
+    };
+  },
+  mounted() {
+    const channel = this.$store.getters["channels/getChannelbyChannelIdAndL2Id"](
+      this.channel_id, this.$l2.id
+    );
+    if (channel) {
+      this.date = channel.date;
+      this.description = channel.description;
+      this.thumbnail = channel.thumbnail;
+      this.title = channel.title;
+      this.custom_url = channel.custom_url;
+      this.country = channel.country;
+      this.views = channel.views;
+      this.video_count = channel.video_count;
+      this.subscribers = channel.subscribers;
+    }
+  }
 };
 </script>
 
@@ -61,11 +81,6 @@ export default {
   align-items: flex-start;
   border-radius: 5px;
   overflow: hidden;
-  padding: 1rem;
-  /* Add a filter to make it a bit darker on hover */
-  &:hover {
-    background: #88888822;
-  }
 }
 
 .channel-thumbnail {

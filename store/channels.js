@@ -55,6 +55,10 @@ export const getters = {
     return state.channels.find((channel) => channel.channel_id === channelId);
   },
 
+  getChannelbyChannelIdAndL2Id: (state) => (channelId, l2Id) => {
+    return state.channels.find((channel) => channel.channel_id === channelId && channel.l2 === l2Id);
+  },
+
   getChannelsSortedBySubscribers: (state) => {
     return state.channels.slice().sort((a, b) => b.subscribers - a.subscribers); // Sort in descending order
   },

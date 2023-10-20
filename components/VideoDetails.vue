@@ -1,7 +1,7 @@
 <template>
   <div class="video-details">
     <h5
-      v-if="video.title"
+      v-if="showTitle && video.title"
       :class="{
         h5: video.title.length > 30,
         h5: video.title.length > 60,
@@ -113,6 +113,10 @@ export default {
     video: {
       type: Object,
       required: true,
+    },
+    showTitle: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

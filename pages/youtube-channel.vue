@@ -22,8 +22,8 @@
       <div class="row" v-if="!$adminMode && channel">
         <div class="col-12">
           <!-- flex box align center -->
-          <div class="d-flex align-items-center">
-            <ChannelCard v-bind="channel" style="margin: 2rem auto" />
+          <div class="d-flex align-items-center justify-content-center mt-3 mb-5">
+            <ChannelCard :channel_id="channel.channel_id" />
           </div>
           <p style="opacity: 0.75; line-height: 1.75; font-size: 0.8rem" class="text-center">{{ channel.description }}</p>
           <MediaSearchResults
@@ -34,7 +34,7 @@
               noVideosMessage: 'No videos found in this channel.',
               limit: 12,
             }"
-            class="my-5"
+            class="my-3"
           />
         </div>
       </div>
