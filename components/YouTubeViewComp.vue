@@ -239,10 +239,11 @@ export default {
           this.$tb("This is a {level} level video.", { level: levelName }),
           {
             position: "top-center",
-            className: `toasted toasted-primary default bg-level${l} safe-toast safe-padding-top`,
+            className: `bg-level${l}`,
+            containerClass: 'safe-padding-top',
             iconPack: "custom-class",
             icon: "fa-solid fa-signal-bars mr-1",
-            duration: 5000,
+            duration: 50000,
           }
         );
       }
