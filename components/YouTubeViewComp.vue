@@ -243,7 +243,7 @@ export default {
             containerClass: 'safe-padding-top',
             iconPack: "custom-class",
             icon: "fa-solid fa-signal-bars mr-1",
-            duration: 50000,
+            duration: 5000,
           }
         );
       }
