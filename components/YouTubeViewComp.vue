@@ -81,7 +81,7 @@ import {
   uniqueByValue,
   toCamelCase,
   parseDuration,
-  proxy
+  proxy,
 } from "@/lib/utils";
 
 export default {
@@ -115,10 +115,6 @@ export default {
     starttime: {
       default: 0,
     },
-    playlist: {
-      type: Object,
-      required: false,
-    },
     showQuiz: {
       type: Boolean,
       default: false,
@@ -126,31 +122,32 @@ export default {
   },
   data() {
     return {
-      nextVideoCountDownSeconds: 8,
+      checkingSubs: false,
       currentTime: 0,
       episodes: [],
+      episodeSort: "title",
       extrasLoaded: false,
       fetchDone: false,
+      l1Locale: undefined,
+      l2Locale: undefined,
+      l2Name: undefined,
+      largeEpisodeCount: undefined,
       mountedDone: false,
+      nextVideoCountDownSeconds: 8,
+      playlist: null,
       randomEpisodeYouTubeId: undefined,
+      savedToHistory: false,
       show: undefined,
       showType: undefined,
       startLineIndex: 0,
       video: undefined,
-      largeEpisodeCount: undefined,
-      checkingSubs: false,
-      l1Locale: undefined,
-      l2Locale: undefined,
-      l2Name: undefined,
-      episodeSort: "title",
-      savedToHistory: false
     };
   },
   computed: {
     ...mapState("stats", ["stats"]),
-    ...mapState("shows", ["showsLoaded"]),
+    ...mapState("shows", ["showsLoaded", "recommendedVideosLoaded", "recommendedVideos"]),
     collection() {
-      return this.showType === "tv_show" ? "tvShows" : "talks"
+      return this.showType === "tv_show" ? "tvShows" : "talks";
     },
     currentTimeEvery10Seconds() {
       let t = Math.floor(this.currentTime / 10) * 10;
@@ -223,49 +220,8 @@ export default {
   async mounted() {
     this.episodeSort = this.$route.query.sort || "title";
     await this.loadVideo(this.youtube_id, this.directus_id);
-    // Get the playlist from the store based on the query string
-    // Check if it's a number
-    let playlist
-    if (this.$route.query.p) {
-      if (!isNaN(this.$route.query.p)) {
-        const playlistId = Number(this.$route.query.p);
-        playlist = await this.$store.dispatch("playlists/fetchPlaylist", {
-          l2: this.$l2,
-          id: playlistId,
-        });
-      } else if (this.$route.query.p === "recommended") {
-        if (this.recommendedVideosLoaded[this.$l2.code]) this.loadRecommendedVideosAsPlaylist();
-        this.unsubscribe = this.$store.subscribe((mutation, state) => {
-          if (mutation.type.startsWith("shows/ADD_RECOMMENDED_VIDEOS")) {
-            this.loadRecommendedVideosAsPlaylist();
-          }
-        });
-      }
-      if (playlist) {
-        this.playlist = playlist;
-      }
-    }
-    // If the playlist is 'recommended', and this is near last video in the playlist, we load more recommended videos
-    if (this.playlist?.id === "recommended" && this.itemIndex === this.items.length - 3) {
-      this.$store.dispatch("shows/loadRecommendedVideos", {
-        userId: this.$auth.user?.id,
-        l2: this.$l2,
-      });
-    }
-    if (this.video?.difficulty) {
-      const l = levelByDifficulty(this.video.difficulty, this.$l2.code)
-      const levelName = level(l, this.$l2).name;
-      this.$toast.show(
-        this.$tb("This is a {level} level video.", { level: levelName }),
-        {
-          position: "top-center",
-          className: `toasted toasted-primary default bg-level${l}`,
-          iconPack: 'custom-class',
-          icon: 'fa-solid fa-signal-bars mr-1',
-          duration: 5000,
-        }
-      );
-    }
+    await this.handlePlaylistFromQueryString();
+    this.showDifficultyToast();
   },
   filters: {
     formatDuration(duration) {
@@ -275,6 +231,57 @@ export default {
     },
   },
   methods: {
+    showDifficultyToast() {
+      if (this.video?.difficulty) {
+        const l = levelByDifficulty(this.video.difficulty, this.$l2.code);
+        const levelName = level(l, this.$l2).name;
+        this.$toast.show(
+          this.$tb("This is a {level} level video.", { level: levelName }),
+          {
+            position: "top-center",
+            className: `toasted toasted-primary default bg-level${l}`,
+            iconPack: "custom-class",
+            icon: "fa-solid fa-signal-bars mr-1",
+            duration: 5000,
+          }
+        );
+      }
+    },
+    async handlePlaylistFromQueryString() {
+      // Get the playlist from the store based on the query string
+      if (this.$route.query.p) {
+        let playlist;
+        // Check if the playlist ID is a number
+        if (!isNaN(this.$route.query.p)) {
+          const playlistId = Number(this.$route.query.p);
+          playlist = await this.$store.dispatch("playlists/fetchPlaylist", {
+            l2: this.$l2,
+            id: playlistId,
+          });
+        } else if (this.$route.query.p === "recommended") {
+          this.handleRecommendedVideosPlaylist();
+        }
+        if (playlist) {
+          this.playlist = playlist;
+        }
+      }
+    },
+    async handleRecommendedVideosPlaylist() {
+      if (this.recommendedVideosLoaded[this.$l2.code])
+        this.loadRecommendedVideosAsPlaylist();
+      this.unsubscribe = this.$store.subscribe((mutation, state) => {
+        if (mutation.type.startsWith("shows/ADD_RECOMMENDED_VIDEOS")) {
+          this.loadRecommendedVideosAsPlaylist();
+        }
+      });
+      // If the playlist is 'recommended', and this is near last video in the playlist, we load more recommended videos
+      if (this.itemIndex === this.items.length - 3) {
+        this.$store.dispatch("shows/loadRecommendedVideos", {
+          userId: this.$auth.user?.id,
+          l2: this.$l2,
+        });
+      }
+    },
     loadRecommendedVideosAsPlaylist() {
       if (!this.recommendedVideosLoaded[this.$l2.code]) return;
       let playlist = {
@@ -324,12 +331,12 @@ export default {
       this.checkingSubs = false;
     },
     async loadTokenizationServerCache(video) {
-      if (!video?.id) return
+      if (!video?.id) return;
       let url = `${PYTHON_SERVER}lemmatize-video?video_id=${video.id}&lang=${this.$l2.code}`;
       const data = await proxy(url);
       // Check if data is an object with content
       if (data && typeof data === "object" && Object.keys(data).length > 0) {
-        const dictionary = await this.$getDictionary()
+        const dictionary = await this.$getDictionary();
         dictionary.loadTokenizationServerCache(data);
       }
     },
@@ -391,7 +398,6 @@ export default {
      * @param {number} limit - The number of episodes to get
      */
     async getEpisodes(episodeCount, limit) {
-
       // We assume that this is a LONG show with hundreds or even thousands of episodes (like News, Music, or some TV station show
       // Let's grab the videos immediately PRIOR and AFTER the current video, so the user can eventually paginate through all the episodes.
       // If sort is '-date', the user wants to see contents that are around the same date.
@@ -415,9 +421,8 @@ export default {
         filters,
         forceRefresh: this.$adminMode,
         limit,
-        sort: this.episodeSort
+        sort: this.episodeSort,
       });
-
 
       // Make sure this video is included in the collection
       videos = [this.video, ...videos];
@@ -473,7 +478,7 @@ export default {
         // We assume the video's youtube_id, if present, is always correct.
         // So if this video's youtube_id does not match the youtube_id, we look for the video with the youtube_id in our database.
         if (youtube_id && video?.youtube_id !== youtube_id) {
-          video = null
+          video = null;
         }
       }
       // If we still don't have a video, we look for the video with the youtube_id in our database.
@@ -646,7 +651,7 @@ export default {
             id: this.previousItem.id,
             lesson: this.previousItem.lesson,
             p: this.playlist?.id,
-            sort: this.episodeSort
+            sort: this.episodeSort,
           },
         });
     },
@@ -662,7 +667,7 @@ export default {
             id: this.nextItem.id,
             lesson: this.nextItem.lesson,
             p: this.playlist?.id,
-            sort: this.episodeSort
+            sort: this.episodeSort,
           },
         });
     },

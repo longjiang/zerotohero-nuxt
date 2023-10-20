@@ -46,7 +46,6 @@
           initialMode: mode,
           landscape,
           starttime,
-          playlist,
           showQuiz
         }"
         @updateLayout="onUpdateLayout"
@@ -93,11 +92,9 @@ export default {
       starttime: 0,
       video: undefined,
       duration: undefined,
-      playlist: undefined,
     };
   },
   computed: {
-    ...mapState("shows", ["recommendedVideosLoaded", "recommendedVideos"]),
     showQuiz() {
       return this.$l2Settings.showQuiz;
     },
