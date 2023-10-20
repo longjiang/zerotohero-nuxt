@@ -223,6 +223,28 @@ export default {
   async mounted() {
     this.episodeSort = this.$route.query.sort || "title";
     await this.loadVideo(this.youtube_id, this.directus_id);
+    // Get the playlist from the store based on the query string
+    // Check if it's a number
+    let playlist
+    if (this.$route.query.p) {
+      if (!isNaN(this.$route.query.p)) {
+        const playlistId = Number(this.$route.query.p);
+        playlist = await this.$store.dispatch("playlists/fetchPlaylist", {
+          l2: this.$l2,
+          id: playlistId,
+        });
+      } else if (this.$route.query.p === "recommended") {
+        if (this.recommendedVideosLoaded[this.$l2.code]) this.loadRecommendedVideosAsPlaylist();
+        this.unsubscribe = this.$store.subscribe((mutation, state) => {
+          if (mutation.type.startsWith("shows/ADD_RECOMMENDED_VIDEOS")) {
+            this.loadRecommendedVideosAsPlaylist();
+          }
+        });
+      }
+      if (playlist) {
+        this.playlist = playlist;
+      }
+    }
     // If the playlist is 'recommended', and this is near last video in the playlist, we load more recommended videos
     if (this.playlist?.id === "recommended" && this.itemIndex === this.items.length - 3) {
       this.$store.dispatch("shows/loadRecommendedVideos", {
@@ -253,6 +275,16 @@ export default {
     },
   },
   methods: {
+    loadRecommendedVideosAsPlaylist() {
+      if (!this.recommendedVideosLoaded[this.$l2.code]) return;
+      let playlist = {
+        l2: this.$l2.id,
+        id: "recommended",
+        title: "Recommended Videos",
+        videos: this.recommendedVideos[this.$l2.code],
+      };
+      this.playlist = playlist;
+    },
     /**
      * Streamline the video loading process.
      *

@@ -169,28 +169,6 @@ export default {
   },
   async created() {
     this.starttime = this.$route.query.t ? Number(this.$route.query.t) : 0;
-    // Get the playlist from the store based on the query string
-    // Check if it's a number
-    let playlist
-    if (this.$route.query.p) {
-      if (!isNaN(this.$route.query.p)) {
-        const playlistId = Number(this.$route.query.p);
-        playlist = await this.$store.dispatch("playlists/fetchPlaylist", {
-          l2: this.$l2,
-          id: playlistId,
-        });
-      } else if (this.$route.query.p === "recommended") {
-        if (this.recommendedVideosLoaded[this.$l2.code]) this.loadRecommendedVideosAsPlaylist();
-        this.unsubscribe = this.$store.subscribe((mutation, state) => {
-          if (mutation.type.startsWith("shows/ADD_RECOMMENDED_VIDEOS")) {
-            this.loadRecommendedVideosAsPlaylist();
-          }
-        });
-      }
-      if (playlist) {
-        this.playlist = playlist;
-      }
-    }
   },
   beforeDestroy() {
     if (this.unsubscribe) this.unsubscribe();
@@ -206,16 +184,6 @@ export default {
     });
   },
   methods: {
-    loadRecommendedVideosAsPlaylist() {
-      if (!this.recommendedVideosLoaded[this.$l2.code]) return;
-      let playlist = {
-        l2: this.$l2.id,
-        id: "recommended",
-        title: "Recommended Videos",
-        videos: this.recommendedVideos[this.$l2.code],
-      };
-      this.playlist = playlist;
-    },
     onVideoLoaded({ video, duration }) {
       this.video = video;
       this.duration = duration;
