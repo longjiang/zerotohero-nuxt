@@ -19,12 +19,35 @@
       <div class="container text-center my-5" v-if="!channel">
         <Loader message="Loading..." :sticky="true" />
       </div>
-      <div class="row" v-if="!$adminMode && channel">
+      <div class="row mt-3 mb-5" v-if="channel">
         <div class="col-12">
-          <!-- flex box align center -->
-          <div class="d-flex align-items-center justify-content-center mt-3 mb-5">
+          <div class="d-flex align-items-center justify-content-center">
             <ChannelCard :channel_id="channel.channel_id" />
           </div>
+          <div class="mt-3 text-center small" style="opacity: 0.7" v-if="$adminMode">Channel ID: {{ channel_id }}</div>
+        </div>
+      </div>
+      <div class="row" v-if="$adminMode">
+        
+        <div class="col-sm-12" >
+          <div class="text-center">
+            <b-button variant="outline-success" @click="showPlaylists = !showPlaylists">{{ !showPlaylists ? 'Show' : 'Hide' }} Playlists</b-button>
+            <b-button
+              variant="outline-secondary"
+              @click="forceRefresh"
+              v-if="showPlaylists"
+            >
+              <i class="fa fa-sync-alt mr-1"></i>
+              Force Refresh
+            </b-button>
+          </div>
+          <template v-if="!loading && showPlaylists">
+            <YouTubePlaylists :playlists="playlists" :skin="$skin" />
+          </template>
+        </div>
+      </div>
+      <div class="row" v-if="channel">
+        <div class="col-12">
           <p style="opacity: 0.75; line-height: 1.75; font-size: 0.8rem" class="text-center">{{ channel.description }}</p>
           <MediaSearchResults
             v-bind="{
@@ -36,43 +59,6 @@
             }"
             class="my-3"
           />
-        </div>
-      </div>
-      <div class="row" v-if="$adminMode">
-        <div class="col-sm-12">
-          <h3 class="mb-4 text-center">
-            <Annotate :buttons="true" v-if="title && title !== 'undefined'">
-              <span>{{ title }}</span>
-            </Annotate>
-            <span v-else>Playlists from the Channel</span>
-            <span v-if="$adminMode">Channel ID: {{ channel_id }}</span>
-          </h3>
-          <div class="text-center" v-if="$adminMode">
-            <b-button
-              class="btn-small btn-primary d-inline-block"
-              @click="forceRefresh"
-            >
-              <i class="fa fa-sync-alt mr-1"></i>
-              Force Refresh
-            </b-button>
-            <router-link
-              class="ml-2"
-              :to="{
-                name: 'youtube-browse',
-                params: {
-                  topic: 'all',
-                  level: 'all',
-                  start: 0,
-                  keyword: `channel:${channel_id}`,
-                },
-              }"
-            >
-              Saved Videos
-            </router-link>
-          </div>
-          <template v-if="!loading">
-            <YouTubePlaylists :playlists="playlists" :skin="$skin" />
-          </template>
         </div>
       </div>
     </div>
@@ -99,6 +85,7 @@ export default {
       loading: true,
       saved: false,
       channel: null,
+      showPlaylists: false
     };
   },
   mounted() {
