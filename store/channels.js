@@ -30,7 +30,7 @@ export const actions = {
         "filter[l2][eq]": l2_id,
         "sort": "-video_count",
         "timestamp": Date.now(),
-        limit: 500,
+        limit: -1,
       });
       if (channels?.length > 0) {
         commit("SET_CHANNELS", { channels, l2_id });

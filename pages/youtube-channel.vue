@@ -111,7 +111,6 @@ export default {
       this.loadChannelPlaylists({ forceRefresh: true });
     },
     loadChannel() {
-      console.log("loadChannel", this.channel_id);
       this.channel = this.$store.getters["channels/getChannelbyChannelId"](
         this.channel_id
       );
