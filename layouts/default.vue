@@ -1,11 +1,14 @@
 <template>
   <div id="zerotohero" :class="classes" :fullscreen="fullscreen">
     <MyLayout :wide="wide">
+      <!-- Keep the epub reader alive so the user doesn't lose his ePub -->
       <Nuxt
         :class="{
           'nuxt-content': true,
           [`skin-${$skin}`]: true,
         }"
+        keep-alive
+        :keep-alive-props="{ include: ['pages/epub.vue'] }"
       />
     </MyLayout>
     <i class="fas fa-star star-animation"></i>
@@ -80,7 +83,9 @@ export default {
           this.$route.params.l1 &&
           this.$route.params.l2 &&
           this.$l1 &&
-          this.$l2 ? true : false,
+          this.$l2
+            ? true
+            : false,
         "zerotohero-electron": this.isElectron,
         "zerotohero-extension": this.isExtension,
         [`route-${this.$route.name}`]: true,
@@ -97,8 +102,8 @@ export default {
     // Set client environment variables, like whether the user is using the app in a browser or in Electron
     this.setClientEnvironment();
 
-    // Subscribe to Vuex mutations, such as when the user's time on site is updated, 
-    // or when the user's progress is updated, when the shows are loaded 
+    // Subscribe to Vuex mutations, such as when the user's time on site is updated,
+    // or when the user's progress is updated, when the shows are loaded
     this.subscribeToVuexMutations();
 
     // Fetch the user's data from the server, such as their subscription status,
@@ -110,7 +115,7 @@ export default {
     // If the landing page's url has l1 and l2
     if (this.$l1 && this.$l2) {
       this.onLanguageChange();
-    } 
+    }
   },
   beforeDestroy() {
     // you may call unsubscribe to stop the subscription
@@ -140,12 +145,12 @@ export default {
         ([hid, src]) => ({ hid, src, body: true })
       );
 
-      const bodyClasses = this.isExtension ? "chrome-extension" : '';
+      const bodyClasses = this.isExtension ? "chrome-extension" : "";
 
       return {
         script: scripts,
         bodyAttrs: {
-          class: bodyClasses
+          class: bodyClasses,
         },
       };
     }
@@ -174,7 +179,6 @@ export default {
     },
   },
   methods: {
-
     // Fetch the user's data from the server, such as their subscription status,
     async getUserDataAndSubscription() {
       if (!this.historyLoaded) {
@@ -214,10 +218,7 @@ export default {
       this.isExtension = !!window?.chrome?.extension;
     },
     updateL2SettingsClasses() {
-      if (
-        this.$l1 &&
-        this.$l2
-      ) {
+      if (this.$l1 && this.$l2) {
         this.$l1, this.$l2;
         let l2SettingsClasses = {};
         if (this.$l2Settings) {
@@ -244,8 +245,8 @@ export default {
         this.classes;
       }
     },
-    // Subscribe to Vuex mutations, such as when the user's time on site is updated, 
-    // or when the user's progress is updated, when the shows are loaded 
+    // Subscribe to Vuex mutations, such as when the user's time on site is updated,
+    // or when the user's progress is updated, when the shows are loaded
     subscribeToVuexMutations() {
       this.unsubscribe = this.$store.subscribe((mutation) => {
         if (
@@ -379,7 +380,7 @@ export default {
       this.wide = wide();
     },
     async updatei18n() {
-      const locale = this.$l1?.code || this.$browserLanguage
+      const locale = this.$l1?.code || this.$browserLanguage;
       if (locale) {
         this.$i18n.setLocale(locale);
         const messages = await axios.get(`/locales/${locale}.json`);
@@ -389,9 +390,7 @@ export default {
     async onLanguageChange() {
       // Set the locale
       if (this.$l1) this.updatei18n();
-      await this.$store.dispatch(
-        "watchHistory/load", this.$l2.id
-      );
+      await this.$store.dispatch("watchHistory/load", this.$l2.id);
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
       if (this.$l1 && this.$l2) {
         this.loadLanguageSpecificData(); // This will trigger updateL2SettingsClasses()
