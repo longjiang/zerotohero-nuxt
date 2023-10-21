@@ -2082,5 +2082,7 @@
   "All HSK words on a big, interactive chart:": "All HSK words on a big, interactive chart:",
   "Learn All Words in Lesson {num}": "Learn All Words in Lesson {num}",
   "{count} Subscribers": "{count} Subscribers",
-  "{count} Videos":   "{count} Videos"
+  "{count} Videos":   "{count} Videos",
+  "IELTS":   "IELTS",
+  "CEFR":   "CEFR"
 }

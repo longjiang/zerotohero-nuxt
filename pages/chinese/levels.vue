@@ -24,7 +24,7 @@
         <div class="col-sm-12">
           <div>
             <!-- <Sale class="mb-4" /> -->
-            <h3 class="text-center">{{ $t('Browse Words by {level} Courses', { level: l2LevelName($l2.code) }) }} </h3>
+            <h3 class="text-center">{{ $t('Browse Words by {level} Courses', { level: $t(l2LevelName($l2.code)) }) }} </h3>
             <p class="text-center">
               {{ $t('Each tiny square represents a word in the {level} curriculum.', { level: l2LevelName($l2.code) }) }}
             </p>

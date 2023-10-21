@@ -42,7 +42,7 @@
               class="link-unstyled"
             >
               <h4 class="page-title text-center mb-4" v-if="method">
-                <b :data-level="args[0]" class="mr-1">{{ l2LevelNameByLevel($l2, args[0]) }}</b>
+                <b :data-level="args[0]" class="mr-1">{{ $t(l2LevelName($l2.code)) }} {{ args[0] }}</b>
                 <template v-if="args[1] && args[2]">{{ $t("Lesson {0} (Part {1}) Vocabulary", { 0: args[1], 1: args[2] }) }}</template>
                 <template v-else-if="args[1]">{{ $t("Lesson {0} Vocabulary", { 0: args[1] }) }}</template>
                 <template v-else>{{ $t("Vocabulary") }}</template>
@@ -174,7 +174,7 @@
 
 <script>
 import { ContainerQuery } from "vue-container-query";
-import { l2LevelNameByLevel } from "@/lib/utils";
+import { l2LevelNameByLevel, l2LevelName } from "@/lib/utils";
 
 export default {
   components: {
@@ -202,6 +202,7 @@ export default {
     this.route();
   },
   methods: {
+    l2LevelName,
     l2LevelNameByLevel,
     saveAllClick() {
       let wordList = this.$refs.wordList;
