@@ -12,7 +12,7 @@ class WiktionaryCsvDictionary extends BaseDictionary {
     this.useLocal = [ "eng-zho" ], // Load locally rather than from server
     this.indexDbVerByLang = {
       fra: '2.18.0',
-      eng: '2.18.0',
+      eng: '2.27.0',
       spa: '2.18.0',
       est: '2.18.0',
     };
