@@ -263,12 +263,14 @@ export default {
           this.handleRecommendedVideosPlaylist();
         } else {
           // The playlist querystring value is a comma-separated list of ids passed from YouTubeVideoList (so we can play the next videos from the list)
-          let ids = this.$route.query.p.split(",");
+          let ids = this.$route.query.p.split(",").map((id) => Number(id));
           
           let videos = await this.$directus.getVideos({
             l2Id: this.$l2.id,
             query: `filter[id][in]=${ids.join(",")}`,
           });
+          // Match the order of the videos in the playlist with the order of the ids in the query string
+          videos = videos.sort((a, b) => ids.indexOf(a.id) - ids.indexOf(b.id));
           playlist = {
             l2: this.$l2.id,
             id: this.$route.query.p,
@@ -427,6 +429,9 @@ export default {
         }
         if (this.episodeSort === "-views") {
           filters["filter[views][lt]"] = this.video.views;
+        }
+        if (this.episodeSort === "difficulty") {
+          filters["filter[difficulty][gt]"] = this.video.difficulty;
         }
       }
       let videos = await this.$store.dispatch("shows/getEpisodesFromServer", {
