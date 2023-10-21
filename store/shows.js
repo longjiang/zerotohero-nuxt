@@ -70,19 +70,20 @@ const normalizeDifficulty = (video) => {
 
 export const fetchRecommendedVideos = async (userId, l2, level, preferredCategories, start, limit, excludeIds) => {
   try {
-    let parmas = {
+    let params = {
       l2: l2.code,
       limit,
       start,
       made_for_kids: 0,
     };
-    if (level) parmas.level = level;
-    if (userId) parmas.user_id = userId;
-    if (preferredCategories) parmas.preferred_categories = preferredCategories.join(',');
-    if (excludeIds) parmas.exclude_ids = excludeIds.join(',');
+    if (level) params.level = level;
+    if (userId) params.user_id = userId;
+    if (preferredCategories) params.preferred_categories = preferredCategories.join(',');
+    if (excludeIds) params.exclude_ids = excludeIds.join(',');
+    params.timestamp = Date.now(); // We don't want to cache this, otherwise when the user refreshes they will get the same videos
     // unset params with empty values
-    Object.keys(parmas).forEach((key) => parmas[key] === undefined && delete parmas[key]);
-    const queryString = Object.keys(parmas).map((key) => key + '=' + parmas[key]).join('&');
+    Object.keys(params).forEach((key) => params[key] === undefined && delete params[key]);
+    const queryString = Object.keys(params).map((key) => key + '=' + params[key]).join('&');
     let res = await axios(`${PYTHON_SERVER}recommend-videos?${queryString}`);
     let videos = res.data;
     if (typeof videos !== "string") {
