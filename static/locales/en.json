@@ -2083,6 +2083,8 @@
   "Learn All Words in Lesson {num}": "Learn All Words in Lesson {num}",
   "{count} Subscribers": "{count} Subscribers",
   "{count} Videos":   "{count} Videos",
-  "IELTS":   "IELTS",
-  "CEFR":   "CEFR"
+  "IELTS": "IELTS",
+  "CEFR": "CEFR",
+  "Sort by Difficulty": "Sort by Difficulty",
+  "See All Channels": "See All Channels"
 }

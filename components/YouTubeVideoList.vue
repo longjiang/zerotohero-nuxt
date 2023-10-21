@@ -205,7 +205,7 @@
               showDate,
               showProgress,
               showLanguage: multilingual,
-              playlistId: playlistId ? playlistId : videos.map((v) => v.id).join(','), // If playlistId is not provided, use the ids of videos as an ad hoc playlist, so when the the user plays the videos, the next videos in the list are automatically queued up
+              playlistId: playlistId ? playlistId : getAdHocPlaylistId(video.id), // If playlistId is not provided, use the ids of videos as an ad hoc playlist, so when the the user plays the videos, the next videos in the list are automatically queued up
               sort,
             }"
           >
@@ -227,7 +227,7 @@ import {
   timeout,
   unique,
   uniqueByValue,
-  normalizeStylizedNumbersInText
+  normalizeStylizedNumbersInText,
 } from "@/lib/utils";
 import { Drag, Drop } from "vue-drag-drop";
 import { ContainerQuery } from "vue-container-query";
@@ -435,12 +435,74 @@ export default {
     if (this.checkSubs) this.checkInfo();
   },
   methods: {
+    /**
+     * Use a comma-separated list of video ids as an ad hoc playlist, so when the the user plays the videos, the next videos in the list are automatically queued up
+     * @param {string} videoId The video id of the video to be played first, the rest of the ids are the items around it
+     */
+    getAdHocPlaylistId(videoId) {
+      const MAX_LENGTH = 1000; // We have to keep the final output under 8,192 characters so most servers can handle it. A video id is less than 6 characters, so we can have about 1,000 video ids in the playlist.
+      const videoIds = this.filteredVideos.map((v) => v.id);
+
+      // Check if the given videoId is valid and exists in the list.
+      const videoIdIndex = videoIds.indexOf(videoId);
+      if (videoIdIndex === -1) {
+        // If the videoId is not found, you can handle it appropriately,
+        // like returning an empty string or the first video.
+        return videoIds[0] || "";
+      }
+
+      // Start building the playlist from the target videoId.
+      let playlist = videoId;
+
+      let leftIndex = videoIdIndex - 1;
+      let rightIndex = videoIdIndex + 1;
+
+      while (true) {
+        const leftId = leftIndex >= 0 ? videoIds[leftIndex] : null;
+        const rightId =
+          rightIndex < videoIds.length ? videoIds[rightIndex] : null;
+
+        const newLeftPlaylist = leftId ? leftId + "," + playlist : null;
+        const newRightPlaylist = rightId ? playlist + "," + rightId : null;
+
+        // Choose the direction (left or right) that would result in a shorter addition to the playlist,
+        // if both directions are possible. If not, choose the only available direction.
+        let direction;
+        if (newLeftPlaylist && newRightPlaylist) {
+          direction =
+            newLeftPlaylist.length < newRightPlaylist.length ? "left" : "right";
+        } else if (newLeftPlaylist) {
+          direction = "left";
+        } else if (newRightPlaylist) {
+          direction = "right";
+        } else {
+          break; // Neither direction is possible.
+        }
+
+        if (direction === "left" && newLeftPlaylist.length <= MAX_LENGTH) {
+          playlist = newLeftPlaylist;
+          leftIndex--;
+        } else if (
+          direction === "right" &&
+          newRightPlaylist.length <= MAX_LENGTH
+        ) {
+          playlist = newRightPlaylist;
+          rightIndex++;
+        } else {
+          break; // Adding in the chosen direction would exceed the max length.
+        }
+      }
+
+      return playlist;
+    },
     async checkInfo() {
       if (!this.videos?.length) return;
       // Only get the ones that are not already in the cache
       const youtube_ids = this.videos
         .map((v) => v.youtube_id)
-        .filter((id) => !this.cachedVideoMetaFromYouTube.find(v => v.id === id));
+        .filter(
+          (id) => !this.cachedVideoMetaFromYouTube.find((v) => v.id === id)
+        );
       if (youtube_ids.length) {
         const videoMetaFromYouTube = await YouTube.videosByApi(youtube_ids);
         if (videoMetaFromYouTube?.length)
@@ -457,7 +519,7 @@ export default {
         if (!info) continue;
         let date = info.snippet["publishedAt"] || null;
         let channelId = info.snippet["channelId"] || null;
-        let tags = info.snippet["tags"] ? info.snippet["tags"].join(',') : "";
+        let tags = info.snippet["tags"] ? info.snippet["tags"].join(",") : "";
         let category = info.snippet["categoryId"] || null;
         let locale = info.snippet["defaultAudioLanguage"] || null;
         let duration = info.contentDetails["duration"] || null;
@@ -619,8 +681,12 @@ export default {
       for (let file of files) {
         for (let videoIndex in this.$refs.youTubeVideoCard) {
           let card = this.$refs.youTubeVideoCard[videoIndex];
-          let numsInFileName = normalizeStylizedNumbersInText(file.name).match(/\d+/g);
-          let numsInVideoTitle = normalizeStylizedNumbersInText(card.video.title).match(/\d+/g);
+          let numsInFileName = normalizeStylizedNumbersInText(file.name).match(
+            /\d+/g
+          );
+          let numsInVideoTitle = normalizeStylizedNumbersInText(
+            card.video.title
+          ).match(/\d+/g);
           let found = false;
           if (numsInFileName && numsInVideoTitle) {
             for (let n of numsInFileName) {
