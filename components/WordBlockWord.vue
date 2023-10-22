@@ -1,6 +1,8 @@
 <template>
   <ruby :class="wordBlockClasses">
-    <rt v-if="phonetics">{{ phonetics }}</rt>{{ text }}
+    <rt v-if="showDefinition">{{ definition || '&nbsp;' }}</rt>
+    <rt v-if="phonetics">{{ phonetics }}</rt
+    >{{ text }}
   </ruby>
 </template>
 
@@ -52,7 +54,7 @@ export default {
     },
     wordBlockClasses() {
       let classes = {
-        'use-zoom': this.useZoom,
+        "use-zoom": this.useZoom,
         "word-block": true,
         "with-popup": this.usePopup,
         "with-quick-gloss": this.isSaved && this.definition,
