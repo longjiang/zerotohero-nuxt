@@ -13,7 +13,7 @@
         <span :class="wordBlockTextClasses">
           {{ text }}
         </span> </span
-      ><span class="word-block-text-byeonggi-wrapper">
+      ><span class="word-block-text-byeonggi-wrapper" v-if="hanAnnotation || (isSaved && definition)">
         <span
           v-if="hanAnnotation"
           class="word-block-text-byeonggi d-inline-block"
@@ -45,7 +45,7 @@
         ><span :class="wordBlockTextClasses">
           {{ segment.surface }}</span
         > </span
-      ><span class="word-block-text-byeonggi-wrapper">
+      ><span class="word-block-text-byeonggi-wrapper" v-if="hanAnnotation || (isSaved && definition)" >
         <span
           v-if="hanAnnotation"
           class="word-block-text-byeonggi d-inline-block"
