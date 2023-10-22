@@ -362,12 +362,11 @@ export default {
 
         // If we still don't have it, we get translated ones
         if (!(subs?.length > 0)) {
-          let tlang = this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code; // tlang
           subs = await YouTube.getTranslatedTranscript({
             youtube_id: video.youtube_id,
             locale: l2Locale,
             name: l2Name,
-            tlang,
+            tlangs: this.$l1.locales,
           });
         }
         if (subs && subs.length > 0) Vue.set(video, `subs_l1`, subs);
