@@ -1,7 +1,7 @@
 <template>
   <div class="youtube-view">
     <SocialHead
-      :title="`${video ? video.title + ' | ' : ''}Learn ${
+      :title="`${video?.title ? video?.title + ' | ' : ''}Learn ${
         $l2.name
       } with Language Player`"
       description="Study the transcript of this video with a popup dictionary"
