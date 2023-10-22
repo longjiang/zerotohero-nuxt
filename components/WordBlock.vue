@@ -1,12 +1,51 @@
 <template>
-  <component
-    :is="tag"
+  <span
     v-on="usePopup ? { click: wordBlockClick } : {}"
     @mouseenter="wordblockHover = true"
     @mouseleave="wordblockHover = false"
-    v-bind="attributes"
-    :animate="animate"
-  />
+  >
+    <component :is="tag" v-bind="attributes" :animate="animate" />
+    <b-modal
+      ref="popup-dictionary-modal"
+      size="sm"
+      centered
+      hide-footer
+      modal-class="safe-padding-top mt-4"
+      :title="$tb('Dictionary')"
+      :body-class="`popup-dictionary-modal-wrapper l2-${$l2.code}`"
+      @show="$nuxt.$emit('popupOpened')"
+      @hide="$nuxt.$emit('popupClosed')"
+    >
+      <div
+        v-if="
+          (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
+        "
+        class="popover-inner-hover-area"
+      >
+        {{ $t("Tap to show answer.") }}
+      </div>
+      <div
+        @mouseenter="tooltipHover = true"
+        @mouseleave="tooltipHover = false"
+        v-else
+        class="popover-inner-hover-area"
+      >
+        <WordBlockPopup
+          v-bind="{
+            text,
+            token,
+            words,
+            images,
+            lookupInProgress,
+            loadingImages,
+            context,
+            phraseObj: phraseItem(text),
+          }"
+          ref="popup"
+        />
+      </div>
+    </b-modal>
+  </span>
 </template>
 
 <script>
@@ -68,7 +107,11 @@ export default {
   computed: {
     ...mapState("savedWords", ["savedWords"]),
     tag() {
-      if  ((this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal) {
+      if (
+        (this.savedWord || this.savedPhrase) &&
+        this.quizMode &&
+        !this.reveal
+      ) {
         return "WordBlockQuiz";
       } else {
         return "WordBlockWord";
@@ -372,6 +415,7 @@ export default {
       return Klingon.fixTypos(text);
     },
     wordBlockClick(event) {
+      console.log({ event });
       if (this.quizMode) {
         this.reveal = !this.reveal;
       }

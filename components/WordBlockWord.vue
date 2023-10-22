@@ -2,13 +2,24 @@
   <span>
     <ruby
       :class="wordBlockClasses"
-      v-for="(segment, index) in mappedPronunciation || [{ type: 'kanji', surface: text, reading: phonetics }]"
+      v-for="(segment, index) in mappedPronunciation || [
+        { type: 'kanji', surface: text, reading: phonetics },
+      ]"
       :key="index"
     >
       <rt v-if="showDefinition && index === 0">{{ definition || "&nbsp;" }}</rt>
-      <rt v-if="segment.type === 'kanji' && hasKanji(segment.surface)">{{ segment.reading }}</rt
-      >{{ segment.surface }}
-    </ruby>
+      <rt v-if="segment.type === 'kanji' && hasKanji(segment.surface)">{{
+        segment.reading
+      }}</rt
+      >{{ segment.surface }}</ruby
+    ><span
+      v-if="hanAnnotation"
+      class="word-block-text-byeonggi d-inline-block"
+      v-html="hanAnnotation"
+    /><span
+      v-if="showQuickGloss && isSaved && definition"
+      class="word-block-text-quick-gloss"
+    >{{ definition }}</span>
   </span>
 </template>
 
@@ -70,6 +81,9 @@ export default {
       };
       if (this.pos) classes[`pos-${this.pos}`] = true;
       return classes;
+    },
+    showQuickGloss() {
+      return !this.showDefinition && this.$l2Settings.showQuickGloss;
     },
     showDefinition() {
       return this.$l2Settings.showDefinition;
@@ -206,7 +220,7 @@ export default {
 }
 
 .word-block-text-quick-gloss {
-  font-size: 0.8rem;
+  font-size: 50%;
   opacity: 0.8;
   font-weight: normal;
 }
@@ -254,11 +268,6 @@ export default {
       display: none;
     }
   }
-}
-
-.word-block-text-byeonggi,
-.word-block-text-quick-gloss {
-  display: none;
 }
 
 /* Shown on demand */
