@@ -1,62 +1,7 @@
 <template>
-  <span :class="wordBlockClasses">
-    <template v-if="!mappedPronunciation">
-      <span class="word-block-segment" :class="{ 'use-zoom': useZoom }">
-        <span
-          class="word-block-definition"
-          v-if="showDefinition"
-          v-html="definition || '&nbsp;'"
-        ></span>
-        <span class="word-block-pinyin" v-if="phonetics" dir="ltr">
-          {{ phonetics }}
-        </span>
-        <span :class="wordBlockTextClasses">
-          {{ text }}
-        </span> </span
-      ><span class="word-block-text-byeonggi-wrapper" v-if="hanAnnotation || (isSaved && definition)">
-        <span
-          v-if="hanAnnotation"
-          class="word-block-text-byeonggi d-inline-block"
-          v-html="hanAnnotation"
-        />
-        <span v-if="isSaved && definition" class="word-block-text-quick-gloss">
-          {{ definition }}
-        </span>
-      </span>
-    </template>
-    <template v-else>
-      <span
-        class="word-block-definition"
-        v-if="showDefinition"
-        v-html="definition || '&nbsp;'"
-      ></span>
-      <span
-        class="word-block-segment"
-        :class="{ 'use-zoom': useZoom }"
-        v-for="(segment, index) in mappedPronunciation"
-        :key="`word-block-segment-${segment.surface}-${index}`"
-        ><span
-          class="word-block-pinyin"
-          v-if="phonetics"
-          :class="{
-            transparent: segment.type !== 'kanji' || !hasKanji(segment.surface),
-          }"
-          >{{ segment.reading || "&nbsp;" }}</span
-        ><span :class="wordBlockTextClasses">
-          {{ segment.surface }}</span
-        > </span
-      ><span class="word-block-text-byeonggi-wrapper" v-if="hanAnnotation || (isSaved && definition)" >
-        <span
-          v-if="hanAnnotation"
-          class="word-block-text-byeonggi d-inline-block"
-          v-html="hanAnnotation"
-        />
-        <span v-if="isSaved && definition" class="word-block-text-quick-gloss">
-          {{ definition }}
-        </span>
-      </span>
-    </template>
-  </span>
+  <ruby :class="wordBlockClasses">
+    <rt v-if="phonetics">{{ phonetics }}</rt>{{ text }}
+  </ruby>
 </template>
 
 <script>
@@ -107,6 +52,7 @@ export default {
     },
     wordBlockClasses() {
       let classes = {
+        'use-zoom': this.useZoom,
         "word-block": true,
         "with-popup": this.usePopup,
         "with-quick-gloss": this.isSaved && this.definition,
