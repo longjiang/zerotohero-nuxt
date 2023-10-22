@@ -2,10 +2,10 @@
   <span>
     <ruby
       :class="wordBlockClasses"
-      v-for="(segment, index) in mappedPronunciation"
+      v-for="(segment, index) in mappedPronunciation || [{ type: 'kanji', surface: text, reading: phonetics }]"
       :key="index"
     >
-      <rt v-if="showDefinition">{{ definition || "&nbsp;" }}</rt>
+      <rt v-if="showDefinition && index === 0">{{ definition || "&nbsp;" }}</rt>
       <rt v-if="segment.type === 'kanji' && hasKanji(segment.surface)">{{ segment.reading }}</rt
       >{{ segment.surface }}
     </ruby>
