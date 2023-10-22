@@ -9,7 +9,7 @@
           $event.target.select();
         "
         @blur="cancel"
-        v-model="text"
+        @input="onInput"
         type="text"
         class="form-control lookup"
         ref="lookup"
@@ -41,51 +41,70 @@
       v-cloak
       v-if="active && text && text.length > 0"
     >
-      <router-link
-        class="suggestion"
-        v-if="
-          lookingUp === false &&
-          suggestions.filter((s) => s.head && s.head.toLowerCase() === text.trim().toLowerCase()).length === 0 &&
-          type === 'dictionary'
-        "
-        :to="`/${$l1.code}/${$l2.code}/phrase/search/${text.trim()}`"
-      >
-        <span class="suggestion-not-found">
-          <i18n path="Look up “{0}” as a phrase">
-            <b data-level="outside">{{ text }}</b>
-          </i18n>
-        </span>
-      </router-link>
-      <a
-        class="suggestion skin-light"
-        v-for="(suggestion, index) in suggestions.filter(
-          (suggestion) => suggestion
-        )"
-        :key="`search-suggestion-${index}-${suggestion ? suggestion.head : ''}`"
-        :href="hrefFunc(suggestion)"
-        @click.stop.prevent="go(hrefFunc(suggestion), suggestion)"
-      >
-        <span v-if="suggestion">
-          <span
-            class="suggestion-word font-weight-bold mr-1"
-            :data-level="suggestion.level || 'outside'"
-          >
-            {{ suggestion.head }}
-          </span>
-          <span
-            class="suggestion-alternate"
-            v-if="getAlternate(suggestion)"
-          >[{{ getAlternate(suggestion) }}]</span>
-          <DefinitionsList v-if="suggestion.definitions" class="suggestion-l1" :definitions="suggestion.definitions" :translated="true" :singleColumn="true" :neverShowAsList="true" />
-        </span>
-      </a>
       <div
-        class="suggestion"
-        v-if="suggestions.length === 0 && type === 'generic'"
+        class="d-flex align-items-center justify-content-center suggestion"
+        v-if="lookingUp"
       >
-        <i18n path="Search for {0} ..." class="suggestion-not-found">
-          <b>“{{ text }}”</b>
-        </i18n>
+        <Loader :sticky="true" message="Looking up the dictionary..." />
+      </div>
+      <div v-else>
+        <router-link
+          class="suggestion"
+          v-if="
+            lookingUp === false &&
+            suggestions.filter(
+              (s) =>
+                s.head && s.head.toLowerCase() === text.trim().toLowerCase()
+            ).length === 0 &&
+            type === 'dictionary'
+          "
+          :to="`/${$l1.code}/${$l2.code}/phrase/search/${text.trim()}`"
+        >
+          <span class="suggestion-not-found">
+            <i18n path="Look up “{0}” as a phrase">
+              <b data-level="outside">{{ text }}</b>
+            </i18n>
+          </span>
+        </router-link>
+        <a
+          class="suggestion skin-light"
+          v-for="(suggestion, index) in suggestions.filter(
+            (suggestion) => suggestion
+          )"
+          :key="`search-suggestion-${index}-${
+            suggestion ? suggestion.head : ''
+          }`"
+          :href="hrefFunc(suggestion)"
+          @click.stop.prevent="go(hrefFunc(suggestion), suggestion)"
+        >
+          <span v-if="suggestion">
+            <span
+              class="suggestion-word font-weight-bold mr-1"
+              :data-level="suggestion.level || 'outside'"
+            >
+              {{ suggestion.head }}
+            </span>
+            <span class="suggestion-alternate" v-if="getAlternate(suggestion)"
+              >[{{ getAlternate(suggestion) }}]</span
+            >
+            <DefinitionsList
+              v-if="suggestion.definitions"
+              class="suggestion-l1"
+              :definitions="suggestion.definitions"
+              :translated="true"
+              :singleColumn="true"
+              :neverShowAsList="true"
+            />
+          </span>
+        </a>
+        <div
+          class="suggestion"
+          v-if="suggestions.length === 0 && type === 'generic'"
+        >
+          <i18n path="Search for {0} ..." class="suggestion-not-found">
+            <b>“{{ text }}”</b>
+          </i18n>
+        </div>
       </div>
     </div>
   </div>
@@ -94,6 +113,7 @@
 <script>
 import { setTimeout } from "timers";
 import { highlight, timeout } from "@/lib/utils";
+import { debounce } from "lodash";
 
 export default {
   props: {
@@ -124,7 +144,7 @@ export default {
       type: Function,
       default: function (entry) {
         if (entry) {
-          const queryString = this.$route.fullPath.split('?')[1];
+          const queryString = this.$route.fullPath.split("?")[1];
           const baseHref = `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$store.state.settings.dictionaryName}/${entry.id}`;
           return queryString ? `${baseHref}?${queryString}` : baseHref;
         }
@@ -145,7 +165,7 @@ export default {
       active: false,
       preventEnter: false,
       suggestionsKey: 0,
-      lookingUp: false
+      lookingUp: false,
     };
   },
   watch: {
@@ -162,26 +182,39 @@ export default {
       if (!this.nav && this.text !== "") {
         this.active = true;
       }
-      this.lookingUp = true
+      this.lookingUp = true;
       if (this.type === "dictionary") {
         const dictionary = await this.$getDictionary();
-        let suggest = await dictionary.lookupBySearch(this.text.trim(), 10);
-        let def = await dictionary.lookupByDef(this.text, 10);
+        let suggest = await dictionary.lookupBySearch(this.text.trim(), 100);
+        let def = await dictionary.lookupByDef(this.text, 100);
+        // Multiply the score of each def element by 0.8
+        def = def.map((s) => {
+          s.score *= 0.8;
+          return s;
+        });
+        // Merge and sort by score
         this.suggestions = [...suggest, ...def]
-          .sort((a, b) =>
-            typeof b.score !== undefined ? b.score - a.score : 0
-          );
+          .sort((a, b) => a.head.length - b.head.length)
+          .sort((a, b) => b.frequency - a.frequency)
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 10);
       } else if (this.suggestionsFunc) {
         this.suggestions = this.suggestionsFunc(this.text);
       }
-      this.lookingUp = false
+      this.lookingUp = false;
     },
   },
   methods: {
     highlight,
+    onInput(event) {
+      this.debouncedInput(event.target.value);
+    },
+    debouncedInput: debounce(function (value) {
+      this.text = value;
+    }, 600), // 300ms delay. Adjust as needed.
     getAlternate(word) {
-      let alternate = word.hanja || word.kana || word.traditional
-      if (alternate && alternate !== word.head) return alternate
+      let alternate = word.hanja || word.kana || word.traditional;
+      if (alternate && alternate !== word.head) return alternate;
     },
     focusOnInput() {
       this.$refs.lookup.focus();
@@ -199,7 +232,7 @@ export default {
         }
       } else {
         this.act();
-        this.preventEnter = true
+        this.preventEnter = true;
       }
     },
     act() {
@@ -241,7 +274,7 @@ export default {
   border: 1px solid #ccc;
   width: 100%;
   top: 2.9rem;
-  max-height: calc(100vh - 5rem)
+  max-height: calc(100vh - 5rem);
 }
 
 .suggestion,

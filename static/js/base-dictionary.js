@@ -18,7 +18,7 @@ class BaseDictionary {
     this.tokenizer = null;
     this.frequencyAssigner = null;
     this.indexDbVerByLang = {};
-    this.indexKeys = ['search'];
+    this.indexKeys = ["search"];
     this.searchIndex = {};
     this.phraseIndex = {};
     this.searcher = null;
@@ -63,7 +63,7 @@ class BaseDictionary {
 
   async tokenizeWithCache(text) {
     const tokens = await this.tokenizer.tokenizeWithCache(text);
-    if (tokens) tokens.forEach(token => this.addCandidatesToToken(token))
+    if (tokens) tokens.forEach((token) => this.addCandidatesToToken(token));
     return tokens;
   }
 
@@ -80,18 +80,18 @@ class BaseDictionary {
     if (token.lemmas) {
       for (let lemma of token.lemmas) {
         if (lemma.lemma && lemma.lemma !== token.text) {
-          const lemmaCandidates = await this.lookupMultiple(lemma.lemma)
-          lemmaCandidates.forEach(c => {
-            let morphology = lemma.morphology
-            if (lemma.morphologies) morphology = lemma.morphologies.join("; ")
-            c.morphology = morphology
-          })
-          candidates = [...candidates, ...lemmaCandidates]
+          const lemmaCandidates = await this.lookupMultiple(lemma.lemma);
+          lemmaCandidates.forEach((c) => {
+            let morphology = lemma.morphology;
+            if (lemma.morphologies) morphology = lemma.morphologies.join("; ");
+            c.morphology = morphology;
+          });
+          candidates = [...candidates, ...lemmaCandidates];
         }
       }
     }
-    token.candidates = uniqueByValues(candidates, ['id']);
-    return candidates
+    token.candidates = uniqueByValues(candidates, ["id"]);
+    return candidates;
   }
 
   dictionaryFile({ l1Code = undefined, l2Code = undefined } = {}) {
@@ -104,7 +104,7 @@ class BaseDictionary {
     let words = await this.loadDictionaryData({ name, file, delimiter });
     console.log(`${this.name}: Normalizing dictionary data...`);
     words.forEach((item) => {
-      this.normalizeWord(item)
+      this.normalizeWord(item);
     });
     words = words.filter((w) => w.head);
     console.log(`${this.name}: ${file} loaded.`);
@@ -192,11 +192,11 @@ class BaseDictionary {
   }
 
   lookupBySearch(text, limit = 10, caseSensitive = false) {
-    if (!caseSensitive) text = text.toLowerCase().trim();
-    let words = this.words.filter(w => w.search.includes(text) || w.head.includes(text))
-    words = words.sort((a, b) => a.search.length - b.search.length).slice(0, limit)
-    words = words.map(word => Object.assign({ score: 1 / (text.length + 1) }, word))
-    return words
+    let results = this.searcher.search(text, { limit });
+    let words = results.map((result) => {
+      return { ...result.item, score: 1 - result.score }; // Fuse.js returns a score from 0 to 1, so we need to invert it
+    });
+    return words.slice(0, limit);
   }
 
   lookupByPronunciation(pronunciationStr) {
@@ -219,15 +219,19 @@ class BaseDictionary {
   }
 
   lookupMultiple(text) {
-    let words = []
+    let words = [];
     if (this.searchIndex) {
       words = this.searchIndex[text.toLowerCase()] || [];
     } else {
-      words = this.words.filter((w) => { 
-        return w.search === text.toLowerCase() || w.head === text.toLowerCase() || w.simplified === text.toLowerCase()
-      })
+      words = this.words.filter((w) => {
+        return (
+          w.search === text.toLowerCase() ||
+          w.head === text.toLowerCase() ||
+          w.simplified === text.toLowerCase()
+        );
+      });
     }
-    if (this.addNewHSK) words.forEach(word => this.addNewHSK(word))
+    if (this.addNewHSK) words.forEach((word) => this.addNewHSK(word));
     return words;
   }
 
@@ -284,7 +288,7 @@ class BaseDictionary {
       for (let indexType of this.indexKeys) {
         if (!Array.isArray(this[indexType + "Index"][word[indexType]]))
           this[indexType + "Index"][word[indexType]] = [];
-        const index = this[indexType + "Index"][word[indexType]]
+        const index = this[indexType + "Index"][word[indexType]];
         if (!index.includes(word)) index.push(word);
       }
       if (/[\s'.\-]/.test(word.head)) {
@@ -414,11 +418,11 @@ class BaseDictionary {
     // Only implemented for Chinese
   }
 
-
   getByBookLessonDialog(book, lesson, dialog) {
     let words = this.words.filter(
       (row) =>
-        (parseInt(row.book) === parseInt(book) || parseInt(row.level) === parseInt(book)) &&
+        (parseInt(row.book) === parseInt(book) ||
+          parseInt(row.level) === parseInt(book)) &&
         parseInt(row.lesson) === parseInt(lesson)
     );
     if (dialog)
@@ -427,7 +431,6 @@ class BaseDictionary {
       );
     return words;
   }
-
 
   async getWordGroupsByLevelLessonDialog() {
     // Only implemented for Chinese
@@ -457,9 +460,8 @@ class BaseDictionary {
   }
 
   getWordGroupsByLevelLessonDialog() {
-    return this.wordGroupsByLevelLessonDialog
+    return this.wordGroupsByLevelLessonDialog;
   }
-
 
   groupWordsByLevelAndLesson(word) {
     let { book, level, lesson, dialog } = word;

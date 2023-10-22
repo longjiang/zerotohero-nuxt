@@ -132,6 +132,8 @@ export default {
     },
     async definitionHtml(text) {
       let lemma, stringBefore, stringAfter;
+      // sanitize text (remove html tags)
+      text = text.replace(/<[^>]*>?/gm, "");
       if (this.$dictionaryName === "hsk-cedict") {
         let m = text.match(/(.*?)([^\s]+?)\|([^\s]+?)\[(.+?)\](.*?)/);
         if (!m) m = text.match(/(.*?)([^\s]+?)\[(.+?)\](.*?)/);
