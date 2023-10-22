@@ -1,6 +1,7 @@
 <router>
   {
     path: '/:l1/:l2/epub',
+    name: 'epub',
     meta: {
       title: 'Epub Reader | Language Player',
       metaTags: [
@@ -35,6 +36,7 @@
 <script>
 
 export default {
+  name: "epub", // Name must be explicitly declared for keep-alive to work
   computed: {
   }
 };

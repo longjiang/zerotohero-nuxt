@@ -57,6 +57,7 @@ import CourseBrowser from "@/components/CourseBrowser.vue";
 import { l2LevelName } from '@/lib/utils'
 
 export default {
+  name: "levels", // Name must be explicitly declared for keep-alive to work
   components: {
     CourseBrowser,
   },

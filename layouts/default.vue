@@ -8,7 +8,7 @@
           [`skin-${$skin}`]: true,
         }"
         keep-alive
-        :keep-alive-props="{ include: ['pages/epub.vue', 'pages/chinese/levels.vue'] }"
+        :keep-alive-props="{ include: ['epub', 'levels'] }"
       />
     </MyLayout>
     <i class="fas fa-star star-animation"></i>
