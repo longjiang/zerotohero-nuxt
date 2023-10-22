@@ -1,60 +1,12 @@
 <template>
-  <div class="d-inline-block" ref="popover">
-    <div
-      v-on="usePopup ? { click: wordBlockClick } : {}"
-      @mouseenter="wordblockHover = true"
-      @mouseleave="wordblockHover = false"
-    >
-      <WordBlockQuiz
-        v-if="
-          (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
-        "
-        v-bind="attributes"
-      />
-      <WordBlockWord v-else v-bind="attributes" :animate="animate" />
-    </div>
-
-    <b-modal
-      ref="popup-dictionary-modal"
-      size="sm"
-      centered
-      hide-footer
-      modal-class="safe-padding-top mt-4"
-      :title="$tb('Dictionary')"
-      :body-class="`popup-dictionary-modal-wrapper l2-${$l2.code}`"
-      @show="$nuxt.$emit('popupOpened')"
-      @hide="$nuxt.$emit('popupClosed')"
-    >
-      <div
-        v-if="
-          (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
-        "
-        class="popover-inner-hover-area"
-      >
-        {{ $t("Tap to show answer.") }}
-      </div>
-      <div
-        @mouseenter="tooltipHover = true"
-        @mouseleave="tooltipHover = false"
-        v-else
-        class="popover-inner-hover-area"
-      >
-        <WordBlockPopup
-          v-bind="{
-            text,
-            token,
-            words,
-            images,
-            lookupInProgress,
-            loadingImages,
-            context,
-            phraseObj: phraseItem(text),
-          }"
-          ref="popup"
-        />
-      </div>
-    </b-modal>
-  </div>
+  <component
+    :is="tag"
+    v-on="usePopup ? { click: wordBlockClick } : {}"
+    @mouseenter="wordblockHover = true"
+    @mouseleave="wordblockHover = false"
+    v-bind="attributes"
+    :animate="animate"
+  />
 </template>
 
 <script>
@@ -115,6 +67,13 @@ export default {
   },
   computed: {
     ...mapState("savedWords", ["savedWords"]),
+    tag() {
+      if  ((this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal) {
+        return "WordBlockQuiz";
+      } else {
+        return "WordBlockWord";
+      }
+    },
     shortDefinition() {
       let shortDefinition =
         this.savedWord?.definitions?.[0] || this.words?.[0]?.definitions?.[0];
@@ -143,14 +102,14 @@ export default {
       if (pos) return pos.replace(/\-.*/, "").replace(/\s/g, "-");
     },
     bestWord() {
-      if (this.savedWord) return this.savedWord
-      let firstCandidate = this.token?.candidates?.[0]
-      if (firstCandidate) return firstCandidate
-      let firstFuzzyWord = this.words?.[0]
+      if (this.savedWord) return this.savedWord;
+      let firstCandidate = this.token?.candidates?.[0];
+      if (firstCandidate) return firstCandidate;
+      let firstFuzzyWord = this.words?.[0];
       if (firstFuzzyWord) {
-        for (let key in ['head', 'simplified', 'traditional', 'kana']) {
+        for (let key in ["head", "simplified", "traditional", "kana"]) {
           if (firstFuzzyWord[key] === this.text) {
-            return firstFuzzyWord
+            return firstFuzzyWord;
           }
         }
       }
@@ -463,15 +422,22 @@ export default {
       }
     },
     playWordAudio() {
-      const canGenerateSpeech = this.$l1 && this.$l2 ? this.$languages.hasFeature(this.$l1, this.$l2, "speech") : false;
+      const canGenerateSpeech =
+        this.$l1 && this.$l2
+          ? this.$languages.hasFeature(this.$l1, this.$l2, "speech")
+          : false;
       const speakComponent = this.$refs.popup?.$refs.speak?.[0];
-      const hasRecordedAudio = speakComponent && speakComponent.mp3 && this.words?.[0].head?.toLowerCase() === this.text.toLowerCase()
+      const hasRecordedAudio =
+        speakComponent &&
+        speakComponent.mp3 &&
+        this.words?.[0].head?.toLowerCase() === this.text.toLowerCase();
       if (hasRecordedAudio) speakComponent.speak({ rate, volume });
       else if (canGenerateSpeech) {
         const rate = 0.75;
         const volume = 0.5;
-        let text = this.text
-        if (this.$l2.code === "ja" && this.token?.pronunciation) text = this.token.pronunciation
+        let text = this.text;
+        if (this.$l2.code === "ja" && this.token?.pronunciation)
+          text = this.token.pronunciation;
         speak({ text, l2: this.$l2, rate, volume });
       }
     },
@@ -488,7 +454,9 @@ export default {
       if (words.length === 0) {
         // addCandidatesToToken is already done by the tokenizer, but sometimes this doesn't happen in time. Let's do it again so we don't override the candidates.
         if (this.token && !this.token.candidates?.length > 0) {
-          this.token.candidates = await dictionary.addCandidatesToToken(this.token);
+          this.token.candidates = await dictionary.addCandidatesToToken(
+            this.token
+          );
           words = this.token?.candidates || [];
           if (!words.length)
             words = (await dictionary.lookupFuzzy(this.text, 20)) || [];
