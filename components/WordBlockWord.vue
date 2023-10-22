@@ -1,9 +1,15 @@
 <template>
-  <ruby :class="wordBlockClasses">
-    <rt v-if="showDefinition">{{ definition || '&nbsp;' }}</rt>
-    <rt v-if="phonetics">{{ phonetics }}</rt
-    >{{ text }}
-  </ruby>
+  <span>
+    <ruby
+      :class="wordBlockClasses"
+      v-for="(segment, index) in mappedPronunciation"
+      :key="index"
+    >
+      <rt v-if="showDefinition">{{ definition || "&nbsp;" }}</rt>
+      <rt v-if="segment.type === 'kanji' && hasKanji(segment.surface)">{{ segment.reading }}</rt
+      >{{ segment.surface }}
+    </ruby>
+  </span>
 </template>
 
 <script>
