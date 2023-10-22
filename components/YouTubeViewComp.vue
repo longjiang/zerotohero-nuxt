@@ -573,12 +573,12 @@ export default {
           });
           // In the case of L1 subtitles, if we still don't have it, we get translated ones
           if (l1OrL2 === "l1" && !(subs?.length > 0)) {
-            let tlang = this.$l1.code === "zh" ? "zh-Hans" : this.$l1.code; // tlang
+            let tlangs = this.$l1.locales
             subs = await YouTube.getTranslatedTranscript({
               youtube_id: video.youtube_id,
               locale: this.l2Locale || this.$l2.code,
               name: this.l2Name,
-              tlang,
+              tlangs,
               generated,
             });
           }
