@@ -95,7 +95,7 @@ export default {
     },
     async translateStrings(strings) {
       if (!this.$store.state.settings.useMachineTranslatedDictionary) return strings
-      if (!LANGS_WITH_AZURE_TRANSLATE.includes(this.$l2.code)) return strings
+      if (!LANGS_WITH_AZURE_TRANSLATE.includes(this.$l1.code)) return strings
       const l1Code = this.$l1.code // The destination language
       const l2Code = 'en'          // The source language is English
       let translatedStrings = strings
