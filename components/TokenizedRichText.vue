@@ -25,6 +25,8 @@
           <TokenizedText
             :text="editedText || text || processedNode.text"
             :context="context"
+            :animationDuration="animationDuration"
+            :animationSpeed="animationSpeed"
             v-on="$listeners"
             @="forwardEvent"
           />
@@ -83,6 +85,15 @@ export default {
       type: Boolean,
       default: true,
     },
+    animationDuration: {
+      type: Number,
+      required: false,
+    },
+    animationSpeed: {
+      type: Number,
+      required: false,
+      default: 1,
+    },
   },
   data() {
     return {
@@ -91,6 +102,17 @@ export default {
       slotText: "", // this will store the text extracted from the slot
       editedText: "", // this will store the text edited by the user
       translationData: this.translation, // For translation
+    };
+  },
+  // Provide/Inject: Vue provides a provide and inject mechanism which is 
+  // aimed at deep component nesting. A parent component can "provide" properties,
+  // and any nested child component can "inject" those properties without them
+  // being passed through each level of the component tree.
+  provide() {
+    return {
+      context: this.context,
+      animationDuration: this.animationDuration,
+      animationSpeed: this.animationSpeed,
     };
   },
   computed: {

@@ -27,35 +27,19 @@ import { timeout, stripTags } from "@/lib/utils";
 
 export default {
   name: "TokenizedText",
+  // Provide/Inject: Vue provides a provide and inject mechanism which is 
+  // aimed at deep component nesting. A parent component can "provide" properties,
+  // and any nested child component can "inject" those properties without them
+  // being passed through each level of the component tree.
+  inject: [
+    'context',
+    'animationDuration',
+    'animationSpeed',
+  ],
   props: {
     text: {
       type: String,
       required: true,
-    },
-    context: {
-      type: Object, // { starttime = undefined, youtube_id = undefined}
-      required: false,
-    },
-    animationDuration: {
-      type: Number,
-      required: false,
-    },
-    animationSpeed: {
-      type: Number,
-      required: false,
-      default: 1,
-    },
-    translation: {
-      // e.g. parallelLine passed from TranscriptLine
-      type: String,
-    },
-    showTranslation: {
-      type: Boolean,
-      default: true,
-    },
-    showMenu: {
-      type: Boolean,
-      default: false,
     },
   },
   data() {
