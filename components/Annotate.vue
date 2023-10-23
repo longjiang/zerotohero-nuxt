@@ -38,7 +38,7 @@
         </div>
         <div class="annotate-except-buttons" style="width: 100%">
           <div
-            :class="{ 'use-zoom': useZoom, 'annotate-slot': true }"
+            :class="{ 'annotate-slot': true }"
             v-if="!annotated"
           >
             <slot></slot>
@@ -309,10 +309,6 @@ export default {
     },
     starttime: {
       type: Number,
-    },
-    useZoom: {
-      type: Boolean,
-      default: false,
     },
     breakSentences: {
       type: Boolean,
@@ -751,12 +747,10 @@ export default {
           }
           html += `<WordBlock v-bind="wordBlockAttributes(${batchId},${index})">${token.text}</WordBlock>`;
         } else {
-          html += `<span class="word-block-unknown ${
-            this.useZoom ? "use-zoom" : ""
-          }"><span class="word-block-segment">${token.replace(
+          html += `<span class="word-block">${token.replace(
             /\s/g,
             "&nbsp;"
-          )}</span></span>`;
+          )}</span>`;
         }
       }
       return html;
@@ -777,7 +771,6 @@ export default {
         explore: this.explore,
         context,
         token,
-        useZoom: this.useZoom,
         quizMode: this.quizMode,
       };
       if (token.mappedPronunciation)

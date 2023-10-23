@@ -114,7 +114,6 @@
             :buttons="true"
             :showTranslation="translation ? false : true"
             :showLoading="showLoading"
-            :useZoom="true"
             ref="annotate"
             @translation="onTranslation($event, lineIndex)"
             @translationLoading="onTranslationLoading($event, lineIndex)"

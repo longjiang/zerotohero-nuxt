@@ -70,9 +70,6 @@ export default {
     quizMode: {
       default: false,
     },
-    useZoom: {
-      default: false,
-    },
     context: {
       type: Object,
       default() {
@@ -180,7 +177,6 @@ export default {
      * - `definition`: The quick gloss definition of the current word or phrase.
      * - `text`: The transformed text of the word or phrase.
      * - `hanAnnotation`: For Vietnamese and Korean, the Han character form of the word, if it exists and should be shown in small print on the side.
-     * - `useZoom`: A value indicating whether zoom should be used.
      * - `mappedPronunciation`: The pronunciation of the word as mapped for Japanese, if the current language is Japanese.
      * - `data-hover-level`: Set to "outside" if the usePopup is true.
      * - `data-rank`: The rank of the word, if it exists.
@@ -212,7 +208,6 @@ export default {
         definition,
         text,
         hanAnnotation,
-        useZoom: this.useZoom,
         mappedPronunciation,
         "data-hover-level": level,
       };

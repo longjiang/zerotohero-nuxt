@@ -9,7 +9,7 @@
     <div v-else>
       <div class="quick-settings-language-specific" v-if="$l1 && $l2">
         <div class="bg-gray rounded p-2" :class="annotationSettingsClass">
-          <Annotate class="text-center" :useZoom="true"
+          <Annotate class="text-center"
             ><span>{{ $l2.vernacularName || "Example" }}</span></Annotate
           >
           <div class="translation-line text-center">

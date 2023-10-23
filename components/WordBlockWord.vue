@@ -53,9 +53,6 @@ export default {
     mappedPronunciation: {
       type: Array, //  e.g. [{ "type": "kanji", "surface": "食", "reading": "しょく" }, { "type": "non-kanji", "surface": "パン", "reading": "ぱん" }]
     },
-    useZoom: {
-      default: false,
-    },
     animate: {
       default: false,
     },
@@ -71,9 +68,8 @@ export default {
     },
     wordBlockClasses() {
       let classes = {
-        "use-zoom": this.useZoom,
         "word-block": true,
-        "with-popup": this.usePopup,
+        "no-popup": !this.usePopup,
         "with-quick-gloss": this.isSaved && this.definition,
         saved: this.isSaved,
         obscure: this.obscure,
@@ -211,7 +207,7 @@ export default {
   }
 }
 
-.word-block.with-popup {
+.word-block:not(.no-popup) {
   cursor: pointer;
 
   &.saved {
