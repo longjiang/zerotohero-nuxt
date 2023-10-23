@@ -20,17 +20,15 @@
         preload="auto"
       ></video>
       <div class="media-body">
-        <Annotate tag="h4" class="article-title" :buttons="true">
-          <h4>{{ article.title }}</h4>
-        </Annotate>
+        <h4 class="article-title"><TokenizedText :buttons="true" :text="article.title" /></h4>
         <div
           v-if="article.media && article.media.oembed"
           v-html="unescape(article.media.oembed.html)"
         ></div>
         <client-only>
-          <Annotate tag="div" class="article-body" :buttons="true">
+          <TokenizedRichText tag="div" class="article-body" :buttons="true">
             <div v-html="unescape(article.selftext_html)" />
-          </Annotate>
+          </TokenizedRichText>
         </client-only>
       </div>
     </div>

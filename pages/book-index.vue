@@ -50,17 +50,16 @@
             class="mb-4 shadow book-thumb"
             data-not-lazy
           />
-          <Annotate
-            v-if="book.title"
-            :showTranslate="true"
-            tag="div"
-            :buttons="false"
-          >
+          <template v-if="book.title">
             <h6>
-              <em>{{ book.title }}</em>
+              <em>
+                <TokenizedText :showTranslate="true" :text="book.title"
+              /></em>
             </h6>
-            <p>{{ book.author }}</p>
-          </Annotate>
+            <p>
+              <TokenizedText :showTranslate="true" :text="book.author" />
+            </p>
+          </template>
           <div class="list-group text-left">
             <router-link
               v-for="(chapter, index) in book.chapters"
@@ -70,7 +69,7 @@
                 $l2.code
               }/book/chapter?url=${encodeURIComponent(chapter.url)}`"
             >
-              <Annotate
+              <TokenizedText
                 :class="{
                   'list-group-item': true,
                   active:
@@ -79,10 +78,9 @@
                       $l2.code
                     }/book/chapter?url=${encodeURIComponent(chapter.url)}`,
                 }"
-                :buttons="false"
-              >
-                <span>{{ chapter.title }}</span>
-              </Annotate>
+                :showMenu="false"
+                :text="chapter.title"
+              />
             </router-link>
           </div>
         </div>

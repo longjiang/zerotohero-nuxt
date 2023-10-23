@@ -23,10 +23,10 @@
                     limit="2"
                     style="flex: 1; margin-right: 2rem"
                   />
-                  <Annotate
+                  <TokenizedRichText
                     tag="div"
                     :checkSaved="false"
-                    :buttons="true"
+                    :showMenu="true"
                     style="flex: 1"
                   >
                     <span
@@ -39,7 +39,7 @@
                       "
                       style="font-size: 1.2em"
                     />
-                  </Annotate>
+                  </TokenizedRichText>
                   <SmallStar
                     :item="collocation"
                     :saved="(collocation) => collocation.saved"

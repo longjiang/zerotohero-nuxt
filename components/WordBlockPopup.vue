@@ -204,21 +204,16 @@
         />
       </div>
 
-      <Annotate
+      <TokenizedText
         v-if="word.counters"
+        :text="word.counters
+              .map((counter) => '一' + counter.simplified)
+              .join(word.simplified + '、') + word.simplified"
         tag="span"
         class="word-counters"
         :buttons="false"
         :popup="false"
-      >
-        <span>
-          {{
-            word.counters
-              .map((counter) => "一" + counter.simplified)
-              .join(word.simplified + "、") + word.simplified
-          }}
-        </span>
-      </Annotate>
+      />
       <div class="phrases mt-2" v-if="word.phrases">
         <WordList
           :words="word.phrases.slice(0, 6).filter((p) => typeof p === 'object')"

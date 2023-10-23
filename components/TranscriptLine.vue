@@ -37,6 +37,7 @@
               text: line.line,
               animationDuration: duration,
               animationSpeed: speed,
+              showMenu: true,
               // sticky,
               // buttons: true,
               // translation: parallelLine,

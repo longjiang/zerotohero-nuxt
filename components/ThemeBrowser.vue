@@ -15,15 +15,13 @@
           ></i>
           <span class="dewey-code ml-3">{{ l1.code }}</span>
 
-          <Annotate
-            tag="span"
+          <TokenizedText
             class="dewey-l1-title"
             :explore="true"
             :wordBlockTemplateFilter="wordBlockTemplateFilter"
             :showTranslate="true"
-          >
-            <span>{{ l1.title }}</span>
-          </Annotate>
+            :text="l1.title"
+          />
         </h5>
         <div :key="l1Key + i * 1000">
           <ul class="dewey-l2" v-if="showL1[i]">
@@ -40,15 +38,14 @@
                   v-if="showL2[i][j]"
                 ></i>
                 <span class="dewey-code ml-3">{{ l2.code }}</span>
-                <Annotate
+                <TokenizedText
                   tag="span"
                   class="dewey-l2-title"
                   :explore="true"
                   :wordBlockTemplateFilter="wordBlockTemplateFilter"
                   :showTranslate="true"
-                >
-                  <span>{{ l2.title }}</span>
-                </Annotate>
+                  :text="l2.title"
+                />
               </h6>
               <div :key="l2Key + i + j * 1000">
                 <ul class="dewey-l3" v-if="showL2[i][j]">
@@ -58,15 +55,14 @@
                   >
                     <div class="mt-3 mb-3">
                       <span class="dewey-code ml-3">{{ l3.code }}</span>
-                      <Annotate
+                      <TokenizedText
                         tag="span"
                         class="dewey-l3-title"
                         :explore="true"
                         :wordBlockTemplateFilter="wordBlockTemplateFilter"
                         :showTranslate="true"
-                      >
-                        <span>{{ l3.title }}</span>
-                      </Annotate>
+                        :text="l3.title"
+                      />
                     </div>
                   </li>
                 </ul>

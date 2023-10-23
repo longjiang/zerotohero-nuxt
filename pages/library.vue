@@ -66,9 +66,7 @@
                   data-not-lazy
                 />
                 <h5 class="mt-3">
-                  <Annotate tag="b">
-                    <span>{{ booklist.title }}</span>
-                  </Annotate>
+                  <TokenizedText :text="booklist.title" />
                 </h5>
                 <p class="mb-0" style="color: #aaa" v-if="source(booklist.url)">
                   Source: {{ source(booklist.url).name }}

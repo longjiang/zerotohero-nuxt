@@ -27,9 +27,9 @@
           <span style="flex: 0 0 1.5rem">{{ $t("A:") }}</span>
           <div style="flex: 1">
             <div v-for="(line, index) in message.text.split('\n')" :key="`gpt-respnose-${index}`" class="mb-2">
-              <Annotate :buttons="true" :showTranslation="true" :showLoading="false">
-                <span>{{ line }}</span>
-              </Annotate>
+              <TokenizedRichText :showMenu="true" :showTranslation="true" :showLoading="false">
+                <span v-html="line" />
+              </TokenizedRichText>
             </div>
             <div class="text-right">
               <span @click="resendMessage(messages[index - 1])" class="btn btn-unstyled text-success mr-2">

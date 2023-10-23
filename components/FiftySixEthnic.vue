@@ -13,9 +13,7 @@
         />
       </div>
       <div class="ethnic-group-simplified">
-        <Annotate :buttons="false">
-          <span>{{ group.simplified }}</span>
-        </Annotate>
+        <TokenizedText :text="group.simplified" />
       </div>
       <b-progress
         :max="groups[0].population / Math.sqrt(groups[0].population)"

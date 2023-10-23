@@ -36,7 +36,7 @@
           <img src="/img/face-straight.gif" alt="" style="width: 100%" v-else />
         </div>
         <div class="line-wrapper">
-          <Annotate tag="span" :buttons="true" class="transcript-line-l2">
+          <TokenizedRichText tag="span" :showMenu="true" class="transcript-line-l2">
             <span
               v-if="$l2.han && $l2.code !== 'ja'"
               v-html="
@@ -48,7 +48,7 @@
               "
             />
             <span v-else v-html="highlight(reviewItem.line.line, reviewItem.text, reviewItem.hsk)" />
-          </Annotate>
+          </TokenizedRichText>
           <div
             :dir="$l1.direction === 'rtl' ? 'rtl' : 'ltr'"
             :class="{

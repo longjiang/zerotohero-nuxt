@@ -18,29 +18,27 @@
           >
             <i class="fas fa-times mistake-item-icon"></i>
             <span class="mistake-context collapsed" data-collapse-target>
-              <Annotate :showTranslate="true" :checkSaved="false">
-                <span>{{ mistake.leftContext }}</span>
-              </Annotate>
+              <TokenizedText :text="mistake.leftContext" :showTranslate="true" :checkSaved="false" />
             </span>
-            <Annotate
+            <TokenizedRichText
               class="mistake-sentence"
               :showTranslate="true"
               :checkSaved="false"
-              :buttons="true"
+              :showMenu="true"
               ><span
                 >{{ mistake.left }}<span class="mistake-word">{{ text }}</span
                 >{{ mistake.right }}</span
-              ></Annotate
+              ></TokenizedRichText
             >
             <span class="mistake-context collapsed" data-collapse-target>
-              <Annotate
+              <TokenizedText
                 :speak="true"
                 :copy="true"
                 :checkSaved="false"
                 :fullscreen="true"
                 :showTranslate="true"
-                ><span>{{ mistake.rightContext }}</span></Annotate
-              >
+                :text="mistake.rightContext"
+                />
             </span>
             <ShowMoreButton :length="1" :class="`btn-sm btn-${$skin}`">
               Context

@@ -54,16 +54,15 @@
                         </span>
                         <Speak :text="phraseObj.phrase" />
                       </div>
-                      <Annotate
+                      <TokenizedText
                         :phonetics="!phraseObj.pronunciation"
-                        :buttons="false"
                         tag="h1"
                         :class="{
                           'text-center mb-0 hide-phonetics text-success': true,
                         }"
-                      >
-                        <span>{{ phraseObj.phrase }}</span>
-                      </Annotate>
+                        :text="phraseObj.phrase"
+                      />
+
                       <div
                         :class="{
                           'text-center mt-1': true,
@@ -85,17 +84,16 @@
                           class="phrase-pronunciation"
                         />
                       </div>
-                      <Annotate
-                        @textChanged="textChanged"
-                        :phonetics="!phraseObj.pronunciation"
-                        :buttons="false"
-                        tag="h1"
-                        :class="{
-                          'text-center mb-0 hide-phonetics text-success': true,
-                        }"
-                      >
-                        <span>{{ phraseObj.phrase }}</span>
-                      </Annotate>
+                      <h6>
+                        <TokenizedText
+                          @textChanged="textChanged"
+                          :phonetics="!phraseObj.pronunciation"
+                          :text="phraseObj.phrase"
+                          :class="{
+                            'text-center mb-0 hide-phonetics text-success': true,
+                          }"
+                        />
+                      </h6>
                       <div
                         :class="{
                           'text-center mt-1': true,
@@ -119,10 +117,7 @@
                   </template>
                 </Flashcard>
               </div>
-              <div
-                class="text-center mb-3"
-                v-if="words && words.length > 1"
-              >
+              <div class="text-center mb-3" v-if="words && words.length > 1">
                 <b-dropdown
                   size="sm"
                   :items="words"
@@ -163,7 +158,9 @@
                         v-if="word.definitions"
                         :class="{ 'mt-3': true, transparent: true }"
                         :definitions="word.definitions"
-                        :translated="$store.state.settings.useMachineTranslatedDictionary"
+                        :translated="
+                          $store.state.settings.useMachineTranslatedDictionary
+                        "
                       ></DefinitionsList>
                     </div>
                   </template>
@@ -178,7 +175,9 @@
                         v-if="word.definitions"
                         :class="{ 'mt-3': true, transparent: false }"
                         :definitions="word.definitions"
-                        :translated="$store.state.settings.useMachineTranslatedDictionary"
+                        :translated="
+                          $store.state.settings.useMachineTranslatedDictionary
+                        "
                       ></DefinitionsList>
                     </div>
                   </template>

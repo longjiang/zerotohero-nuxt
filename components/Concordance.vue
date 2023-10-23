@@ -20,12 +20,12 @@
                 .sort((a, b) => a.sentences[0].length - b.sentences[0].length)"
               :key="`example-item-${index}`"
             >
-              <Annotate
+              <TokenizedRichText
                 tag="div"
                 class="pt-2 pb-2"
                 :showTranslate="true"
                 :checkSaved="false"
-                :buttons="true"
+                :showMenu="true"
               >
                 <span
                   v-html="
@@ -36,7 +36,7 @@
                     )
                   "
                 />
-              </Annotate>
+              </TokenizedRichText>
               <div v-if="example.l1">{{ example.l1 }}</div>
               <div v-if="example.ref" class="concordance-ref">
                 {{ example.ref }}

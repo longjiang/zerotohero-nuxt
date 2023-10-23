@@ -34,9 +34,9 @@
 
       <div v-for="(comment, index) in comments" :key="`comment-item-${index}`">
         <h6>{{ comment.author }}</h6>
-        <Annotate :showTranslate="true">
+        <TokenizedRichText :showTranslate="true">
           <div v-html="unescape(comment.body_html)"></div>
-        </Annotate>
+        </TokenizedRichText>
         <hr />
       </div>
     </div>

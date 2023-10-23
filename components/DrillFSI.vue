@@ -3,13 +3,13 @@
     <audio id="drill-audio">
       <source :src="drill.file" type="audio/mpeg">
     </audio>
-    <div v-for="(pattern, patternIndex) in drill.patterns">
+    <div v-for="(pattern, patternIndex) in drill.patterns" :key="`drill-pattern-${patternIndex}`">
       <div class="audio-media">
         <b-button @click="playAudio(pattern.model.starttime, pattern.model.endtime)"><i class="fas fa-play"></i></b-button>
         <div class="audio-media-body">
-          <Annotate><p class="lead mb-0">
-            {{ pattern.model[$l2.code] }}
-          </p></Annotate>
+          <p class="lead mb-0">
+            <TokenizedText :text="pattern.model[$l2.code]" />
+          </p>
           <p class="translation">
             {{ pattern.model[$l1.code] }}
           </p>
@@ -17,14 +17,15 @@
       </div>
       <div
         v-for="(part, partIndex) in pattern.parts"
+        :key="`drill-part-${patternIndex}-${partIndex}`"
         class="jumbotron p-4 mb-3"
       >
-        <div v-for="(item, itemIndex) in part" class="mt-4 mb-4">
+        <div v-for="(item, itemIndex) in part" class="mt-4 mb-4" :key="`drill-item-${patternIndex}-${partIndex}-${itemIndex}`">
           <div class="audio-media mb-2">
             <b-button @click="playItem(patternIndex, partIndex, itemIndex)"><i class="fas fa-play"></i></b-button>
             <div class="audio-media-body">
-              <Annotate tag="div"><strong>{{ item.prompt }}</strong></Annotate>
-              <Annotate :id="`drill-answer-${patternIndex}-${partIndex}-${itemIndex}`" class="drill-answer drill-answer-hidden"><span>{{ item.answer }}</span></Annotate>
+              <div><strong><TokenizedText :text="item.prompt" /></strong></div>
+              <div :id="`drill-answer-${patternIndex}-${partIndex}-${itemIndex}`" class="drill-answer drill-answer-hidden"><TokenizedText :text="item.answer" /></div>
             </div>
           </div>
         </div>

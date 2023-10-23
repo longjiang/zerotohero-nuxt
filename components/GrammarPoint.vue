@@ -1,6 +1,6 @@
 <template>
   <div class="grammar-notes-item text-center">
-    <Annotate tag="div" :copy="false" class="grammar-structure">
+    <TokenizedRichText tag="div" :copy="false" class="grammar-structure">
       <h5
         v-html="
           highlightMultiple(
@@ -10,15 +10,15 @@
           )
         "
       ></h5>
-    </Annotate>
+    </TokenizedRichText>
     <div class="grammar-english">{{ grammar.english }}</div>
-    <Annotate tag="h2" class="grammar-example" :showTranslate="false">
+    <TokenizedRichText tag="h2" class="grammar-example" :showTranslate="false">
       <span
         v-html="
         highlightMultiple(grammar.example, grammar.words, grammar.book)
       "
       ></span>
-    </Annotate>
+    </TokenizedRichText>
     <div class="grammar-example-english">{{ grammar.exampleTranslation }}</div>
     <a
       v-if="grammar.url !== ''"

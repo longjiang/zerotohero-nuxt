@@ -55,17 +55,17 @@
               </span>
             </td>
             <td class="align-middle">
-              <Annotate>
+              <TokenizedRichText>
                 <span v-html="highlightMultiple(row.structure, row.words, row.book)" />
-              </Annotate>
+              </TokenizedRichText>
             </td>
             <td class="align-middle">
               <span>{{ row.english }}</span>
             </td>
             <td class="align-middle">
-              <Annotate>
+              <TokenizedRichText>
                 <span v-html="highlightMultiple(row.example, row.words, row.book)" />
-              </Annotate>
+              </TokenizedRichText>
             </td>
             <td class="align-middle">
               <span>{{ row.exampleTranslation }}</span>

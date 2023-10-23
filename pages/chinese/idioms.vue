@@ -18,7 +18,8 @@
           The HSK curriculum has a total
           <b>112 idioms</b>
           . With the exception of
-          <Annotate><span>讨价还价 and 名胜古迹</span></Annotate>
+          <TokenizedText text="讨价还价" /> and
+          <TokenizedText text="名胜古迹" />
           being in HSK 5, the rest 110 are all in HSK 6.
         </p>
       </div>
@@ -32,26 +33,21 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="idiom in idioms.filter((row) => row.idiom === 'yes')">
+          <tr
+            v-for="idiom in idioms.filter((row) => row.idiom === 'yes')"
+            :key="idiom.simplified"
+          >
             <th class="text-center">
-              <Annotate>
-                <span>{{ idiom.simplified }}</span>
-              </Annotate>
+              <TokenizedText :text="idiom.simplified" />
             </th>
             <td>
-              <Annotate>
-                <span>{{ idiom.sourcePeriod }}</span>
-              </Annotate>
+              <TokenizedText :text="idiom.sourcePeriod" />
             </td>
             <td style="min-width: 30rem">
-              <Annotate>
-                <span
-                  ><span>{{ idiom.sourceAuthor }} {{ idiom.sourceBook }}</span
-                  ><span
-                    >{{ idiom.sourceChapter }}：{{ idiom.sourceQuote }}</span
-                  ></span
-                >
-              </Annotate>
+              <TokenizedText :text="idiom.sourceAuthor" />
+              <TokenizedText :text="idiom.sourceBook" />
+              <TokenizedText :text="idiom.sourceChapter" />：
+              <TokenizedText :text="idiom.sourceQuote" />
             </td>
             <td>
               <a :href="`https://www.zdic.net/hans/${idiom.simplified}`">
@@ -72,12 +68,7 @@
           <em>not</em>
           idioms:
         </b>
-        <Annotate>
-          <span>
-            公共汽车 电子邮件 高速公路 归根到底 二氧化碳 新陈代谢 烟花爆竹
-            迄今为止 通货膨胀
-          </span>
-        </Annotate>
+        <TokenizedRichText text="公共汽车 电子邮件 高速公路 归根到底 二氧化碳 新陈代谢 烟花爆竹 迄今为止 通货膨胀" />
       </p>
     </div>
   </div>

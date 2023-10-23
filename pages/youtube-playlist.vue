@@ -10,9 +10,7 @@
       <div class="row">
         <div class="col-sm-12">
           <h3 class="text-center" v-if="title">
-            <Annotate :buttons="true">
-              <span>{{ title.replace('All uploaded videos of ', '') }}</span>
-            </Annotate>
+            <TokenizedText :buttons="true" :text="title.replace('All uploaded videos of ', '')" />
           </h3>
           <h3 class="text-center" v-else>Playlist</h3>
           <div class="text-center mb-3" v-if="$adminMode">Playlist ID: {{ playlist_id }}</div>

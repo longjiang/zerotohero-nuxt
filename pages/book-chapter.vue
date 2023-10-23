@@ -48,14 +48,13 @@
           >
             <Loader :sticky="true" />
           </div>
-          <Annotate
+          <TokenizedText
             tag="h1"
             :foreign="foreign"
             :showTranslate="foreign"
-            :buttons="true"
-          >
-            <span>{{ chapter.title }}</span>
-          </Annotate>
+            :showMenu="true"
+            :text="chapter.title"
+          />
 
           <div class="chapter-content" v-if="chapter.content">
             <client-only :placeholder="chapter.content">
@@ -106,12 +105,12 @@
                 class="mb-4 shadow book-thumb"
                 data-not-lazy
               />
-              <Annotate v-if="book.title" :foreign="foreign" :buttons="false">
+              <template v-if="book.title">
                 <h6>
-                  <em>{{ book.title }}</em>
+                  <em><TokenizedText :text="book.title" /></em>
                 </h6>
-                <p>{{ book.author }}</p>
-              </Annotate>
+                <p<TokenizedText :text="book.author" /></p>
+              </template>
             </router-link>
           </client-only>
           <client-only placeholder="Read the original">
@@ -143,7 +142,7 @@
               }/book/chapter?url=${encodeURIComponent(chapter.url)}`"
               class="link-unstyled"
             >
-              <Annotate
+              <TokenizedText
                 :class="{
                   'list-group-item': true,
                   active:
@@ -153,10 +152,8 @@
                     }/book/chapter?url=${encodeURIComponent(chapter.url)}`,
                 }"
                 :foreign="foreign"
-                :buttons="false"
-              >
-                <span>{{ chapter.title }}</span>
-              </Annotate>
+                :text="chapter.title"
+              />
             </router-link>
           </div>
         </div>
@@ -169,7 +166,7 @@
 import { IMAGE_PROXY } from "@/lib/config";
 import Library from "@/lib/library";
 import { parse } from "node-html-parser";
-import DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 import { stripTags } from "@/lib/utils";
 
 export default {
@@ -187,7 +184,7 @@ export default {
       chapter: undefined,
       chapterLang: undefined,
       foreign: true,
-      IMAGE_PROXY
+      IMAGE_PROXY,
     };
   },
   computed: {
@@ -239,7 +236,7 @@ export default {
     async getChapter() {
       let url = decodeURIComponent(this.args);
       try {
-        let libraryL2 = await(
+        let libraryL2 = await (
           await import(`@/lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)
         ).default;
         await Library.setLangSources(libraryL2.sources);

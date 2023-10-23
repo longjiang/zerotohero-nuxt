@@ -50,13 +50,12 @@
                   "
                 >
                   <td>
-                    <Annotate>
-                      <span>{{ radical.radical }}</span>
-                    </Annotate>
+                    <TokenizedText :text="radical.radical" />
                   </td>
                   <td>
                     <span
                       v-for="(character, index) in radical.characters"
+                      :key="`character-${character.character}`"
                       :data-level="character.hsk"
                       @click="learnCharacter(radical, index)"
                       class="cursor-pointer"

@@ -9,9 +9,7 @@
         <LanguageList :langs="dialect.languages" :singleColumn="true" :skin="skin" />
       </div>
       <div class="dialect-simplified">
-        <Annotate :buttons="false">
-          <span>{{ dialect.simplified }}</span>
-        </Annotate>
+        <TokenizedText :text="dialect.simplified" />
       </div>
       <b-progress
         :max="dialects[0].population / Math.sqrt(dialects[0].population)"

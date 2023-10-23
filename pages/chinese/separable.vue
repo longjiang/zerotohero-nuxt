@@ -28,15 +28,13 @@
             <span>
               A
               <strong>separable verb</strong>
-              —for example, 唱歌 (chànggē, to sing a song)—consists of a verb (唱) and an object (歌).
-              Because of this, they can take the following forms. Note that a
-              variety of measure words and complements can be used, not just the
-              ones listed in the chart.
+              —for example, 唱歌 (chànggē, to sing a song)—consists of a verb
+              (唱) and an object (歌). Because of this, they can take the
+              following forms. Note that a variety of measure words and
+              complements can be used, not just the ones listed in the chart.
             </span>
           </p>
-          <table
-            class="table table-responsive separable-table"
-          >
+          <table class="table table-responsive separable-table">
             <thead>
               <tr>
                 <th>HSK</th>
@@ -73,54 +71,34 @@
                   {{ s.hsk }}
                 </th>
                 <th>
-                  <Annotate>
-                    <span>{{ s.v }}{{ s.o }}</span>
-                  </Annotate>
+                  <TokenizedText :text="s.v + s.o" />
                 </th>
                 <td>
-                  <Annotate>
-                    <span>{{ s.v }}不{{ s.v }}{{ s.o }}？</span>
-                  </Annotate>
+                  <TokenizedText :text="s.v + '不' + s.v + s.o + '？'" />
                 </td>
                 <td>
-                  <Annotate>
-                    <span>{{ s.v }}了{{ s.o }}</span>
-                  </Annotate>
+                  <TokenizedText :text="s.v + '了' + s.o" />
                 </td>
                 <td>
-                  <Annotate>
-                    <span>{{ s.v }}了一{{ s.measure }}{{ s.o }}</span>
-                  </Annotate>
+                  <TokenizedText :text="s.v + '了一' + s.measure + s.o" />
                 </td>
                 <td>
-                  <Annotate>
-                    <span>{{ s.v }}没{{ s.v }}{{ s.o }}？</span>
-                  </Annotate>
+                  <TokenizedText :text="s.v + '没' + s.v + s.o + '？'" />
                 </td>
                 <td>
-                  <Annotate>
-                    <span>{{ s.v }}{{ s.v }}{{ s.o }}</span>
-                  </Annotate>
+                  <TokenizedText :text="s.v + s.v + s.o" />
                 </td>
                 <td>
-                  <Annotate>
-                    <span>{{ s.v }}了{{ s.v }}{{ s.o }}</span>
-                  </Annotate>
+                  <TokenizedText :text="s.v + '了' + s.v + s.o" />
                 </td>
                 <td>
-                  <Annotate>
-                    <span>{{ s.v }}完{{ s.o }}</span>
-                  </Annotate>
+                  <TokenizedText :text="s.v + '完' + s.o" />
                 </td>
                 <td>
-                  <Annotate>
-                    <span>{{ s.v }}得了{{ s.o }}</span>
-                  </Annotate>
+                  <TokenizedText :text="s.v + '得了' + s.o" />
                 </td>
                 <td>
-                  <Annotate>
-                    <span>{{ s.v }}不了{{ s.o }}</span>
-                  </Annotate>
+                  <TokenizedText :text="s.v + '不了' + s.o" />
                 </td>
               </tr>
             </tbody>
@@ -139,8 +117,7 @@ export default {
       separable.o = separable.simplified[1];
     }
   },
-  computed: {
-  },
+  computed: {},
   data() {
     return {
       separables: [

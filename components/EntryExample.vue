@@ -7,7 +7,7 @@
           <div class="example-sentence">
             <!-- <p class="example-sentence-pinyin">{{ entry.examplePinyin }} <i class="speak glyphicon glyphicon-volume-up" v-bind:data-speak="entry.example"></i></p> -->
 
-            <Annotate
+            <TokenizedRichText
               tag="p"
               class="example-sentence-word"
             >
@@ -16,7 +16,7 @@
                   highlight(entry.example, entry.simplified, entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk)
                 "
               ></span>
-            </Annotate>
+            </TokenizedRichText>
             <p class="example-sentence-english">{{ entry.exampleTranslation }}</p>
           </div>
         </div>

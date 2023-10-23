@@ -71,12 +71,8 @@
               alt="Book cover"
               class="mb-4 shadow book-thumb"
             />
-            <Annotate tag="h6">
-              <b>{{ book.title }}</b>
-            </Annotate>
-            <Annotate tag="small" v-if="book.author">
-              <span>{{ book.author }}</span>
-            </Annotate>
+            <h6><TokenizedText v-if="book.title" :text="book.title" /></h6>
+            <small><TokenizedText v-if="book.author" :text="book.author" /></small>
           </router-link>
         </li>
       </ul>

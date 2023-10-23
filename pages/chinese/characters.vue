@@ -28,12 +28,17 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="character in characters">
+                <tr v-for="character in characters" :key="character.character">
                   <td>{{ character.hsk }}</td>
-                  <td><Annotate><span>{{ character.word }}</span></Annotate></td>
-                  <td><Annotate><span>{{ character.radicals }}</span></Annotate></td>
+                  <td><TokenizedText :text="character.word" /></td>
+                  <td><TokenizedText :text="character.radicals" /></td>
                   <td>{{ character.strokeCount }}</td>
-                  <td><Annotate :sticky="true"><span>{{ character.examples.replace(/ /g, '，') }}</span></Annotate></td>
+                  <td>
+                    <TokenizedText
+                      :sticky="true"
+                      :text="character.examples.replace(/ /g, '，')"
+                    />
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -45,35 +50,37 @@
 </template>
 
 <script>
-
 export default {
   async mounted() {
     const dictionary = await this.$getDictionary();
-    this.characters = await dictionary.listCharacters()
+    this.characters = await dictionary.listCharacters();
   },
   methods: {
     async buildCharactersTable() {
       const dictionary = await this.$getDictionary();
-      let characters = await dictionary.listCharacters()
+      let characters = await dictionary.listCharacters();
       for (let character of characters) {
-        let h = await (await this.$getHanzi()).lookupShallow(character.word)
-        character = Object.assign(character, h)
-        let examples = (await dictionary.lookupByCharacter(
-          character.character
-        )).filter(example => example.hsk !== 'outside').sort((a, b) => a.hsk - b.hsk)
-        character.examples = [...new Set(examples.map(item => item.simplified))]
-        character.radicals = character.decomposition ? character.decomposition.replace(/[⿰⿱⿲⿳⿴⿵⿶⿷⿸⿹⿺⿻？]/g, '') : ''
+        let h = await (await this.$getHanzi()).lookupShallow(character.word);
+        character = Object.assign(character, h);
+        let examples = (await dictionary.lookupByCharacter(character.character))
+          .filter((example) => example.hsk !== "outside")
+          .sort((a, b) => a.hsk - b.hsk);
+        character.examples = [
+          ...new Set(examples.map((item) => item.simplified)),
+        ];
+        character.radicals = character.decomposition
+          ? character.decomposition.replace(/[⿰⿱⿲⿳⿴⿵⿶⿷⿸⿹⿺⿻？]/g, "")
+          : "";
       }
-      return characters
+      return characters;
     },
   },
   data() {
     return {
-      characters: []
-    }
-  }
-}
+      characters: [],
+    };
+  },
+};
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

@@ -79,9 +79,7 @@
             </div>
             <div :key="rootsKey">
               <div class="big-word text-center">
-                <Annotate>
-                  <span>{{ arg }}</span>
-                </Annotate>
+                <TokenizedText :text="arg" />
                 Words
               </div>
               <Loader class="mt-5 text-center" />

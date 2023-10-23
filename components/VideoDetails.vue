@@ -9,13 +9,13 @@
       style="line-height: 1.5; margin-bottom: 0"
     >
       <span v-if="video" :key="`video-title-${video.title}`">
-        <Annotate
-          :phonetics="false"
-          :buttons="true"
+        <TokenizedText
           v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
+          :phonetics="false"
+          :showMenu="true"
+          :text="video.title"
           :showLoading="false"
-          ><span>{{ video.title }}</span></Annotate
-        >
+          />
         <span v-else>{{ video.title }}</span>
       </span>
     </h5>

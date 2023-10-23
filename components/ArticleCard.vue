@@ -8,12 +8,10 @@
     <div class="media-body">
       <client-only>
         <h5 class="article-title">
-          <Annotate :buttons="true">
-            <span>{{ article.title }}</span>
-          </Annotate>
+          <TokenizedText :text="article.title" />
         </h5>
         <div class="article-body">
-          <Annotate :buttons="true"><div v-html="article.body" /></Annotate>
+          <TokenizedRichText :showMenu="true"><div v-html="article.body" /></TokenizedRichText>
         </div>
       </client-only>
       <a

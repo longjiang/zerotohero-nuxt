@@ -20,13 +20,13 @@
             :remove="removeSavedLine"
             style="overflow: hidden; float: left"
           /> -->
-          <Annotate tag="div" :checkSaved="false" :buttons="true">
+          <TokenizedRichText tag="div" :checkSaved="false" :showMenu="true">
             <span
               v-html="
                 highlight(line.line, word ? word.head : text, level)
               "
             />
-          </Annotate>
+          </TokenizedRichText>
         </li>
       </ul>
       <ShowMoreButton

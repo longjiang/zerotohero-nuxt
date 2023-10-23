@@ -61,7 +61,7 @@ class BaseTokenizer {
     let tokenized = [];
 
     switch (tokenizationType) {
-      // tokenizationType passed in from <Annotate>
+      // tokenizationType passed in from <TokenizedRichText>
       case "integral":
         tokenized = this.tokenizeIntegral(text);
         break;

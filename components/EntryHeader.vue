@@ -4,15 +4,16 @@
     <div>
       <div>
         <span
-          v-if="
-            entry.level &&
-            entry.level !== 'outside'
-          "
+          v-if="entry.level && entry.level !== 'outside'"
           class="entry-level p-1 rounded ml-2 mr-2"
           style="position: relative; bottom: 0.2em; font-size: 0.8em"
           :data-bg-level="entry.level"
         >
-        {{ levels && levels[entry.level] ? levels[entry.level].name : entry.level }}
+          {{
+            levels && levels[entry.level]
+              ? levels[entry.level].name
+              : entry.level
+          }}
         </span>
         <span
           v-if="entry.newHSK"
@@ -31,17 +32,17 @@
           </span>
         </span>
       </div>
-      <Annotate
-        tag="div"
+      <div
         v-if="entry.counters"
         :class="{ 'mt-1 mb-2': true, transparent: hidePhonetics && !reveal }"
       >
-        <span>
-          一{{
-            entry.counters.map((counter) => counter.simplified).join("、一")
-          }}
-        </span>
-      </Annotate>
+        <TokenizedText
+          :text="
+            '一' +
+            entry.counters.map((counter) => counter.simplified).join('、一')
+          "
+        />
+      </div>
       <div class="entry-word-wrapper" style="display: inline-block">
         <div class="mb-2">
           <div class="entry-pinyin">

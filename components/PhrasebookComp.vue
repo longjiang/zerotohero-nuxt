@@ -38,8 +38,15 @@
       />
     </div>
     <div class="row" v-if="phrasebook">
-      <div class="col-sm-12 mb-3 mt-3" v-if="startRow > 1" @click="startRow = 1">
-        <b-button variant="success" class="d-block w-100"><i class="fa fa-chevron-up mr-1"></i> {{ $t('Show Previous {n} Phrases', {n: startRow - 1}) }}</b-button>
+      <div
+        class="col-sm-12 mb-3 mt-3"
+        v-if="startRow > 1"
+        @click="startRow = 1"
+      >
+        <b-button variant="success" class="d-block w-100"
+          ><i class="fa fa-chevron-up mr-1"></i>
+          {{ $t("Show Previous {n} Phrases", { n: startRow - 1 }) }}</b-button
+        >
       </div>
       <router-link
         v-for="(phraseObj, phraseIndex) in filteredPhrases.slice(
@@ -93,19 +100,22 @@
             </span>
           </div>
 
-          <Annotate
-            :phonetics="!phraseObj.pronunciation"
-            :popup="false"
-            :class="{ 'hide-phonetics': hidePhonetics, 'hide-word': hideWord }"
+          <h4
+            :data-level="
+              phraseObj && phraseObj.level ? phraseObj.level : 'outside'
+            "
+            class="mb-0"
           >
-            <h4
-              :data-level="
-                phraseObj && phraseObj.level ? phraseObj.level : 'outside'
-              "
-              class="mb-0"
-              v-html="phraseObj.phrase"
+            <TokenizedText
+              :phonetics="!phraseObj.pronunciation"
+              :popup="false"
+              :class="{
+                'hide-phonetics': hidePhonetics,
+                'hide-word': hideWord,
+              }"
+              :text="phraseObj.phrase"
             />
-          </Annotate>
+          </h4>
 
           <div
             :class="{ 'mb-0': true, transparent: hideDefinitions }"
@@ -120,7 +130,7 @@
 </template>
 
 <script>
-import { makeTextFile } from '@/lib/utils';
+import { makeTextFile } from "@/lib/utils";
 
 export default {
   props: {
@@ -159,7 +169,7 @@ export default {
       } else {
         return this.phrasebook.phrases;
       }
-    }
+    },
   },
   watch: {
     startRow() {
@@ -171,7 +181,7 @@ export default {
       if (this.keyword) {
         this.startRow = 1;
       }
-    }
+    },
   },
   methods: {
     remove(phraseObj) {
@@ -277,6 +287,5 @@ export default {
   z-index: 2;
   top: 0;
   text-align: center;
-  
 }
 </style>
