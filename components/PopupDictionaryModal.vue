@@ -63,7 +63,7 @@ export default {
     this.$nuxt.$off('hidePopupDictionary', this.hide);
   },
   methods: {
-    show(token, text, context, phraseObj, words, images, quizModeItem) {
+    show({ token, text, context, phraseObj, words, images, quizModeItem }) {
       this.token = token;
       this.text = text;
       this.context = context;

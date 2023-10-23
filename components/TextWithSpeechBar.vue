@@ -106,7 +106,7 @@
           v-for="(line, lineIndex) of lines"
           :key="`chapter-line-${lineIndex}`"
         >
-          <Annotate
+          <!-- <Annotate
             class="annotated-line"
             tag="div"
             :foreign="foreign"
@@ -120,7 +120,8 @@
             @sentenceClick="onSentenceClick"
           >
             <div v-html="line.trim()" />
-          </Annotate>
+          </Annotate> -->
+          <TokenizedText :text="stripTags(line).trim()" />
           <div
             v-if="translation || translationLoading"
             class="translation-line"
@@ -199,7 +200,7 @@
 import { parse } from "node-html-parser";
 import { ContainerQuery } from "vue-container-query";
 import { timeout } from "@/lib/utils/timeout";
-import { breakSentences } from "@/lib/utils/string";
+import { breakSentences, stripTags } from "@/lib/utils/string";
 import Vue from "vue";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 
@@ -345,6 +346,7 @@ export default {
     },
   },
   methods: {
+    stripTags,
     bindKeys() {
       window.addEventListener("keydown", this.handleKeydown);
     },
