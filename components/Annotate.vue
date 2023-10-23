@@ -57,6 +57,7 @@
           </div>
           <template v-if="annotated && !textMode">
             <v-runtime-template
+              v-once
               v-for="(template, index) of annotatedSlots"
               :key="`annotate-template-${index}`"
               :template="template"
@@ -233,7 +234,6 @@ import readerlink from "@/components/ReaderLink";
 import VRuntimeTemplate from "v-runtime-template";
 import SmartQuotes from "smartquotes";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
-import { getClient } from "iframe-translator";
 import {
   highlightMultiple,
   isMobile,
@@ -241,7 +241,6 @@ import {
   logError,
   breakSentences,
   l2LevelName,
-  PYTHON_SERVER
 } from "@/lib/utils";
 
 export default {
@@ -401,6 +400,220 @@ export default {
     },
   },
   methods: {
+    async visibilityChanged(isVisible) {
+      if (isVisible) {
+        this.isVisible = true
+        this.convertToSentencesAndAnnotate(this.$slots.default[0]);
+        if (this.showGrammar) {
+          this.getGrammar();
+        }
+      }
+    },
+    convertToSentencesAndAnnotate(slot) {
+      if (
+        !this.annotating &&
+        !this.annotated &&
+        this.$hasFeature("dictionary")
+      ) {
+        if (slot) {
+          this.convertToSentencesRecursive(slot.elm);
+          if (!this.disableAnnotation) this.annotate(slot.elm);
+          else this.$emit("annotated", true);
+        }
+      }
+    },
+    async annotate(node) {
+      this.annotating = true;
+      this.annotatedSlots = [];
+      if (typeof node !== "undefined") {
+        let annotatedNode = await this.annotateRecursive(node.cloneNode(true));
+        let annotatedHtml = annotatedNode.outerHTML;
+        this.annotatedSlots.push(annotatedHtml);
+      }
+      this.annotating = false;
+      this.annotated = true;
+      this.$emit("annotated", true);
+      this.checkSavedWords();
+    },
+    async annotateRecursive(node) {
+      if (node?.classList?.contains("sentence")) {
+        // .sentence node
+        let sentence = node.innerText;        
+        sentence = SmartQuotes.string(
+            sentence.replace(/'/g, "--do-not-smart-quote-single-quotes--")
+          ).replace(/--do-not-smart-quote-single-quotes--/g, "'");
+        // We MUST do that otherwise the data-sentence-text attribute (10 lines down) will mess up the markup!
+        if (
+          this.$l2.code === "my" &&
+          this.myanmarZawgyiDetector &&
+          this.myanmarZawgyiConverter
+        ) {
+          let score = this.myanmarZawgyiDetector.getZawgyiProbability(sentence);
+          if (score > 0.8)
+            sentence = this.myanmarZawgyiConverter.zawgyiToUnicode(sentence);
+        }
+        let html = await this.tokenize(sentence, this.batchId);
+        let dataSentenceText = this.emitSentenceTextAsAttr
+          ? `data-sentence-text="${sentence.trim()}"`
+          : "";
+        let $tokenizedSentenceSpan = $(
+          `<span class="sentence" @click.capture="onSentenceClick" ${dataSentenceText}>${html}</span>`
+        );
+        this.batchId = this.batchId + 1;
+        $(node).before($tokenizedSentenceSpan);
+        $(node).remove();
+      } else {
+        // work with child nodes
+        let nodes = [];
+        for (let n of node.childNodes) {
+          nodes.push(n);
+        }
+        for (let n of nodes) {
+          await this.annotateRecursive(n);
+        }
+      }
+
+      return node;
+    },
+    async tokenize(text, batchId) {
+      let html = "";
+      let dictionary = await this.$getDictionary();
+      if (!dictionary) return text;
+      let tokens = await dictionary.tokenizeWithCache(text);
+      this.tokenized[batchId] = tokens;
+      for (let index in this.tokenized[batchId]) {
+        let token = this.tokenized[batchId][index];
+        if (typeof token === "object") {
+          if (token.text === '\n') {
+            html += `<br />`;
+            continue;
+          }
+          // If token.text is multiple spaces
+          if (token.text?.match(/^\s+$/)) {
+            html += token.text;
+            continue;
+          }
+          html += `<WordBlock v-bind="wordBlockAttributes(${batchId},${index})">${token.text}</WordBlock>`;
+        } else {
+          html += `<span class="word-block">${token.replace(
+            /\s/g,
+            "&nbsp;"
+          )}</span>`;
+        }
+      }
+      return html;
+    },
+
+    wordBlockAttributes(batchId, index) {
+      let token = this.tokenized[batchId][index];
+      token.text;
+      let context = {
+        text: this.text,
+        youtube_id: this.youtube_id,
+        starttime: this.starttime,
+      }; // { text, starttime = undefined, youtube_id = undefined}
+      let attrs = {
+        ref: "word-block",
+        usePopup: this.usePopup,
+        sticky: this.sticky,
+        explore: this.explore,
+        context,
+        token,
+        quizMode: this.quizMode,
+      };
+      if (token.mappedPronunciation)
+        attrs.mappedPronunciation = token.mappedPronunciation;
+      return attrs;
+    },
+    convertToSentencesRecursive(node) {
+      if (typeof node === "undefined") return node;
+      if (node.nodeType === 3) {
+        // textNode
+        // break setnences
+        let text = node.nodeValue;
+        text = text.replace(/\n\u200e/g, "\n"); // Fix error when \n and a left-to-right mark are found together and mess up with the order of words.
+        let sentences = this.breakSentences ? breakSentences(text) : [text];
+        for (let sentence of sentences) {
+          // $(node).before(`<span id="sentence-placeholder-${this.batchId}">${sentence}</span>`)
+          let dataSentenceText = this.emitSentenceTextAsAttr
+            ? `data-sentence-text="${sentence.trim()}"`
+            : "";
+          let sentenceSpan = $(
+            `<span class="sentence" @click.capture="onSentenceClick" ${dataSentenceText}>${sentence}</span>`
+          );
+          $(node).before(sentenceSpan);
+        }
+        $(node).remove();
+      } else {
+        // work with child nodes
+        let nodes = [];
+        for (let n of node.childNodes) {
+          nodes.push(n);
+        }
+        for (let n of nodes) {
+          this.convertToSentencesRecursive(n);
+        }
+      }
+      return node;
+    },
+
+    async checkSavedWords() {
+       // Give time for the runtime template to render
+      await timeout(300);
+      if (this.$refs["run-time-template"]?.length > 0) {
+        let savedWords = [];
+        for (let template of this.$refs["run-time-template"]) {
+          let wordblocks = template.$children?.[0]?.$children;
+          let moreSavedWords = wordblocks
+            .filter((wb) => wb.savedWord)
+            .map((wb) => wb.savedWord);
+          savedWords = [...savedWords, ...moreSavedWords];
+        }
+        if (savedWords.length > 0) {
+          this.$emit("savedWordsFound", savedWords);
+        }
+      }
+    },
+    async getGrammar() {
+      let grammar = await this.$getGrammar();
+      if (grammar)
+        this.matchedGrammar = grammar.findInText(this.text, this.level);
+    },
+    async annotateInputBlur(e) {
+      let newText = e.target.value;
+      this.reannotate(newText);
+      await timeout(200);
+      this.selectedText = undefined;
+      this.textMode = false;
+      this.$emit("textChanged", newText);
+    },
+    async reannotate(newText) {
+      await timeout(200);
+      let node = this.$el.querySelector(".annotate-slot > *");
+      if (node) {
+        node.innerText = newText;
+        this.convertToSentencesRecursive(node);
+        this.annotate(node);
+      }
+      this.annotated = true;
+    },
+    highlightTranslation(current) {
+      let translationSentences = this.getTranslationSentences();
+      for (let translationSentence of translationSentences) {
+        $(translationSentence).removeClass("current");
+      }
+      const translationSentence = translationSentences[current];
+      $(translationSentence).addClass("current");
+    },
+    onSentenceClick(e) {
+      let sentenceEl = e.currentTarget;
+      let sentences = this.getSentences();
+      let index = sentences.findIndex((el) => el === sentenceEl);
+      let current = Math.max(index, 0); // cannot set this as a data property because reactivity makes it impossible for the parent
+      this.highlightTranslation(current);
+      this.$emit("sentenceClick", sentenceEl);
+    },
+
     lookupAsPhraseClick() {
       this.$router.push({
         name: "phrase",
@@ -594,227 +807,6 @@ export default {
       document.execCommand("copy");
       modal.removeChild(tempInput);
       this.hideMenuModal();
-    },
-    async visibilityChanged(isVisible) {
-      if (isVisible) {
-        this.isVisible = true
-        this.convertToSentencesAndAnnotate(this.$slots.default[0]);
-        if (this.showGrammar) {
-          this.getGrammar();
-        }
-      } else {
-        this.isVisible = false
-        // We unset the annotations to save memory and battery, but we set the height and width to prevent the annotated text from shifting up and down.
-        // this.$el.style.minHeight = this.$el.clientHeight + "px";
-        // this.$el.style.minWidth = this.$el.clientWidth + "px";
-        this.annotated = false;
-        this.$emit("annotated", false);
-      }
-    },
-    async getGrammar() {
-      let grammar = await this.$getGrammar();
-      if (grammar)
-        this.matchedGrammar = grammar.findInText(this.text, this.level);
-    },
-    async annotateInputBlur(e) {
-      let newText = e.target.value;
-      this.reannotate(newText);
-      await timeout(200);
-      this.selectedText = undefined;
-      this.textMode = false;
-      this.$emit("textChanged", newText);
-    },
-    async reannotate(newText) {
-      this.annotated = false;
-      await timeout(200);
-      let node = this.$el.querySelector(".annotate-slot > *");
-      if (node) {
-        node.innerText = newText;
-        this.convertToSentencesRecursive(node);
-        this.annotate(node);
-      }
-      this.annotated = true;
-    },
-    convertToSentencesAndAnnotate(slot) {
-      if (
-        !this.annotating &&
-        !this.annotated &&
-        this.$hasFeature("dictionary")
-      ) {
-        if (slot) {
-          this.convertToSentencesRecursive(slot.elm);
-          if (!this.disableAnnotation) this.annotate(slot.elm);
-          else this.$emit("annotated", true);
-        }
-      }
-    },
-    highlightTranslation(current) {
-      let translationSentences = this.getTranslationSentences();
-      for (let translationSentence of translationSentences) {
-        $(translationSentence).removeClass("current");
-      }
-      const translationSentence = translationSentences[current];
-      $(translationSentence).addClass("current");
-    },
-    async annotate(node) {
-      this.annotated = false;
-      this.annotating = true;
-      this.annotatedSlots = [];
-      if (typeof node !== "undefined") {
-        let annotatedNode = await this.annotateRecursive(node.cloneNode(true));
-        let annotatedHtml = annotatedNode.outerHTML;
-        this.annotatedSlots.push(annotatedHtml);
-      }
-      this.annotating = false;
-      this.annotated = true;
-      this.$emit("annotated", true);
-      this.checkSavedWords();
-    },
-    async checkSavedWords() {
-       // Give time for the runtime template to render
-      await timeout(300);
-      if (this.$refs["run-time-template"]?.length > 0) {
-        let savedWords = [];
-        for (let template of this.$refs["run-time-template"]) {
-          let wordblocks = template.$children?.[0]?.$children;
-          let moreSavedWords = wordblocks
-            .filter((wb) => wb.savedWord)
-            .map((wb) => wb.savedWord);
-          savedWords = [...savedWords, ...moreSavedWords];
-        }
-        if (savedWords.length > 0) {
-          this.$emit("savedWordsFound", savedWords);
-        }
-      }
-    },
-    async annotateRecursive(node) {
-      if (node?.classList?.contains("sentence")) {
-        // .sentence node
-        let sentence = node.innerText;        
-        sentence = SmartQuotes.string(
-            sentence.replace(/'/g, "--do-not-smart-quote-single-quotes--")
-          ).replace(/--do-not-smart-quote-single-quotes--/g, "'");
-        // We MUST do that otherwise the data-sentence-text attribute (10 lines down) will mess up the markup!
-        if (
-          this.$l2.code === "my" &&
-          this.myanmarZawgyiDetector &&
-          this.myanmarZawgyiConverter
-        ) {
-          let score = this.myanmarZawgyiDetector.getZawgyiProbability(sentence);
-          if (score > 0.8)
-            sentence = this.myanmarZawgyiConverter.zawgyiToUnicode(sentence);
-        }
-        let html = await this.tokenize(sentence, this.batchId);
-        let dataSentenceText = this.emitSentenceTextAsAttr
-          ? `data-sentence-text="${sentence.trim()}"`
-          : "";
-        let $tokenizedSentenceSpan = $(
-          `<span class="sentence" @click.capture="onSentenceClick" ${dataSentenceText}>${html}</span>`
-        );
-        this.batchId = this.batchId + 1;
-        $(node).before($tokenizedSentenceSpan);
-        $(node).remove();
-      } else {
-        // work with child nodes
-        let nodes = [];
-        for (let n of node.childNodes) {
-          nodes.push(n);
-        }
-        for (let n of nodes) {
-          await this.annotateRecursive(n);
-        }
-      }
-
-      return node;
-    },
-    async tokenize(text, batchId) {
-      let html = "";
-      let dictionary = await this.$getDictionary();
-      if (!dictionary) return text;
-      let tokens = await dictionary.tokenizeWithCache(text);
-      this.tokenized[batchId] = tokens;
-      for (let index in this.tokenized[batchId]) {
-        let token = this.tokenized[batchId][index];
-        if (typeof token === "object") {
-          if (token.text === '\n') {
-            html += `<br />`;
-            continue;
-          }
-          // If token.text is multiple spaces
-          if (token.text?.match(/^\s+$/)) {
-            html += token.text;
-            continue;
-          }
-          html += `<WordBlock v-bind="wordBlockAttributes(${batchId},${index})">${token.text}</WordBlock>`;
-        } else {
-          html += `<span class="word-block">${token.replace(
-            /\s/g,
-            "&nbsp;"
-          )}</span>`;
-        }
-      }
-      return html;
-    },
-
-    wordBlockAttributes(batchId, index) {
-      let token = this.tokenized[batchId][index];
-      let text = token.text;
-      let context = {
-        text: this.text,
-        youtube_id: this.youtube_id,
-        starttime: this.starttime,
-      }; // { text, starttime = undefined, youtube_id = undefined}
-      let attrs = {
-        ref: "word-block",
-        usePopup: this.usePopup,
-        sticky: this.sticky,
-        explore: this.explore,
-        context,
-        token,
-        quizMode: this.quizMode,
-      };
-      if (token.mappedPronunciation)
-        attrs.mappedPronunciation = token.mappedPronunciation;
-      return attrs;
-    },
-    convertToSentencesRecursive(node) {
-      if (typeof node === "undefined") return node;
-      if (node.nodeType === 3) {
-        // textNode
-        // break setnences
-        let text = node.nodeValue;
-        text = text.replace(/\n\u200e/g, "\n"); // Fix error when \n and a left-to-right mark are found together and mess up with the order of words.
-        let sentences = this.breakSentences ? breakSentences(text) : [text];
-        for (let sentence of sentences) {
-          // $(node).before(`<span id="sentence-placeholder-${this.batchId}">${sentence}</span>`)
-          let dataSentenceText = this.emitSentenceTextAsAttr
-            ? `data-sentence-text="${sentence.trim()}"`
-            : "";
-          let sentenceSpan = $(
-            `<span class="sentence" @click.capture="onSentenceClick" ${dataSentenceText}>${sentence}</span>`
-          );
-          $(node).before(sentenceSpan);
-        }
-        $(node).remove();
-      } else {
-        // work with child nodes
-        let nodes = [];
-        for (let n of node.childNodes) {
-          nodes.push(n);
-        }
-        for (let n of nodes) {
-          this.convertToSentencesRecursive(n);
-        }
-      }
-      return node;
-    },
-    onSentenceClick(e) {
-      let sentenceEl = e.currentTarget;
-      let sentences = this.getSentences();
-      let index = sentences.findIndex((el) => el === sentenceEl);
-      let current = Math.max(index, 0); // cannot set this as a data property because reactivity makes it impossible for the parent
-      this.highlightTranslation(current);
-      this.$emit("sentenceClick", sentenceEl);
     },
   },
 };
