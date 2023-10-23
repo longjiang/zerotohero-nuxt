@@ -63,6 +63,7 @@
 
 <script>
 import { stripTags } from "@/lib/utils";
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -104,7 +105,7 @@ export default {
       translationData: this.translation, // For translation
     };
   },
-  // Provide/Inject: Vue provides a provide and inject mechanism which is 
+  // Provide/Inject: Vue provides a provide and inject mechanism which is
   // aimed at deep component nesting. A parent component can "provide" properties,
   // and any nested child component can "inject" those properties without them
   // being passed through each level of the component tree.
@@ -125,6 +126,35 @@ export default {
     phraseSaved() {
       return this.$refs["savePhrase"] && this.$refs["savePhrase"].saved;
     },
+    ...mapState({
+      savedWords: (state) => state.savedWords,
+    }),
+  },
+  watch: {
+    // Watch for editMode changes
+    editMode(newValue) {
+      if (newValue) {
+        this.$nextTick(() => {
+          this.adjustTextareaHeight();
+        });
+      }
+    },
+    savedWords: {
+      handler: function () {
+        this.checkSavedWords();
+      },
+      deep: true,
+    },
+    translationData(translation) {
+      if (translation) this.$emit("translation", translation);
+    },
+    editMode(editMode) {
+      if (editMode) {
+        this.$nextTick(() => {
+          this.adjustTextareaHeight();
+        });
+      }
+    },
   },
   mounted() {
     if (this.$slots.default && this.$slots.default.length > 0) {
@@ -139,16 +169,6 @@ export default {
       }
     }
   },
-  watch: {
-    // Watch for editMode changes
-    editMode(newValue) {
-      if (newValue) {
-        this.$nextTick(() => {
-          this.adjustTextareaHeight();
-        });
-      }
-    },
-  },
   methods: {
     dummyFunction(target) {},
     // captures the event name and payload, then re-emits the same event
@@ -157,26 +177,32 @@ export default {
         this.$emit(event.name, event.payload);
       }
     },
+    getTokenizedTextComponent() {
+      return this.$children.find(
+        (child) => child.$options.name === "TokenizedText"
+      );
+    },
+
+    async delegateToTokenizedText(methodName, ...args) {
+      let tokenizedTextComponent = this.getTokenizedTextComponent();
+      if (tokenizedTextComponent && tokenizedTextComponent[methodName]) {
+        await tokenizedTextComponent[methodName](...args);
+      }
+    },
+
     /**
      * @param {Number} startFrom Starting time in seconds
      */
     async playAnimation(startFrom = 0) {
-      // pass it to the first <TokenizedText /> component if it exists
-      let tokenizedTextComponent = this.$children.find(
-        (child) => child.$options.name === 'TokenizedText'
-      );
-      if (tokenizedTextComponent) {
-        await tokenizedTextComponent.playAnimation(startFrom);
-      }
+      await this.delegateToTokenizedText("playAnimation", startFrom);
     },
-    // the same for pauseAnimation
+
     async pauseAnimation() {
-      let tokenizedTextComponent = this.$children.find(
-        (child) => child.$options.name === 'TokenizedText'
-      );
-      if (tokenizedTextComponent) {
-        await tokenizedTextComponent.pauseAnimation();
-      }
+      await this.delegateToTokenizedText("pauseAnimation");
+    },
+
+    async checkSavedWords() {
+      await this.delegateToTokenizedText("checkSavedWords");
     },
     async editBlur(e) {
       let newText = e.target.value;

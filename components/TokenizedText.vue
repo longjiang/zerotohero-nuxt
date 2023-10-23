@@ -27,15 +27,11 @@ import { timeout, stripTags } from "@/lib/utils";
 
 export default {
   name: "TokenizedText",
-  // Provide/Inject: Vue provides a provide and inject mechanism which is 
+  // Provide/Inject: Vue provides a provide and inject mechanism which is
   // aimed at deep component nesting. A parent component can "provide" properties,
   // and any nested child component can "inject" those properties without them
   // being passed through each level of the component tree.
-  inject: [
-    'context',
-    'animationDuration',
-    'animationSpeed',
-  ],
+  inject: ["context", "animationDuration", "animationSpeed"],
   props: {
     text: {
       type: String,
@@ -59,18 +55,6 @@ export default {
       return this.$refs["savePhrase"] && this.$refs["savePhrase"].saved;
     },
   },
-  watch: {
-    translationData(translation) {
-      if (translation) this.$emit("translation", translation);
-    },
-    editMode(editMode) {
-      if (editMode) {
-        this.$nextTick(() => {
-          this.adjustTextareaHeight();
-        });
-      }
-    },
-  },
   methods: {
     visibilityChanged(visible) {
       if (visible && !this.tokenized) {
@@ -83,6 +67,30 @@ export default {
       this.tokenized = true;
       this.$emit("annotated", true);
     },
+    async checkSavedWords() {
+      // Give a brief delay to allow the WordBlocks components to render fully.
+      await timeout(300);
+
+      // If there are children present
+      if (this.$children?.length > 0) {
+        // Initialize an empty array to store saved words from all WordBlocks components
+        let savedWords = [];
+
+        // Loop through each WordBlocks component (direct child)
+        for (let wordBlockComponent of this.$children) {
+          // Check if the component has a savedWord property and add it to the savedWords array
+          if (wordBlockComponent.savedWord) {
+            savedWords.push(wordBlockComponent.savedWord);
+          }
+        }
+
+        // If there are any saved words found, emit an event with the saved words
+        if (savedWords.length > 0) {
+          this.$emit("savedWordsFound", savedWords);
+        }
+      }
+    },
+
     /**
      * @param {Number} startFrom Starting time in seconds
      */
