@@ -1,6 +1,6 @@
 <template>
   <TabbedSections v-bind="{ sections }">
-    <template #media>{{ context}}
+    <template #media>
       <Widget
         skin="dark"
         :withPadding="false"
