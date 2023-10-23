@@ -270,8 +270,37 @@ export default {
                     this.playerIsThisPlayerNotSomeOtherPlayer() &&
                     !this.interval
                   ) {
+                    let crossingTimes
+                    if (this.video?.subs_l2) {
+                      // Map times of each of subs_l2's 'starttime' and 'starttime' + 'duration' properties (if duration is available)
+                      // So we get a flat array of "crossing" points
+                      crossingTimes = this.video.subs_l2
+                        .map((sub) => {
+                          return sub.duration ? [sub.starttime, sub.starttime + sub.duration] : [sub.starttime];
+                        })
+                        .flat();
+
+                    }
                     this.interval = setInterval(() => {
-                      this.updateCurrentTime();
+                      if (!this.player) return
+                      let currentTime = this.player.getCurrentTime();
+                      if (currentTime < 0.5) {
+                        this.updateCurrentTime();
+                      } else if (crossingTimes) {
+                        // If crossingTimes is set, check if the current time is in the vicinity of a crossing time
+                        // If so, emit the crossing time
+                        let crossingTime = crossingTimes.find((time) => {
+                          return Math.abs(currentTime - time) < 0.25;
+                        });
+                        if (crossingTime) {
+                          this.updateCurrentTime();
+                        }
+                      } else {
+                        // crossingTimes not available, just emit the current time if it's % 1s
+                        if (currentTime % 1 < 0.1) {
+                          this.updateCurrentTime();
+                        }
+                      }
                     }, 250);
                   }
                 } else {
