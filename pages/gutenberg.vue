@@ -7,8 +7,8 @@
 <template>
   <div class="main">
     <SocialHead
-      :title="`${bookData.title} | Language Player`"
-      :description="`Read ${bookData.title} on Language Player, a free online library for ${$l2.name} learners.`"
+      :title="`${bookData ? bookData.title + ' | ' : ''}Language Player`"
+      :description="`Read ${bookData?.title} on Language Player, a free online library for ${$l2.name} learners.`"
     />
     <div class="container pt-4 pb-5">
       <div class="row">

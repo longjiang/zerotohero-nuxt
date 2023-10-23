@@ -155,13 +155,15 @@ export default {
       }
     },
     bestPhonetics() {
+      let phonetics;
       if (this.token?.pronunciation) {
-        return this.token.pronunciation;
+        phonetics = this.token.pronunciation; 
       } else if (this.bestWord) {
-        let phonetics = this.phoneticsFromWord(this.bestWord);
-        if (phonetics) return phonetics;
-      }
-      return tr(this.text).replace(/"/g, "");
+        phonetics = this.phoneticsFromWord(this.bestWord);
+      } else {
+        phonetics = tr(this.text).replace(/"/g, "");
+      }  
+      if (phonetics) return phonetics;
     },
   },
   asyncComputed: {
@@ -410,7 +412,6 @@ export default {
       return Klingon.fixTypos(text);
     },
     wordBlockClick(event) {
-      console.log({ event });
       if (this.quizMode) {
         this.reveal = !this.reveal;
       }

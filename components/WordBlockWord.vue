@@ -8,7 +8,7 @@
       :key="index"
     >
       <rt v-if="showDefinition && index === 0">{{ definition || "&nbsp;" }}</rt>
-      <rt v-if="segment.type === 'kanji' && hasKanji(segment.surface)">{{
+      <rt v-if="showReading(segment)">{{
         segment.reading
       }}</rt
       >{{ segment.surface }}</ruby
@@ -86,8 +86,11 @@ export default {
     },
   },
   methods: {
-    hasKanji(...args) {
-      return hasKanji(...args);
+    showReading(segment) {
+      if (!this.$l2Settings.showPinyin) return false; // If the user doesn't want to see phonetics (pinyin), don't show it
+      if (segment.type !== 'kanji') return false // segment.type is 'kanji' for all words, except those in Japanese that do not have kanji
+      if (this.mappedPronunciation?.length && !hasKanji(surface)) return false // If this is Japanese, do not show pronunciation if there is no kanji
+      return true;
     },
   },
 };
