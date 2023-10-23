@@ -21,12 +21,12 @@
         v-html="attributes?.hanAnnotation"
       /><span
         v-if="
-          attributes?.showQuickGloss &&
+          this.showQuickGloss &&
           attributes?.isSaved &&
           attributes?.definition
         "
         class="word-block-text-quick-gloss"
-        >{{ definition }}</span
+        >‘{{ attributes.definition }}’</span
       >
     </template>
   </span>
@@ -559,7 +559,7 @@ rt {
 
 .word-block-text-byeonggi {
   color: rgba(143, 158, 172, 0.8);
-  font-size: 6em;
+  font-size: 50%;
 }
 
 .word-block-unknown {

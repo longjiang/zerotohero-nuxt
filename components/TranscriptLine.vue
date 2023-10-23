@@ -49,6 +49,7 @@
               // breakSentences: false,
             }"
             :class="{
+              'w-100': true,
               'transcript-line-l2': true,
               'transcript-line-l2-single': single,
               'transcript-line-l2-rtl': $l2.direction === 'rtl',
