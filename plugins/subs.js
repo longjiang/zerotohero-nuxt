@@ -6,7 +6,6 @@ import {
   mutuallyExclusive,
   uniqueByValue,
   characterClass,
-  escapeRegExp,
 } from "@/lib/utils";
 
 export default ({ app }, inject) => {
@@ -29,11 +28,34 @@ export default ({ app }, inject) => {
           line.starttime = Number(line.starttime);
           if (line.duration) line.duration = Number(line.duration);
         }
-        parsed = parsed.sort((a, b) => a.starttime - b.starttime);
+        parsed = this.normalizeSubs(parsed);
         return parsed;
       } else {
         return [];
       }
+    },
+    normalizeSubs(lines) {
+      lines = lines.sort((a, b) => a.starttime - b.starttime);
+      lines = uniqueByValue(lines, "starttime")
+
+      // Filterout zero-width space characters
+      lines = lines.map((line) => {
+        line.line = line.line.replace(/\u200B/g, "");
+        return line;
+      });
+
+      // If multiple consecutive lines have the same `line` property, merge them
+      let prevLine;
+      for (let line of lines) {
+        if (prevLine && prevLine.line === line.line) {
+          prevLine.duration += line.duration;
+          line.starttime = undefined;
+        } else {
+          prevLine = line;
+        }
+      }
+      lines = lines.filter((line) => line.starttime);
+      return lines;
     },
     parseSrt(srt) {
       let parsed = parseSync(srt).map((cue) => {
@@ -57,7 +79,8 @@ export default ({ app }, inject) => {
           prevLine = line;
         }
       }
-      return uniqueByValue(subs_l2, "starttime");
+      subs_l2 = this.normalizeSubs(subs_l2);
+      return subs_l2;
     },
     unparseSubs(subs, l2 = "en") {
       let lines = subs

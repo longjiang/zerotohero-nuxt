@@ -67,7 +67,6 @@ export default {
      * @param {Number} startFrom Starting time in seconds
      */
     async playAnimation(startFrom = 0) {
-        console.log('yo', {animationDuration: this.animationDuration })
       if (this.tokenized) {
         this.animate = true;
         if (this.animationDuration) {
