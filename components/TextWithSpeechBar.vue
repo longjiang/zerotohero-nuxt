@@ -48,7 +48,11 @@
               >
                 <i class="fas fa-step-backward"></i>
               </b-button>
-              <b-button :variant="$skin" @click="previous()" :title="$t('Previous Sentence') + ' (↑)'">
+              <b-button
+                :variant="$skin"
+                @click="previous()"
+                :title="$t('Previous Sentence') + ' (↑)'"
+              >
                 <i class="fas fa-arrow-up"></i>
               </b-button>
               <b-button
@@ -69,7 +73,11 @@
               >
                 <i class="fas fa-pause"></i>
               </b-button>
-              <b-button :variant="$skin" @click="next()" :title="$t('Next Sentence') + ' (↓)'">
+              <b-button
+                :variant="$skin"
+                @click="next()"
+                :title="$t('Next Sentence') + ' (↓)'"
+              >
                 <i class="fas fa-arrow-down"></i>
               </b-button>
               <b-button
@@ -81,7 +89,11 @@
               >
                 <i class="fas fa-step-forward"></i>
               </b-button>
-              <b-button :variant="$skin" @click="toggleSpeed" :title="$t('Playback Speed: {speed}x', { speed }) + ' (M)'">
+              <b-button
+                :variant="$skin"
+                @click="toggleSpeed"
+                :title="$t('Playback Speed: {speed}x', { speed }) + ' (M)'"
+              >
                 <span>{{ speed }}x</span>
               </b-button>
             </template>
@@ -111,8 +123,7 @@
             tag="div"
             :foreign="foreign"
             :emitSentenceTextAsAttr="true"
-            :buttons="true"
-            :showTranslation="translation ? false : true"
+            
             :showLoading="showLoading"
             ref="annotate"
             @translation="onTranslation($event, lineIndex)"
@@ -121,7 +132,11 @@
           >
             <div v-html="line.trim()" />
           </Annotate> -->
-          <TokenizedText :text="line" />
+          <TokenizedText
+            :text="line"
+            :showTranslation="translation ? false : true"
+            class="w-100"
+          />
           <div
             v-if="translation || translationLoading"
             class="translation-line"
@@ -484,7 +499,7 @@ export default {
 
       // Remove ruby tags
       let rtTags = dom.querySelectorAll("rt");
-      rtTags.forEach(rt => rt.remove());
+      rtTags.forEach((rt) => rt.remove());
 
       let as = dom.querySelectorAll("a");
       as.forEach((a) => {
@@ -637,13 +652,16 @@ export default {
         this.pause();
         this.play();
       }
-      this.scrollToCurrentSentence()
+      this.scrollToCurrentSentence();
     },
     scrollToCurrentSentence() {
       this.$nextTick(() => {
-        const currentSentence = this.$el.querySelector('.sentence.current');
+        const currentSentence = this.$el.querySelector(".sentence.current");
         if (currentSentence) {
-          currentSentence.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          currentSentence.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+          });
         }
       });
     },
@@ -654,7 +672,7 @@ export default {
           this.pause();
           this.play();
         }
-        this.scrollToCurrentSentence()
+        this.scrollToCurrentSentence();
       }
     },
   },

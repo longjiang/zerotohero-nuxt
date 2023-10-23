@@ -3,6 +3,7 @@
   <div class="zerotohero-layout" :class="{fullscreen}">
     <!-- <FeedbackButton /> -->
     <PopupDictionaryModal />
+    <TokenizedTextMenuModal />
     <HydrationNotice v-if="$route.path === '/'" />
     <client-only>
       <!-- Main nav - side bar on wide screen, bottom bar on small screen /-->

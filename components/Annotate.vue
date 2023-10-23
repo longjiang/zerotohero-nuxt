@@ -300,7 +300,7 @@ export default {
     animationSpeed: {
       default: 1,
     },
-    translation: {
+    translation: { // 
       type: String,
     },
     youtube_id: {
