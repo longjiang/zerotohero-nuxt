@@ -82,7 +82,7 @@ export default {
     },
     showMenu: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   data() {

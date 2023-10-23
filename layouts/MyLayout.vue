@@ -2,11 +2,11 @@
 <template>
   <div class="zerotohero-layout" :class="{fullscreen}">
     <!-- <FeedbackButton /> -->
-    <PopupDictionaryModal />
-    <TokenizedTextMenuModal />
     <HydrationNotice v-if="$route.path === '/'" />
     <client-only>
       <!-- Main nav - side bar on wide screen, bottom bar on small screen /-->
+      <PopupDictionaryModal v-if="l1 && l2" />
+      <TokenizedTextMenuModal v-if="l1 && l2" />
       <NavMain
         v-if="!fullscreen && $route.params.l1 && $route.params.l2 && l1 && l2"
         class="zth-main-nav-wrapper"
