@@ -1,9 +1,17 @@
 <template>
   <div>
-    <div class="d-none">
+    <!-- Handle the case where the slot contains a text or the `text` prop is provided -->
+    <TokenizedText v-if="text || (processedNode && processedNode.type === 'text')" :text="text || processedNode.text" />
+
+    <!-- If processedNode is a non-text node, render it -->
+    <div v-else-if="processedNode && processedNode.type !== 'text'">
+      <RecursiveRenderer :node="processedNode" />
+    </div>
+
+    <!-- Default case: render the slot content -->
+    <div v-else>
       <slot></slot>
     </div>
-    <RecursiveRenderer :node="processedNode" v-if="processedNode" />
   </div>
 </template>
 
@@ -11,18 +19,24 @@
 import TokenizedText from "./TokenizedText.vue";
 
 export default {
+  props: {
+    text: {
+      type: String,
+      default: null,
+    },
+  },
   components: {
     TokenizedText,
   },
   data() {
     return {
-      processedNode: null,  // change here
+      processedNode: null,
     };
   },
   mounted() {
     if (this.$slots.default && this.$slots.default.length > 0) {
       const node = this.$slots.default[0].elm;
-      if (node) this.processedNode = this.processNode(node);  // change here
+      if (node) this.processedNode = this.processNode(node);
     }
   },
   methods: {
