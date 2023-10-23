@@ -1,52 +1,28 @@
 <template>
-  <span class="d-inline-flex align-items-start justify-content-between">
-    <!-- the tokenized text + translation -->
-    <div style="flex: 1">
-      <!-- the tokenized text -->
-      <div
-        class="use-zoom"
-        v-observe-visibility="{
-          callback: visibilityChanged,
-          once: true,
-        }"
-      >
-        <div v-if="editMode && tokenized">
-          <textarea
-            class="annotate-input"
-            @blur="editBlur"
-            @click.stop="dummyFunction"
-            ref="textarea"
-            :value="sanitizedText"
-          ></textarea>
-        </div>
-        <template v-else-if="tokenized">
-          <template v-for="(token, index) in tokens"
-            >{{ typeof token === "string" ? token : ""
-            }}<word-block
-              v-if="typeof token !== 'string'"
-              :key="index"
-              :token="token"
-              :context="context ? { ...context, text } : { text }"
-              :mappedPronunciation="token.mappedPronunciation"
-          /></template>
-        </template>
-        <template v-else>{{ sanitizedText }}</template>
-      </div>
-      <!-- the translation -->
-      <div
-        class="annotate-translation"
-        v-if="showTranslation && translationData"
-      >
-        {{ translationData }}
-      </div>
+  <div class="use-zoom"
+       v-observe-visibility="{
+           callback: visibilityChanged,
+           once: true,
+       }">
+    <div v-if="editMode && tokenized">
+      <textarea class="annotate-input"
+                @blur="editBlur"
+                @click.stop="dummyFunction"
+                ref="textarea"
+                :value="sanitizedText"></textarea>
     </div>
-    <SimpleButton
-      iconClass="fa fa-ellipsis-v"
-      @click="showModal"
-      :title="$t('Actions')"
-      v-if="showMenu"
-    />
-  </span>
+    <template v-else-if="tokenized">
+      <template v-for="(token, index) in tokens">
+        {{ typeof token === "string" ? token : "" }}
+        <word-block v-if="typeof token !== 'string'"
+                    :key="index"
+                    :token="token"
+                    :context="context ? { ...context, text } : { text }"
+                    :mappedPronunciation="token.mappedPronunciation"/>
+      </template>
+    </template>
+    <template v-else>{{ sanitizedText }}</template>
+  </div>
 </template>
 
 <script>

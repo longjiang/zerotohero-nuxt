@@ -101,12 +101,12 @@ export default {
     // add your computed properties here
   },
   created() {
-    this.$nuxt.$on('showTokenizedRichTextMenu', this.show);
-    this.$nuxt.$on('hideTokenizedRichTextMenu', this.hide);
+    this.$nuxt.$on('showTokenizedTextMenu', this.show);
+    this.$nuxt.$on('hideTokenizedTextMenu', this.hide);
   },
   beforeDestroy() {
-    this.$nuxt.$off('showTokenizedRichTextMenu', this.show);
-    this.$nuxt.$off('hideTokenizedRichTextMenu', this.hide);
+    this.$nuxt.$off('showTokenizedTextMenu', this.show);
+    this.$nuxt.$off('hideTokenizedTextMenu', this.hide);
   },
   methods: {
     show({ text, translation, editMode, phraseSaved, callerComponent }) {
@@ -139,7 +139,12 @@ export default {
 
     async translate(text) {
       let translator = this.$languages.getTranslator(this.$l1, this.$l2);
-      return await translator.translateWithBing({text, l1Code: this.$l1.code, l2Code: this.$l2.code});
+      try {
+        let translation = await translator.translateWithBing({text, l1Code: this.$l1.code, l2Code: this.$l2.code});
+        return translation;
+      } catch (e) {
+        console.error(e);
+      }
     },
 
     saveAsPhraseClick() {
