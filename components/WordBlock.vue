@@ -12,11 +12,10 @@
         ]"
         :key="index"
       >
-        <rt v-if="attributes?.showDefinition && index === 0">{{
+        <!-- <rt v-if="attributes?.showDefinition && index === 0">{{
           attributes?.definition || "&nbsp;"
-        }}</rt>
-        <rt v-if="showReading(segment)">{{ segment.reading }}</rt
-        >{{ russianAccentText || segment.surface }}</ruby
+        }}</rt> -->
+        {{ russianAccentText || segment.surface}}<rt v-if="showReading(segment)">{{ segment.reading }}</rt><rt v-else>&nbsp;</rt></ruby
       ><span
         v-if="attributes?.hanAnnotation"
         class="word-block-text-byeonggi d-inline-block"
@@ -35,7 +34,7 @@
 </template>
 
 <script>
-import { timeout, unique, speak, uniqueByValue } from "@/lib/utils";
+import { timeout, unique, speak, uniqueByValue, hasKanji } from "@/lib/utils";
 import { mapState } from "vuex";
 import { tify, sify } from "chinese-conv";
 import { transliterate as tr } from "transliteration";
@@ -193,7 +192,8 @@ export default {
     wordBlockClasses() {
       let classes = {
         "word-block": true,
-        "with-quick-gloss": this.attributes?.isSaved && this.attributes?.definition,
+        "with-quick-gloss":
+          this.attributes?.isSaved && this.attributes?.definition,
         saved: this.attributes?.isSaved,
         obscure: this.attributes?.obscure,
         animate: this.animate,
@@ -236,7 +236,11 @@ export default {
     showReading(segment) {
       if (!this.$l2Settings.showPinyin) return false; // If the user doesn't want to see phonetics (pinyin), don't show it
       if (segment.type !== "kanji") return false; // segment.type is 'kanji' for all words, except those in Japanese that do not have kanji
-      if (this.mappedPronunciation?.length && !hasKanji(surface)) return false; // If this is Japanese, do not show pronunciation if there is no kanji
+      if (
+        this.attributes?.mappedPronunciation?.length &&
+        !hasKanji(segment.surface)
+      )
+        return false; // If this is Japanese, do not show pronunciation if there is no kanji
       return true;
     },
     showMenuModal() {
@@ -412,7 +416,7 @@ export default {
     async checkSavedItems() {
       await this.checkSavedWord();
       this.checkSavedPhrase();
-      if (this.$l2.code === 'ru')
+      if (this.$l2.code === "ru")
         this.russianAccentText = await this.getRussianAccentText();
     },
     async loadImages() {
@@ -467,7 +471,7 @@ export default {
             this.text,
             this.savedWord.head
           );
-          if (accentText) return accentText
+          if (accentText) return accentText;
         }
       }
     },
@@ -515,14 +519,15 @@ export default {
 
 <style lang="scss">
 @import "@/assets/scss/variables.scss";
-// [data-hover-level=outside].saved {
-//   color: white !important;
-// }
 
-.word-block,
-.word-block-unknown {
-  text-align: center;
-  display: inline-block;
+ruby {
+    white-space: nowrap;
+}
+
+rt {
+  font-size: 50%; /* Smaller size for phonetic annotation */
+  line-height: 1.2; /* Adjust line-height if needed */
+  display: block;
 }
 
 .zerotohero-dark {
@@ -559,7 +564,6 @@ export default {
 
 .word-block,
 .word-block-unknown {
-
   &.animate {
     animation-iteration-count: 1;
     animation-duration: 2s;
@@ -710,7 +714,7 @@ export default {
 .show-definition .word-block-text {
   position: relative;
 }
- .word-block-pinyin,
+.word-block-pinyin,
 .word-block-definition {
   opacity: 0.7;
   margin: 0 0.1rem -0 0.1rem;
