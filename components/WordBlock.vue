@@ -1,8 +1,31 @@
 <template>
-  <span
-    @click="wordBlockClick"
-  >
-    <component :is="tag" v-bind="attributes" :animate="animate" />
+  <span @click="wordBlockClick">
+    <div v-if="showFillInTheBlank" class="word-block-quiz word-block-segment">
+      <span class="transparent">{{ text }}</span>
+    </div>
+    <template v-else>
+      <ruby
+        :class="wordBlockClasses"
+        :data-hover-level="attributes?.level || 'outside'"
+        v-for="(segment, index) in attributes?.mappedPronunciation || [
+          { type: 'kanji', surface: text, reading: attributes?.phonetics },
+        ]"
+        :key="index"
+      >
+        <rt v-if="attributes?.showDefinition && index === 0">{{ attributes?.definition || "&nbsp;" }}</rt>
+        <rt v-if="showReading(segment)">{{
+          segment.reading
+        }}</rt
+        >{{ segment.surface }}</ruby
+      ><span
+        v-if="attributes?.hanAnnotation"
+        class="word-block-text-byeonggi d-inline-block"
+        v-html="attributes?.hanAnnotation"
+      /><span
+        v-if="attributes?.showQuickGloss && attributes?.isSaved && attributes?.definition"
+        class="word-block-text-quick-gloss"
+      >{{ definition }}</span>
+    </template>
   </span>
 </template>
 
@@ -93,22 +116,14 @@ export default {
         pos,
         definition,
         text,
+        level,
         hanAnnotation,
         mappedPronunciation,
-        "data-hover-level": level,
       };
       return attributes;
     },
-    tag() {
-      if (
-        (this.savedWord || this.savedPhrase) &&
-        this.quizMode &&
-        !this.reveal
-      ) {
-        return "WordBlockQuiz";
-      } else {
-        return "WordBlockWord";
-      }
+    showFillInTheBlank() {
+      (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
     },
     shortDefinition() {
       let shortDefinition =
@@ -153,13 +168,38 @@ export default {
     bestPhonetics() {
       let phonetics;
       if (this.token?.pronunciation) {
-        phonetics = this.token.pronunciation; 
+        phonetics = this.token.pronunciation;
       } else if (this.bestWord) {
         phonetics = this.phoneticsFromWord(this.bestWord);
       } else {
         phonetics = tr(this.text).replace(/"/g, "");
-      }  
+      }
       if (phonetics) return phonetics;
+    },
+    wordBlockTextClasses() {
+      let classes = {
+        "word-block-text d-inline-block": true,
+        klingon: this.$l2.code === "tlh",
+        "word-block-hard": this.hard,
+      };
+      return classes;
+    },
+    wordBlockClasses() {
+      let classes = {
+        "word-block": true,
+        "with-quick-gloss": this.isSaved && this.definition,
+        saved: this.isSaved,
+        obscure: this.obscure,
+        animate: this.animate,
+      };
+      if (this.pos) classes[`pos-${this.pos}`] = true;
+      return classes;
+    },
+    showQuickGloss() {
+      return !this.showDefinition && this.$l2Settings.showQuickGloss;
+    },
+    showDefinition() {
+      return this.$l2Settings.showDefinition;
     },
   },
   mounted() {
@@ -187,6 +227,12 @@ export default {
   methods: {
     unique,
     speak,
+    showReading(segment) {
+      if (!this.$l2Settings.showPinyin) return false; // If the user doesn't want to see phonetics (pinyin), don't show it
+      if (segment.type !== 'kanji') return false // segment.type is 'kanji' for all words, except those in Japanese that do not have kanji
+      if (this.mappedPronunciation?.length && !hasKanji(surface)) return false // If this is Japanese, do not show pronunciation if there is no kanji
+      return true;
+    },
     showMenuModal() {
       this.$nuxt.$emit("showPopupDictionary", {
         token: this.token,
@@ -339,7 +385,7 @@ export default {
     checkSavedPhrase() {
       let phrase = this.phraseItem(this.text);
       let saved = this.$store.getters["savedPhrases/has"](phrase);
-      if (saved) this.savedPhrase = saved
+      if (saved) this.savedPhrase = saved;
     },
     fixKlingonTypos(text) {
       return Klingon.fixTypos(text);
@@ -443,3 +489,248 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+@import "@/assets/scss/variables.scss";
+// [data-hover-level=outside].saved {
+//   color: white !important;
+// }
+
+.word-block,
+.word-block-unknown {
+  text-align: center;
+  display: inline-block;
+}
+
+.zerotohero-dark {
+  .word-block,
+  .word-block-unknown {
+    &.animate .word-block-segment {
+      animation-name: shinedark;
+    }
+  }
+}
+
+.zerotohero-light {
+  .word-block,
+  .word-block-unknown {
+    &.animate .word-block-segment {
+      animation-name: shinelight;
+    }
+  }
+}
+
+.show-pinyin .word-block .word-block-hard {
+  // text-decoration: underline;
+  background-color: rgba(255, 226, 129, 0.137);
+}
+
+.word-block-text-byeonggi {
+  color: rgba(143, 158, 172, 0.8);
+  font-size: 6em;
+}
+
+.word-block-unknown {
+  color: #ccc;
+}
+
+.word-block,
+.word-block-unknown {
+  .word-block-segment {
+    display: inline-block;
+  }
+
+  &.animate .word-block-segment {
+    animation-iteration-count: 1;
+    animation-duration: 2s;
+    animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  &.saved[data-hover-level="outside"].animate .word-block-segment {
+    animation-name: shinesaved;
+  }
+}
+
+.word-block.obscure {
+  opacity: 0;
+}
+
+@keyframes shinesaved {
+  0% {
+    color: $primary-color;
+    transform: scale(1);
+  }
+
+  10% {
+    color: #54ff7c;
+    transform: scale(1.1);
+  }
+
+  100% {
+    color: $primary-color;
+    transform: scale(1);
+  }
+}
+
+@keyframes shinedark {
+  0% {
+    color: inherit;
+  }
+
+  10% {
+    color: #54ff7c;
+    transform: translateY(-0.1em);
+  }
+
+  100% {
+    color: inherit;
+  }
+}
+
+@keyframes shinelight {
+  0% {
+    color: inherit;
+    transform: scale(1);
+  }
+
+  10% {
+    color: #00d031;
+    transform: scale(1.1);
+  }
+
+  100% {
+    color: inherit;
+    transform: scale(1);
+  }
+}
+
+.word-block:not(.no-popup) {
+  cursor: pointer;
+
+  &.saved {
+    font-weight: bold;
+  }
+}
+
+.word-block-text-quick-gloss {
+  font-size: 50%;
+  opacity: 0.8;
+  font-weight: normal;
+}
+
+.word-block-text-byeonggi-wrapper {
+  font-size: 0.1em;
+
+  .word-block-text {
+    font-size: 10em;
+  }
+}
+
+.show-quick-gloss:not(.l2-ja) {
+  [dir="ltr"] .word-block.saved.with-quick-gloss {
+    // text-align: left;
+  }
+
+  [dir="rtl"] .word-block.saved.with-quick-gloss {
+    // text-align: right;
+  }
+}
+
+.add-pinyin {
+  .word-block {
+    margin: 0;
+    position: relative;
+    text-indent: 0;
+
+    .word-block-pinyin,
+    .word-block-text-byeonggi-wrapper {
+      text-indent: 0;
+    }
+
+    .word-block-pinyin {
+      position: relative;
+      bottom: -0.3em;
+      font-family: AndikaW, Andika, Arial, sans-serif;
+    }
+
+    /* Hide by default */
+    .word-block-pinyin,
+    .word-block-simplified,
+    .word-block-traditional,
+    .word-block-definition {
+      display: none;
+    }
+  }
+}
+
+/* Shown on demand */
+
+.show-pinyin .word-block .word-block-pinyin,
+.show-simplified .word-block .word-block-simplified,
+.show-traditional .word-block .word-block-traditional,
+.show-definition .word-block .word-block-definition {
+  display: block;
+}
+
+.show-byeonggi .word-block .word-block-text-byeonggi {
+  display: inline;
+}
+
+.show-quick-gloss .word-block .word-block-text-quick-gloss {
+  display: inline;
+}
+
+.show-definition .word-block {
+  position: relative;
+}
+
+/* Line style */
+
+.show-pinyin .word-block-segment .word-block-text,
+.show-definition .word-block-segment .word-block-text {
+  position: relative;
+}
+
+.word-block-segment .word-block-pinyin,
+.word-block-definition {
+  opacity: 0.7;
+  margin: 0 0.1rem -0 0.1rem;
+  font-size: 0.8rem;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: none;
+  position: relative;
+  // bottom: -0.25em;
+}
+
+.word-block.saved {
+  .word-block-pinyin {
+    opacity: 1;
+    font-weight: normal;
+  }
+}
+
+.show-pinyin-for-saved {
+  .word-block:hover:not(.saved) {
+    .word-block-pinyin {
+      display: inherit;
+      position: absolute;
+      top: -1.25em;
+      left: 50%;
+      margin-left: -5em;
+      width: 10em;
+    }
+  }
+
+  .word-block.saved {
+    margin-left: 0.1rem;
+    margin-right: 0.1rem;
+
+    .word-block-pinyin {
+      display: block;
+    }
+  }
+}
+</style>
