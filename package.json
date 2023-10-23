@@ -73,6 +73,7 @@
     "pinyin-separate": "^1.1.0",
     "pinyin2ipa": "^1.0.4",
     "sass-loader": "10.1.1",
+    "sbd": "^1.0.19",
     "semver": "^7.5.0",
     "smartquotes": "^2.3.2",
     "smoothscroll-polyfill": "^0.4.4",
