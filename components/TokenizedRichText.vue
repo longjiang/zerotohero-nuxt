@@ -25,12 +25,14 @@
           <TokenizedText
             :text="editedText || text || processedNode.text"
             :context="context"
+            v-on="$listeners"
+            @="forwardEvent"
           />
         </div>
 
         <!-- If processedNode is a non-text node, render it -->
         <div v-else-if="processedNode && processedNode.type !== 'text'">
-          <RecursiveRenderer :node="processedNode" />
+          <RecursiveRenderer :node="processedNode" @="forwardEvent" />
         </div>
 
         <!-- Default case: render the slot content -->
@@ -58,7 +60,6 @@
 </template>
 
 <script>
-import TokenizedText from "./TokenizedText.vue";
 import { stripTags } from "@/lib/utils";
 
 export default {
@@ -82,9 +83,6 @@ export default {
       type: Boolean,
       default: true,
     },
-  },
-  components: {
-    TokenizedText,
   },
   data() {
     return {
@@ -131,6 +129,33 @@ export default {
   },
   methods: {
     dummyFunction(target) {},
+    // captures the event name and payload, then re-emits the same event
+    forwardEvent(event) {
+      if (event && event.name) {
+        this.$emit(event.name, event.payload);
+      }
+    },
+    /**
+     * @param {Number} startFrom Starting time in seconds
+     */
+    async playAnimation(startFrom = 0) {
+      // pass it to the first <TokenizedText /> component if it exists
+      let tokenizedTextComponent = this.$children.find(
+        (child) => child.$options.name === 'TokenizedText'
+      );
+      if (tokenizedTextComponent) {
+        await tokenizedTextComponent.playAnimation(startFrom);
+      }
+    },
+    // the same for pauseAnimation
+    async pauseAnimation() {
+      let tokenizedTextComponent = this.$children.find(
+        (child) => child.$options.name === 'TokenizedText'
+      );
+      if (tokenizedTextComponent) {
+        await tokenizedTextComponent.pauseAnimation();
+      }
+    },
     async editBlur(e) {
       let newText = e.target.value;
       if (newText) {

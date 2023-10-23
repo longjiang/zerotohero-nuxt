@@ -1,28 +1,25 @@
 <template>
-  <div class="use-zoom"
-       v-observe-visibility="{
-           callback: visibilityChanged,
-           once: true,
-       }">
-    <div v-if="editMode && tokenized">
-      <textarea class="annotate-input"
-                @blur="editBlur"
-                @click.stop="dummyFunction"
-                ref="textarea"
-                :value="sanitizedText"></textarea>
-    </div>
-    <template v-else-if="tokenized">
+  <span
+    class="use-zoom"
+    v-observe-visibility="{
+      callback: visibilityChanged,
+      once: true,
+    }"
+  >
+    <template v-if="tokenized">
       <template v-for="(token, index) in tokens">
         {{ typeof token === "string" ? token : "" }}
-        <word-block v-if="typeof token !== 'string'"
-                    :key="index"
-                    :token="token"
-                    :context="context ? { ...context, text } : { text }"
-                    :mappedPronunciation="token.mappedPronunciation"/>
+        <word-block
+          v-if="typeof token !== 'string'"
+          :key="index"
+          :token="token"
+          :context="context ? { ...context, text } : { text }"
+          :mappedPronunciation="token.mappedPronunciation"
+        />
       </template>
     </template>
     <template v-else>{{ sanitizedText }}</template>
-  </div>
+  </span>
 </template>
 
 <script>
@@ -67,7 +64,7 @@ export default {
       translationData: this.translation, // So we don't mutate the prop when we translate our own text
       tokens: [],
       editMode: false,
-      textData: this.text // So we don't mutate the prop when we edit our own text
+      textData: this.text, // So we don't mutate the prop when we edit our own text
     };
   },
   computed: {
@@ -88,36 +85,12 @@ export default {
           this.adjustTextareaHeight();
         });
       }
-    }
+    },
   },
   methods: {
-    dummyFunction(target) {},
-    async editBlur(e) {
-      let newText = e.target.value;
-      if (newText) {
-        this.textData = newText;
-        this.tokenize();
-        this.editMode = false;
-        this.$emit("textChanged", newText);
-      }
-    },
-    adjustTextareaHeight() {
-        const textarea = this.$refs["textarea"];
-        textarea.style.height = 'auto'; // Reset height
-        textarea.style.height = textarea.scrollHeight + 'px'; // Set to scrollHeight
-    },
-    showModal() {
-      this.$nuxt.$emit("showTokenizedTextMenu", {
-        text: this.sanitizedText,
-        translation: this.translationData,
-        editMode: this.editMode,
-        phraseSaved: this.phraseSaved,
-        callerComponent: this,
-      });
-    },
     visibilityChanged(visible) {
       if (visible && !this.tokenized) {
-        this.tokenize()
+        this.tokenize();
       }
     },
     async tokenize() {
@@ -177,8 +150,8 @@ export default {
 </script>
 <style>
 .annotate-input {
-    width: 100%;
-    resize: none; /* to prevent manual resizing */
-    overflow: hidden;
+  width: 100%;
+  resize: none; /* to prevent manual resizing */
+  overflow: hidden;
 }
 </style>

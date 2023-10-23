@@ -34,7 +34,7 @@
                 starttime: line.starttime,
                 youtube_id: video.youtube_id,
               },
-              text: line.line,
+              text: line.line, // If text prop is set, it will only render one TokenizedText component without dom hierarchy
               animationDuration: duration,
               animationSpeed: speed,
               showMenu: true,

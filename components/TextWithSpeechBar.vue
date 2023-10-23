@@ -132,7 +132,6 @@
           >
             <div v-html="line.trim()" />
           </Annotate> -->
-          <span v-html="line"></span>
           <TokenizedRichText
             :showTranslation="translation ? false : true"
             class="w-100"
