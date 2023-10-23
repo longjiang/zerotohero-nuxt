@@ -1,4 +1,4 @@
-<template><span>{{ token.text }}</span></template>
+<template><span @click="showPopup" class="word-block">{{ token.text }}</span></template>
 <script>
 export default {
   props: {
@@ -6,9 +6,10 @@ export default {
       type: Object,
       required: true,
     },
-    text: {
-      type: String,
-      required: true,
+  },
+  methods: {
+    showPopup() {
+      this.$nuxt.$emit("showPopupDictionary", this.token, this.text);
     },
   }
 }
