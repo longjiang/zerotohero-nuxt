@@ -1,11 +1,10 @@
 <template>
-  <span @click="wordBlockClick">
+  <span @click="wordBlockClick" :class="wordBlockClasses" :style="{ 'animation-duration': animationDuration + 'ms' }" @animationend="resetAnimation">
     <div v-if="showFillInTheBlank" class="word-block-quiz word-block-segment">
       <span class="transparent">{{ text }}</span>
     </div>
     <template v-else>
       <ruby
-        :class="wordBlockClasses"
         :data-hover-level="attributes?.level || 'outside'"
         v-for="(segment, index) in attributes?.mappedPronunciation || [
           { type: 'kanji', surface: text, reading: attributes?.phonetics },
@@ -78,6 +77,7 @@ export default {
       reveal: false,
       t: 0,
       animate: false,
+      animationDuration: undefined
     };
   },
   computed: {
@@ -258,9 +258,11 @@ export default {
       this.$nuxt.$emit("hidePopupDictionary");
     },
     async playAnimation(animationDuration) {
-      this.animate = false;
+      const animationDurationMs = animationDuration * 1000
+      this.animationDuration = animationDurationMs * 5;
       this.animate = true;
-      await timeout(animationDuration);
+    },
+    resetAnimation() {
       this.animate = false;
     },
     getHanAnnotation(word) {
@@ -520,14 +522,16 @@ export default {
 <style lang="scss">
 @import "@/assets/scss/variables.scss";
 
-ruby {
-    white-space: nowrap;
-}
-
 rt {
   font-size: 50%; /* Smaller size for phonetic annotation */
   line-height: 1.2; /* Adjust line-height if needed */
   display: block;
+}
+
+.word-block {
+  will-change: color, transform;
+  backface-visibility: hidden;
+  display: inline-block;
 }
 
 .zerotohero-dark {
@@ -566,7 +570,6 @@ rt {
 .word-block-unknown {
   &.animate {
     animation-iteration-count: 1;
-    animation-duration: 2s;
     animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
   }
 
@@ -582,49 +585,51 @@ rt {
 @keyframes shinesaved {
   0% {
     color: $primary-color;
-    transform: scale(1);
+    bottom: 0;
   }
 
   10% {
     color: #54ff7c;
-    transform: scale(1.1);
+    
   }
 
   100% {
     color: $primary-color;
-    transform: scale(1);
+    bottom: 0;
   }
 }
 
 @keyframes shinedark {
   0% {
-    color: inherit;
+    transform: translate3D(0, 0, 0);
+    bottom: 0;
   }
-
   10% {
     color: #54ff7c;
-    transform: translateY(-0.1em);
+    transform: translate3D(0, -5%, 0); // Force GPU acceleration
+    
   }
-
   100% {
-    color: inherit;
+    transform: translate3D(0, 0, 0);
+    bottom: 0;
   }
 }
 
 @keyframes shinelight {
   0% {
-    color: inherit;
-    transform: scale(1);
+    transform: translate3D(0, 0, 0);
+    bottom: 0;
   }
 
   10% {
     color: #00d031;
-    transform: scale(1.1);
+    transform: translate3D(0, -5%, 0); // Force GPU acceleration
+    
   }
 
   100% {
-    color: inherit;
-    transform: scale(1);
+    transform: translate3D(0, 0, 0);
+    bottom: 0;
   }
 }
 

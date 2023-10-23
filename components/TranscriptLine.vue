@@ -28,7 +28,6 @@
             <div class="dot" v-if="current"></div>
           </div>
           <TokenizedText
-            tag="div"
             ref="annotate"
             v-bind="{
               context: {
@@ -53,10 +52,9 @@
               'transcript-line-l2': true,
               'transcript-line-l2-single': single,
               'transcript-line-l2-rtl': $l2.direction === 'rtl',
-              annotated: annotated,
+              annotated,
             }"
             v-if="!showSubsEditing"
-            style="flex: 1"
             @translation="onTranslation"
             @translationLoading="translationLoading = true"
             @textChanged="lineChanged(line, ...arguments)"
