@@ -14,7 +14,7 @@
           :key="index"
           v-bind="{
             token,
-            context: context || { text },
+            context: context ? { ...context, text } : { text },
             mappedPronunciation: token.mappedPronunciation,
           }"
         />
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { timeout } from "@/lib/utils";
+
 export default {
   name: "TokenizedText",
   props: {
@@ -35,8 +37,17 @@ export default {
       required: true,
     },
     context: {
-      type: Object, // { text, starttime = undefined, youtube_id = undefined}
+      type: Object, // { starttime = undefined, youtube_id = undefined}
       required: false,
+    },
+    animationDuration: {
+      type: Number,
+      required: false,
+    },
+    animationSpeed: {
+      type: Number,
+      required: false,
+      default: 1,
     },
   },
   data() {
@@ -52,6 +63,45 @@ export default {
         this.tokens = await dictionary.tokenizeWithCache(this.text);
         this.tokenized = true;
       }
+    },
+    /**
+     * @param {Number} startFrom Starting time in seconds
+     */
+    async playAnimation(startFrom = 0) {
+      if (this.tokenized) {
+        this.animate = true;
+        if (this.animationDuration) {
+          let wordBlockComponents = this.$children; // directly get the word block components
+
+          if (wordBlockComponents?.length > 0) {
+            let aggregateTextLength = this.text.length; // use this.text directly
+
+            let durationAlreadyPlayed = 0;
+            for (const wb of wordBlockComponents) {
+              let blockLength = wb.text?.length || 0;
+              let blockDuration =
+                (blockLength / aggregateTextLength) * this.animationDuration;
+
+              if (blockDuration === 0) continue;
+
+              durationAlreadyPlayed = durationAlreadyPlayed + blockDuration;
+
+              // Which ones should skip
+              if (durationAlreadyPlayed > startFrom) {
+                if (!this.animate) return;
+                const animationDuration =
+                  (blockDuration * 1000) / this.animationSpeed;
+                const fadeDuration = animationDuration * 2000;
+                wb.playAnimation(fadeDuration);
+                await timeout(animationDuration);
+              }
+            }
+          }
+        }
+      }
+    },
+    async pauseAnimation() {
+      this.animate = false;
     },
   },
 };

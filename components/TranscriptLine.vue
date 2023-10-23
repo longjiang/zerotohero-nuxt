@@ -27,22 +27,27 @@
           <div class="dot-wrapper-ltr" v-if="!single && $l2.direction !== 'rtl'">
             <div class="dot" v-if="current"></div>
           </div>
-          <Annotate
+          <TokenizedText
             tag="div"
             ref="annotate"
             v-bind="{
-              animationSpeed: speed,
+              context: {
+                starttime: line.starttime,
+                youtube_id: video.youtube_id,
+              },
+              text: line.line,
               animationDuration: duration,
-              sticky,
-              buttons: true,
-              translation: parallelLine,
-              delay: single ? false : 123,
-              showTranslation: false,
-              showLoading: false,
-              showGrammar: true,
-              youtube_id: this.video.youtube_id,
-              starttime: this.line.starttime,
-              breakSentences: false
+              animationSpeed: speed,
+              // sticky,
+              // buttons: true,
+              // translation: parallelLine,
+              // delay: single ? false : 123,
+              // showTranslation: false,
+              // showLoading: false,
+              // showGrammar: true,
+              // youtube_id: this.video.youtube_id,
+              // starttime: this.line.starttime,
+              // breakSentences: false,
             }"
             :class="{
               'transcript-line-l2': true,
@@ -57,9 +62,7 @@
             @textChanged="lineChanged(line, ...arguments)"
             @annotated="onAnnotated"
             @savedWordsFound="onSavedWordsFound"
-          >
-            <span v-html="lineHtml(line)" />
-          </Annotate>
+          />
           <div v-else v-html="lineHtml(line)" />
           <div class="dot-wrapper-rtl" v-if="!single && $l2.direction === 'rtl'">
             <div class="dot" v-if="current"></div>

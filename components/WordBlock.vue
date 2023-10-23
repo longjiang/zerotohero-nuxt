@@ -196,6 +196,7 @@ export default {
         "with-quick-gloss": this.attributes?.isSaved && this.attributes?.definition,
         saved: this.attributes?.isSaved,
         obscure: this.attributes?.obscure,
+        animate: this.animate,
       };
       if (this.pos) classes[`pos-${this.pos}`] = true;
       return classes;
@@ -526,7 +527,7 @@ export default {
 .zerotohero-dark {
   .word-block,
   .word-block-unknown {
-    &.animate .word-block-segment {
+    &.animate {
       animation-name: shinedark;
     }
   }
@@ -535,7 +536,7 @@ export default {
 .zerotohero-light {
   .word-block,
   .word-block-unknown {
-    &.animate .word-block-segment {
+    &.animate {
       animation-name: shinelight;
     }
   }
@@ -557,17 +558,14 @@ export default {
 
 .word-block,
 .word-block-unknown {
-  .word-block-segment {
-    display: inline-block;
-  }
 
-  &.animate .word-block-segment {
+  &.animate {
     animation-iteration-count: 1;
     animation-duration: 2s;
     animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
   }
 
-  &.saved[data-hover-level="outside"].animate .word-block-segment {
+  &.saved[data-hover-level="outside"].animate {
     animation-name: shinesaved;
   }
 }
@@ -707,12 +705,11 @@ export default {
 
 /* Line style */
 
-.show-pinyin .word-block-segment .word-block-text,
-.show-definition .word-block-segment .word-block-text {
+.show-pinyin .word-block-text,
+.show-definition .word-block-text {
   position: relative;
 }
-
-.word-block-segment .word-block-pinyin,
+ .word-block-pinyin,
 .word-block-definition {
   opacity: 0.7;
   margin: 0 0.1rem -0 0.1rem;
