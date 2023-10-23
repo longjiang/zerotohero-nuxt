@@ -50,7 +50,7 @@
               </b-button>
               <b-button
                 :variant="$skin"
-                @click="previous()"
+                @click="speakPreviousSentence()"
                 :title="$t('Previous Sentence') + ' (↑)'"
               >
                 <i class="fas fa-arrow-up"></i>
@@ -75,7 +75,7 @@
               </b-button>
               <b-button
                 :variant="$skin"
-                @click="next()"
+                @click="speakNextSentence()"
                 :title="$t('Next Sentence') + ' (↓)'"
               >
                 <i class="fas fa-arrow-down"></i>
@@ -135,7 +135,7 @@
           <TokenizedRichText
             :showTranslation="translation ? false : true"
             class="w-100"
-          ><span v-html="line"></span>
+            ><span v-html="line"></span>
           </TokenizedRichText>
           <div
             v-if="translation || translationLoading"
@@ -295,14 +295,26 @@ export default {
       return options;
     },
     allLines() {
+      // Trim leading and trailing whitespace from the HTML
       let html = this.html.trim();
-      let lines = html
-        .replace(/<(div|p|h1|h2|h3|h4|h5|h6|dd)/g, "ANNOTATORSEPARATOR!!!<$1")
-        .split("ANNOTATORSEPARATOR!!!");
-      lines = lines.map((line) => this.augmentHtml(line));
+
+      // Create a temporary div element to parse the HTML
+      const tempDiv = document.createElement("div");
+      tempDiv.innerHTML = html;
+
+      // Extract top-level elements
+      const topLevelElements = Array.from(tempDiv.children);
+
+      // Get the augmented html of each top-level element
+      let lines = topLevelElements.map((element) => this.augmentedHtmlFromDomNode(element));
+
+      // Filter out lines that are empty or contain only whitespace
       lines = lines.filter((l) => l.trim() !== "");
+
+      // Return the resulting lines as an array
       return lines;
     },
+
     lines() {
       let lines = this.allLines;
       if (this.page)
@@ -362,6 +374,120 @@ export default {
   },
   methods: {
     stripTags,
+
+    // Methods related to TTS
+
+    speak(text) {
+      if (window && window.speechSynthesis) {
+        let speechSynthesis = window.speechSynthesis;
+        if (speechSynthesis.paused) {
+          if (this.utterance) {
+            this.utterance.onend = undefined;
+          }
+          speechSynthesis.cancel();
+        }
+        if (this.voices.length === 0) this.getVoices();
+        this.utterance = new SpeechSynthesisUtterance(text);
+        // this.utterance.lang = this.lang || this.$l2.code
+        this.utterance.rate = this.speed * 0.9;
+        if (this.voices[this.voice]) {
+          this.utterance.voice = this.voices[this.voice];
+        }
+        speechSynthesis.speak(this.utterance);
+        if (this.utterance) {
+          this.utterance.onend = () => {
+            this.speakNextSentence();
+          };
+        }
+      }
+    },
+    play() {
+      // Check if the browser supports the Speech Synthesis API
+      let speechSynthesis = window?.speechSynthesis;
+      if (!speechSynthesis) return;
+
+      // Set the speaking flag to true
+      this.speaking = true;
+
+      // Check if speech synthesis is paused and if the current line is being spoken
+      if (speechSynthesis.paused && this.speakingLineIndex === this.current) {
+        // If paused, resume speaking
+        speechSynthesis.resume();
+      } else {
+        // If not paused, update the current line and get the next sentence to speak
+        this.update();
+        this.speakingLineIndex = this.current;
+        const sentence = this.getSentences()[this.current];
+
+        // Convert the sentence into text and clean it up
+        let text = this.sentenceText(sentence);
+        text = text.replace(/[\n\s]+/g, " ");
+
+        // Check if special conditions apply for text modification
+        if (this.$l2.continua) text = text.replace(/\s/g, "");
+
+        // Check if the text is empty, and if so, move to the next sentence
+        if (text.length === 0) {
+          this.speakNextSentence();
+          return;
+        }
+
+        // Speak the cleaned-up text
+        this.speak(text);
+      }
+    },
+
+    pause() {
+      if (window && window.speechSynthesis) {
+        let speechSynthesis = window.speechSynthesis;
+        this.speaking = false;
+        if (this.speakingLineIndex === this.current) {
+          speechSynthesis.pause();
+        } else {
+          if (this.utterance) {
+            this.utterance.onend = undefined;
+          }
+          speechSynthesis.cancel();
+        }
+      }
+    },
+    speakPreviousSentence() {
+      this.current = Math.max(0, this.current - 1);
+      if (this.speaking) {
+        this.pause();
+        this.play();
+      }
+      this.scrollToCurrentSentence();
+    },
+    speakNextSentence() {
+      // Check if there is another sentence available
+      if (this.current + 1 < this.getSentences().length) {
+        // Increment the current sentence index
+        this.current++;
+
+        // If speaking is in progress, pause it and then continue playing
+        if (this.speaking) {
+          this.pause();
+          this.play();
+        }
+
+        // Scroll to the current sentence in the UI
+        this.scrollToCurrentSentence();
+      }
+    },
+    scrollToCurrentSentence() {
+      this.$nextTick(() => {
+        const currentSentence = this.$el.querySelector(".sentence.current");
+        if (currentSentence) {
+          currentSentence.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+          });
+        }
+      });
+    },
+
+    // Other methods below
     bindKeys() {
       window.addEventListener("keydown", this.handleKeydown);
     },
@@ -404,12 +530,12 @@ export default {
             return false;
           }
           if (["ArrowUp"].includes(e.code)) {
-            this.previous();
+            this.speakPreviousSentence();
             e.preventDefault();
             return false;
           }
           if (["ArrowDown"].includes(e.code)) {
-            this.next();
+            this.speakNextSentence();
             e.preventDefault();
             return false;
           }
@@ -494,8 +620,7 @@ export default {
       }
       this.speed = speeds[index];
     },
-    augmentHtml(html) {
-      let dom = parse(html);
+    augmentedHtmlFromDomNode(dom) {
 
       // Remove ruby tags
       let rtTags = dom.querySelectorAll("rt");
@@ -516,7 +641,7 @@ export default {
           elm.setAttribute("src", this.baseUrl + src);
         }
       });
-      html = dom.toString();
+      const html = dom.outerHTML;
       return html;
     },
     browser() {
@@ -578,30 +703,6 @@ export default {
         translationSentences[this.current + this.translationOffset];
       $(translationSentence).addClass("current");
     },
-    speak(text) {
-      if (window && window.speechSynthesis) {
-        let speechSynthesis = window.speechSynthesis;
-        if (speechSynthesis.paused) {
-          if (this.utterance) {
-            this.utterance.onend = undefined;
-          }
-          speechSynthesis.cancel();
-        }
-        if (this.voices.length === 0) this.getVoices();
-        this.utterance = new SpeechSynthesisUtterance(text);
-        // this.utterance.lang = this.lang || this.$l2.code
-        this.utterance.rate = this.speed * 0.9;
-        if (this.voices[this.voice]) {
-          this.utterance.voice = this.voices[this.voice];
-        }
-        speechSynthesis.speak(this.utterance);
-        if (this.utterance) {
-          this.utterance.onend = () => {
-            this.next();
-          };
-        }
-      }
-    },
     scroll(sentence) {
       if (sentence.offsetHeight > 0) {
         sentence.scrollIntoView();
@@ -610,69 +711,6 @@ export default {
           document.documentElement.clientHeight / -2 +
             (sentence.offsetHeight || 0) / 2
         );
-      }
-    },
-    play() {
-      let speechSynthesis = window?.speechSynthesis;
-      if (!speechSynthesis) return;
-      this.speaking = true;
-      if (speechSynthesis.paused && this.speakingLineIndex === this.current) {
-        speechSynthesis.resume();
-      } else {
-        this.update();
-        this.speakingLineIndex = this.current;
-        const sentence = this.getSentences()[this.current];
-        let text = this.sentenceText(sentence);
-        text = text.replace(/[\n\s]+/g, " ");
-        if (this.$l2.continua) text = text.replace(/\s/g, "");
-        if (text.length === 0) {
-          this.next();
-          return;
-        }
-        this.speak(text);
-      }
-    },
-    pause() {
-      if (window && window.speechSynthesis) {
-        let speechSynthesis = window.speechSynthesis;
-        this.speaking = false;
-        if (this.speakingLineIndex === this.current) {
-          speechSynthesis.pause();
-        } else {
-          if (this.utterance) {
-            this.utterance.onend = undefined;
-          }
-          speechSynthesis.cancel();
-        }
-      }
-    },
-    previous() {
-      this.current = Math.max(0, this.current - 1);
-      if (this.speaking) {
-        this.pause();
-        this.play();
-      }
-      this.scrollToCurrentSentence();
-    },
-    scrollToCurrentSentence() {
-      this.$nextTick(() => {
-        const currentSentence = this.$el.querySelector(".sentence.current");
-        if (currentSentence) {
-          currentSentence.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest",
-          });
-        }
-      });
-    },
-    next() {
-      if (this.current + 1 < this.getSentences().length) {
-        this.current++;
-        if (this.speaking) {
-          this.pause();
-          this.play();
-        }
-        this.scrollToCurrentSentence();
       }
     },
   },

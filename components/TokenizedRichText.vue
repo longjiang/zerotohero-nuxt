@@ -234,6 +234,7 @@ export default {
 
         return {
           type: node.nodeName.toLowerCase(),
+          element: node,
           children: children,
         };
       }

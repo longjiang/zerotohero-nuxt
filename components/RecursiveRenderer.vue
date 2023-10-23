@@ -3,8 +3,13 @@
   <span v-if="node.type === 'text'">
     <TokenizedText v-for="(sentence, index) in tokenizeText(node.text)" :key="index" :text="sentence" @="forwardEvent" />
   </span>
+  
+  <!-- Base case: if the node is type 'code' or 'pre', or any of the non-text types like images, render it as is -->
+  <span v-else-if="['code', 'pre', 'image', 'video', 'audio', 'iframe', 'hr', 'br'].includes(node.type)">
+    <div :is="node.type" v-html="node.element.outerHTML" />
+  </span>
   <!-- If node is a non-text node, render it recursively -->
-  <span v-else-if="['span', 'p', 'em', 'strong', 'div'].includes(node.type)">
+  <span v-else>
     <div :is="node.type">
       <RecursiveRenderer v-for="(child, index) in node.children" :node="child" :key="index" @="forwardEvent" />
     </div>
@@ -31,7 +36,8 @@ export default {
     },
     tokenizeText(text) {
       // Use sbd library to tokenize the text into sentences
-      return sbd.sentences(text);
+      const sentences = sbd.sentences(text);
+      return sentences
     }
   }
 };
