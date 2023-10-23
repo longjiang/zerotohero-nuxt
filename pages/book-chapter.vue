@@ -48,7 +48,7 @@
           >
             <Loader :sticky="true" />
           </div>
-          <TokenizedText
+          <TokenizedRichText
             tag="h1"
             :foreign="foreign"
             :showTranslate="foreign"
@@ -109,7 +109,7 @@
                 <h6>
                   <em><TokenizedText :text="book.title" /></em>
                 </h6>
-                <p<TokenizedText :text="book.author" /></p>
+                <p><TokenizedText :text="book.author" /></p>
               </template>
             </router-link>
           </client-only>

@@ -9,7 +9,7 @@
       style="line-height: 1.5; margin-bottom: 0"
     >
       <span v-if="video" :key="`video-title-${video.title}`">
-        <TokenizedText
+        <TokenizedRichText
           v-if="$l2.code !== 'tlh' && $l2.direction !== 'rtl'"
           :phonetics="false"
           :showMenu="true"

@@ -69,7 +69,7 @@
                 $l2.code
               }/book/chapter?url=${encodeURIComponent(chapter.url)}`"
             >
-              <TokenizedText
+              <TokenizedRichText
                 :class="{
                   'list-group-item': true,
                   active:

@@ -20,13 +20,13 @@
         preload="auto"
       ></video>
       <div class="media-body">
-        <h4 class="article-title"><TokenizedText :buttons="true" :text="article.title" /></h4>
+        <h4 class="article-title"><TokenizedText :text="article.title" /></h4>
         <div
           v-if="article.media && article.media.oembed"
           v-html="unescape(article.media.oembed.html)"
         ></div>
         <client-only>
-          <TokenizedRichText tag="div" class="article-body" :buttons="true">
+          <TokenizedRichText tag="div" class="article-body" :showMenu="true">
             <div v-html="unescape(article.selftext_html)" />
           </TokenizedRichText>
         </client-only>

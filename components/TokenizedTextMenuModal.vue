@@ -94,19 +94,19 @@ export default {
       translation: undefined,
       editMode: false,
       phraseSaved: false,
-      callerComponent: undefined, // The <TokenizedText /> component that called this modal
+      callerComponent: undefined, // The <TokenizedRichText /> component that called this modal
     };
   },
   computed: {
     // add your computed properties here
   },
   created() {
-    this.$nuxt.$on('showTokenizedTextMenu', this.show);
-    this.$nuxt.$on('hideTokenizedTextMenu', this.hide);
+    this.$nuxt.$on('showTokenizedRichTextMenu', this.show);
+    this.$nuxt.$on('hideTokenizedRichTextMenu', this.hide);
   },
   beforeDestroy() {
-    this.$nuxt.$off('showTokenizedTextMenu', this.show);
-    this.$nuxt.$off('hideTokenizedTextMenu', this.hide);
+    this.$nuxt.$off('showTokenizedRichTextMenu', this.show);
+    this.$nuxt.$off('hideTokenizedRichTextMenu', this.hide);
   },
   methods: {
     show({ text, translation, editMode, phraseSaved, callerComponent }) {

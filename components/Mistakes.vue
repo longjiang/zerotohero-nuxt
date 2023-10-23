@@ -18,7 +18,7 @@
           >
             <i class="fas fa-times mistake-item-icon"></i>
             <span class="mistake-context collapsed" data-collapse-target>
-              <TokenizedText :text="mistake.leftContext" :showTranslate="true" :checkSaved="false" />
+              <TokenizedRichText :text="mistake.leftContext" :showTranslate="true" :checkSaved="false" />
             </span>
             <TokenizedRichText
               class="mistake-sentence"
@@ -31,7 +31,7 @@
               ></TokenizedRichText
             >
             <span class="mistake-context collapsed" data-collapse-target>
-              <TokenizedText
+              <TokenizedRichText
                 :speak="true"
                 :copy="true"
                 :checkSaved="false"

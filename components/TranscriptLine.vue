@@ -27,7 +27,7 @@
           <div class="dot-wrapper-ltr" v-if="!single && $l2.direction !== 'rtl'">
             <div class="dot" v-if="current"></div>
           </div>
-          <TokenizedText
+          <TokenizedRichText
             ref="annotate"
             v-bind="{
               context: {
