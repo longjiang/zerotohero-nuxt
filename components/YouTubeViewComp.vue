@@ -145,7 +145,14 @@ export default {
   },
   computed: {
     ...mapState("stats", ["stats"]),
-    ...mapState("shows", ["showsLoaded", "recommendedVideosLoaded", "recommendedVideos"]),
+    ...mapState("shows", [
+      "showsLoaded",
+      "recommendedVideosLoaded",
+      "recommendedVideos",
+    ]),
+    recommendedVideosLoadedForL2() {
+      return this.recommendedVideosLoaded?.[this.$l2.code];
+    },
     collection() {
       return this.showType === "tv_show" ? "tvShows" : "talks";
     },
@@ -216,12 +223,21 @@ export default {
         this.playlist.videos.unshift(this.video);
       }
     },
+    recommendedVideosLoadedForL2(loaded) {
+      console.log("recommendedVideosLoadedForL2", loaded);
+      if (loaded) {
+        if (this.$route.query.p === "recommended") {
+          this.loadRecommendedVideosAsPlaylist();
+        }
+      }
+    },
   },
   async mounted() {
     this.episodeSort = this.$route.query.sort || "title";
-    await this.loadVideo(this.youtube_id, this.directus_id);
-    await this.handlePlaylistFromQueryString();
-    this.showDifficultyToast();
+    await Promise.all([
+      this.loadVideo(this.youtube_id, this.directus_id),
+      this.handlePlaylistFromQueryString(),
+    ]);
   },
   filters: {
     formatDuration(duration) {
@@ -240,10 +256,10 @@ export default {
           {
             position: "top-center",
             className: `bg-level${l}`,
-            containerClass: 'safe-padding-top',
+            containerClass: "safe-padding-top",
             iconPack: "custom-class",
             icon: "fa-solid fa-signal-bars mr-1",
-            duration: 5000,
+            duration: 3000,
           }
         );
       }
@@ -260,11 +276,12 @@ export default {
             id: playlistId,
           });
         } else if (this.$route.query.p === "recommended") {
-          this.handleRecommendedVideosPlaylist();
+          // loadRecommendedVideosAsPlaylist is called again in the watcher because we have to wait until the computed value recommendedVideosLoadedForL2 is true (from the store)
+          this.loadRecommendedVideosAsPlaylist();
         } else {
           // The playlist querystring value is a comma-separated list of ids passed from YouTubeVideoList (so we can play the next videos from the list)
           let ids = this.$route.query.p.split(",").map((id) => Number(id));
-          
+
           let videos = await this.$directus.getVideos({
             l2Id: this.$l2.id,
             query: `filter[id][in]=${ids.join(",")}`,
@@ -275,7 +292,7 @@ export default {
             l2: this.$l2.id,
             id: this.$route.query.p,
             title: "Playlist",
-            videos
+            videos,
           };
         }
         if (playlist) {
@@ -283,24 +300,9 @@ export default {
         }
       }
     },
-    async handleRecommendedVideosPlaylist() {
-      if (this.recommendedVideosLoaded[this.$l2.code])
-        this.loadRecommendedVideosAsPlaylist();
-      this.unsubscribe = this.$store.subscribe((mutation, state) => {
-        if (mutation.type.startsWith("shows/ADD_RECOMMENDED_VIDEOS")) {
-          this.loadRecommendedVideosAsPlaylist();
-        }
-      });
-      // If the playlist is 'recommended', and this is near last video in the playlist, we load more recommended videos
-      if (this.itemIndex === this.items.length - 3) {
-        this.$store.dispatch("shows/loadRecommendedVideos", {
-          userId: this.$auth.user?.id,
-          l2: this.$l2,
-        });
-      }
-    },
     loadRecommendedVideosAsPlaylist() {
-      if (!this.recommendedVideosLoaded[this.$l2.code]) return;
+      console.log("Loading recommended videos as playlist");
+      if (!this.recommendedVideosLoadedForL2) return;
       let playlist = {
         l2: this.$l2.id,
         id: "recommended",
@@ -308,6 +310,14 @@ export default {
         videos: this.recommendedVideos[this.$l2.code],
       };
       this.playlist = playlist;
+      // If the playlist is 'recommended', and this is near last video in the playlist, we load more recommended videos
+      if (this.itemIndex > this.items.length - 3) {
+        console.log("🍉 Loading more recommended videos");
+        this.$store.dispatch("shows/loadRecommendedVideos", {
+          userId: this.$auth.user?.id,
+          l2: this.$l2,
+        });
+      }
     },
     /**
      * Streamline the video loading process.
@@ -332,20 +342,27 @@ export default {
       // Set video ID
       this.video = { youtube_id };
       this.checkingSubs = true;
+      try {
+        // Retrieve video info and subs from our database
+        const video = await this.getVideoFromDB(youtube_id, directus_id);
 
-      // Retrieve video info and subs from our database
-      const video = await this.getVideoFromDB(youtube_id, directus_id);
+        this.video = video || this.video;
+        this.showDifficultyToast();
+        this.loadTokenizationServerCache(video);
 
-      this.loadTokenizationServerCache(video);
-      this.video = video || this.video;
+        if (this.video.tv_show || this.video.talk) this.loadShowAndEpisodes();
 
-      if (this.video.tv_show || this.video.talk) this.loadShowAndEpisodes();
-
-      // Retrieve missing information from YouTube
-      await this.loadTranscriptLocalesFromYouTube(this.video);
-      await this.loadMissingSubsFromYouTube(this.video);
-      await this.loadMissingMetaFromYouTube(this.video);
+        // Retrieve missing information from YouTube
+        await this.loadTranscriptLocalesFromYouTube(this.video);
+        await Promise.all([
+          this.loadMissingSubsFromYouTube(this.video),
+          this.loadMissingMetaFromYouTube(this.video),
+        ]);
+      } catch (err) {
+        console.error(err);
+      }
       this.checkingSubs = false;
+      return; // Must return a promise
     },
     async loadTokenizationServerCache(video) {
       if (!video?.id) return;
@@ -573,7 +590,7 @@ export default {
           });
           // In the case of L1 subtitles, if we still don't have it, we get translated ones
           if (l1OrL2 === "l1" && !(subs?.length > 0)) {
-            let tlangs = this.$l1.locales
+            let tlangs = this.$l1.locales;
             subs = await YouTube.getTranslatedTranscript({
               youtube_id: video.youtube_id,
               locale: this.l2Locale || this.$l2.code,
