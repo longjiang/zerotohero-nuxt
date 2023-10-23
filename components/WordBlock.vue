@@ -371,7 +371,6 @@ export default {
     },
     async openPopup() {
       if (this.open) return; // Already open
-      this.showMenuModal();
       if (this.lookupInProgress === false && !(this.words?.length > 0)) {
         await this.lookup();
       }
@@ -381,6 +380,7 @@ export default {
           this.playWordAudio();
         }
       }
+      this.showMenuModal();
     },
     playWordAudio() {
       const canGenerateSpeech =
