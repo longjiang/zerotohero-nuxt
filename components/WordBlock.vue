@@ -254,6 +254,7 @@ export default {
       this.$nuxt.$emit("hidePopupDictionary");
     },
     async playAnimation(animationDuration) {
+      this.animate = false;
       this.animate = true;
       await timeout(animationDuration);
       this.animate = false;

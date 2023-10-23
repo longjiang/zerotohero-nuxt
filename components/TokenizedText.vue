@@ -62,6 +62,7 @@ export default {
         let dictionary = await this.$getDictionary();
         this.tokens = await dictionary.tokenizeWithCache(this.text);
         this.tokenized = true;
+        this.$emit("annotated", true);
       }
     },
     /**
@@ -98,6 +99,15 @@ export default {
             }
           }
         }
+      } else {
+        const timeBeforeRetry = Date.now();
+        
+        this.$on('annotated', () => {
+            this.$nextTick(() => {
+              const delay = (Date.now() - timeBeforeRetry) / 1000;
+              this.playAnimation(startFrom + delay);
+            })
+        })
       }
     },
     async pauseAnimation() {
