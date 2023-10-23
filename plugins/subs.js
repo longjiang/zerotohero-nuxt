@@ -129,10 +129,14 @@ export default ({ app }, inject) => {
         if (!matchedVideo) {
           let matchedVideos = await app.$directus.getVideos({
             l2Id: l2Obj.id,
-            query: `filter[youtube_id][eq]=${mustIncludeYouTubeId}`,
+            params: {
+              'filter[youtube_id][eq]': mustIncludeYouTubeId,
+            },
+            subs: true
           });
+          matchedVideo = matchedVideos[0];
           if (matchedVideos?.length > 0) {
-            videos = [matchedVideos[0], ...videos];
+            videos = [matchedVideo, ...videos];
           }
         }
       }
@@ -154,7 +158,8 @@ export default ({ app }, inject) => {
             convertToSimplified,
             exact,
             apostrophe,
-            mustIncludeYouTubeId
+            mustIncludeYouTubeId,
+            limit
           )
         );
       }
@@ -175,26 +180,22 @@ export default ({ app }, inject) => {
       convertToSimplified = false,
       mustIncludeYouTubeId = undefined,
     } = {}) {
-      let hits = [];
-      hits = hits.concat(
-        await this.searchWithLike({
-          terms,
-          l2Obj,
-          tvShowFilter,
-          talkFilter,
-          adminMode,
-          excludeTerms,
-          continua,
-          sort,
-          limit,
-          exact,
-          apostrophe,
-          convertToSimplified,
-          mustIncludeYouTubeId,
-        })
-      );
+      let hits = await this.searchWithLike({
+        terms,
+        l2Obj,
+        tvShowFilter,
+        talkFilter,
+        adminMode,
+        excludeTerms,
+        continua,
+        sort,
+        limit,
+        exact,
+        apostrophe,
+        convertToSimplified,
+        mustIncludeYouTubeId,
+      })
       hits = uniqueByValue(hits, "id");
-      if (limit) hits = hits.slice(0, limit);
       return hits.sort((a, b) => a.lineIndex - b.lineIndex);
     },
 

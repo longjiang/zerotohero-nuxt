@@ -510,7 +510,7 @@ export default {
         }
         return pass;
       });
-      return { savedHits, matchedHits, remainingHits };
+      return { savedHits, matchedHits, remainingHits: remainingHits.slice(0, this.calculateLimit()) };
     },
     groupByLength(hits) {
       let hitGroups = {};
