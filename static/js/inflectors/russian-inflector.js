@@ -156,6 +156,7 @@ class RussianInflector extends BaseInflector {
     let search = text.toLowerCase();
     head = head || text
     let forms = await this.inflect(head)
+    if (!forms) return text;
     forms = forms.map(f => f.form)
     const accentLessForms = forms.map(f => f.replace(/́/g, ""))
     let matchedIndex = accentLessForms.findIndex((f) => search === f);

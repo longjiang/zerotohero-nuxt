@@ -12,19 +12,24 @@
         ]"
         :key="index"
       >
-        <rt v-if="attributes?.showDefinition && index === 0">{{ attributes?.definition || "&nbsp;" }}</rt>
-        <rt v-if="showReading(segment)">{{
-          segment.reading
-        }}</rt
-        >{{ segment.surface }}</ruby
+        <rt v-if="attributes?.showDefinition && index === 0">{{
+          attributes?.definition || "&nbsp;"
+        }}</rt>
+        <rt v-if="showReading(segment)">{{ segment.reading }}</rt
+        >{{ russianAccentText || segment.surface }}</ruby
       ><span
         v-if="attributes?.hanAnnotation"
         class="word-block-text-byeonggi d-inline-block"
         v-html="attributes?.hanAnnotation"
       /><span
-        v-if="attributes?.showQuickGloss && attributes?.isSaved && attributes?.definition"
+        v-if="
+          attributes?.showQuickGloss &&
+          attributes?.isSaved &&
+          attributes?.definition
+        "
         class="word-block-text-quick-gloss"
-      >{{ definition }}</span>
+        >{{ definition }}</span
+      >
     </template>
   </span>
 </template>
@@ -70,6 +75,7 @@ export default {
       checkSaved: true,
       tooltipHover: false,
       lastLookupWasQuick: false,
+      russianAccentText: undefined,
       reveal: false,
       t: 0,
       animate: false,
@@ -123,7 +129,7 @@ export default {
       return attributes;
     },
     showFillInTheBlank() {
-      (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
+      (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal;
     },
     shortDefinition() {
       let shortDefinition =
@@ -229,8 +235,8 @@ export default {
     speak,
     showReading(segment) {
       if (!this.$l2Settings.showPinyin) return false; // If the user doesn't want to see phonetics (pinyin), don't show it
-      if (segment.type !== 'kanji') return false // segment.type is 'kanji' for all words, except those in Japanese that do not have kanji
-      if (this.mappedPronunciation?.length && !hasKanji(surface)) return false // If this is Japanese, do not show pronunciation if there is no kanji
+      if (segment.type !== "kanji") return false; // segment.type is 'kanji' for all words, except those in Japanese that do not have kanji
+      if (this.mappedPronunciation?.length && !hasKanji(surface)) return false; // If this is Japanese, do not show pronunciation if there is no kanji
       return true;
     },
     showMenuModal() {
@@ -403,6 +409,8 @@ export default {
     async checkSavedItems() {
       await this.checkSavedWord();
       this.checkSavedPhrase();
+      if (this.$l2.code === 'ru')
+        this.russianAccentText = await this.getRussianAccentText();
     },
     async loadImages() {
       if (this.images.length === 0) {
@@ -446,6 +454,18 @@ export default {
         if (this.$l2.code === "ja" && this.token?.pronunciation)
           text = this.token.pronunciation;
         speak({ text, l2: this.$l2, rate, volume });
+      }
+    },
+    async getRussianAccentText() {
+      if (this.$l2.code === "ru") {
+        if (this.savedWord && this.text) {
+          let dictionary = await this.$getDictionary();
+          let accentText = await dictionary.getAccentForm(
+            this.text,
+            this.savedWord.head
+          );
+          if (accentText) return accentText
+        }
       }
     },
     async closePopup() {
