@@ -193,10 +193,9 @@ export default {
     wordBlockClasses() {
       let classes = {
         "word-block": true,
-        "with-quick-gloss": this.isSaved && this.definition,
-        saved: this.isSaved,
-        obscure: this.obscure,
-        animate: this.animate,
+        "with-quick-gloss": this.attributes?.isSaved && this.attributes?.definition,
+        saved: this.attributes?.isSaved,
+        obscure: this.attributes?.obscure,
       };
       if (this.pos) classes[`pos-${this.pos}`] = true;
       return classes;
@@ -367,6 +366,8 @@ export default {
       }
       if (saved) {
         await this.setSavedWord(saved.id, saved.forms[0]);
+      } else {
+        this.savedWord = undefined;
       }
     },
     /**
