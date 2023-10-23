@@ -2,23 +2,48 @@
   <div>
     <!-- Conditionally render tokenized text -->
     <span class="d-inline-flex align-items-start justify-content-between">
-      <!-- If there's text or a text node -->
-      <div style="flex: 1" v-if="text || (processedNode && processedNode.type === 'text')">
-        <TokenizedText :text="text || processedNode.text" :context="context" />
+      <!-- When the user wants to edit the text, show a textarea -->
+
+      <textarea
+        v-if="editMode"
+        class="annotate-input"
+        @blur="editBlur"
+        @click.stop="dummyFunction"
+        ref="textarea"
+        :value="sanitizedText"
+      ></textarea>
+      <div v-else>
+        <!-- If there's text or a text node -->
+        <div
+          style="flex: 1"
+          v-if="
+            editedText ||
+            text ||
+            (processedNode && processedNode.type === 'text')
+          "
+        >
+          <TokenizedText
+            :text="editedText || text || processedNode.text"
+            :context="context"
+          />
+        </div>
+
+        <!-- If processedNode is a non-text node, render it -->
+        <div v-else-if="processedNode && processedNode.type !== 'text'">
+          <RecursiveRenderer :node="processedNode" />
+        </div>
+
+        <!-- Default case: render the slot content -->
+        <div v-else>
+          <slot></slot>
+        </div>
         <!-- the translation -->
-        <div class="annotate-translation" v-if="showTranslation && translationData">
+        <div
+          class="annotate-translation"
+          v-if="showTranslation && translationData"
+        >
           {{ translationData }}
         </div>
-      </div>
-
-      <!-- If processedNode is a non-text node, render it -->
-      <div v-else-if="processedNode && processedNode.type !== 'text'">
-        <RecursiveRenderer :node="processedNode" />
-      </div>
-
-      <!-- Default case: render the slot content -->
-      <div v-else>
-        <slot></slot>
       </div>
 
       <!-- Action Button -->
@@ -63,15 +88,19 @@ export default {
   },
   data() {
     return {
+      editMode: false, // Whether the user is editing the text
       processedNode: null,
+      slotText: "", // this will store the text extracted from the slot
+      editedText: "", // this will store the text edited by the user
       translationData: this.translation, // For translation
-      slotText: '', // this will store the text extracted from the slot
     };
   },
   computed: {
     sanitizedText() {
       // combine the text from the prop and from the slot, then sanitize
-      return stripTags((this.text || '') + this.slotText).trim();
+      let textFromPropOrSlot = (this.text || "") + this.slotText;
+      // If the user has edited the text, use that instead
+      return stripTags(this.editedText || textFromPropOrSlot).trim();
     },
     phraseSaved() {
       return this.$refs["savePhrase"] && this.$refs["savePhrase"].saved;
@@ -86,12 +115,35 @@ export default {
       const node = this.$slots.default[0].elm;
       if (node) {
         this.processedNode = this.processNode(node);
-        this.slotText = node.innerText || ''; // Extract the text content from the slot
+        this.slotText = node.innerText || ""; // Extract the text content from the slot
       }
     }
   },
+  watch: {
+    // Watch for editMode changes
+    editMode(newValue) {
+      if (newValue) {
+        this.$nextTick(() => {
+          this.adjustTextareaHeight();
+        });
+      }
+    },
+  },
   methods: {
-    
+    dummyFunction(target) {},
+    async editBlur(e) {
+      let newText = e.target.value;
+      if (newText) {
+        this.editedText = newText;
+        this.editMode = false;
+        this.$emit("textChanged", newText);
+      }
+    },
+    adjustTextareaHeight() {
+      const textarea = this.$refs["textarea"];
+      textarea.style.height = "auto"; // Reset height
+      textarea.style.height = textarea.scrollHeight + "px"; // Set to scrollHeight
+    },
     processNode(node) {
       if (node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== "") {
         return {
