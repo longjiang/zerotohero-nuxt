@@ -121,7 +121,7 @@
           >
             <div v-html="line.trim()" />
           </Annotate> -->
-          <TokenizedText :text="stripTags(line).trim()" />
+          <TokenizedText :text="line" />
           <div
             v-if="translation || translationLoading"
             class="translation-line"

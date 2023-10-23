@@ -7,27 +7,24 @@
     }"
   >
     <template v-if="tokenized">
-      <template v-for="(token, index) in tokens"
-        >{{ typeof token === "string" ? token : ""
-        }}<WordBlock
+      <template v-for="(token, index) in tokens">{{ typeof token === "string" ? token : "" }}
+        <word-block
           v-if="typeof token !== 'string'"
           :key="index"
-          v-bind="{
-            token,
-            context: context ? { ...context, text } : { text },
-            mappedPronunciation: token.mappedPronunciation,
-          }"
+          :token="token"
+          :context="context ? { ...context, text } : { text }"
+          :mappedPronunciation="token.mappedPronunciation"
         />
       </template>
     </template>
     <template v-else>
-      {{ text }}
+      {{ sanitizedText }}
     </template>
   </span>
 </template>
 
 <script>
-import { timeout } from "@/lib/utils";
+import { timeout, stripTags } from "@/lib/utils";
 
 export default {
   name: "TokenizedText",
@@ -56,11 +53,16 @@ export default {
       tokens: [],
     };
   },
+  computed: {
+    sanitizedText() {
+      return stripTags(this.text).trim()
+    },
+  },
   methods: {
     async visibilityChanged(visible) {
       if (visible && !this.tokenized) {
         let dictionary = await this.$getDictionary();
-        this.tokens = await dictionary.tokenizeWithCache(this.text);
+        this.tokens = await dictionary.tokenizeWithCache(this.sanitizedText);
         this.tokenized = true;
         this.$emit("annotated", true);
       }
