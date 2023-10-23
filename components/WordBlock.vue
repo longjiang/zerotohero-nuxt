@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { timeout, unique, speak, uniqueByValue, isMobile } from "@/lib/utils";
+import { timeout, unique, speak, uniqueByValue } from "@/lib/utils";
 import { mapState } from "vuex";
 import { tify, sify } from "chinese-conv";
 import { transliterate as tr } from "transliteration";
@@ -41,7 +41,7 @@ export default {
       loadingImages: false,
       text: this.token.text,
       images: [],
-      words: [],
+      words: this.token?.candidates || [],
       savedWord: undefined,
       savedPhrase: undefined,
       checkSaved: true,
@@ -54,6 +54,51 @@ export default {
   },
   computed: {
     ...mapState("savedWords", ["savedWords"]),
+    /**
+     * Calculates the attributes object.
+     *
+     * The returned object has the following properties:
+     *
+     * - `saved`: A value indicating whether the word or phrase has been saved.
+     * - `phonetics`: The phonetics of the current word or phrase.
+     * - `pos`: The part of speech of the current word or phrase.
+     * - `definition`: The quick gloss definition of the current word or phrase.
+     * - `text`: The transformed text of the word or phrase.
+     * - `hanAnnotation`: For Vietnamese and Korean, the Han character form of the word, if it exists and should be shown in small print on the side.
+     * - `mappedPronunciation`: The pronunciation of the word as mapped for Japanese, if the current language is Japanese.
+     * - `data-hover-level`: Set to "outside" by default
+     * - `data-rank`: The rank of the word, if it exists.
+     * - `data-weight`: The weight of the word, if it exists.
+     *
+     * @async
+     * @computed
+     * @returns {Promise<Object>} The attributes object.
+     */
+    attributes() {
+      let isSaved = this.savedWord || this.savedPhrase ? true : false;
+      let phonetics = this.$l2Settings.showPinyin ? this.bestPhonetics : false;
+      let text = this.getDisplayText(this.text);
+      let pos = this.pos;
+      let definition, hanAnnotation, mappedPronunciation;
+      if (this.$l2Settings.showDefinition || this.$l2Settings.showQuickGloss)
+        definition = this.shortDefinition;
+      if (this.$l2Settings.showByeonggi && ["ko", "vi"].includes(this.$l2.code))
+        hanAnnotation = this.getHanAnnotation(this.bestWord);
+      if (this.$l2.code === "ja")
+        mappedPronunciation = this.getMappedPronunciation();
+      let level = this.bestWord?.level || "outside";
+      let attributes = {
+        isSaved,
+        phonetics,
+        pos,
+        definition,
+        text,
+        hanAnnotation,
+        mappedPronunciation,
+        "data-hover-level": level,
+      };
+      return attributes;
+    },
     tag() {
       if (
         (this.savedWord || this.savedPhrase) &&
@@ -117,61 +162,7 @@ export default {
       if (phonetics) return phonetics;
     },
   },
-  asyncComputed: {
-    /**
-     * Asynchronously calculates the attributes object.
-     *
-     * The returned object has the following properties:
-     *
-     * - `saved`: A value indicating whether the word or phrase has been saved.
-     * - `phonetics`: The phonetics of the current word or phrase.
-     * - `pos`: The part of speech of the current word or phrase.
-     * - `definition`: The quick gloss definition of the current word or phrase.
-     * - `text`: The transformed text of the word or phrase.
-     * - `hanAnnotation`: For Vietnamese and Korean, the Han character form of the word, if it exists and should be shown in small print on the side.
-     * - `mappedPronunciation`: The pronunciation of the word as mapped for Japanese, if the current language is Japanese.
-     * - `data-hover-level`: Set to "outside" by default
-     * - `data-rank`: The rank of the word, if it exists.
-     * - `data-weight`: The weight of the word, if it exists.
-     *
-     * @async
-     * @computed
-     * @returns {Promise<Object>} The attributes object.
-     */
-    async attributes() {
-      let isSaved = this.savedWord || this.savedPhrase ? true : false;
-      let phonetics = this.$l2Settings.showPinyin ? this.bestPhonetics : false;
-      let text = await this.getDisplayText(this.text);
-      let pos = this.pos;
-      let definition, hanAnnotation, mappedPronunciation;
-      if (this.$l2Settings.showDefinition || this.$l2Settings.showQuickGloss)
-        definition = this.shortDefinition;
-      if (this.$l2Settings.showByeonggi && ["ko", "vi"].includes(this.$l2.code))
-        hanAnnotation = this.getHanAnnotation(this.bestWord);
-      if (this.$l2.code === "ja")
-        mappedPronunciation = this.getMappedPronunciation();
-      let level = this.bestWord?.level || "outside";
-      let attributes = {
-        isSaved,
-        phonetics,
-        pos,
-        definition,
-        text,
-        hanAnnotation,
-        mappedPronunciation,
-        "data-hover-level": level,
-      };
-      return attributes;
-    },
-  },
   mounted() {
-    if (this.token?.candidates) {
-      let words = uniqueByValue(
-        [...this.token.candidates, ...this.words],
-        "id"
-      );
-      this.words = words;
-    }
     this.checkSavedItems();
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (
@@ -232,19 +223,9 @@ export default {
         return hanja ? hanja.split(/[,\-]/)[0] : "";
       }
     },
-    async getDisplayText(text) {
+    getDisplayText(text) {
       if (typeof text === "undefined" || text.trim() === "") {
         return "";
-      }
-      if (this.$l2.code === "ru") {
-        if (this.savedWord) {
-          let dictionary = await this.$getDictionary();
-          let accentText = await dictionary.getAccentForm(
-            this.text,
-            this.savedWord.head
-          );
-          if (accentText) text = accentText;
-        }
       }
       if (this.$l2.code === "tlh") {
         text = Klingon.latinToConScript(text);
@@ -308,9 +289,9 @@ export default {
      * Checks whether the first word in `this.words` array or `this.tokens` array is saved in the store.
      * If not found in `this.words` and `this.tokens`, it checks for the word in `this.text`.
      * If the word is saved, it assigns it to `this.savedWord` and returns it, else it sets `this.savedWord` as undefined.
-     * @return {Object|undefined} - Returns the saved word object if found, else returns undefined.
+     * @return {Promise<void>}
      */
-    checkSavedWord() {
+    async checkSavedWord() {
       if (!this.checkSaved) return false;
       let saved;
       let firstWord = this.words[0] || this.tokens?.[0];
@@ -333,11 +314,8 @@ export default {
         });
       }
       if (saved) {
-        this.setSavedWord(saved.id, saved.forms[0]);
-      } else {
-        this.savedWord = undefined;
+        await this.setSavedWord(saved.id, saved.forms[0]);
       }
-      return saved;
     },
     /**
      * setSavedWord function:
@@ -360,9 +338,8 @@ export default {
     },
     checkSavedPhrase() {
       let phrase = this.phraseItem(this.text);
-      this.savedPhrase = this.$store.getters["savedPhrases/get"](
-        Object.assign({}, phrase)
-      );
+      let saved = this.$store.getters["savedPhrases/has"](phrase);
+      if (saved) this.savedPhrase = saved
     },
     fixKlingonTypos(text) {
       return Klingon.fixTypos(text);
@@ -378,7 +355,7 @@ export default {
       this.openPopup();
     },
     async checkSavedItems() {
-      this.checkSavedWord();
+      await this.checkSavedWord();
       this.checkSavedPhrase();
     },
     async loadImages() {

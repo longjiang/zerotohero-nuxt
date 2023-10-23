@@ -37,7 +37,7 @@
                 : ""
             }}:
           </span>
-          <v-runtime-template :template="`<span>${definition.html}</span>`" />
+          <span v-html="definition.html" />
           <span
             v-if="
               !alwaysShowAsList &&
