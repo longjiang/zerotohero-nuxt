@@ -242,20 +242,6 @@ export default {
         return false; // If this is Japanese, do not show pronunciation if there is no kanji
       return true;
     },
-    showMenuModal() {
-      this.$nuxt.$emit("showPopupDictionary", {
-        token: this.token,
-        text: this.text,
-        context: this.context,
-        phraseObj: this.phraseItem(this.text),
-        words: this.words,
-        images: this.images,
-        quizModeItem: this.quizModeItem,
-      });
-    },
-    hideMenuModal() {
-      this.$nuxt.$emit("hidePopupDictionary");
-    },
     async playAnimation(animationDuration) {
       const animationDurationMs = animationDuration * 1000
       this.animationDuration = animationDurationMs * 5;
@@ -422,27 +408,48 @@ export default {
     },
     async loadImages() {
       if (this.images.length === 0) {
-        this.images = (
+        let images = (
           await WordPhotos.getGoogleImages({
             term: this.token ? this.token.text : this.text,
             lang: this.$l2.code,
           })
         ).slice(0, 5);
+        this.images = images;
       }
       this.loadingImages = false;
+      return this.images // to pass to popup as a promise
     },
-    async openPopup() {
-      if (this.open) return; // Already open
-      if (this.lookupInProgress === false && !(this.words?.length > 0)) {
-        await this.lookup();
-      }
-      this.loadImages();
+    async openPopup() {      
       if (this.$l2Settings.autoPronounce) {
         if (!this.quizMode || this.reveal) {
           this.playWordAudio();
         }
       }
-      this.showMenuModal();
+      // Open it first, then load the words and images
+      this.$nuxt.$emit("showPopupDictionary", {
+        token: this.token,
+        text: this.text,
+        context: this.context,
+        phraseObj: this.phraseItem(this.text),
+        words: this.words,
+        images: this.images,
+        info: this.quizModeItem ? "Tap to show answer." : undefined,
+      });
+      // Load the images and do lookup
+      let promises = []
+      let needToLookUp = this.lookupInProgress === false && !(this.words?.length > 0)
+      if (needToLookUp) {
+        promises.push(this.lookup())
+      }
+      if (!this.images?.length) {
+        promises.push(this.loadImages())
+      }
+      await Promise.all(promises)
+      this.$nuxt.$emit("updatePopupDictionary", {
+        words: this.words,
+        images: this.images,
+      });
+
     },
     playWordAudio() {
       const canGenerateSpeech =
@@ -477,7 +484,7 @@ export default {
       }
     },
     async closePopup() {
-      this.hideMenuModal();
+      this.$nuxt.$emit("hidePopupDictionary");
     },
     async lookup() {
       this.lookupInProgress = true;
@@ -510,9 +517,11 @@ export default {
             return asaved === bsaved ? 0 : asaved ? -1 : 1;
           })
         : [];
-      this.words = uniqueByValue([...words, ...this.words], "id");
+      words = uniqueByValue([...words, ...this.words], "id");
+      this.words = words;
       this.checkSavedItems();
       this.lookupInProgress = false;
+      return words // to pass to popup as a promise
     },
   },
 };

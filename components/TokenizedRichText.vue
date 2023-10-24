@@ -28,14 +28,13 @@
             :animationDuration="animationDuration"
             :animationSpeed="animationSpeed"
             v-on="$listeners"
-            @="forwardEvent"
             ref="tokenizedText"
           />
         </div>
 
         <!-- If processedNode is a non-text node, render it -->
         <div v-else-if="processedNode && processedNode.type !== 'text'">
-          <RecursiveRenderer :node="processedNode" @="forwardEvent" ref="recursiveRenderer" />
+          <RecursiveRenderer :node="processedNode" v-on="$listeners" ref="recursiveRenderer" />
         </div>
 
         <!-- Default case: render the slot content -->

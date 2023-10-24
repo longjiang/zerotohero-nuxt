@@ -5,7 +5,7 @@
       v-for="(sentence, index) in tokenizeText(node.text)"
       :key="index"
       :text="sentence"
-      @="forwardEvent"
+      v-on="$listeners"
       ref="tokenizedTexts"
     />
   </span>
@@ -20,14 +20,17 @@
   >
     <div :is="node.type" v-html="node.element.outerHTML" />
   </span>
-  <!-- If node is a non-text node, render it recursively -->
+  <!-- For custom components, use vue-runtime-template -->
+  <span v-else-if="['popupnote'].includes(node.type)">
+    <v-runtime-template v-once :template="node.element.outerHTML" />
+  </span>
   <span v-else>
     <div :is="node.type">
       <RecursiveRenderer
         v-for="(child, index) in node.children"
         :node="child"
         :key="index"
-        @="forwardEvent"
+        v-on="$listeners"
         ref="recursiveRenderers"
       />
     </div>
@@ -38,6 +41,7 @@
 import TokenizedText from "./TokenizedText.vue";
 import popupnote from "./PopupNote.vue"; // Must be lower-case
 import { SpeechSingleton } from "@/lib/utils";
+import VRuntimeTemplate from "v-runtime-template";
 import sbd from "sbd";
 
 export default {
@@ -48,6 +52,22 @@ export default {
     RecursiveRenderer: () => import("./RecursiveRenderer.vue"),
     TokenizedText,
     popupnote,
+    VRuntimeTemplate,
+  },
+  computed: {
+    attributesObject() {
+      if (this.node && this.node.element) {
+        let attrs = {};
+        for (let i = 0; i < this.node.element.attributes.length; i++) {
+          const attrName = this.node.element.attributes[i].name;
+          if (this.isValidAttrName(attrName)) {
+            attrs[attrName] = this.node.element.attributes[i].value;
+          }
+        }
+        return attrs;
+      }
+      return {};
+    },
   },
   methods: {
     highlightFirstSentence() {
@@ -76,9 +96,7 @@ export default {
         }
       }
       // Otherwise speak the <RecursiveRenderer> component
-      else if (
-        this.$refs.recursiveRenderers?.length
-      ) {
+      else if (this.$refs.recursiveRenderers?.length) {
         for (let i = 0; i < this.$refs.recursiveRenderers.length; i++) {
           if (typeof this.$refs.recursiveRenderers[i].speak === "function") {
             await this.$refs.recursiveRenderers[i].speak();

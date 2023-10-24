@@ -1,26 +1,10 @@
 <template>
-  <v-popover
-    :open="hover"
-    :open-group="'id' + _uid"
-    placement="top"
-    trigger="manual"
-    class="popup-note-popover"
-    style="display: inline-block"
+  <span
+    :class="{'popup-note': true, 'popup-note-disabled': !content}"
+    @click="openPopup"
   >
-    <span
-      :class="{'popup-note': true, 'popup-note-disabled': !content}"
-      @mouseover="mouseOverHandler"
-      @mouseout="mouseOutHandler"
-    >
-      {{ number }}
-    </span>
-    <template slot="popover">
-      <button class="word-block-tool-tip-close" @click="hover = false">
-        <i class="fa fa-times"></i>
-      </button>
-      <div class="popup-note-content mt-4">{{ content }}</div>
-    </template>
-  </v-popover>
+    {{ number }}
+  </span>
 </template>
 
 <script>
@@ -39,27 +23,10 @@ export default {
     };
   },
   methods: {
-    mouseOverHandler() {
-      this.openPopup();
-    },
-    mouseOutHandler() {
-      this.closePopup();
-    },
     async openPopup() {
-      setTimeout(() => {
-        if ($(".popover:hover").length === 0) {
-          this.hover = true;
-        }
-      }, 300); // Allow user to interact with previous popover
-    },
-    closePopup() {
-      setTimeout(() => {
-        // Allow user to interact with popover
-        let $popovers = $(".popover:hover");
-        if ($popovers && $popovers.length === 0) {
-          this.hover = false;
-        }
-      }, 300);
+      this.$nuxt.$emit("showPopupDictionary", {
+        info: this.content,
+      });
     },
   },
 };
