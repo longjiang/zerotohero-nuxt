@@ -1,6 +1,7 @@
 <template>
   <span
     class="use-zoom"
+    :class="{ 'speaking': speaking }"
     v-observe-visibility="{
       callback: visibilityChanged,
       once: true,
@@ -45,6 +46,7 @@ export default {
       tokens: [],
       editMode: false,
       textData: this.text, // So we don't mutate the prop when we edit our own text
+      speaking: false,
     };
   },
   computed: {
@@ -57,7 +59,9 @@ export default {
   },
   methods: {
     async speak() {
+      this.speaking = true;
       await SpeechSingleton.instance.speak({l2: this.$l2, text: this.sanitizedText });
+      this.speaking = false;
       return true;
     },
     visibilityChanged(visible) {
@@ -149,5 +153,10 @@ export default {
   width: 100%;
   resize: none; /* to prevent manual resizing */
   overflow: hidden;
+}
+
+.speaking {
+  background-color: #ffdd5733;
+  transition: background-color 0.5s ease;
 }
 </style>
