@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { timeout, stripTags } from "@/lib/utils";
+import { timeout, stripTags, SpeechSingleton } from "@/lib/utils";
 
 export default {
   name: "TokenizedText",
@@ -56,6 +56,10 @@ export default {
     },
   },
   methods: {
+    async speak() {
+      await SpeechSingleton.instance.speak({l2: this.$l2, text: this.sanitizedText });
+      return true;
+    },
     visibilityChanged(visible) {
       if (visible && !this.tokenized) {
         this.tokenize();

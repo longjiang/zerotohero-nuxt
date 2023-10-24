@@ -134,7 +134,9 @@
           </Annotate> -->
           <TokenizedRichText
             :showTranslation="translation ? false : true"
+            ref="tokenizedRichTexts"
             class="w-100"
+            @click="this.focusLineIndex = lineIndex"
             ><span v-html="line"></span>
           </TokenizedRichText>
           <div
@@ -261,13 +263,13 @@ export default {
   data() {
     return {
       goToPage: this.page, // What the user selects from the dropdown
-      current: 0,
       translationOffset: 0, // When translation and content is out of sync, the user can click on the translation to put them in sync.
       voice: 0,
       speed: 1,
       linesPerPage: 15,
       speaking: false,
-      speakingLineIndex: undefined,
+      focusLineIndex: 0,
+      speakingLineIndex: 0,
       translationLoading: {},
       voices: [],
       params: {},
@@ -281,7 +283,7 @@ export default {
   computed: {
     currentSentence() {
       let sentences = this.getSentences();
-      let currentSentence = sentences?.[this.current];
+      let currentSentence = sentences?.[this.focusLineIndex];
       return currentSentence;
     },
     pageOptions() {
@@ -340,18 +342,15 @@ export default {
     },
   },
   mounted() {
-    this.voices = SpeechSingleton.instance.getVoices();
+    this.voices = SpeechSingleton.instance.getVoices(this.$l2.code);
     this.bindKeys();
   },
   beforeDestroy() {
     this.unbindKeys();
   },
   watch: {
-    current() {
-      this.update();
-    },
     page() {
-      this.current = 0;
+      this.focusLineIndex = 0;
       this.translationOffset = 0; // When translation and content is out of sync, the user can click on the translation to put them in sync.
       this.translationLoading = {};
       this.goToPage = this.page;
@@ -381,38 +380,34 @@ export default {
       this.speaking = false;
       this.speakNextSentence();
     },
-    play() {
+    async play() {
+      // Set the speaking flag to true
+      this.speaking = true;
+      const totalLines = this.$refs.tokenizedRichTexts.length;
+      // Speak all the <TokenizedRichText> components in order, starting from speakingLineIndex
+      for (let i = this.speakingLineIndex; i < totalLines; i++) {
+        // keep track of which one is speaking
+        this.speakingLineIndex = i;
+        await this.$refs.tokenizedRichTexts[i].speak();
+      }      
+    },
+
+    resume() {
       // Check if the browser supports the Speech Synthesis API
       if (!SpeechSingleton.instance) return;
 
       // Set the speaking flag to true
       this.speaking = true;
 
-      // Check if speech synthesis is paused and if the current line is being spoken
-      if (SpeechSingleton.instance.paused && this.speakingLineIndex === this.current) {
+      // Check if speech synthesis is paused and if the focused line is being spoken
+      if (SpeechSingleton.instance.paused && this.speakingLineIndex === this.focusLineIndex) {
         // If paused, resume speaking
         SpeechSingleton.instance.resume();
       } else {
-        // If not paused, update the current line and get the next sentence to speak
-        this.update();
-        this.speakingLineIndex = this.current;
-        const sentence = this.getSentences()[this.current];
-
-        // Convert the sentence into text and clean it up
-        let text = this.sentenceText(sentence);
-        text = text.replace(/[\n\s]+/g, " ");
-
-        // Check if special conditions apply for text modification
-        if (this.$l2.continua) text = text.replace(/\s/g, "");
-
-        // Check if the text is empty, and if so, move to the next sentence
-        if (text.length === 0) {
-          this.speakNextSentence();
-          return;
-        }
-
-        // Speak the cleaned-up text
-        this.speak(text);
+        // If not paused, or if there's a mismatch between focused and speaking lines,
+        // update the currently speaking line and get the next sentence to speak
+        this.speakingLineIndex = this.focusLineIndex;
+        this.play();        
       }
     },
 
@@ -424,18 +419,19 @@ export default {
     },
 
     speakPreviousSentence() {
-      this.current = Math.max(0, this.current - 1);
+      this.focusLineIndex = Math.max(0, this.focusLineIndex - 1);
       if (this.speaking) {
         this.pause();
         this.play();
       }
       this.scrollToCurrentSentence();
     },
+
     speakNextSentence() {
       // Check if there is another sentence available
-      if (this.current + 1 < this.getSentences().length) {
+      if (this.focusLineIndex + 1 < this.getSentences().length) {
         // Increment the current sentence index
-        this.current++;
+        this.focusLineIndex++;
 
         // If speaking is in progress, pause it and then continue playing
         if (this.speaking) {
@@ -447,15 +443,22 @@ export default {
         this.scrollToCurrentSentence();
       }
     },
+
+    togglePlay() {
+      if (this.speaking) {
+        this.pause();
+      } else {
+        this.play();
+      }
+    },
+
     scrollToCurrentSentence() {
       this.$nextTick(() => {
-        const currentSentence = this.$el.querySelector(".sentence.current");
-        if (currentSentence) {
-          currentSentence.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest",
-          });
-        }
+        // scrollIntoView to the <TokenizedRichText> component that is currently being spoken
+        this.$refs.tokenizedRichTexts[this.speakingLineIndex].$el.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
       });
     },
 
@@ -527,30 +530,17 @@ export default {
         }
       }
     },
-    togglePlay() {
-      if (this.speaking) {
-        this.pause();
-      } else {
-        this.play();
-      }
-    },
     onTranslationSentenceClick(e) {
-      if (this.current > 0) {
+      if (this.focusLineIndex > 0) {
         let translationSentences = Array.from(
           this.$el.querySelectorAll(".translation-sentence")
         );
         let translationIndex = translationSentences.findIndex(
           (el) => el === e.target
         );
-        let translationOffset = translationIndex - this.current;
+        let translationOffset = translationIndex - this.focusLineIndex;
         this.translationOffset = translationOffset;
-        this.update();
       }
-    },
-    onSentenceClick(sentenceEl) {
-      let sentences = this.getSentences();
-      let index = sentences.findIndex((el) => el === sentenceEl);
-      this.current = Math.max(index, 0);
     },
     async translateAll() {
       if (this.$refs.annotate?.[0]) {
@@ -626,17 +616,6 @@ export default {
       let textAttr = sentence.getAttribute("data-sentence-text");
       return textAttr || "";
     },
-    getSentences() {
-      let sentences = [];
-      for (let annotate of this.$children) {
-        for (let sentence of annotate.$el.querySelectorAll(
-          ".annotate-template .sentence"
-        )) {
-          sentences.push(sentence);
-        }
-      }
-      return sentences;
-    },
     getTranslationSentences() {
       let sentences = [];
       for (let annotate of this.$children) {
@@ -647,21 +626,6 @@ export default {
         }
       }
       return sentences;
-    },
-    update() {
-      let sentences = this.getSentences();
-      for (let sentence of sentences) {
-        $(sentence).removeClass("current");
-      }
-      const sentence = sentences[this.current];
-      $(sentence).addClass("current");
-      let translationSentences = this.getTranslationSentences();
-      for (let translationSentence of translationSentences) {
-        $(translationSentence).removeClass("current");
-      }
-      const translationSentence =
-        translationSentences[this.current + this.translationOffset];
-      $(translationSentence).addClass("current");
     },
     scroll(sentence) {
       if (sentence.offsetHeight > 0) {

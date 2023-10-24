@@ -29,12 +29,13 @@
             :animationSpeed="animationSpeed"
             v-on="$listeners"
             @="forwardEvent"
+            ref="tokenizedText"
           />
         </div>
 
         <!-- If processedNode is a non-text node, render it -->
         <div v-else-if="processedNode && processedNode.type !== 'text'">
-          <RecursiveRenderer :node="processedNode" @="forwardEvent" />
+          <RecursiveRenderer :node="processedNode" @="forwardEvent" ref="recursiveRenderer" />
         </div>
 
         <!-- Default case: render the slot content -->
@@ -62,7 +63,7 @@
 </template>
 
 <script>
-import { stripTags } from "@/lib/utils";
+import { stripTags, SpeechSingleton } from "@/lib/utils";
 import { mapState } from "vuex";
 
 export default {
@@ -170,6 +171,17 @@ export default {
     }
   },
   methods: {
+    async speak() {
+      // If we have a <TokenizedText /> speak it
+      if (this.$refs.tokenizedText) {
+        await this.$refs.tokenizedText.speak();
+      }
+      // If we have a <RecursiveRenderer /> speak it
+      else if (this.$refs.recursiveRenderer) {
+        await this.$refs.recursiveRenderer.speak();
+      }
+      return true;
+    },
     dummyFunction(target) {},
     // captures the event name and payload, then re-emits the same event
     forwardEvent(event) {
