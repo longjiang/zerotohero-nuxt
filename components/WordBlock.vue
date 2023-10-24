@@ -232,7 +232,6 @@ export default {
   },
   methods: {
     unique,
-    speak,
     showReading(segment) {
       if (!this.$l2Settings.showPinyin) return false; // If the user doesn't want to see phonetics (pinyin), don't show it
       if (segment.type !== "kanji") return false; // segment.type is 'kanji' for all words, except those in Japanese that do not have kanji
