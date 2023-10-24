@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { timeout } from "@/lib/utils";
+import { timeout, SpeechSingleton } from "@/lib/utils";
 import YouTube from "@/lib/youtube";
 
 export default {
@@ -263,8 +263,8 @@ export default {
                 }
                 if (state === PLAYING) {
                   this.neverPlayed = false;
-                  if (window && window.speechSynthesis) {
-                    window.speechSynthesis.cancel();
+                  if (SpeechSingleton.instance) {
+                    SpeechSingleton.instance.cancel();
                   }
                   if (
                     this.playerIsThisPlayerNotSomeOtherPlayer() &&

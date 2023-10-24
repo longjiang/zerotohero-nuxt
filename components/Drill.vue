@@ -53,13 +53,10 @@
 </template>
 
 <script>
-import Speak from "@/components/Speak";
+import { SpeechSingleton } from "@/lib/utils";
 
 export default {
   props: ["drill"],
-  components: {
-    Speak,
-  },
   data() {
     return {
       itemKey: 0,
@@ -71,13 +68,7 @@ export default {
   },
   methods: {
     speak(text) {
-      if (window?.speechSynthesis) {
-        let speechSynthesis = window.speechSynthesis;
-        var utterance = new SpeechSynthesisUtterance(text);
-        let speechCode = this.$l2.code === "yue" ? "zh-HK" : this.$l2.code;
-        utterance.lang = speechCode;
-        speechSynthesis.speak(utterance);
-      }
+      SpeechSingleton.instance.speak({text: text, l2: this.$l2});
     },
     playItem(patternIndex, itemIndex) {
       let pattern = this.drill.patterns[patternIndex];

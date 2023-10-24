@@ -665,7 +665,7 @@ export default {
         );
         await englishPromise;
       }
-      if (!this.audioCancelled && !window.speechSynthesis.speaking) {
+      if (!this.audioCancelled && !SpeechSingleton.instance.speaking) {
         if (this.currentLine) {
           this.$emit("speechStart");
           let japanesePromise = SpeechSingleton.instance.speak(this.currentLine.line, this.$l2, 1);
@@ -676,7 +676,7 @@ export default {
     },
     stopAudioModeStuff() {
       this.audioCancelled = true;
-      if (window && window.speechSynthesis) window.speechSynthesis.cancel();
+      if (window && SpeechSingleton.instance) SpeechSingleton.instance.stop();
       this.$emit("speechEnd");
       this.$emit("pause");
     },

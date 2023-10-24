@@ -266,7 +266,6 @@ export default {
       voice: 0,
       speed: 1,
       linesPerPage: 15,
-      utterance: undefined,
       speaking: false,
       speakingLineIndex: undefined,
       translationLoading: {},
@@ -384,16 +383,15 @@ export default {
     },
     play() {
       // Check if the browser supports the Speech Synthesis API
-      let speechSynthesis = window?.speechSynthesis;
-      if (!speechSynthesis) return;
+      if (!SpeechSingleton.instance) return;
 
       // Set the speaking flag to true
       this.speaking = true;
 
       // Check if speech synthesis is paused and if the current line is being spoken
-      if (speechSynthesis.paused && this.speakingLineIndex === this.current) {
+      if (SpeechSingleton.instance.paused && this.speakingLineIndex === this.current) {
         // If paused, resume speaking
-        speechSynthesis.resume();
+        SpeechSingleton.instance.resume();
       } else {
         // If not paused, update the current line and get the next sentence to speak
         this.update();
@@ -419,19 +417,12 @@ export default {
     },
 
     pause() {
-      if (window && window.speechSynthesis) {
-        let speechSynthesis = window.speechSynthesis;
+      if (SpeechSingleton.instance) {
+        SpeechSingleton.instance.pause();
         this.speaking = false;
-        if (this.speakingLineIndex === this.current) {
-          speechSynthesis.pause();
-        } else {
-          if (this.utterance) {
-            this.utterance.onend = undefined;
-          }
-          speechSynthesis.cancel();
-        }
       }
     },
+
     speakPreviousSentence() {
       this.current = Math.max(0, this.current - 1);
       if (this.speaking) {
