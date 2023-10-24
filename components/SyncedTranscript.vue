@@ -110,7 +110,7 @@
 import {
   uniqueId,
   timeout,
-  speak,
+  SpeechSingleton,
   documentOffsetTop,
   NON_PRO_MAX_LINES,
 } from "@/lib/utils";
@@ -658,7 +658,7 @@ export default {
         this.matchedParallelLines[this.currentLineIndex]
       ) {
         this.$emit("speechStart");
-        let englishPromise = speak(
+        let englishPromise = SpeechSingleton.instance.speak(
           this.matchedParallelLines[this.currentLineIndex],
           this.$l1,
           1.1
@@ -668,7 +668,7 @@ export default {
       if (!this.audioCancelled && !window.speechSynthesis.speaking) {
         if (this.currentLine) {
           this.$emit("speechStart");
-          let japanesePromise = speak(this.currentLine.line, this.$l2, 1);
+          let japanesePromise = SpeechSingleton.instance.speak(this.currentLine.line, this.$l2, 1);
           await japanesePromise;
           this.$emit("speechEnd");
         }

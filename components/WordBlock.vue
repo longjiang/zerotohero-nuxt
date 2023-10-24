@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { timeout, unique, speak, uniqueByValue, hasKanji } from "@/lib/utils";
+import { SpeechSingleton, unique, uniqueByValue, hasKanji } from "@/lib/utils";
 import { mapState } from "vuex";
 import { tify, sify } from "chinese-conv";
 import { transliterate as tr } from "transliteration";
@@ -462,7 +462,7 @@ export default {
         let text = this.text;
         if (this.$l2.code === "ja" && this.token?.pronunciation)
           text = this.token.pronunciation;
-        speak({ text, l2: this.$l2, rate, volume });
+        SpeechSingleton.instance.speak({ text, l2: this.$l2, rate, volume });
       }
     },
     async getRussianAccentText() {

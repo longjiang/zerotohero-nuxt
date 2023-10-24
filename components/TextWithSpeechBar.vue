@@ -216,6 +216,7 @@ import { parse } from "node-html-parser";
 import { ContainerQuery } from "vue-container-query";
 import { timeout } from "@/lib/utils/timeout";
 import { breakSentences, stripTags } from "@/lib/utils/string";
+import { SpeechSingleton } from "@/lib/utils";
 import Vue from "vue";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 
@@ -340,7 +341,7 @@ export default {
     },
   },
   mounted() {
-    this.getVoices();
+    this.voices = SpeechSingleton.instance.getVoices();
     this.bindKeys();
   },
   beforeDestroy() {
@@ -376,30 +377,10 @@ export default {
     stripTags,
 
     // Methods related to TTS
-
-    speak(text) {
-      if (window && window.speechSynthesis) {
-        let speechSynthesis = window.speechSynthesis;
-        if (speechSynthesis.paused) {
-          if (this.utterance) {
-            this.utterance.onend = undefined;
-          }
-          speechSynthesis.cancel();
-        }
-        if (this.voices.length === 0) this.getVoices();
-        this.utterance = new SpeechSynthesisUtterance(text);
-        // this.utterance.lang = this.lang || this.$l2.code
-        this.utterance.rate = this.speed * 0.9;
-        if (this.voices[this.voice]) {
-          this.utterance.voice = this.voices[this.voice];
-        }
-        speechSynthesis.speak(this.utterance);
-        if (this.utterance) {
-          this.utterance.onend = () => {
-            this.speakNextSentence();
-          };
-        }
-      }
+    async speak(text) {
+      await SpeechSingleton.instance.speak({l2: this.$l2, text, voice: this.voices[this.voice], speed: this.speed })
+      this.speaking = false;
+      this.speakNextSentence();
     },
     play() {
       // Check if the browser supports the Speech Synthesis API
@@ -646,18 +627,6 @@ export default {
     },
     browser() {
       return typeof document !== "undefined";
-    },
-    getVoices() {
-      let speechSynthesis = window?.speechSynthesis;
-      if (!speechSynthesis) return;
-      let voices = speechSynthesis
-        .getVoices()
-        .filter(
-          (voice) =>
-            voice.lang.startsWith(this.lang || this.$l2.code) &&
-            !voice.name.includes("Siri")
-        );
-      this.voices = voices;
     },
     setvoice(index) {
       this.voice = index;

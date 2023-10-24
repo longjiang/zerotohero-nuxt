@@ -86,7 +86,7 @@
 <script>
 import { distance } from "fastest-levenshtein";
 import { mapState } from "vuex";
-import { uniqueByValue, shuffle, speak, timeout, highlightMultiple, highlight, unique } from "@/lib/utils";
+import { uniqueByValue, shuffle, SpeechSingleton, timeout, highlightMultiple, highlight, unique } from "@/lib/utils";
 
 export default {
   data() {
@@ -192,9 +192,9 @@ export default {
     },
     async speak() {
       if (this.reviewItem.parallelLines) {
-        await speak(this.reviewItem.parallelLines, this.$l1, 1.1);
+        await SpeechSingleton.instance.speak(this.reviewItem.parallelLines, this.$l1, 1.1);
       }
-      await speak(this.reviewItem.line.line, this.$l2, 1);
+      await SpeechSingleton.instance.speak(this.reviewItem.line.line, this.$l2, 1);
     },
     async answered(answer) {
       if (answer.correct) {

@@ -18,7 +18,7 @@
 </template>
 <script>
 import commons from "wikimedia-commons-file-path";
-import { speak } from "@/lib/utils";
+import { SpeechSingleton } from "@/lib/utils";
 
 export default {
   props: {
@@ -89,7 +89,7 @@ export default {
       } else if (this.text) {
         if (this.canSpeak) {
           const l2 = this.l2 || this.$l2
-          if (l2) speak({text: this.text, l2, rate, volume});
+          if (l2) SpeechSingleton.instance.speak({text: this.text, l2, rate, volume});
         }
       }
     },
