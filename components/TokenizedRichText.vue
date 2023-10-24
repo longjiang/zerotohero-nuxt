@@ -12,7 +12,7 @@
         ref="textarea"
         :value="sanitizedText"
       ></textarea>
-      <div v-else>
+      <div class="flex-1 w-100" v-else>
         <!-- If there's text or a text node -->
         <div
           style="flex: 1"

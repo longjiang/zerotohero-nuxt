@@ -264,7 +264,7 @@ export default {
                 if (state === PLAYING) {
                   this.neverPlayed = false;
                   if (SpeechSingleton.instance) {
-                    SpeechSingleton.instance.cancel();
+                    SpeechSingleton.instance.stop();
                   }
                   if (
                     this.playerIsThisPlayerNotSomeOtherPlayer() &&

@@ -247,7 +247,7 @@ export default {
         token: this.token,
         text: this.text,
         context: this.context,
-        phraseObj: this.phraseObj,
+        phraseObj: this.phraseItem(this.text),
         words: this.words,
         images: this.images,
         quizModeItem: this.quizModeItem,
