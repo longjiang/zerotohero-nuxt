@@ -49,13 +49,6 @@
                 <i class="fas fa-step-backward"></i>
               </b-button>
               <b-button
-                :variant="$skin"
-                @click="speakPreviousSentence()"
-                :title="$t('Previous Sentence') + ' (↑)'"
-              >
-                <i class="fas fa-arrow-up"></i>
-              </b-button>
-              <b-button
                 class="text-success"
                 :variant="$skin"
                 v-if="!speaking"
@@ -72,13 +65,6 @@
                 :title="$t('Pause') + ` (${$t('SPACE BAR')})`"
               >
                 <i class="fas fa-pause"></i>
-              </b-button>
-              <b-button
-                :variant="$skin"
-                @click="speakNextSentence()"
-                :title="$t('Next Sentence') + ' (↓)'"
-              >
-                <i class="fas fa-arrow-down"></i>
               </b-button>
               <b-button
                 v-if="showTocButton"
@@ -281,11 +267,6 @@ export default {
     };
   },
   computed: {
-    currentSentence() {
-      let sentences = this.getSentences();
-      let currentSentence = sentences?.[this.focusLineIndex];
-      return currentSentence;
-    },
     pageOptions() {
       let options = [];
       for (let i = 1; i <= this.pageCount; i++) {
@@ -374,13 +355,11 @@ export default {
   methods: {
     stripTags,
 
-    // Methods related to TTS
-    async speak(text) {
-      await SpeechSingleton.instance.speak({l2: this.$l2, text, voice: this.voices[this.voice], speed: this.speed })
-      this.speaking = false;
-      this.speakNextSentence();
-    },
     async play() {
+      if (this.paused) {
+        this.resume();
+        return;
+      }
       // Set the speaking flag to true
       this.speaking = true;
       const totalLines = this.$refs.tokenizedRichTexts.length;
@@ -388,7 +367,7 @@ export default {
       for (let i = this.speakingLineIndex; i < totalLines; i++) {
         // keep track of which one is speaking
         this.speakingLineIndex = i;
-        await this.$refs.tokenizedRichTexts[i].speak();
+        if (this.$refs.tokenizedRichTexts[i]) await this.$refs.tokenizedRichTexts[i].speak();
       }      
     },
 
@@ -424,24 +403,7 @@ export default {
         this.pause();
         this.play();
       }
-      this.scrollToCurrentSentence();
-    },
-
-    speakNextSentence() {
-      // Check if there is another sentence available
-      if (this.focusLineIndex + 1 < this.getSentences().length) {
-        // Increment the current sentence index
-        this.focusLineIndex++;
-
-        // If speaking is in progress, pause it and then continue playing
-        if (this.speaking) {
-          this.pause();
-          this.play();
-        }
-
-        // Scroll to the current sentence in the UI
-        this.scrollToCurrentSentence();
-      }
+      this.scrollToCurrentLine();
     },
 
     togglePlay() {
@@ -452,7 +414,7 @@ export default {
       }
     },
 
-    scrollToCurrentSentence() {
+    scrollToCurrentLine() {
       this.$nextTick(() => {
         // scrollIntoView to the <TokenizedRichText> component that is currently being spoken
         this.$refs.tokenizedRichTexts[this.speakingLineIndex].$el.scrollIntoView({
@@ -506,11 +468,6 @@ export default {
           }
           if (["ArrowUp"].includes(e.code)) {
             this.speakPreviousSentence();
-            e.preventDefault();
-            return false;
-          }
-          if (["ArrowDown"].includes(e.code)) {
-            this.speakNextSentence();
             e.preventDefault();
             return false;
           }
