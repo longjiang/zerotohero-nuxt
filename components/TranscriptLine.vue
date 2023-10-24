@@ -15,16 +15,27 @@
       :style="textSize !== 1 ? `font-size: ${textSize}em` : ''"
     >
       <div v-if="!single && showSubsEditing" class="transcript-line-edit mr-3">
-        <div class="transcript-line-edit-time">{{ Math.round(line.starttime * 100) / 100 }}</div>
-        <b-button class="btn btn-small bg-danger text-white" @click="removeLineClick">
+        <div class="transcript-line-edit-time">
+          {{ Math.round(line.starttime * 100) / 100 }}
+        </div>
+        <b-button
+          class="btn btn-small bg-danger text-white"
+          @click="removeLineClick"
+        >
           <i class="fa fa-trash"></i>
         </b-button>
       </div>
-      <div :class="{'transcript-line-both': true, transparent: hideWhileAnnotating && !annotated}" >
-        <div
-          class="transcript-line-l2-wrapper"
-        >
-          <div class="dot-wrapper-ltr" v-if="!single && $l2.direction !== 'rtl'">
+      <div
+        :class="{
+          'transcript-line-both': true,
+          transparent: hideWhileAnnotating && !annotated,
+        }"
+      >
+        <div class="transcript-line-l2-wrapper">
+          <div
+            class="dot-wrapper-ltr"
+            v-if="!single && $l2.direction !== 'rtl'"
+          >
             <div class="dot" v-if="current"></div>
           </div>
           <TokenizedRichText
@@ -34,7 +45,6 @@
                 starttime: line.starttime,
                 youtube_id: video.youtube_id,
               },
-              text: line.line, // If text prop is set, it will only render one TokenizedText component without dom hierarchy
               animationDuration: duration,
               animationSpeed: speed,
               showMenu: true,
@@ -62,9 +72,14 @@
             @textChanged="lineChanged(line, ...arguments)"
             @annotated="onAnnotated"
             @savedWordsFound="onSavedWordsFound"
-          />
+            ><template v-if="!notes">{{ line.line }}</template
+            ><span v-else v-html="lineHtml(line)"
+          /></TokenizedRichText>
           <div v-else v-html="lineHtml(line)" />
-          <div class="dot-wrapper-rtl" v-if="!single && $l2.direction === 'rtl'">
+          <div
+            class="dot-wrapper-rtl"
+            v-if="!single && $l2.direction === 'rtl'"
+          >
             <div class="dot" v-if="current"></div>
           </div>
         </div>
@@ -75,10 +90,18 @@
             'transcript-line-l1-single': single,
           }"
         >
-          <beat-loader v-if="translationLoading" class="d-inline-block" color="#28a745" size="5px"></beat-loader>
+          <beat-loader
+            v-if="translationLoading"
+            class="d-inline-block"
+            color="#28a745"
+            size="5px"
+          ></beat-loader>
           <span
             class="limit-to-three-lines"
-            v-else-if="(showParallelLine && line.line.length > 0 && parallelLine) || translation"
+            v-else-if="
+              (showParallelLine && line.line.length > 0 && parallelLine) ||
+              translation
+            "
             :data-line-index="lineIndex"
             v-html="translation || parallelLine"
             :contenteditable="enableTranslationEditing"
@@ -100,72 +123,72 @@ import { mapState } from "vuex";
 export default {
   components: {
     ContainerQuery,
-    BeatLoader
+    BeatLoader,
   },
   props: {
     line: {
-      type: Object
+      type: Object,
     },
     lineIndex: {
-      type: Number
+      type: Number,
     },
     abnormal: {
-      type: Boolean
+      type: Boolean,
     },
     current: {
-      type: Boolean
+      type: Boolean,
     },
     currentTime: {
-      type: Number
+      type: Number,
     },
     sticky: {
-      type: Boolean
+      type: Boolean,
     },
     single: {
-      type: Boolean
+      type: Boolean,
     },
     hsk: {
-      type: String
+      type: String,
     },
     notes: {
-      type: Array
+      type: Array,
     },
     duration: {
-      default: undefined
+      default: undefined,
     },
     parallelLine: {
-      type: String
+      type: String,
     },
     showParallelLine: {
-      default: false // The user can hide the line via settings/css, but if the transcript has no parallel line we control how the component is rendered
+      default: false, // The user can hide the line via settings/css, but if the transcript has no parallel line we control how the component is rendered
     },
     showSubsEditing: {
-      type: Boolean
+      type: Boolean,
     },
     showAnimation: {
-      default: true
+      default: true,
     },
     speed: {
-      default: 1
+      default: 1,
     },
     enableTranslationEditing: {
-      type: Boolean
+      type: Boolean,
     },
     hideWhileAnnotating: {
       // Whether to hide the line before annotation is complete (for reducing flickering in single-line mode)
       type: Boolean,
-      default: false
+      default: false,
     },
     textSize: {
-      default: 1
+      default: 1,
     },
     video: {
-      type: Object
+      type: Object,
     },
     paused: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -180,9 +203,9 @@ export default {
       params: {},
       query: {
         lg: {
-          minWidth: 600
-        }
-      }
+          minWidth: 600,
+        },
+      },
     };
   },
   mounted() {
@@ -227,8 +250,8 @@ export default {
       }
     },
     playAnimation() {
-      if (!this.showAnimation || !this.karaokeAnimation) return
-      const startFrom = Math.max(this.currentTime - this.line.starttime, 0)
+      if (!this.showAnimation || !this.karaokeAnimation) return;
+      const startFrom = Math.max(this.currentTime - this.line.starttime, 0);
       if (this.$refs["annotate"]) {
         this.$refs["annotate"].playAnimation(startFrom);
       }
@@ -259,7 +282,7 @@ export default {
         html = html.replace(/\[(\d+)\]/g, (_, num) => {
           let note;
           if (this.notes) {
-            note = this.notes.find(note => note.id === Number(num));
+            note = this.notes.find((note) => note.id === Number(num));
           }
           return `<PopupNote :number="${num}" content="${
             note ? note.note : ""
@@ -270,14 +293,12 @@ export default {
     },
     highlightMultiple() {
       return highlightMultiple(...arguments);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-
-
 .skin-dark {
   .dot,
   .dot:before,
@@ -407,8 +428,6 @@ export default {
   opacity: 0.5;
 }
 
-
-
 .dot:after {
   content: "";
   position: absolute;
@@ -461,17 +480,17 @@ export default {
 
 .transcript-line-edit-time {
   font-size: 0.5em;
-  color: #ccc
+  color: #ccc;
 }
 
 .limit-to-three-lines {
-    display: -webkit-box;  /* Converts the span to a block-level container */
-    -webkit-line-clamp: 3;  /* Limits to 3 lines */
-    -webkit-box-orient: vertical;  /* Sets the direction of children inline boxes */
-    overflow: hidden;  /* Hides the overflow */
-    text-overflow: ellipsis;  /* Adds the ellipsis at the end */
-    max-width: 100%;  /* Or any other width */
-    line-height: 1.5em;  /* This will depend on your font size */
-    max-height: 4.5em;  /* line-height multiplied by the number of lines you want to display. This is 20*3 in our case */
+  display: -webkit-box; /* Converts the span to a block-level container */
+  -webkit-line-clamp: 3; /* Limits to 3 lines */
+  -webkit-box-orient: vertical; /* Sets the direction of children inline boxes */
+  overflow: hidden; /* Hides the overflow */
+  text-overflow: ellipsis; /* Adds the ellipsis at the end */
+  max-width: 100%; /* Or any other width */
+  line-height: 1.5em; /* This will depend on your font size */
+  max-height: 4.5em; /* line-height multiplied by the number of lines you want to display. This is 20*3 in our case */
 }
 </style>

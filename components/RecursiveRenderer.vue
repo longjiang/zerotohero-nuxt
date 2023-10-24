@@ -36,6 +36,7 @@
 
 <script>
 import TokenizedText from "./TokenizedText.vue";
+import popupnote from "./PopupNote.vue"; // Must be lower-case
 import { SpeechSingleton } from "@/lib/utils";
 import sbd from "sbd";
 
@@ -46,6 +47,7 @@ export default {
   components: {
     RecursiveRenderer: () => import("./RecursiveRenderer.vue"),
     TokenizedText,
+    popupnote,
   },
   methods: {
     highlightFirstSentence() {

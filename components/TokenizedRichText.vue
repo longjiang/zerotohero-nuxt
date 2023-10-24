@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import { stripTags, SpeechSingleton } from "@/lib/utils";
+import { stripTags } from "@/lib/utils";
 import { mapState } from "vuex";
 
 export default {
