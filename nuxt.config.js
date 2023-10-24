@@ -574,11 +574,7 @@ export default {
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: ["nuxt-delay-hydration", "@nuxtjs/pwa", "nuxt-vite"],
-
-  delayHydration: {
-    mode: "manual",
-  },
+  buildModules: ["@nuxtjs/pwa"],
 
   toast: {
     position: "top-center",

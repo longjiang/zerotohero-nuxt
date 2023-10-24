@@ -3,7 +3,7 @@ import Vue from "vue";
 import { mapState } from "vuex";
 
 
-function mapParams(type) {
+const mapParams = (type) => {
   let computedProperties = {}
   if (this.$route && this.$route[type]) {
     for (const [key, value] of Object.entries(this.$route[type])) {
@@ -19,8 +19,31 @@ Vue.mixin({
   computed: {
     ...mapState("fullHistory", ["fullHistory", "lastL1L2", "fullHistoryLoaded"]),
     ...mapState("settings", ["l2Settings"]),
-    ...mapParams('params'),
-    ...mapParams('query'),
+    ...function() {
+      let computedProperties = {};
+      if (this.$route && this.$route.params) {
+        for (const [key] of Object.entries(this.$route.params)) {
+          computedProperties[key] = function() {
+            return this.$route.params[key];
+          };
+        }
+      }
+      return computedProperties;
+    }.call(this),
+
+    // Dynamically compute properties based on $route.query
+    ...function() {
+      let computedProperties = {};
+      if (this.$route && this.$route.query) {
+        for (const [key] of Object.entries(this.$route.query)) {
+          computedProperties[key] = function() {
+            return this.$route.query[key];
+          };
+        }
+      }
+      return computedProperties;
+    }.call(this),
+    
     $l2Settings() {
       let l2 = this.$store.state.settings.l2
       let l2SettingsOfL2 = {};

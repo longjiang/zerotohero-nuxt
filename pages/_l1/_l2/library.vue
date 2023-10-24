@@ -113,7 +113,7 @@ export default {
   async created() {
     try {
       let libraryL2 = await (
-        await import(`../lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)
+        await import(`../../../lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)
       ).default;
       Library.setLangSources(libraryL2.sources);
       this.booklists = await libraryL2.booklists();
