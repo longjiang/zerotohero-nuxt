@@ -272,7 +272,7 @@
           </h6>
         </div>
         <YouTubeVideoList
-          v-if="episodes?.length || related?.length"
+          v-if="(episodes && episodes.length) || (related && related.length)"
           :videos="show ? episodes : related"
           :showDate="true"
           :initialSort="episodeSort"

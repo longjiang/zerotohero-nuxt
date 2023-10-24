@@ -1,7 +1,7 @@
 <template>
   <container-query :query="query" v-model="params">
     <div>
-      <div v-show="title && shows?.length">
+      <div v-show="title && shows && shows.length">
         <h5>
           {{ $t(title) }}
           <router-link

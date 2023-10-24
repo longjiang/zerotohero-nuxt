@@ -1,11 +1,3 @@
-<router>
-  {
-    path: '/register',
-    meta: {
-      skin: 'dark'
-    }
-  }
-</router>
 <template>
   <div
     :style="`min-height: 100vh; ${

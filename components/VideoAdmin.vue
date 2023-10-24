@@ -98,7 +98,7 @@
               Removed
             </span>
             <b-button
-              v-if="video?.subs_l2?.length"
+              v-if="video && video.subs_l2 && video.subs_l2.length"
               @click="syncSubs"
               size="small"
               variant="success"
@@ -334,7 +334,7 @@ export default {
         youtube_id,
         srt_content,
       });
-      if (res?.data) {
+      if (res && res.data) {
         const syncedSrt = res.data;
         this.video.subs_l2 = this.$subs.parseSrt(syncedSrt);
         this.$toast.success("Subtitles synced successfully.", {

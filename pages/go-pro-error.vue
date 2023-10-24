@@ -1,9 +1,3 @@
-<router>
-  {
-    path: '/go-pro-error',
-    props: true
-  }
-</router>
 <template>
   <div class="main container mt-5 p-4 rounded shadow">
     <div class="row">

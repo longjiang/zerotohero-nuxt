@@ -1,7 +1,7 @@
 <template>
   <component
     :is="currentComponent"
-    :key="`${type}-${video?.youtube_id}`"
+    :key="`${type}-${video && video.youtube_id}`"
     v-bind="{
       starttime,
       stoptime,

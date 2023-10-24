@@ -1,19 +1,3 @@
-<router>
-    {
-      path: '/:l1/:l2/assign-lesson-videos/:level?/:lesson?',
-      props: true,
-      meta: {
-        title: 'Lesson Videos | Language Player',
-        skin: 'dark',
-        metaTags: [
-          {
-            name: 'description',
-            content: 'Assign videos to reenforce lesson vocabulary.'
-          }
-        ]
-      }
-    }
-</router>
 <template>
   <div class="container-fluid main mb-5">
     <div class="row">
@@ -110,7 +94,6 @@
 </template>
 
 <script>
-import WordList from "@/components/WordList";
 import { parseDuration, timeStringToSeconds, unique, uniqueByValue } from "../../lib/utils";
 
 export default {
@@ -153,9 +136,6 @@ export default {
       videos = uniqueByValue(videos, "youtube_id");
       return videos
     },
-  },
-  components: {
-    WordList,
   },
   activated() {
     this.route();

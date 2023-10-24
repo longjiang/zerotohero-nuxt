@@ -3,10 +3,10 @@
     <template #title>
       <i18n path="Words related to “{0}”" tag="span">
         <span>
-          <span v-if="!$l2.han">{{ entry?.head || term }}</span>
+          <span v-if="!$l2.han">{{ entry ? entry.head : term }}</span>
           <template v-else>
-            <span class="traditional">{{ entry?.traditional || term  }}</span>
-            <span class="simplified">{{ entry?.simplified || term  }}</span>
+            <span class="traditional">{{ entry ? entry.traditional : term  }}</span>
+            <span class="simplified">{{ entry ? entry.simplified : term  }}</span>
           </template>
         </span>
       </i18n>
@@ -29,7 +29,7 @@
         {{
           $t(
             "Sorry, we could not find any words related to “{term}” in this corpus.",
-            { term: entry?.head || term  }
+            { term: entry ? entry.head : term }
           )
         }}
         <i18n path="You can set a different corpus in {0}.">

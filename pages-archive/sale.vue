@@ -1,12 +1,3 @@
-<router>
-  {
-    path: '/sale',
-    props: true,
-    meta: {
-      layout: 'full'
-    }
-  }
-</router>
 <template>
   <div class="l2-zh">
     <SocialHead :title="title" :description="description" :image="image" />

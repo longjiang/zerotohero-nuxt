@@ -1,17 +1,3 @@
-<router>
-  {
-    path: '/all-routes',
-    meta: {
-      title: 'All Routes | Language Player',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'All routes (paths) in Language Player.'
-        }
-      ]
-    }
-  }
-</router>
 <template>
   <div>
     <h1>List of Route Patterns</h1>
@@ -28,6 +14,12 @@ export default {
       return this.$router.options.routes.map((route) => ({
         path: route.path
       }));
+    },
+    method() {
+      return this.$route.params.method;
+    },
+    args() {
+      return this.$route.params.args;
     }
   }
 };

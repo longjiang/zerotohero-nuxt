@@ -1,9 +1,3 @@
-<router>
-  {
-    path: '/stats',
-    props: true,
-  }
-</router>
 <template>
   <div style="min-height: 100vh">
     <SocialHead

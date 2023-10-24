@@ -16,7 +16,6 @@
 <script>
 import { jsonProxy } from "../lib/utils";
 import RedditArticleCard from "@/components/RedditArticleCard";
-import axios from 'axios'
 
 export default {
   components: {

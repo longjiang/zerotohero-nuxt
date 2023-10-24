@@ -271,7 +271,7 @@ export default {
                     !this.interval
                   ) {
                     let crossingTimes
-                    if (this.video?.subs_l2) {
+                    if (this.video && this.video.subs_l2) {
                       // Map times of each of subs_l2's 'starttime' and 'starttime' + 'duration' properties (if duration is available)
                       // So we get a flat array of "crossing" points
                       crossingTimes = this.video.subs_l2

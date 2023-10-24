@@ -1,9 +1,3 @@
-<router>
-  {
-    path: '/privacy-policy',
-    props: true
-  }
-</router>
 <template>
   <div>
     <div  class="main page pt-5 pb-5 container">

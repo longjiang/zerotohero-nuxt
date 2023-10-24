@@ -1,13 +1,3 @@
-<router>
-  {
-    name: 'index',
-    path: '/',
-    meta: {
-      layout: 'full',
-      skin: 'dark'
-    }
-  }
-</router>
 <template>
   <div>
     <SocialHead

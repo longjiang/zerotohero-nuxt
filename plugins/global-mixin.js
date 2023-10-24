@@ -2,10 +2,25 @@
 import Vue from "vue";
 import { mapState } from "vuex";
 
+
+function mapParams(type) {
+  let computedProperties = {}
+  if (this.$route && this.$route[type]) {
+    for (const [key, value] of Object.entries(this.$route[type])) {
+      computedProperties[key] = function() {
+        return this.$route[type][key];
+      }
+    }
+  }
+  return computedProperties;
+}
+
 Vue.mixin({
   computed: {
     ...mapState("fullHistory", ["fullHistory", "lastL1L2", "fullHistoryLoaded"]),
     ...mapState("settings", ["l2Settings"]),
+    ...mapParams('params'),
+    ...mapParams('query'),
     $l2Settings() {
       let l2 = this.$store.state.settings.l2
       let l2SettingsOfL2 = {};

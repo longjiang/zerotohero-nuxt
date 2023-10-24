@@ -2,7 +2,7 @@
   <container-query :query="query" v-model="params">
     
     <div :class="`watch-history watch-history-${skin}`">
-      <div class="history-items" v-if="itemsFiltered?.length > 0">
+      <div class="history-items" v-if="itemsFiltered && itemsFiltered.length > 0">
         <div class="row" v-if="showClear">
           <div
             class="col-12 text-right"
@@ -74,7 +74,7 @@
           </template>
         </div>
       </div>
-      <div class="w-100" v-if="itemsFiltered?.length === 0">
+      <div class="w-100" v-if="itemsFiltered && itemsFiltered.length === 0">
         <div class="col-sm-12">
           <p class="text-center p-4 rounded bg-accent">
             {{ $t("You haven't studied any {l2} videos yet.", {l2: l2 ? $t(l2.name) : ""}) }}

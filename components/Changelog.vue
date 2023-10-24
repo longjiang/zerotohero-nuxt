@@ -6,7 +6,6 @@
 
 <script>
 import VueMarkdown from "vue-markdown";
-import changelogContent from "../CHANGELOG.md";
 
 export default {
   components: {
@@ -17,6 +16,12 @@ export default {
       changelogContent,
     };
   },
+  mounted() {
+    // Load /CHANGELOG.md via axios
+    this.$axios.get("/CHANGELOG.md").then((response) => {
+      this.changelogContent = response.data;
+    });
+  }
 };
 </script>
 

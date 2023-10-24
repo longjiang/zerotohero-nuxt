@@ -1,12 +1,3 @@
-<router>
-  {
-    path: '/logout',
-    props: true,
-    meta: {
-      skin: 'dark'
-    },
-  }
-</router>
 <template>
   <div
     class="container-fluid pt-5"

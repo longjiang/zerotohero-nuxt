@@ -1,7 +1,7 @@
 <template>
   <div class="youtube-view">
     <SocialHead
-      :title="`${video?.title ? video?.title + ' | ' : ''}Learn ${
+      :title="`${video && video.title ? video.title + ' | ' : ''}Learn ${
         $l2.name
       } with Language Player`"
       description="Study the transcript of this video with a popup dictionary"
@@ -15,7 +15,7 @@
         autoplay: true,
         cc: false,
         checkingSubs,
-        episodes: playlist?.videos?.length ? playlist.videos : episodes,
+        episodes: playlist && playlist.videos && playlist.videos.length ? playlist.videos : episodes,
         episodeSort,
         forcePortrait: false,
         initialMode,

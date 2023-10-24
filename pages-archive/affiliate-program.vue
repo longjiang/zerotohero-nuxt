@@ -1,8 +1,3 @@
-<router>
-  {
-    path: '/:l1/:l2/affiliate-program'
-  }
-</router>
 <template>
   <div class="main">
     <div class="affiliate container pt-5 pb-5">

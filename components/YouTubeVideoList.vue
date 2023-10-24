@@ -496,7 +496,7 @@ export default {
       return playlist;
     },
     async checkInfo() {
-      if (!this.videos?.length) return;
+      if (!this.videos && this.videos.length) return;
       // Only get the ones that are not already in the cache
       const youtube_ids = this.videos
         .map((v) => v.youtube_id)
@@ -505,7 +505,7 @@ export default {
         );
       if (youtube_ids.length) {
         const videoMetaFromYouTube = await YouTube.videosByApi(youtube_ids);
-        if (videoMetaFromYouTube?.length)
+        if (videoMetaFromYouTube && videoMetaFromYouTube.length)
           this.cachedVideoMetaFromYouTube = [
             ...this.cachedVideoMetaFromYouTube,
             ...videoMetaFromYouTube,

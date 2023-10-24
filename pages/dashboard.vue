@@ -1,9 +1,3 @@
-<router>
-  {
-    name: 'dashboard',
-    path: '/dashboard',
-  }
-</router>
 <template>
   <div>
     <client-only>
@@ -22,7 +16,7 @@
           >
             <div class="col-sm-12">
               <div :class="`home-card skin-${$skin} p-2 pt-4 pb-4`">
-                <h5 class="text-center mt-2 mb-1" v-if="$auth.user?.first_name">
+                <h5 class="text-center mt-2 mb-1" v-if="$auth.user && $auth.user.first_name">
                   {{ $auth.user.first_name }}{{ $tb("’s Language Dashboard") }}
                 </h5>
                 <div v-if="!loggedIn" class="text-center mt-4 mb-4">

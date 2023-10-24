@@ -11,7 +11,8 @@
     </div>
     <div
       v-if="
-        token?.lemmas &&
+        token &&
+        token.lemmas &&
         token.lemmas.length > 0 &&
         token.lemmas[0].lemma !== text
       "
@@ -26,7 +27,7 @@
       <span v-if="$hasFeature('transliteration')">
         <Speak :text="text" class="mr-1" ref="speak" />
         <span class="word-pronunciation"
-          >[{{ transliterationprop || token?.pronunciation || tr(text) }}]</span
+          >[{{ transliterationprop || (token && token.pronunciation) || tr(text) }}]</span
         >
       </span>
       <div>
@@ -227,7 +228,7 @@
     </div>
     <TranslatorLinks v-bind="{ text }" class="mt-2" />
     <LookUpIn
-      v-if="text || token?.candidates?.[0]"
+      v-if="text || (token && token.candidates && token.candidates[0])"
       :term="text ? text : token.candidates[0].head"
       :sticky="false"
       class="mt-2"
@@ -277,7 +278,7 @@ export default {
   },
   computed: {
     preciseMatchFound() {
-      let tokenCandidatesFound = this.token?.candidates?.length > 0;
+      let tokenCandidatesFound = this.token && this.token.candidates && this.token.candidates.length > 0;
       if (tokenCandidatesFound) return true;
       let matchFoundInWords = this.words.find(
         (w) =>

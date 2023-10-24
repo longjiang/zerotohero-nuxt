@@ -34,7 +34,7 @@
       <span class="nav-item-title">
         {{
           $t(isDropdown ? selfOrCurrentChild.title : item.title, {
-            l2: $t($l2?.name),
+            l2: $t($l2 && $l2.name),
           })
         }}
         <i class="fas fa-wrench ml-2" v-if="item.title === 'Me' && $adminMode"></i>

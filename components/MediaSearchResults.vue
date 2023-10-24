@@ -2,7 +2,7 @@
   <div class="media-search-results">
     <div class="row">
       <div class="col-sm-12">
-        <div v-show="title && videos?.length">
+        <div v-show="title && videos && videos.length">
           <h5>
             {{ $t(title) }}
             <router-link
@@ -39,7 +39,7 @@
         >
           <Loader :sticky="true" message="Loading videos in our library..." />
         </div>
-        <div v-if="videos?.length > 0" v-observe-visibility="visibilityChanged"></div>
+        <div v-if="videos && videos.length > 0" v-observe-visibility="visibilityChanged"></div>
         </div>
         <div v-if="videos && videos.length === 0 && noVideosMessage" class="no-videos-message">
           {{ $t(noVideosMessage) }}

@@ -1,9 +1,3 @@
-<router>
-  {
-    path: '/:l1/:l2/phrase-survey-merge',
-    props: true
-  }
-</router>
 <template>
   <div class="main container pt-5">
     <div class="row">

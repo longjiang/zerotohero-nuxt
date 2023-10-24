@@ -5,9 +5,9 @@
     </div>
     <template v-else>
       <ruby
-        :data-hover-level="attributes?.level || 'outside'"
-        v-for="(segment, index) in attributes?.mappedPronunciation || [
-          { type: 'kanji', surface: text, reading: attributes?.phonetics },
+        :data-hover-level="(attributes && attributes.level) || 'outside'"
+        v-for="(segment, index) in attributes && attributes.mappedPronunciation || [
+          { type: 'kanji', surface: text, reading: attributes && attributes.phonetics },
         ]"
         :key="index"
       >
@@ -16,14 +16,14 @@
         }}</rt> -->
         {{ russianAccentText || segment.surface}}<rt v-if="showReading(segment)">{{ segment.reading }}</rt><rt v-else>&nbsp;</rt></ruby
       ><span
-        v-if="attributes?.hanAnnotation"
+        v-if="attributes && attributes.hanAnnotation"
         class="word-block-text-byeonggi d-inline-block"
-        v-html="attributes?.hanAnnotation"
+        v-html="attributes && attributes.hanAnnotation"
       /><span
         v-if="
           this.showQuickGloss &&
-          attributes?.isSaved &&
-          attributes?.definition
+          attributes && attributes.isSaved &&
+          attributes.definition
         "
         class="word-block-text-quick-gloss"
         >‘{{ attributes.definition }}’</span

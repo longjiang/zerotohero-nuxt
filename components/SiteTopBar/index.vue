@@ -129,7 +129,7 @@
         size="xl"
         centered
         hide-footer
-        :title="$t('Learning {l2}' || 'Switch languages', {l2: $t($l2?.name)})"
+        :title="$t('Learning {l2}' || 'Switch languages', {l2: $t($l2 && $l2.name)})"
         modal-class="safe-padding-top mt-4"
         body-class="languages-modal-wrapper"
       >
@@ -252,7 +252,7 @@ export default {
     hasDashboard() {
       return (
         this.$auth.loggedIn &&
-        this.$auth.user?.first_name &&
+        this.$auth.user && $auth.user.first_name &&
         this.$store.state.progress.progress &&
         Object.keys(this.$store.state.progress.progress).length > 0
       );

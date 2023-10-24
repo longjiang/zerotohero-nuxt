@@ -123,8 +123,8 @@
       </li>
     </ul>
     <ShowMoreButton
-      v-if="collapse > 0 && asyncComputedWords?.length > collapse"
-      :length="asyncComputedWords?.length"
+      v-if="collapse > 0 && asyncComputedWords && asyncComputedWords.length > collapse"
+      :length="asyncComputedWords && asyncComputedWords.length"
       :min="collapse"
     />
   </div>
@@ -214,7 +214,7 @@ export default {
             return await dictionary.get(id);
           })
         );
-        wordFromIds = wordFromIds?.filter((w) => w) || []
+        wordFromIds = wordFromIds && wordFromIds.filter((w) => w) || []
         allWords = allWords.concat(wordFromIds)
       }
 
@@ -235,7 +235,7 @@ export default {
       if (this.$l2.code === "ja") {
         allWords = await Promise.all(
           allWords.map(async (word) => {
-            word.romaji = await dictionary.transliterate(word?.kana);
+            word.romaji = await dictionary.transliterate(word && word.kana);
             return word;
           })
         );

@@ -1,12 +1,3 @@
-<router>
-  {
-    path: '/login',
-    props: true,
-    meta: {
-      skin: 'dark',
-    }
-  }
-</router>
 <template>
   <div
     :style="`min-height: 100vh; ${

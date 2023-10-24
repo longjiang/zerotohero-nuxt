@@ -1,8 +1,3 @@
-<router>
-  {
-    path: '/:l1/:l2/video-count',
-  }
-</router>
 <template>
   <div class="main">
     <SocialHead

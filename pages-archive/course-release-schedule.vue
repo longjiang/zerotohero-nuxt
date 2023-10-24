@@ -1,9 +1,3 @@
-<router>
-  {
-    path: '/:l1/:l2/course-release-schedule',
-    props: true
-  }
-</router>
 <template>
   <div class="main">
     <div class="container pt-5 pb-5">

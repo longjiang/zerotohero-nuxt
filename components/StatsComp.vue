@@ -75,7 +75,7 @@
             <th style="width: 3.5rem">{{ $tb("ID") }}</th>
             <th>{{ $tb("Language") }}</th>
             <th>{{ $tb("Video Count") }}</th>
-            <th v-if="languageData[0]?.tokenizerName">
+            <th v-if="languageData[0] && languageData[0].tokenizerName">
               {{ $tb("Lemmatizer") }}
             </th>
           </tr>
@@ -96,10 +96,7 @@
                 :to="{
                   name: 'recommended-video',
                   params: {
-                    l1: supportedL1s(
-                      row.language['iso639-3'],
-                      $browserLanguage
-                    )?.[0]?.code,
+                    l1: l1Code,
                     l2: row.language.code,
                   },
                 }"
@@ -110,16 +107,7 @@
             <td>
               {{ formatNumber(row.count) }}
               <!-- Show delta from previously loaded stats with green and red arrows and numbers -->
-              <small
-                v-if="previousLanguageData"
-                :set="
-                  (delta =
-                    row.count -
-                    previousLanguageData.find(
-                      (l) => l.language.id === row.language.id
-                    )?.count)
-                "
-              >
+              <small v-if="previousLanguageData" :set="(delta = countMe(row))">
                 <span v-if="delta > 0" class="text-success">
                   <i class="fas fa-arrow-up"></i>
                   {{ formatNumber(Math.abs(delta)) }}
@@ -134,9 +122,7 @@
               <small v-if="row.tokenizerName !== 'Base'">{{
                 row.tokenizerName
               }}</small>
-              <small v-else>
-                Default ({{ row.tokenizationType }})
-              </small>
+              <small v-else> Default ({{ row.tokenizationType }}) </small>
             </td>
           </tr>
         </tbody>
@@ -181,6 +167,10 @@ export default {
     await this.getStats();
   },
   computed: {
+    l1Code() {
+      return this.supportedL1s(row.language["iso639-3"], $browserLanguage)?.[0]
+        ?.code;
+    },
     langsWithEnDict() {
       if (this.$languages) {
         let langsWithEnDict = this.$languages.l1s.filter(
@@ -191,6 +181,11 @@ export default {
     },
   },
   methods: {
+    countMe(row) {
+      const foundLang = this.previousLanguageData.find((l) => l.language.id === row.language.id)
+      const minusCount = foundLang ? foundLang.count : 0;
+      return row.count - minusCount;
+    },
     supportedL1s(iso639_3, preferredL1Code) {
       return this.$languages.supportedL1s(iso639_3, preferredL1Code);
     },
@@ -219,15 +214,13 @@ export default {
               );
               if (tokenizerName)
                 tokenizerName = tokenizerName.replace("Tokenizer", "");
-              tokenizationType = TokenizerFactory.getTokenizationType(
-                language
-              );
+              tokenizationType = TokenizerFactory.getTokenizationType(language);
             }
             languageData.push({
               count,
               language,
               tokenizerName,
-              tokenizationType
+              tokenizationType,
             });
           }
           this.languageData = languageData.sort((a, b) => b.count - a.count);

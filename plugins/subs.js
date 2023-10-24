@@ -1,5 +1,4 @@
 import { sify } from "chinese-conv";
-import { parseSync } from "subtitle";
 import Papa from "papaparse";
 import he from "he"; // html entities
 import {
@@ -57,31 +56,32 @@ export default ({ app }, inject) => {
       lines = lines.filter((line) => line.starttime);
       return lines;
     },
-    parseSrt(srt) {
-      let parsed = parseSync(srt).map((cue) => {
-        return {
-          starttime: cue.data.start / 1000,
-          duration: (cue.data.end - cue.data.start) / 1000,
-          line: cue.data.text,
-        };
-      });
+    // parseSync from the 'subtitle' package is incompatible with Vite
+    // parseSrt(srt) {
+    //   let parsed = parseSync(srt).map((cue) => {
+    //     return {
+    //       starttime: cue.data.start / 1000,
+    //       duration: (cue.data.end - cue.data.start) / 1000,
+    //       line: cue.data.text,
+    //     };
+    //   });
 
-      let subs_l2 = [];
-      let prevLine;
-      for (let line of parsed) {
-        // In the rare case when two consecutive lines have the same starttime,
-        // merge them and join them by "\n"
-        if (prevLine && prevLine.starttime === line.starttime) {
-          prevLine.duration += line.duration;
-          prevLine.line = prevLine.line + "\n" + line.line;
-        } else {
-          subs_l2.push(line);
-          prevLine = line;
-        }
-      }
-      subs_l2 = this.normalizeSubs(subs_l2);
-      return subs_l2;
-    },
+    //   let subs_l2 = [];
+    //   let prevLine;
+    //   for (let line of parsed) {
+    //     // In the rare case when two consecutive lines have the same starttime,
+    //     // merge them and join them by "\n"
+    //     if (prevLine && prevLine.starttime === line.starttime) {
+    //       prevLine.duration += line.duration;
+    //       prevLine.line = prevLine.line + "\n" + line.line;
+    //     } else {
+    //       subs_l2.push(line);
+    //       prevLine = line;
+    //     }
+    //   }
+    //   subs_l2 = this.normalizeSubs(subs_l2);
+    //   return subs_l2;
+    // },
     unparseSubs(subs, l2 = "en") {
       let lines = subs
         .filter((l) => l)

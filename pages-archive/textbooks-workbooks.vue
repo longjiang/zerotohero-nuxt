@@ -1,8 +1,3 @@
-<router>
-  {
-    path: '/:l1/:l2/textbooks-workbooks'
-  }
-</router>
 <template>
   <div class="main">
     <div class="container pt-5 pb-5">

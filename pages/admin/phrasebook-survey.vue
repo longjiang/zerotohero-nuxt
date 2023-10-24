@@ -1,9 +1,3 @@
-<router>
-  {
-    path: '/phrasebook-survey/:start?',
-    props: true
-  }
-</router>
 <template>
   <div class="main">
     <div class="container pt-5">

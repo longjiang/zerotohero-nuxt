@@ -1,9 +1,3 @@
-<router>
-  {
-    path: '/:l1/:l2/db-audit/:start?',
-    props: true
-  }
-</router>
 <template>
   <div class="main container-fluid pt-5">
     <div class="row">

@@ -45,7 +45,7 @@
     </div>
     <hr style="clear: both" />
     <h6 class="text-center">{{ $t('Words with this Character') }}</h6>
-    <WordList :key="examples?.length" :words="examples" :highlight="character.character" :showCounters="false" collapse="4" />
+    <WordList :key="examples && examples.length" :words="examples" :highlight="character.character" :showCounters="false" collapse="4" />
   </div>
 </template>
 

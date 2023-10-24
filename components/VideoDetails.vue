@@ -39,7 +39,7 @@
         <a :href="`https://www.youtube.com/watch?v=${video.youtube_id}`" target="_blank"><i class="fab fa-youtube"></i></a>
       </span>
       <template
-        v-if="video.category == 10 || video.tv_show?.title === 'Music'"
+        v-if="video.category == 10 || (video.tv_show && video.tv_show.title) === 'Music'"
       >
         <span>
           <a

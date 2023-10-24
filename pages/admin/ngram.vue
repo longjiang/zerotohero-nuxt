@@ -1,9 +1,3 @@
-<router>
-  {
-    path: '/:l1/:l2/text-survey/:start?',
-    props: true
-  }
-</router>
 <template>
   <div class="main">
     <div class="container pt-5">

@@ -7,7 +7,7 @@
       once: true,
     }"
   >
-    <template v-if="augmentedDefinitions?.length > 0">
+    <template v-if="augmentedDefinitions && augmentedDefinitions.length > 0">
       <ol
         :class="{
           'definitions mb-2': true,

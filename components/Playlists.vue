@@ -26,7 +26,7 @@
         :class="colClasses"
       >
         <VideoThumbnailStack
-          :thumbnail="thumbnail(playlist.videos?.[0]?.youtube_id)"
+          :thumbnail="thumbnail(playlist.videos && playlist.videos[0] && playlist.videos[0].youtube_id)"
           :videos="playlist.videos"
           :title="playlist.title"
           :to="{
@@ -36,7 +36,7 @@
         >
           <template v-slot:belowTitle>
             <div style="opacity: 0.8; font-size: 0.8em; margin-top: 0.25rem">
-              ({{ $t("{num} Videos", { num: playlist.videos?.length }) }})
+              ({{ $t("{num} Videos", { num: playlist.videos && playlist.videos.length }) }})
             </div>
           </template>
         </VideoThumbnailStack>

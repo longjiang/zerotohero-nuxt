@@ -9,7 +9,7 @@
     </div>
     <YouTubeVideoList
       class="mt-3"
-      v-if="playlist?.videos"
+      v-if="playlist && playlist.videos"
       :videos="playlist.videos"
       :playlist="playlist"
       :dragEnabled="true"

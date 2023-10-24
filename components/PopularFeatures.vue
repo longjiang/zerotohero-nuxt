@@ -17,7 +17,7 @@
           <tr v-for="(feature, index) in features.slice(0, 10)" :key="index">
             <th>{{ feature.feature }}</th>
             <td v-for="(pair, index) in pairs.slice(0, 10)" :key="index">
-              <span v-if="feature.language_pairs?.[pair.l1 + '/' + pair.l2]">
+              <span v-if="feature.language_pairs && feature.language_pairs[pair.l1 + '/' + pair.l2]">
                 <!-- show top paths in the given language pair, removing trailing slash, and make sure they are unique -->
                 <router-link
                   :to="path"

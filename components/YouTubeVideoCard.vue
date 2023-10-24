@@ -261,7 +261,7 @@ import Vue from "vue";
 import assParser from "ass-parser";
 import languageEncoding from "detect-file-encoding-and-language";
 import { Drag, Drop } from "vue-drag-drop";
-import { parseSync } from "subtitle";
+// import { parseSync } from "subtitle"; // Incompatible with Vite
 import { mapState } from "vuex";
 import { parseDuration, convertDurationToSeconds, levelByDifficulty, timeout, logError, level, TOPICS } from "../lib/utils";
 
@@ -366,7 +366,7 @@ export default {
       }
       if (this.video.starttime) {
         to.query.t = this.video.starttime;
-      } else if (this.showProgress && this.historyItem?.last_position) {
+      } else if (this.showProgress && this.historyItem && this.historyItem.last_position) {
         to.query.t = this.historyItem.last_position;
       }
       if (this.playlistId) {
@@ -543,56 +543,57 @@ export default {
         this.subsUpdated = true;
       }
     },
+    // parseSync is incompatible with Vite
     async importSrt(file) {
-      if (!file) return
-      let extension = file.name.split(".").pop().toLowerCase();
-      try {
-        let reader = new FileReader();
-        let encoding = "UTF-8";
-        let fileInfo = await languageEncoding(file);
-        if (fileInfo) encoding = fileInfo.encoding;
-        reader.readAsText(file, encoding);
-        reader.onload = (event) => {
-          let str = event.target.result;
-          let subs_l2;
-          if (extension === "srt") {
-            subs_l2 = parseSync(str).map((cue) => {
-              return {
-                starttime: cue.data.start / 1000,
-                duration: (cue.data.end - cue.data.start) / 1000,
-                line: cue.data.text,
-              };
-            });
-          }
-          if (extension === "ass") {
-            let data = assParser(str);
-            let events = data.find((section) => section.section === "Events");
-            if (events) {
-              subs_l2 = events.body
-                .filter(
-                  (item) =>
-                    item.key === "Dialogue" &&
-                    !item.value.Style.includes("CN") &&
-                    !item.value.Style.includes("STAFF")
-                )
-                .map((cue) => {
-                  return {
-                    starttime: DateHelper.parseHMSTime(cue.value.Start),
-                    line: cue.value.Text.replace(/{.*}/g, ""),
-                  };
-                });
-            }
-          }
-          if (subs_l2) {
-            subs_l2 = subs_l2.sort((a, b) => a.starttime - b.starttime);
-            this.firstLineTime = subs_l2[0].starttime;
-            this.subsFile = file;
-            Vue.set(this.video, "subs_l2", subs_l2);
-            Vue.set(this.video, "hasSubs", true);
-            this.$emit("hasSubs", true);
-          }
-        };
-      } catch (err) {}
+      // if (!file) return
+      // let extension = file.name.split(".").pop().toLowerCase();
+      // try {
+      //   let reader = new FileReader();
+      //   let encoding = "UTF-8";
+      //   let fileInfo = await languageEncoding(file);
+      //   if (fileInfo) encoding = fileInfo.encoding;
+      //   reader.readAsText(file, encoding);
+      //   reader.onload = (event) => {
+      //     let str = event.target.result;
+      //     let subs_l2;
+      //     if (extension === "srt") {
+      //       subs_l2 = parseSync(str).map((cue) => {
+      //         return {
+      //           starttime: cue.data.start / 1000,
+      //           duration: (cue.data.end - cue.data.start) / 1000,
+      //           line: cue.data.text,
+      //         };
+      //       });
+      //     }
+      //     if (extension === "ass") {
+      //       let data = assParser(str);
+      //       let events = data.find((section) => section.section === "Events");
+      //       if (events) {
+      //         subs_l2 = events.body
+      //           .filter(
+      //             (item) =>
+      //               item.key === "Dialogue" &&
+      //               !item.value.Style.includes("CN") &&
+      //               !item.value.Style.includes("STAFF")
+      //           )
+      //           .map((cue) => {
+      //             return {
+      //               starttime: DateHelper.parseHMSTime(cue.value.Start),
+      //               line: cue.value.Text.replace(/{.*}/g, ""),
+      //             };
+      //           });
+      //       }
+      //     }
+      //     if (subs_l2) {
+      //       subs_l2 = subs_l2.sort((a, b) => a.starttime - b.starttime);
+      //       this.firstLineTime = subs_l2[0].starttime;
+      //       this.subsFile = file;
+      //       Vue.set(this.video, "subs_l2", subs_l2);
+      //       Vue.set(this.video, "hasSubs", true);
+      //       this.$emit("hasSubs", true);
+      //     }
+      //   };
+      // } catch (err) {}
     },
     handleDrop(data, event) {
       event.preventDefault();

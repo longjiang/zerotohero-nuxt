@@ -1,12 +1,3 @@
-<router>
-  {
-    path: '/go-pro',
-    props: true,
-    meta: {
-      skin: 'dark'
-    }
-  }
-</router>
 <template>
   <div
     :style="`min-height: 100vh; ${
@@ -55,7 +46,7 @@
                     <div v-else>
                       <div>
                         <p>{{ $tb('Please choose your method of payment.') }}</p>
-                        <template v-if="$auth.user?.id">
+                        <template v-if="$auth.user && $auth.user.id">
                           <PurchaseStripe  :plan="selectedPlan.name" />
                           <PurchasePayPal v-if="selectedPlan.name === 'lifetime'" :plan="selectedPlan.name" />
                         </template>

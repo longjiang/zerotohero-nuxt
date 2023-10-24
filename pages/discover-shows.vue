@@ -1,12 +1,3 @@
-<router>
-  {
-    path: '/discover-shows/:l1?/:l2?/:type?',
-    props: true,
-    meta: {
-      skin: 'dark'
-    }
-  }
-</router>
 <template>
   <div class="loader-bg">
     <SocialHead

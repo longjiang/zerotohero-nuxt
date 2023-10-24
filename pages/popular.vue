@@ -1,17 +1,3 @@
-<router>
-  {
-    path: '/popular',
-    meta: {
-      title: 'What\'s Popular | Language Player',
-      metaTags: [
-        {
-          name: 'description',
-          content: 'See what\'s popular on Language Player.'
-        }
-      ]
-    }
-  }
-</router>
 <template>
   <div class="main">
     <div class="container pt-3 pb-5">

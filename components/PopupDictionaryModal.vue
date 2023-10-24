@@ -6,7 +6,7 @@
     hide-footer
     modal-class="safe-padding-top mt-4"
     :title="$tb(info ? 'Note' : 'Dictionary')"
-    :body-class="`popup-dictionary-modal-wrapper l2-${$l2?.code}`"
+    :body-class="`popup-dictionary-modal-wrapper l2-${$l2 ? $l2.code : ''}`"
     @show="$nuxt.$emit('popupOpened')"
     @hide="$nuxt.$emit('popupClosed')"
   >

@@ -1,0 +1,149 @@
+<template>
+  <div class="main pt-5 pb-5">
+    <SocialHead
+      v-if="resources[0]"
+      :title="$t('{resources} Resources to Help You Learn {l2}', { resources: resources.length, l2: $t($l2.name) }) + ' | Language Player'"
+      :description="`${resources.map((r) => r.title).join(', ')}`"
+      :image="resources[0].thumbnail"
+    />
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h3 class="mb-5 text-center">
+            {{ $t("Resources for learning {l2}", { l2: $t($l2.name) }) }}
+          </h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-8 pr-4 mb-5">
+          <ResourceList :resources="resources" />
+        </div>
+        <div class="col-sm-12 col-md-4">
+          <h6 class="text-center mb-4">{{ $t("Filter by Topic") }}</h6>
+          <div class="list-group">
+            <router-link
+              :class="{
+                'link-unstyled': true,
+                'list-group-item': true,
+                'list-group-item-action': topic === 'all',
+                active: topic === 'all',
+              }"
+              :to="`/${$l1.code}/${$l2.code}/resource/list/all/${type}`"
+            >
+              {{ $t("All") }}
+            </router-link>
+            <router-link
+              v-for="(topicName, topicValue) in topics"
+              :key="`topic-${topicValue}`"
+              :class="{
+                'link-unstyled': true,
+                'list-group-item': true,
+                'list-group-item-action': topicValue === topic,
+                active: topicValue === topic,
+              }"
+              :to="`/${$l1.code}/${$l2.code}/resource/list/${topicValue}/all`"
+            >
+              {{ $t(topicName) }}
+            </router-link>
+          </div>
+          <h6 class="mt-4 mb-4 text-center">{{ $t("Filter by Type") }}</h6>
+          <div class="list-group">
+            <router-link
+              :class="{
+                'link-unstyled': true,
+                'list-group-item': true,
+                'list-group-item-action': type === 'all',
+                active: type === 'all',
+              }"
+              :to="`/${$l1.code}/${$l2.code}/resource/list/${topic}/all`"
+            >
+              {{ $t("All") }}
+            </router-link>
+            <router-link
+              v-for="(typeName, typeValue) in types"
+              :key="`type-${typeValue}`"
+              :class="{
+                'link-unstyled': true,
+                'list-group-item': true,
+                'list-group-item-action': typeValue === type,
+                active: typeValue === type,
+              }"
+              :to="`/${$l1.code}/${$l2.code}/resource/list/all/${typeValue}`"
+            >
+              {{ $t(typeName) }}
+            </router-link>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import ResourceList from "@/components/ResourceList";
+
+export default {
+  components: {
+    ResourceList,
+  },
+  props: {
+    topic: {
+      default: "all",
+    },
+    type: {
+      default: "all",
+    },
+  },
+  data() {
+    return {
+      resources: [],
+      types: {
+        av: "Audio-Visual",
+        community: "Community",
+        courses: "Courses",
+        games: "Games",
+        lists: "Lists of Resources",
+        music: "Music",
+        reading: "Reading",
+        software: "Software",
+        textbooks: "Textbooks",
+        multiple: "Miscellaneous",
+      },
+      topics: {
+        strategy: "Learning Strategy",
+        characters: "Characters",
+        culture: "Culture",
+        grammar: "Grammar",
+        vocabulary: "Vocabulary",
+        multiple: "Miscellaneous",
+      },
+    };
+  },
+  async created() {
+    let canonical = `/${this.$l1.code}/${this.$l2.code}/resource/list/${this.topic}/${this.type}`;
+    let filters = "";
+    if (this.$router.currentRoute.path !== canonical) {
+      this.$router.push({ path: canonical });
+    } else {
+      if (this.topic !== "all") {
+        filters += "&filter[topic][eq]=" + this.topic;
+      }
+      if (this.type !== "all") {
+        filters += "&filter[type][eq]=" + this.type;
+      }
+      let response = await this.$directus.get(
+        `items/resources?filter[l2][eq]=${this.$l2.id}${filters}&fields=*,thumbnail.*`
+      );
+      this.resources =
+        response.data.data.map((resource) => {
+          resource.thumbnail = resource.thumbnail.data.full_url;
+          return resource;
+        }) || [];
+    }
+  },
+  computed: {
+  },
+};
+</script>
+
+<style></style>

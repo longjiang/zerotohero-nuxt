@@ -1,9 +1,3 @@
-<router>
-  {
-    path: '/:l1/:l2/manage-subscriptions',
-    props: true
-  }
-</router>
 <template>
   <div class="main">
     <div class="container pt-5">

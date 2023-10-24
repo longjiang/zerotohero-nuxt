@@ -1,9 +1,3 @@
-<router>
-  {
-    path: '/go-pro-success',
-    props: true
-  }
-</router>
 <template>
   <div
     :style="`padding-top: 10rem; min-height: 100vh; ${

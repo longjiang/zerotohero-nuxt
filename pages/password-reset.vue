@@ -1,11 +1,3 @@
-<router>
-  {
-    path: '/password-reset',
-    meta: {
-      skin: 'dark',
-    }
-  }
-</router>
 <template>
   <div
     class="container-fluid pt-5"
