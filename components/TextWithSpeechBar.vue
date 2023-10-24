@@ -48,6 +48,14 @@
               >
                 <i class="fas fa-step-backward"></i>
               </b-button>
+
+              <b-button
+                :variant="$skin"
+                @click="speakPreviousSentence()"
+                :title="$t('Previous Sentence') + ' (↑)'"
+              >
+                <i class="fas fa-arrow-up"></i>
+              </b-button>
               <b-button
                 class="text-success"
                 :variant="$skin"
@@ -65,6 +73,13 @@
                 :title="$t('Pause') + ` (${$t('SPACE BAR')})`"
               >
                 <i class="fas fa-pause"></i>
+              </b-button>
+              <b-button
+                :variant="$skin"
+                @click="speakNextSentence()"
+                :title="$t('Next Sentence') + ' (↓)'"
+              >
+                <i class="fas fa-arrow-down"></i>
               </b-button>
               <b-button
                 v-if="showTocButton"
@@ -289,7 +304,9 @@ export default {
       const topLevelElements = Array.from(tempDiv.children);
 
       // Get the augmented html of each top-level element
-      let lines = topLevelElements.map((element) => this.augmentedHtmlFromDomNode(element));
+      let lines = topLevelElements.map((element) =>
+        this.augmentedHtmlFromDomNode(element)
+      );
 
       // Filter out lines that are empty or contain only whitespace
       lines = lines.filter((l) => l.trim() !== "");
@@ -354,6 +371,25 @@ export default {
   },
   methods: {
     stripTags,
+    speakPreviousSentence() {
+      this.speakingLineIndex = Math.max(0, this.speakingLineIndex - 1);
+      this.scrollToCurrentLine();
+      if (this.speaking) {
+        this.pause();
+        this.play();
+      }
+    },
+    speakNextSentence() {
+      this.speakingLineIndex = Math.min(
+        this.lines.length - 1,
+        this.speakingLineIndex + 1
+      );
+      this.scrollToCurrentLine();
+      if (this.speaking) {
+        this.pause();
+        this.play();
+      }
+    },
 
     async play() {
       if (this.paused) {
@@ -367,8 +403,9 @@ export default {
       for (let i = this.speakingLineIndex; i < totalLines; i++) {
         // keep track of which one is speaking
         this.speakingLineIndex = i;
-        if (this.$refs.tokenizedRichTexts[i]) await this.$refs.tokenizedRichTexts[i].speak();
-      }      
+        if (this.$refs.tokenizedRichTexts[i])
+          await this.$refs.tokenizedRichTexts[i].speak();
+      }
     },
 
     resume() {
@@ -379,14 +416,17 @@ export default {
       this.speaking = true;
 
       // Check if speech synthesis is paused and if the focused line is being spoken
-      if (SpeechSingleton.instance.paused && this.speakingLineIndex === this.focusLineIndex) {
+      if (
+        SpeechSingleton.instance.paused &&
+        this.speakingLineIndex === this.focusLineIndex
+      ) {
         // If paused, resume speaking
         SpeechSingleton.instance.resume();
       } else {
         // If not paused, or if there's a mismatch between focused and speaking lines,
         // update the currently speaking line and get the next sentence to speak
         this.speakingLineIndex = this.focusLineIndex;
-        this.play();        
+        this.play();
       }
     },
 
@@ -395,15 +435,6 @@ export default {
         SpeechSingleton.instance.pause();
         this.speaking = false;
       }
-    },
-
-    speakPreviousSentence() {
-      this.focusLineIndex = Math.max(0, this.focusLineIndex - 1);
-      if (this.speaking) {
-        this.pause();
-        this.play();
-      }
-      this.scrollToCurrentLine();
     },
 
     togglePlay() {
@@ -417,7 +448,17 @@ export default {
     scrollToCurrentLine() {
       this.$nextTick(() => {
         // scrollIntoView to the <TokenizedRichText> component that is currently being spoken
-        this.$refs.tokenizedRichTexts[this.speakingLineIndex].$el.scrollIntoView({
+        const lineComp = this.$refs.tokenizedRichTexts[
+          this.speakingLineIndex
+        ]
+        lineComp.highlightFirstSentence();
+        // Remove highlight from the rest
+        for (let i = 0; i < this.$refs.tokenizedRichTexts.length; i++) {
+          if (i !== this.speakingLineIndex) {
+            this.$refs.tokenizedRichTexts[i].removeHighlight();
+          }
+        }
+        lineComp.$el.scrollIntoView({
           behavior: "smooth",
           block: "center",
         });
@@ -540,7 +581,6 @@ export default {
       this.speed = speeds[index];
     },
     augmentedHtmlFromDomNode(dom) {
-
       // Remove ruby tags
       let rtTags = dom.querySelectorAll("rt");
       rtTags.forEach((rt) => rt.remove());

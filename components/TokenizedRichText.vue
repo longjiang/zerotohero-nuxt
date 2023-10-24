@@ -172,6 +172,18 @@ export default {
     }
   },
   methods: {
+    highlightFirstSentence() {
+      const comp = this.$refs.recursiveRenderer
+      if (comp) {
+        comp.highlightFirstSentence();
+      }
+    },
+    removeHighlight() {
+      const comp = this.$refs.recursiveRenderer
+      if (comp) {
+        comp.removeHighlight();
+      }
+    },
     async speak() {
       // If we have a <TokenizedText /> speak it
       if (this.$refs.tokenizedText) {

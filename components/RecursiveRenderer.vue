@@ -48,6 +48,23 @@ export default {
     TokenizedText,
   },
   methods: {
+    highlightFirstSentence() {
+      if (this.$refs.recursiveRenderers) {
+        this.$refs.recursiveRenderers[0].highlightFirstSentence();
+      } else if (this.$refs.tokenizedTexts) {
+        this.removeHighlight();
+        this.$refs.tokenizedTexts[0].speaking = true;
+      }
+    },
+    removeHighlight() {
+      if (this.$refs.recursiveRenderers) {
+        this.$refs.recursiveRenderers[0].removeHighlight();
+      } else if (this.$refs.tokenizedTexts) {
+        for (let i = 0; i < this.$refs.tokenizedTexts.length; i++) {
+          this.$refs.tokenizedTexts[i].speaking = false;
+        }
+      }
+    },
     async speak() {
       // Check if we have a <TokenizedText> component
       if (this.$refs.tokenizedTexts) {
