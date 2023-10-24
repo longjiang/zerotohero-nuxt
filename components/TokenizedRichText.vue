@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Conditionally render tokenized text -->
-    <span class="d-inline-flex align-items-start justify-content-between">
+    <span class="d-flex justify-content-between">
       <!-- When the user wants to edit the text, show a textarea -->
 
       <textarea
@@ -54,6 +54,7 @@
       <!-- Action Button -->
       <SimpleButton
         iconClass="fa fa-ellipsis-v"
+        style="display: flex; align-items: flex-start; padding-top: 0.5rem;"
         @click="showModal"
         :title="$t('Actions')"
         v-if="showMenu"

@@ -39,12 +39,14 @@
         </span>
       </div>
       <div class="annotate-menu-modal-item">
-        <Speak
-          :text="text"
-          class="annotator-button"
-          title="Speak"
-          ref="speak"
-        />
+        <span
+          class="annotator-button annotator-translate focus-exclude"
+          title="Read Aloud"
+          @click="readAloud"
+          ref="translation"
+        >
+          <i class="fas fa-volume-up"></i>
+        </span>
         <span @click="readAloud">{{ $t("Read Aloud") }}</span>
       </div>
       <div class="annotate-menu-modal-item">
@@ -101,12 +103,12 @@ export default {
     // add your computed properties here
   },
   created() {
-    this.$nuxt.$on('showTokenizedTextMenu', this.show);
-    this.$nuxt.$on('hideTokenizedTextMenu', this.hide);
+    this.$nuxt.$on("showTokenizedTextMenu", this.show);
+    this.$nuxt.$on("hideTokenizedTextMenu", this.hide);
   },
   beforeDestroy() {
-    this.$nuxt.$off('showTokenizedTextMenu', this.show);
-    this.$nuxt.$off('hideTokenizedTextMenu', this.hide);
+    this.$nuxt.$off("showTokenizedTextMenu", this.show);
+    this.$nuxt.$off("hideTokenizedTextMenu", this.hide);
   },
   methods: {
     show({ text, translation, editMode, phraseSaved, callerComponent }) {
@@ -117,7 +119,7 @@ export default {
       this.callerComponent = callerComponent;
       this.$refs["tokenized-text-menu-modal"].show();
     },
-    
+
     hide() {
       this.$refs["tokenized-text-menu-modal"].hide();
     },
@@ -140,7 +142,11 @@ export default {
     async translate(text) {
       let translator = this.$languages.getTranslator(this.$l1, this.$l2);
       try {
-        let translation = await translator.translateWithBing({text, l1Code: this.$l1.code, l2Code: this.$l2.code});
+        let translation = await translator.translateWithBing({
+          text,
+          l1Code: this.$l1.code,
+          l2Code: this.$l2.code,
+        });
         return translation;
       } catch (e) {
         console.error(e);
@@ -154,7 +160,7 @@ export default {
     },
 
     readAloud() {
-      this.$refs["speak"].$el.click();
+      this.callerComponent.speak();
       this.hide();
     },
 
@@ -180,13 +186,10 @@ export default {
         tempInput.select();
         document.execCommand("copy");
         modal.removeChild(tempInput);
-        this.$toast.success(
-          this.$tb("Copied!"),
-          {
-            position: "top-center",
-            duration: 5000,
-          }
-        );
+        this.$toast.success(this.$tb("Copied!"), {
+          position: "top-center",
+          duration: 5000,
+        });
       }
       this.hide();
     },
@@ -205,3 +208,24 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+
+.annotate-menu-modal {
+  .annotate-menu-modal-item {
+    padding: 0.15rem 0;
+    cursor: pointer;
+
+    &:hover {
+      color: black;
+    }
+
+    .annotator-button {
+      width: 1.5rem;
+      text-align: center;
+      margin-right: 0.5rem;
+      display: inline-block;
+    }
+  }
+}
+
+</style>
