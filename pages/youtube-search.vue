@@ -172,7 +172,7 @@
 <script>
 import SimpleSearch from "@/components/SimpleSearch";
 import YouTubeSearchResults from "@/components/YouTubeSearchResults";
-import YouTube from "@/lib/youtube";
+import YouTube from "../lib/youtube";
 import { mapState } from "vuex";
 import popularTopicsCSV from "@/static/data/languages/popular-topics.csv.txt";
 import Papa from "papaparse";

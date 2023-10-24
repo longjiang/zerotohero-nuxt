@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import { makeTextFile } from "@/lib/utils";
+import { makeTextFile } from "../lib/utils";
 
 export default {
   props: {
@@ -226,7 +226,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .zerotohero-dark {
   .hide-defs {
     background-color: $bg-color-dark-1;

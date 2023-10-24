@@ -58,8 +58,8 @@
 
 <script>
 import VRuntimeTemplate from "v-runtime-template";
-import { unique, LANGS_WITH_AZURE_TRANSLATE } from "@/lib/utils";
-import translators from "@/lib/translators";
+import { unique, LANGS_WITH_AZURE_TRANSLATE } from "../lib/utils";
+import translators from "../lib/translators";
 
 export default {
   components: {

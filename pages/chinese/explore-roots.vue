@@ -100,7 +100,7 @@
 <script>
 import WordListExtended from "@/components/WordListExtended.vue";
 import EntryCharacters from "@/components/EntryCharacters.vue";
-import { highlight } from "@/lib/utils";
+import { highlight } from "../../lib/utils";
 
 export default {
   components: {

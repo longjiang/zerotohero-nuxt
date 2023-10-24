@@ -1,4 +1,4 @@
-import { LANGS_WITH_AZURE_TRANSLATE } from '@/lib/utils'
+import { LANGS_WITH_AZURE_TRANSLATE } from '../lib/utils'
 
 export default async function ({ error, route, app, store, params, i18n }) {
   if (params.l1 && params.l2) {

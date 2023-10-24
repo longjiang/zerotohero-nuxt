@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { stripTags } from "@/lib/utils";
+import { stripTags } from "../lib/utils";
 import { mapState } from "vuex";
 
 export default {

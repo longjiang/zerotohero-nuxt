@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { logError, highlightMultiple, unique } from "@/lib/utils";
+import { logError, highlightMultiple, unique } from "../lib/utils";
 import { transliterate } from "transliteration";
 
 export default {

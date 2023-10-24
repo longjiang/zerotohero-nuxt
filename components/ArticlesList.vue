@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ArticleCard from "@/components/ArticleCard";
+import ArticleCard from "./ArticleCard";
 
 export default {
   components: {

@@ -217,9 +217,9 @@
 <script>
 import { parse } from "node-html-parser";
 import { ContainerQuery } from "vue-container-query";
-import { timeout } from "@/lib/utils/timeout";
-import { breakSentences, stripTags } from "@/lib/utils/string";
-import { SpeechSingleton } from "@/lib/utils";
+import { timeout } from "../lib/utils/timeout";
+import { breakSentences, stripTags } from "../lib/utils/string";
+import { SpeechSingleton } from "../lib/utils";
 import Vue from "vue";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
 
@@ -639,7 +639,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 #speech-container.skin-dark {
   .speech-bar,
   .speech-nav {

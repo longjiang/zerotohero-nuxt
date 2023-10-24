@@ -1,4 +1,4 @@
-import { logError } from "@/lib/utils";
+import { logError } from "../lib/utils";
 import Vue from "vue";
 
 export const romanizationOffByDefault = [

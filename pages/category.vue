@@ -1,4 +1,4 @@
-<router> { path: '/:l1/:l2/category/:slug', props: true, } </router>
+
 <template>
   <div>
     <div class="container pb-5">
@@ -63,7 +63,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { CATEGORIES, SLUG_TO_CATEGORY_ID } from '@/lib/youtube';
+import { CATEGORIES, SLUG_TO_CATEGORY_ID } from '../lib/youtube';
 
 export default {
   props: {

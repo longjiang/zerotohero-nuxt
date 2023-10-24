@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import Dewey from "@/lib/dewey";
+import Dewey from "../lib/dewey";
 
 export default {
   data() {
@@ -131,7 +131,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .dewey-l1.collapsed,
 .dewey-l2.collapsed,
 .dewey-l3.collapsed {

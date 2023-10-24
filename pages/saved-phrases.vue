@@ -51,8 +51,8 @@
 </template>
 
 <script>
-import { documentOffsetTop, elementHeight } from "@/lib/utils";
-import WordPhotos from "@/lib/word-photos";
+import { documentOffsetTop, elementHeight } from "../lib/utils";
+import WordPhotos from "../lib/word-photos";
 import { mapState } from "vuex";
 
 export default {

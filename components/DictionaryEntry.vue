@@ -211,7 +211,7 @@
 </template>
 <script>
 import Vue from "vue";
-import { unique, mutuallyExclusive } from "@/lib/utils";
+import { unique, mutuallyExclusive } from "../lib/utils";
 
 export default {
   props: {

@@ -89,7 +89,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { background } from "@/lib/utils/background";
+import { background } from "../lib/utils/background";
 
 export default {
   data() {

@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import { SALE } from "@/lib/utils/variables";
+import { SALE } from "../lib/utils/variables";
 
 export default {
   data() {
@@ -149,7 +149,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .pricing-container {
   display: flex;
   justify-content: center;

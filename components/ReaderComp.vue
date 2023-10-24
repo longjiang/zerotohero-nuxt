@@ -138,7 +138,7 @@
 <script>
 import Marked from "marked";
 import { ContainerQuery } from "vue-container-query";
-import { unique, timeout } from "@/lib/utils";
+import { unique, timeout } from "../lib/utils";
 
 export default {
   components: {

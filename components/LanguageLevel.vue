@@ -30,7 +30,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { languageLevels, LANGS_WITH_LEVELS } from "@/lib/utils";
+import { languageLevels, LANGS_WITH_LEVELS } from "../lib/utils";
 export default {
   computed: {
     ...mapState("progress", ["progress"]),
@@ -59,7 +59,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .level-btn-wrapper {
   padding: 0.25rem;
 }

@@ -92,8 +92,8 @@
 </template>
 
 <script>
-import Translators from "@/lib/translators";
-import { unique } from "@/lib/utils";
+import Translators from "../../lib/translators";
+import { unique } from "../../lib/utils";
 export default {
   data: () => ({
     googleImagesURLs: {},

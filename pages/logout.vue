@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { background } from "@/lib/utils";
+import { background } from "../lib/utils";
 export default {
   data() {
     return {

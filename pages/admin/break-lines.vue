@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { normalizeStylizedNumbersInText } from "@/lib/utils";
+import { normalizeStylizedNumbersInText } from "../../lib/utils";
 
 export default {
   // layout: "test-layout",

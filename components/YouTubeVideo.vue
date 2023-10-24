@@ -48,8 +48,8 @@
 </template>
 
 <script>
-import { timeout, SpeechSingleton } from "@/lib/utils";
-import YouTube from "@/lib/youtube";
+import { timeout, SpeechSingleton } from "../lib/utils";
+import YouTube from "../lib/youtube";
 
 export default {
   props: {

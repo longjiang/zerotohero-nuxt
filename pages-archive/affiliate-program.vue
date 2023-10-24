@@ -98,7 +98,7 @@
 
 <script>
 import Page from "@/components/Page";
-import { CHINESE_ZERO_TO_HERO } from "@/lib/utils/servers";
+import { CHINESE_ZERO_TO_HERO } from "../lib/utils/servers";
 
 export default {
   computed: {

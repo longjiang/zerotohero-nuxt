@@ -6,7 +6,7 @@
 
 <script>
 import VueMarkdown from "vue-markdown";
-import changelogContent from "@/CHANGELOG.md";
+import changelogContent from "../CHANGELOG.md";
 
 export default {
   components: {
@@ -21,7 +21,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .changelog {
   :deep(*) {
     h3 {

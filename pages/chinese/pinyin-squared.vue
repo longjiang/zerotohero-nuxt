@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import PinyinSquared from "@/lib/pinyin-squared";
+import PinyinSquared from "../../lib/pinyin-squared";
 import PinyinSquaredCharacter from "@/components/PinyinSquaredCharacter";
 
 export default {

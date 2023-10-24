@@ -336,9 +336,9 @@
 </template>
 
 <script>
-import { toHHMMSS } from "@/lib/date-helper";
-import { shuffle, uniqueByValue } from "@/lib/utils/array";
-import { timeout } from "@/lib/utils/timeout";
+import { toHHMMSS } from "../lib/date-helper";
+import { shuffle, uniqueByValue } from "../lib/utils/array";
+import { timeout } from "../lib/utils/timeout";
 
 export default {
   props: {
@@ -775,7 +775,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 :deep(.youtube-videos) > * {
   padding-left: 0.5rem;
   padding-right: 0.5rem;

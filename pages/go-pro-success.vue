@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { background } from "@/lib/utils/background";
+import { background } from "../lib/utils/background";
 
 export default {
   async mounted() {

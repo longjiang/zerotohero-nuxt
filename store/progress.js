@@ -1,4 +1,4 @@
-import { logError } from '@/lib/helper'
+import { logError } from '../lib/helper'
 
 export const DEFAULT_LEVEL = 1
 export const DEFAULT_WEEKLY_HOURS = 7

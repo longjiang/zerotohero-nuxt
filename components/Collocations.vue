@@ -134,8 +134,8 @@
 </template>
 
 <script>
-import SketchEngine from "@/lib/sketch-engine";
-import { highlight } from "@/lib/utils";
+import SketchEngine from "../lib/sketch-engine";
+import { highlight } from "../lib/utils";
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
 

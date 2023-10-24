@@ -22,7 +22,7 @@
 </template>
 <script>
 import axios from "axios";
-import { makeTextFile } from "@/lib/utils";
+import { makeTextFile } from "../lib/utils";
 
 export default {
   data() {

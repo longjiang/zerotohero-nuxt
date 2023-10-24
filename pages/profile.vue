@@ -233,7 +233,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { languageLevels, timeout, formatName } from "@/lib/utils";
+import { languageLevels, timeout, formatName } from "../lib/utils";
 
 export default {
   computed: {
@@ -335,7 +335,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .goal {
   display: inline-block;
   width: 100%;

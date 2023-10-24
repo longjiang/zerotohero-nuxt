@@ -243,7 +243,7 @@
 
 <script>
 import SearchSubsComp from "@/components/SearchSubsComp";
-import { highlightMultiple } from "@/lib/utils";
+import { highlightMultiple } from "../lib/utils";
 
 export default {
   components: {

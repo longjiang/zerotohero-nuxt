@@ -77,7 +77,7 @@
 <script>
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
-import { shuffle, uniqueByValue, IMAGE_PROXY } from "@/lib/utils";
+import { shuffle, uniqueByValue, IMAGE_PROXY } from "../lib/utils";
 import axios from 'axios';
 import Papa from 'papaparse'
 
@@ -352,7 +352,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .feed-item-wrapper {
   overflow: hidden;
   padding: 0.5rem;

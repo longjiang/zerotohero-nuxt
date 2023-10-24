@@ -255,15 +255,15 @@
 </template>
 
 <script>
-import DateHelper from "@/lib/date-helper";
-import YouTube from "@/lib/youtube";
+import DateHelper from "../lib/date-helper";
+import YouTube from "../lib/youtube";
 import Vue from "vue";
 import assParser from "ass-parser";
 import languageEncoding from "detect-file-encoding-and-language";
 import { Drag, Drop } from "vue-drag-drop";
 import { parseSync } from "subtitle";
 import { mapState } from "vuex";
-import { parseDuration, convertDurationToSeconds, levelByDifficulty, timeout, logError, level, TOPICS } from "@/lib/utils";
+import { parseDuration, convertDurationToSeconds, levelByDifficulty, timeout, logError, level, TOPICS } from "../lib/utils";
 
 export default {
   components: {
@@ -691,7 +691,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .youtube-video-card-wrapper.skin-dark {
   .youtube-thumbnail-wrapper {
     box-shadow: 0 -1px 1px #ffffff69;

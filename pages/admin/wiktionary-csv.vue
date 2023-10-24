@@ -27,7 +27,7 @@
   </div>
 </template>
 <script>
-import { makeTextFile } from "@/lib/helper";
+import { makeTextFile } from "../../lib/helper";
 export default {
   computed: {
   },

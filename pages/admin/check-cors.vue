@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { arrayChunk } from "@/lib/utils";
+import { arrayChunk } from "../../lib/utils";
 
 export default {
   computed: {

@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import settingsMixin from '@/lib/mixins/settings-mixin'
+import settingsMixin from '../lib/mixins/settings-mixin'
 
 export default {
   mixins: [ settingsMixin ],

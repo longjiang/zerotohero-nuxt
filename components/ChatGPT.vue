@@ -62,7 +62,7 @@
 
 <script>
 import OpenAI from "openai-api";
-import { timeout } from "@/lib/utils";
+import { timeout } from "../lib/utils";
 import Vue from "vue";
 
 export default {

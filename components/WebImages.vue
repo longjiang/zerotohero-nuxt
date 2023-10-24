@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import WordPhotos from "@/lib/word-photos";
-import { IMAGE_PROXY } from "@/lib/utils";
+import WordPhotos from "../lib/word-photos";
+import { IMAGE_PROXY } from "../lib/utils";
 
 export default {
   props: {

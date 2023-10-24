@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { uniqueId } from '@/lib/utils'
+import { uniqueId } from '../lib/utils'
 
 export default {
   props: {

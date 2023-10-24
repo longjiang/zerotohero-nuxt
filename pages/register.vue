@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import { background, logError, PYTHON_SERVER, DIRECTUS_URL } from "@/lib/utils";
+import { background, logError, PYTHON_SERVER, DIRECTUS_URL } from "../lib/utils";
 
 export default {
   data() {

@@ -51,8 +51,8 @@
 
 <script>
 
-import settingsMixin from '@/lib/mixins/settings-mixin'
-import SketchEngine from "@/lib/sketch-engine";
+import settingsMixin from '../lib/mixins/settings-mixin'
+import SketchEngine from "../lib/sketch-engine";
 
 export default {
   mixins: [ settingsMixin ],

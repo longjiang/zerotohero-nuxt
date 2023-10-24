@@ -1,4 +1,4 @@
-import DateHelper from "@/lib/date-helper";
+import DateHelper from "../lib/date-helper";
 import axios from "axios";
 import he from "he"; // html entities
 import {
@@ -12,7 +12,7 @@ import {
   WEB_URL,
   reduceTags,
   parseQueryString,
-} from "@/lib/utils";
+} from "../lib/utils";
 
 export const YOUTUBE_VIDEOS_TABLES = {
   2: [

@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { unique } from "@/lib/utils";
+import { unique } from "../lib/utils";
 import { mapState } from "vuex";
 
 export default {

@@ -35,7 +35,7 @@
 
 <script>
 import { mapState, mapGetters } from "vuex";
-import { languageLevels, LANGS_WITH_LEVELS, maxDifficultyByLevel, minDifficultyByLevel } from "@/lib/utils";
+import { languageLevels, LANGS_WITH_LEVELS, maxDifficultyByLevel, minDifficultyByLevel } from "../lib/utils";
 
 export default {
   props: {

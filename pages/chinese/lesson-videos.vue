@@ -161,7 +161,7 @@
 
 <script>
 import WordList from "@/components/WordList";
-import { languageLevels, uniqueByValue } from "@/lib/utils";
+import { languageLevels, uniqueByValue } from "../../lib/utils";
 
 export default {
   data() {

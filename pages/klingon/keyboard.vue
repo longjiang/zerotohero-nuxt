@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import Klingon from "@/lib/klingon";
+import Klingon from "../../lib/klingon";
 export default {
   data() {
     return {

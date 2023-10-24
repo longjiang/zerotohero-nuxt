@@ -99,8 +99,8 @@
 
 <script>
 import Frequency from "@/components/Frequency";
-import WordPhotos from "@/lib/word-photos";
-import { highlight } from "@/lib/utils";
+import WordPhotos from "../lib/word-photos";
+import { highlight } from "../lib/utils";
 
 export default {
   components: {

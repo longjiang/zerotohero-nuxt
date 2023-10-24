@@ -193,7 +193,7 @@ import {
   shuffle,
   uniqueByValue,
   LANGS_WITH_CONTENT,
-} from "@/lib/utils";
+} from "../lib/utils";
 import { tify, sify } from "chinese-conv";
 
 export default {

@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import { timeout } from "@/lib/utils";
+import { timeout } from "../lib/utils";
 export default {
   props: {
     language: {

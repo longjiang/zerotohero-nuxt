@@ -94,7 +94,7 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
-import { groupArrayBy } from "@/lib/utils";
+import { groupArrayBy } from "../lib/utils";
 
 export default {
   components: {

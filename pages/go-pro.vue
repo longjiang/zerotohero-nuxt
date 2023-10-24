@@ -104,7 +104,7 @@
 
 <script>
 import { Capacitor } from "@capacitor/core";
-import { timeout, background, TEST, SALE } from "@/lib/utils";
+import { timeout, background, TEST, SALE } from "../lib/utils";
 
 export default {
   data() {

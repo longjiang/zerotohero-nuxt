@@ -75,8 +75,8 @@
 </template>
 
 <script>
-import YouTube from "@/lib/youtube";
-import { uniqueByValue } from "@/lib/utils";
+import YouTube from "../lib/youtube";
+import { uniqueByValue } from "../lib/utils";
 import sha256 from "js-sha256";
 
 export default {

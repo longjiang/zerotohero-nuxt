@@ -40,7 +40,7 @@
 <script>
 import TokenizedText from "./TokenizedText.vue";
 import popupnote from "./PopupNote.vue"; // Must be lower-case
-import { SpeechSingleton } from "@/lib/utils";
+import { SpeechSingleton } from "../lib/utils";
 import VRuntimeTemplate from "v-runtime-template";
 import sbd from "sbd";
 

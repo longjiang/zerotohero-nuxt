@@ -295,7 +295,7 @@
  */
 
 import Vue from "vue";
-import { timeout } from "@/lib/utils";
+import { timeout } from "../lib/utils";
 import { mapState } from "vuex";
 
 export default {

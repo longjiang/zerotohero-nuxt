@@ -146,7 +146,7 @@
 <script>
 import Vue from "vue";
 import he from "he";
-import { characterClass, highlight, uniqueByValue } from "@/lib/utils";
+import { characterClass, highlight, uniqueByValue } from "../../lib/utils";
 
 export default {
   props: {

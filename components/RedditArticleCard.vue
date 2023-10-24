@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { unescape, stripTags } from "@/lib/utils";
+import { unescape, stripTags } from "../lib/utils";
 
 export default {
   props: ["article"],

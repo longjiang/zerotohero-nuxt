@@ -54,7 +54,7 @@
   </Widget>
 </template>
 <script>
-import SketchEngine from "@/lib/sketch-engine";
+import SketchEngine from "../lib/sketch-engine";
 
 export default {
   props: {

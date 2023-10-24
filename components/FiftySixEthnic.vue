@@ -35,7 +35,7 @@
 <script>
 import Papa from "papaparse";
 import axios from "axios";
-import { SERVER, logError, formatK } from "@/lib/utils";
+import { SERVER, logError, formatK } from "../lib/utils";
 
 export default {
   props: {

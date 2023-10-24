@@ -146,7 +146,7 @@
 </template>
 
 <script>
-import { proxy, LP_DIRECTUS_TOOLS_URL } from "@/lib/utils";
+import { proxy, LP_DIRECTUS_TOOLS_URL } from "../lib/utils";
 
 export default {
   props: {
@@ -255,7 +255,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 
 .stats-dark {
   .stat-big-number {

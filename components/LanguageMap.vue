@@ -147,10 +147,10 @@
 
 <script>
 import axios from "axios";
-import { SERVER } from "@/lib/utils";
+import { SERVER } from "../lib/utils";
 import Papa from "papaparse";
 import "leaflet/dist/leaflet.css";
-import { LANGS_WITH_CONTENT, uniqueByValue, formatK } from "@/lib/utils";
+import { LANGS_WITH_CONTENT, uniqueByValue, formatK } from "../lib/utils";
 
 export default {
   components: {
@@ -420,7 +420,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .language-map {
   width: 100%;
   height: 40rem;

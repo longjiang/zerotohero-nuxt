@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { uniqueByValue, randomArrayItem } from "@/lib/utils";
+import { uniqueByValue, randomArrayItem } from "../lib/utils";
 import Search from "@/components/Search";
 
 export default {

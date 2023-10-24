@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { timeout, background, logError } from "@/lib/utils";
+import { timeout, background, logError } from "../lib/utils";
 
 export default {
   data() {

@@ -42,8 +42,8 @@
 </template>
 <script>
 import { mapState } from "vuex";
-import { formatK, level, levelByDifficulty } from "@/lib/utils";
-import { CATEGORIES, } from "@/lib/youtube";
+import { formatK, level, levelByDifficulty } from "../lib/utils";
+import { CATEGORIES, } from "../lib/youtube";
 
 export default {
   props: {
@@ -118,7 +118,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 
 .statistics span+span::before {
   content: " · ";

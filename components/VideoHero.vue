@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { wide, isMobile } from "@/lib/utils";
+import { wide, isMobile } from "../lib/utils";
 import { mapState } from "~/imports";
 
 export default {
@@ -216,7 +216,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .video-hero-wrapper {
   position: relative;
   border-radius: 0.25rem;

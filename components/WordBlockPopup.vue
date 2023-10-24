@@ -237,9 +237,9 @@
 
 <script>
 import { transliterate as tr } from "transliteration";
-import { IMAGE_PROXY } from "@/lib/config";
-import { timeout, PYTHON_SERVER, LANGS_WITH_AZURE_TRANSLATE, languageLevels } from "@/lib/utils";
-import Klingon from "@/lib/klingon";
+import { IMAGE_PROXY } from "../lib/config";
+import { timeout, PYTHON_SERVER, LANGS_WITH_AZURE_TRANSLATE, languageLevels } from "../lib/utils";
+import Klingon from "../lib/klingon";
 import pinyin2ipa from "pinyin2ipa";
 
 export default {
@@ -405,7 +405,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 
 .word-block-popup {
   .word-block-pinyin,

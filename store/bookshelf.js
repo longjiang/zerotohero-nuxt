@@ -1,4 +1,4 @@
-import { logError, uniqueByValue } from '@/lib/utils'
+import { logError, uniqueByValue } from '../lib/utils'
 
 export const state = () => {
   return {

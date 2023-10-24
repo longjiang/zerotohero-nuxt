@@ -111,7 +111,7 @@
 
 <script>
 import WordList from "@/components/WordList";
-import { parseDuration, timeStringToSeconds, unique, uniqueByValue } from "@/lib/utils";
+import { parseDuration, timeStringToSeconds, unique, uniqueByValue } from "../../lib/utils";
 
 export default {
   props: ["level", "lesson"],

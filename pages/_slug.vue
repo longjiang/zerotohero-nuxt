@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { background } from "@/lib/utils/background";
+import { background } from "../lib/utils/background";
 export default {
   async asyncData({ $content, params }) {
     const page = await $content(params.slug).fetch();

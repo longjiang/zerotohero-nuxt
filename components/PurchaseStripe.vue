@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import { PYTHON_SERVER, SALE, TEST } from "@/lib/utils";
-import { HOST } from "@/lib/utils/url";
+import { PYTHON_SERVER, SALE, TEST } from "../lib/utils";
+import { HOST } from "../lib/utils/url";
 
 export default {
   props: {

@@ -93,7 +93,7 @@
 <script>
 import Papa from "papaparse";
 import Vue from "vue";
-import { unique } from "@/lib/utils";
+import { unique } from "../../lib/utils";
 
 export default {
   props: {

@@ -121,7 +121,7 @@
 
 <script>
 import Papa from "papaparse";
-import { timeout } from "@/lib/utils";
+import { timeout } from "../../lib/utils";
 
 export default {
   props: {

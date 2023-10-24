@@ -320,7 +320,7 @@
 
 <script>
 import Resource from "@/components/Resource";
-import { LEVELS, LANGS_WITH_LEVELS, l2LevelKey, languageHours, background, backgroundKeyword } from "@/lib/utils";
+import { LEVELS, LANGS_WITH_LEVELS, l2LevelKey, languageHours, background, backgroundKeyword } from "../lib/utils";
 
 export default {
   components: {
@@ -473,7 +473,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .l2-zh {
   .learning-path {
     .level {

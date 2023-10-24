@@ -201,7 +201,7 @@
 </template>
 
 <script>
-import WordPhotos from "@/lib/word-photos";
+import WordPhotos from "../lib/word-photos";
 
 export default {
   data() {

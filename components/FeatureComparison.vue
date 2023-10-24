@@ -87,7 +87,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .pricing-card {
   text-shadow: none;
   padding: 2rem 2rem 1rem 2rem;

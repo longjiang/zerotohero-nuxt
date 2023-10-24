@@ -228,11 +228,11 @@ import {
   unique,
   uniqueByValue,
   normalizeStylizedNumbersInText,
-} from "@/lib/utils";
+} from "../lib/utils";
 import { Drag, Drop } from "vue-drag-drop";
 import { ContainerQuery } from "vue-container-query";
 import draggable from "vuedraggable";
-import YouTube from "@/lib/youtube";
+import YouTube from "../lib/youtube";
 import sha256 from "js-sha256";
 
 export default {

@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { SpeechSingleton } from "@/lib/utils";
+import { SpeechSingleton } from "../lib/utils";
 
 export default {
   props: ["drill"],

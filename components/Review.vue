@@ -86,7 +86,7 @@
 <script>
 import { distance } from "fastest-levenshtein";
 import { mapState } from "vuex";
-import { uniqueByValue, shuffle, SpeechSingleton, timeout, highlightMultiple, highlight, unique } from "@/lib/utils";
+import { uniqueByValue, shuffle, SpeechSingleton, timeout, highlightMultiple, highlight, unique } from "../lib/utils";
 
 export default {
   data() {

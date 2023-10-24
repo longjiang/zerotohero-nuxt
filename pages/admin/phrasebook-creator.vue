@@ -110,7 +110,7 @@
 
 <script>
 import Papa from "papaparse";
-import { logError, makeTextFile } from "@/lib/utils";
+import { logError, makeTextFile } from "../../lib/utils";
 
 export default {
   props: {

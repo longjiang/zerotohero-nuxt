@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import { highlight } from "@/lib/utils/string";
-import { uniqueByValue } from "@/lib/utils/array";
+import { highlight } from "../lib/utils/string";
+import { uniqueByValue } from "../lib/utils/array";
 import { mapState } from "vuex";
 
 export default {

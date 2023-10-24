@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { randomInt, unique} from "@/lib/utils";
+import { randomInt, unique} from "../lib/utils";
 
 export default {
   props: {

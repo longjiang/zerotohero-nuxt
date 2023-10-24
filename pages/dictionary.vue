@@ -242,7 +242,7 @@
 </template>
 
 <script>
-import WordPhotos from "@/lib/word-photos";
+import WordPhotos from "../lib/word-photos";
 import { ContainerQuery } from "vue-container-query";
 
 export default {

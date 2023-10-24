@@ -1,4 +1,4 @@
-import { logError } from '@/lib/helper'
+import { logError } from '../lib/helper'
 import Vue from 'vue';
 
 

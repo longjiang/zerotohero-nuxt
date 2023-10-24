@@ -16,14 +16,14 @@
 </template>
 
 <script>
-import settingsMixin from '@/lib/mixins/settings-mixin'
+import settingsMixin from '../lib/mixins/settings-mixin'
 
 export default {
   mixins: [ settingsMixin ],
 };
 </script>
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 
 .translated-line {
   color: #aaa;

@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { unescape, stripTags, DIRECTUS_URL } from "@/lib/utils";
+import { unescape, stripTags, DIRECTUS_URL } from "../lib/utils";
 
 const DIRECTUS_ADMIN_URL = `${DIRECTUS_URL}admin/#/`
 

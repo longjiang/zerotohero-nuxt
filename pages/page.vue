@@ -19,7 +19,7 @@
 
 <script>
 import Marked from "marked";
-import { logError } from "@/lib/utils";
+import { logError } from "../lib/utils";
 
 export default {
   props: {

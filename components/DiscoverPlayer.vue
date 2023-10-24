@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import { l1Code } from "@/lib/utils";
+import { l1Code } from "../lib/utils";
 
 export default {
   props: {

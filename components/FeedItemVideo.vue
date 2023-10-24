@@ -65,7 +65,7 @@
 
 <script>
 import { mapState } from "vuex";
-import DateHelper from "@/lib/date-helper";
+import DateHelper from "../lib/date-helper";
 
 export default {
   props: {
@@ -182,7 +182,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .youtube-title {
   font-weight: bold;
   font-size: 1rem;

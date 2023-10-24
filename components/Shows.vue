@@ -189,8 +189,8 @@ import {
   unique,
   languageLevels,
   LANGS_WITH_LEVELS,
-} from "@/lib/utils";
-import { CATEGORIES } from "@/lib/youtube";
+} from "../lib/utils";
+import { CATEGORIES } from "../lib/youtube";
 import { mapState } from "vuex";
 
 export default {

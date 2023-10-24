@@ -113,7 +113,7 @@ import {
   SpeechSingleton,
   documentOffsetTop,
   NON_PRO_MAX_LINES,
-} from "@/lib/utils";
+} from "../lib/utils";
 import Vue from "vue";
 
 const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
@@ -822,7 +822,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .synced-transcript {
   .transcript-title {
     font-weight: bold;

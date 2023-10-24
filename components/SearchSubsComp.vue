@@ -174,8 +174,8 @@ import {
   highlightMultiple,
   iOS,
   NON_PRO_MAX_SUBS_SEARCH_HITS,
-} from "@/lib/utils";
-import YouTube from "@/lib/youtube";
+} from "../lib/utils";
+import YouTube from "../lib/youtube";
 import Vue from "vue";
 
 export default {
@@ -618,7 +618,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .search-subs {
   max-width: calc(100vh - 5rem);
   margin: 0 auto;

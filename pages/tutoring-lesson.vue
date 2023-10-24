@@ -150,8 +150,8 @@
 </template>
 
 <script>
-import WordPhotos from "@/lib/word-photos";
-import { removeInlineStylesFromString, level, IMAGE_PROXY } from "@/lib/utils";
+import WordPhotos from "../lib/word-photos";
+import { removeInlineStylesFromString, level, IMAGE_PROXY } from "../lib/utils";
 
 export default {
   props: ["id"],

@@ -161,7 +161,7 @@
 </template>
 
 <script>
-import { groupArrayBy, makeTextFile } from "@/lib/utils";
+import { groupArrayBy, makeTextFile } from "../lib/utils";
 import Papa from "papaparse";
 
 export default {
@@ -309,7 +309,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 
 .zerotohero-dark {
   .hide-defs {

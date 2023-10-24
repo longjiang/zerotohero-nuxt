@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { timeout, stripTags, SpeechSingleton } from "@/lib/utils";
+import { timeout, stripTags, SpeechSingleton } from "../lib/utils";
 
 export default {
   name: "TokenizedText",

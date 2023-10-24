@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { background } from "@/lib/utils/background";
+import { background } from "../lib/utils/background";
 export default {
   async asyncData({ $content }) {
     const articles = await $content().sortBy("createdAt", "desc").fetch();

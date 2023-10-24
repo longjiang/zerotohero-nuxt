@@ -1,4 +1,4 @@
-import { logError } from "@/lib/utils"
+import { logError } from "../lib/utils"
 
 export const state = () => {
   return {

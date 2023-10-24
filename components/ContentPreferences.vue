@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import settingsMixin from '@/lib/mixins/settings-mixin'
+import settingsMixin from '../lib/mixins/settings-mixin'
 import { mapState } from "vuex";
 
 export default {

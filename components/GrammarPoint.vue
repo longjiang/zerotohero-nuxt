@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { highlightMultiple } from "@/lib/utils";
+import { highlightMultiple } from "../lib/utils";
 export default {
   props: {
     grammar: {

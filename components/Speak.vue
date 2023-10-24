@@ -18,7 +18,7 @@
 </template>
 <script>
 import commons from "wikimedia-commons-file-path";
-import { SpeechSingleton } from "@/lib/utils";
+import { SpeechSingleton } from "../lib/utils";
 
 export default {
   props: {

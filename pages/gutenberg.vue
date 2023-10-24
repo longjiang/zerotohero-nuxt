@@ -95,7 +95,7 @@
 import axios from "axios";
 import { parse } from "node-html-parser";
 import { mapState } from "vuex";
-import { proxy, logError } from "@/lib/utils";
+import { proxy, logError } from "../lib/utils";
 
 export default {
   props: {

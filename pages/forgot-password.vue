@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { background, timeout } from "@/lib/utils";
+import { background, timeout } from "../lib/utils";
 
 export default {
   props: {

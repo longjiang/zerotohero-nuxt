@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import { logError } from "@/lib/utils/error";
-import { PYTHON_SERVER } from '@/lib/utils/servers'
+import { logError } from "../lib/utils/error";
+import { PYTHON_SERVER } from '../lib/utils/servers'
 import axios from "axios";
 
 const IOS_IAP_PRODUCT_ID = "pro";

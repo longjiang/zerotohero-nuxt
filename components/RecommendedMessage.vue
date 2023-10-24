@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { LANGS_WITH_LEVELS } from "@/lib/utils";
+import { LANGS_WITH_LEVELS } from "../lib/utils";
 export default {
   data() {
     return {

@@ -112,7 +112,7 @@
 
 <script>
 import { setTimeout } from "timers";
-import { highlight, timeout } from "@/lib/utils";
+import { highlight, timeout } from "../lib/utils";
 import { debounce } from "lodash";
 
 export default {

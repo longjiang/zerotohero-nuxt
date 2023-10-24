@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import { timeout, unique } from "@/lib/utils";
+import { timeout, unique } from "../lib/utils";
 
 export default {
   data() {

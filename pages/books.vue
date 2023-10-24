@@ -86,7 +86,7 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import InfiniteLoading from "vue-infinite-loading";
-import { proxy, unique, queryString, logError } from "@/lib/utils";
+import { proxy, unique, queryString, logError } from "../lib/utils";
 
 export default {
   components: {

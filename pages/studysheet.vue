@@ -88,7 +88,7 @@
 <script>
 import StudySheet from "@/components/StudySheet";
 import SmartQuotes from "smartquotes";
-import { languageLevels } from "@/lib/helper";
+import { languageLevels } from "../lib/helper";
 
 export default {
   components: {

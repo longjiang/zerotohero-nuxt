@@ -150,7 +150,7 @@
 
 <script>
 import { ContainerQuery } from "vue-container-query";
-import { dictionaryTooLargeAndWillCauseServerCrash } from "@/lib/utils";
+import { dictionaryTooLargeAndWillCauseServerCrash } from "../lib/utils";
 
 export default {
   components: {

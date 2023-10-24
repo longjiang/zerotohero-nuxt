@@ -174,7 +174,7 @@
 
 <script>
 import { ContainerQuery } from "vue-container-query";
-import { l2LevelNameByLevel, l2LevelName } from "@/lib/utils";
+import { l2LevelNameByLevel, l2LevelName } from "../lib/utils";
 
 export default {
   components: {

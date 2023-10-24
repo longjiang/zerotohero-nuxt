@@ -138,10 +138,10 @@
 </template>
 
 <script>
-import Klingon from "@/lib/klingon";
+import Klingon from "../lib/klingon";
 import { transliterate as tr } from "transliteration";
 import pinyin2ipa from "pinyin2ipa";
-import { languageLevels } from "@/lib/utils/language-levels";
+import { languageLevels } from "../lib/utils/language-levels";
 
 export default {
   props: {

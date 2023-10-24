@@ -18,7 +18,7 @@
 <script>
 import smoothscroll from "smoothscroll-polyfill";
 import MyLayout from "@/layouts/MyLayout.vue";
-import { wide, timeout } from "@/lib/utils";
+import { wide, timeout } from "../lib/utils";
 import { mapState } from "vuex";
 import { DelayHydration } from "nuxt-delay-hydration/dist/components";
 
@@ -460,7 +460,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/scss/zerotohero.scss";
+@import "../assets/scss/zerotohero.scss";
 
 .transition {
   transition: 0.5s all ease-in-out;

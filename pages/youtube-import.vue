@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import YouTube from "@/lib/youtube";
+import YouTube from "../lib/youtube";
 
 export default {
   data() {

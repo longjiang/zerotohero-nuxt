@@ -13,7 +13,7 @@
   </div>
 </template>
 <script>
-import Grammar from "@/lib/grammar";
+import Grammar from "../lib/grammar";
 import GrammarPoint from "@/components/GrammarPoint";
 
 export default {

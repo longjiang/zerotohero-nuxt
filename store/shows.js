@@ -1,5 +1,5 @@
-import { CATEGORIES } from "@/lib/youtube";
-import { LANGS_WITH_CONTENT, uniqueByValue, unique, PYTHON_SERVER, proxy } from "@/lib/utils";
+import { CATEGORIES } from "../lib/youtube";
+import { LANGS_WITH_CONTENT, uniqueByValue, unique, PYTHON_SERVER, proxy } from "../lib/utils";
 import Vue from "vue";
 
 export const state = () => {

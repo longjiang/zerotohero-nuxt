@@ -242,7 +242,7 @@ import {
   normalizeStylizedNumbersInText,
   logError,
   timeout,
-} from "@/lib/utils";
+} from "../lib/utils";
 import Vue from "vue";
 import SmartQuotes from "smartquotes";
 

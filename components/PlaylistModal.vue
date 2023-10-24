@@ -126,7 +126,7 @@
 </template>
 
 <script>
-import { ucFirst, timeout, highlightMultiple } from "@/lib/utils";
+import { ucFirst, timeout, highlightMultiple } from "../lib/utils";
 
 export default {
   props: {

@@ -189,12 +189,12 @@
 
 <script>
 import ReaderComp from "@/components/ReaderComp";
-import { logError, proxy } from "@/lib/utils";
-import SAMPLE_TEXT from "@/lib/utils/sample-text";
+import { logError, proxy } from "../lib/utils";
+import SAMPLE_TEXT from "../lib/utils/sample-text";
 import { markdownToTxt } from "markdown-to-txt";
 import { NodeHtmlMarkdown, NodeHtmlMarkdownOptions } from "node-html-markdown";
 import { parse } from "node-html-parser";
-import { baseUrl } from "@/lib/utils/url";
+import { baseUrl } from "../lib/utils/url";
 
 export default {
   template: "#reader-template",
@@ -459,7 +459,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .zerotohero-light {
   .share-banner {
     background-color: rgba($primary-color, 0.5);

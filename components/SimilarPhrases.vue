@@ -120,7 +120,7 @@
 </template>
 
 <script>
-import { uniqueByValue, uniqueByValues } from "@/lib/utils";
+import { uniqueByValue, uniqueByValues } from "../lib/utils";
 import { ContainerQuery } from "vue-container-query";
 
 export default {
@@ -391,7 +391,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .similar-phrase-l2 {
   font-weight: bold;
   color: $primary-color;

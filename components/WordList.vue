@@ -130,7 +130,7 @@
   </div>
 </template>
 <script>
-import { unique, uniqueByValue } from "@/lib/utils";
+import { unique, uniqueByValue } from "../lib/utils";
 
 export default {
   props: {
@@ -284,7 +284,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .word-type {
   opacity: 0.7;
 }

@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { unique, LEVELS, l2LevelKey, highlightMultiple } from "@/lib/utils";
+import { unique, LEVELS, l2LevelKey, highlightMultiple } from "../lib/utils";
 export default {
   data() {
     return {

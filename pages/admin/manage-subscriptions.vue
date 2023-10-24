@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { PYTHON_SERVER } from '@/lib/utils'
+import { PYTHON_SERVER } from '../../lib/utils'
 
 export default {
   data() {

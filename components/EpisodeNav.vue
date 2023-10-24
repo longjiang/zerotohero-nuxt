@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { randomArrayItem } from "@/lib/utils";
+import { randomArrayItem } from "../lib/utils";
 
 export default {
   props: {

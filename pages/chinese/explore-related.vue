@@ -65,7 +65,7 @@
 <script>
 import WordListExtended from "@/components/WordListExtended.vue";
 import Search from "@/components/Search.vue";
-import SketchEngine from "@/lib/sketch-engine";
+import SketchEngine from "../../lib/sketch-engine";
 import Merge from "@/components/Merge";
 
 export default {

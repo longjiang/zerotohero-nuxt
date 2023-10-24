@@ -18,7 +18,7 @@
 
 <script>
 import { tify } from "chinese-conv";
-import { timeout } from "@/lib/utils";
+import { timeout } from "../lib/utils";
 export default {
   props: {
     term: "",
@@ -244,7 +244,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .lookup-link {
   white-space: nowrap;
   display: inline-block;

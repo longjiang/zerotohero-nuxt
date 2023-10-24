@@ -97,8 +97,8 @@
 </template>
 
 <script>
-import SketchEngine from "@/lib/sketch-engine";
-import { highlightMultiple } from "@/lib/utils";
+import SketchEngine from "../lib/sketch-engine";
+import { highlightMultiple } from "../lib/utils";
 
 export default {
   props: {

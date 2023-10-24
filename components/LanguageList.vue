@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { uniqueByValue } from "@/lib/utils";
+import { uniqueByValue } from "../lib/utils";
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
 

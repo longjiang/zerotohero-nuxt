@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { isEmpty, ucFirst, groupArrayBy } from "@/lib/utils";
+import { isEmpty, ucFirst, groupArrayBy } from "../lib/utils";
 
 export default {
   props: {

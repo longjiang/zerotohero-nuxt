@@ -69,8 +69,8 @@
 </template>
 
 <script>
-import YouTube from "@/lib/youtube";
-import DateHelper from "@/lib/date-helper";
+import YouTube from "../lib/youtube";
+import DateHelper from "../lib/date-helper";
 import Vue from "vue";
 import { mapState } from "vuex";
 import {
@@ -82,7 +82,7 @@ import {
   toCamelCase,
   parseDuration,
   proxy,
-} from "@/lib/utils";
+} from "../lib/utils";
 
 export default {
   props: {

@@ -45,7 +45,7 @@ import {
   randomItemFromArray,
   LANGS_WITH_LEVELS,
   LANGS_WITH_CONTENT,
-} from "@/lib/utils";
+} from "../lib/utils";
 
 export default {
   name: "recommended", // Added to resolve Vue warn - Invalid component name: "pages/explore-media.vue"
@@ -164,7 +164,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 
 .media-section {
   padding-bottom: 2rem;

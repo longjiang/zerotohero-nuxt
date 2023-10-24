@@ -242,10 +242,10 @@
 </template>
 
 <script>
-import { SERVER } from "@/lib/utils";
+import { SERVER } from "../../lib/utils";
 import Papa from "papaparse";
 import Vue from "vue";
-import { unique, formatK } from "@/lib/utils";
+import { unique, formatK } from "../../lib/utils";
 
 export default {
   data() {

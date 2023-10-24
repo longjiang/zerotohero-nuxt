@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import navMixin from "@/lib/mixins/nav-mixin";
+import navMixin from "../lib/mixins/nav-mixin";
 
 export default {
   mixins: [navMixin],
@@ -76,7 +76,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 
 
 .zth-nav-secondary {

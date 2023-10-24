@@ -24,8 +24,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { SLUG_TO_CATEGORY_ID, CATEGORIES } from '@/lib/youtube';
+import { SLUG_TO_CATEGORY_ID, CATEGORIES } from '../lib/youtube';
 
 
 export default {

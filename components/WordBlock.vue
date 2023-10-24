@@ -33,12 +33,12 @@
 </template>
 
 <script>
-import { SpeechSingleton, unique, uniqueByValue, hasKanji } from "@/lib/utils";
+import { SpeechSingleton, unique, uniqueByValue, hasKanji } from "../lib/utils";
 import { mapState } from "vuex";
 import { tify, sify } from "chinese-conv";
 import { transliterate as tr } from "transliteration";
-import WordPhotos from "@/lib/word-photos";
-import Klingon from "@/lib/klingon";
+import WordPhotos from "../lib/word-photos";
+import Klingon from "../lib/klingon";
 
 export default {
   props: {
@@ -528,7 +528,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 
 rt {
   font-size: 50%; /* Smaller size for phonetic annotation */

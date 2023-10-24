@@ -6,7 +6,7 @@ import {
   mutuallyExclusive,
   uniqueByValue,
   characterClass,
-} from "@/lib/utils";
+} from "../lib/utils";
 
 export default ({ app }, inject) => {
   inject("subs", {

@@ -50,7 +50,7 @@
 import WordBlock from '@/components/WordBlock'
 import WordBlockDictionary from '@/components/WordBlockDictionary'
 import VRuntimeTemplate from 'v-runtime-template'
-import { reject, splitByReg } from '@/lib/utils'
+import { reject, splitByReg } from '../lib/utils'
 
 export default {
   components: {

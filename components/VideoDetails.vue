@@ -105,7 +105,7 @@
   </div>
 </template>
 <script>
-import { makeTextFile, formatK, proxy, sanitizeFilename, PYTHON_SERVER } from "@/lib/utils";
+import { makeTextFile, formatK, proxy, sanitizeFilename, PYTHON_SERVER } from "../lib/utils";
 import subsrt from 'subsrt';
 
 export default {

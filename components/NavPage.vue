@@ -41,8 +41,8 @@ feature-card-name-${item.name}`"
 </template>
 
 <script>
-import navMixin from "@/lib/mixins/nav-mixin";
-import { uniqueByValue } from '@/lib/utils';
+import navMixin from "../lib/mixins/nav-mixin";
+import { uniqueByValue } from '../lib/utils';
 import { ContainerQuery } from "vue-container-query";
 
 export default {
@@ -126,7 +126,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 
 .feature-card-column:hover {
   z-index: 1;

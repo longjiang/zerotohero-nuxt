@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import DateHelper from "@/lib/date-helper";
+import DateHelper from "../lib/date-helper";
 
 export default {
   props: {

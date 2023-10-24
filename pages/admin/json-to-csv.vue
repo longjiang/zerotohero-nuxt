@@ -38,7 +38,7 @@
   </div>
 </template>
 <script>
-import { makeTextFile } from "@/lib/utils";
+import { makeTextFile } from "../../lib/utils";
 
 export default {
   computed: {

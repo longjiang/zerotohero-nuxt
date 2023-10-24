@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { l2LevelName, l2LevelNameByLevel } from "@/lib/utils"
+import { l2LevelName, l2LevelNameByLevel } from "../lib/utils"
 
 export default {
   data() {

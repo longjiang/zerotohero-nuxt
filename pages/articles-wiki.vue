@@ -70,7 +70,7 @@
 <script>
 import ArticlesList from "@/components/ArticlesList.vue";
 import ArticleCard from "@/components/ArticleCard.vue";
-import { unescape, stripTags } from "@/lib/utils";
+import { unescape, stripTags } from "../lib/utils";
 
 export default {
   components: {

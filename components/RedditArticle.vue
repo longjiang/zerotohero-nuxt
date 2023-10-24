@@ -44,10 +44,10 @@
 </template>
 
 <script>
-import { jsonProxy } from "@/lib/utils";
+import { jsonProxy } from "../lib/utils";
 import RedditArticleCard from "@/components/RedditArticleCard";
 import axios from "axios";
-import { unescape, stripTags } from "@/lib/utils";
+import { unescape, stripTags } from "../lib/utils";
 
 export default {
   props: ["articleId"],

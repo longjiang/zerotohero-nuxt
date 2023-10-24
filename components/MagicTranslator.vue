@@ -30,7 +30,7 @@
 // Client height WAS 226px
 // Target height is 801px
 
-import { timeout } from "@/lib/utils";
+import { timeout } from "../lib/utils";
 
 export default {
   props: {

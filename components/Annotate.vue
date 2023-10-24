@@ -228,9 +228,9 @@
 </template>
 
 <script>
-import wordblock from "@/components/WordBlock";
-import popupnote from "@/components/PopupNote";
-import readerlink from "@/components/ReaderLink";
+import wordblock from "./WordBlock";
+import popupnote from "./PopupNote";
+import readerlink from "./ReaderLink";
 import VRuntimeTemplate from "v-runtime-template";
 import SmartQuotes from "smartquotes";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
@@ -241,7 +241,7 @@ import {
   logError,
   breakSentences,
   l2LevelName,
-} from "@/lib/utils";
+} from "../lib/utils";
 
 export default {
   components: {

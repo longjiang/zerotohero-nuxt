@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import { formatK } from "@/lib/utils";
+import { formatK } from "../lib/utils";
 
 export default {
   props: {

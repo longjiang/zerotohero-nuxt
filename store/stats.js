@@ -1,4 +1,4 @@
-import { proxy, logError, DIRECTUS_URL } from '@/lib/utils'
+import { proxy, logError, DIRECTUS_URL } from '../lib/utils'
 
 export const state = () => {
   return {

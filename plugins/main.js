@@ -7,7 +7,7 @@ import ModuleLoader from '~/lib/module-loader'
 import WorkerModuleLoader from '~/lib/worker-module-loader'
 import VueMq from 'vue-mq'
 import VueSmoothScroll from 'vue2-smooth-scroll'
-import Languages from '@/lib/languages'
+import Languages from '../lib/languages'
 import AsyncComputed from 'vue-async-computed'
 import { ModalPlugin } from 'bootstrap-vue'
 

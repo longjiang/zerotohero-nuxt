@@ -240,10 +240,10 @@
 </template>
 
 <script>
-import DateHelper from "@/lib/date-helper";
+import DateHelper from "../lib/date-helper";
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
-import { dictionaryTooLargeAndWillCauseServerCrash } from "@/lib/utils";
+import { dictionaryTooLargeAndWillCauseServerCrash } from "../lib/utils";
 
 export default {
   components: {
@@ -630,7 +630,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .zerotohero-wide {
   .content-pane-left {
     overflow-y: auto;

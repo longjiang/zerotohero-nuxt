@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { IMAGE_PROXY } from "@/lib/utils";
+import { IMAGE_PROXY } from "../../lib/utils";
 
 export default {
   async mounted() {

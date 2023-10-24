@@ -43,8 +43,8 @@
 </template>
 
 <script>
-import { country } from "@/lib/utils/countries";
-import { LANGS_WITH_CONTENT } from '@/lib/utils';
+import { country } from "../lib/utils/countries";
+import { LANGS_WITH_CONTENT } from '../lib/utils';
 
 export default {
   data() {

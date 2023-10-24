@@ -60,8 +60,8 @@
 </template>
 
 <script>
-import { languageLevels } from "@/lib/utils";
-import YouTube from "@/lib/youtube";
+import { languageLevels } from "../lib/utils";
+import YouTube from "../lib/youtube";
 import { mapState } from "vuex";
 import Vue from "vue";
 export default {
@@ -154,7 +154,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 
 .show-tag {
   font-size: 0.8em;

@@ -181,7 +181,7 @@
 
 <script>
 import Papa from "papaparse";
-import { unique } from "@/lib/utils";
+import { unique } from "../../lib/utils";
 
 export default {
   /**
@@ -304,7 +304,7 @@ export default {
 
 <style lang="scss" scoped>
 
-@import "~@/assets/scss/variables.scss";
+@import "../../assets/scss/variables.scss";
 
 .similar-phrases-panel {
   background: white;

@@ -1,6 +1,6 @@
 // Import Bootstrap and Bootstrap-Vue styles
-@import "~bootstrap/scss/bootstrap";
-@import "~bootstrap-vue/src/index.scss";
+@import "node_modules/bootstrap/scss/bootstrap.scss";
+@import "node_modules/bootstrap-vue/src/index.scss";
 
 // Import variables
 @import "./variables";

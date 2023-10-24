@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { highlight } from "@/lib/utils"
+import { highlight } from "../lib/utils"
 
 export default {
   props: {

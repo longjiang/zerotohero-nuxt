@@ -90,8 +90,8 @@
 </template>
 
 <script>
-import { IMAGE_PROXY } from "@/lib/utils";
-import Library from "@/lib/library";
+import { IMAGE_PROXY } from "../lib/utils";
+import Library from "../lib/library";
 import SimpleSearch from "@/components/SimpleSearch";
 
 export default {
@@ -120,7 +120,7 @@ export default {
     let url = decodeURIComponent(this.args);
     try {
       let libraryL2 = await (
-        await import(`@/lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)
+        await import(`../lib/library-l2s/library-${this.$l2["iso639-3"]}.js`)
       ).default;
       await Library.setLangSources(libraryL2.sources);
     } catch (err) {

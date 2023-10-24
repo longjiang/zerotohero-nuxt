@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Hanzi from '@/lib/hanzi'
+import Hanzi from '../lib/hanzi'
 
 export default {
   props: ['char'],

@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { scrollToTargetAdjusted, wide } from "@/lib/utils";
+import { scrollToTargetAdjusted, wide } from "../lib/utils";
 import { mapState } from "vuex";
 
 export default {

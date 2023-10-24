@@ -29,7 +29,7 @@
 <script>
 import { mapState } from "vuex";
 
-import { escapeRegExp, uniqueIgnoreCase } from "@/lib/utils";
+import { escapeRegExp, uniqueIgnoreCase } from "../lib/utils";
 
 export default {
   props: {

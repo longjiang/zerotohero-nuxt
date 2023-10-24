@@ -1,4 +1,3 @@
-// @/lib/inflectors/russian-inflector.js
 
 importScripts('../js/inflectors/base-inflector.js')
 

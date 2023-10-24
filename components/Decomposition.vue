@@ -56,7 +56,7 @@ const decompositionTemplate = {
   </div>`,
 };
 
-import { uniqueId } from "@/lib/utils";
+import { uniqueId } from "../lib/utils";
 
 export default {
   props: ["char", "quiz"],

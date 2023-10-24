@@ -173,7 +173,7 @@
 
 <script>
 import axios from "axios";
-import { uniqueByValue, unique, escapeRegExp, SERVER } from "@/lib/utils";
+import { uniqueByValue, unique, escapeRegExp, SERVER } from "../lib/utils";
 import Papa from "papaparse";
 import Vue from "vue";
 import CountryCodeLookup from "country-code-lookup";
@@ -389,7 +389,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/assets/scss/variables.scss";
+@import "../assets/scss/variables.scss";
 .live-video-column {
   position: sticky;
   top: 0;

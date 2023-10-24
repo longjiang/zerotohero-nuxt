@@ -1,12 +1,3 @@
-<router>
-  {
-    name: 'error',
-    path: '/',
-    meta: {
-      skin: 'dark'
-    }
-  }
-</router>
 <template>
   <div
     :style="`min-height: 100vh; background-image: url(${background}); background-size: cover; background-position: center;`"
@@ -39,7 +30,7 @@
 </template>
 
 <script>
-import { background } from '@/lib/utils/background'
+import { background } from '../lib/utils/background'
 export default {
   props: ["error"],
   layout: "error",

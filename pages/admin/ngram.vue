@@ -59,7 +59,7 @@
 <script>
 import Vue from "vue";
 import he from "he";
-import { makeTextFile, characterClass, highlight } from "@/lib/utils";
+import { makeTextFile, characterClass, highlight } from "../../lib/utils";
 
 export default {
   props: {

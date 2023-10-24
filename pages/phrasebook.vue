@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { documentOffsetTop, elementHeight } from "@/lib/utils";
+import { documentOffsetTop, elementHeight } from "../lib/utils";
 
 export default {
   props: {

@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { shuffle } from '@/lib/utils'
+import { shuffle } from '../lib/utils'
 
 export default {
   props: {

@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import YouTube from "@/lib/youtube";
+import YouTube from "../lib/youtube";
 import { mapState } from "vuex";
 
 export default {

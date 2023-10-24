@@ -163,7 +163,7 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
-import { SPECIAL_LANGUAGES, makeTextFile } from "@/lib/utils";
+import { SPECIAL_LANGUAGES, makeTextFile } from "../lib/utils";
 
 export default {
   components: {

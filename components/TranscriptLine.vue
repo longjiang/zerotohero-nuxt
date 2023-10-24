@@ -117,7 +117,7 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import BeatLoader from "vue-spinner/src/BeatLoader.vue";
-import { highlightMultiple } from "@/lib/utils";
+import { highlightMultiple } from "../lib/utils";
 import { mapState } from "vuex";
 
 export default {

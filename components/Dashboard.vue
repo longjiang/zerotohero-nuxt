@@ -34,7 +34,7 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
-import { LANGS_WITH_CONTENT, SPECIAL_LANGUAGES } from "@/lib/utils";
+import { LANGS_WITH_CONTENT, SPECIAL_LANGUAGES } from "../lib/utils";
 
 export default {
   components: {

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { absoluteURL } from "@/lib/utils/url";
+import { absoluteURL } from "../lib/utils/url";
 
 export default {
   props: {
