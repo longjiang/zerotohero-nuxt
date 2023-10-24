@@ -6,18 +6,23 @@ class CompromiseInflector extends BaseInflector {
       case "eng":
         importScripts("../vendor/compromise@14.8.2/compromise.js");
         this.nlp = nlp;
+        break;
       case "fra":
         importScripts("../vendor/fr-compromise@b24c7ba/fr-compromise.min.js");
         this.nlp = frCompromise;
+        break;
       case "ita":
         importScripts("../vendor/it-compromise@38f40d4/it-compromise.min.js");
         this.nlp = itCompromise;
+        break;
       case "spa":
         importScripts("../vendor/es-compromise@2018e73/es-compromise.min.js");
         this.nlp = esCompromise;
+        break;
       case "deu":
         importScripts("../vendor/de-compromise@5a2275a/de-compromise.min.js");
         this.nlp = deCompromise;
+        break;
     }
   }
 
