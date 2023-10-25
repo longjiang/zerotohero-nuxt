@@ -83,7 +83,7 @@
           <router-link
             :key="`topic-${topic['en']}`"
             :to="{
-              name: 'youtube-search',
+              name: 'l1-l2youtube-search',
               params: { term: topic[$l2.code] || topic['en'], start: 0 },
             }"
             >{{ topic[$l2.code] || topic["en"] }}</router-link

@@ -59,7 +59,7 @@
         </client-only>
         <router-link
           v-if="$route.params.l1 && $route.params.l2"
-          :to="{ name: 'youtube-search' }"
+          :to="{ name: 'l1-l2youtube-search' }"
           :class="`btn top-bar-buttontop btn-unstyled link-unstyled mr-1`"
           title="Search Videos"
         >
