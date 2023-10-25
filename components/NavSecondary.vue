@@ -80,7 +80,6 @@ export default {
 
 
 .zth-nav-secondary {
-  width: 100vw;
   white-space: nowrap;
   text-align: center;
   padding-left: 1rem;

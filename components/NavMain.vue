@@ -11,7 +11,7 @@
       <nav class="main-nav">
         <Logo
           layout="horizontal"
-          v-if="variant === 'side-bar'"
+          v-if="variant === 'side-bar' && showLogo"
           style="margin-left: 1.25rem; margin-top: 2.5rem"
           :skin="$skin"
         />
@@ -35,10 +35,11 @@
           </template>
         </div>
         <div class="nav-side-bar-end" v-if="variant === 'side-bar'">
-          <VersionInfo class="mb-2 small" />
+          <VersionInfo class="mb-2 small" v-if="showLogo" />
           <b-button
             variant="unstyled collapse-toggle"
             @click="toggleCollapsed"
+            v-if="showLogo"
           >
             <span v-if="!collapsed">
               <i class="fa-solid fa-caret-left mr-1"></i>
@@ -96,8 +97,7 @@ export default {
     };
   },
   mounted() {
-    if (this.$route.meta.collapseNav)
-      this.collapsed = this.$route.meta.collapseNav;
+    if (typeof window !== 'undefined' && window.innerWidth < 900) this.collapsed = true;
     this.$emit("collapsed", this.collapsed);
     this.bindAutoHideBottomBarEvent();
   },
@@ -312,17 +312,18 @@ export default {
 
 
 
-.zerotohero-wide {
-  .zth-main-nav-wrapper {
-    &:not(.zth-nav-collapsed) {
-      width: 13rem;
-    }    
-    &.zth-nav-collapsed {
-      width: 5rem;
-      :deep(.word-mark) {
-        display: none;
-      }
-    }
+.zth-main-nav-wrapper {
+  &:not(.zth-nav-collapsed) {
+    width: 13rem;
+  }    
+}
+
+.zth-nav-collapsed {
+  .nav-side-bar {
+  width: 5rem;
+  :deep(.word-mark) {
+    display: none;
+  }
   }
 }
 </style>

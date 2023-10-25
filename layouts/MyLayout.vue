@@ -1,6 +1,6 @@
 // MyLayout.vue
 <template>
-  <div class="zerotohero-layout" :class="{fullscreen}">
+  <div class="zerotohero-layout" :class="{fullscreen, wide, tall, landscape, 'with-nav': withNav }">
     <!-- <FeedbackButton /> -->
     <HydrationNotice v-if="$route.path === '/'" />
     <client-only>
@@ -8,13 +8,14 @@
       <PopupDictionaryModal v-if="l1 && l2" />
       <TokenizedTextMenuModal v-if="l1 && l2" />
       <NavMain
-        v-if="!fullscreen && $route.params.l1 && $route.params.l2 && l1 && l2"
+        v-if="withNav"
         class="zth-main-nav-wrapper"
         :l1="l1"
         :l2="l2"
         :key="`nav-main-${l1.code}-${l2.code}`"
-        :variant="wide ? 'side-bar' : 'bottom-bar'"
+        :variant="wide || landscape ? 'side-bar' : 'bottom-bar'"
         :skin="$skin"
+        :showLogo="tall"
         @collapsed="updateCollapsed"
       />
       <SiteTopBar
@@ -52,13 +53,27 @@ export default {
       type: Boolean,
       default: false,
     },
+    tall: {
+      type: Boolean,
+      default: false,
+    },
+    landscape: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     ...mapState("settings", ["l2Settings", "l1", "l2", "fullscreen"]),
+    withNav() {
+      return !this.fullscreen && this.$route.params.l1 && this.$route.params.l2 && this.l1 && this.l2
+    },
     showTopBar() {
       if (this.fullscreen) return false; // Don't show top bar in browser's fullscreen mode (e.g. when a full-screen video is playing)
       if (this.$route.meta && this.$route.meta.layout === "full") return false;
       return true
+    },
+    showLogo() {
+      if (typeof window !== 'undefined' && window.innerHeight < 900) return false;
     },
   },
   mounted() {
@@ -118,8 +133,9 @@ export default {
   }
 }
 
-#zerotohero.zerotohero-with-nav {
-  &.zerotohero-wide .zerotohero-layout {
+#zerotohero {
+  .zerotohero-layout.with-nav.wide,
+  .zerotohero-layout.with-nav.landscape {
     grid-template-rows: auto auto 1fr;
     grid-template-columns: auto 1fr;
     grid-template-areas:
@@ -130,7 +146,8 @@ export default {
       grid-row: 1 / 4; /* This makes the nav area span two rows */
     }
   }
-  &.zerotohero-not-wide .zerotohero-layout {
+  
+  .zerotohero-layout.with-nav:not(.wide):not(.landscape) {
     grid-template-rows: auto auto 1fr auto;
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -138,16 +155,17 @@ export default {
       "secondarynav"
       "content"
       "nav";
+
   }
 
   &.route-video-view {
-    &.zerotohero-wide .zerotohero-layout {
+    .zerotohero-layout.with-nav.wide {
       grid-template-rows: auto 1fr;
       grid-template-areas:
         "nav topbar"
         "nav content";
     }
-    &.zerotohero-not-wide .zerotohero-layout {
+    .zerotohero-layout.with-nav:not(.wide) {
       grid-template-rows: auto 1fr auto;
       grid-template-areas:
         "topbar"
@@ -157,8 +175,8 @@ export default {
   }
 }
 
-#zerotohero:not(.zerotohero-with-nav) {
-  .zerotohero-layout {
+#zerotohero {
+  .zerotohero-layout:not(.with-nav) {
     grid-template-rows: auto 1fr;
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -166,4 +184,6 @@ export default {
       "content";
   }
 }
+
+
 </style>

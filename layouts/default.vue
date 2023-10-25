@@ -1,6 +1,6 @@
 <template>
   <div id="zerotohero" :class="classes" :fullscreen="fullscreen">
-    <MyLayout :wide="wide">
+    <MyLayout v-bind="{wide, tall, landscape}">
       <!-- Keep the epub reader alive so the user doesn't lose his ePub -->
       <Nuxt
         :class="{
@@ -18,7 +18,7 @@
 <script>
 import smoothscroll from "smoothscroll-polyfill";
 import MyLayout from "@/layouts/MyLayout.vue";
-import { wide, timeout } from "../lib/utils";
+import { wide, tall, landscape, timeout } from "../lib/utils";
 import { mapState } from "vuex";
 import { DelayHydration } from "nuxt-delay-hydration/dist/components";
 
@@ -30,6 +30,8 @@ export default {
   data() {
     return {
       wide: false,
+      tall: false,
+      landscape: false,
       focus: false,
       loaded: false,
       dictionaryCredit: "",
@@ -209,7 +211,7 @@ export default {
     },
     // Set client environment variables, like whether the user is using the app in a browser or in Electron
     setClientEnvironment() {
-      this.wide = wide();
+      this.onResize()
       smoothscroll.polyfill(); // Safari does not support smoothscroll
       if (typeof window !== "undefined")
         window.addEventListener("resize", this.onResize);
@@ -378,6 +380,8 @@ export default {
     },
     onResize() {
       this.wide = wide();
+      this.tall = tall();
+      this.landscape = landscape();
     },
     async updatei18n() {
       const locale = this.$l1?.code || this.$browserLanguage;
