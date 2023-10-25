@@ -276,11 +276,6 @@ export default {
           component: "./pages/_l1/_l2/youtube/playlist.vue",
         },
         {
-          name: "l1-l2-grammar-view-id",
-          path: "/:l1/:l2/grammar/view/:id",
-          component: "./pages/_l1/_l2/grammar/view/_id.vue",
-        },
-        {
           name: "l1-l2-gutenberg",
           path: "/:l1/:l2/gutenberg/:id/:page?/:title?",
           component: "./pages/_l1/_l2/gutenberg.vue",
@@ -372,6 +367,7 @@ export default {
       }
       routes.forEach(route => {
         route.props = true; // Enable props throughout
+        route.path = route.path?.replace('/:l2?', '/:l2'); // Make sure l2 is required
       });
     },
   },

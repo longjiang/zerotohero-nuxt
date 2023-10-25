@@ -6,7 +6,7 @@
         `site-top-bar-${skin}`,
         'draggable-region',
       ]"
-    >{{ $route.params }}
+    >
       <div class="site-top-bar-left">
         <b-button
           @click="$router.back()"
