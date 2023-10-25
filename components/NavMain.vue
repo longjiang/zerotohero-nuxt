@@ -39,7 +39,6 @@
           <b-button
             variant="unstyled collapse-toggle"
             @click="toggleCollapsed"
-            v-if="showLogo"
           >
             <span v-if="!collapsed">
               <i class="fa-solid fa-caret-left mr-1"></i>
@@ -107,9 +106,6 @@ export default {
   },
   watch: {
     $route() {
-      if (this.$route.meta.collapseNav)
-        this.collapsed = this.$route.meta.collapseNav;
-      else this.collapsed = false;
       this.hidden = false;
     },
     collapsed() {

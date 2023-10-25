@@ -58,7 +58,7 @@
             <template #cell(title)="data">
               <router-link
                 :to="{
-                  name: 'l1-l2-video-view',
+                  name: 'l1-l2-video-view-type',
                   params: { type: 'youtube', youtube_id: data.item.youtube_id },
                 }"
               >

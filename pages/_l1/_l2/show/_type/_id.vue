@@ -93,7 +93,7 @@
                       style="opacity: 0.6; line-height: 1.7"
                       v-if="randomEpisodeYouTubeId"
                       :to="{
-                        name: 'l1-l2-video-view',
+                        name: 'l1-l2-video-view-type',
                         params: {
                           type: 'youtube',
                           youtube_id: randomEpisodeYouTubeId,

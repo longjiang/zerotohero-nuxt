@@ -334,7 +334,7 @@ export default {
     this.dictionarySize = await this.getDictionarySize();
     // End tasks previously run on server
     if (
-      this.$route.name === "dictionary" &&
+      this.$route.name === "l1-l2-dictionary" &&
       this.$route.params.args === "random"
     ) {
       this.random();
@@ -350,12 +350,12 @@ export default {
             this.sW[currentIndex + 1] || this.sW[currentIndex - 1];
           if (nextSavedWord) {
             this.$router.push({
-              name: `dictionary`,
+              name: `l1-l2-dictionary`,
               params: { method: this.method, args: nextSavedWord.id },
             });
           } else if (this.sW.length > 0) {
             this.$router.push({
-              name: `dictionary`,
+              name: `l1-l2-dictionary`,
               params: { method: this.method, args: this.sW[0].id },
             });
           }
