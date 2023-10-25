@@ -92,8 +92,8 @@ export default {
     },
     to(language) {
       let name = LANGS_WITH_CONTENT.includes(language.code)
-        ? "recommended-video"
-        : "language-info";
+        ? "l1-l2-recommended-video"
+        : "l1-l2-language-info";
       return {
         name,
         params: { l1: this.getL1Code(language), l2: language.code },

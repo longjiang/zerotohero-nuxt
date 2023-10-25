@@ -100,7 +100,7 @@ export default {
       } else {
         if (this.$l1 && this.$l2)
           this.$router.push({
-            name: "profile",
+            name: "l1-l2-profile",
             params: { l1: this.$l1.code, l2: this.$l2.code },
           });
         else this.$router.push("/dashboard");

@@ -679,9 +679,11 @@ export default {
     goToPreviousItem() {
       if (this.previousItem)
         this.$router.push({
-          name: "video-view",
+          name: "l1-l2-video-view-type",
           params: {
             type: "youtube",
+            l1: this.$l1.code,
+            l2: this.$l2.code,
           },
           query: {
             v: this.previousItem.youtube_id,
@@ -695,9 +697,11 @@ export default {
     goToNextItem() {
       if (this.nextItem)
         this.$router.push({
-          name: "video-view",
+          name: "l1-l2-video-view-type",
           params: {
             type: "youtube",
+            l1: this.$l1.code,
+            l2: this.$l2.code,
           },
           query: {
             v: this.nextItem.youtube_id,

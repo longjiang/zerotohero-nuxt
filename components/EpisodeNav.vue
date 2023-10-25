@@ -141,7 +141,7 @@ export default {
   methods: {
     to(video) {
       return {
-        name: "video-view",
+        name: "l1-l2-video-view-type",
         params: {
           type: "youtube",
         },

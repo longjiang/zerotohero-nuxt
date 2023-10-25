@@ -121,7 +121,7 @@ export default {
     ...mapState("settings", ["muteAutoplay"]),
     to() {
       let to = {
-        name: "video-view",
+        name: "l1-l2-video-view-type",
         params: { type: "youtube" },
         query: { v: this.video.youtube_id },
       }

@@ -14,7 +14,7 @@ export default {
   },
   mounted() {
     if (this.category !== 'all' && isNaN(Number(this.category))) {
-      this.$router.push({ name: "audiobooks", params: { category: undefined } });
+      this.$router.push({ name: "l1-l2-audiobooks", params: { category: undefined } });
     }
   },
 };

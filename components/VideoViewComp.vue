@@ -96,7 +96,7 @@ export default {
   },
   computed: {
     showQuiz() {
-      return this.$l2Settings.showQuiz;
+      return this.$l2Settings?.showQuiz;
     },
     currentComponent() {
       switch (this.type) {
@@ -126,7 +126,7 @@ export default {
      */
     maximizeVideoTo() {
       return {
-        name: "video-view",
+        name: "l1-l2-video-view-type",
         params: {
           type: this.type,
         },
@@ -146,9 +146,9 @@ export default {
             h.includes(this.$l1.code + "/" + this.$l2.code) // Must be the same language!
         );
         if (lastNonYouTubeViewPath) return lastNonYouTubeViewPath;
-        else return { name: "recommended-video" };
+        else return { name: "l1-l2-recommended-video" };
       }
-      return { name: "recommended-video" };
+      return { name: "l1-l2-recommended-video" };
     },
     minimizeToggleRouterLinkTo() {
       return this.mini ? this.maximizeVideoTo : this.minimizeVideoTo;

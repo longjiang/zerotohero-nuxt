@@ -127,7 +127,7 @@ export default {
       let item = await this.$store.dispatch("savedText/add", { l2: this.$l2 });
       if (item) {
         this.$router.push({
-          name: "reader",
+          name: "l1-l2-reader",
           params: { method: "shared", arg: item.id },
         });
       }

@@ -124,7 +124,7 @@ export default {
     },
     to() {
       let to = {
-        name: "video-view",
+        name: "l1-l2-video-view-type",
         params: {
           type: "youtube",
           youtube_id: this.video.youtube_id,

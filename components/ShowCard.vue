@@ -101,11 +101,11 @@ export default {
     },
     to() {
       const showList = {
-        name: "show",
+        name: "l1-l2-show",
         params: { type: this.slug, id: this.show.id },
       };
       const firstEpisode = {
-        name: "video-view",
+        name: "l1-l2-video-view-type",
         params: { type: "youtube" },
         query: { v: this.show.youtube_id },
       };

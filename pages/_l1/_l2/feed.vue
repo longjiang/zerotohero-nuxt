@@ -53,7 +53,7 @@
             <client-only>
               <LazyIdenticalLanguages
                 class="mt-5 mb-5"
-                routeName="recommended-video"
+                routeName="l1-l2-recommended-video"
                 v-if="!loading"
               />
             </client-only>
@@ -342,7 +342,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/scss/variables.scss";
+@import "../../../assets/scss/variables.scss";
 .feed-item-wrapper {
   overflow: hidden;
   padding: 0.5rem;

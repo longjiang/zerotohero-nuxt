@@ -204,7 +204,7 @@ export default {
           duration: 1000,
         });
         this.$router.replace({
-          name: "youtube-playlist",
+          name: "l1-l2-youtube-playlist",
           params: { playlist_id },
         });
       } else if (youtube_id) {
@@ -212,7 +212,7 @@ export default {
           duration: 1000,
         });
         this.$router.replace({
-          name: "video-view",
+          name: "l1-l2-video-view-type",
           params: { type: "youtube" },
           query: { v: youtube_id },
         });

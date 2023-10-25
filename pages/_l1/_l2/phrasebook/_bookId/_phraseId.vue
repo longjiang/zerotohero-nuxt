@@ -276,11 +276,11 @@ export default {
       let route;
       if (this.bookId === "saved")
         route = {
-          name: "saved-phrases",
+          name: "l1-l2-saved-phrases",
         };
       else {
         route = {
-          name: "phrasebook",
+          name: "l1-l2-phrasebook",
           params: {
             bookId: String(this.phrasebook.id),
           },
@@ -428,7 +428,7 @@ export default {
       let phraseId = this.phraseId;
       if (nextSavedPhrase) {
         let route = {
-          name: "phrasebook-phrase",
+          name: "l1-l2-phrasebook-phrase",
           params: {
             bookId: "saved",
             phraseId,
@@ -438,7 +438,7 @@ export default {
         this.$router.push(route);
       } else if (savedPhrases.length > 0) {
         this.$router.push({
-          name: "phrasebook-phrase",
+          name: "l1-l2-phrasebook-phrase",
           params: {
             bookId: "saved",
             phraseId: "0",
@@ -447,7 +447,7 @@ export default {
         });
       } else {
         this.$router.push({
-          name: "home",
+          name: "l1-l2",
         });
       }
     },
@@ -458,7 +458,7 @@ export default {
       );
       let nextPhrase = this.phrasebook.phrases[nextPhraseId];
       let route = {
-        name: "phrasebook-phrase",
+        name: "l1-l2-phrasebook-phrase",
         params: {
           bookId: this.bookId,
           phraseId: String(nextPhrase.id),
@@ -518,7 +518,7 @@ export default {
         else await this.matchPhraseToDictionaryEntries();
       } else {
         this.$router.push({
-          name: "phrase",
+          name: "l1-l2-phrase-search",
           params: {
             term: this.phrase,
           },
@@ -624,7 +624,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/scss/variables.scss";
+@import "../../../../../assets/scss/variables.scss";
 .zerotohero-wide {
   .content-pane-left {
     overflow-y: auto;

@@ -62,8 +62,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { CATEGORIES, SLUG_TO_CATEGORY_ID } from '../../../lib/youtube';
+import { CATEGORIES, SLUG_TO_CATEGORY_ID } from '../../../../lib/youtube';
 
 export default {
   props: {
@@ -107,7 +106,3 @@ export default {
   },
 };
 </script>
-
-<style>
-  /* Add your styles here */
-</style>

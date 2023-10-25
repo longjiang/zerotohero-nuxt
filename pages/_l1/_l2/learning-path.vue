@@ -459,7 +459,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/scss/variables.scss";
+@import "../../../assets/scss/variables.scss";
 .l2-zh {
   .learning-path {
     .level {

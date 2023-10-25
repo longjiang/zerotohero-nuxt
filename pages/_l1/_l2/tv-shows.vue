@@ -16,7 +16,7 @@ export default {
   },
   mounted() {
     if (this.category !== 'all' && isNaN(Number(this.category))) {
-      this.$router.push({ name: "tv-shows", params: { category: undefined } });
+      this.$router.push({ name: "l1-l2-tv-shows", params: { category: undefined } });
     }
   },
 };

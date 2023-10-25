@@ -344,7 +344,7 @@ export default {
     },
     to() {
       let to = {
-        name: "video-view",
+        name: "l1-l2-video-view-type",
         params: {
           type: "youtube",
           l1: this.l1 ? this.l1.code : this.$l1 ? this.$l1.code : "en",

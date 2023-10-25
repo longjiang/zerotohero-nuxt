@@ -253,7 +253,7 @@ export default {
       const words = this.inputWords.split(/[\n,]+/).map(word => word.trim());
 
       // Log array of words
-      this.$router.push({ name: "learn", params: { method: 'adhoc', argsProp: words.join(',') } });
+      this.$router.push({ name: "l1-l2-learn", params: { method: 'adhoc', argsProp: words.join(',') } });
       this.$refs["import-modal"].hide();
     },
     updateLoaded(loaded) {
@@ -295,7 +295,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../assets/scss/variables.scss";
+@import "../../../assets/scss/variables.scss";
 
 .zerotohero-dark {
   .hide-defs {

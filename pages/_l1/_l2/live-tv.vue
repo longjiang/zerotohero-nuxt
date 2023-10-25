@@ -380,7 +380,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/scss/variables.scss";
+@import "../../../assets/scss/variables.scss";
 .live-video-column {
   position: sticky;
   top: 0;

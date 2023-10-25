@@ -240,7 +240,6 @@ import WordPhotos from "../../../lib/word-photos";
 import { ContainerQuery } from "vue-container-query";
 
 export default {
-  name: "dictionary-page",  // Added to resolve Vue warn - Invalid component name: "pages/dictionary.vue"
   components: {
     ContainerQuery,
   },

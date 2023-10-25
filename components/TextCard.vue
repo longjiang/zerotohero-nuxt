@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     to() {
-      let to = { name: "reader" };
+      let to = { name: "l1-l2-reader" };
       if (this.type === "remote")
         to.params = { method: "shared", arg: this.text.id };
       return to;

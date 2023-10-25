@@ -326,7 +326,7 @@ export default {
           let shared = res.data.data;
           this.shared = shared;
           this.$router.push({
-            name: "reader",
+            name: "l1-l2-reader",
             params: { method: "shared", arg: shared.id },
           });
         }
@@ -338,7 +338,7 @@ export default {
     },
     onPreviousPage() {
       let to = {
-        name: "reader",
+        name: "l1-l2-reader",
         params: {
           method: this.method,
           arg: this.arg,
@@ -351,7 +351,7 @@ export default {
     },
     goToPage(page) {
       let to = {
-        name: "reader",
+        name: "l1-l2-reader",
         params: {
           method: this.method,
           arg: this.arg,
@@ -364,7 +364,7 @@ export default {
     },
     onNextPage() {
       let to = {
-        name: "reader",
+        name: "l1-l2-reader",
         params: {
           method: this.method,
           arg: this.arg,
@@ -443,7 +443,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../assets/scss/variables.scss";
+@import "../../../assets/scss/variables.scss";
 .zerotohero-light {
   .share-banner {
     background-color: rgba($primary-color, 0.5);

@@ -130,7 +130,7 @@ export default {
           );
         });
       // Redirect to the playlists page
-      this.$router.push({ name: "my-playlists" });
+      this.$router.push({ name: "l1-l2-my-playlists" });
     },
   },
 };

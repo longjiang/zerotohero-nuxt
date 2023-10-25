@@ -56,7 +56,7 @@ export default {
   computed: {
     to() {
       let to = {
-        name: "live-tv",
+        name: "l1-l2-live-tv",
         query: {
           tvgID: this.channel.tvgID,
         },

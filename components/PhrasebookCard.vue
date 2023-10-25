@@ -62,7 +62,7 @@ export default {
       let to;
       if (this.phrasebook.index)
         to = {
-          name: "phrasebook-phrase",
+          name: "l1-l2-phrasebook-phrase",
           params: {
             bookId: String(this.phrasebook.id),
             phraseId: String(this.phrasebook.index),
@@ -70,7 +70,7 @@ export default {
         };
       else {
         to = {
-          name: "phrasebook",
+          name: "l1-l2-phrasebook",
           params: { bookId: String(this.phrasebook.id) },
         };
         if (this.progress) {

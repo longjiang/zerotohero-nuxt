@@ -712,7 +712,7 @@ export default {
             clearInterval(interval);
             // The computed property is truthy. Execute your logic here.
             if (this.$lastL1L2) this.$router.push({
-              name: "recommended-video",
+              name: "l1-l2-recommended-video",
               params: this.$lastL1L2,
             });
             this.showRedirectingLoader = false;

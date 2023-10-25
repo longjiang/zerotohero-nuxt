@@ -44,7 +44,7 @@ export default {
   methods: {
     to(categoryId) {
       return {
-        name: "category",
+        name: "l1-l2-category",
         params: {
           slug: this.categoryIdToSlug(categoryId)
         },

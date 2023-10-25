@@ -104,13 +104,13 @@ export default {
      */
     attributes() {
       let isSaved = this.savedWord || this.savedPhrase ? true : false;
-      let phonetics = this.$l2Settings.showPinyin ? this.bestPhonetics : false;
+      let phonetics = this.$l2Settings?.showPinyin ? this.bestPhonetics : false;
       let text = this.getDisplayText(this.text);
       let pos = this.pos;
       let definition, hanAnnotation, mappedPronunciation;
-      if (this.$l2Settings.showDefinition || this.$l2Settings.showQuickGloss)
+      if (this.$l2Settings?.showDefinition || this.$l2Settings?.showQuickGloss)
         definition = this.shortDefinition;
-      if (this.$l2Settings.showByeonggi && ["ko", "vi"].includes(this.$l2.code))
+      if (this.$l2Settings?.showByeonggi && ["ko", "vi"].includes(this.$l2.code))
         hanAnnotation = this.getHanAnnotation(this.bestWord);
       if (this.$l2.code === "ja")
         mappedPronunciation = this.getMappedPronunciation();
@@ -202,10 +202,10 @@ export default {
       return classes;
     },
     showQuickGloss() {
-      return !this.showDefinition && this.$l2Settings.showQuickGloss;
+      return !this.showDefinition && this.$l2Settings?.showQuickGloss;
     },
     showDefinition() {
-      return this.$l2Settings.showDefinition;
+      return this.$l2Settings?.showDefinition;
     },
   },
   mounted() {
@@ -233,7 +233,7 @@ export default {
   methods: {
     unique,
     showReading(segment) {
-      if (!this.$l2Settings.showPinyin) return false; // If the user doesn't want to see phonetics (pinyin), don't show it
+      if (!this.$l2Settings?.showPinyin) return false; // If the user doesn't want to see phonetics (pinyin), don't show it
       if (segment.type !== "kanji") return false; // segment.type is 'kanji' for all words, except those in Japanese that do not have kanji
       if (
         this.attributes?.mappedPronunciation?.length &&
@@ -284,11 +284,11 @@ export default {
       const text = this.text;
       let result = "";
       if (word) {
-        result = this.$l2Settings.useTraditional
+        result = this.$l2Settings?.useTraditional
           ? word.traditional
           : word.simplified;
       } else {
-        result = this.$l2Settings.useTraditional ? tify(text) : sify(text);
+        result = this.$l2Settings?.useTraditional ? tify(text) : sify(text);
       }
       return result;
     },

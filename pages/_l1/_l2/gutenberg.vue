@@ -164,7 +164,7 @@ export default {
     },
     goToPage(page) {
       let to = {
-        name: "gutenberg",
+        name: "l1-l2-gutenberg",
         params: {
           id: this.id,
           book: this.book,
@@ -176,7 +176,7 @@ export default {
     },
     onPreviousPage() {
       let to = {
-        name: "gutenberg",
+        name: "l1-l2-gutenberg",
         params: {
           id: this.id,
           book: this.book,
@@ -188,7 +188,7 @@ export default {
     },
     onNextPage() {
       let to = {
-        name: "gutenberg",
+        name: "l1-l2-gutenberg",
         params: {
           id: this.id,
           book: this.book,

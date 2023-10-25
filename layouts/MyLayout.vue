@@ -27,7 +27,7 @@
         v-if="!fullscreen && l1 && l2 && $route.params.l1 && $route.params.l2"
         :class="{
           'zth-secondary-nav-wrapper': true,
-          'd-none': $route.name === 'video-view',
+          'd-none': $route.name === 'l1-l2-video-view-type',
         }"
         variant="menu-bar"
         v-bind="{

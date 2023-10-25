@@ -90,7 +90,7 @@ export default {
     return {
       linguisticsTools: [
         {
-          name: "ling-language-map",
+          name: "language-map",
           title: `Map of Languages`,
           icon: "fas fa-globe-asia",
           show: true,
@@ -102,25 +102,25 @@ export default {
           show: true,
         },
         {
-          name: "ling-language-icons",
+          name: "language-icons",
           title: "Face of the Language",
           icon: "fas fa-user",
           show: true,
         },
         {
-          name: "ling-phonological-features",
+          name: "phonological-features",
           title: "Phonological Features",
           icon: "fas fa-lips",
           show: true,
         },
         {
-          name: "ling-compare-languages",
+          name: "compare-languages",
           title: "Compare Languages",
           icon: "fa-solid fa-arrow-right-arrow-left",
           show: true,
         },
         {
-          name: "ling-translators",
+          name: "translators",
           title: "Web Translators",
           icon: "fas fa-language",
           show: true,

@@ -34,15 +34,11 @@
 import { mapState } from "vuex";
 import {
   timeout,
-  uniqueByValue,
   languageLevels,
-  randomItemFromArray,
   LANGS_WITH_LEVELS,
-  LANGS_WITH_CONTENT,
 } from "../../../lib/utils";
 
 export default {
-  name: "recommended", // Added to resolve Vue warn - Invalid component name: "pages/explore-media.vue"
   data() {
     return {
       videos: undefined,
@@ -98,12 +94,12 @@ export default {
         !this.languageLevel
       )
         this.$router.replace({
-          name: "set-language-level",
+          name: "l1-l2-set-language-level",
           params: { l1: this.$l1.code, l2: this.$l2.code },
         });
       else if (this.settingsLoaded && this.preferredCategories.length === 0)
         this.$router.replace({
-          name: "set-content-preferences",
+          name: "l1-l2-set-content-preferences",
           params: { l1: this.$l1.code, l2: this.$l2.code },
         });
     },
@@ -115,7 +111,7 @@ export default {
       // let previousHistoryItem = this.fullHistory[this.fullHistory.length - 2];
       // if (previousHistoryItem?.path.includes(this.$l2.code + "/video-view")) {
       //   this.$router.push({
-      //     name: "explore-media",
+      //     name: "l1-l2-explore-media",
       //     params: { l1: this.$l1.code, l2: this.$l2.code },
       //   });
       //   return;
@@ -126,7 +122,7 @@ export default {
           this.recommendedVideos?.[this.$l2.code]?.[0];
         if (firstRecommendedVideo && typeof firstRecommendedVideo === "object")
           this.$router.replace({
-            name: "video-view",
+            name: "l1-l2-video-view-type",
             params: {
               type: "youtube",
             },
@@ -139,7 +135,7 @@ export default {
           return;
       }
       this.$router.replace({
-        name: "explore-media",
+        name: "l1-l2-explore-media",
         params: { l1: this.$l1.code, l2: this.$l2.code },
       });
       this.loading = false;
@@ -158,7 +154,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/scss/variables.scss";
+@import "../../../assets/scss/variables.scss";
 
 .media-section {
   padding-bottom: 2rem;

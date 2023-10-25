@@ -49,7 +49,7 @@ export default {
     },
   },
   mounted() {
-    this.$router.push({ name: "recommended-video" });
+    this.$router.push({ name: "l1-l2-recommended-video" });
   },
   methods: {
     hasDashboardUpdate(hasDashboard) {
@@ -79,9 +79,9 @@ export default {
         this.$hasFeature("dictionary") ||
         this.$hasFeature("transliteration")
       ) {
-        this.$router.push({ name: "reader" });
+        this.$router.push({ name: "l1-l2-reader" });
       } else {
-        this.$router.push({ name: "learning-path" });
+        this.$router.push({ name: "l1-l2-learning-path" });
       }
     },
   },

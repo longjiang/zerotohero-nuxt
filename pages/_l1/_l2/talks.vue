@@ -22,7 +22,7 @@ export default {
   },
   mounted() {
     if (this.category !== 'all' && isNaN(Number(this.category))) {
-      this.$router.push({ name: "talks", params: { category: undefined } });
+      this.$router.push({ name: "l1-l2-talks", params: { category: undefined } });
     }
   },
 };

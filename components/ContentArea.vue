@@ -31,7 +31,7 @@ export default {
   computed: {
     ...mapState("settings", ["l1", "l2"]),
     overlayPlayerMinimized() {
-      return this.$route.name !== "video-view";
+      return this.$route.name !== "l1-l2-video-view-type";
     },
     combinedLanguages() {
       return `${this.$l1?.code}-${this.$l2?.code}`;
@@ -58,7 +58,7 @@ export default {
       this.overlayPlayerLesson = undefined;
     },
     updateOverlayPlayerProps() {
-      if (this.$route.name === "video-view") {
+      if (this.$route.name === "l1-l2-video-view-type") {
         this.overlayPlayerType = this.$route.params.type
         this.overlayPlayerYouTubeId = this.$route.query.v || this.$route.params.youtube_id;
         this.overlayPlayerLesson = this.$route.query.lesson || this.$route.params.lesson;

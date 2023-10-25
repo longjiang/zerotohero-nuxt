@@ -33,7 +33,7 @@
               :l1="$l1"
               :l2="$l2"
               class="youtube-browse-nav mb-5 row"
-              :showOnly="['Discover', 'Music', 'TV Shows', 'Movies', 'YouTube', 'Live TV', 'News', 'Kids', 'Categories', 'Open MP4...', 'Import from YouTube']"
+              :showOnly="['Discover', 'Music', 'TV Shows', 'Movies', 'YouTube', 'Live TV', 'News', 'Audiobooks', 'Kids', 'Categories', 'Open MP4...', 'Import from YouTube']"
             />
           </client-only>
 
@@ -61,7 +61,7 @@
           <client-only>
             <LazyIdenticalLanguages
               class="mt-5 mb-5"
-              routeName="explore-media"
+              routeName="l1-l2-explore-media"
               v-if="!loading"
             />
           </client-only>
@@ -83,7 +83,7 @@ import {
 } from "../../../lib/utils";
 
 export default {
-  name: "explore-media", // Added to resolve Vue warn - Invalid component name: "pages/explore-media.vue"
+  name: "l1-l2-explore-media", // Added to resolve Vue warn - Invalid component name: "pages/explore-media.vue"
   data() {
     return {
       videos: undefined,
@@ -150,12 +150,12 @@ export default {
         !this.languageLevel
       )
         this.$router.replace({
-          name: "set-language-level",
+          name: "l1-l2-set-language-level",
           params: { l1: this.$l1.code, l2: this.$l2.code },
         });
       else if (this.settingsLoaded && this.preferredCategories.length === 0)
         this.$router.replace({
-          name: "set-content-preferences",
+          name: "l1-l2-set-content-preferences",
           params: { l1: this.$l1.code, l2: this.$l2.code },
         });
     },
@@ -234,7 +234,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/scss/variables.scss";
+@import "../../../assets/scss/variables.scss";
 
 .media-section {
   padding-bottom: 2rem;

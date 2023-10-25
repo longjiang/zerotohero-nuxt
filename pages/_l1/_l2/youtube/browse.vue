@@ -282,7 +282,7 @@ export default {
     },
     handleSearch($event) {
       this.$router.push({
-        name: "youtube-browse",
+        name: "l1-l2-youtube-browse",
         params: {
           category: this.category,
           level: this.level,
@@ -294,7 +294,7 @@ export default {
     },
     handleCategoryFilter(value) {
       this.$router.push({
-        name: "youtube-browse",
+        name: "l1-l2-youtube-browse",
         params: {
           category: value,
           level: this.level,
@@ -306,7 +306,7 @@ export default {
     },
     handleLevelFilter(value) {
       this.$router.push({
-        name: "youtube-browse",
+        name: "l1-l2-youtube-browse",
         params: {
           category: this.category,
           level: value,

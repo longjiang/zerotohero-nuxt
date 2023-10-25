@@ -125,7 +125,7 @@ export default {
   watch: {
     topicData() {
       this.$router.push({
-        name: "youtube-browse",
+        name: "l1-l2-youtube-browse",
         params: {
           topic: this.topicData,
           level: "all",

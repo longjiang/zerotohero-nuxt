@@ -92,7 +92,7 @@ export default {
     },
     learnCharacter(radical, index) {
       this.$router.push({
-        name: "learn",
+        name: "l1-l2-learn",
         params: {
           method: "adhoc",
           argsProp: radical.characters.map((c) => c.character).join(","),

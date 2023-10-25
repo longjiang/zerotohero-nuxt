@@ -21,7 +21,7 @@ export default {
           .replace("https://youtu.be/", "")
           .replace(/.*\?v=([^&]*).*/, "$1");
         this.$router.push({
-          name: "video-view",
+          name: "l1-l2-video-view-type",
           params: { type: "youtube" },
           query: { v: id },
         });
