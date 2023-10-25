@@ -32,7 +32,17 @@ export default {
   // aimed at deep component nesting. A parent component can "provide" properties,
   // and any nested child component can "inject" those properties without them
   // being passed through each level of the component tree.
-  inject: ["context", "animationDuration", "animationSpeed"],
+  inject: {
+    context: {
+      default: () => null,
+    },
+    animationSpeed: {
+      default: () => 1
+    },
+    animationDuration: {
+      default: () => null
+    }
+  },
   props: {
     text: {
       type: String,

@@ -138,7 +138,7 @@
         </Toggle>
         <hr />
         <div :class="`annotation-setting-toggle`" v-if="$l1 && $l2">
-          <router-link :to="{ name: 'settings' }" class="text-success">
+          <router-link :to="{ name: 'l1-l2-settings' }" class="text-success">
             <i class="fa-solid fa-gears annotation-setting-icon"></i
             >{{ $tb("More Settings") }}
             <i class="fa-solid fa-chevron-right"></i>

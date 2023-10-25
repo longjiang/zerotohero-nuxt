@@ -90,9 +90,9 @@
 </template>
 
 <script>
-import Grammar from "../../../../lib/grammar";
-import { l2LevelName } from "../../../../lib/utils";
-import WordPhotos from "../../../../lib/word-photos";
+import Grammar from "../../../../../lib/grammar";
+import { l2LevelName } from "../../../../../lib/utils";
+import WordPhotos from "../../../../../lib/word-photos";
 
 export default {
   props: {

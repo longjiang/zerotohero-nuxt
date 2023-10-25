@@ -223,147 +223,157 @@ export default {
 
   router: {
     middleware: ["language-switch", "redirectPaths"],
-    // extendRoutes(routes, resolve) {
-    //   const customRoutes = [
-    //     {
-    //       name: "assign-lesson-videos",
-    //       path: "/:l1/:l2/admin/assign-lesson-videos/:level?/:lesson?",
-    //       component: "./pages/admin/assign-lesson-videos",
-    //     },
-    //     {
-    //       name: "l1-l2-lesson-videos",
-    //       path: "/:l1/:l2/lesson-videos/:level?/:lesson?",
-    //       component: "./pages/_l1/_l2/lesson-videos",
-    //     },
-    //     {
-    //       name: "compare-languages",
-    //       path: "/compare-languages/:bookId?/:en?/:wiktionary?",
-    //       component: "./pages/compare-languages",
-    //     },
-    //     {
-    //       name: "l1-l2-reddit-articles",
-    //       path: "/:l1/:l2/articles/reddit/:method?/:args?",
-    //       component: "./pages/_l1/_l2/articles/reddit",
-    //     },
-    //     {
-    //       name: "l1-l2-wiki-articles",
-    //       path: "/:l1/:l2/articles/wiki/:method?/:args?",
-    //       component: "./pages/_l1/_l2/articles/wiki",
-    //     },
-    //     {
-    //       name: "l1-l2-audiobooks",
-    //       path: "/:l1/:l2/audiobooks/:category?/:tag?/:level?",
-    //       component: "./pages/_l1/_l2/audiobooks",
-    //     },
-    //     {
-    //       name: "l1-l2-book-index",
-    //       path: "/:l1/:l2/book/index",
-    //       component: "./pages/_l1/_l2/book/index",
-    //     },
-    //     {
-    //       name: "l1-l2-dictionary",
-    //       path: "/:l1/:l2/dictionary/:method?/:args?",
-    //       component: "./pages/_l1/_l2/dictionary",
-    //     },
-    //     {
-    //       name: "l1-l2-discover-shows",
-    //       path: "/discover-shows/:l1?/:l2?/:type?",
-    //       component: "./pages/discover-shows",
-    //     },
-    //     {
-    //       name: "l1-l2-youtube-playlist",
-    //       path: "/:l1/:l2/youtube/playlist/:playlist_id?/:title?",
-    //       component: "./pages/_l1/_l2/youtube/playlist.vue",
-    //     },
-    //     {
-    //       name: "l1-l2-grammar-view",
-    //       path: "/:l1/:l2/grammar/view/:id",
-    //       component: "./pages/_l1/_l2/grammar/view.vue",
-    //     },
-    //     {
-    //       name: "l1-l2-gutenberg",
-    //       path: "/:l1/:l2/gutenberg/:id/:page?/:title?",
-    //       component: "./pages/_l1/_l2/gutenberg.vue",
-    //     },
-    //     {
-    //       name: "l1-l2-separable",
-    //       path: "/:l1/:l2/separable/:method?/:args?",
-    //       component: "./pages/_l1/_l2/separable.vue",
-    //     },
-    //     {
-    //       name: "l1-l2-youtube-channel",
-    //       path: "/:l1/:l2/youtube/channel/:channel_id?/:title?",
-    //       component: "./pages/_l1/_l2/youtube/channel.vue",
-    //     },
+    extendRoutes(routes, resolve) {
+      const customRoutes = [
+        {
+          name: "assign-lesson-videos",
+          path: "/:l1/:l2/admin/assign-lesson-videos/:level?/:lesson?",
+          component: "./pages/admin/assign-lesson-videos",
+        },
+        {
+          name: "l1-l2-lesson-videos",
+          path: "/:l1/:l2/lesson-videos/:level?/:lesson?",
+          component: "./pages/_l1/_l2/lesson-videos",
+        },
+        {
+          name: "compare-languages",
+          path: "/compare-languages/:bookId?/:en?/:wiktionary?",
+          component: "./pages/compare-languages",
+        },
+        {
+          name: "l1-l2-reddit-articles",
+          path: "/:l1/:l2/articles/reddit/:method?/:args?",
+          component: "./pages/_l1/_l2/articles/reddit",
+        },
+        {
+          name: "l1-l2-wiki-articles",
+          path: "/:l1/:l2/articles/wiki/:method?/:args?",
+          component: "./pages/_l1/_l2/articles/wiki",
+        },
+        {
+          name: "l1-l2-audiobooks",
+          path: "/:l1/:l2/audiobooks/:category?/:tag?/:level?",
+          component: "./pages/_l1/_l2/audiobooks",
+        },
+        {
+          name: "l1-l2-book-index",
+          path: "/:l1/:l2/book/index",
+          component: "./pages/_l1/_l2/book/index",
+        },
+        {
+          name: "l1-l2-dictionary",
+          path: "/:l1/:l2/dictionary/:method?/:args?",
+          component: "./pages/_l1/_l2/dictionary",
+        },
+        {
+          name: "l1-l2-discover-shows",
+          path: "/discover-shows/:l1?/:l2?/:type?",
+          component: "./pages/discover-shows",
+        },
+        {
+          name: "l1-l2-youtube-playlist",
+          path: "/:l1/:l2/youtube/playlist/:playlist_id?/:title?",
+          component: "./pages/_l1/_l2/youtube/playlist.vue",
+        },
+        {
+          name: "l1-l2-grammar-view-id",
+          path: "/:l1/:l2/grammar/view/:id",
+          component: "./pages/_l1/_l2/grammar/view/_id.vue",
+        },
+        {
+          name: "l1-l2-gutenberg",
+          path: "/:l1/:l2/gutenberg/:id/:page?/:title?",
+          component: "./pages/_l1/_l2/gutenberg.vue",
+        },
+        {
+          name: "l1-l2-separable",
+          path: "/:l1/:l2/separable/:method?/:args?",
+          component: "./pages/_l1/_l2/separable.vue",
+        },
+        {
+          name: "l1-l2-youtube-channel",
+          path: "/:l1/:l2/youtube/channel/:channel_id?/:title?",
+          component: "./pages/_l1/_l2/youtube/channel.vue",
+        },
 
-    //     {
-    //       name: "l1-l2-video-view-type",
-    //       path: "/:l1/:l2/video-view/:type/:youtube_id?/:directus_id?/:lesson?",
-    //       component: "./pages/_l1/_l2/video-view/_type.vue",
-    //     },
-    //     {
-    //       name: "l1-l2-learn",
-    //       path: "/:l1/:l2/learn/:method?/:argsProp?/:index?",
-    //       component: "./pages/_l1/_l2/learn",
-    //     },
-    //     {
-    //       name: "l1-l2-page",
-    //       path: "/:l1/:l2/page/:id/:title?",
-    //       component: "./pages/_l1/_l2/page/_id",
-    //     },
-    //     {
-    //       name: "l1-l2-phrase",
-    //       path: "/:l1/:l2/phrase/search/:term?/:dict?",
-    //       component: "./pages/_l1/_l2/phrase/search",
-    //     },
-    //     {
-    //       name: "l1-l2-phrasebook",
-    //       path: "/:l1/:l2/phrasebook/:bookId/:phraseId/:phrase?",
-    //       component: "./pages/_l1/_l2/phrasebook/_bookId/_phraseId",
-    //     },
-    //     {
-    //       name: "l1-l2-tv-shows",
-    //       path: "/:l1/:l2/tv-shows/:category?/:tag?/:level?",
-    //       component: "./pages/_l1/_l2/tv-shows",
-    //     },
-    //     {
-    //       name: "l1-l2-reader",
-    //       path: "/:l1/:l2/reader/:method?/:arg?",
-    //       component: "./pages/_l1/_l2/reader",
-    //     },
-    //     {
-    //       name: "l1-l2-tutoring",
-    //       path: "/:l1/:l2/tutoring/:level?",
-    //       component: "./pages/_l1/_l2/tutoring",
-    //     },
-    //     {
-    //       name: "l1-l2-talks",
-    //       path: "/:l1/:l2/talks/:category?/:tag?/:level?",
-    //       component: "./pages/_l1/_l2/talks",
-    //     },
-    //     {
-    //       name: "l1-l2-resources",
-    //       path: "/:l1/:l2/resource/list/:topic?/:type?",
-    //       component: "./pages/_l1/_l2/resource/list",
-    //     },
-    //     {
-    //       name: "l1-l2-saved-phrases",
-    //       path: "/:l1/:l2/saved-phrases/:initId?",
-    //       component: "./pages/_l1/_l2/saved-phrases",
-    //     },
-    //   ];
+        {
+          name: "l1-l2-video-view-type",
+          path: "/:l1/:l2/video-view/:type/:youtube_id?/:directus_id?/:lesson?",
+          component: "./pages/_l1/_l2/video-view/_type.vue",
+        },
+        {
+          name: "l1-l2-learn",
+          path: "/:l1/:l2/learn/:method?/:argsProp?/:index?",
+          component: "./pages/_l1/_l2/learn",
+        },
+        {
+          name: "l1-l2-page",
+          path: "/:l1/:l2/page/:id/:title?",
+          component: "./pages/_l1/_l2/page/_id",
+        },
+        {
+          name: "l1-l2-phrase",
+          path: "/:l1/:l2/phrase/search/:term?/:dict?",
+          component: "./pages/_l1/_l2/phrase/search",
+        },
+        {
+          name: "l1-l2-phrasebook",
+          path: "/:l1/:l2/phrasebook/:bookId/:phraseId/:phrase?",
+          component: "./pages/_l1/_l2/phrasebook/_bookId/_phraseId",
+        },
+        {
+          name: "l1-l2-tv-shows",
+          path: "/:l1/:l2/tv-shows/:category?/:tag?/:level?",
+          component: "./pages/_l1/_l2/tv-shows",
+        },
+        {
+          name: "l1-l2-reader",
+          path: "/:l1/:l2/reader/:method?/:arg?",
+          component: "./pages/_l1/_l2/reader",
+        },
+        {
+          name: "l1-l2-tutoring",
+          path: "/:l1/:l2/tutoring/:level?",
+          component: "./pages/_l1/_l2/tutoring",
+        },
+        {
+          name: "l1-l2-talks",
+          path: "/:l1/:l2/talks/:category?/:tag?/:level?",
+          component: "./pages/_l1/_l2/talks",
+        },
+        {
+          name: "l1-l2-resources",
+          path: "/:l1/:l2/resource/list/:topic?/:type?",
+          component: "./pages/_l1/_l2/resource/list",
+        },
+        {
+          name: "l1-l2-saved-phrases",
+          path: "/:l1/:l2/saved-phrases/:initId?",
+          component: "./pages/_l1/_l2/saved-phrases",
+        },
+      ];
 
-    //   for (const route of customRoutes) {
-    //     routes.push({
-    //       name: route.name,
-    //       path: route.path,
-    //       component: resolve(__dirname, route.component),
-    //     });
-    //   }
-    //   routes.forEach(route => {
-    //     route.props = true; // Enable props throughout
-    //   });
-    // },
+      // Check if routes contain a custom route, if not, add it, otherwise update it
+      for (const route of customRoutes) {
+        const index = routes.findIndex((r) => r.name === route.name);
+        if (index === -1) {
+          routes.push({
+            name: route.name,
+            path: route.path,
+            component: resolve(__dirname, route.component),
+          });
+        } else {
+          routes[index] = {
+            ...routes[index],
+            path: route.path,
+            component: resolve(__dirname, route.component),
+          };
+        }
+      }
+      routes.forEach(route => {
+        route.props = true; // Enable props throughout
+      });
+    },
   },
 
   vue: {

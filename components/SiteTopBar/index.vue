@@ -6,7 +6,7 @@
         `site-top-bar-${skin}`,
         'draggable-region',
       ]"
-    >
+    >{{ $route.params }}
       <div class="site-top-bar-left">
         <b-button
           @click="$router.back()"
@@ -59,7 +59,7 @@
         </client-only>
         <router-link
           v-if="$route.params.l1 && $route.params.l2"
-          :to="{ name: 'l1-l2youtube-search' }"
+          :to="{ name: 'l1-l2-youtube-search' }"
           :class="`btn top-bar-buttontop btn-unstyled link-unstyled mr-1`"
           title="Search Videos"
         >

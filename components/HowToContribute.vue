@@ -6,7 +6,7 @@
         Open our
         <router-link
           :to="{
-            name: 'l1-l2youtube-search',
+            name: 'l1-l2-youtube-search',
             params: { term: `${$l2.name} language` },
           }"
         >
