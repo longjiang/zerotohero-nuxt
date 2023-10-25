@@ -45,7 +45,7 @@
 
       <router-link
         :to="{
-          name: 'video-view',
+          name: 'l1-l2-video-view',
           params: {
             type: 'youtube',
             l1: l1 ? l1.code : l1Code(randomShowRandomEpisodeL2Code),

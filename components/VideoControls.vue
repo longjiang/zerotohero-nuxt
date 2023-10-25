@@ -249,7 +249,7 @@
             <router-link
               v-else
               :to="{
-                name: 'show',
+                name: 'l1-l2-show',
                 params: {
                   type: showType === 'tv_show' ? 'tv-show' : 'talk',
                   id: show.id,

@@ -16,7 +16,7 @@
             <button :class="`btn btn-sm btn-${$skin} mr-1`" v-if="id > 1" @click="prevClick">
               <i class="fa fa-caret-left" />
             </button>
-            <router-link :to="{ name: 'grammar' }">
+            <router-link :to="{ name: 'l1-l2-grammar' }">
               {{
                 $t("Grammar {level} {code}", {
                   level: $t(l2LevelName),

@@ -98,7 +98,7 @@
         <div class="d-block text-right mt-3">
           <router-link
             router-link
-            :to="{ name: 'phrase', params: { term } }"
+            :to="{ name: 'l1-l2-phrase-search', params: { term } }"
             style="color: #999"
           >
             <i class="fa fa-search mr-2"></i>

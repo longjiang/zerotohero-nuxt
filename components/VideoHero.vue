@@ -53,7 +53,7 @@
                 <router-link
                   v-if="(video.tv_show || video.talk) && showEpisodes"
                   :to="{
-                    name: 'show',
+                    name: 'l1-l2-show',
                     params: {
                       id: video.tv_show || video.talk,
                       type: video.tv_show ? 'tv-show' : 'talk',

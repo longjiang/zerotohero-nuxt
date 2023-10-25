@@ -23,7 +23,7 @@
     <router-link
       v-if="show"
       :to="{
-        name: 'show',
+        name: 'l1-l2-show',
         params: {
           type: showType === 'tv_show' ? 'tv-show' : 'talk',
           id: show.id,
@@ -43,7 +43,7 @@
     <router-link
       v-if="episodes && episodes.length && show && !largeEpisodeCount"
       :to="{
-        name: 'show',
+        name: 'l1-l2-show',
         params: {
           type: showType === 'tv_show' ? 'tv-show' : 'talk',
           id: show.id,
@@ -67,7 +67,7 @@
     <router-link
       v-if="episodes && episodes.length > 0"
       :to="{
-        name: 'video-view',
+        name: 'l1-l2-video-view',
         params: {
           type: 'youtube',
           youtube_id: this.randomEpisodeYouTubeId,

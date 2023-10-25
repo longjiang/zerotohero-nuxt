@@ -156,7 +156,7 @@
               {{ channel.videos.length }} Videos:
               <router-link
                 :to="{
-                  name: 'video-view',
+                  name: 'l1-l2-video-view',
                   params: {
                     type: 'youtube',
                     youtube_id: channel.videos[0].youtube_id,

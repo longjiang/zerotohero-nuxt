@@ -33,7 +33,7 @@
       <div>
         <router-link
           data-level="outside"
-          :to="{ name: 'phrase', params: { term: text } }"
+          :to="{ name: 'l1-l2-phrase-search', params: { term: text } }"
           style="font-size: 1.5rem; font-weight: bold"
           >{{ text }} <i class="fa fa-chevron-right"></i
         ></router-link>

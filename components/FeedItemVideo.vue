@@ -12,7 +12,7 @@
           video && show
         "
         :to="{
-          name: 'show',
+          name: 'l1-l2-show',
           params: {
             type: video.tv_show ? 'tv-show' : 'talk',
             id: video.tv_show ? video.tv_show.id : video.talk.id,
