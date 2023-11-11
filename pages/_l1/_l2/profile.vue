@@ -51,13 +51,7 @@
                   ),
                 })
               }}
-              <i18n path="Cancel anytime by {emailing_us}.">
-                <template #emailing_us>
-                  <a href="mailto:jon.long@zerotohero.ca">{{
-                    $t("emailing us")
-                  }}</a>
-                </template>
-              </i18n>
+              <a href="https://billing.stripe.com/p/login/aEUeYr0Gu6GW9BSbII" target="_blank">{{ $t('Change or Cancel') }} <i class="fas fa-external-link-alt"></i></a>
             </div>
             <div
               v-if="
