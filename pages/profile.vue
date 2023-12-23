@@ -57,7 +57,7 @@
                   ),
                 })
               }}
-              <i18n path="Change or cancel through {stripe}.">
+              <i18n path="To change or cancel, go to {stripe}.">
                 <template #stripe>
                   <a href="https://billing.stripe.com/p/login/aEUeYr0Gu6GW9BSbII" target="_blank">{{
                     $t("Stripe")
