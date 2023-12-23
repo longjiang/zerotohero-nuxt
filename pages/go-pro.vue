@@ -21,8 +21,8 @@
       <div class="row">
         <div class="col-sm-12">
           <div v-if="SALE" class="text-white p-3 rounded text-center mb-5" style="max-width: 46rem; margin: 0 auto; font-size: 1.2em; background: red" >
-            <div><b>{{ $tb('{name} SALE!', {name: $tb('BLACK FRIDAY')}) }}</b> {{ $tb('{discount} on lifetime Pro account', { discount: $tb('30% off') }) }}</div>
-            <small style="text-small">{{ $tb('Offer ends:')}} {{ $db(new Date(2023, 10, 28), 'short') }}</small>
+            <div><b>{{ $tb('{name} SALE!', {name: $tb('YEAR END')}) }}</b> {{ $tb('{discount} on lifetime Pro account', { discount: $tb('30% off') }) }}</div>
+            <small style="text-small">{{ $tb('Offer ends:')}} {{ $db(new Date(2024, 0, 1), 'short') }}</small>
           </div>
           <client-only>
             <div class="mt-4"></div>
