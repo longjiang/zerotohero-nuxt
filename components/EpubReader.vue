@@ -88,7 +88,7 @@ export default {
       this.page = page;
       this.$nuxt.$emit("scroll-to", {
         top: 0,
-        behavior: "smooth",
+        behavior: "auto",
       });
     },
     onNextPage() {
