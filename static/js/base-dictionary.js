@@ -432,10 +432,6 @@ class BaseDictionary {
     return words;
   }
 
-  async getWordGroupsByLevelLessonDialog() {
-    // Only implemented for Chinese
-  }
-
   getNewHSK() {
     // Only implemented for Chinese
   }

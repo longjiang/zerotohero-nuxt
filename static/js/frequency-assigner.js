@@ -189,6 +189,9 @@ class FrequencyAssigner {
     filteredItems = filteredItems.sort((a, b) => {
       return b.frequency - a.frequency; // Sorting in descending order.
     });
+    
+    // Do not add lesson or dialog info if already exists (e.g. Chinese already has HSK lesson info)
+    if(filteredItems?.[0]?.lesson || filteredItems?.[0]?.dialog) return;
 
     let wordsByLevel = {};
 

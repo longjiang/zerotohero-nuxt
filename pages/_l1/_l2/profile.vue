@@ -51,7 +51,13 @@
                   ),
                 })
               }}
-              <a href="https://billing.stripe.com/p/login/aEUeYr0Gu6GW9BSbII" target="_blank">{{ $t('Change or Cancel') }} <i class="fas fa-external-link-alt"></i></a>
+              <i18n path="To change or cancel, go to {stripe}.">
+                <template #stripe>
+                  <a href="https://billing.stripe.com/p/login/aEUeYr0Gu6GW9BSbII" target="_blank">{{
+                    $t("Stripe")
+                  }}</a>
+                </template>
+              </i18n>
             </div>
             <div
               v-if="
@@ -221,7 +227,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { languageLevels, timeout, formatName } from "../../../lib/utils";
+import { languageLevels, timeout, formatName } from "@/lib/utils";
 
 export default {
   computed: {
@@ -323,7 +329,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../../../assets/scss/variables.scss";
+@import "~@/assets/scss/variables.scss";
 .goal {
   display: inline-block;
   width: 100%;
