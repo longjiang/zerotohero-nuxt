@@ -342,6 +342,7 @@ export default {
     },
   },
   mounted() {
+    this.linesPerPage = this.calculateLinesPerPage();
     this.voices = SpeechSingleton.instance.getVoices(this.$l2.code);
     this.bindKeys();
   },
@@ -373,6 +374,23 @@ export default {
   },
   methods: {
     stripTags,
+    /**
+     * Calculate the number of lines per page based on the length of the text.
+     * @returns {number} The number of lines per page.
+     */
+    calculateLinesPerPage() {
+      // Get the default
+      let linesPerPage = this.linesPerPage;
+
+      // If the text is longer than 1000 characters, adjust the number of lines per page
+      const maxCharCountPerPage = 2000;
+      let text = this.allLines.join("\n");
+      let idealPageCount = text.length / maxCharCountPerPage
+      if (idealPageCount > 1) {
+        linesPerPage = Math.ceil(this.allLines.length / idealPageCount);
+      }
+      return linesPerPage;
+    },
     speakPreviousSentence() {
       this.speakingLineIndex = Math.max(0, this.speakingLineIndex - 1);
       this.scrollToCurrentLine();
