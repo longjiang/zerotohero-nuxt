@@ -142,7 +142,12 @@ export default {
       );
 
       let concatenatedChapterHTML = await this.getConcatenatedChapterHTML(spine, startIndex, endIndex);
+
+      // Filter the chapter HTML to only include the current chapter
       let chapterHTML = this.getFilteredChapterHTML(concatenatedChapterHTML, this.currentChapterHref, tocHrefs);
+
+      // Only include the content of the body tag, and flatten any nested divs
+      chapterHTML = this.normalizeHTML(chapterHTML);
 
       this.currentChapterHTML = chapterHTML;
       this.page = 1;
@@ -199,6 +204,47 @@ export default {
       }
 
       return this.updateImageURLs(concatenatedChapterHTML);
+    },
+
+    /**
+     * Only include the content of the body tag, and flatten any nested divs
+     * @param {string} chapterHTML
+     */
+    normalizeHTML(chapterHTML) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(chapterHTML, "text/html");
+
+      const body = doc.getElementsByTagName("body")[0];
+
+      if (!body) {
+        return chapterHTML;
+      }
+
+      const newContainer = doc.createElement("div");
+
+      // Flatten any nested divs
+      for (const child of body.childNodes) {
+        if (child.nodeName === "DIV") {
+          for (const grandchild of child.childNodes) {
+            newContainer.appendChild(grandchild.cloneNode(true));
+          }
+        } else {
+          newContainer.appendChild(child.cloneNode(true));
+        }
+      }
+
+      // Remove any none-displayed elements
+      
+      const hiddenElements = newContainer.querySelectorAll(
+        "script, style, link, meta, title, head, noscript"
+      );
+      for (const el of hiddenElements) {
+        el.remove();
+      }
+
+      console.log(newContainer.innerHTML)
+
+      return newContainer.innerHTML;
     },
 
     getCurrentHrefAndIndex(tocHrefs, itemHref) {
