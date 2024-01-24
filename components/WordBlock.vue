@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { SpeechSingleton, unique, uniqueByValue, hasKanji } from "../lib/utils";
+import { SpeechSingleton, unique, uniqueByValue, hasKanji, timeout } from "../lib/utils";
 import { mapState } from "vuex";
 import { tify, sify } from "chinese-conv";
 import { transliterate as tr } from "transliteration";
@@ -73,7 +73,8 @@ export default {
       reveal: false,
       t: 0,
       animate: false,
-      animationDuration: undefined
+      animationDuration: undefined,
+      highlighted: false,
     };
   },
   computed: {
@@ -193,6 +194,7 @@ export default {
         saved: this.attributes?.isSaved,
         obscure: this.attributes?.obscure,
         animate: this.animate,
+        highlighted: this.highlighted
       };
       if (this.pos) classes[`pos-${this.pos}`] = true;
       return classes;
@@ -403,6 +405,7 @@ export default {
         this.russianAccentText = await this.getRussianAccentText();
     },
     async openPopup() {      
+      this.highlighted = true;
       if (this.$l2Settings.autoPronounce) {
         if (!this.quizMode || this.reveal) {
           this.playWordAudio();
@@ -424,7 +427,10 @@ export default {
       this.$nuxt.$emit("updatePopupDictionary", {
         words: this.words,
       });
-
+      this.$nuxt.$on("popupClosed", async () => {
+        await timeout(300);
+        this.highlighted = false;
+      });
     },
     playWordAudio() {
       const canGenerateSpeech =
@@ -744,4 +750,14 @@ rt {
     }
   }
 }
+
+.word-block {
+  transition: background-color 0.2s ease-in-out;
+}
+
+.word-block.highlighted {
+  background-color: #88888888;
+  color: white;  
+}
+
 </style>
