@@ -271,6 +271,11 @@ export default {
           component: "./pages/discover-shows",
         },
         {
+          name: "l1-l2-youtube-search-results",
+          path: "/:l1/:l2/youtube/search/:term?/:start?",
+          component: "./pages/_l1/_l2/youtube/search.vue",
+        },
+        {
           name: "l1-l2-youtube-playlist",
           path: "/:l1/:l2/youtube/playlist/:playlist_id?/:title?",
           component: "./pages/_l1/_l2/youtube/playlist.vue",
