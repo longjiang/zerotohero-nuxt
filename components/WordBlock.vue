@@ -36,7 +36,6 @@ import { SpeechSingleton, unique, uniqueByValue, hasKanji } from "../lib/utils";
 import { mapState } from "vuex";
 import { tify, sify } from "chinese-conv";
 import { transliterate as tr } from "transliteration";
-import WordPhotos from "../lib/word-photos";
 import Klingon from "../lib/klingon";
 
 export default {
@@ -63,9 +62,7 @@ export default {
       open: false,
       showPhrase: {},
       lookupInProgress: false,
-      loadingImages: false,
       text: this.token.text,
-      images: [],
       words: this.token?.candidates || [],
       savedWord: undefined,
       savedPhrase: undefined,
@@ -405,19 +402,6 @@ export default {
       if (this.$l2.code === "ru")
         this.russianAccentText = await this.getRussianAccentText();
     },
-    async loadImages() {
-      if (this.images.length === 0) {
-        let images = (
-          await WordPhotos.getGoogleImages({
-            term: this.token ? this.token.text : this.text,
-            lang: this.$l2.code,
-          })
-        ).slice(0, 5);
-        this.images = images;
-      }
-      this.loadingImages = false;
-      return this.images // to pass to popup as a promise
-    },
     async openPopup() {      
       if (this.$l2Settings.autoPronounce) {
         if (!this.quizMode || this.reveal) {
@@ -431,22 +415,14 @@ export default {
         context: this.context,
         phraseObj: this.phraseItem(this.text),
         words: this.words,
-        images: this.images,
         info: this.quizModeItem ? "Tap to show answer." : undefined,
       });
-      // Load the images and do lookup
-      let promises = []
       let needToLookUp = this.lookupInProgress === false && !(this.words?.length > 0)
       if (needToLookUp) {
-        promises.push(this.lookup())
+        await this.lookup()
       }
-      if (!this.images?.length) {
-        promises.push(this.loadImages())
-      }
-      await Promise.all(promises)
       this.$nuxt.$emit("updatePopupDictionary", {
         words: this.words,
-        images: this.images,
       });
 
     },

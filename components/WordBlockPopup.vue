@@ -240,6 +240,7 @@
 import { transliterate as tr } from "transliteration";
 import { IMAGE_PROXY } from "../lib/config";
 import { timeout, PYTHON_SERVER, LANGS_WITH_AZURE_TRANSLATE, languageLevels } from "../lib/utils";
+import WordPhotos from "../lib/word-photos";
 import Klingon from "../lib/klingon";
 import pinyin2ipa from "pinyin2ipa";
 
@@ -248,7 +249,6 @@ export default {
     text: String,
     words: Array,
     token: Object,
-    images: Array,
     transliterationprop: String,
     phraseObj: Object,
     loading: {
@@ -274,6 +274,7 @@ export default {
       IMAGE_PROXY,
       entryClasses: { "tooltip-entry": true }, // Other classes are added upon update
       levels: undefined,
+      images: [],
     };
   },
   computed: {
@@ -296,13 +297,27 @@ export default {
     if (this.$l2) this.entryClasses[`l2-${this.$l2.code}`] = true;
     if (this.$l2.han) this.entryClasses["l2-zh"] = true;
     if (this.$l2) this.levels = languageLevels(this.$l2);
+    this.loadImages();
     if (!this.preciseMatchFound) {
       await timeout(1000);
-      if (LANGS_WITH_AZURE_TRANSLATE.includes(this.$l2.code)) this.translate(this.text);
+      if (!this.preciseMatchFound && LANGS_WITH_AZURE_TRANSLATE.includes(this.$l2.code)) this.translate(this.text);
     }
   },
   methods: {
     tr,
+    async loadImages() {
+      if (this.images.length === 0) {
+        let images = (
+          await WordPhotos.getGoogleImages({
+            term: this.token ? this.token.text : this.text,
+            lang: this.$l2.code,
+          })
+        ).slice(0, 5);
+        this.images = images;
+      }
+      this.loadingImages = false;
+      return this.images // to pass to popup as a promise
+    },
     async translate(text) {
       let translator = this.$languages.getTranslator(this.$l1, this.$l2) || [];
       this.translation = await translator.translateWithBing({
