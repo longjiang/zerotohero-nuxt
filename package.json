@@ -141,7 +141,7 @@
     "eslint": "^7.22.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-vue": "^7.7.0",
-    "node-sass": "npm:sass@^1.54.4",
+    "node-sass": "8",
     "raw-loader": "^4.0.2",
     "vue-jest": "^3.0.4"
   }
