@@ -17,7 +17,7 @@ const TokenizerFactory = {
       // 'deu',
       // 'ell',
       // 'eng',
-      // 'spa',
+      'spa',
       // 'fin',
       // 'fra',
       // 'hrv',

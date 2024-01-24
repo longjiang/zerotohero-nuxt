@@ -56,6 +56,11 @@
         {{ translation }}
         <small class="text-muted"> ({{ $t("machine translated") }}) </small>
       </div>
+      <div class="context small">
+        <hr />
+        <div><span v-html="highlight(this.immediateContext, this.text, 'outside')" /></div>
+        <div class="mt-2"><Translate :text="immediateContext" /></div>
+      </div>
       <hr class="mt-2 mb-2" />
     </div>
     <div
@@ -223,15 +228,21 @@
       </div>
       <div class="mt-2 mb-2" />
     </div>
+    <hr />
+    <div class="context small">
+      <div><span v-html="highlight(this.immediateContext, this.text, 'outside')" /></div>
+      <div class="mt-2"><Translate :text="immediateContext" /></div>
+    </div>
+    <hr />
     <div v-if="loading === true">
       <Loader :sticky="true" message="Looking up the dictionary..." />
     </div>
-    <TranslatorLinks v-bind="{ text }" class="mt-2" />
+    <TranslatorLinks v-bind="{ text }" class="mt-2 small" />
     <LookUpIn
       v-if="text || (token && token.candidates && token.candidates[0])"
       :term="text ? text : token.candidates[0].head"
       :sticky="false"
-      class="mt-2"
+      class="mt-2 small"
     />
   </div>
 </template>
@@ -243,6 +254,7 @@ import { timeout, PYTHON_SERVER, LANGS_WITH_AZURE_TRANSLATE, languageLevels } fr
 import WordPhotos from "../lib/word-photos";
 import Klingon from "../lib/klingon";
 import pinyin2ipa from "pinyin2ipa";
+import  { breakSentences, highlight } from "../lib/utils";
 
 export default {
   props: {
@@ -271,6 +283,7 @@ export default {
   data() {
     return {
       translation: undefined,
+      immediateContextTranslation: undefined,
       IMAGE_PROXY,
       entryClasses: { "tooltip-entry": true }, // Other classes are added upon update
       levels: undefined,
@@ -278,6 +291,15 @@ export default {
     };
   },
   computed: {
+    /**
+     * The `context` attribute can have many sentences. This find the sentence (the immediate context) that contains the word.
+     */
+    immediateContext() {
+      if (!this.context?.text) return undefined;
+      let sentences = breakSentences(this.context.text);
+      let sentencesWithText = sentences.filter((s) => s.includes(this.text));
+      return sentencesWithText.length ? sentencesWithText[0] : this.context.text;
+    },
     preciseMatchFound() {
       let tokenCandidatesFound = this.token && this.token.candidates && this.token.candidates.length > 0;
       if (tokenCandidatesFound) return true;
@@ -305,6 +327,7 @@ export default {
   },
   methods: {
     tr,
+    highlight,
     async loadImages() {
       if (this.images.length === 0) {
         let images = (
