@@ -214,6 +214,8 @@ export default {
     marked() {
       let text = this.textThrottled || this.text;
       let augmentedText = text.replace(/^ {4,}/gm, ""); // remove 4+ spaces, which in markdown is a code block
+      // Replace one or more newlines with 2 newlines, which in markdown is a paragraph break
+      augmentedText = augmentedText.replace(/\n+/g, "\n\n");
       Marked.setOptions({
         breaks: true
       });

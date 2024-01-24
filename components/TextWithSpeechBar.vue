@@ -138,6 +138,8 @@
             ref="tokenizedRichTexts"
             class="w-100"
             @click="this.focusLineIndex = lineIndex"
+            @translation="onTranslation($event, lineIndex)"
+            @translationLoading="onTranslationLoading($event, lineIndex)"
             ><span v-html="line"></span>
           </TokenizedRichText>
           <div
