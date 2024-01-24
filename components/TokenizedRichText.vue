@@ -289,7 +289,7 @@ export default {
 </script>
 <style lang="scss">
 .annotate-translation {
-  opacity: 0.5;
+  opacity: 0.7;
   font-size: 0.8rem;
 }
 </style>

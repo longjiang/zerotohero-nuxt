@@ -5,7 +5,6 @@
     </div>
     <template v-else>
       <ruby
-        :data-hover-level="(attributes && attributes.level) || 'outside'"
         v-for="(segment, index) in attributes && attributes.mappedPronunciation || [
           { type: 'kanji', surface: text, reading: attributes && attributes.phonetics },
         ]"
