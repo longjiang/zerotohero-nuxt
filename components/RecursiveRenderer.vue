@@ -9,17 +9,16 @@
       ref="tokenizedTexts"
     />
   </span>
-
+  
   <!-- Base case: if the node is type 'code' or 'pre', or any of the non-text types like images, render it as is -->
   <span
     v-else-if="
-      ['code', 'pre', 'image', 'video', 'audio', 'iframe', 'hr', 'br'].includes(
+      ['code', 'pre', 'image', 'video', 'audio', 'iframe', 'hr', 'br', 'img'].includes(
         node.type
       )
     "
-  >
-    <div :is="node.type" v-html="node.element.outerHTML" />
-  </span>
+     v-html="node.element.outerHTML"
+  />
   <!-- For custom components, use vue-runtime-template -->
   <span v-else-if="['popupnote'].includes(node.type)">
     <v-runtime-template v-once :template="node.element.outerHTML" />
