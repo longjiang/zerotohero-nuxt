@@ -1,12 +1,5 @@
 <template>
-  <span
-    class="use-zoom"
-    :class="{ 'speaking': speaking }"
-    v-observe-visibility="{
-      callback: visibilityChanged,
-      once: true,
-    }"
-  >
+  <span class="use-zoom" :class="{ speaking: speaking }">
     <template v-if="tokenized">
       <template v-for="(token, index) in tokens">
         {{ typeof token === "string" ? token : "" }}
@@ -19,7 +12,15 @@
         />
       </template>
     </template>
-    <template v-else>{{ sanitizedText }}</template>
+    <template v-else
+      ><span
+        v-observe-visibility="{
+          callback: visibilityChanged,
+          once: true,
+        }"
+        >{{ sanitizedText }}</span
+      ></template
+    >
   </span>
 </template>
 
@@ -37,11 +38,11 @@ export default {
       default: () => null,
     },
     animationSpeed: {
-      default: () => 1
+      default: () => 1,
     },
     animationDuration: {
-      default: () => null
-    }
+      default: () => null,
+    },
   },
   props: {
     text: {
@@ -70,7 +71,10 @@ export default {
   methods: {
     async speak() {
       this.speaking = true;
-      await SpeechSingleton.instance.speak({l2: this.$l2, text: this.sanitizedText });
+      await SpeechSingleton.instance.speak({
+        l2: this.$l2,
+        text: this.sanitizedText,
+      });
       this.speaking = false;
       return true;
     },

@@ -2,7 +2,7 @@
   <!-- Base case: if node is a text node, render it -->
   <span v-if="node.type === 'text'">
     <TokenizedText
-      v-for="(sentence, index) in tokenizeText(node.text)"
+      v-for="(sentence, index) in breakSentencesAndTokenizeText(node.text)"
       :key="index"
       :text="sentence"
       v-on="$listeners"
@@ -116,10 +116,14 @@ export default {
         this.$emit(event.name, event.payload);
       }
     },
-    tokenizeText(text) {
-      // Use sbd library to tokenize the text into sentences
-      const sentences = sbd.sentences(text);
-      return sentences;
+    breakSentencesAndTokenizeText(text) {
+      // Sentence-breaking leads to large number of tokenization server requests, turning off for now...
+      // // Use sbd library to tokenize the text into sentences
+      // const sentences = sbd.sentences(text);
+      // return [sentences];
+
+      // Return the text as-is instead
+      return [ text ];
     },
   },
 };
