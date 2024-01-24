@@ -12,9 +12,14 @@
         ref="textarea"
         :value="sanitizedText"
       ></textarea>
-      <div class="flex-1 w-100" v-else>
+      <div
+        class="flex-1 w-100"
+        :class="{ 'annotate-with-translation': translationData }"
+        v-else
+      >
         <!-- If there's text or a text node -->
         <div
+          class="annotate-text"
           style="flex: 1"
           v-if="
             editedText ||
@@ -33,12 +38,19 @@
         </div>
 
         <!-- If processedNode is a non-text node, render it -->
-        <div v-else-if="processedNode && processedNode.type !== 'text'">
-          <RecursiveRenderer :node="processedNode" v-on="$listeners" ref="recursiveRenderer" />
+        <div
+          v-else-if="processedNode && processedNode.type !== 'text'"
+          class="annotate-text"
+        >
+          <RecursiveRenderer
+            :node="processedNode"
+            v-on="$listeners"
+            ref="recursiveRenderer"
+          />
         </div>
 
         <!-- Default case: render the slot content -->
-        <div v-else>
+        <div v-else class="annotate-text">
           <slot></slot>
         </div>
         <!-- the translation -->
@@ -53,7 +65,7 @@
       <!-- Action Button -->
       <SimpleButton
         iconClass="fa fa-ellipsis-v"
-        style="display: flex; align-items: flex-start; padding-top: 0.5rem;"
+        style="display: flex; align-items: flex-start; padding-top: 0.5rem"
         @click="showModal"
         :title="$t('Actions')"
         v-if="showMenu"
@@ -172,13 +184,13 @@ export default {
   },
   methods: {
     highlightFirstSentence() {
-      const comp = this.$refs.recursiveRenderer
+      const comp = this.$refs.recursiveRenderer;
       if (comp) {
         comp.highlightFirstSentence();
       }
     },
     removeHighlight() {
-      const comp = this.$refs.recursiveRenderer
+      const comp = this.$refs.recursiveRenderer;
       if (comp) {
         comp.removeHighlight();
       }
@@ -275,3 +287,9 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.annotate-translation {
+  opacity: 0.5;
+  font-size: 0.8rem;
+}
+</style>

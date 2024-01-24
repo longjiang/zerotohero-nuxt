@@ -47,6 +47,7 @@ export default {
       epubFileName: undefined,
       coverUrl: null,
       coverTapped: false,
+      translation: null,
     };
   },
   head() {
@@ -241,8 +242,6 @@ export default {
       for (const el of hiddenElements) {
         el.remove();
       }
-
-      console.log(newContainer.innerHTML)
 
       return newContainer.innerHTML;
     },
