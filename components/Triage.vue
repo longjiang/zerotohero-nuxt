@@ -22,7 +22,7 @@
           <router-link
             class="btn btn-success pl-5 pr-5"
             :to="{
-              name: 'recommended-video',
+              name: DEFAULT_PAGE,
               params: { l1: l1.code, l2: l2.code === 'cmn' ? 'zh' : l2.code },
             }"
           >
@@ -44,13 +44,14 @@
 
 <script>
 import { country } from "@/lib/utils/countries";
-import { LANGS_WITH_CONTENT } from '@/lib/utils';
+import { LANGS_WITH_CONTENT, DEFAULT_PAGE } from '@/lib/utils';
 
 export default {
   data() {
     return {
       l1: undefined, // Object
       l2: undefined, // Object
+      DEFAULT_PAGE,
       popularCodes:
         "en zh ko it es fr de ja pt ru".split(
           " "

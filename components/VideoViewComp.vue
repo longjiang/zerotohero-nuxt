@@ -58,8 +58,7 @@
 </template>
 
 <script>
-import { scrollToTargetAdjusted, wide } from "@/lib/utils";
-import { mapState } from "vuex";
+import { scrollToTargetAdjusted, wide, DEFAULT_PAGE } from "@/lib/utils";
 
 export default {
   props: {
@@ -146,9 +145,9 @@ export default {
             h.includes(this.$l1.code + "/" + this.$l2.code) // Must be the same language!
         );
         if (lastNonYouTubeViewPath) return lastNonYouTubeViewPath;
-        else return { name: "recommended-video" };
+        else return { name: DEFAULT_PAGE };
       }
-      return { name: "recommended-video" };
+      return { name: DEFAULT_PAGE };
     },
     minimizeToggleRouterLinkTo() {
       return this.mini ? this.maximizeVideoTo : this.minimizeVideoTo;

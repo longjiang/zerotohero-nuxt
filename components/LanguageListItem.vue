@@ -22,7 +22,7 @@
       </router-link>
       <router-link
         :to="{
-          name: 'recommended-video',
+          name: DEFAULT_PAGE,
           params: { l1: from || english, l2: language.code },
         }"
         :class="{
@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import { formatK } from "@/lib/utils";
+import { formatK, DEFAULT_PAGE } from "@/lib/utils";
 
 export default {
   props: {
@@ -149,6 +149,7 @@ export default {
   },
   data() {
     return {
+      DEFAULT_PAGE,
       base: this.languagePath(this.language),
     };
   },

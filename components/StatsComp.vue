@@ -94,7 +94,7 @@
             <td>
               <router-link
                 :to="{
-                  name: 'recommended-video',
+                  name: DEFAULT_PAGE,
                   params: {
                     l1: supportedL1s(
                       row.language['iso639-3'],
@@ -146,7 +146,7 @@
 </template>
 
 <script>
-import { proxy, LP_DIRECTUS_TOOLS_URL } from "@/lib/utils";
+import { proxy, LP_DIRECTUS_TOOLS_URL, DEFAULT_PAGE } from "@/lib/utils";
 
 export default {
   props: {
@@ -165,6 +165,7 @@ export default {
     previousLanguageData: [],
     languageData: [],
     gettingStats: false,
+    DEFAULT_PAGE,
   }),
   async mounted() {
     if (process.client) {

@@ -80,7 +80,7 @@
             {{ $t("You haven't studied any {l2} videos yet.", {l2: l2 ? $t(l2.name) : ""}) }}
             <br />
             <br />
-            <router-link :to="{ name: 'recommended-video' }" class="btn btn-success">
+            <router-link :to="{ name: DEFAULT_PAGE }" class="btn btn-success">
               <i class="fas fa-play mr-1"></i>
               {{ $t('Start Watching') }}
             </router-link>
@@ -94,7 +94,7 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
-import { groupArrayBy } from "@/lib/utils";
+import { groupArrayBy, DEFAULT_PAGE } from "@/lib/utils";
 
 export default {
   components: {
@@ -126,6 +126,7 @@ export default {
   },
   data() {
     return {
+      DEFAULT_PAGE,
       params: {},
       query: {
         xs: {

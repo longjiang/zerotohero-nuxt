@@ -93,7 +93,7 @@
                   </router-link>
                   <router-link
                     class="index-nav-item btn btn-success"
-                    :to="{ name: 'recommended-video', params: $lastL1L2 }"
+                    :to="{ name: DEFAULT_PAGE, params: $lastL1L2 }"
                     v-if="$auth.loggedIn && $lastL1L2"
                   >
                     {{ languageName($lastL1L2) }}
@@ -156,7 +156,7 @@
                     </p>
                     <router-link
                       class="btn btn-success"
-                      :to="{ name: 'recommended-video', params: $lastL1L2 }"
+                      :to="{ name: DEFAULT_PAGE, params: $lastL1L2 }"
                       v-if="$lastL1L2"
                     >
                       {{ $tb("Go to {l2}", { l2: languageName($lastL1L2) }) }}
@@ -623,10 +623,12 @@
 import { Capacitor } from "@capacitor/core";
 import { mapState } from "vuex";
 import { background } from "@/lib/utils/background";
+import { DEFAULT_PAGE } from "@/lib/utils";
 
 export default {
   data() {
     return {
+      DEFAULT_PAGE,
       sale: false,
       playBtnClicked: false,
       langKeyword: undefined,
@@ -722,7 +724,7 @@ export default {
             clearInterval(interval);
             // The computed property is truthy. Execute your logic here.
             if (this.$lastL1L2) this.$router.push({
-              name: "recommended-video",
+              name: DEFAULT_PAGE,
               params: this.$lastL1L2,
             });
             this.showRedirectingLoader = false;

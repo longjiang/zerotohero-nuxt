@@ -34,7 +34,7 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
-import { LANGS_WITH_CONTENT, SPECIAL_LANGUAGES } from "@/lib/utils";
+import { LANGS_WITH_CONTENT, SPECIAL_LANGUAGES, DEFAULT_PAGE } from "@/lib/utils";
 
 export default {
   components: {
@@ -92,7 +92,7 @@ export default {
     },
     to(language) {
       let name = LANGS_WITH_CONTENT.includes(language.code)
-        ? "recommended-video"
+        ? DEFAULT_PAGE
         : "language-info";
       return {
         name,
