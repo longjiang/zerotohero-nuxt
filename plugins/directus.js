@@ -235,7 +235,7 @@ export default ({ app }, inject) => {
         params = parseQueryString(query);
       }
       let fields = 'id,l2,title,youtube_id,tv_show,talk,date,lex_div,word_freq,difficulty,views,category,locale,duration,made_for_kids,views,likes,comments,type';
-      if (subs) fields += ',subs_l2';
+      if (subs) fields += ',subs_l2,subs_l1';
       if (tags) fields += ',tags';
       params.fields = params.fields || fields;
       // No language filter is necessary since the table only has one language

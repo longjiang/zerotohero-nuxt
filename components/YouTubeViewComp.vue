@@ -335,6 +335,7 @@ export default {
 
       // Retrieve video info and subs from our database
       const video = await this.getVideoFromDB(youtube_id, directus_id);
+      console.log({video})
 
       this.loadTokenizationServerCache(video);
       this.video = video || this.video;
@@ -505,6 +506,7 @@ export default {
       if (!video && youtube_id) {
         let videos = await this.$directus.getVideos({
           l2Id: this.$l2.id,
+          subs: true,
           query: `filter[youtube_id][eq]=${youtube_id}`,
         });
         if (videos?.length > 0) video = videos[0];
