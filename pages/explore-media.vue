@@ -48,7 +48,7 @@
             playlistId="recommended"
           />
 
-          <div v-observe-visibility="visibilityChanged" class="text-center" v-if="recommendedVideos?.[$l2.code]?.length" >
+          <div v-observe-visibility="visibilityChanged" class="text-center" v-if="!this.recommendedVideosLoaded[this.$l2.code] || recommendedVideos?.[$l2.code]?.length" >
             <Loader
               key="rec-loader"
               :sticky="true"
@@ -58,7 +58,7 @@
               class="text-white"
             />
           </div>
-          <div v-else>
+          <div v-else-if="!recommendedVideos?.[$l2.code]?.length">
             <p>We have limited content for {{ $l2.name}}. Below are all the videos in our library: </p>
             <MediaSearchResults  />  
           </div>
