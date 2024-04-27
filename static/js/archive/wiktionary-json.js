@@ -2,7 +2,8 @@ importScripts("../vendor/fastest-levenshtein/fastest-levenshtein.js");
 importScripts("../vendor/localforage/localforage.js")
 importScripts("../vendor/hash-string/hash-string.min.js")
 
-const PYTHON_SERVER = 'https://python.zerotohero.ca/'
+// const PYTHON_SERVER = "https://python.zerotohero.ca/";  // Unavailable after Mar 31 2024
+const PYTHON_SERVER = "https://pythonvps.zerotohero.ca/";  // New since Mar 17 2024
 
 const PROXY_SERVER = 'https://server.chinesezerotohero.com/'
 
