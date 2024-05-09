@@ -389,6 +389,7 @@
   "(no common definitions)": "(共通の定義はありません)",
   "{cat} ({num}*) level": "{cat}（{num}*）レベル",
   "{count} books": "{count} 書籍",
+  "{count} Subscribers": "{count} Subscribers",
   "{description}, a user of {language}.": "{description}, {language} のユーザーです。",
   "{discount} on lifetime Pro account": "ライフタイムProアカウントのアップグレード時に50%オフ",
   "{hours} to {goal}": "{goal}まで{hours}時間",

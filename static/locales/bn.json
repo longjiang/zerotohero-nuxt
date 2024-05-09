@@ -5,6 +5,7 @@
   "(no common definitions)": "(কোন সাধারণ সংজ্ঞা নেই)",
   "{cat} ({num}*) level": "{cat} ({{num}*) স্তর",
   "{count} books": "{count} বই",
+  "{count} Subscribers": "{count} Subscribers",
   "{description}, a user of {language}.": "{description}, {language}-এর একজন ব্যবহারকারী।",
   "{discount} on lifetime Pro account": "লাইফটাইম প্রো অ্যাকাউন্টে {discount}",
   "{hours} to {goal}": "{hours} থেকে {goal}",

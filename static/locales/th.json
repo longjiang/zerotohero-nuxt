@@ -5,6 +5,7 @@
   "(no common definitions)": "(ไม่มีคําจํากัดความทั่วไป)",
   "{cat} ({num}*) level": "{cat} ({num}*) ระดับ",
   "{count} books": "หนังสือ {count}",
+  "{count} Subscribers": "{count} Subscribers",
   "{description}, a user of {language}.": "{description} ผู้ใช้ {language}",
   "{discount} on lifetime Pro account": "{discount} ในบัญชี Pro ตลอดชีพ",
   "{hours} to {goal}": "{hours} ถึง {goal}",

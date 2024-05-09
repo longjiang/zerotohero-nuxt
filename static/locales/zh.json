@@ -389,6 +389,7 @@
   "(no common definitions)": "（没有共同的定义）",
   "{cat} ({num}*) level": "{cat}（{num}*）",
   "{count} books": "{count}本书",
+  "{count} Subscribers": "粉丝数 {count}",
   "{description}, a user of {language}.": "{description}. 是一位{language}语言使用者。",
   "{discount} on lifetime Pro account": "终身 Pro 账户{discount}",
   "{hours} to {goal}": "达到{goal}尚需{hours}",

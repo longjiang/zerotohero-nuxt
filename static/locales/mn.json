@@ -5,6 +5,7 @@
   "(no common definitions)": "(нийтлэг тодорхойлолт байхгүй)",
   "{cat} ({num}*) level": "{cat} ({num}*) түвшин",
   "{count} books": "{count} ном",
+  "{count} Subscribers": "{count} Subscribers",
   "{description}, a user of {language}.": "{language} -ийн хэрэглэгч{description}",
   "{discount} on lifetime Pro account": "Амьдралын туршид Pro дансанд {discount}",
   "{hours} to {goal}": "{hours} to {goal}",
