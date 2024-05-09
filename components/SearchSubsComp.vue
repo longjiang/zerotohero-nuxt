@@ -7,7 +7,7 @@
     }"
   >
     <div class="text-center pb-2">
-      <span v-if="hits.length > 0">
+      <span v-if="hits.length > 0" class="skin-dark">
         <!-- Navigation Buttons -->
         <SimpleButton
           :disabled="hitIndex === 0"
@@ -33,6 +33,7 @@
         <!-- Show playlist modal, showing current Hit Index -->
         <SimpleButton
           iconClass="fa-solid fa-list mr-1"
+          skin="dark"
           :title="$t('List All Clips')"
           @click="showPlaylistModal"
           :text="$t('{num} of {total}', {num: hitIndex + 1, total: hits.length})"
