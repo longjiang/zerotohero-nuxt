@@ -37,18 +37,20 @@
                 ></b-form-input>
               </b-form-group>
               <div class="text-center">
-                <b-button type="submit" variant="primary" :disabled="verifying">
+                <b-button type="submit" variant="primary" :disabled="verifying" class="w-100">
                   <b-spinner small v-if="verifying" />
                   <span v-else>{{ $tb("Verify") }}</span>
                 </b-button>
                 
               </div>
-              <div class="text-center mt-3">
+              <div class="text-center">
                 <b-button
                   variant="link"
+                  class="text-primary"
                   @click="resendCode"
                 >
-                  {{ $tb('Resend Code') }}
+                  <b-spinner small v-if="resending" />
+                  <span v-else>{{ $tb("Resend Code") }}</span>
                 </b-button>
               </div>
             </b-form>
@@ -71,6 +73,7 @@ export default {
       },
       show: true,
       verifying: false,
+      resending: false,
     };
   },
   mounted() {
@@ -103,14 +106,17 @@ export default {
     },
     // Re-send a verification email
     async resendCode() {
+      this.resending = true;
       try {
         await this.$axios.post(`${PYTHON_SERVER}/verification_email`, {
           email: this.form.email,
         });
-        this.$toast.success(this.$tb('Verification code resent.'));
+        this.$toast.success(this.$tb('Verification code resent.', { duration: 5000 }));
       } catch (error) {
         logError(error);
-        this.$toast.error(this.$tb('Failed to resend verification code.'));
+        this.$toast.error(this.$tb('Failed to resend verification code.', { duration: 5000 }));
+      } finally {
+        this.resending = false;
       }
     },
   },
