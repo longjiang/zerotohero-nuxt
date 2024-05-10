@@ -3,7 +3,7 @@
     class="channel-card link-unstyled"
     :to="{ name: 'youtube-channel', params: { title, channel_id } }"
   >
-    <img :src="thumbnail" alt="Channel Thumbnail" class="channel-thumbnail" />
+    <img :src="thumbnail" class="channel-thumbnail" />
 
     <div class="channel-info">
       <h6 class="mb-0">{{ title }}</h6>

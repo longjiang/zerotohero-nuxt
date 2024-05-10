@@ -203,7 +203,7 @@
             />
           </div>
         </div>
-        <ChannelCard :channel_id="video.channel_id" class="mb-2"/>
+        <ChannelCard v-if="video.channel_id" :channel_id="video.channel_id" class="mb-2"/>
         <VideoDetails :video="video" ref="videoDetails" :showTitle="false" />
         <VideoAdmin
           :video="video"
