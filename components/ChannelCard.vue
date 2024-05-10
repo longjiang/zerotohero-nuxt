@@ -3,7 +3,7 @@
     class="channel-card link-unstyled"
     :to="{ name: 'youtube-channel', params: { title, channel_id } }"
   >
-    <img :src="thumbnail" class="channel-thumbnail" />
+    <img :src="thumbnail" class="channel-thumbnail" @error="handleImageError" />
 
     <div class="channel-info">
       <h6 class="mb-0">{{ title }}</h6>
@@ -34,9 +34,6 @@ export default {
   props: {
     channel_id: String,
   },
-  methods: {
-    formatK,
-  },
   data() {
     return {
       date: null,
@@ -48,6 +45,7 @@ export default {
       views: null,
       video_count: null,
       subscribers: null,
+      placeholder: '/img/placeholder-faded.png' // path to your placeholder channel image
     };
   },
   mounted() {
@@ -64,6 +62,12 @@ export default {
       this.views = channel.views;
       this.video_count = channel.video_count;
       this.subscribers = channel.subscribers;
+    }
+  },
+  methods: {
+    formatK,
+    handleImageError(event) {
+      event.target.src = this.placeholder; // change the source to placeholder image
     }
   }
 };
