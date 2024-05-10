@@ -10,9 +10,9 @@
       >
         <p>
           <i class="fa fa-file mr-2"></i>
-          {{ $t("Upload original subtitles (.srt or .ass)") }}
+          {{ $t("Upload original subtitles (.srt)") }}
         </p>
-        <input type="file" accept=".srt,.ass" @change="uploadSubs($event, 'l2')" />
+        <input type="file" accept=".srt" @change="uploadSubs($event, 'l2')" />
       </div>
       <div
         :class="{
@@ -23,9 +23,9 @@
       >
         <p>
           <i class="fa fa-file mr-2"></i>
-          {{ $t("Upload translation subtitles (.srt or .ass)") }}
+          {{ $t("Upload translation subtitles (.srt)") }}
         </p>
-        <input type="file" accept=".srt,.ass" @change="uploadSubs($event, 'l1')" />
+        <input type="file" accept=".srt" @change="uploadSubs($event, 'l1')" />
       </div>
       <div
         class="mt-4 mb-5 rounded"
@@ -42,7 +42,7 @@
           }}
           {{
             $t(
-              "If you have the subtitles file (.srt or .ass), you can add it by uploading it above."
+              "If you have the subtitles file (.srt), you can add it by uploading it above."
             )
           }}
         </div>
