@@ -154,10 +154,20 @@ export default {
         }
       } catch (err) {
         if (err.response && err.response.data) {
-          this.$toast.error(err.response.data.error.message, {
-            position: "top-center",
-            duration: 5000,
-          });
+          if (err.response.data.error.code === 103) {
+            // User's status is not 'active'. Ask the user to verify their email.
+            this.$router.push({
+              name: "verify-email",
+              query: {
+                email: this.form.email,
+              },
+            }); 
+          } else {
+            this.$toast.error(err.response.data.error.message, {
+              position: "top-center",
+              duration: 5000,
+            });
+          }
         } else {
           this.$toast.error(
             this.$tb("There has been an error."),

@@ -127,10 +127,6 @@ export default {
         );
 
         if (res && res.data && res.data.public === true) {
-          // Send a verification email
-          await axios.post(`${PYTHON_SERVER}verification_email`, {
-            email: this.form.email,
-          });
           // Redirect to Verification Instruction Screen
           this.$router.push({
             name: "verify-email",

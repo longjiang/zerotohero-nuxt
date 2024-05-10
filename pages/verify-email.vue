@@ -7,53 +7,47 @@
   }
 </router>
 <template>
-  <div
-    :style="`min-height: 100vh; ${
-      backgroundImage
-        ? 'background-image: url(' +
-          backgroundImage +
-          '); background-size: cover; background-position: center;'
-        : ''
-    }`"
-  >
+  <div :style="`min-height: 100vh; ${backgroundImage
+    ? 'background-image: url(' +
+    backgroundImage +
+    '); background-size: cover; background-position: center;'
+    : ''
+    }`">
     <div class="container">
       <div class="row">
         <div class="col-sm-12 pt-5">
           <div class="login-page">
             <div class="text-center mb-4 skin-light">
               <h5 class="mb-4">{{ $tb('Verify Your Email') }}</h5>
-              <p>{{ $tb('A verification email has been sent to') }}</p>
-              <p><strong>{{ form.email }}</strong></p>
-              <p>{{ $tb('Please check your email and enter the verification code below.') }}</p>
+              <div v-if="sending">
+                <b-spinner small />
+                <p>{{ $tb('Sending verification code...') }}</p>
+              </div>
+              <div v-else>
+                <p>{{ $tb('A verification email has been sent to') }}</p>
+                <p><strong>{{ form.email }}</strong></p>
+                <p>{{ $tb('Please check your email and enter the verification code below.') }}</p>
+                <b-form @submit.prevent="onSubmit" v-if="show">
+                  <b-form-group id="input-group-1" label-for="code">
+                    <b-form-input id="code" v-model="form.code" type="text" :placeholder="$tb('Verification Code')"
+                      required></b-form-input>
+                  </b-form-group>
+                  <div class="text-center">
+                    <b-button type="submit" variant="primary" :disabled="verifying" class="w-100">
+                      <b-spinner small v-if="verifying" />
+                      <span v-else>{{ $tb("Verify") }}</span>
+                    </b-button>
+
+                  </div>
+                  <div class="text-center">
+                    <b-button variant="link" class="text-primary" @click="sendCode">
+                      <b-spinner small v-if="sending" />
+                      <span v-else>{{ $tb("Resend Code") }}</span>
+                    </b-button>
+                  </div>
+                </b-form>
+              </div>
             </div>
-            <b-form @submit.prevent="onSubmit" v-if="show">
-              <b-form-group id="input-group-1" label-for="code">
-                <b-form-input
-                  id="code"
-                  v-model="form.code"
-                  type="text"
-                  :placeholder="$tb('Verification Code')"
-                  required
-                ></b-form-input>
-              </b-form-group>
-              <div class="text-center">
-                <b-button type="submit" variant="primary" :disabled="verifying" class="w-100">
-                  <b-spinner small v-if="verifying" />
-                  <span v-else>{{ $tb("Verify") }}</span>
-                </b-button>
-                
-              </div>
-              <div class="text-center">
-                <b-button
-                  variant="link"
-                  class="text-primary"
-                  @click="resendCode"
-                >
-                  <b-spinner small v-if="resending" />
-                  <span v-else>{{ $tb("Resend Code") }}</span>
-                </b-button>
-              </div>
-            </b-form>
           </div>
         </div>
       </div>
@@ -73,11 +67,13 @@ export default {
       },
       show: true,
       verifying: false,
-      resending: false,
+      sending: false,
     };
   },
-  mounted() {
+  async mounted() {
     this.form.email = this.$route.query.email;
+    // Send a verification email
+    this.sendCode();
   },
   computed: {
     backgroundImage() {
@@ -104,19 +100,19 @@ export default {
         this.verifying = false;
       }
     },
-    // Re-send a verification email
-    async resendCode() {
-      this.resending = true;
+    // Send a verification email
+    async sendCode() {
+      this.sending = true;
       try {
         await this.$axios.post(`${PYTHON_SERVER}/verification_email`, {
           email: this.form.email,
         });
-        this.$toast.success(this.$tb('Verification code resent.', { duration: 5000 }));
+        this.$toast.success(this.$tb('Verification code resent.'), { duration: 5000 });
       } catch (error) {
         logError(error);
-        this.$toast.error(this.$tb('Failed to resend verification code.', { duration: 5000 }));
+        this.$toast.error(this.$tb('Failed to resend verification code.'), { duration: 5000 });
       } finally {
-        this.resending = false;
+        this.sending = false;
       }
     },
   },
