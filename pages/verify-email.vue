@@ -93,6 +93,7 @@ export default {
 
         if (res.data.status = 'success') {
           this.$toast.success(this.$tb('Email verified. You can now log in.'), { duration: 5000 });
+          this.$gtag.event('user_register')
           this.$router.push({ name: 'login' });
         } else {
           this.$toast.error(this.$tb('Failed to verify email.'), { duration: 5000 });
@@ -112,10 +113,10 @@ export default {
         await this.$axios.post(`${PYTHON_SERVER}/verification_email`, {
           email: this.form.email,
         });
-        this.$toast.success(this.$tb('Verification code resent.'), { duration: 5000 });
+        this.$toast.success(this.$tb('Verification code sent.'), { duration: 5000 });
       } catch (error) {
         logError(error);
-        this.$toast.error(this.$tb('Failed to resend verification code.'), { duration: 5000 });
+        this.$toast.error(this.$tb('Failed to send verification code.'), { duration: 5000 });
       } finally {
         this.sending = false;
       }
