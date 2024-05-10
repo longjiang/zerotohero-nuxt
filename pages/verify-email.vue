@@ -17,14 +17,14 @@
       <div class="row">
         <div class="col-sm-12 pt-5">
           <div class="login-page">
-            <div class="text-center mb-4 skin-light">
+            <div class="text-center skin-light">
               <h5 class="mb-4">{{ $tb('Verify Your Email') }}</h5>
               <div v-if="sending">
                 <b-spinner small />
                 <p>{{ $tb('Sending verification code...') }}</p>
               </div>
               <div v-else>
-                <p>{{ $tb('A verification email has been sent to') }}</p>
+                <p>{{ $tb('A verification email has been sent to this email address:') }}</p>
                 <p><strong>{{ form.email }}</strong></p>
                 <p>{{ $tb('Please check your email and enter the verification code below.') }}</p>
                 <b-form @submit.prevent="onSubmit" v-if="show">
@@ -45,6 +45,11 @@
                       <span v-else>{{ $tb("Resend Code") }}</span>
                     </b-button>
                   </div>
+                  <!-- If the user has trouble verifying their email, ask them to contact support -->
+                  <div class="text-center mt-3 mb-0"><small>
+                      <p class="mb-0">{{ $tb('Having trouble?') }} <a
+                          href="mailto:jon.long@zerotohero.ca">{{ $tb('Contact Us') }}</a></p>
+                    </small></div>
                 </b-form>
               </div>
             </div>
