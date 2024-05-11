@@ -4,9 +4,11 @@ class OpenKoreanTextTokenizer extends BaseTokenizer {
   async tokenize(text) {
     let tokenized = this.loadFromServerCache(text);
     if (!tokenized) {
-      let url = `http://py.zerotohero.ca:4567/tokenize?text=${encodeURIComponent(text)}`;
+      // let url = `http://py.zerotohero.ca:4567/tokenize?text=${encodeURIComponent(text)}`; // Old server, no longer working
+      let url = `https://pythonvps.zerotohero.ca/lemmatize-korean?text=${encodeURIComponent(text)}`;
       let res = await proxy(url, { timeout: 5000 }); // dictionary-utils.js
-      tokenized = res?.tokens;
+      // tokenized = res?.tokens; // Old server responds with { tokens: [] }
+      tokenized = res;
     }
     
     // Check if the tokenized is an array and not a string

@@ -335,7 +335,6 @@ export default {
 
       // Retrieve video info and subs from our database
       const video = await this.getVideoFromDB(youtube_id, directus_id);
-      console.log({video})
 
       this.loadTokenizationServerCache(video);
       this.video = video || this.video;
