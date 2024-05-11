@@ -189,6 +189,17 @@ export default {
       }
       await this.$directus.fetchOrCreateUserData(); // Make sure user data is fetched from the server
       if (this.$auth.loggedIn) {
+        let user = await this.$directus.getCurrentUser();
+        
+        // If the user cannot be fetched, or if the status is 'inactive' or 'draft', redirect to the email verification page
+        if (!user || ['inactive', 'draft'].includes(user.status)) {
+          this.$router.push({
+            name: "verify-email",
+            query: {
+              email: this.$auth.user.email,
+            },
+          });
+        }
         await this.$store.dispatch(
           "subscriptions/checkSubscription",
           this.$auth.user.id

@@ -463,6 +463,12 @@ export default ({ app }, inject) => {
       return app.$auth && app.$auth.loggedIn && app.$auth.user;
     },
 
+    async getCurrentUser() {
+      let res = await this.get(`users/me`);
+      let user = res?.data?.data;
+      return user;
+    },
+
     getToken() {
       const token = app.$auth.strategy.token.get();
       return token ? token.replace("Bearer ", "") : undefined;
