@@ -48,7 +48,7 @@
                 >
                   {{ $tb('Continue') }}
                 </b-button>
-                <div class="text-center" v-else>
+                <div class="text-center skin-light" v-else>
                   <Loader
                     :sticky="true"
                     message="Sending password reset email..."
@@ -104,23 +104,32 @@ export default {
         let sent = await this.$directus.sendPasswordResetEmail({ email });
         if (sent) {
           this.emailSent = true;
-          this.emailSending = false;
         }
       } catch (err) {
-        console.log(err)
         if (err.response?.data?.error?.message) {
-          this.$toast.error(err.response?.data?.error?.message, {
-            position: "top-center",
-            duration: 5000,
-          });
+          if (err.response.data.error.code === 103) {
+            // User status is not 'active', redirect to email verification
+            this.$router.push({
+              name: "verify-email",
+              query: {
+                email: this.form.email,
+              },
+            });
+          } else {
+            this.$toast.error(err.response?.data?.error?.message, {
+              position: "top-center",
+              duration: 5000,
+            });
+          }
         } else {
           this.$toast.error("There has been an error.", {
             position: "top-center",
             duration: 5000,
           });
         }
-        this.emailSending = false;
         this.shake();
+      } finally {
+        this.emailSending = false;
       }
     },
     async shake() {

@@ -112,14 +112,18 @@ export default ({ app }, inject) => {
       if (res) return res;
     },
 
-    async post(path, payload) {
+    async post(path, payload, catchErrors = true) {
       let res = await axios
         .post(
           this.appendHostCors(DIRECTUS_API_URL + path),
           payload,
           this.tokenOptions()
         )
-        .catch((err) => logError(err));
+        .catch((err) => {
+          if (catchErrors) logError(err);
+          else 
+            throw err;
+        });
       if (res) return res;
     },
 
@@ -397,7 +401,7 @@ export default ({ app }, inject) => {
       let res = await this.post(`auth/password/request`, {
         email,
         reset_url,
-      });
+      }, false); // Don't catch errors
       return res && res.status === 200;
     },
 

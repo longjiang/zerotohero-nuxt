@@ -24,7 +24,7 @@
             <div class="text-center mb-4">
               <Logo skin="light" />
             </div>
-            <b-form @submit.prevent="onSubmit" v-if="token">
+            <b-form @submit.prevent="onSubmit" v-if="token" class="skin-light">
               <div class="alert alert-success">
                 <i class="fas fa-check mr-1"></i>
                 {{ $tb('Email verified.') }}
@@ -36,7 +36,7 @@
                   id="password"
                   type="password"
                   v-model="form.password"
-                  placeholder="Password"
+                  :placeholder="$tb('Password')"
                   required
                 ></b-form-input>
               </b-form-group>
@@ -97,7 +97,7 @@ export default {
         let password = this.form.password;
         let reset = this.$directus.resetPassword({ token, password })
         if (reset) {
-          this.$toast.success("Your password has been updated, please login.", {
+          this.$toast.success(this.$tb("Your password has been updated, please login."), {
             position: "top-center",
             duration: 5000,
           });
@@ -112,7 +112,7 @@ export default {
             duration: 5000,
           });
         } else {
-          this.$toast.error("There has been an error.", {
+          this.$toast.error(this.$tb("There has been an error."), {
             position: "top-center",
             duration: 5000,
           });
