@@ -6,7 +6,7 @@ class OpenKoreanTextTokenizer extends BaseTokenizer {
     if (!tokenized) {
       // let url = `http://py.zerotohero.ca:4567/tokenize?text=${encodeURIComponent(text)}`; // Old server, no longer working
       let url = `https://pythonvps.zerotohero.ca/lemmatize-korean?text=${encodeURIComponent(text)}`;
-      let res = await proxy(url, { timeout: 5000 }); // dictionary-utils.js
+      let res = await axios.get(url, { timeout: 5000 }).then(res => res.data);
       // tokenized = res?.tokens; // Old server responds with { tokens: [] }
       tokenized = res;
     }

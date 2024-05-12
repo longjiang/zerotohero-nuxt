@@ -350,7 +350,7 @@ export default {
     async loadTokenizationServerCache(video) {
       if (!video?.id) return;
       let url = `${PYTHON_SERVER}lemmatize-video?video_id=${video.id}&lang=${this.$l2.code}`;
-      const data = await proxy(url);
+      const data = await axios.get(url).then((res) => res.data);
       // Check if data is an object with content
       if (data && typeof data === "object" && Object.keys(data).length > 0) {
         const dictionary = await this.$getDictionary();
