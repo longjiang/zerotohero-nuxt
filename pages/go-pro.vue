@@ -8,85 +8,52 @@
   }
 </router>
 <template>
-  <div
-    :style="`min-height: 100vh; ${
-      background
-        ? 'background-image: url(' +
-          background +
-          '); background-size: cover; background-position: center;'
-        : ''
-    }`"
-  >
+  <div :style="`min-height: 100vh; ${background
+      ? 'background-image: url(' +
+      background +
+      '); background-size: cover; background-position: center;'
+      : ''
+    }`">
     <div class="pt-5 pb-5 container">
       <div class="row">
         <div class="col-sm-12">
-          <div v-if="SALE" class="text-white p-3 rounded text-center mb-5" style="max-width: 46rem; margin: 0 auto; font-size: 1.2em; background: red" >
-            <div><b>{{ $tb('{name} SALE!', {name: $tb('YEAR END')}) }}</b> {{ $tb('{discount} on lifetime Pro account', { discount: $tb('30% off') }) }}</div>
-            <small style="text-small">{{ $tb('Offer ends:')}} {{ $db(new Date(2024, 0, 1), 'short') }}</small>
+          <div v-if="SALE" class="text-white p-3 rounded text-center mb-5"
+            style="max-width: 46rem; margin: 0 auto; font-size: 1.2em; background: red">
+            <div><b>{{ $tb('{name} SALE!', { name: $tb('YEAR END') }) }}</b> {{ $tb('{discount} on lifetime Pro account',
+    { discount: $tb('30% off') }) }}</div>
+            <small style="text-small">{{ $tb('Offer ends:') }} {{ $db(new Date(2024, 0, 1), 'short') }}</small>
           </div>
           <client-only>
             <div class="mt-4"></div>
             <FeatureComparison />
             <div v-if="$auth.loggedIn && $auth.user" class="text-center text-white">
-              <!-- <div v-if="pro">
-                <Pricing class="mb-5" />
-                <h5 class="mb-3">🎉 {{ $tb('You are already Pro!') }} 🚀 {{ $tb('Enjoy!') }}</h5>
-                <router-link class="btn btn-success mb-3" to="/">
-                  {{ $tb('Start Using Pro') }}
-                </router-link>
-              </div> -->
               <div class="mb-3 text-white">
                 <client-only>
                   <div class="mt-5 mb-4">
-                    <h5>{{ $tb('Ready to upgrade to Pro?') }}</h5>
+                    <h5>{{ $tb('Ready to upgrade?') }}</h5>
                   </div>
                   <p>{{ $tb('Please choose your plan.') }}</p>
                   <Pricing @plan-selected="handlePlanSelection" />
-                  <section class="mt-3" v-if="selectedPlan" id="payment-methods" ref="paymentMethods">
-                    <div v-if="iOS">
-                      <div class="pt-4 pb-5">
-                        <div v-if="selectedPlan.name === 'lifetime'">
-                          <PurchaseiOS  />
-                          <div v-if="SALE" class="alert alert-danger mt-2" style="max-width: 15.5rem; margin: 0 auto;">{{ $tb('Note: Discount price is not available through iOS in-app purchase.') }}</div>
-                        </div>
-                        <div v-else class="alert alert-warning" style="max-width: 15.5rem; margin: 0 auto;">⚠️ {{ $tb('Only the lifetime plan is available as an in-app purchase.') }}</div>
-                      </div>
-                    </div>
-                    <div v-else>
-                      <div>
-                        <p>{{ $tb('Please choose your method of payment.') }}</p>
-                        <template v-if="$auth.user?.id">
-                          <PurchaseStripe  :plan="selectedPlan.name" />
-                          <PurchasePayPal v-if="selectedPlan.name === 'lifetime'" :plan="selectedPlan.name" />
-                        </template>
-                        <div v-else class="alert alert-warning">
-                          {{ $tb('Your account is not logged in. Please log in to purchase.') }} <a href="/login?redirect=/go-pro">{{ $tb('Login') }}</a>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
+                  <b-modal ref="paymentMethods" hide-footer centered class="safe-padding-top mt-4" size="sm" :title="selectedPlan ? selectedPlan.currency + selectedPlan.amount + $tb(selectedPlan.intervalText) : 'Pro'"
+                    @shown="modalRendered = true" @hidden="modalRendered = false" >
+                    <PaymentMethods v-if="modalRendered" :selectedPlan="selectedPlan" /> <!-- We load this only after the modal is shown to prevent PayPal button errors -->
+                  </b-modal>
                 </client-only>
               </div>
             </div>
             <div v-else class="text-center text-white">
               <Pricing class="mb-5" />
-              <p style="font-size: 1.2em">
+              <p style="font-size: 1.2em;">
                 {{ $tb('Before you get Pro, you need to create an account.') }}
               </p>
               <div>
-                <router-link
-                  :to="{ path: '/register?redirect=/go-pro' }"
-                  class="btn btn-success mb-3"
-                >
+                <router-link :to="{ path: '/register?redirect=/go-pro' }" class="btn btn-success mb-3">
                   {{ $tb('Create an Account') }}
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
                 <br />
-                <router-link
-                  :to="{ path: '/login?redirect=/go-pro' }"
-                  class="text-white"
-                >
-                  {{ $tb('Already have an account?') }} 
+                <router-link :to="{ path: '/login?redirect=/go-pro' }" class="text-white">
+                  {{ $tb('Already have an account?') }}
                   <u>{{ $tb('Please login') }}</u>
                 </router-link>
               </div>
@@ -104,15 +71,15 @@
 
 <script>
 import { Capacitor } from "@capacitor/core";
-import { timeout, background, TEST, SALE } from "@/lib/utils";
+import { background, SALE } from "@/lib/utils";
 
 export default {
   data() {
     return {
-      TEST,
       SALE,
       loading: false,
       selectedPlan: undefined,
+      modalRendered: false,
     };
   },
   computed: {
@@ -122,9 +89,6 @@ export default {
     native() {
       return Capacitor.isNativePlatform();
     },
-    iOS() {
-      return Capacitor.getPlatform() === "ios";
-    },
     pro() {
       return this.forcePro || this.$store.state.subscriptions.active;
     },
@@ -132,14 +96,25 @@ export default {
   methods: {
     async handlePlanSelection(plan) {
       this.selectedPlan = plan;
-      await timeout(1000)
-      if (this.$refs.paymentMethods) this.$refs.paymentMethods.scrollIntoView({ behavior: 'smooth' });
+      // Show the payment methods modal
+      this.$refs.paymentMethods.show();
+    },
+    initPaymentMethods() {
+
+      paypal.Buttons({
+        // Configuration options
+        createOrder: function (data, actions) {
+          // Order creation code
+        },
+        onApprove: function (data, actions) {
+          // Code to run on approval
+        }
+      }).render('#paypal-button-container');
     },
   },
 };
 </script>
 <style scoped lang="scss">
-
 .go-pro-wrapper {
   margin-top: 5rem;
   margin-bottom: 5rem;
@@ -162,6 +137,7 @@ export default {
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem auto;
+
   i {
     font-size: 1.5rem;
   }

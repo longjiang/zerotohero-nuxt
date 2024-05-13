@@ -6,10 +6,11 @@
       :class="{
         'pricing-card': true,
         sale: SALE && plan.name === 'lifetime',
+        active: subscription && subscription.type === plan.name,
         selected: selectedPlan && selectedPlan.name === plan.name,
       }"
-      @click="selectPlan(plan)"
-    >
+      @click="subscription && subscription.type === plan.name ? null : selectPlan(plan)"
+    > 
       <div class="price" style="white-space: nowrap">
         <div v-if="plan.name !== 'lifetime' || !SALE">
           <span>
@@ -89,6 +90,21 @@
         </div>
       </div>
       <div>{{ $tb(plan.description) }}</div>
+      <div class="mt-2">
+        <b-button
+          v-if="plan.name === subscription?.type"
+          size="sm"
+          disabled
+          >{{ $tb('Current Plan') }}</b-button
+        >
+        <b-button
+          v-else
+          size="sm"
+          variant="success"
+          @click="selectPlan(plan)"
+          >{{ $tb('Select Plan') }}</b-button
+        >
+      </div>
       <div v-if="plan.name === 'lifetime' && SALE" class="sale-end-date">
         <div>{{ $tb('Offer ends:')}} {{ $db(new Date(2024, 0, 1), 'short') }}</div>
       </div>
@@ -138,7 +154,14 @@ export default {
       ],
     };
   },
-  computed: {},
+  computed: {
+    pro() {
+      return this.$store.state.subscriptions.active;
+    },
+    subscription() {
+      return this.$store.state.subscriptions.subscription;
+    },
+  },
   methods: {
     selectPlan(plan) {
       this.selectedPlan = plan;
@@ -170,6 +193,10 @@ export default {
   &:hover,
   &.selected {
     border: 3px solid $primary-color;
+  }
+  &.active {
+    border: 3px solid #6c757d99;
+    cursor: default;
   }
 }
 
