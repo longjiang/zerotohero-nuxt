@@ -27,11 +27,13 @@
               {{ formatName($auth.user.first_name, $auth.user.last_name) }}
             </h4>
             <div>{{ $auth.user.email }}</div>
-            <hr class="mt-3 mb-3" />
-            <SubscriptionStatus />
+            <div class="my-4 p-3 rounded bg-accent">
+              <h6>🚀 Your Pro Subscription</h6>
+              <hr />
+              <SubscriptionStatus />
+            </div>
           </div>
         </div>
-        <hr class="mt-3 mb-3" />
         <NavPage :showOnly="['My Words', 'My Phrases', 'My Watch History', 'My Liked Videos', 'My Bookshelf', 'My Texts']" class="my-3" />
         <template v-if="level">
           <hr class="mt-3 mb-3" />

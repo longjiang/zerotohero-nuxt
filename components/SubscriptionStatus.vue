@@ -1,75 +1,67 @@
 <template>
   <div>
-    <div v-if="subscription && !pro">
-      {{
-      $t("Your Pro has expired on {date}.", {
-        date: $d(
-          new Date(subscription.expires_on),
-          "short",
-          $l1.code
-        ),
-      })
-    }}
+    <div v-if="subscription && pro" class="row text-left">
+      <div class="col-sm-12 col-md-4 col-lg-3">
+        <strong>{{ $t('Plan') }}:</strong> {{ subscription ? type[subscription.type] : type[free] }} <router-link v-if="subscription.type !== 'lifetime'" :to="{ name: 'go-pro' }">{{ $t('Upgrade') }} <i class="fas fa-chevron-right"></i></router-link>
+      </div>
+      <div class="col-sm-12 col-md-4 col-lg-3">
+        <strong>{{ $t('Expires') }}:</strong> {{ subscription.expires_on ? $d(
+      new Date(subscription.expires_on),
+      "short",
+      $l1.code
+    ) : $t('Never') }}
+      </div>
+      <div class="col-sm-12 col-md-4 col-lg-3">
+        <strong>{{ $t('Auto-Renew') }}:</strong> {{ subscription.payment_customer_id ? 'Yes' : 'No' }}
+        <b-button v-if="subscription.payment_customer_id" @click="cancelSubscriptionAtEndOfPeriod" variant="link" class="text-danger p-0 mb-1" :disabled="cancelling">
+          <b-spinner small v-if="cancelling" />
+          <span v-else>{{ $t('Cancel') }}</span>
+        </b-button>
+      </div>
     </div>
-    <div v-if="subscription &&
-      pro &&
-      subscription.type !== 'lifetime' &&
-      subscription.payment_processor === 'stripe'
-      ">
-      🚀
-      {{
-      $t("Your Pro will auto-renew on {date}.", {
-        date: $d(
-          new Date(subscription.expires_on),
-          "short",
-          $l1.code
-        ),
-      })
-    }}
-      <i18n path="To change or cancel, go to {stripe}.">
-        <template #stripe>
-          <a href="https://billing.stripe.com/p/login/aEUeYr0Gu6GW9BSbII" target="_blank">{{
-        $t("Stripe")
-      }}</a>
-        </template>
-      </i18n>
-    </div>
-    <div v-if="subscription &&
-      pro &&
-      subscription.type !== 'lifetime' &&
-      subscription.payment_processor !== 'stripe'
-      ">
-      🚀
-      {{
-      $t("Your Pro will expire on {date}.", {
-        date: $d(
-          new Date(subscription.expires_on),
-          "short",
-          $l1.code
-        ),
-      })
-    }}
-    </div>
-    <div v-if="subscription && subscription.type === 'lifetime'">
-      🚀 {{ $t("You have lifetime access to Pro.") }}
-    </div>
-    <div v-if="!subscription">
+    <div v-else>
       {{ $t("You are not Pro yet.") }}
-    </div>
-    <div v-if="!pro">
-      <router-link :to="{ name: 'go-pro' }">{{ $t("Upgrade to Pro") }} 🚀</router-link>
+      <router-link :to="{ name: 'go-pro' }">{{ $t("Upgrade to Pro") }} </router-link>
     </div>
   </div>
 </template>
 <script>
 
 export default {
+  data() {
+    return {
+      cancelling: false,
+      type: {
+        monthly: this.$t('Pro (Monthly)'),
+        annual: this.$t('Pro (Annual)'),
+        lifetime: this.$t('Pro (Lifetime)'),
+        trial: this.$t('Pro (Trial)'),
+        free: this.$t('Free'),
+      }
+    };
+  },
   computed: {
     pro() {
       return this.$store.state.subscriptions.active;
-    },    
+    },
     subscription() {
       return this.$store.state.subscriptions.subscription;
+    },
+  },
+  methods: {
+    async cancelSubscriptionAtEndOfPeriod() {
+      // Prompt the user to confirm the cancellation
+      if (!confirm(this.$t('Are you sure you want to cancel your Pro subscription?'))) {
+        return;
+      }
+      this.cancelling = true;
+      // Call the action to cancel the subscription
+      await this.$store.dispatch('subscriptions/cancelSubscriptionAtEndOfPeriod');
+      this.cancelling = false;
+      this.$toast.success(
+        this.$t("Your Pro subscription has been cancelled. You can still use Pro features before the end of the current billing period."),
+        { duration: 5000 }
+      );
     },
   },
 }

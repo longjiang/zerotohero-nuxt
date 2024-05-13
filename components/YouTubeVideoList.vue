@@ -9,7 +9,7 @@
       <client-only>
         <div
           v-if="$adminMode && showAdminToolsInAdminMode"
-          class="mb-4 youtube-video-list-admin-bar rounded p-3 w-100"
+          class="mb-4 bg-accent rounded p-3 w-100"
         >
           <div>
             <b-button
@@ -710,18 +710,6 @@ export default {
 <style lang="scss" scoped>
 .youtube-video-list-admin-bar {
   background: rgb(205, 207, 212);
-}
-
-.skin-dark {
-  .youtube-video-list-admin-bar {
-    background-color: #88888822;
-  }
-}
-
-.skin-light {
-  .youtube-video-list-admin-bar {
-    background-color: #88888822;
-  }
 }
 
 .col-compact {

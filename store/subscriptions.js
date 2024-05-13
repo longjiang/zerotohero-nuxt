@@ -1,3 +1,5 @@
+import { PYTHON_SERVER } from "@/lib/utils";
+
 export const state = () => ({
   active: false,
   checking: true,
@@ -39,6 +41,21 @@ export const actions = {
       commit("SET_CHECKING", false);
     }
   },
+  async cancelSubscriptionAtEndOfPeriod({ commit }) {
+    let subscription = this.state.subscriptions.subscription;
+    if (!subscription) return;
+    let customer_id = subscription.payment_customer_id;
+    if (!customer_id) return;
+    try {
+      let res = await axios.post(PYTHON_SERVER + 'cancel-subscription-at-end-of-period', {
+        customer_id
+      });
+      // dispatch the checkSubscription action to update the state
+      this.dispatch("subscriptions/checkSubscription");
+    } catch (error) {
+      console.error("Error cancelling subscription:", error.message);
+    }
+  }
 };
 
 export const getters = {
