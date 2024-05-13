@@ -464,7 +464,8 @@ export default ({ app }, inject) => {
     },
 
     async getCurrentUser() {
-      let res = await this.get(`users/me`);
+      // Make sure to bust cache
+      let res = await this.get(`users/me?timestamp=${Date.now()}`);
       let user = res?.data?.data;
       return user;
     },
