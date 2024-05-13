@@ -221,7 +221,7 @@ export default {
     this.episodeSort = this.$route.query.sort || "title";
     await this.loadVideo(this.youtube_id, this.directus_id);
     await this.handlePlaylistFromQueryString();
-    this.showDifficultyToast();
+    // this.showDifficultyToast(); // Do not show this as the toast interferes with the popup dictionary. Until we find a better way to show the toast, we disable it.
   },
   filters: {
     formatDuration(duration) {
