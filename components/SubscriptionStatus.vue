@@ -2,7 +2,7 @@
   <div>
     <div class="row text-left">
       <div class="col-sm-12">
-        <strong>{{ $t('Plan') }}:</strong> {{ subscription ? type[subscription.type] : type['free'] }} <router-link v-if="!subscription || subscription.type !== 'lifetime'" :to="{ name: 'go-pro' }">{{ $t('Upgrade') }} <i class="fas fa-chevron-right"></i></router-link>
+        <strong>{{ $t('Plan') }}:</strong> {{ subscription ? $t(type[subscription.type]) : $t(type['free']) }} <router-link v-if="!subscription || subscription.type !== 'lifetime'" :to="{ name: 'go-pro' }">{{ $t('Upgrade') }} <i class="fas fa-chevron-right"></i></router-link>
       </div>
       <div class="col-sm-12" v-if="subscription">
         <strong>{{ $t('Expires') }}:</strong> {{ subscription.expires_on ? $d(
@@ -12,7 +12,7 @@
     ) : $t('Never') }}
       </div>
       <div class="col-sm-12" v-if="subscription && subscription.type !== 'lifetime'">
-        <strong>{{ $t('Auto-Renew') }}:</strong> {{ subscription.payment_customer_id ? 'Yes' : 'No' }}
+        <strong>{{ $t('Auto-Renew') }}:</strong> {{ subscription.payment_customer_id ? $t('Yes') : $t('No') }}
         <b-button v-if="subscription.payment_customer_id" @click="cancelSubscriptionAtEndOfPeriod" variant="link" class="text-danger p-0 mb-1" :disabled="cancelling">
           <b-spinner small v-if="cancelling" />
           <span v-else>{{ $t('Cancel') }}</span>

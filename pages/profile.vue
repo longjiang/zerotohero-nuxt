@@ -28,7 +28,7 @@
             </h4>
             <div>{{ $auth.user.email }}</div>
             <div class="my-4 p-3 rounded bg-accent">
-              <h6>🚀 Your Pro Subscription</h6>
+              <h6>🚀 {{ $t('Your Pro Subscription') }}</h6>
               <hr />
               <SubscriptionStatus />
             </div>
