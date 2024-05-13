@@ -20,12 +20,18 @@
       centered
       hide-footer
       no-fade
-      modal-class="safe-padding-top mt-4"
-      :title="$tb('Dictionary')"
+      modal-class="my-5"
       :body-class="`popup-dictionary-modal-wrapper l2-${$l2.code}`"
       @show="$nuxt.$emit('popupOpened')"
       @hide="$nuxt.$emit('popupClosed')"
     >
+      <template #modal-header="{ close }">
+        <!-- Emulate built in modal header close button action -->
+        <h5>{{ $tb('Dictionary') }}</h5>
+        <b-button size="sm" variant="outline-success" @click="close()">
+          <i class="fas fa-times"></i> {{ $tb('Close') }}
+        </b-button>
+      </template>
       <div
         v-if="
           (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
