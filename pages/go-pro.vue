@@ -40,7 +40,7 @@
                       <!-- If there is an active subscription, the customer must cancel it first. -->
                       <div v-if="subscription && subscription.payment_customer_id">
                         <p>{{ $tb('You have an existing active subscription:') }}</p>
-                        <SubscriptionStatus class="my-3" />
+                        <SubscriptionStatus class="my-3" :showActionButtons="false" />
                         <p><strong>{{ $tb('You must cancel it before you can upgrade.') }}</strong></p>
                         <CancelSubscriptionButton :subscription="subscription" variant="success" class="w-100" :text="$tb('Cancel Existing Subscription')" />
                       </div>

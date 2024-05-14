@@ -66,7 +66,7 @@
       <div class="mt-2">
         <b-button v-if="plan.name === subscription?.type && subscription?.payment_customer_id" size="sm" disabled>{{
       $tb('Current Plan') }}</b-button>
-        <b-button v-else-if="isHigherPlan(plan.name, subscription.type)" size="sm" variant="success" @click="selectPlan(plan)">{{
+        <b-button v-else-if="isHigherPlan(plan.name, subscription?.type)" size="sm" variant="success" @click="selectPlan(plan)">{{
           $tb('Select Plan') }}</b-button>
       </div>
       <div v-if=" plan.name === 'lifetime' && SALE " class="sale-end-date">
@@ -128,9 +128,10 @@ export default {
   },
   methods: {
     // Compare plan levels
-    isHigherPlan(planNameA, planNameB) {
+    isHigherPlan(planNameA = 'free', planNameB = 'free') {
       // Define the ranking of plans
       const planRank = {
+        'free': 0,
         'trial': 1,
         'monthly': 2,
         'annual': 3,
