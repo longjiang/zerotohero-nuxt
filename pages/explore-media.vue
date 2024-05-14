@@ -27,6 +27,7 @@
       </div>
       <div class="row" v-else>
         <div class="col-sm-12">
+          <Sale class="my-4" />
           <VideoHero
             v-if="heroVideo"
             :video="heroVideo"

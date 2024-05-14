@@ -23,7 +23,7 @@
               }}</span></span>
         </div>
         <div v-else>
-          <div v-if="plan.name === 'lifetime'" class="sale-banner">{{ $tb('{name} SALE!', { name: $tb('YEAR END') }) }}
+          <div v-if="plan.name === 'lifetime'" class="sale-banner">{{ $tb('{name} SALE!', { name: $tb(SALE_NAME) }) }}
           </div>
           <div style="margin-top: 1rem; margin-bottom: -0.5em">
             <span>
@@ -47,7 +47,7 @@
           <div>
             <span><span style="position: relative; bottom: 1.2rem; color: red">{{
       plan.currency
-    }}</span><b style="font-size: 2.68rem; color: red">83</b></span><span style="
+    }}</span><b style="font-size: 2.68rem; color: red">{{ Math.floor(plan.amount * SALE_DISCOUNT) }}</b></span><span style="
                 display: inline-block;
                 position: relative;
                 bottom: 1.2rem;
@@ -70,19 +70,22 @@
           $tb('Select Plan') }}</b-button>
       </div>
       <div v-if=" plan.name === 'lifetime' && SALE " class="sale-end-date">
-        <div>{{ $tb('Offer ends:')}} {{ $db(new Date(2024, 0, 1), 'short') }}</div>
+        <div>{{ $tb('Offer ends:')}} {{ $db(SALE_END_DATE, 'short') }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { SALE } from "@/lib/utils/variables";
+import { SALE, SALE_NAME, SALE_END_DATE, SALE_DISCOUNT } from "@/lib/utils/variables";
 
 export default {
   data() {
     return {
       SALE,
+      SALE_NAME,
+      SALE_END_DATE,
+      SALE_DISCOUNT,
       selectedPlan: null,
       pricingPlans: [
         {

@@ -27,6 +27,7 @@
               {{ formatName($auth.user.first_name, $auth.user.last_name) }}
             </h4>
             <div>{{ $auth.user.email }}</div>
+            <Sale class="my-4" />
             <div class="my-4 p-3 rounded bg-accent">
               <h6>🚀 {{ $t('Your Pro Subscription') }}</h6>
               <hr />
@@ -36,7 +37,6 @@
         </div>
         <NavPage :showOnly="['My Words', 'My Phrases', 'My Watch History', 'My Liked Videos', 'My Bookshelf', 'My Texts']" class="my-3" />
         <template v-if="level">
-          <hr class="mt-3 mb-3" />
           <div class="row">
             <div class="col-sm-12">
               <h5>

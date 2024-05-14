@@ -223,6 +223,7 @@
           }"
           class="mt-3"
         />
+        <Sale class="mb-4" />
         <div class="mt-3">
           <h6 v-if="show">
             <hr class="mb-3" />

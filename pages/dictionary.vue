@@ -49,7 +49,6 @@
           <div class="container" v-if="!entry">
             <div class="row">
               <div class="col-sm-12">
-                <!-- <Sale style="border-radius: 1rem !important" class="pb-5 pl-5 pr-5" v-if="$l2.code === 'zh'" /> -->
                 <div style="max-width: 50rem; margin: 0 auto" class="mt-5">
                   <ul class="list-unstyled">
                     <li class="mt-2">

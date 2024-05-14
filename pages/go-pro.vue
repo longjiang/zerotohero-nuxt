@@ -17,12 +17,7 @@
     <div class="pt-5 pb-5 container">
       <div class="row">
         <div class="col-sm-12">
-          <div v-if="SALE" class="text-white p-3 rounded text-center mb-5"
-            style="max-width: 46rem; margin: 0 auto; font-size: 1.2em; background: red">
-            <div><b>{{ $tb('{name} SALE!', { name: $tb('YEAR END') }) }}</b> {{ $tb('{discount} on lifetime Pro account',
-    { discount: $tb('30% off') }) }}</div>
-            <small style="text-small">{{ $tb('Offer ends:') }} {{ $db(new Date(2024, 0, 1), 'short') }}</small>
-          </div>
+          <Sale class="mb-5" :actionButton="false" />
           <client-only>
             <div class="mt-4"></div>
             <FeatureComparison />
@@ -34,7 +29,7 @@
                   </div>
                   <p>{{ $tb('Please choose your plan.') }}</p>
                   <Pricing @plan-selected="handlePlanSelection" />
-                  <b-modal ref="paymentMethods" hide-footer centered class="safe-padding-top mt-4" size="sm" :title="selectedPlan ? selectedPlan.currency + selectedPlan.amount + $tb(selectedPlan.intervalText) : 'Pro'"
+                  <b-modal ref="paymentMethods" hide-footer centered class="safe-padding-top mt-4" size="sm" :title="selectedPlan ? selectedPlan.currency + Math.floor(selectedPlan.amount * (selectedPlan.name === 'lifetime' && SALE ? SALE_DISCOUNT : 1)) + $tb(selectedPlan.intervalText) : 'Pro'"
                     @shown="modalRendered = true" @hidden="modalRendered = false" >
                     <div v-if="modalRendered"><!-- We load this only after the modal is shown to prevent PayPal button errors -->
                       <!-- If there is an active subscription, the customer must cancel it first. -->
@@ -80,12 +75,13 @@
 
 <script>
 import { Capacitor } from "@capacitor/core";
-import { background, SALE } from "@/lib/utils";
+import { background, SALE, SALE_DISCOUNT } from "@/lib/utils";
 
 export default {
   data() {
     return {
       SALE,
+      SALE_DISCOUNT,
       loading: false,
       selectedPlan: undefined,
       modalRendered: false,

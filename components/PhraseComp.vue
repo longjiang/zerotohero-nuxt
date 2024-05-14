@@ -129,7 +129,7 @@
       </template>
     </TabbedSections>
 
-    <!-- <Sale v-if="$l2.code === 'zh'" class="mb-5" /> -->
+    <Sale class="mb-5" />
   </article>
 </template>
 

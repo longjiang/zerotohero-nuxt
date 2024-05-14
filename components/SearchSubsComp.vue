@@ -141,7 +141,7 @@
         @videoUnavailable="onVideoUnavailable"
       />
     </template>
-    <template v-if="!pro">
+    <div v-if="!pro">
       <YouNeedPro
         v-if="hitIndex > NON_PRO_MAX_SUBS_SEARCH_HITS - 1"
         skin="dark"
@@ -151,7 +151,7 @@
           })
         "
       />
-    </template>
+    </div>
     <PlaylistModal
       ref="playlist-modal"
       v-bind="{
