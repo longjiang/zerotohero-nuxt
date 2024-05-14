@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "টিভি শো \"{title}\"",
   "The word “{word}” seems to only take on one form.": "\"{{word}\" শব্দটি কেবল মাত্র একটি রূপ ধারণ করে বলে মনে হয়।",
   "There has been an error.": "একটা ভুল হয়েছে।",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "এই {l2} অভিধানে <b>{num} শব্দ</b> রয়েছে",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "এটি একটি {l2} টেক্সট রিডিং টুল (যেমন অ্যানোটেটর, টোকেনাইজার, লেমাটাইজার)",
   "This is a {level} level video.": "এটি একটি {level} স্তরের ভিডিও।",

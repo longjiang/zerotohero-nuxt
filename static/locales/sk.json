@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "televízna relácia {title}\"",
   "The word “{word}” seems to only take on one form.": "Zdá sa, že slovo \"{word}\" má len jednu podobu.",
   "There has been an error.": "Vyskytla sa chyba.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Tento slovník {l2} obsahuje {<b>{l2}} slov</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Toto je nástroj na čítanie textu {l2} (známy aj ako anotátor, tokenizátor, lemmatizátor)",
   "This is a {level} level video.": "Toto je video na úrovni {level}.",

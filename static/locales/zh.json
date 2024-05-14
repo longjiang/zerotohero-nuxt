@@ -1897,6 +1897,7 @@
   "the TV Show “{title}”": "电视节目《{title}》",
   "The word “{word}” seems to only take on one form.": "“{word}”这个词似乎只有一种形式。",
   "There has been an error.": "出现错误。",
+  "There was an error cancelling your Pro subscription.": "取消您的专业版会员时出错。",
   "This {l2} dictionary has <b>{num} words</b>": "此{l2}词典包含<b>{num}个单词</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "这是一个 {l2} 文本阅读工具（又称注释器、标记器、词性分析器）",
   "This is a {level} level video.": "这是一个 {level} 级别的视频。",

@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "montre nan televizyon \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Mo \"{word}} sanble sèlman pran sou yon fòm.",
   "There has been an error.": "Te gen yon erè.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Sa a {l2} diksyonè gen <b>{num} mo</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Sa a se yon {l2} tèks tèks zouti (a.k.a annotator, tokenizer, lematizer)",
   "This is a {level} level video.": "Sa a se yon {level} nivo videyo.",

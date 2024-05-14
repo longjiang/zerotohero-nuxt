@@ -1,5 +1,5 @@
 <template>
-  <div v-if="SALE" class="text-white p-3 rounded text-center sale-ad">
+  <div v-if="SALE && (!subscription || subscription.type !== 'lifetime')" class="text-white p-3 rounded text-center sale-ad">
     <div><b>{{ $tb('{name} SALE!', { name: $tb(SALE_NAME) }) }}</b> {{ $tb('{discount} on lifetime Pro account',
     { discount: $tb('30% off') }) }}</div>
     <small style="text-small">{{ $tb('Offer ends:') }} {{ $db(SALE_END_DATE, 'short') }}</small>
@@ -26,6 +26,11 @@ export default {
       SALE_NAME,
       SALE_END_DATE,
     };
+  },
+  computed: {
+    subscription() {
+      return this.$store.state.subscriptions.subscription;
+    },
   },
 };
 </script>

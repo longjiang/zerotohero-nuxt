@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "tv show \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Orðið \"{word}\" tykist bara at taka eitt form.",
   "There has been an error.": "Tað hevur verið ein feilur.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Hetta {l2} orðabók has <b>{num} words</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Hetta er ein {l2} text lesa tool (a.k.a annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Hetta er ein {level} level video.",

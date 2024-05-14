@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "Acara TV \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Kata \"{word}\" tampaknya hanya mengambil satu bentuk.",
   "There has been an error.": "Telah terjadi kesalahan.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Kamus {l2} ini memiliki <b>{num} kata</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Ini adalah alat membaca teks {l2} (alias annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Ini adalah video tingkat {level}.",

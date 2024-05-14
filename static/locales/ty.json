@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "te hoho'a i roto i te afata teata \" {title} \"",
   "The word “{word}” seems to only take on one form.": "E au ra te ta'o ra \"{word}} \" i ni'a noa i te hoê api parau.",
   "There has been an error.": "Ua tupu te hoê hape.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "I roto i teie titionare {l2} te vai ra <b>te mau ta'o {num}</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "E mauhaa tai'oraa parau teie {l2} (a.k.a annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "E hoho'a video {level}.",

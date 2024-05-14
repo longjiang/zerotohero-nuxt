@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "ລາຍການໂທລະພາບ \"{title}\"",
   "The word “{word}” seems to only take on one form.": "ຄໍາວ່າ \"{word}\" ເບິ່ງຄືວ່າຈະມີແຕ່ແບບຟອມດຽວເທົ່ານັ້ນ.",
   "There has been an error.": "ມີຄວາມຜິດພາດ.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "ນີ້ວັດຈະນານຸກົມ {l2} <b>ມີຄໍາວ່າ {num}</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "ນີ້ແມ່ນເຄື່ອງມືການອ່ານຂໍ້ຄວາມ {l2} (a.k.a annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "ນີ້ແມ່ນວິດີໂອລະດັບ {level} .",

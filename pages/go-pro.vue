@@ -33,7 +33,7 @@
                     @shown="modalRendered = true" @hidden="modalRendered = false" >
                     <div v-if="modalRendered"><!-- We load this only after the modal is shown to prevent PayPal button errors -->
                       <!-- If there is an active subscription, the customer must cancel it first. -->
-                      <div v-if="subscription && subscription.payment_customer_id">
+                      <div v-if="hasActiveSubscription">
                         <p>{{ $tb('You have an existing active subscription:') }}</p>
                         <SubscriptionStatus class="my-3" :showActionButtons="false" />
                         <p><strong>{{ $tb('You must cancel it before you can upgrade.') }}</strong></p>
@@ -99,6 +99,14 @@ export default {
     },
     pro() {
       return this.forcePro || this.$store.state.subscriptions.active;
+    },
+    hasActiveSubscription() {
+      if (!this.subscription) return false;
+      if (!this.subscription.payment_customer_id) return false; // Only those with a payment_customer_id have a renewing subscription with Stripe
+      // Make sure subscription is active and not expired
+      const expiresOn = new Date(this.subscription.expires_on.replace(' ', 'T')); // subscription.expires_on is in the format 2024-06-14 10:16:40, but we need a Date object for comparison
+      const currentDate = new Date();
+      return currentDate < expiresOn;
     },
   },
   methods: {

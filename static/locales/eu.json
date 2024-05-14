@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "\"{title} telebista-saioa",
   "The word “{word}” seems to only take on one form.": "\"{{word}\" hitzak forma bakarra hartzen duela dirudi.",
   "There has been an error.": "Akats bat izan da.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "{l2} hiztegi honek <b>hitzak {l2}} ditu.</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Testua irakurtzeko tresna bat da hau {l2} (adibidez, ohartailea, tokenizadoizatzailea, lematizatzailea)",
   "This is a {level} level video.": "Hau {level} mailako bideoa da.",

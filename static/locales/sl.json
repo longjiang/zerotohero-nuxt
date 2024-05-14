@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "TV-oddaja »{title}«",
   "The word “{word}” seems to only take on one form.": "Zdi se, da ima beseda »{word}« samo eno obliko.",
   "There has been an error.": "Prišlo je do napake.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Ta slovar {l2} vsebuje besede {<b>{l2}}</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "To je orodje za branje besedila {l2} (tudi annotator, tokenizator, lemmatizer)",
   "This is a {level} level video.": "To je videoposnetek na ravni {level}.",

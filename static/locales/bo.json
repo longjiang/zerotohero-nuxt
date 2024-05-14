@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "བརྙན་འཕྲིན་ལེ་ཚན་\"{title}\"།",
   "The word “{word}” seems to only take on one form.": "\"{word}་\"ཞེས་པའི་ཐ་སྙད་འདི་ལ་རྣམ་པ་གཅིག་མ་གཏོགས་མེད་པ་འདྲ།",
   "There has been an error.": "ནོར་འཁྲུལ་བྱུང་བ་རེད།",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "འདི་{l2}་ཚིག་མཛོད་ནང་<b>དུ་མིང་རྐྱང་{num}་འདུ་བ་</b>ཡིན།",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "འདི་ནི་{l2}་ཡིག་ཀློག་འདོན་ཡོ་བྱད་(མིང་ལ་འགྲེལ་བཤད་རྒྱག་ཆས་དང་། ཐ་སྙད་དབྱེ་འབྱེད་ཡོ་བྱད། མིང་ཚིག་གི་མ་བཅོས་ཡོ་བྱད་བཅས་ཡིན། )",
   "This is a {level} level video.": "འདི་ནི་རིམ་པ་{level}་བའི་བརྙན་རིས་ཤིག་རེད།",

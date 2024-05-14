@@ -1832,6 +1832,7 @@
   "the TV Show “{title}”": "テレビ番組「{title}」",
   "The word “{word}” seems to only take on one form.": "\"{word}\" という単語は 1 つの形式に過ぎないようです。",
   "There has been an error.": "エラーが発生しました。",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "この{l2}辞書に<b>{num}語があります。</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "これは{l2}テキスト読み取りツール(別名アノテーター、トークナイザー、レンマタイザー)です",
   "This is a {level} level video.": "これは {level} レベルのビデオです。",

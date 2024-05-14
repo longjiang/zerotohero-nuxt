@@ -1217,6 +1217,7 @@
   "the TV Show “{title}”": "TV 쇼 \"{title}\"",
   "The word “{word}” seems to only take on one form.": "\"{word}\"라는 단어는 한 가지 형태로만 사용되는 것 같습니다.",
   "There has been an error.": "오류가 발생했습니다.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "이 {l2} 사전에는 <b>{num} 단어가 있습니다.</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "이것은 {l2} 텍스트 읽기 도구(일명 주석가, 토크나이저, 표제어 추출제)입니다.",
   "This is a {level} level video.": "{level} 수준의 동영상입니다.",

@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "Телепередача \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Слово «{word}», кажется, принимает только одну форму.",
   "There has been an error.": "Произошла ошибка.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Этот словарь {l2} содержит {<b>{l2}} слов</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Это {l2} инструмент для чтения текста (он же аннотатор, токенизатор, лемматизатор)",
   "This is a {level} level video.": "Это видео уровня {level}.",

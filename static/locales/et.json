@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "telesaade \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Sõna \"{word}\" näib võtvat ainult ühe vormi.",
   "There has been an error.": "On tehtud viga.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Selles {l2} sõnastikus on {<b>{l2}} sõnad</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "See on {l2} teksti lugemise tööriist (teise nimega annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "See on {level} taseme video.",

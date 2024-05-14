@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "an Seó Teilifíse \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Is cosúil nach dtógann an focal \"{word}\" ach foirm amháin.",
   "There has been an error.": "Tharla earráid.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Tá <b>focail {num}</b> ag an bhfoclóir {l2} seo",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Is uirlis léitheoireachta téacs {l2} é seo (ar a dtugtar freisin annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Is físeán leibhéal {level} é seo.",

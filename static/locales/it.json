@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "il programma televisivo \"{title}\"",
   "The word “{word}” seems to only take on one form.": "La parola \"{word}\" sembra assumere una sola forma.",
   "There has been an error.": "Si è verificato un errore.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Questo dizionario {l2} contiene {<b>{l2}} parole</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Questo è uno strumento di lettura del testo {l2} (noto anche come annotatore, tokenizzatore, lemmatizzatore)",
   "This is a {level} level video.": "Questo è un video di livello {level}.",

@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "ang TV Show na \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Ang salitang \"{word}\" ay tila nagkakaroon lamang ng isang anyo.",
   "There has been an error.": "May mali na.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Ang diksyunaryong {l2} na ito ay may <b>{num} na salita</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Ito ay isang {l2} tool sa pagbabasa ng teksto (a.k.a annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Ito ay isang {level} level video.",

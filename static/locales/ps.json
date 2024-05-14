@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "د \"{title} پروګرام\"",
   "The word “{word}” seems to only take on one form.": "داسې ښکاری چې \"{word} کلمه یوازې یو فورمه اخلی.",
   "There has been an error.": "یوه تېروتنه رامنځته شوې ده.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "دا د {l2} <b>لغتونه لری {num}</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "دا د {l2} متن لوستلو وسیله ده (a.k.a annotator، tokenizer، lemmatizer)",
   "This is a {level} level video.": "دا د {level} کچې ویډیو ده.",

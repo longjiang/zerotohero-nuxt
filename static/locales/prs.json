@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "برنامه تلویزیونی \"{title}\"",
   "The word “{word}” seems to only take on one form.": "کلمه \"{word}\" به نظر می رسد تنها در یک فرم را.",
   "There has been an error.": "خطایی رخ داده است.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "این واژه {l2} <b>{num}</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "این یک ابزار خواندن متن {l2} (نام دیگر، نشانه، لمتیزر) است.",
   "This is a {level} level video.": "این یک ویدیو سطح {level} است.",

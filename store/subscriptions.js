@@ -52,6 +52,7 @@ export const actions = {
       });
       // dispatch the checkSubscription action to update the state
       this.dispatch("subscriptions/checkSubscription");
+      return res;
     } catch (error) {
       console.error("Error cancelling subscription:", error.message);
     }

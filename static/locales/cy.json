@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "TV Show \"[{title}}\"",
   "The word “{word}” seems to only take on one form.": "Mae'n ymddangos bod y gair \"{word}\" yn cymryd un ffurf yn unig.",
   "There has been an error.": "Mae camgymeriad wedi bod.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Mae gan y geiriadur {l2} <b>hwn {num} o eiriau</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Mae hwn yn offeryn darllen testun {l2} (a.k.a annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Mae hwn yn fideo lefel {{level}.",

@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "het tv-programma \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Het woord \"{word}\" lijkt maar één vorm aan te nemen.",
   "There has been an error.": "Er is een fout opgetreden.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Dit {l2} woordenboek bevat {<b>{l2}} woorden</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Dit is een {l2} tekstleestool (ook bekend als annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Dit is een video op {level} niveau.",

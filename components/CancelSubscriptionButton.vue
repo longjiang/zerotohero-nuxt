@@ -36,12 +36,19 @@ export default {
       }
       this.cancelling = true;
       // Call the action to cancel the subscription
-      await this.$store.dispatch('subscriptions/cancelSubscriptionAtEndOfPeriod');
+      let res = await this.$store.dispatch('subscriptions/cancelSubscriptionAtEndOfPeriod');
       this.cancelling = false;
-      this.$toast.success(
-        this.$t("Your Pro subscription has been cancelled. You can still use Pro features before the end of the current billing period."),
-        { duration: 5000 }
-      );
+      if (res) {
+          this.$toast.success(
+          this.$t("Your Pro subscription has been cancelled. You can still use Pro features before the end of the current billing period."),
+          { duration: 5000 }
+        );
+      } else {
+        this.$toast.error(
+          this.$t("There was an error cancelling your Pro subscription."),
+          { duration: 5000 }
+        );
+      }
     },
   },
 };

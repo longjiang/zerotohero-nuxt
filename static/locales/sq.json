@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "Tv Show \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Fjala \"{word}\" duket se merr vetëm një formë.",
   "There has been an error.": "Ka pasur një gabim.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Ky fjalor {l2} ka fjalë {<b>{l2}}</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Ky është një mjet për leximin e tekstit {l2} (a.k.a annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Kjo është një video e nivelit {level} .",

@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "تېلېۋىزىيە پروگراممىسى «{title}}",
   "The word “{word}” seems to only take on one form.": "«{word}} دېگەن سۆز پەقەت بىرلا جەدۋەلنى ئۆز ئۈستىگە ئالغاندەك كۆرۈنىدۇ.",
   "There has been an error.": "خاتالىق كۆرۈلدى.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "بۇ {l2} لۇغەتتە <b>{num} سۆزلەر</b> بار",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "بۇ {l2} تېكىست ئوقۇش قورالى (a.k.annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "بۇ {level} دەرىجە ۋىدىئوسى.",

@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "emisiunea TV \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Cuvântul \"{word}\" pare să ia o singură formă.",
   "There has been an error.": "A apărut o eroare.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Acest dicționar {l2} are <b>{num} cuvinte</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Acesta este un instrument de citire a textului {l2} (alias adnotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Acesta este un videoclip de nivel {level}.",

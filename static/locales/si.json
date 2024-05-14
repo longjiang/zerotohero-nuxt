@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "රූපවාහිනී වැඩසටහන \"{title}\"",
   "The word “{word}” seems to only take on one form.": "\"{word}\" යන වචනය එක් ස්වරූපයක් පමණක් ගන්නා බව පෙනේ.",
   "There has been an error.": "වැරදීමක් වෙලා තියෙනවා.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "මෙම {l2} ශබ්දකෝෂයේ <b>{num} වචන</b> ඇත",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "මෙය {l2} පෙළ කියවීමේ මෙවලමකි (එනම් ඇනෝටේටරයක්, ටෝකනයිසර්, ලෙම්මාටිසර්)",
   "This is a {level} level video.": "මෙය {level} මට්ටමේ වීඩියෝවකි.",

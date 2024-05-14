@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "TV-ohjelma \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Sana \"{word}\" näyttää saavan vain yhden muodon.",
   "There has been an error.": "On tapahtunut virhe.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Tässä {l2}-sanakirjassa on {<b>{l2}} sanaa</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Tämä on {l2}-tekstinlukutyökalu (alias annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Tämä on {level}-tason video.",

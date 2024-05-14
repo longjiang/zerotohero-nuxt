@@ -1002,6 +1002,7 @@
   "the TV Show “{title}”": "el programa de televisió \"{title}\"",
   "The word “{word}” seems to only take on one form.": "La paraula \"{word}\" sembla que només pren una forma.",
   "There has been an error.": "S'ha produït un error.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Aquest diccionari {l2} té {<b>{l2}} paraules</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Aquesta és una eina de lectura de text {l2} (també conegut com a anotador, tokenitzador, lematitzador)",
   "This is a {level} level video.": "Aquest és un vídeo de nivell {level}.",

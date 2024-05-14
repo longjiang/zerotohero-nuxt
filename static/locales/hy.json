@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "հեռուստաշոու «{title}",
   "The word “{word}” seems to only take on one form.": "«{{word} բառը կարծես թե միայն մեկ ձեւ է վերցնում:",
   "There has been an error.": "Սխալ է եղել.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Այս {l2} բառակազմությունը ունի <b>{num} բառեր</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Սա a {l2} տեքստային ընթերցման գործիք է (a.k.a annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Սա {level} մակարդակի վիդեո է:",

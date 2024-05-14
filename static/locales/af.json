@@ -1002,6 +1002,7 @@
   "the TV Show “{title}”": "die TV-program \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Dit lyk asof die woord \"{word}\" net een vorm aanneem.",
   "There has been an error.": "Daar was 'n fout.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Hierdie {l2} woordeboek het {<b>{l2}} woorde</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Dit is 'n {l2} teksleesinstrument (ook bekend as annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Dit is 'n {level} vlak video.",

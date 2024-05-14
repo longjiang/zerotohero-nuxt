@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "TV-programmet \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Ordet \"{word}\" verkar bara ha en form.",
   "There has been an error.": "Ett fel har uppstått.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Denna {l2} ordbok har {<b>{l2}} ord</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Detta är ett {l2} textläsningsverktyg (även kallat annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Det här är en video på {level}-nivå.",

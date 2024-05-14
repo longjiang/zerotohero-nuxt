@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "Ho ho ho tv show \"{title}*\"",
   "The word “{word}” seems to only take on one form.": "Ho bonahala eka lentsoe \"{word}\"\" le nka feela ka sebopeho se le seng.",
   "There has been an error.": "Ho bile le phoso.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Mantsoe ana a na <b>{l2} le mantsoe a</b> {num}",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Ena ke {l2} sesebelisoa sa ho bala mongolo (a.k.k.a annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Ena ke video e phahameng ea {level}.",

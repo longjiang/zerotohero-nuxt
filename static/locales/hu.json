@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "a \"{title}\" tévéműsor",
   "The word “{word}” seems to only take on one form.": "Úgy tűnik, hogy a \"{word}\" szó csak egy formát ölt.",
   "There has been an error.": "Hiba történt.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Ez a {l2} szótár {<b>{l2}} szavakat</b> tartalmaz",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Ez egy {l2} szövegolvasó eszköz (más néven annotátor, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Ez egy {level} szintű videó.",

@@ -805,6 +805,7 @@
   "the TV Show “{title}”": "i-TV Show \"{title}\"",
   "The word “{word}” seems to only take on one form.": "Igama elithi \"{word}\" libonakala lithatha ifomu elilodwa kuphela.",
   "There has been an error.": "Kube nephutha.",
+  "There was an error cancelling your Pro subscription.": "There was an error cancelling your Pro subscription.",
   "This {l2} dictionary has <b>{num} words</b>": "Lesi sichazamazwi se-{l2} <b>sinamagama {num}</b>",
   "This is a {l2} text reading tool (a.k.a annotator, tokenizer, lemmatizer)": "Lena {l2} ithuluzi lokufunda umbhalo (a.k.a annotator, tokenizer, lemmatizer)",
   "This is a {level} level video.": "Lena ividiyo yezinga le-{level} .",
