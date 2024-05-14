@@ -14,7 +14,7 @@
         <p class="text-center">{{ $tb('Please choose your method of payment.') }}</p>
         <template v-if="$auth.user?.id">
           <PurchaseStripe :plan="selectedPlan.name" />
-          <PurchasePayPal v-if="selectedPlan.name === 'lifetime'" :plan="selectedPlan.name" class="ml-2" />
+          <PurchasePayPal v-if="selectedPlan.name === 'lifetime'" :plan="selectedPlan.name" style="width: 250px; margin: 0 auto" />
         </template>
         <div v-else class="alert alert-warning">
           {{ $tb('Your account is not logged in. Please log in to purchase.') }} <a href="/login?redirect=/go-pro">{{

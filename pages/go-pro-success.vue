@@ -27,7 +27,7 @@
                 <h6 class="text-left my-3">
                   🎉 {{ $tb("You’re now Pro!") }}
                 </h6>
-                <SubscriptionStatus class="my-4" />
+                <SubscriptionStatus class="my-4" :showActionButtons="false" />
                 <div>
                   <router-link
                     :to="{ name: 'logout' }"

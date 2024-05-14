@@ -36,7 +36,16 @@
                   <Pricing @plan-selected="handlePlanSelection" />
                   <b-modal ref="paymentMethods" hide-footer centered class="safe-padding-top mt-4" size="sm" :title="selectedPlan ? selectedPlan.currency + selectedPlan.amount + $tb(selectedPlan.intervalText) : 'Pro'"
                     @shown="modalRendered = true" @hidden="modalRendered = false" >
-                    <PaymentMethods v-if="modalRendered" :selectedPlan="selectedPlan" /> <!-- We load this only after the modal is shown to prevent PayPal button errors -->
+                    <div v-if="modalRendered"><!-- We load this only after the modal is shown to prevent PayPal button errors -->
+                      <!-- If there is an active subscription, the customer must cancel it first. -->
+                      <div v-if="subscription && subscription.payment_customer_id">
+                        <p>{{ $tb('You have an existing active subscription:') }}</p>
+                        <SubscriptionStatus class="my-3" />
+                        <p><strong>{{ $tb('You must cancel it before you can upgrade.') }}</strong></p>
+                        <CancelSubscriptionButton :subscription="subscription" variant="success" class="w-100" :text="$tb('Cancel Existing Subscription')" />
+                      </div>
+                      <PaymentMethods v-else :selectedPlan="selectedPlan" /> 
+                    </div>
                   </b-modal>
                 </client-only>
               </div>
@@ -88,6 +97,9 @@ export default {
     },
     native() {
       return Capacitor.isNativePlatform();
+    },
+    subscription() {
+      return this.$store.state.subscriptions.subscription;
     },
     pro() {
       return this.forcePro || this.$store.state.subscriptions.active;
