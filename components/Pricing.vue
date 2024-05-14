@@ -6,7 +6,7 @@
       :class="{
         'pricing-card': true,
         sale: SALE && plan.name === 'lifetime',
-        active: subscription && subscription.type === plan.name,
+        active: subscription && subscription.type === plan.name && subscription.payment_customer_id,
         selected: selectedPlan && selectedPlan.name === plan.name,
       }"
       @click="subscription && subscription.type === plan.name ? null : selectPlan(plan)"
@@ -92,7 +92,7 @@
       <div>{{ $tb(plan.description) }}</div>
       <div class="mt-2">
         <b-button
-          v-if="plan.name === subscription?.type"
+          v-if="plan.name === subscription?.type && subscription?.payment_customer_id"
           size="sm"
           disabled
           >{{ $tb('Current Plan') }}</b-button

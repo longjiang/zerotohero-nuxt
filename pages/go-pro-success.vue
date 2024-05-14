@@ -19,31 +19,21 @@
         <div class="col-sm-12 text-dark">
           <div>
             <Logo :forcePro="true" skin="light" class="logo" />
-            <hr />
           </div>
           <div class="mt-4" />
           <client-only>
             <div v-if="$auth.loggedIn && $auth.user" class="text-center">
               <div v-if="pro">
-                <h3 class="text-center mt-3">
+                <h6 class="text-left my-3">
                   🎉 {{ $tb("You’re now Pro!") }}
-                </h3>
-                <div class="mt-4" />
-                <div>
-                  {{
-                    $tb(
-                      "Welcome {name}, you now enjoy the benefit of a Pro account across all languages.",
-                      { name: $auth.user ? $auth.user.first_name : "" }
-                    )
-                  }}
-                </div>
-                <div class="mt-4"></div>
+                </h6>
+                <SubscriptionStatus class="my-4" />
                 <div>
                   <router-link
-                    :to="{ name: 'dashboard' }"
+                    :to="{ name: 'logout' }"
                     class="btn btn-success pl-4 pr-4"
                   >
-                    {{ $tb("Start Using Pro") }}
+                    {{ $tb("Login") }}
                     <i class="fas fa-chevron-right"></i>
                   </router-link>
                 </div>

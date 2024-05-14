@@ -62,7 +62,7 @@ export default {
           duration: 5000
         }
       );
-      this.$router.push("/");
+      this.$router.push("/login");
     }
   }
 };
