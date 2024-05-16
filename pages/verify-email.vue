@@ -76,7 +76,7 @@ export default {
     };
   },
   async mounted() {
-    this.form.email = this.$route.query.email;
+    this.form.email = decodeURIComponent(this.$route.query.email);
     // Send a verification email
     this.sendCode();
   },
