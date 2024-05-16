@@ -131,7 +131,7 @@ export default {
           this.$router.push({
             name: "verify-email",
             query: {
-              email: this.form.email,
+              email: encodeURIComponent(this.form.email),
             },
           });
         }

@@ -159,9 +159,9 @@ export default {
             this.$router.push({
               name: "verify-email",
               query: {
-                email: this.form.email,
+                email: encodeURIComponent(this.form.email),
               },
-            }); 
+            });
           } else {
             this.$toast.error(err.response.data.error.message, {
               position: "top-center",
