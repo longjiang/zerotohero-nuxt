@@ -15,8 +15,8 @@
     }`"
   >
     <div class="container">
-      <div class="row">
-        <div class="go-pro-wrapper mx-4 col-sm-12 text-dark">
+      <div class="row mx-4">
+        <div class="go-pro-wrapper col-sm-12 text-dark">
           <div>
             <Logo :forcePro="true" skin="light" class="logo" />
           </div>
@@ -125,6 +125,7 @@ export default {
   max-width: 30rem;
   padding: 2rem;
   border-radius: 1rem;
+  margin: 0 auto;
   background: rgba(255, 255, 255, 0.7333333333);
   box-shadow: 0 0 30px rgb(0 0 0 / 48%);
   -webkit-backdrop-filter: blur(20px);
