@@ -3,7 +3,7 @@
     <!-- <router-link :to="{ lastFullHistoryPath }" class="feedback-button">
       <i class="fa-solid fa-arrows-rotate"></i>
     </router-link> -->
-    <a href="https://discord.com/channels/1002116370303037500/1002116371536171086" target="_blank" class="feedback-button"><i class="fa-brands fa-discord"></i> {{ $t("Feedback") }}</a>
+    <a href="https://discord.gg/4SzBp5J6VX" target="_blank" class="feedback-button"><i class="fa-brands fa-discord"></i> {{ $t("Feedback") }}</a>
     <!-- <span @click="showModal" class="feedback-button"><i class="fa-brands fa-discord"></i> {{ $t("Feedback") }}</span> -->
     <!-- <b-modal
       ref="feedback-modal"
