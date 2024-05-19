@@ -63,7 +63,7 @@
         </span>
       </template>
       <span @click="retranslate" v-if="this.video.id" class="text-success cursor-pointer">
-        <template v-if="this.retranslating">{{ $t('Retranslating...') }}</template>
+        <b-spinner small v-if="retranslating" />
         <template v-else>{{ $t('Retranslate') }}</template>
       </span>
       <span v-if="video.channel && $adminMode">
@@ -169,8 +169,23 @@ export default {
   methods: {
     async retranslate() {
       this.retranslating = true
-      let response = await proxy(`${PYTHON_SERVER}/translate_video_and_save?l1=${this.$l1.code}&l2=${this.$l2.code}&video_id=${this.video.id}`)
-      let subs_l1 = this.$subs.parseSavedSubs(response)
+      let url = `${PYTHON_SERVER}translate_video_and_save?l1=${this.$l1.code}&l2=${this.$l2.code}&video_id=${this.video.id}`
+      let jsonOrCSV = await axios(url).then((res) => res.data).catch((err) => err)
+      if (!jsonOrCSV || typeof jsonOrCSV !== 'string') {
+        console.error(`${url} responded with:`, jsonOrCSV)
+      }
+      let subs_l1 = this.$subs.parseSavedSubs(jsonOrCSV)
+      if (!subs_l1) {
+        this.$toast.error(
+          this.$t('Failed to retranslate subtitles.'),
+          {
+            position: "top-center",
+            duration: 5000,
+          }
+        );
+        this.retranslating = false
+        return
+      }
       this.$store.commit("shows/MODIFY_ITEM", {
         item: this.video,
         key: "subs_l1",

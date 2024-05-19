@@ -19,7 +19,8 @@ export default ({ app }, inject) => {
       return parsed;
     },
     parseSavedSubs(jsonOrCSV) {
-      if (jsonOrCSV) {
+      // Make sure jsonOrCSV is not null, undefined and is a string
+      if (jsonOrCSV && typeof jsonOrCSV === "string") {
         let isJSON = jsonOrCSV.charAt(0) === "[";
         let parsed = isJSON
           ? JSON.parse(jsonOrCSV)
