@@ -94,7 +94,6 @@ export default {
         if (res.data.status = 'success') {
           this.$toast.success(this.$tb('Email verified. You can now log in.'), { duration: 5000 });
           this.$gtag.event('user_register')
-          this.$gtag.event('ads_conversion_Sign_Up_1')
           // Log out the user
           await this.$auth.logout();          
           this.$router.push({ name: 'login' });
