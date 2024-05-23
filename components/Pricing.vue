@@ -78,6 +78,7 @@
 
 <script>
 import { SALE, SALE_NAME, SALE_END_DATE, SALE_DISCOUNT } from "@/lib/utils/variables";
+import { getPrices } from "@/lib/prices";
 
 export default {
   data() {
@@ -87,29 +88,7 @@ export default {
       SALE_END_DATE,
       SALE_DISCOUNT,
       selectedPlan: null,
-      pricingPlans: [
-        {
-          name: "monthly",
-          currency: "US$",
-          amount: "6",
-          intervalText: "/mo",
-          description: "Billed monthly",
-        },
-        {
-          name: "annual",
-          currency: "US$",
-          amount: "59",
-          intervalText: "/yr",
-          description: "Billed annually",
-        },
-        {
-          name: "lifetime",
-          currency: "US$",
-          amount: "129",
-          intervalText: "/lifetime",
-          description: "One-time payment, lifetime access.",
-        },
-      ],
+      pricingPlans: [],
     };
   },
   computed: {
@@ -120,7 +99,46 @@ export default {
       return this.$store.state.subscriptions.subscription;
     },
   },
+  async created() {
+    try {
+      const stripePrices = await getPrices()
+      this.pricingPlans = stripePrices
+        .filter(price => price.status === 'current' && price.type === 'regular' && price.currency === 'usd')
+        .map(price => {
+          return {
+            name: price.plan,
+            currency: this.formatCurrency(price.currency),
+            amount: price.amount.toString(),
+            intervalText: this.getIntervalText(price.plan),
+            description: this.getDescription(price.plan)
+          };
+        });
+    } catch (error) {
+      console.error('Failed to fetch prices:', error)
+    }
+  },
   methods: {
+    formatCurrency(currencyCode) {
+      return currencyCode.toUpperCase() === 'USD' ? 'US$' : 'CNY¥';
+    },
+    getIntervalText(plan) {
+      if (plan === 'monthly') {
+        return '/mo';
+      } else if (plan === 'annual') {
+        return '/yr';
+      } else {
+        return '/lifetime';
+      }
+    },
+    getDescription(plan) {
+      if (plan === 'monthly') {
+        return 'Billed monthly';
+      } else if (plan === 'annual') {
+        return 'Billed annually';
+      } else {
+        return 'One-time payment, lifetime access.';
+      }
+    },
     // Compare plan levels
     isHigherPlan(planNameA = 'free', planNameB = 'free') {
       // Define the ranking of plans

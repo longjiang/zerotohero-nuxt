@@ -46,6 +46,7 @@
 <script>
 import { PYTHON_SERVER, SALE, TEST } from "@/lib/utils";
 import { HOST } from "@/lib/utils/url";
+import { getPrices } from "@/lib/prices";
 
 export default {
   props: {
@@ -64,13 +65,10 @@ export default {
     };
   },
   async created() {
-    const testQuery = this.TEST ? '?test=true' : '';
-    const response = await fetch(`${PYTHON_SERVER}/stripe-prices${testQuery}`);
-    if (response.ok) {
-      const data = await response.json();
-      this.prices = data;
-    } else {
-      console.error('Failed to load prices:', response.statusText);
+    try {
+      this.prices = await getPrices()
+    } catch (error) {
+      console.error('Failed to fetch prices:', error)
     }
   },
   computed: {
