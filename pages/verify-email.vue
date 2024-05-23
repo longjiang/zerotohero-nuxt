@@ -45,10 +45,11 @@
                       <span v-else>{{ $tb("Resend Code") }}</span>
                     </b-button>
                   </div>
-                  <!-- If the user has trouble verifying their email, ask them to contact support -->
+                  <!-- If the user has trouble verifying their email, ask them to contact support. Precompose a message including their email address. -->
                   <div class="text-center mt-3 mb-0"><small>
                       <p class="mb-0">{{ $tb('Having trouble?') }} <a
-                          href="mailto:jon.long@zerotohero.ca">{{ $tb('Contact Us') }}</a></p>
+                          :href="`mailto:jon.long@zerotohero.ca?subject=Email Verification Issue&body=Hello, I am having trouble verifying my email address. My email address is: ${form.email}`"
+                          class="text-primary">{{ $tb('Contact Us') }}</a></p>
                     </small></div>
                 </b-form>
               </div>
@@ -105,7 +106,7 @@ export default {
           this.$toast.success(this.$tb('Email verified. You can now log in.'), { duration: 5000 });
           this.$gtag.event('user_register')
           // Log out the user
-          await this.$auth.logout();          
+          await this.$auth.logout();
           this.$router.push({ name: 'login' });
         } else {
           this.$toast.error(this.$tb(res.data.message), { duration: 5000 });
