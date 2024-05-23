@@ -108,7 +108,7 @@ export default {
           await this.$auth.logout();          
           this.$router.push({ name: 'login' });
         } else {
-          this.$toast.error(this.$tb('Failed to verify email.'), { duration: 5000 });
+          this.$toast.error(this.$tb(res.data.message), { duration: 5000 });
         }
 
       } catch (error) {
