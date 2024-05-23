@@ -179,6 +179,7 @@ export default {
   width: 100%;
   padding: 2px 5px;
   font-weight: bold;
+  white-space: initial;
 }
 
 .sale-end-date {
