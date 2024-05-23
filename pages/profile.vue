@@ -121,39 +121,22 @@
                 />
               </div>
               <div class="mt-4 pb-5">
-                <h5 class="mb-4">{{ $t("Danger Zone") }}</h5>
                 <div class="row">
-                  <div class="col-sm-12 col-md-6 mb-2">
-                    <div class="text-center alert-danger rounded p-4">
-                      <b-button variant="danger" @click="removeProgress">
-                        <i class="fas fa-trash mr-2"></i>
-                        {{ $t("Remove {l2}", { l2: $t($l2.name) }) }}
-                      </b-button>
-                      <p class="mt-3 mb-0">
-                        {{
-                          $t(
-                            "This will remove your logged time for {l2}, and remove {l2} from your home screen Dashboard.",
-                            { l2: $t($l2.name) }
-                          )
-                        }}
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="col-sm-12 mb-2">
                     <div
-                      class="text-center alert-danger rounded p-4"
-                      style="height: 100%"
+                      class="bg-accent rounded p-3"
+                      style="height: 100%; font-size: 0.9em; color: #6c757d;"
                     >
-                      <b-button variant="danger" @click="deleteAccount">
-                        <i class="fas fa-times-circle mr-2"></i>
-                        {{ $t("Delete My Account") }}
-                      </b-button>
-                      <p class="mt-3 mb-0">
+                    <h6>{{ $t("Delete My Account") }}</h6>
+                      <p class="mt-2 mb-0">
                         {{
                           $t(
                             "This will permanently remove your Language Player account. There is no undo."
                           )
                         }}
+                        <router-link :to="{ name: 'delete-account' }" class="text-secondary">
+                          <u>{{ $t("Delete My Account") }}</u>
+                        </router-link>
                       </p>
                     </div>
                   </div>
