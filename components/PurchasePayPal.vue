@@ -29,6 +29,7 @@
       </div>
     </div>
     <PayPal
+      v-if="price"
       currency="USD"
       env="production"
       :amount="price"
@@ -50,14 +51,13 @@
 <script>
 import { PYTHON_SERVER, SALE } from "@/lib/utils";
 import { HOST } from "@/lib/utils/url";
+import { getPrices } from "@/lib/prices";
 
 export default {
   data() {
-    let defaultPrice = "129.00"
-    let discountPrice = "103.00" // 20% off
-    let price = SALE ? discountPrice : defaultPrice
+
     return {
-      price,
+      price: undefined, // Updated in created()
       paypalPaymentStatus: undefined,
       paypalCredentials: {
         sandbox:
@@ -70,7 +70,7 @@ export default {
           name: "zero-to-hero-pro",
           description: "Language Player Pro features",
           quantity: "1",
-          price,
+          price: undefined, // Updated in created()
           currency: "USD",
         },
       ],
@@ -82,6 +82,16 @@ export default {
     }
   },
   computed: {
+  },
+  async created() {
+    try {
+      const allPlans = await getPrices()
+      const lifetimeUSDPlan = allPlans.find(price => price.status === 'current' && price.type === SALE ? 'sale' : 'regular' && price.plan === 'lifetime' && price.currency === 'usd')
+      this.price = lifetimeUSDPlan.amount.toString()
+      this.paypalItems[0].price = lifetimeUSDPlan.amount.toString()
+    } catch (error) {
+      console.error('Failed to fetch prices:', error)
+    }
   },
   methods: {
     onPayPalPaymentAuthorized(e) {
