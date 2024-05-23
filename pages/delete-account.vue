@@ -21,48 +21,35 @@
         </div>
       </div>
       <div class="container" v-else>
+        {{ hasActiveSubscription }}
         <div class="row mb-3">
           <div class="col-sm-12 text-center">
-            <h4>
-              {{ formatName($auth.user.first_name, $auth.user.last_name) }}
-            </h4>
+            <h4>{{ formatName($auth.user.first_name, $auth.user.last_name) }}</h4>
             <div>{{ $auth.user.email }}</div>
           </div>
         </div>
         <div class="row mt-5">
           <div class="col-sm-12 text-center">
             <div class="bg-accent rounded p-4">
-              <h5>{{ $t("Confirm Account Deletion") }}</h5>
-              <p>
-                {{
-                  $t(
-                    "We're sorry to see you go."
-                  )
-                }}
-                {{ $t(
-                    "Once your account is deleted, all of your content will be permanently gone, including your profile, saved words, saved texts, history and likes."
-                ) }}
-              </p>
-              <p>{{ $t("To confirm deletion, type 'delete' below:") }}</p>
-              <input
-                type="text"
-                v-model="confirmText"
-                class="form-control mb-3"
-                placeholder="delete"
-              />
-              <button
-                class="btn btn-danger"
-                @click="confirmDeletion"
-                :disabled="confirmText !== 'delete'"
-              >
-                {{ $t("Confirm Deletion") }}
-              </button>
-              <router-link
-                to="/profile"
-                class="btn btn-secondary ml-2"
-              >
-                {{ $t("Cancel") }}
-              </router-link>
+              <div v-if="hasActiveSubscription">
+                <p>{{ $tb('You have an existing active subscription:') }}</p>
+                <SubscriptionStatus class="my-3" :showActionButtons="false" />
+                <p><strong>{{ $tb('You must cancel your active subscription before you can delete your account.') }}</strong></p>
+                <CancelSubscriptionButton :subscription="subscription" variant="success" class="w-100" :text="$tb('Cancel Existing Subscription')" />
+              </div>
+              <div v-else>
+                <h5>{{ $t("Confirm Account Deletion") }}</h5>
+                <p>
+                  {{ $t("We're sorry to see you go.") }}
+                  {{ $t("Once your account is deleted, all of your content will be permanently gone.") }}
+                </p>
+                <p>{{ $t("To confirm deletion, type 'delete' below:") }}</p>
+                <input type="text" v-model="confirmText" class="form-control mb-3" placeholder="delete"/>
+                <button class="btn btn-danger" @click="confirmDeletion" :disabled="confirmText !== 'delete'">
+                  {{ $t("Confirm Deletion") }}
+                </button>
+                <router-link to="/profile" class="btn btn-secondary ml-2">{{ $t("Cancel") }}</router-link>
+              </div>
             </div>
           </div>
         </div>
@@ -82,17 +69,23 @@ export default {
     };
   },
   computed: {
-    ...mapState("savedWords", ["savedWords"]),
-    level() {
-      return this.$store.state.progress.progressLoaded
-        ? Number(this.$store.getters["progress/level"](this.$l2))
-        : 0;
+    ...mapState("subscriptions", ["subscription"]),
+    subscription() {
+      return this.$store.state.subscriptions.subscription;
+    },
+    hasActiveSubscription() {
+      if (!this.subscription) return false;
+      if (!this.subscription.payment_customer_id) return false; // Only those with a payment_customer_id have a renewing subscription with Stripe
+      // Make sure subscription is active and not expired
+      const expiresOn = new Date(this.subscription.expires_on.replace(' ', 'T')); // subscription.expires_on is in the format 2024-06-14 10:16:40, but we need a Date object for comparison
+      const currentDate = new Date();
+      return currentDate < expiresOn;
     },
   },
   methods: {
     formatName,
     async confirmDeletion() {
-      if (this.confirmText === 'delete') {
+      if (!this.hasActiveSubscription && this.confirmText === 'delete') {
         // Add logic to delete account
         try {
           let res = await this.$directus.get(`users/me`);

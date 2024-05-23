@@ -19,8 +19,7 @@
       <div class="col-sm-12" v-if="subscription && subscription.type !== 'lifetime'">
         <strong>{{ $t('Auto-Renew') }}:</strong> {{ subscription.payment_customer_id ? $t('Yes') : $t('No') }}
         <template v-if="showActionButtons">
-          <span v-if="subscription.payment_customer_id">(
-            <CancelSubscriptionButton v-if="subscription.payment_customer_id" :subscription="subscription"
+          <span v-if="subscription.payment_customer_id">(<CancelSubscriptionButton v-if="subscription.payment_customer_id" :subscription="subscription"
               variant="link" />)
           </span>
         </template>
