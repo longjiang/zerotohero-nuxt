@@ -86,7 +86,7 @@ export default {
   async created() {
     try {
       const allPlans = await getPrices()
-      const lifetimeUSDPlan = allPlans.find(price => price.status === 'current' && price.type === SALE ? 'sale' : 'regular' && price.plan === 'lifetime' && price.currency === 'usd')
+      const lifetimeUSDPlan = allPlans.find(price => price.status === 'current' && price.type === (SALE ? 'sale' : 'regular') && price.plan === 'lifetime' && price.currency === 'usd')
       this.price = lifetimeUSDPlan.amount.toString()
       this.paypalItems[0].price = lifetimeUSDPlan.amount.toString()
     } catch (error) {
