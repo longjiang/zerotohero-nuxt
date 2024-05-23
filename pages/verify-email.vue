@@ -76,9 +76,19 @@ export default {
     };
   },
   async mounted() {
-    this.form.email = decodeURIComponent(this.$route.query.email);
-    // Send a verification email
-    this.sendCode();
+    let email = decodeURIComponent(this.$route.query.email);
+    let code = this.$route.query.code;
+    if (email) {
+      this.form.email = email;
+    }
+    if (code) {
+      this.form.code = code;
+      this.onSubmit();
+    } else {
+      this.show = true;
+      // Send a verification email
+      this.sendCode();
+    }
   },
   computed: {
     backgroundImage() {
