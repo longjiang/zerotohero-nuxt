@@ -34,17 +34,17 @@
                   </b-form-group>
                   <div class="text-left my-2 skin-light">
                     <!-- Add a form that asks the user how they heard about us. Give them the options: Google Search, Ads, Word of Mouth, HSK Courses, YouTube, Instagram, Other (Pleae specify) -->
-                    <b-form-group id="input-group-2" label-for="how_heard">
+                    <b-form-group id="input-group-2" label-for="acquisition_source">
                       <b-form-select 
-                        id="how_heard" 
-                        v-model="form.how_heard" 
-                        :options="how_heard_options"
+                        id="acquisition_source" 
+                        v-model="form.acquisition_source" 
+                        :options="acquisition_options"
                         required>
                       </b-form-select>
                     </b-form-group>
                     <!-- If the user selects "Other", show an input field where they can specify how they heard about us. -->
-                    <b-form-group v-if="form.how_heard === 'other'" id="input-group-3" label-for="how_heard_other">
-                      <b-form-input id="how_heard_other" v-model="form.how_heard_other" type="text" :placeholder="$tb('Please specify')"
+                    <b-form-group v-if="form.acquisition_source === 'other'" id="input-group-3" label-for="acquisition_other">
+                      <b-form-input id="acquisition_other" v-model="form.acquisition_other" type="text" :placeholder="$tb('Please specify')"
                         required></b-form-input>
                     </b-form-group>
                   </div>
@@ -86,12 +86,12 @@ export default {
       form: {
         email: "",
         code: "",
-        how_heard: null,
+        acquisition_source: null,
       },
       show: true,
       verifying: false,
       sending: false,
-      how_heard_options: [
+      acquisition_options: [
         { value: null, text: this.$tb('How did you hear about us?') },
         { value: 'hsk_courses', text: this.$tb('HSK Courses') },
         { value: 'youtube', text: this.$tb('YouTube') },
