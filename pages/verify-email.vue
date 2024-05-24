@@ -44,7 +44,7 @@
                     </b-form-group>
                     <!-- If the user selects "Other", show an input field where they can specify how they heard about us. -->
                     <b-form-group v-if="form.acquisition_source === 'other'" id="input-group-3" label-for="acquisition_other">
-                      <b-form-input id="acquisition_other" v-model="form.acquisition_other" type="text" :placeholder="$tb('Please specify')"
+                      <b-form-input id="acquisition_other" v-model="form.acquisition_details" type="text" :placeholder="$tb('Please specify')"
                         required></b-form-input>
                     </b-form-group>
                   </div>
@@ -87,6 +87,7 @@ export default {
         email: "",
         code: "",
         acquisition_source: null,
+        acquisition_details: null,
       },
       show: true,
       verifying: false,
