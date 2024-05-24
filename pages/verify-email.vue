@@ -32,6 +32,22 @@
                     <b-form-input id="code" v-model="form.code" type="text" :placeholder="$tb('Verification Code')"
                       required></b-form-input>
                   </b-form-group>
+                  <div class="text-left my-2 skin-light">
+                    <!-- Add a form that asks the user how they heard about us. Give them the options: Google Search, Ads, Word of Mouth, HSK Courses, YouTube, Instagram, Other (Pleae specify) -->
+                    <b-form-group id="input-group-2" label-for="how_heard">
+                      <b-form-select 
+                        id="how_heard" 
+                        v-model="form.how_heard" 
+                        :options="how_heard_options"
+                        required>
+                      </b-form-select>
+                    </b-form-group>
+                    <!-- If the user selects "Other", show an input field where they can specify how they heard about us. -->
+                    <b-form-group v-if="form.how_heard === 'other'" id="input-group-3" label-for="how_heard_other">
+                      <b-form-input id="how_heard_other" v-model="form.how_heard_other" type="text" :placeholder="$tb('Please specify')"
+                        required></b-form-input>
+                    </b-form-group>
+                  </div>
                   <div class="text-center">
                     <b-button type="submit" variant="primary" :disabled="verifying" class="w-100">
                       <b-spinner small v-if="verifying" />
@@ -62,7 +78,7 @@
 </template>
 
 <script>
-import { background, logError, PYTHON_SERVER, DIRECTUS_URL } from "@/lib/utils";
+import { background, logError, PYTHON_SERVER } from "@/lib/utils";
 
 export default {
   data() {
@@ -70,10 +86,21 @@ export default {
       form: {
         email: "",
         code: "",
+        how_heard: null,
       },
       show: true,
       verifying: false,
       sending: false,
+      how_heard_options: [
+        { value: null, text: this.$tb('How did you hear about us?') },
+        { value: 'hsk_courses', text: this.$tb('HSK Courses') },
+        { value: 'youtube', text: this.$tb('YouTube') },
+        { value: 'instagram', text: this.$tb('Instagram') },
+        { value: 'google_search', text: this.$tb('Google Search') },
+        { value: 'google_ads', text: this.$tb('Google Ads') },
+        { value: 'word_of_mouth', text: this.$tb('Word of Mouth') },
+        { value: 'other', text: this.$tb('Other (Please specify)') },
+      ],
     };
   },
   async mounted() {
@@ -84,12 +111,11 @@ export default {
     }
     if (code) {
       this.form.code = code;
-      this.onSubmit();
     } else {
-      this.show = true;
       // Send a verification email
       this.sendCode();
     }
+    this.show = true;
   },
   computed: {
     backgroundImage() {
