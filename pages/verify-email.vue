@@ -38,7 +38,7 @@
                       <b-form-select 
                         id="acquisition_source" 
                         v-model="form.acquisition_source" 
-                        :options="acquisition_options"
+                        :options="translatedAcquisitionOptions"
                         required>
                       </b-form-select>
                     </b-form-group>
@@ -97,8 +97,9 @@ export default {
         { value: 'hsk_courses', text: this.$tb('HSK Courses') },
         { value: 'youtube', text: this.$tb('YouTube') },
         { value: 'instagram', text: this.$tb('Instagram') },
-        { value: 'google_search', text: this.$tb('Google Search') },
-        { value: 'google_ads', text: this.$tb('Google Ads') },
+        { value: 'bilibili', text: this.$tb('Bilibili') },
+        { value: 'google_search', text: this.$tb('Web Search') },
+        { value: 'google_ads', text: this.$tb('Online Ads') },
         { value: 'word_of_mouth', text: this.$tb('Word of Mouth') },
         { value: 'other', text: this.$tb('Other (Please specify)') },
       ],
@@ -121,6 +122,19 @@ export default {
   computed: {
     backgroundImage() {
       return background(this.$l2);
+    },
+    translatedAcquisitionOptions() {
+      return [
+        { value: null, text: this.$t('How did you hear about us?') },
+        { value: 'hsk_courses', text: this.$t('HSK Courses') },
+        { value: 'youtube', text: this.$t('YouTube') },
+        { value: 'instagram', text: this.$t('Instagram') },
+        { value: 'bilibili', text: this.$t('Bilibili') },
+        { value: 'google_search', text: this.$t('Web Search') },
+        { value: 'google_ads', text: this.$t('Online Ads') },
+        { value: 'word_of_mouth', text: this.$t('Word of Mouth') },
+        { value: 'other', text: this.$t('Other (Please specify)') },
+      ];
     },
   },
   methods: {
