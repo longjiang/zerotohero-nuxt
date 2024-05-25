@@ -1,6 +1,6 @@
 <template>
   <TabbedSections v-bind="{ sections }">
-    <template #media>
+    <template #subtitles>
       <Widget
         skin="dark"
         :withPadding="false"
@@ -311,8 +311,8 @@ export default {
     sections() {
       return [
         {
-          name: "media",
-          title: "Media",
+          name: "subtitles",
+          title: "Subtitles",
           visible:
             this.entry && this.showSearchSubs && this.selectedSearchTerms,
         },

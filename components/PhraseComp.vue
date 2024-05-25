@@ -12,7 +12,7 @@
     </div>
 
     <TabbedSections v-bind="{ sections }">
-      <template #media>
+      <template #subtitles>
         <Widget
           skin="dark"
           id="search-subs"
@@ -177,8 +177,8 @@ export default {
     sections() {
       return [
         {
-          name: "media",
-          title: "Media",
+          name: "subtitles",
+          title: "Subtitles",
           visible: this.term,
         },
         {

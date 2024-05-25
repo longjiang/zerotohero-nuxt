@@ -7,15 +7,17 @@
     }"
   >
     <div class="text-center pb-2">
-      <span v-if="hits.length > 0" class="skin-dark">
+      <span class="skin-dark">
         <!-- Navigation Buttons -->
         <SimpleButton
+          v-if="hits.length > 0"
           :disabled="hitIndex === 0"
           iconClass="fas fa-step-backward"
           :title="$t('Previous Clip')"
           @click="goToPrevHit"
         />
         <SimpleButton
+          v-if="hits.length > 0"
           :disabled="hitIndex >= hits.length - 1"
           iconClass="fas fa-step-forward"
           :title="$t('Next Clip')"
@@ -29,46 +31,29 @@
           :title="$t('Filter Clips by Keywords')"
           @click="showFilter = true"
         />
-        
+
         <!-- Show playlist modal, showing current Hit Index -->
         <SimpleButton
+          v-if="hits.length > 0"
           iconClass="fa-solid fa-list mr-1"
           skin="dark"
           :title="$t('List All Clips')"
           @click="showPlaylistModal"
-          :text="$t('{num} of {total}', {num: hitIndex + 1, total: hits.length})"
+          :text="
+            $t('{num} of {total}', { num: hitIndex + 1, total: hits.length })
+          "
         />
 
         <!-- Search Input -->
         <b-form-input
-          v-if="showFilter && (hits.length > 0 || regex)"
+          v-if="showFilter"
           type="text"
           class="d-inline-block"
           size="sm"
           v-model="regex"
-          :placeholder="$t('Filter...')"
+          :placeholder="$t('Filter with regex...')"
           @blur="showFilter = false"
         />
-
-        <!-- Open Full Video -->
-        <router-link
-          v-if="currentHit"
-          :to="{
-            name: 'video-view',
-            params: {
-              type: 'youtube',
-              youtube_id: currentHit.video.youtube_id,
-            },
-            query: {
-              t: currentHit.video.subs_l2[currentHit.lineIndex].starttime,
-            },
-          }"
-          class="btn btn-ghost-dark-no-bg btn-sm"
-          title="Open this video with full transcript"
-        >
-          <i class="fa-solid fa-arrows-maximize mr-1"></i>
-          {{ $t("Open Full") }}
-        </router-link>
       </span>
     </div>
 
@@ -85,7 +70,11 @@
           {{ $t("Select different search terms from the dropdown above.") }}
         </li>
         <li>
-          {{ $t("Select more video categories and shows from the dropdown above.") }}
+          {{
+            $t(
+              "Select more video categories and shows from the dropdown above."
+            )
+          }}
         </li>
         <li v-if="$store.state.settings.subsSearchLimit">
           {{
@@ -141,6 +130,26 @@
         @videoUnavailable="onVideoUnavailable"
       />
     </template>
+    <!-- Open Full Video -->
+    <div class="text-center my-4">
+      <router-link
+        v-if="currentHit"
+        :to="{
+          name: 'video-view',
+          params: {
+            type: 'youtube',
+            youtube_id: currentHit.video.youtube_id,
+          },
+          query: {
+            t: currentHit.video.subs_l2[currentHit.lineIndex].starttime,
+          },
+        }"
+        class="btn btn-secondary"
+        :title="$t('Open this video with full transcript')"
+      >
+        {{ $t("View Full Video") }} <i class="fa-solid fa-chevron-right ml-1"></i>
+      </router-link>
+    </div>
     <div v-if="!pro">
       <YouNeedPro
         v-if="hitIndex > NON_PRO_MAX_SUBS_SEARCH_HITS - 1"
@@ -250,7 +259,7 @@ export default {
   computed: {
     // Determines if we can sort by views without too much of a performance hit
     canSortByViews() {
-      if (this.$l2.continua && !['zh'].includes(this.$l2.code)) return false; // continua script without ngram index, so this filters out japanse and thai among other languages
+      if (this.$l2.continua && !["zh"].includes(this.$l2.code)) return false; // continua script without ngram index, so this filters out japanse and thai among other languages
       return true; // It seems like performance is not too bad for most common words in most languages
       // return false; // Stilll figuring out how this can be done without SQL filesort which is too slow
       // return !this.talkFilter && !this.tvShowFilter;
@@ -349,6 +358,10 @@ export default {
     ucFirst,
     highlightMultiple,
     iOS,
+    pauseYouTube() {
+      if (this.$refs[`youtube-${this.hitIndex}`])
+        this.$refs[`youtube-${this.hitIndex}`].pause();
+    },
     async loadL1SubsIfNeeded() {
       let video = this.currentHit?.video;
       if (!video) return;
@@ -550,7 +563,11 @@ export default {
       let { savedHits, matchedHits, remainingHits } =
         this.getSavedAndMatchedHits(hits);
       // Only one group
-      hitGroups = { zthSaved: savedHits, contextMatched: matchedHits, views: remainingHits.sort((a, b) => b.video.views - a.video.views) };
+      hitGroups = {
+        zthSaved: savedHits,
+        contextMatched: matchedHits,
+        views: remainingHits.sort((a, b) => b.video.views - a.video.views),
+      };
       return hitGroups;
     },
     groupContext(context, hits, leftOrRight) {
@@ -642,7 +659,6 @@ export default {
       hit.saved = false;
       this.collectContext(this.hits);
       if (this.currentHit === hit) this.$emit("goToNextHit");
-      
     },
   },
 };
