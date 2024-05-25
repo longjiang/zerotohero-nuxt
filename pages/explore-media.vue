@@ -60,7 +60,7 @@
             />
           </div>
           <div v-else-if="!recommendedVideos?.[$l2.code]?.length">
-            <p>We have limited content for {{ $l2.name}}. Below are all the videos in our library: </p>
+            <p>{{ $t('We have limited content for {l2}. Below are all the videos in our library:', { l2: $l2.name }) }}</p>
             <MediaSearchResults  />  
           </div>
           

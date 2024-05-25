@@ -127,7 +127,33 @@ export const actions = {
       let videos = await this.$directus.getVideos({ l2Id, query })
       commit('ADD_VIDEO_DETAILS', { userLike, video: videos[0] })
     }
-  }
+  },
+
+  async fetchMultipleVideoDetails({ commit, state }, { l2Id, videoIds }) {
+      // Filter watchHistory for those that are both in the videoIds array and have the same l2Id
+      let userLikes = state.userLikes.filter(like => 
+        videoIds.includes(like.video_id) && like.l2 === l2Id && !like.video
+      );
+
+      if (userLikes.length > 0) {
+        // Define the fields to fetch for each video
+        const fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments";
+        // Create a filter query string using the video IDs
+        const filter = `filter[id][in]=${userLikes.map(like => like.video_id).join(',')}`;
+        const query = `${fields}&${filter}`;
+
+        // Fetch the video details from the API
+        const videos = await this.$directus.getVideos({ l2Id, query });
+
+        // Commit each video detail back to the corresponding userLikes item
+        videos.forEach(video => {
+          const userLike = userLikes.find(watch => watch.video_id === video.id);
+          if (userLike) {
+            commit('ADD_VIDEO_DETAILS', { userLike, video });
+          }
+        });
+      }
+    }
 }
 
 export const getters = {
