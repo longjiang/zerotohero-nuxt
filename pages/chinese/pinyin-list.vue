@@ -7,26 +7,26 @@
   <div class="main">
     <SocialHead
       title="Pronunciation List Tool | Language Player"
-      :description="`Enter a list of ${$l2.name} words and convert them into a list of pronunciation transcriptions.`"
+      :description="`Enter a list of ${$t($l2.name)} words and convert them into a list of pronunciation transcriptions.`"
     />
     <div class="container pt-5 pb-5">
       <div class="row">
         <div class="col-sm-12">
           <h3 class="text-center">{{ $t('Get pronunciation for a list of words') }}</h3>
           <p class="text-center">
-            {{ $t('Paste your list into the text box and get a table of all pronunciation variations for each word.') }}
+            {{ $t('Paste your list of {l2} words into the text box and get a table of all pronunciation variations for each word.', {l2: $t($l2.name)}) }}
           </p>
         </div>
       </div>
       <div class="row">
         <div :class="{ 'col-sm-6': csv, 'col-sm-12': !csv }">
-          <h5 class="mt-4 mb-4">{{ $t('Enter {l2} Words Here:', { l2: $l2.name }) }}</h5>
+          <h5 class="mt-4 mb-4">{{ $t('Enter {l2} Words Here:', { l2: $t($l2.name) }) }}</h5>
           <textarea
             v-model="text"
             class="mt-2 mb-2 form-control"
             cols="30"
             rows="10"
-            :placeholder="$t('Paste your list or {l2} words here to generate a pronunciation table', {l2: $l2.name})"
+            :placeholder="$t('Paste your list of {l2} words here to generate a pronunciation table', {l2: $t($l2.name)})"
           ></textarea>
         </div>
         <div class="col-sm-6" v-if="csv">
