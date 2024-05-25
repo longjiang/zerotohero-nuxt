@@ -86,16 +86,28 @@ export const actions = {
     }
   },
 
-  async fetchVideoDetails({ commit, state }, { l2Id, videoId }) {
-    // Find the watchHistory item for this video in the state
-    let watchHistory = state.watchHistory.find(like => like.video_id === videoId && like.l2 === l2Id)
-    if (watchHistory && ! watchHistory.video) {
+  async fetchMultipleVideoDetails({ commit, state }, { l2Id, videoIds }) {
+    // Find the watchHistory items for these videos in the state
+    let watchHistories = state.watchHistory.filter(like => videoIds.includes(like.video_id) && like.l2 === l2Id);
+    // Make sure they don't already have the video details
+    watchHistories = watchHistories.filter(like => !like.video);
+    
+    if (watchHistories.length > 0) {
       let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments";
-      let filter = `filter[id][eq]=${videoId}`
-      let query = `${fields}&${filter}`
-      
-      let videos = await this.$directus.getVideos({ l2Id, query })
-      commit('ADD_VIDEO_DETAILS', { watchHistory, video: videos[0] })
+      // Get the videoIds for the videos that we need to fetch
+      let filteredVideoIds = watchHistories.map(like => like.video_id);
+      let filter = `filter[id][in]=${filteredVideoIds.join(',')}`;
+      let query = `${fields}&${filter}`;
+  
+      let videos = await this.$directus.getVideos({ l2Id, query });
+  
+      // Map videos to their respective watchHistories
+      for (let video of videos) {
+        let watchHistory = watchHistories.find(watch => watch.video_id === video.id);
+        if (watchHistory) {
+          commit('ADD_VIDEO_DETAILS', { watchHistory, video });
+        }
+      }
     }
   },
 

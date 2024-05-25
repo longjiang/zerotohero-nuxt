@@ -95,6 +95,7 @@
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
 import { groupArrayBy, DEFAULT_PAGE } from "@/lib/utils";
+import debounce from 'lodash.debounce'; // Import lodash debounce
 
 export default {
   components: {
@@ -149,6 +150,7 @@ export default {
           minWidth: 1140,
         },
       },
+      visibleVideoIds: new Set(), // Track visible video IDs
     };
   },
   mounted() {
@@ -195,10 +197,10 @@ export default {
   methods: {
     onVisibilityChange(isVisible, entry, item) {
       if (isVisible) {
-        this.$store.dispatch("watchHistory/fetchVideoDetails", {
-          l2Id: this.$l2.id,
-          videoId: item.video_id,
-        });
+        this.visibleVideoIds.add(item.video_id);
+        this.fetchVisibleVideos();
+      } else {
+        this.visibleVideoIds.delete(item.video_id);
       }
     },
     emitHasWatchHistory() {
@@ -210,6 +212,14 @@ export default {
         this.$store.dispatch('watchHistory/removeAll');
       }
     },
+    fetchVisibleVideos: debounce(function() {
+      if (this.visibleVideoIds.size > 0) {
+        this.$store.dispatch('watchHistory/fetchMultipleVideoDetails', {
+          l2Id: this.$l2.id,
+          videoIds: Array.from(this.visibleVideoIds),
+        });
+      }
+    }, 300), // Debounce to limit the number of API calls
   },
 };
 </script>
