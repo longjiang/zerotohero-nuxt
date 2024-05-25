@@ -16,10 +16,7 @@
           <span style="flex: 0 0 1.5rem">{{ $t("A:") }}</span>
           <div style="flex: 1">
             <div v-for="(line, index) in message.text.split('\n')" :key="`gpt-respnose-${index}`" class="mb-2">
-              
-              <Annotate :buttons="true" :showTranslation="true" :showLoading="false">
-                <div v-html="Marked(line.trim())" />
-              </Annotate>
+              <div v-html="Marked(line.trim())" />
             </div>
             <div class="text-right">
               <span @click="resendMessage(messages[index - 1])" class="btn btn-unstyled text-success mr-2">
@@ -41,7 +38,7 @@
           </div>
         </div>
       </div>
-      <div class="mt-3 text-center" v-if="thinking">
+      <div class="my-5 text-center" v-if="thinking">
         <Loader :sticky="true" message="Getting response from ChatGPT..." />
       </div>
       <h6 v-if="!initialMessages[0]">{{ $t("Ask ChatGPT:") }}</h6>
@@ -70,6 +67,7 @@ export default {
       watcherActive: false,
       dictionary: undefined,
       errorMessage: undefined,
+      maxTokens: 150,
     };
   },
   async mounted() {

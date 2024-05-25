@@ -85,16 +85,17 @@
             {{ $t("Pronunciation, Morphology, and Examples") }}
           </b-button>
           <ChatGPT
+            :maxTokens="50"
             :initialMessages="[
               $t(
-                'Please explain the {l2} word “{word}”{pronunciation}, give its morphological breakdown, and some examples with {l1} translations, and a sample dialogue with {l1} translations.',
+                'Please explain the {l2} word “{word}”{pronunciation}, give its morphological breakdown, and some examples.',
                 {
                   l2: $t($l2.name),
                   l1: $t($l1.name),
                   word: entry.head,
                   pronunciation: pronunciation ? ` (${pronunciation})` : '',
                 }
-              ) + ' ' + $t('(No more than 50 words)'),
+              ),
             ]"
             v-if="showChatGPTBasic"
           />
@@ -107,6 +108,7 @@
             {{ $t("Compare from Similar Words") }}
           </b-button>
           <ChatGPT
+            :maxTokens="50"
             :initialMessages="[
               $t(
                 'Please explain how the {l2} word “{word}”{pronunciation} differs from other similar words in {l2}.',
@@ -116,7 +118,7 @@
                   word: entry.head,
                   pronunciation: pronunciation ? ` (${pronunciation})` : '',
                 }
-              ) + ' ' + $t('(No more than 50 words)'),
+              ),
             ]"
             v-if="showChatGPTDiff"
           />
@@ -129,16 +131,17 @@
             {{ $t("Write a Story with the Word") }}
           </b-button>
           <ChatGPT
+            :maxTokens="50"
             :initialMessages="[
               $t(
-                'Please make a {l2} story that illustrates the use of the {l2} word “{word}”{pronunciation}, with a {l1} translation after each paragraph.',
+                'Please make a {l2} story that illustrates the use of the {l2} word “{word}”{pronunciation}.',
                 {
                   l2: $t($l2.name),
                   l1: $t($l1.name),
                   word: entry.head,
                   pronunciation: pronunciation ? ` (${pronunciation})` : '',
                 }
-              ) + ' ' + $t('(No more than 50 words)'),
+              ),
             ]"
             v-if="showChatGPTStory"
           />
