@@ -1,5 +1,6 @@
 import { logError } from "@/lib/utils";
 import Vue from "vue";
+import SketchEngine from "@/lib/sketch-engine";
 
 export const romanizationOffByDefault = [
   "ko",
@@ -230,6 +231,18 @@ export const actions = {
   },
   setDictionaryName({ dispatch }, dictionaryName) {
     dispatch("setTransientSettings", { dictionaryName });
+  },
+  async setDefaultCorpname({ state, dispatch }, { l2 }) {
+    // Check if the user has already set a corpus
+    if (state.l2Settings[l2.code].corpname) {
+      console.log("📚 Corpus set to", state.l2Settings[l2.code].corpname);
+      return;
+    }
+    let corpname = await SketchEngine.corpname(l2)
+    console.log("📚 Initializing default corpus to", corpname);
+    if (corpname) {
+      dispatch("setL2Settings", { corpname });
+    }
   },
   setUseMachineTranslatedDictionary({ dispatch }, useMachineTranslatedDictionary) {
     dispatch("setTransientSettings", { useMachineTranslatedDictionary });

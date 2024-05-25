@@ -419,6 +419,7 @@ export default {
         l1: this.$l1,
         l2: this.$l2,
       });
+      this.$store.dispatch('settings/setDefaultCorpname', { l2: this.$l2 })
       this.$store.dispatch("settings/resetShowFilters");
       if (!this.savedWordsLoaded) {
         this.$store.dispatch("savedWords/load");
