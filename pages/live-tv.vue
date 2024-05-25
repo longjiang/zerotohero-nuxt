@@ -62,13 +62,12 @@
                 v-model="country"
                 @change="
                   keyword = null;
-                  category = null;
                   featured = false;
                 "
                 class="form-control mr-1"
               >
                 <b-form-select-option :value="null">
-                  {{ $t("Countries/Regions") }}
+                  {{ $t("All Countries/Regions") }}
                 </b-form-select-option>
                 <b-form-select-option
                   v-for="c in countries"
@@ -82,7 +81,6 @@
                 v-model="category"
                 @change="
                   keyword = null;
-                  country = null;
                   if (category === 'featured') {
                     featured = true;
                     category = null;
@@ -93,7 +91,7 @@
                 class="form-control"
               >
                 <b-form-select-option :value="null">
-                  {{ $t("Categories") }}
+                  {{ $t("All Categories") }}
                 </b-form-select-option>
                 <b-form-select-option
                   v-for="cat in categories"
@@ -212,19 +210,21 @@ export default {
       return this.channels.find((c) => c.featured);
     },
     filteredChannels() {
-      let channels = this.channels;
-      channels = channels.filter((c) => {
-        if (this.keyword && this.keyword !== "")
-          return (
-            c.name &&
-            c.name.match(new RegExp(escapeRegExp(this.keyword), "i"))
-          );
-        if (this.featured) return c.featured;
-        if (this.category) return c.category === this.category;
-        if (this.country) return c.countries.includes(this.country);
+      return this.channels.filter((c) => {
+        if (this.keyword && !c.name.match(new RegExp(escapeRegExp(this.keyword), "i"))) {
+          return false;
+        }
+        if (this.featured && !c.featured) {
+          return false;
+        }
+        if (this.category && c.category !== this.category) {
+          return false;
+        }
+        if (this.country && !c.countries.includes(this.country)) {
+          return false;
+        }
         return true;
       });
-      return channels;
     },
     all() {
       let all =
