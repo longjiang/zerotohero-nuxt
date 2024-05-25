@@ -110,7 +110,7 @@ export default ({ app }, inject) => {
       if (tvShowFilter) tv_show = tvShowFilter === "all" ? "nnull" : tvShowFilter.join(",");
       if (talkFilter) talk = talkFilter === "all" ? "nnull" : talkFilter.join(",");
       let hits = [];
-      terms = terms.filter((t) => t).map((t) => t.replace(/'/g, "&#39;"));
+      // terms = terms.filter((t) => t).map((t) => t.replace(/'/g, "&#39;"));
       terms = mutuallyExclusive(terms); // So if terms are ['dièdres', 'dièdre'], we search only 'dièdre' since results of the plural will be included automatically.
       let timestamp = adminMode ? Date.now() : 0;
       let params = {
