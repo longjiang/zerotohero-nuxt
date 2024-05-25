@@ -13,6 +13,7 @@
         type="text"
         class="form-control lookup"
         ref="lookup"
+        v-model="text"
         :placeholder="placeholder || $t('Search')"
       />
       <a
