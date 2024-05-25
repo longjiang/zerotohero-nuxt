@@ -32,29 +32,6 @@
               <hr class="my-4" />
             </div>
             <div>
-              <h5 class="my-4">{{ $t("ChatGPT Settings") }}</h5>
-              <p>{{ $t("Enter your ChatGPT API token:") }}</p>
-              <b-form-input
-                type="password"
-                v-model="localSettings.openAIToken"
-                @change="updateSettings"
-                :lazy="true"
-              ></b-form-input>
-              <i18n
-                path="Get your ChatGPT API token {0}."
-                class="mt-1 small"
-                tag="p"
-              >
-                <a
-                  href="https://platform.openai.com/account/api-keys"
-                  target="_blank"
-                >
-                  {{ $t("here") }}
-                </a>
-              </i18n>
-              <hr class="my-4" />
-            </div>
-            <div>
               <h5 class="my-4">
                 {{ $t("Settings specific to {l2}", { l2: $t($l2.name) }) }}:
               </h5>

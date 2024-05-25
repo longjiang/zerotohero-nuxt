@@ -75,6 +75,15 @@
           {{ $t("Let ChatGPT explain “{text}”", { text: entry.head }) }}
         </template>
         <template #body>
+          <!-- Show a button, when the user clicks we show the chatgpt component -->
+          <b-button
+            v-if="!showChatGPTBasic"
+            @click="showChatGPTBasic = true"
+            variant="primary"
+            class="mb-3 d-block"
+          >
+            {{ $t("Pronunciation, Morphology, and Examples") }}
+          </b-button>
           <ChatGPT
             :initialMessages="[
               $t(
@@ -85,7 +94,20 @@
                   word: entry.head,
                   pronunciation: pronunciation ? ` (${pronunciation})` : '',
                 }
-              ),
+              ) + ' ' + $t('(No more than 50 words)'),
+            ]"
+            v-if="showChatGPTBasic"
+          />
+          <b-button
+            v-if="!showChatGPTDiff"
+            @click="showChatGPTDiff = true"
+            variant="primary"
+            class="mb-3 d-block"
+          >
+            {{ $t("Compare from Similar Words") }}
+          </b-button>
+          <ChatGPT
+            :initialMessages="[
               $t(
                 'Please explain how the {l2} word “{word}”{pronunciation} differs from other similar words in {l2}.',
                 {
@@ -94,7 +116,20 @@
                   word: entry.head,
                   pronunciation: pronunciation ? ` (${pronunciation})` : '',
                 }
-              ),
+              ) + ' ' + $t('(No more than 50 words)'),
+            ]"
+            v-if="showChatGPTDiff"
+          />
+          <b-button
+            v-if="!showChatGPTStory"
+            @click="showChatGPTStory = true"
+            variant="primary"
+            class="mb-3 d-block"
+          >
+            {{ $t("Write a Story with the Word") }}
+          </b-button>
+          <ChatGPT
+            :initialMessages="[
               $t(
                 'Please make a {l2} story that illustrates the use of the {l2} word “{word}”{pronunciation}, with a {l1} translation after each paragraph.',
                 {
@@ -103,8 +138,9 @@
                   word: entry.head,
                   pronunciation: pronunciation ? ` (${pronunciation})` : '',
                 }
-              ),
+              ) + ' ' + $t('(No more than 50 words)'),
             ]"
+            v-if="showChatGPTStory"
           />
         </template>
       </Widget>
@@ -258,6 +294,9 @@ export default {
       renderSearchSubs: true,
       searchTermsWatcherActivated: false,
       wholePhraseOnly: this.exact ? true : false,
+      showChatGPTBasic: false,
+      showChatGPTDiff: false,
+      showChatGPTStory: false,
     };
   },
   computed: {
@@ -393,7 +432,7 @@ export default {
         return excludeTerms.filter(
           (s) =>
             s !== "" &&
-            !s.includes(' ') &&
+            !s.includes(" ") &&
             !allSearchTerms
               .filter((t) => t)
               .map((t) => t.toLowerCase())

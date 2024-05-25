@@ -7,7 +7,7 @@
           v-if="showDefinition"
           v-html="definition || '&nbsp;'"
         ></span>
-        <span class="word-block-pinyin" v-if="phonetics" dir="ltr">
+        <span class="word-block-pinyin" v-if="phonetics && phonetics !== text" dir="ltr">
           {{ phonetics }}
         </span>
         <span :class="wordBlockTextClasses">
