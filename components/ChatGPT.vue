@@ -80,6 +80,7 @@ export default {
   methods: {
     Marked,
     async getCompletion(prompt, cache = true) {
+      prompt = prompt + ` (Keep the entire reponse under ${this.maxTokens} words)`;
       this.thinking = true;
       try {
         // Post to the `{PYTHON_SERVER}chatgpt` endpoint
