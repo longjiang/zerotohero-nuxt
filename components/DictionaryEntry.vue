@@ -76,14 +76,6 @@
         </template>
         <template #body>
           <!-- Show a button, when the user clicks we show the chatgpt component -->
-          <b-button
-            v-if="!showChatGPTBasic"
-            @click="showChatGPTBasic = true"
-            variant="primary"
-            class="mb-3 d-block"
-          >
-            {{ $t("Pronunciation, Morphology, and Examples") }}
-          </b-button>
           <ChatGPT
             :maxTokens="50"
             :initialMessages="[
@@ -99,14 +91,6 @@
             ]"
             v-if="showChatGPTBasic"
           />
-          <b-button
-            v-if="!showChatGPTDiff"
-            @click="showChatGPTDiff = true"
-            variant="primary"
-            class="mb-3 d-block"
-          >
-            {{ $t("Compare from Similar Words") }}
-          </b-button>
           <ChatGPT
             :maxTokens="50"
             :initialMessages="[
@@ -122,14 +106,6 @@
             ]"
             v-if="showChatGPTDiff"
           />
-          <b-button
-            v-if="!showChatGPTStory"
-            @click="showChatGPTStory = true"
-            variant="primary"
-            class="mb-3 d-block"
-          >
-            {{ $t("Write a Story with the Word") }}
-          </b-button>
           <ChatGPT
             :maxTokens="50"
             :initialMessages="[
@@ -145,6 +121,32 @@
             ]"
             v-if="showChatGPTStory"
           />
+          <div style="max-width: 20rem; margin: 0 auto;">
+            <b-button
+              v-if="!showChatGPTBasic"
+              @click="showChatGPTBasic = true"
+              variant="primary"
+              class="mb-3 d-block w-100"
+            >
+              {{ $t("Pronunciation, Morphology, and Examples") }}
+            </b-button>
+            <b-button
+              v-if="!showChatGPTDiff"
+              @click="showChatGPTDiff = true"
+              variant="primary"
+              class="mb-3 d-block w-100"
+            >
+              {{ $t("Compare from Similar Words") }}
+            </b-button>
+            <b-button
+              v-if="!showChatGPTStory"
+              @click="showChatGPTStory = true"
+              variant="primary"
+              class="mb-3 d-block w-100"
+            >
+              {{ $t("Write a Story with the Word") }}
+            </b-button>
+          </div>
         </template>
       </Widget>
     </template>
