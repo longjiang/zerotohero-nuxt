@@ -45,9 +45,7 @@
             </li>
           </ul>
           <ShowMoreButton
-            :length="
-              examples.filter((example) => example.sentences.length > 0).length
-            "
+            :length="filteredExamples.length"
             :min="7"
             :data-bg-level="level"
           />
@@ -70,7 +68,7 @@
           {{ $t("Sentences provided by") }}
           <a
             :href="`https://app.sketchengine.eu/#concordance?corpname=${encodeURIComponent(
-              SketchEngine.corpname
+              $l2Settings.corpname
             )}&tab=basic&keyword=${term}&structs=s%2Cg&refs=%3Ddoc.website&showresults=1&operations=%5B%7B%22name%22%3A%22iquery%22%2C%22arg%22%3A%22${term}%22%2C%22active%22%3Atrue%2C%22query%22%3A%7B%22queryselector%22%3A%22iqueryrow%22%2C%22iquery%22%3A%22${term}%22%7D%2C%22id%22%3A3859%7D%5D`"
             target="_blank"
           >
@@ -80,6 +78,10 @@
               class="ml-2 logo-small"
             />
           </a>
+          <span v-if="$l2Settings?.corpname">
+            {{ $t("Corpus") }}:
+            <code>{{ $l2Settings?.corpname.replace("preloaded/", "") }}</code>
+          </span>
         </div>
         <hr />
         <div>
@@ -125,6 +127,11 @@ export default {
     term() {
       return this.word ? this.word.head : this.text;
     },
+    filteredExamples() {
+      return this.examples.filter(
+        (example) => example.sentences.length > 0
+      );
+    },
   },
   watch: {
     word() {
@@ -149,6 +156,7 @@ export default {
         term: this.term,
         l1: this.$l1,
         l2: this.$l2,
+        corpname: this.$l2Settings.corpname,
       });
       if (!examples) return false;
       for (let example of examples) {

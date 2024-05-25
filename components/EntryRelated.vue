@@ -48,7 +48,11 @@
               class="ml-2 logo-small"
             />
           </a>
-        </i18n>
+        </i18n> | 
+        <span v-if="$l2Settings?.corpname">
+          {{ $t("Corpus") }}:
+          <code>{{ $l2Settings?.corpname.replace("preloaded/", "") }}</code>
+        </span>
       </div>
     </template>
   </Widget>
