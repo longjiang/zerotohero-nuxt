@@ -317,7 +317,7 @@ export default {
       phrasebooks = uniqueByValue(phrasebooks, "id");
       let phrases = [];
       for (let phrasebook of phrasebooks) {
-        let l2 = this.$languages.getById(phrasebook.l2.id);
+        let l2 = this.$languages.getById(phrasebook.l2);
         phrasebook.phrases = Papa.parse(phrasebook.phrases, {
           header: true,
         }).data.map((p, id) => {

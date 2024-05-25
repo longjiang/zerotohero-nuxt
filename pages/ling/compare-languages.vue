@@ -87,8 +87,8 @@
               :sticky="true"
               :message="
                 wiktionary
-                  ? 'Searching through 7,669,735 words across 3,752 languages. This usualy takes 15 seconds...'
-                  : 'Looking for similar phrases in other languages'
+                  ? $tb('Searching through {num} words across {langs} languages. This usualy takes {s} seconds...', {num: '7,669,735', langs: '3,752', s: 15})
+                  : $tb('Looking for similar phrases in other languages')
               "
             />
           </div>
@@ -105,7 +105,7 @@
       </div>
       <div
         :class="{
-          'similar-phrases-panel': true,
+          'similar-phrases-panel skin-light': true,
           'd-none': !showList,
         }"
       >
@@ -117,7 +117,7 @@
                 listType === 'all-phrases' ? 'secondary' : 'outline-secondary'
               "
             >
-              All Phrases
+              {{ $tb('All Phrases') }}
             </b-button>
             <b-button
               @click="listType = 'this-phrase'"
@@ -125,7 +125,7 @@
                 listType === 'this-phrase' ? 'secondary' : 'outline-secondary'
               "
             >
-              This Phrase
+              {{ $tb('This Phrase') }}
             </b-button>
           </b-button-group>
         </div>
@@ -275,27 +275,41 @@ export default {
       this.phrasesInAllLangs = youInOtherLangs;
     },
     async loadPhraseObj() {
+      // Set the current index to the value of the 'i' query parameter, or 0 if it's not set
       this.currentIndex = this.$route.query.i ? Number(this.$route.query.i) : 0;
+      
       this.updating = true;
+      
       try {
-        let res = await this.$directus.get(
-          `items/phrasebook/${this.bookId}`
-        );
+        // Fetch the phrasebook with the specified ID
+        let res = await this.$directus.get(`items/phrasebook/${this.bookId}`);
+        
         if (res && res.data) {
           let phrasebook = res.data.data;
+          
+          // Parse the 'phrases' field of the phrasebook, which is a CSV string, into an array of objects
+          // Each object represents a phrase and has properties corresponding to the CSV columns
           phrasebook.phrases = Papa.parse(phrasebook.phrases, {
             header: true,
           }).data.map((p, id) => {
+            // Add an 'id' property to each phrase object, using the index as the ID
             p.id = id;
             return p;
           });
+          
+          // Store the phrasebook and the phrases in the component's data
           this.phrasebook = phrasebook;
           this.phrases = phrasebook.phrases;
+          
+          // Store the English translation of the first phrase in the component's data
           this.enData = this.phrases[0].en;
         }
       } catch (err) {
+        // If an error occurs, stop the loading animation
         this.loadingMap = false;
       }
+      
+      // Set 'updating' to false to indicate that the data has finished loading
       this.updating = false;
     },
   },

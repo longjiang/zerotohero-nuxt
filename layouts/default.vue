@@ -401,7 +401,7 @@ export default {
     async onLanguageChange() {
       // Set the locale
       if (this.$l1) this.updatei18n();
-      await this.$store.dispatch("watchHistory/load", this.$l2.id);
+      if (this.$l2) await this.$store.dispatch("watchHistory/load", this.$l2.id);
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
       if (this.$l1 && this.$l2) {
         this.loadLanguageSpecificData(); // This will trigger updateL2SettingsClasses()
