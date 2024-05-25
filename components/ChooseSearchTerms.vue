@@ -22,30 +22,34 @@
       modal-class="safe-padding-top mt-4"
       @hide="onModalHide"
     >
-      <p>✅ {{ $t('Include results containing:') }}</p>
-      <b-form-checkbox-group id="search-terms-checkbox-group" v-model="selectedSearchTerms">
-        <b-form-checkbox
-          v-for="term in allSearchTerms"
-          :key="`term-${term}`"
-          :value="term"
-          class="d-block mb-1"
-        >
-          {{ term }}
-        </b-form-checkbox>
-      </b-form-checkbox-group>
-      <hr />
-      <p>❌ {{ $t('Exclude results containing:') }}</p>
-      <b-form-checkbox-group id="search-terms-checkbox-group" v-model="selectedExcludeTerms">
-        <b-form-checkbox
-          v-for="term in allExcludeTerms"
-          :key="`term-${term}`"
-          :value="term"
-          class="d-block mb-1"
-        >
-          {{ term }}
-        </b-form-checkbox>
-      </b-form-checkbox-group>
-      <hr />
+      <div v-if="allSearchTerms.length > 1">
+        <p>{{ $t('Include results containing:') }}</p>
+        <b-form-checkbox-group id="search-terms-checkbox-group" v-model="selectedSearchTerms">
+          <b-form-checkbox
+            v-for="term in allSearchTerms"
+            :key="`term-${term}`"
+            :value="term"
+            class="d-block mb-1"
+          >
+            {{ term }}
+          </b-form-checkbox>
+        </b-form-checkbox-group>
+        <hr />
+      </div>
+      <div v-if="allExcludeTerms.length > 0">
+        <p>{{ $t('Exclude results containing:') }}</p>
+        <b-form-checkbox-group id="search-terms-checkbox-group" v-model="selectedExcludeTerms">
+          <b-form-checkbox
+            v-for="term in allExcludeTerms"
+            :key="`term-${term}`"
+            :value="term"
+            class="d-block mb-1"
+          >
+            {{ term }}
+          </b-form-checkbox>
+        </b-form-checkbox-group>
+        <hr />
+      </div>
       <b-form-checkbox
         v-model="wholePhraseOnly"
         class="d-block mb-1"

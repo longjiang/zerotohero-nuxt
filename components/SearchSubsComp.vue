@@ -312,6 +312,8 @@ export default {
     },
     currentHit: {
       async handler(newVal, oldVal) {
+        // If currentHit is not set, we don't do anything
+        if (!newVal) return;
         let unavailable = await YouTube.videoUnavailable(
           this.currentHit?.video?.youtube_id
         );
@@ -378,11 +380,12 @@ export default {
       }
     },
     async onVideoUnavailable(youtube_id) {
+      if (!this.currentHit) return;
       let video = this.currentHit.video;
       if (youtube_id && youtube_id !== video.youtube_id) return; // Always make sure the unavailable video is indeed what the user is looking at
       // Go to next video
       await timeout(2000);
-      if (this.currentHit.video.youtube_id === youtube_id)
+      if (this.currentHit?.video.youtube_id === youtube_id)
         this.removeCurrentHitAndGoToNext();
     },
     loadSettings() {
