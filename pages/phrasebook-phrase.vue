@@ -199,7 +199,7 @@
               <LazyDictionaryEntry
                 v-if="word && phrasebook"
                 :entry="word"
-                :tvShow="phrasebook.tv_show"
+                :tvShow="getTVShow(phrasebook.tv_show)"
                 :exact="phraseObj.exact || phrasebook.exact"
                 :exactPhrase="phraseObj.phrase"
                 :key="`dictionary-entry-${word.id}`"
@@ -209,7 +209,7 @@
               <LazyPhraseComp
                 v-else-if="phraseObj && phraseObj.phrase && phrasebook"
                 :term="phraseObj.phrase.toLowerCase()"
-                :tvShow="phrasebook.tv_show"
+                :tvShow="getTVShow(phrasebook.tv_show)"
                 :exact="phraseObj.exact || phrasebook.exact"
                 :showExternal="false"
                 :showImages="false"
@@ -395,6 +395,10 @@ export default {
     next();
   },
   methods: {
+    getTVShow(id) {
+      let tvSHow = this.$store.getters["shows/tvShow"]({l2: this.$l2, id})
+      return tvSHow;
+    },
     async saveTranslation(e) {
       let newText = e.target.innerText.trim();
       if (this.phraseObj[this.$l1.code] !== newText) {
