@@ -11,9 +11,9 @@
       description="See on a map how people say words like 'yes', 'no', 'thanks' on a map!"
       image="/img/thumbnail-compare-languages.jpg"
     />
-    <div class="container-fluid">
+    <div class="container-fluid d-grid">
       <div
-        class="row bg-dark text-white pt-2 pb-2 text-left"
+        class="row first-row bg-dark text-white py-2 text-left"
         style="overflow: visible; height: 56px"
       >
         <div class="col-sm-12 d-flex" style="overflow: visible">
@@ -80,8 +80,8 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12" style="height: calc(100vh - 56px); padding: 0">
+      <div class="row second-row">
+        <div class="col-12" style="height: calc(100vh - 103px); padding: 0">
           <div class="loader-wrapper p-5" v-if="loadingMap || updating">
             <Loader
               :sticky="true"
@@ -95,10 +95,10 @@
           <client-only>
             <LanguageMap
               v-if="phrasesInAllLangs"
-              style="height: 100%"
               ref="languageMap"
               :phrases="phrasesInAllLangs"
               @ready="onReady"
+              style="height: calc(100% - "
             />
           </client-only>
         </div>
@@ -244,8 +244,10 @@ export default {
           );
         }
       }
-      this.enData = this.phrases[this.currentIndex].phrase;
-      this.showList = false;
+      if (this.phrases) {
+        this.enData = this.phrases[this.currentIndex].phrase;
+        this.showList = false;
+      }
     },
     enData() {
       if (!this.phrases || this.enData !== this.phrases[this.currentIndex].en) {
@@ -319,6 +321,22 @@ export default {
 <style lang="scss" scoped>
 
 @import "~@/assets/scss/variables.scss";
+
+.d-grid {
+  display: grid;
+  grid-template-rows: 56px 1fr; /* 56px for the header, rest for the content */
+  height: 100vh;
+  overflow: hidden; /* Prevents overflow beyond the viewport */
+}
+
+.first-row {
+  grid-row: 1;
+}
+
+.second-row {
+  grid-row: 2;
+  overflow: auto; /* Allows scrolling within the row if content overflows */
+}
 
 .similar-phrases-panel {
   background: white;

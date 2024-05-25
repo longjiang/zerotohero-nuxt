@@ -423,8 +423,7 @@ export default {
 @import "~@/assets/scss/variables.scss";
 .language-map {
   width: 100%;
-  height: 40rem;
-  max-height: 100vh;
+  height: 100%;
   .language-marker {
     width: 10rem;
     margin-left: -5rem;
