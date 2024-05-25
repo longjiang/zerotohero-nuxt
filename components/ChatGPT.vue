@@ -90,7 +90,6 @@ export default {
         });
         
         this.thinking = false;
-        console.log(response.data);
         return {
           text: response.data.response,
           sender: "bot",
