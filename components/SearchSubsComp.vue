@@ -163,6 +163,10 @@
         goToHit,
       }"
       @updateSort="(newSortValue) => (sort = newSortValue)"
+      @goToNextHit="goToNextHit"
+      @removeSavedHit="removeSavedHit"
+      @saveHit="saveHit"
+      @removeHit="removeSavedHit"
     />
   </div>
 </template>
@@ -614,6 +618,28 @@ export default {
       index = Math.max(index, 0);
       this.currentHit = this.hits[index];
       this.navigated = true;
+    },
+
+    saveHit(hit) {
+      this.$store.dispatch("savedHits/add", {
+        terms: this.terms,
+        hit: hit,
+        l2: this.$l2.code,
+      });
+      hit.saved = true;
+      this.collectContext(this.hits);
+      if (this.currentHit === hit) this.$emit("goToNextHit");
+    },
+    removeSavedHit(hit) {
+      this.$store.dispatch("savedHits/remove", {
+        terms: this.terms,
+        hit: hit,
+        l2: this.$l2.code,
+      });
+      hit.saved = false;
+      this.collectContext(this.hits);
+      if (this.currentHit === hit) this.$emit("goToNextHit");
+      
     },
   },
 };

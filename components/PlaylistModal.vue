@@ -78,7 +78,7 @@
                 :item="hit"
                 :saved="(hit) => hit.saved"
                 :save="saveHit"
-                :remove="removeSavedHit"
+                :remove="removeHit"
               />
               <img
                 class="hit-thumb"
@@ -164,51 +164,6 @@ export default {
     hide() {
       this.$refs["playlist-modal"].hide();
     },
-    saveHit(hit) {
-      this.$store.dispatch("savedHits/add", {
-        terms: this.terms,
-        hit: hit,
-        l2: this.$l2.code,
-      });
-      hit.saved = true;
-      if (this.currentHit === hit) this.goToNextHit();
-      this.groupsLeft["zthSaved"].push(hit);
-      this.groupsRight["zthSaved"].push(hit);
-      this.findAndRemoveHit(this.groupsLeft, hit);
-      this.findAndRemoveHit(this.groupsRight, hit);
-    },
-    findAndRemoveHit(groups, hit) {
-      for (let c in groups) {
-        if (c !== "zthSaved") {
-          let group = groups[c];
-          let index = group.findIndex((h) => h === hit);
-          if (index !== -1) group.splice(index, 1);
-        }
-      }
-    },
-    putHitBack(groups, hit, leftOrRight) {
-      for (let c in groups) {
-        if (hit[`${leftOrRight}Context`].startsWith(c)) {
-          groups[c].push(hit);
-          break;
-        }
-      }
-    },
-    removeSavedHit(hit) {
-      this.$store.dispatch("savedHits/remove", {
-        terms: this.terms,
-        hit: hit,
-        l2: this.$l2.code,
-      });
-      hit.saved = false;
-      if (this.currentHit === hit) this.goToNextHit();
-      let index = this.groupsLeft["zthSaved"].findIndex((h) => h === hit);
-      if (index !== -1) this.groupsLeft["zthSaved"].splice(index, 1);
-      index = this.groupsRight["zthSaved"].findIndex((h) => h === hit);
-      if (index !== -1) this.groupsRight["zthSaved"].splice(index, 1);
-      this.putHitBack(this.groupsLeft, hit, "left");
-      this.putHitBack(this.groupsRight, hit, "right");
-    },
     async onPlaylistModalShown() {
       await timeout(500);
       if (this.$refs["playlist-modal-current-item"]) {
@@ -216,7 +171,12 @@ export default {
         ref.scrollIntoView({ block: "center" });
       }
     },
-    // ... any other existing methods for this modal
+    saveHit(hit) {
+      this.$emit('saveHit', hit)
+    },
+    removeHit(hit) {
+      this.$emit('removeHit', hit)
+    },
   },
 };
 </script>
