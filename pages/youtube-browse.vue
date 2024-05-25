@@ -87,11 +87,11 @@
       </div> -->
       <!-- Add a search field -->
 
-      <div class="row mb-4">
+      <!-- <div class="row mb-4">
         <div class="col-sm-12">
           <ChannelList :channels="channels.filter(c => c.l2 === this.$l2.id)" />
         </div>
-      </div>
+      </div> -->
       <div class="row mb-4">
         <div class="col-sm-12 text-center">
           <div v-show="kidsOnly" class="mb-2">
@@ -137,13 +137,13 @@
           </div>
         </div>
       </div>
-      <b-form-input
+      <!-- <b-form-input
         :lazy="true"
         :placeholder="$tb('Search')"
         class="mb-5"
         @keyup.enter="handleSearch"
         :value="keyword"
-      />
+      /> -->
       <MediaSearchResults
         v-bind="{
           params: mediaSearchParams,
