@@ -434,6 +434,8 @@ export default {
     },
     hideMenuModal() {
       this.$bvModal.hide("annotateMenuModal");
+      this.$bvModal.hide("grammarModal");
+      this.$bvModal.hide("chatGptModal");
     },
     showGrammarModal() {
       this.$bvModal.show("grammarModal");
