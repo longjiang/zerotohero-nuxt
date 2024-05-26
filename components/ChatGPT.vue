@@ -1,9 +1,9 @@
 <template>
   <div>
     <div>
-      <div v-for="(message, index) in messages" :key="index" class="mt-4 mb-2">
-        <div v-if="message.sender === 'user'">
-          <div class="d-flex">
+      <div v-for="(message, index) in messages" :key="index" class="my-2">
+        <div v-if="message.sender === 'user' && showPrompt">
+          <div class="d-flex" v-if="showPrompt">
             <b style="flex: 0 0 1.5rem">{{ $t("Q:") }}</b>
             <b style="flex: 1">{{ message.text }}</b>
           </div>
@@ -13,7 +13,7 @@
           </div>
         </div>
         <div v-if="message.sender === 'bot' && typeof message.text === 'string'" class="d-flex">
-          <span style="flex: 0 0 1.5rem">{{ $t("A:") }}</span>
+          <span style="flex: 0 0 1.5rem" v-if="showPrompt">{{ $t("A:") }}</span>
           <div style="flex: 1">
             <div v-for="(line, index) in message.text.split('\n')" :key="`gpt-respnose-${index}`" class="mb-2">
               <div v-html="Marked(line.trim())" />
@@ -57,6 +57,9 @@ export default {
   props: {
     initialMessages: {
       default: [], // of Strings
+    },
+    showPrompt: {
+      default: true, // Whether or not to show the question prompt
     },
   },
   data() {
