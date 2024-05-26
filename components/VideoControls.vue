@@ -281,14 +281,14 @@
           skin="light"
           class="p-2"
         />
-        <client-only>
+        <!-- <client-only>
           <NavPage
             :l1="$l1"
             :l2="$l2"
             class="youtube-browse-nav mb-5 row"
             :showOnly="['Discover', 'Music', 'TV Shows', 'Movies', 'YouTube', 'Live TV', 'News', 'Kids', 'Categories', 'Open MP4...', 'Import from YouTube']"
           />
-        </client-only>
+        </client-only> -->
       </div>
     </b-modal>
     <b-modal
