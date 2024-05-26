@@ -315,6 +315,9 @@
       <Toggle v-model="karaokeAnimation" label="Karaoke Highlighting">
         <i class="fa-sharp fa-solid fa-stars"></i>
       </Toggle>
+      <Toggle v-model="showQuiz" label="Show Pop Quizzes">
+        <i class="fa-solid fa-rocket"></i>
+      </Toggle>
       <div>
         <button
           :class="{
@@ -433,6 +436,7 @@ export default {
       progressPercentage: 0,
       transcriptMode: false,
       karaokeAnimation: false,
+      showQuiz: false,
       watcherActive: false,
       likePending: false,
     };
@@ -547,6 +551,12 @@ export default {
       if (!this.watcherActive) return;
       this.$store.dispatch("settings/setGeneralSettings", {
         karaokeAnimation: this.karaokeAnimation,
+      });
+    },
+    showQuiz(oldValue, newValue) {
+      if (!this.watcherActive) return;
+      this.$store.dispatch("settings/setL2Settings", {
+        showQuiz: this.showQuiz,
       });
     },
   },
