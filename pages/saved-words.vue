@@ -15,37 +15,6 @@
 <template>
   <div class="main pb-4" v-cloak>
     <div class="container">
-      <div class="row text-center" v-if="sW.length > 0">
-        <div class="col-sm-12">
-          <div class="mt-3">
-            <b-button
-              @click="importButtonClick()"
-              :variant="$skin"
-              size="sm"
-            >
-              <i class="fa fa-upload mr-1"></i>
-              {{ $t("Import") }}
-            </b-button>
-            <b-button
-              :variant="$skin"
-              size="sm"
-              @click="exportButtonClick()"
-            >
-              <i class="fa fa-download mr-1"></i>
-              {{ $t("Export") }}
-            </b-button>
-            <b-button
-              variant="danger"
-              size="sm"
-              v-on:click="removeAllClick"
-              v-if="this.sW.length > 0"
-            >
-              <i class="fas fa-times mr-1"></i>
-              {{ $t("Remove All") }}
-            </b-button>
-          </div>
-        </div>
-      </div>
       <div class="row">
         <div class="col-sm-12">
           <div
@@ -74,7 +43,7 @@
           <div v-if="dictionaryLoaded && !sWLoaded" class="text-center mt-4">
             <Loader :sticky="true" :message="$t('Loading saved words...')" />
           </div>
-          <div
+          <!-- <div
             class="hide-defs pb-3 pt-3 text-center"
             v-if="sWLoaded && sW.length > 0"
           >
@@ -83,9 +52,16 @@
               @hideDefinitions="hideDefinitions = arguments[0]"
               @hidePhonetics="hidePhonetics = arguments[0]"
             />
-          </div>
-          <div class="text-center" v-if="sWLoaded && sW.length > 0">
+          </div> -->
+          <div class="d-flex my-5 justify-content-between align-items-center" v-if="sWLoaded && sW.length > 0">
             <MakeAStory :words="sW.map((s) => s.word).slice(0, 6)" />
+            <b-button
+              :variant="$skin"
+              @click="showActionMenu()"
+            >
+              {{ $t("Actions") }}<i class="fa fa-chevron-down ml-1"></i>
+            </b-button>
+
           </div>
           <div
             v-for="(group, index) in groups"
@@ -136,15 +112,21 @@
     </b-button>
   </b-modal>
     <b-modal
-      ref="export-modal"
+      ref="actions-modal"
       centered
+      size="sm"
       hide-footer
-      :title="$t('Export')"
-      body-class="export-modal-modal"
+      :title="$t('Actions')"
+      body-class="actions-modal-modal"
       modal-class="safe-padding-top mt-4"
     >
+      <b-button @click.stop="importButtonClick()" class="d-block w-100 text-left" variant="light">
+        <i class="fa fa-file-import mr-2"></i>
+        
+        {{ $t("Import") }}
+      </b-button>
       <a
-        class="download-csv btn btn-sm text-secondary"
+        class="d-block w-100 text-left btn btn-light"
         :href="csvHref"
         :download="`${$l2.name
           .toLowerCase()
@@ -153,9 +135,17 @@
         size="sm"
         v-if="sW.length > 0"
       >
-        <i class="fa fa-file mr-1"></i>
+        <i class="fa fa-file-export mr-2"></i>
         {{ $t("Export to CSV") }}
       </a>
+      <b-button
+        class="d-block w-100 text-left btn btn-light"
+        v-on:click="removeAllClick"
+        v-if="this.sW.length > 0"
+      >
+        <i class="fas fa-times mr-2"></i>
+        {{ $t("Remove All") }}
+      </b-button>
     </b-modal>
   </div>
 </template>
@@ -256,8 +246,8 @@ export default {
     this.unsubscribe();
   },
   methods: {
-    exportButtonClick() {
-      this.$refs["export-modal"].show();
+    showActionMenu() {
+      this.$refs["actions-modal"].show();
     },
     importButtonClick() {
       this.$refs["import-modal"].show();
@@ -297,7 +287,7 @@ export default {
     },
     removeAllClick() {
       const confirmed = confirm(
-        "Are you sure you want to remove all your saved words?"
+        this.$t("Are you sure you want to remove all your saved words?")
       );
       if (confirmed) {
         this.$store.dispatch("savedWords/removeAll", {

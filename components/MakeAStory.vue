@@ -1,13 +1,14 @@
 <template>
   <div>
-    <button
+    <b-button
+
       v-if="showButton"
       @click="hideButton"
-      class="btn btn-md btn-success text-white"
+      :variant="$skin"
     >
       <i class="fas fa-book-open mr-1"></i>
       {{ $t(this.btnText || "Read a story with these words") }}
-    </button>
+    </b-button>
     <p v-else class="text-left">
       <ChatGPT
         :maxTokens="150"
