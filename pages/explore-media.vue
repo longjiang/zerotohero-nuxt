@@ -136,11 +136,6 @@ export default {
         return this.progress[this.$l2.code].level;
     },
   },
-  watch: {
-    loading() {
-      if (this.loading === false) this.loadHeroVideo();
-    },
-  },
   methods: {
     visibilityChanged(isVisible, entry) {
       if (isVisible) {
