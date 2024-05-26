@@ -100,7 +100,7 @@
           :label="{ ko: 'Show Hanja', vi: 'Show Han Tự' }[$l2.code]"
         >
           <span>
-            <span>{{ { ko: "자", vi: "Tự" }[$l2.code] }}</span
+            <span style="font-size: 0.9em">{{ { ko: "자", vi: "Tự" }[$l2.code] }}</span
             ><small style="font-size: 0.5em">字</small>
           </span>
         </Toggle>
