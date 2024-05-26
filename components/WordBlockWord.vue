@@ -339,7 +339,7 @@ export default {
 .word-block-definition {
   opacity: 0.7;
   margin: 0 0.1em 0.1em 0.1em;
-  font-size: 0.5em;
+  font-size: max(0.5em, 0.8rem);
   line-height: 1.33;
   white-space: nowrap;
   overflow: hidden;

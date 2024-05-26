@@ -254,7 +254,6 @@ import {
   logError,
   breakSentences,
   l2LevelName,
-  PYTHON_SERVER,
 } from "@/lib/utils";
 
 export default {
@@ -306,7 +305,7 @@ export default {
       default: false,
     },
     showTranslation: {
-      default: false,
+      default: true,
     },
     showLoading: {
       default: true, // Whether to show a loading animation before annotation is complete
@@ -644,6 +643,7 @@ export default {
       await timeout(200);
       this.selectedText = undefined;
       this.textMode = false;
+      this.text = newText;
       this.$emit("textChanged", newText);
     },
     async reannotate(newText) {
