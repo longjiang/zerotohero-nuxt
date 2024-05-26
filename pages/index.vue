@@ -104,33 +104,16 @@
           </div>
           <div class="row index-section">
             <div class="col-md-7 mb-5">
-              <div
-                v-if="!playBtnClicked"
-                @click="playBtnClicked = true"
-                style="cursor: pointer; position: relative"
-              >
-                <img
-                  src="/img/btn-play.png"
-                  alt="Play Button"
-                  class="btn-play-green"
-                  data-not-lazy
+              <client-only>
+                <YouTubeVideo
+                  :video="{ youtube_id: 'rGRcL_Jr6qo' }"
+                  :autoload="true"
+                  :autoplay="true"
+                  :fullscreen="true"
+                  :starttime="27"
+                  style="overflow: hidden; border-radius: 1rem"
                 />
-                <img
-                  src="/img/screenshot-player.jpg"
-                  alt="Screenshot"
-                  style="border-radius: 0.5rem"
-                  class="img-fluid"
-                  data-not-lazy
-                />
-              </div>
-              <YouTubeVideo
-                :video="{ youtube_id: 'rGRcL_Jr6qo' }"
-                :autoload="true"
-                :autoplay="true"
-                :fullscreen="true"
-                v-if="playBtnClicked"
-                style="overflow: hidden; border-radius: 1rem"
-              />
+              </client-only>
             </div>
             <div class="col-md-5">
               <h3 class="text-white mb-2">
