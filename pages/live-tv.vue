@@ -93,15 +93,15 @@
                 <b-form-select-option :value="null">
                   {{ $t("All Categories") }}
                 </b-form-select-option>
+                <b-form-select-option :value="'featured'" v-if="hasFeatured">
+                  {{ $t('Featured') }}
+                </b-form-select-option>
                 <b-form-select-option
                   v-for="cat in categories"
                   :key="`live-tv-cat-tab-${cat}`"
                   :value="cat"
                 >
                   {{ $t(cat) }}
-                </b-form-select-option>
-                <b-form-select-option :value="'featured'" v-if="hasFeatured">
-                  {{ $t('Featured') }}
                 </b-form-select-option>
               </b-form-select>
             </div>
@@ -329,7 +329,6 @@ export default {
             } else this.setChannel(channels[0]);
           }
         }
-        if (this.hasFeatured) this.featured = true;
         this.loadCategories();
         this.loadCountries();
       }
@@ -361,8 +360,8 @@ export default {
       this.countries = countries;
     },
     countryNameFromCode(code) {
-      if (code === "cn") return "Democratic Republic of the Congo";
-      if (code === "cd") return "China";
+      if (code === "cd") return "Democratic Republic of the Congo";
+      if (code === "cn") return "China";
       if (code === "int") return "International";
       let country = CountryCodeLookup.byInternet(code.toUpperCase());
       if (country) return country.country;
