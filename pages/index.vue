@@ -110,7 +110,6 @@
                   :autoload="true"
                   :autoplay="true"
                   :fullscreen="true"
-                  :starttime="27"
                   style="overflow: hidden; border-radius: 1rem"
                 />
               </client-only>
