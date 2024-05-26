@@ -92,17 +92,6 @@ export default {
       show: true,
       verifying: false,
       sending: false,
-      acquisition_options: [
-        { value: null, text: this.$tb('How did you hear about us?') },
-        { value: 'hsk_courses', text: this.$tb('HSK Courses') },
-        { value: 'youtube', text: this.$tb('YouTube') },
-        { value: 'instagram', text: this.$tb('Instagram') },
-        { value: 'bilibili', text: this.$tb('Bilibili') },
-        { value: 'google_search', text: this.$tb('Web Search') },
-        { value: 'google_ads', text: this.$tb('Online Ads') },
-        { value: 'word_of_mouth', text: this.$tb('Word of Mouth') },
-        { value: 'other', text: this.$tb('Other (Please specify)') },
-      ],
     };
   },
   async mounted() {
@@ -126,13 +115,15 @@ export default {
     translatedAcquisitionOptions() {
       return [
         { value: null, text: this.$t('How did you hear about us?') },
-        { value: 'hsk_courses', text: this.$t('HSK Courses') },
-        { value: 'youtube', text: this.$t('YouTube') },
+        { value: 'word_of_mouth', text: this.$t('Word of Mouth') },
         { value: 'instagram', text: this.$t('Instagram') },
         { value: 'bilibili', text: this.$t('Bilibili') },
+        { value: 'google_ads', text: this.$tb('Online Ads') },
+        { value: 'hsk_courses', text: this.$t('HSK Courses') },
+        { value: 'app_store', text: this.$t('App Store') },
+        { value: 'google_play', text: this.$tb('Google Play') },
         { value: 'google_search', text: this.$t('Web Search') },
-        { value: 'google_ads', text: this.$t('Online Ads') },
-        { value: 'word_of_mouth', text: this.$t('Word of Mouth') },
+        { value: 'youtube', text: this.$t('YouTube') },
         { value: 'other', text: this.$t('Other (Please specify)') },
       ];
     },
