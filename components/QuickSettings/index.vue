@@ -113,6 +113,7 @@
         </Toggle>
         <Toggle
           v-model="localL2Settings.quizMode"
+          @change="updateL2Settings"
           label="Saved Words as Blanks"
         >
           <i class="fa-solid fa-pen-line"></i>
