@@ -218,21 +218,6 @@ export default {
   }
 }
 
-.zth-nav-light {
-  .main-nav-item {
-    color: #444;
-    text-shadow: none;
-    &.nav-item-active,
-    &:hover {
-      color: $primary-color;
-      background: hsla(0deg, 100%, 100%, 0.75);
-    }
-  }
-
-  .secondary-nav-item a {
-    color: #444;
-  }
-}
 
 .zth-nav-dark {
   .main-nav-item {
@@ -362,6 +347,22 @@ export default {
   text-decoration: none;
 }
 
+
+.zth-nav-light {
+  .main-nav-item {
+    color: #444;
+    text-shadow: none;
+    &.nav-item-active,
+    &:hover {
+      color: $primary-color;
+    }
+  }
+
+  .secondary-nav-item a {
+    color: #444;
+  }
+}
+
 .main-nav-item {
   padding: 0.5rem 1rem;
   display: inline-block;
@@ -374,6 +375,7 @@ export default {
   &.nav-item-active,
   &:hover {
     text-decoration: none;
+    background: rgba(121, 121, 121, 0.5);
   }
 }
 

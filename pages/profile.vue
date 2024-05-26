@@ -21,28 +21,27 @@
         </div>
       </div>
       <div class="container" v-else>
-        <div class="row mb-3">
+        <div class="row">
           <div class="col-sm-12 text-center">
+            <LanguageFlag :language="$l2" :autocycle="true" class="my-3" />
             <h4>
               {{ formatName($auth.user.first_name, $auth.user.last_name) }}
             </h4>
             <div>{{ $auth.user.email }}</div>
             <Sale class="my-4" />
-            <div class="my-4 p-3 rounded bg-accent">
+            <div class="p-4 rounded bg-accent" style="margin: 2rem 0" >
               <h6>🚀 {{ $t('Your Pro Subscription') }}</h6>
               <hr />
               <SubscriptionStatus />
             </div>
           </div>
         </div>
-        <NavPage :showOnly="['My Words', 'My Phrases', 'My Watch History', 'My Liked Videos', 'My Bookshelf', 'My Texts']" class="my-3" />
         <template v-if="level">
           <div class="row">
             <div class="col-sm-12">
-              <h5>
-                <LanguageFlag :language="$l2" :autocycle="true" class="mb-2" />
-                {{
-                  $t("{name}’s {l2} Language Progress", {
+              <div class="p-4 rounded bg-accent">
+                <h6 class="text-center">{{
+                  $t("Your {l2} Language Progress", {
                     name: formatName(
                       $auth.user.first_name,
                       $auth.user.last_name,
@@ -50,26 +49,23 @@
                     ),
                     l2: $t($l2.name),
                   })
-                }}
-              </h5>
-            </div>
-          </div>
-          <LanguageGoal />
-          <div class="row mt-3">
-            <div class="col-sm-12">
-              <LanguageProgress
-                class="mt-3"
-                :l1="$l1"
-                :l2="$l2"
-                :description="true"
-                :dot="true"
-                :edit="true"
-                :animated="true"
-                progressBarHeight="1.5rem"
-                :progressBarShowValue="false"
-              />
+                }}</h6>
+                <hr />
+                <LanguageGoal />
+                <LanguageProgress
+                  class="mt-3"
+                  :l1="$l1"
+                  :l2="$l2"
+                  :description="true"
+                  :dot="true"
+                  :edit="true"
+                  :animated="true"
+                  progressBarHeight="1.5rem"
+                  :progressBarShowValue="false"
+                />
+              </div>
               <div v-if="wordIds">
-                <h5 class="mt-4 mb-3">
+                <h5 class="mt-5 mb-3">
                   {{
                     $t("Your {l2} Words", {
                       name: $auth.user.first_name,
