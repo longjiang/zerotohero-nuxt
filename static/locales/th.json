@@ -1305,6 +1305,7 @@
   "Study Sheet": "เอกสารการศึกษา",
   "Study YouTube Subtitles": "ศึกษาคําบรรยาย YouTube",
   "Subtitles": "คำ บรรยาย",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "อธิบายอย่างรวบรัดโดยใช้ {l1}คําว่า {l2} ({code}) คําว่า '{word}}' หมายถึงอะไรในวลี '{text}' ให้คําหลักสัณฐานวิทยาและการผันรูป",
   "Sudan": "ซูดาน",
   "Sumerian": "ชาวสุเมเรียน",
   "SUMMER": "ฤดูร้อน",

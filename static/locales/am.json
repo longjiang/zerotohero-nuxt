@@ -1119,6 +1119,7 @@
   "Study Sheet": "የጥናት ወረቀት",
   "Study YouTube Subtitles": "የ YouTube ንዑስ ርዕሶች ንዑስ ርዕሶችን ማጥናት",
   "Subtitles": "ንዑስ ርዕሶች",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "Succinly አብራሩ {l1}, የ {l2} (PLACEHOLDER2{}}) ቃል 'PLACEHOLDER3{}' የሚለው ቃል '{PLACEHOLDER4}' ማለት ነው። ጅማቱን፣ ሞርፎሎጂውንና ፍሰቱን ስጠው።",
   "Sudan": "Sudan",
   "SUMMER": "ሱመር",
   "Support and Contact": "ድጋፍ እና ግንኙነት",

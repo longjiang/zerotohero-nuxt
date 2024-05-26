@@ -12,7 +12,6 @@
         v-if="showQuiz"
         ref="reviewItemCollector"
         @showQuiz="pause"
-        @hideQuiz="play"
         @goToLine="goToLine($event)"
         :active="paused"
       />

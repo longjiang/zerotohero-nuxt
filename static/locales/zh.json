@@ -1920,6 +1920,7 @@
   "subjects of \"{word}\"": "\"{word}\" 的主语",
   "subjects of \"be {word}\"": "\"be {word}\" 的主语",
   "Subtitles": "字幕",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "使用 {l1} 简洁地解释 {l2} ({code}) 单词“{word}”在短语“{text}”中的含义。 给出它的词目（原型）、形态和词形变化。",
   "Sudan": "苏丹",
   "Sumerian": "苏美尔语",
   "SUMMER": "夏季",

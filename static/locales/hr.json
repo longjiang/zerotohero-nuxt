@@ -1305,6 +1305,7 @@
   "Study Sheet": "Studijski list",
   "Study YouTube Subtitles": "Proučite YouTube titlove",
   "Subtitles": "Titlovi",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "Sažeto objasnite koristeći {{l1}, što {l2} ({{code}) znači riječ '{word}' u izrazu '{text}'. Dajte mu lemmu, morfologiju i fleksiju.",
   "Sudan": "Sudan",
   "Sumerian": "Sumerski",
   "SUMMER": "LJETO",

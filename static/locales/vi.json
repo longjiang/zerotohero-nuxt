@@ -1305,6 +1305,7 @@
   "Study Sheet": "Phiếu học tập",
   "Study YouTube Subtitles": "Nghiên cứu phụ đề YouTube",
   "Subtitles": "Phụ đề",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "Giải thích ngắn gọn bằng cách sử dụng {l1}, từ {l2} ({code}) '{word}' có nghĩa là gì trong cụm từ '{text}'. Đưa ra các lemma, hình thái và biến tố của nó.",
   "Sudan": "Sudan",
   "Sumerian": "Sumer",
   "SUMMER": "MÙA HÈ",

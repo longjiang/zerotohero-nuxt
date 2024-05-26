@@ -1305,6 +1305,7 @@
   "Study Sheet": "अध्ययन पत्रक",
   "Study YouTube Subtitles": "YouTube उपशीर्षकों का अध्ययन करें",
   "Subtitles": "उपशीर्षक",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "{l1} का प्रयोग करके संक्षेप में समझाइए कि '{text}' वाक्यांश में {l2} ({code}) शब्द '{word}' का क्या अर्थ है। इसकी लेम्मा, आकृति विज्ञान और विभक्ति दें।",
   "Sudan": "सूडान",
   "Sumerian": "सुमेरियन",
   "SUMMER": "गर्मी",

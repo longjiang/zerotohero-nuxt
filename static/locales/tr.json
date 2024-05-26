@@ -1305,6 +1305,7 @@
   "Study Sheet": "Çalışma Sayfası",
   "Study YouTube Subtitles": "YouTube Altyazılarını İnceleyin",
   "Subtitles": "Altyazı",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "{l1} kullanarak, '{text}' ifadesinde {l2} ({code}) '{word}' kelimesinin ne anlama geldiğini kısaca açıklayın. Lemmasını, morfolojisini ve çekimini verin.",
   "Sudan": "Sudan",
   "Sumerian": "Sümer",
   "SUMMER": "YAZ",

@@ -18,7 +18,7 @@
             <div v-for="(line, index) in message.text.split('\n')" :key="`gpt-respnose-${index}`" class="mb-2">
               <div v-html="Marked(line.trim())" />
             </div>
-            <div class="text-right">
+            <div class="text-center" v-if="showActions">
               <span @click="resendMessage(messages[index - 1])" class="btn btn-unstyled text-success mr-2">
                 <i class="fa fa-sync mr-1"></i>
                 {{ $t("Regenerate") }}
@@ -60,6 +60,9 @@ export default {
     },
     showPrompt: {
       default: true, // Whether or not to show the question prompt
+    },
+    showActions: {
+      default: true, // Whether or not to show the action buttons
     },
   },
   data() {

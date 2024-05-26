@@ -1305,6 +1305,7 @@
   "Study Sheet": "Studieblad",
   "Study YouTube Subtitles": "Studera YouTube-undertexter",
   "Subtitles": "Textning",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "Förklara kortfattat med {l1} vad {l2} ({code}) ordet '{word}' betyder i frasen '{text}'. Ge dess lemma, morfologi och böjning.",
   "Sudan": "Sudan",
   "Sumerian": "Sumeriska",
   "SUMMER": "SOMMAR",

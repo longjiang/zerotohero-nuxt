@@ -1119,6 +1119,7 @@
   "Study Sheet": "অধ্যয়ন পত্ৰিকা",
   "Study YouTube Subtitles": "ইউটিউব উপশীৰ্ষকসমূহ অধ্যয়ন কৰক",
   "Subtitles": "উপশীৰ্ষকসমূহ",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "{l1}' ব্যৱহাৰ কৰি সংক্ষিপ্তভাৱে বৰ্ণনা কৰক, '{{}}' শব্দ '{{PLACEHOLDER3 PLACEHOLDER4}}' বাক্যাংশত {{PLACEHOLDER2 PLACEHOLDER1}}) শব্দটোৰ অৰ্থ কি। ইয়াৰ লেমা, ৰূপতত্ত্ব আৰু পৰিৱৰ্তন দিয়ক।",
   "Sudan": "Sudan",
   "SUMMER": "গ্ৰীষ্মকাল",
   "Support and Contact": "সমৰ্থন আৰু পৰিচয়",

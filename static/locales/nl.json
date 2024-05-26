@@ -1305,6 +1305,7 @@
   "Study Sheet": "Studieblad",
   "Study YouTube Subtitles": "YouTube Ondertitels bestuderen",
   "Subtitles": "Ondertitels",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "Leg kort en bondig uit wat het {l2} ({{PLACEHOLDER0 PLACEHOLDER2}}) woord '{word}' betekent in de zin '{text}'. Geef het lemma, de morfologie en de verbuiging.",
   "Sudan": "Soedan",
   "Sumerian": "Sumerische",
   "SUMMER": "ZOMER",

@@ -1305,6 +1305,7 @@
   "Study Sheet": "Fișă de studiu",
   "Study YouTube Subtitles": "Studiați subtitrările YouTube",
   "Subtitles": "Subtitrari",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "Explicați succint folosind {l1}, ce înseamnă cuvântul {l2} ({code}) din expresia \"{{PLACEHOLDER3 PLACEHOLDER4}}\". Dați lema, morfologia și inflexiunea.",
   "Sudan": "Sudan",
   "Sumerian": "Sumeriană",
   "SUMMER": "VARĂ",

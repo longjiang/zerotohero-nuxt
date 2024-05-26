@@ -1920,6 +1920,7 @@
   "subjects of \"{word}\"": "subjects of \"{word}\"",
   "subjects of \"be {word}\"": "subjects of \"be {word}\"",
   "Subtitles": "Subtitles",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.",
   "Sudan": "Sudan",
   "Sumerian": "Sumerian",
   "SUMMER": "SUMMER",

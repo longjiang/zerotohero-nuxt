@@ -1305,6 +1305,7 @@
   "Study Sheet": "ورقة الدراسة",
   "Study YouTube Subtitles": "دراسة ترجمات يوتيوب",
   "Subtitles": "ترجمات",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "اشرح بإيجاز باستخدام {l1} ، ما تعنيه كلمة {l2} ({code}) \"{word}\" في عبارة \"{text}\". أعط ليما ، مورفولوجيا وانعطاف.",
   "Sudan": "수단",
   "Sumerian": "السومريه",
   "SUMMER": "صيف",

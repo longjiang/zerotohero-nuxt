@@ -1305,6 +1305,7 @@
   "Study Sheet": "Studieark",
   "Study YouTube Subtitles": "Studer YouTube-undertekster",
   "Subtitles": "Undertekster",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "Forklar kort med {l1}, hva ordet {l2} ({code}) betyr i uttrykket '{{PLACEHOLDER3 PLACEHOLDER4}}'. Gi lemma, morfologi og bøyning.",
   "Sudan": "Sudan",
   "Sumerian": "Sumerisk",
   "SUMMER": "SOMMER",

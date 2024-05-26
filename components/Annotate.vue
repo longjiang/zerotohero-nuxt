@@ -162,6 +162,16 @@
       body-class="annotate-menu-modal-wrapper"
     >
       <div class="annotate-menu-modal">
+        <div class="annotate-menu-modal-item">
+          <span
+            class="annotator-button annotator-translate"
+            @click="translateClick"
+            ref="translation"
+          >
+            <i class="fas fa-language"></i>
+          </span>
+          <span @click="translateClick">{{ $t("Get Translation") }}</span>
+        </div>
         <div
           class="annotate-menu-modal-item"
           @click="
@@ -174,16 +184,6 @@
             <i class="fa-solid fa-message-question"></i>
           </span>
           <span>{{ $t("Let ChatGPT Explain") }}</span>
-        </div>
-        <div class="annotate-menu-modal-item">
-          <span
-            class="annotator-button annotator-translate"
-            @click="translateClick"
-            ref="translation"
-          >
-            <i class="fas fa-language"></i>
-          </span>
-          <span @click="translateClick">{{ $t("Get Translation") }}</span>
         </div>
         <div class="annotate-menu-modal-item">
           <span @click="copyClick" class="annotator-button annotator-copy">

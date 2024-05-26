@@ -1305,6 +1305,7 @@
   "Study Sheet": "Studienblatt",
   "Study YouTube Subtitles": "YouTube-Untertitel studieren",
   "Subtitles": "Untertitel",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "Erkläre kurz und bündig mit {l1}, was das {l2} ({code}) Wort '{word}' in der Phrase '{text}' bedeutet. Geben Sie das Lemma, die Morphologie und die Flexion an.",
   "Sudan": "Sudan",
   "Sumerian": "Sumerisch",
   "SUMMER": "SOMMER",

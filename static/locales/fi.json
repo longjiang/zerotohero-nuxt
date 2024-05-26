@@ -1305,6 +1305,7 @@
   "Study Sheet": "Opintolomake",
   "Study YouTube Subtitles": "Tutki YouTube-tekstityksiä",
   "Subtitles": "Tekstitys",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "Selitä ytimekkäästi {l1} avulla, mitä {l2} ({code}) -sana \"{word}\" tarkoittaa lauseessa \"{text}\". Anna sen lemma, morfologia ja taivutus.",
   "Sudan": "Sudan",
   "Sumerian": "Sumerilainen",
   "SUMMER": "KESÄ",

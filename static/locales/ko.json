@@ -1305,6 +1305,7 @@
   "Study Sheet": "연구 시트",
   "Study YouTube Subtitles": "YouTube 자막 공부",
   "Subtitles": "자막",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "'{text}' 구문에서 {l2} ({code}) 단어 '{word}'가 무엇을 의미하는지 {l1}를 사용하여 간결하게 설명하십시오. 기본형, 형태 및 굴절을 제공하십시오.",
   "Sudan": "수단",
   "Sumerian": "수메르",
   "SUMMER": "여름",

@@ -1920,6 +1920,7 @@
   "subjects of \"{word}\"": "主語＋「{word}」",
   "subjects of \"be {word}\"": "単語であるという主語",
   "Subtitles": "字幕",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "{l1}を使って簡潔に説明し、{l2} ({code}) という単語 '{word}' が '{text}' という句で何を意味するのかを説明します。その補題、形態、語尾変化を与えます。",
   "Sudan": "スーダン",
   "Sumerian": "シュメール",
   "SUMMER": "夏",

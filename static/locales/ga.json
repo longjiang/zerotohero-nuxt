@@ -1305,6 +1305,7 @@
   "Study Sheet": "Bileog Staidéir",
   "Study YouTube Subtitles": "Déan staidéar ar YouTube Subtitles",
   "Subtitles": "Fotheidil",
+  "Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.": "Mínigh go gonta ag baint úsáide as {l1}, cad is brí leis an bhfocal {l2} ({code}) '{word}' san abairt '{text}'. Tabhair a lemma, moirfeolaíocht agus infhilleadh.",
   "Sudan": "An tSúdáin",
   "Sumerian": "SumerianName",
   "SUMMER": "SAMHAIN",

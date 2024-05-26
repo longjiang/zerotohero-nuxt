@@ -20,8 +20,8 @@
       <b>{{ $t("Lemmatized:") }}</b> {{ text }} →
       {{ token.lemmas.map((l) => l.lemma).join(", ") }}
       <template v-if="token.pos">({{ token.pos.toLowerCase() }})</template>
-      <hr />
     </div>
+    
     <div v-if="!loading && !preciseMatchFound" class="no-entry">
       <span v-if="$hasFeature('transliteration')">
         <Speak :text="text" class="mr-1" ref="speak" />
@@ -56,6 +56,22 @@
         <small class="text-muted"> ({{ $t("machine translated") }}) </small>
       </div>
       <hr class="mt-2 mb-2" />
+    </div>
+
+    <div>
+      <b-button v-if="!showChatGPT" @click="showChatGPT = true" size="sm" variant="outline-secondary" class="mt-2">
+        <i class="fa fa-comment"></i>
+        {{ $t('Let ChatGPT Explain') }}
+      </b-button>
+      <ChatGPT
+        v-if="showChatGPT"
+        :maxTokens="30"
+        :showActions="false"
+        :showPrompt="true"
+        class="mt-4"
+        :initialMessages="[$t('Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.', { text: context.text, word: text, l2: $t($l2.name), l1: $t($l1.name), code: $l2.code})]"
+      />
+      <hr/>
     </div>
     <div
       v-for="word in words"
@@ -230,12 +246,13 @@
     <div v-if="loading === true">
       <Loader :sticky="true" message="Looking up the dictionary..." />
     </div>
-    <TranslatorLinks v-bind="{ text }" class="mt-2" />
+    <!-- <TranslatorLinks v-bind="{ text }" class="mt-2" /> -->
     <LookUpIn
       v-if="text || token?.candidates?.[0]"
       :term="text ? text : token.candidates[0].head"
       :sticky="false"
       class="mt-2"
+      style="font-size: 0.8em"
     />
   </div>
 </template>
@@ -278,6 +295,7 @@ export default {
       IMAGE_PROXY,
       entryClasses: { "tooltip-entry": true }, // Other classes are added upon update
       levels: undefined,
+      showChatGPT: false,
     };
   },
   computed: {
