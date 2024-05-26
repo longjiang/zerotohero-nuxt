@@ -16,7 +16,7 @@
       ><span class="word-block-text-byeonggi-wrapper">
         <span
           v-if="hanAnnotation"
-          class="word-block-text-byeonggi d-inline-block"
+          class="word-block-text-byeonggi"
           v-html="hanAnnotation"
         />
         <span v-if="isSaved && definition" class="word-block-text-quick-gloss">
@@ -317,7 +317,7 @@ export default {
 }
 
 .show-byeonggi .word-block .word-block-text-byeonggi {
-  display: inline;
+  display: inline-block;
 }
 
 .show-quick-gloss .word-block .word-block-text-quick-gloss {
