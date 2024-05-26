@@ -13,7 +13,7 @@
         <div class="col-sm-12">
           <div v-if="loaded">
             <div v-if="savedtexts.length > 0">
-              <h4 class="mb-4 text-center">{{ $t('My Texts') }}</h4>
+              <h4 class="my-4 text-center">{{ $t('My Texts') }}</h4>
               <div v-for="savedText in savedtexts" :key="savedText.id" class="mb-4">
                 <TextCard :text="savedText" @removed="onTextRemoved" />
               </div>

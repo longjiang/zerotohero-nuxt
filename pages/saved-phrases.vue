@@ -28,23 +28,25 @@
     <div class="container pb-5">
       <SocialHead :title="title" :description="description" :image="image" />
       <client-only>
+        <PhrasebookComp
+          v-if="phrasebook"
+          :phrasebook="phrasebook"
+          :initId="initId"
+          class="mt-4"
+        />
         <div
           class="text-center mb-4"
           v-if="phrasebook && phrasebook.phrases.length > 0"
         >
           <b-button
-            variant="danger"
+            variant="no-bg"
+            class="text-danger my-5"
             @click="$bvModal.show('confirm-remove-all')"
           >
             <i class="fa fa-trash mr-1"></i>
             {{ $t("Remove All Saved Phrases") }}
           </b-button>
         </div>
-        <PhrasebookComp
-          v-if="phrasebook"
-          :phrasebook="phrasebook"
-          :initId="initId"
-        />
       </client-only>
     </div>
   </div>

@@ -30,13 +30,13 @@
         </div>
       </div>
     </div>
-    <div class="pt-3 pb-3 mb-3 hide-defs">
+    <!-- <div class="pt-3 pb-3 mb-3 hide-defs">
       <LazyHideDefs
         @hideWord="hideWord = arguments[0]"
         @hideDefinitions="hideDefinitions = arguments[0]"
         @hidePhonetics="hidePhonetics = arguments[0]"
       />
-    </div>
+    </div> -->
     <div class="row" v-if="phrasebook">
       <div class="col-sm-12 mb-3 mt-3" v-if="startRow > 1" @click="startRow = 1">
         <b-button variant="success" class="d-block w-100"><i class="fa fa-chevron-up mr-1"></i> {{ $t('Show Previous {n} Phrases', {n: startRow - 1}) }}</b-button>
