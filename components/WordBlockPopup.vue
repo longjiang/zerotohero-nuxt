@@ -68,7 +68,7 @@
         :showActions="false"
         :showPrompt="false"
         class="mt-4"
-        :initialMessages="[$t('Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.', { text: context.text, word: text, l2: $t($l2.name), l1: $t($l1.name), code: $l2.code})]"
+        :initialMessages="[chatGPTPrompt]"
       />
     </div>
     <div
@@ -310,6 +310,13 @@ export default {
       if (matchFoundInWords) return true;
       return false;
     },
+    chatGPTPrompt() {
+      const basePrompt = this.$t('Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’.', { text: this.context.text, word: this.text, l2: this.$t(this.$l2.name), l1: this.$t(this.$l1.name), code: this.$l2.code})
+      const inflectionPrompt = this.$t('Give its lemma, inflection, and morphology.')
+      // Languages that don't inflect dont' need the inflection prompt
+      const inflectionNotNeeded = ['zh', 'vi', 'th', 'lo', 'km']
+      return inflectionNotNeeded.includes(this.$l2.code) ? basePrompt : `${basePrompt} ${inflectionPrompt}`
+    }
   },
   async mounted() {
     if (this.$l1) this.entryClasses[`l1-${this.$l1.code}`] = true;
