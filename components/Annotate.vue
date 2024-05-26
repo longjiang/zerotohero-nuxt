@@ -90,7 +90,7 @@
       </div>
     </div>
     <b-modal
-      id="grammarModal"
+      ref="grammarModal"
       size="md"
       centered
       hide-footer
@@ -140,7 +140,7 @@
       </table>
     </b-modal>
     <b-modal
-      id="chatGptModal"
+      ref="chatGptModal"
       :title="$t('Let ChatGPT Explain')"
       size="lg"
       centered
@@ -153,7 +153,7 @@
       />
     </b-modal>
     <b-modal
-      id="annotateMenuModal"
+      ref="annotateMenuModal"
       size="sm"
       centered
       hide-footer
@@ -165,8 +165,8 @@
         <div
           class="annotate-menu-modal-item"
           @click="
-            $bvModal.show('chatGptModal');
-            $bvModal.hide('annotateMenuModal');
+            $refs.chatGptModal.show();
+            $refs.annotateMenuModal.hide();
           "
         >
           <!-- show a ChatGPT modal -->
@@ -430,18 +430,18 @@ export default {
       return highlightMultiple(...args);
     },
     showMenuModal() {
-      this.$bvModal.show("annotateMenuModal");
+      this.$refs.annotateMenuModal.show();
     },
     hideMenuModal() {
-      this.$bvModal.hide("annotateMenuModal");
-      this.$bvModal.hide("grammarModal");
-      this.$bvModal.hide("chatGptModal");
+      this.$refs.annotateMenuModal.hide();
+      this.$refs.grammarModal.hide();
+      this.$refs.chatGptModal.hide();
     },
     showGrammarModal() {
-      this.$bvModal.show("grammarModal");
+      this.$refs.grammarModal.show();
     },
     hideGrammarModal() {
-      this.$bvModal.hide("grammarModal");
+      this.$refs.grammarModal.hide();
     },
     saveAsPhraseClick() {
       let s = this.$refs["savePhrase"];
