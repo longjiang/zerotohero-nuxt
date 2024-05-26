@@ -131,6 +131,7 @@ export default ({ app }, inject) => {
           let matchedVideos = await app.$directus.getVideos({
             l2Id: l2Obj.id,
             query: `filter[youtube_id][eq]=${mustIncludeYouTubeId}`,
+            subs: true
           });
           if (matchedVideos?.length > 0) {
             videos = [matchedVideos[0], ...videos];
@@ -195,7 +196,16 @@ export default ({ app }, inject) => {
         })
       );
       hits = uniqueByValue(hits, "id");
-      if (limit) hits = hits.slice(0, limit);
+      // Before slicing to a limit, the video with mustIncludeYouTubeId must be the first element for this to work properly, otherwise we won't have the video from which the user saved the word
+      if (mustIncludeYouTubeId) {
+        let mustIncludeHit = hits.find(
+          (hit) => hit.video.youtube_id === mustIncludeYouTubeId
+        );
+        if (mustIncludeHit) {
+          hits = [mustIncludeHit, ...hits.filter((hit) => hit.id !== mustIncludeHit.id)];
+        }
+      }
+      if (limit) hits = hits.slice(0, limit); 
       return hits.sort((a, b) => a.lineIndex - b.lineIndex);
     },
 
@@ -205,12 +215,15 @@ export default ({ app }, inject) => {
       const seenYouTubeIds = [];
 
       for (const video of videos) {
+
         if (!video || seenYouTubeIds.includes(video.youtube_id)) continue;
+
         seenYouTubeIds.push(video.youtube_id);
 
         for (const [index, { line: rawLine }] of Object.entries(
           video.subs_l2 || {}
         )) {
+
           const line = he.decode(rawLine).replace(/\n/g, " ");
 
           if (
