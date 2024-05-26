@@ -55,11 +55,10 @@
         {{ translation }}
         <small class="text-muted"> ({{ $t("machine translated") }}) </small>
       </div>
-      <hr class="mt-2 mb-2" />
     </div>
 
-    <div>
-      <b-button v-if="!showChatGPT" @click="showChatGPT = true" size="sm" variant="outline-secondary" class="mt-2">
+    <div class="my-3">
+      <b-button v-if="!showChatGPT" @click="showChatGPT = true" size="sm" variant="outline-secondary" class="w-100">
         <i class="fa fa-comment"></i>
         {{ $t('Let ChatGPT Explain') }}
       </b-button>
@@ -67,11 +66,10 @@
         v-if="showChatGPT"
         :maxTokens="30"
         :showActions="false"
-        :showPrompt="true"
+        :showPrompt="false"
         class="mt-4"
         :initialMessages="[$t('Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’. Give the its lemma, morphology and inflection.', { text: context.text, word: text, l2: $t($l2.name), l1: $t($l1.name), code: $l2.code})]"
       />
-      <hr/>
     </div>
     <div
       v-for="word in words"
