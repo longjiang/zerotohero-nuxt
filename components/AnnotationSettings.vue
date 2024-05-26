@@ -1,9 +1,9 @@
 <template>
   <div class="annotation-settings">
     <div class="mt-3">
-      <b-form-checkbox class="my-1" v-model="localL2Settings.showDefinition" @change="updateL2Settings" switch>
+      <!-- <b-form-checkbox class="my-1" v-model="localL2Settings.showDefinition" @change="updateL2Settings" switch>
         {{ $t("Show definition above words") }}
-      </b-form-checkbox>
+      </b-form-checkbox> -->
       <b-form-checkbox class="my-1" v-model="localL2Settings.disableAnnotation" @change="updateL2Settings" switch>
         {{ $t("Disable popup dictionary") }}
       </b-form-checkbox>
