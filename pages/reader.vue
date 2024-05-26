@@ -427,7 +427,7 @@ export default {
         ) {
           this.$store.dispatch("savedText/update", {
             l2: this.$l2,
-            item: {
+            payload: {
               id: this.shared.id,
               title: this.title,
               text: this.text,

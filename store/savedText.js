@@ -27,16 +27,16 @@ export const mutations = {
   REMOVE(state, { l2, itemId }) {
     state.itemsByL2[l2.code] = state.itemsByL2[l2.code].filter((i) => i.id !== itemId);
   },
-  UPDATE(state, { l2, item }) {
+  UPDATE(state, { l2, payload }) {
     let items = state.itemsByL2[l2.code]
     if (items) {
-      let existing = state.itemsByL2[l2.code].find(i => i.id === item.id)
+      let existing = state.itemsByL2[l2.code].find(i => i.id === payload.id)
       if (!existing) {
         existing = {}
         state.itemsByL2[l2.code].push(existing)
       }
-      for (let key in item) {
-        existing[key] = item[key]
+      for (let key in payload) {
+        existing[key] = payload[key]
       }
     }
   },
@@ -119,14 +119,14 @@ export const actions = {
     commit('REMOVE', { l2, itemId })
     // commit('SAVE_LOCAL')
   },
-  async update({ commit }, { l2, item }) {
+  async update({ commit }, { l2, payload }) {
     if ($nuxt.$auth.loggedIn) {
-      let response = await $nuxt.$directus.patch(
-        `items/text/${item.id}`,
-        item
+      await $nuxt.$directus.patch(
+        `items/text/${payload.id}`,
+        payload
       );
     }
-    commit('UPDATE', { l2, item })
+    commit('UPDATE', { l2, payload })
   }
 }
 
