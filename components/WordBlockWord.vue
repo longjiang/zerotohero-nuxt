@@ -338,9 +338,9 @@ export default {
 .word-block-segment .word-block-pinyin,
 .word-block-definition {
   opacity: 0.7;
-  margin: 0 0.1rem -0 0.1rem;
-  font-size: 0.8rem;
-  line-height: 1.25;
+  margin: 0 0.1em 0.1em 0.1em;
+  font-size: 0.5em;
+  line-height: 1.33;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
