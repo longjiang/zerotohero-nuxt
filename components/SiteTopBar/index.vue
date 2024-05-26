@@ -129,40 +129,17 @@
         size="xl"
         centered
         hide-footer
-        :title="$t('Learning {l2}' || 'Switch languages', {l2: $t($l2?.name)})"
+        :title="$t('Switch Languages')"
         modal-class="safe-padding-top mt-4"
         body-class="languages-modal-wrapper"
       >
         <div class="languages-modal">
-          <div class="pb-2">
-            <h5 class="text-center mb-2">
-              {{ $t("Switch languages") }}
-            </h5>
-          </div>
           <LazyDashboard class="mb-5" v-show="hasDashboard" />
           <div class="pb-5">
             <h5 class="text-center mb-2">
-              {{ $t("Learn another language") }}
+              {{ $t("Learn Another Language") }}
             </h5>
             <Triage />
-          </div>
-          <div class="pt-3 pb-2">
-            <client-only>
-              <NavPage
-                :l1="$l1"
-                :l2="$l2"
-                class="youtube-browse-nav"
-                :showOnly="[
-                  'Map of Languages',
-                  'Face of the Language',
-                  'Phonological Features',
-                  'Compare Languages',
-                  'Web Translators',
-                  'Language Player Stats',
-                ]"
-                :limit="12"
-              />
-            </client-only>
           </div>
         </div>
       </b-modal>
