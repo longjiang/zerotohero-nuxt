@@ -390,7 +390,7 @@ export default {
       tempInput.select();
       document.execCommand("copy");
       popover.removeChild(tempInput);
-      this.$toast.success($t("Copied!"), {
+      this.$toast.success(this.$t("Copied!"), {
         duration: 2000,
       });
     },
