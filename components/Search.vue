@@ -59,7 +59,7 @@
             ).length === 0 &&
             type === 'dictionary'
           "
-          :to="`/${$l1.code}/${$l2.code}/phrase/search/${text.trim()}`"
+          :to="dictionaryLookUpAsPhraseRoute"
         >
           <span class="suggestion-not-found">
             <i18n path="Look up “{0}” as a phrase">
@@ -169,6 +169,14 @@ export default {
       suggestionsKey: 0,
       lookingUp: false,
     };
+  },
+  computed: {
+    dictionaryLookUpAsPhraseRoute() {
+      let route = this.defaultURL(this.text)
+      // If route is {}, the defaultURL function has not been set
+      if (route && Object.keys(route).length > 0) return route
+      else return { name: 'phrase', params: {term: this.text.trim() }};
+    },
   },
   watch: {
     $route() {
