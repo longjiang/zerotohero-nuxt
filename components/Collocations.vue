@@ -195,7 +195,11 @@ export default {
         });
     },
     term() {
-      return this.word ? this.word.head : this.text;
+      if (!this.word) return this.text;
+      // If this.$l2.code is 'zh', determine if the corpus is traditional or simplified
+      const corpname = this.$l2Settings.corpname
+      const isChineseTraditional = this.$l2.code === 'zh' && corpname && corpname.includes("trad");
+      return isChineseTraditional ? this.word.traditional : this.word.head;
     },
     colDescArray() {
       let colDescArray = [];

@@ -176,8 +176,8 @@ class HskCedictDictionary extends BaseDictionary {
   lookupByPronunciation(pinyin) {
     return this.words.filter(
       (row) =>
-        removeTonesMarks(row.search).replace(/ /g, "") ===
-        removeTonesMarks(pinyin).replace(/ /g, "")
+        removeToneMarks(row.search).replace(/ /g, "") ===
+        removeToneMarks(pinyin).replace(/ /g, "")
     );
   }
 

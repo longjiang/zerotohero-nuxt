@@ -64,7 +64,7 @@ export default {
   },
   async mounted() {
     this.corpora = await this.getCorpora();
-    this.localL2Settings.corpname = await SketchEngine.corpname(this.$l2);
+    this.localL2Settings.corpname = this.$l2Settings.corpname || await SketchEngine.corpname(this.$l2);
   },
   methods: {
     async getCorpora() {
