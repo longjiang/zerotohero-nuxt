@@ -123,11 +123,24 @@ export default {
     scrollToLine() {
       this.$emit("goToLine", this.reviewItem.line);
     },
+    /**
+     * Find similar words (but not identical) to the target surface form `text` as confounds.
+     * @param {string} text - The target surface form
+     * @returns {Array} - An array of similar words
+     */
     async findSimilarWords(text) {
+      // Initialize an empty array to store the similar words
       let words = [];
+
+      // Get the saved words for the current language
       let savedWords = this.savedWords[this.$l2.code] || [];
+
+      // Fetch the dictionary
       const dictionary = await this.$getDictionary();
+
+      // If there are more than one saved words, use them to find similar words as confounds
       if (savedWords.length > 1) {
+        // Calculate the distance between each saved word and the target word's surface form 'text'
         savedWords = savedWords.map((s) =>
           Object.assign(
             {
@@ -139,39 +152,73 @@ export default {
             s
           )
         );
+
+        // Filter, sort, and limit the saved words based on their distance to the target word's surface form 'text'
         savedWords = savedWords
           .filter((w) => w.forms && w.forms[0])
           .sort((a, b) => a.distance - b.distance)
           .slice(0, 2);
+
+        // Fetch the full details of each saved word from the dictionary and add them to the words array
         for (let w of savedWords) {
           let word = await dictionary.get(w.id);
           words.push(word);
         }
       } else {
-        const dictionary = await this.$getDictionary();
+        // If there are not enough saved words, perform a fuzzy lookup in the dictionary
         words = await dictionary.lookupFuzzy(text);
+
+        // Sort the words based on their distance to the input text
         words = words.sort(
           (a, b) =>
             distance(a.head, text) -
             distance(b.head, text)
         );
       }
+
+      // Filter out the input text and duplicate words from the words array
       words = words.filter(
         (word) =>
           word && word.head && word.head.toLowerCase() !== text.toLowerCase()
       );
+
+      // For learners of Chinese, Korean, and Japanese, we need to consider different forms of characters.
+      // We don't know if the target word `text` is in simplified, traditional, hangul, or kana form.
+      // So, we exclude words that match `text` in any of these forms.
+      if (["zh", "ko", "ja"].includes(this.$l2.code)) {
+        console.log("Removing based on different character forms:", words);
+        words = words.filter(
+          (word) =>
+            word &&
+            (!word.head || word.head !== text) &&
+            (!word.simplified || word.simplified !== text) &&
+            (!word.traditional || word.traditional !== text) &&
+            (!word.hangul || word.hangul !== text) &&
+            (!word.kana || word.kana !== text)
+        );
+        console.log("After removing based on different character forms:", words);
+      }
+
       words = uniqueByValue(words, "head");
+
+      // Return the words array
       return words;
     },
     async generateAnswers(form, word) {
       const dictionary = await this.$getDictionary();
+
+      // Find words similar to the given form
       let similarWords = await this.findSimilarWords(form);
+
+      // If less than 2 similar words are found, add random words from the dictionary
       if (similarWords.length < 2) {
         for (let i of [1, 2]) {
           let randomWord = await dictionary.random();
           similarWords.push(randomWord);
         }
       }
+
+      // Map the similar words to a new format and limit the array to 2 elements
       let answers = similarWords
         .map((similarWord) => {
           return {
@@ -181,13 +228,19 @@ export default {
             correct: false,
           };
         })
-        .slice(0, 2);
+
+      
+      answers = answers.slice(0, 2);
+
+      // Add the correct answer to the array
       answers.push({
         text: form,
         simplified: word.simplified,
         traditional: word.traditional,
         correct: true,
       });
+
+      // Shuffle the answers array to randomize the order of the answers
       return shuffle(answers);
     },
     async speak() {
