@@ -42,14 +42,23 @@
         </div>
       </div>
       <div
-        v-if="!aSketch || !bSketch || !aSketch.Gramrels || !bSketch.Gramrels"
+        v-if="
+          !updating &&
+          (!aSketch || !aSketch.Gramrels || aSketch.Gramrels.length === 0) &&
+          (!bSketch || !bSketch.Gramrels || bSketch.Gramrels.length === 0)
+        "
       >
-        Sorry, we could not find matching collocations for both words in this
-        corpus (dataset). You can set a different corpus in
-        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">
-          Settings
-        </router-link>
-        .
+        {{
+          $t(
+            "Sorry, we could not find any collocations with “{term}” in this corpus.",
+            { term: `${term}”, “${compareTerm}` }
+          )
+        }}
+        <i18n path="You can set a different corpus in {0}.">
+          <router-link :to="{ name: 'settings' }">
+            {{ $t("Settings") }}
+          </router-link>
+        </i18n>
       </div>
       <div class="mt-2">
         {{ $t("Collocations provided by") }}
@@ -96,6 +105,7 @@ export default {
       SketchEngine,
       colDesc: {},
       collocationsKey: 0,
+      updating: false,
     };
   },
   computed: {
