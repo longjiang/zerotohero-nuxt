@@ -14,6 +14,7 @@
       <WordBlockWord v-else v-bind="attributes" :animate="animate" />
     </div>
 
+    <!-- no-fade is turned on to prevent a "ghosted" modal on iOS that blocks and disables the entire UI -->
     <b-modal
       ref="popup-dictionary-modal"
       size="sm"
