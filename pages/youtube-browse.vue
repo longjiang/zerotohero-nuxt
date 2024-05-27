@@ -197,7 +197,7 @@ export default {
       sort: "-views",
       selectedHeroVideo: null,
       sortOptions: [
-        { value: "id", text: "Sort by Date Added" },
+        { value: "-id", text: "Sort by Date Added" },
         { value: "-date", text: "Sort by Date Uploaded" },
         { value: "-views", text: "Sort by Views" },
         { value: "title", text: "Sort by Title" },
