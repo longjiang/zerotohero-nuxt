@@ -88,6 +88,7 @@
             <span class="suggestion-alternate" v-if="getAlternate(suggestion)"
               >[{{ getAlternate(suggestion) }}]</span
             >
+            <span class="suggestion-pronunciation" v-if="suggestion.pronunciation">{{ suggestion.pronunciation.split(',')[0] }}</span>
             <DefinitionsList
               v-if="suggestion.definitions"
               class="suggestion-l1"
@@ -288,7 +289,11 @@ a.suggestion {
   text-decoration: none;
   display: flex;
   align-items: top;
-  padding: 0.5rem 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .suggestion:hover,
@@ -315,6 +320,13 @@ a.suggestion {
   display: inline;
   font-weight: bold;
 }
+
+.suggestion-pronunciation {
+  font-size: 1rem;
+  color: #779bb5;
+  font-family: AndikaW, Andika, Arial, sans-serif;
+}
+
 
 .btn-random {
   position: absolute;
