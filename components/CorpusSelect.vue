@@ -19,7 +19,7 @@
           <td>
             <b-form-radio :value="corpus.corpname" v-model="localL2Settings.corpname" @change="updateL2Settings" />
           </td>
-          <td>{{ corpus.name }}</td>
+          <td>{{ corpus.name }} <small class="mt-2 bg-success px-2 py-1 rounded text-center" v-if="defaultCorpname == corpus.corpname">{{ $t('Default') }}</small></td>
           <td>
             <code>{{ corpus.corpname.replace("preloaded/", "") }}</code>
           </td>
@@ -59,12 +59,14 @@ export default {
   data() {
     return {
       SketchEngine,
+      defaultCorpname: null,
       corpora: null,
     };
   },
   async mounted() {
     this.corpora = await this.getCorpora();
-    this.localL2Settings.corpname = this.$l2Settings.corpname || await SketchEngine.corpname(this.$l2);
+    this.defaultCorpname = await SketchEngine.corpname(this.$l2);
+    this.localL2Settings.corpname = this.$l2Settings.corpname || this.defaultCorpname;
   },
   methods: {
     async getCorpora() {
