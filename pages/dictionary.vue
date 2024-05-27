@@ -137,7 +137,8 @@
                       )
                     "
                   >
-                    <b>{{ w.head }}</b>
+                    <b class="text-success">{{ w.head }}</b>
+                    <span v-if="w.pronunciation || w.kana">({{ w.pronunciation || w.kana }})</span>
                     <em>{{ w.definitions[0] }}</em>
                   </b-dropdown-item>
                 </b-dropdown>
