@@ -186,7 +186,6 @@ export default {
       // We don't know if the target word `text` is in simplified, traditional, hangul, or kana form.
       // So, we exclude words that match `text` in any of these forms.
       if (["zh", "ko", "ja"].includes(this.$l2.code)) {
-        console.log("Removing based on different character forms:", words);
         words = words.filter(
           (word) =>
             word &&
@@ -196,7 +195,6 @@ export default {
             (!word.hangul || word.hangul !== text) &&
             (!word.kana || word.kana !== text)
         );
-        console.log("After removing based on different character forms:", words);
       }
 
       words = uniqueByValue(words, "head");
