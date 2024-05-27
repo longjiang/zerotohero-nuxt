@@ -392,7 +392,7 @@ export default {
       }
     },
     async setEpisodesAndEpisodeCount() {
-      let limit = 5;
+      let limit = 100; // If this number is too small, sometimes the "previous" button will not work because the previous episode is not loaded
       let episodeCount = await this.getEpisodeCount();
       if (episodeCount)
         this.$store.dispatch("shows/setEpisodeCount", {
