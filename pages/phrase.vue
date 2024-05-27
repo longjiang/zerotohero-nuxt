@@ -36,10 +36,6 @@
                     :urlFunc="
                       (text) => `/${$l1.code}/${$l2.code}/phrase/search/${text}`
                     "
-                    :compareUrlFunc="
-                      (text) =>
-                        `/${$l1.code}/${$l2.code}/phrase/compare/${term}/${text}`
-                    "
                   />
                 </div>
               </div>

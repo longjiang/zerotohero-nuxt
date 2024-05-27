@@ -124,7 +124,7 @@ export default {
     },
     defaultURL: {
       type: Function,
-      default: () => {},
+      default: () => null,
     },
     type: {
       default: "dictionary", // can also be 'generic'
@@ -172,9 +172,11 @@ export default {
   },
   computed: {
     dictionaryLookUpAsPhraseRoute() {
+      // First try to get the route from the defaultURL function
       let route = this.defaultURL(this.text)
-      // If route is {}, the defaultURL function has not been set
-      if (route && Object.keys(route).length > 0) return route
+      // If route is not null, return it
+      if (route) return route
+      // If route is null, the defaultURL function has not been set
       else return { name: 'phrase', params: {term: this.text.trim() }};
     },
   },
