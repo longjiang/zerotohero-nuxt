@@ -72,6 +72,7 @@ export default {
   watch: {},
   methods: {
     onUpdateVideo(video) {
+      if (!video) return
       Vue.set(this, "video", video);
     },
     onUpdateLayout(layout) {

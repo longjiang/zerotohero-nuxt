@@ -311,9 +311,13 @@ export default {
           : this.regex;
       let hits = [];
       for (let hit of this.unfilteredHits) {
-        let regex = new RegExp(r, "gim");
-        if (regex.test(hit.video.subs_l2[hit.lineIndex].line)) {
-          hits.push(hit);
+        try {
+          let regex = new RegExp(r, "gim");
+          if (regex.test(hit.video.subs_l2[hit.lineIndex].line)) {
+            hits.push(hit);
+          }
+        } catch (error) {
+          console.error(`Failed to create or test regex: ${error}`);
         }
       }
       this.collectContext(hits);

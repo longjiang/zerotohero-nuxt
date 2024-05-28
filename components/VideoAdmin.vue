@@ -8,11 +8,14 @@
         }"
         :key="`l2-subs-upload-${transcriptKey}`"
       >
-        <p>
-          <i class="fa fa-file mr-2"></i>
-          {{ $t("Upload original subtitles (.srt)") }}
-        </p>
-        <input type="file" accept=".srt" @change="uploadSubs($event, 'l2')" />
+        <b-form-file
+          accept=".srt"
+          v-model="subsL2File"
+          :placeholder="$t('Upload original subtitles (.srt)')"
+          :drop-placeholder="$t('Drop file here...')"
+          :browse-text="$t('Browse')"
+        ></b-form-file>
+        
       </div>
       <div
         :class="{
@@ -21,11 +24,13 @@
         }"
         :key="`l1-subs-upload-${transcriptKey}`"
       >
-        <p>
-          <i class="fa fa-file mr-2"></i>
-          {{ $t("Upload translation subtitles (.srt)") }}
-        </p>
-        <input type="file" accept=".srt" @change="uploadSubs($event, 'l1')" />
+        <b-form-file
+          accept=".srt"
+          v-model="subsL1File"
+          :placeholder="$t('Upload translation subtitles (.srt)')"
+          :drop-placeholder="$t('Drop file here...')"
+          :browse-text="$t('Browse')"
+        ></b-form-file>
       </div>
       <div
         class="mt-4 mb-5 rounded"
@@ -285,6 +290,8 @@ export default {
       translation: "",
       updating: false,
       syncingSrt: false,
+      subsL1File: null, // The uploaded SRT file for the translation subtitles
+      subsL2File: null, // The uploaded SRT file for the original subtitles
     };
   },
   computed: {
@@ -303,6 +310,12 @@ export default {
     this.originalText = this.text;
   },
   watch: {
+    subsL1File() {
+      this.uploadSubs(this.subsL1File, "l1");
+    },
+    subsL2File() {
+      this.uploadSubs(this.subsL2File, "l2");
+    },
     showSubsEditing() {
       this.$emit("showSubsEditing", this.showSubsEditing);
     },
@@ -454,9 +467,7 @@ export default {
         }
       }
     },
-    uploadSubs(event, l1OrL2) {
-      event.preventDefault();
-      let file = event.target.files[0];
+    uploadSubs(file, l1OrL2) {
       let reader = new FileReader();
       reader.readAsText(file);
       reader.onload = (event) => {

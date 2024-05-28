@@ -4,19 +4,15 @@
       <div class="upload-wrapper pl-4 pr-4 pt-3" v-if="!loaded">
         <div class="upload">
           <div class="w-100 p-4">
-            <label for="video-upload">
-              {{
-                $t("Choose a video ({formats}) to open:", {
-                  formats: formats.map(f => f.ext).join(", "),
-                })
-              }}
-            </label>
-            <br />
-            <input
-              type="file"
+            <b-form-file
               :accept="formats.map((f) => '.' + f.ext).join(',')"
-              @change="loadVideo"
-            />
+              v-model="videoFile"
+              :placeholder="$t($t('Choose a video ({formats}) to open:', {
+                  formats: formats.map(f => f.ext).slice(0,3).join(', '),
+                }))"
+              :drop-placeholder="$t('Drop file here...')"
+              :browse-text="$t('Browse')"
+            ></b-form-file>
           </div>
         </div>
       </div>
@@ -105,7 +101,8 @@ export default {
       duration: undefined,
       loaded: false,
       randomSeeked: false,
-      formats: []
+      formats: [],
+      videoFile: null, // The uploaded video file
     };
   },
   computed: {
@@ -136,6 +133,9 @@ export default {
   watch: {
     speed() {
       this.setSpeed(this.speed);
+    },
+    videoFile() {
+      this.loadVideo({ target: { files: [this.videoFile] } });
     },
   },
   methods: {
@@ -186,6 +186,8 @@ export default {
       }
     },
     loadVideo(event) {
+      if (!event.target.files) return;
+      // Log a list of properties of event target
       const file = event.target.files[0];
       if (file) {
         const url = URL.createObjectURL(file);

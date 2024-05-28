@@ -176,32 +176,18 @@
       modal-class="safe-padding-top mt-4"
       size="md"
       :title="
-        video.title
+        video.title || $t('Actions')
       "
     >
       <div class="video-info-inner">
         <div v-if="showOpenButton">
-          <SimpleButton
-            iconClass="fa-solid fa-folder-open"
-            :title="$t('Open Another Video...') + ' (O)'"
-            :text="$t('Open Another Video...')"
+          <b-button
+            :title="$t('Close Video') + ' (O)'"
             @click="open()"
-            skin="light"
-          />
-          <div>
-            <SimpleButton
-              iconClass="fa-solid fa-angles-left"
-              :text="$t('Shift Subs Back 1s')"
-              skin="light"
-              @click="shiftSubs(-1)"
-            />
-            <SimpleButton
-              iconClass="fa-solid fa-angles-right"
-              :text="$t('Shift Subs Forward 1s')"
-              skin="light"
-              @click="shiftSubs(+1)"
-            />
-          </div>
+            class="d-block w-100"
+          >
+            <i class="fa-solid fa-folder-open" /> {{ $t('Open Another Video...') }}
+          </b-button>
         </div>
         <ChannelCard v-if="video.channel_id" :channel_id="video.channel_id" class="mb-2"/>
         <VideoDetails :video="video" ref="videoDetails" :showTitle="false" />
