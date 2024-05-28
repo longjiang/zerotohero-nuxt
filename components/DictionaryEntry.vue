@@ -29,7 +29,9 @@
             :level="entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk"
             :key="`subs-search-${
               entry.id
-            }-${wholePhraseOnly}-${selectedSearchTerms.join('-')}`"
+            }-${wholePhraseOnly}-${selectedSearchTerms.join('-')}-${
+              selectedExcludeTerms.join('-')
+            }-${tvShow?.id}`"
             :terms="selectedSearchTerms"
             :excludeTerms="selectedExcludeTerms"
             :tvShow="tvShow"
