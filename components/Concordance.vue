@@ -150,50 +150,87 @@ export default {
       return highlightMultiple(...args);
     },
     async update() {
-      this.updating = true;
+      // Reset examples
       this.examples = undefined;
+
+      // Get dictionary
       let dictionary = await this.$getDictionary();
-      let forms = []
-      if (this.word) {
-        forms = await dictionary.inflect(this.word.head)
-        forms = forms.map((form) => form.form.replace(/'/g, ""))
+
+      // Get word forms if a word is available
+      let forms = this.word ? await this.getWordForms(dictionary) : [];
+
+      // Set words
+      this.words = [this.term, ...forms];
+
+      // Get examples
+      let examples = await this.getExamples();
+
+      // If no examples, stop updating and return
+      if (!examples) {
+        this.updating = false;
+        return false;
       }
-      this.words = [this.term].concat(forms);
-      let examples = await SketchEngine.concordance({
-        term: this.term,
-        searchAsPhrase: this.searchAsPhrase,
-        l1: this.$l1,
-        l2: this.$l2,
-        corpname: this.$l2Settings.corpname,
-      });
-      if (!examples) return false;
+
+      // Process examples
       for (let example of examples) {
-        if (this.$l2.code === "zh") {
-          let t = example.l2.replace(/([。！？：]+”?)/g, "$1!!!DELIMITER!!!");
-          let sentences = t.split("!!!DELIMITER!!!");
-          example.sentences = [];
-          for (let sentence of sentences) {
-            let found = this.words.some((word) =>
-              new RegExp(word.replace(/\*/g, "[^，。！？,!.?]+?")).test(
-                sentence
-              )
-            );
-            if (found) {
-              if (this.$l2.continua) sentence = sentence.replace(/ /g, "");
-              example.sentences.push(sentence);
-            }
-          }
-        } else {
-          example.sentences = [example.l2];
-        }
+        example.sentences = this.$l2.code === "zh" ? this.processChineseExample(example) : [example.l2];
       }
+
+      // Set examples and stop updating
       this.examples = examples;
-      this.updating = false;
+
+      // Emit event if examples are available
       if (this.examples && this.examples.length > 0) {
         this.$emit("concordanceReady");
       }
+
+      // Increment key
       this.concordanceKey += 1;
     },
+
+    async getWordForms(dictionary) {
+      let forms = await dictionary.inflect(this.word.head);
+      return forms.map((form) => form.form.replace(/'/g, ""));
+    },
+
+    async getExamples() {
+      // Start updating
+      this.updating = true;
+      try {
+        const result = await SketchEngine.concordance({
+          term: this.term,
+          searchAsPhrase: this.searchAsPhrase,
+          l1: this.$l1,
+          l2: this.$l2,
+          corpname: this.$l2Settings.corpname,
+        });
+        return result;
+      } catch (error) {
+        console.error("An error occurred while fetching the concordance:", error);
+        throw error; // re-throw the error if you want to handle it further up the call stack
+      } finally {
+        this.updating = false;
+      }
+    },
+
+    processChineseExample(example) {
+      let t = example.l2.replace(/([。！？：]+”?)/g, "$1!!!DELIMITER!!!");
+      let sentences = t.split("!!!DELIMITER!!!");
+      let processedSentences = [];
+
+      for (let sentence of sentences) {
+        let found = this.words.some((word) =>
+          new RegExp(word.replace(/\*/g, "[^，。！？,!.?]+?")).test(sentence)
+        );
+
+        if (found) {
+          if (this.$l2.continua) sentence = sentence.replace(/ /g, "");
+          processedSentences.push(sentence);
+        }
+      }
+
+      return processedSentences;
+    }
   },
   async mounted() {
     this.update();
