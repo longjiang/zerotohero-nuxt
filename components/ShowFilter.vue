@@ -40,7 +40,7 @@
             </a>
           </b-form-checkbox>
           <template v-if="!allCategoriesChecked">
-            <b-form-checkbox-group id="categories-checkbox-group" v-model="categoriesChecked"  style="columns: 2">
+            <b-form-checkbox-group id="categories-checkbox-group" v-model="categoriesChecked" >
               <b-form-checkbox
                 v-for="category of filteredCategories"
                 :key="`category-${category.id}`"
@@ -267,7 +267,6 @@ export default {
   .fa,
   .fas {
     width: calc(0.2rem * 16);
-    height: calc(0.2rem * 9);
     margin-right: 0.5rem;
     text-align: center;
   }
@@ -276,6 +275,12 @@ export default {
     height: calc(0.2rem * 9);
     object-fit: cover;
     margin-right: 0.5rem;
+  }
+}
+
+@media (min-width: 601px) {
+  .categories-checkbox-group {
+    columns: 2;
   }
 }
 </style>
