@@ -2,9 +2,6 @@
   {
     path: '/:l1/:l2/live-tv',
     props: true,
-    meta: {
-      skin: 'dark'
-    }
   }
 </router>
 <template>
@@ -117,6 +114,7 @@
                 :class="{
                   'channel-button': true,
                   'bg-secondary': currentChannel === channel,
+                  'text-white': currentChannel === channel,
                 }"
                 v-for="channel in filteredChannels"
                 :key="`channel-button-${channel.url}`"
@@ -384,6 +382,18 @@ export default {
     width: 100%;
   }
 }
+
+.skin-dark {
+  .channel-button {
+    color: $text-color-on-dark
+  }
+}
+.skin-light {
+  .channel-button {
+    color: $text-color-on-light;
+  }
+}
+
 .channel-button {
   background: none;
   border: none;
