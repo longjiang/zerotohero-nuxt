@@ -294,35 +294,6 @@ export default ({ app }, inject) => {
       return notExcluded;
     },
 
-    // Helper function to update hit contexts
-    updateHitContexts(hit, termsRegex) {
-      const getLeftContext = (prevLine, currentLine, regex) =>
-        (prevLine ? prevLine.trim() : "") + currentLine.replace(regex, "");
-
-      const getRightContext = (currentLine, nextLine, regex) =>
-        currentLine.replace(regex, "").trim() +
-        (nextLine ? nextLine.trim() : "");
-
-      let prev = hit.video.subs_l2[hit.lineIndex - 1];
-      let next = hit.video.subs_l2[Number(hit.lineIndex) + 1];
-      let regex = new RegExp(
-        `(${termsRegex.join("|").replace(/[*]/g, ".+").replace(/[_]/g, ".")})`,
-        "gim"
-      );
-
-      if (!hit.leftContext) {
-        hit.leftContext = getLeftContext(prev ? prev.line : "", hit.line, regex)
-          .split("")
-          .reverse()
-          .join("")
-          .trim();
-      }
-
-      if (!hit.rightContext) {
-        hit.rightContext = getRightContext(hit.line, next && next.line, regex);
-      }
-    },
-
     // Convert subtitles to simplified Chinese
     convertSubLinesToSimplified(hit, sify) {
       [hit.lineIndex - 1, hit.lineIndex, hit.lineIndex + 1].forEach((index) => {
@@ -370,15 +341,10 @@ export default ({ app }, inject) => {
         if (convertToSimplified) {
           this.convertSubLinesToSimplified(hit, sify);
         }
-
-        this.updateHitContexts(hit, termsRegex);
       }
-
-      hits = hits.sort((a, b) =>
-        a.rightContext.localeCompare(b.rightContext, "zh-CN")
-      );
 
       return hits;
     },
   });
+  
 };

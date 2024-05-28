@@ -457,7 +457,6 @@ export default {
       };
 
       let hits = await this.$subs.searchSubs(options);
-
       hits = this.updateSaved(hits);
       hits = this.setShows(hits);
       this.collectContext(hits);
@@ -490,10 +489,75 @@ export default {
     get(name) {
       return this[name];
     },
+    // Helper function to update hit contexts
+    updateHitContexts(hit, termsRegex) {
+      // Helper function to get the context of a hit
+      const getContext = (line1 = "", line2 = "", regex, direction) => {
+
+        if (direction === 'left') {
+          let replacedLine2 = line2;
+          let match = line2.match(regex);
+          if (match) {
+            let index = replacedLine2.indexOf(match[0]);
+            replacedLine2 = replacedLine2.substring(0, index);
+          }
+
+          return (line1.trim() + replacedLine2).trim();
+        } else if (direction === 'right') {
+          let replacedLine1 = line1;
+          let match = line1.match(regex);
+          if (match) {
+            let index = replacedLine1.indexOf(match[0]);
+            replacedLine1 = replacedLine1.substring(index + match[0].length);
+          }
+
+          return (replacedLine1 + line2.trim()).trim();
+        }
+        throw new Error(`Invalid direction: ${direction}`);
+      };
+
+      // Get the previous and next lines from the video subtitles
+      let prev = hit.video.subs_l2[hit.lineIndex - 1];
+      let next = hit.video.subs_l2[Number(hit.lineIndex) + 1];
+
+      // Create a regex from the terms to match
+      let regex = new RegExp(
+        `(${termsRegex.join("|").replace(/[*]/g, ".+").replace(/[_]/g, ".")})`,
+        "gim"
+      );
+
+      // If the hit doesn't have a left context, calculate it
+      if (!hit.leftContext) {
+        hit.leftContext = getContext(prev ? prev.line : "", hit.line, regex, 'left')
+          .split("")
+          .reverse()
+          .join("")
+          .trim();
+      }
+
+      // If the hit doesn't have a right context, calculate it
+      if (!hit.rightContext) {
+        hit.rightContext = getContext(hit.line, next ? next.line : "", regex, 'right').trim();
+      }
+    },
     collectContext(hits) {
       let contextLeft = [];
       let contextRight = [];
+      // First run updateHitContexts over all hits, and collect the left and right contexts
       for (let hit of hits) {
+        // Get the previous and next lines from the video subtitles
+        let prev = hit.lineIndex > 0 ? hit.video.subs_l2[hit.lineIndex - 1] : null;
+        let next = hit.lineIndex < hit.video.subs_l2.length - 1 ? hit.video.subs_l2[Number(hit.lineIndex) + 1] : null;
+
+        // Print the previous line, current line, and next line joined together
+        // console.log('Joined lines:', [prev ? prev.line : '', hit.line, next ? next.line : ''].join(' '));
+
+        this.updateHitContexts(hit, this.terms);
+
+        // Print the left and right context
+        // console.log('Left context:', hit.leftContext);
+        // console.log('Right context:', hit.rightContext);
+
         contextLeft.push(hit.leftContext);
         contextRight.push(hit.rightContext);
       }
@@ -578,6 +642,7 @@ export default {
       let hitGroups = {};
       let { savedHits, matchedHits, remainingHits } =
         this.getSavedAndMatchedHits(hits);
+
       for (let c of context.map((s) => s.charAt(0))) {
         if (!hitGroups[c.charAt(0)]) hitGroups[c.charAt(0)] = {};
         hitGroups[c.charAt(0)] = remainingHits.filter((hit) =>
@@ -586,10 +651,12 @@ export default {
             : hit[`${leftOrRight}Context`] === ""
         );
       }
+
       hitGroups = Object.assign(
         { zthSaved: savedHits, contextMatched: matchedHits },
         hitGroups
       );
+
       for (let key in hitGroups) {
         hitGroups[key] = hitGroups[key].sort((a, b) =>
           a.leftContext.localeCompare(
@@ -598,6 +665,7 @@ export default {
           )
         );
       }
+
       return hitGroups;
     },
     sortGroupIndex(group, sort = true) {
