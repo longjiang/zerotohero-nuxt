@@ -98,7 +98,9 @@ export default {
   },
   async mounted() {
     let phrasebook = {
-      title: "Saved {l2} Phrases",
+      title: this.$t("Saved {l2} Phrases", {
+        l2: this.$t(this.$l2.name),
+      }),
       phrases: this.savedPhrases[this.$l2.code] || [],
       l2: this.$l2,
       id: "saved",
