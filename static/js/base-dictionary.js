@@ -333,13 +333,21 @@ class BaseDictionary {
 
   // Called from <SearchSubComp> to look for exclusion terms.
   getWordsThatContain(text) {
-    let words = this.words.filter(
-      (w) => w.head.includes(text) || w.search.includes(text)
+    // Define the keys to check
+    const keys = ['search', 'simplified', 'traditional', 'kana', 'hangul', 'hanja', 'head'];
+
+    // Filter the words
+    let words = this.words.filter(word =>
+      keys.some(key => word[key] && word[key].includes(text))
     );
-    let strings = words
-      .map((word) => word.search)
-      .concat(words.map((word) => word.head));
-    return unique(strings);
+
+    // Map the words to an array of strings
+    let strings = words.flatMap(word =>
+      keys.map(key => word[key])
+    );
+
+    // Return the unique strings
+    return unique(strings).filter(Boolean);
   }
 
   transliterate(text) {

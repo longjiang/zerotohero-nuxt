@@ -275,7 +275,6 @@ export default ({ app }, inject) => {
 
     // Helper function to check term and exclusion conditions
     lineMeetsTermAndExclusionCriteria(line, exact, regex, punctuationsRegex, excludeRegex) {
-      const notExcluded = !excludeRegex || !excludeRegex.test(line);
       let matchesTerms = false
       if (exact) {
         let segs = line
@@ -290,7 +289,9 @@ export default ({ app }, inject) => {
       } else {
         if (regex.test(line)) matchesTerms = true;
       }
-      return matchesTerms && notExcluded;
+      if (!matchesTerms) return false;
+      const notExcluded = !excludeRegex || !excludeRegex.test(line);
+      return notExcluded;
     },
 
     // Helper function to update hit contexts

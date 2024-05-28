@@ -428,26 +428,36 @@ export default {
     },
     async getExcludeTerms(allSearchTerms) {
       let excludeTerms = [];
+
       let dictionary = await this.$getDictionary();
+
+      // If the dictionary exists and there are search terms
       if (dictionary && allSearchTerms?.length > 0) {
+        // Loop over each search term
         for (let term of allSearchTerms) {
-          let t = await dictionary.getWordsThatContain(term);
-          t = this.simplifyExcludeTerms(t);
-          excludeTerms = excludeTerms.concat(t);
+          // Get words from the dictionary that contain the current term
+          let words = await dictionary.getWordsThatContain(term);
+
+          // Simplify the words and add them to the exclude terms
+          excludeTerms = excludeTerms.concat(this.simplifyExcludeTerms(words));
         }
-        excludeTerms = unique(excludeTerms);
-        return excludeTerms.filter(
-          (s) =>
+
+        // Remove duplicates from the exclude terms
+        excludeTerms = [...new Set(excludeTerms)];
+
+        // Filter out empty strings, strings with spaces, and strings that are in the search terms
+        excludeTerms = excludeTerms.filter((s) => {
+          const lowerCaseS = s.toLowerCase();
+          return (
             s !== "" &&
             !s.includes(" ") &&
-            !allSearchTerms
-              .filter((t) => t)
-              .map((t) => t.toLowerCase())
-              .includes(s.toLowerCase())
-        );
-      } else {
-        return [];
+            !allSearchTerms.some((t) => t && t.toLowerCase() === lowerCaseS)
+          );
+        });
       }
+
+      // Return the exclude terms (or an empty array if there were no search terms or no dictionary)
+      return excludeTerms;
     },
     reloadSearchSubs() {
       this.renderSearchSubs = false;
