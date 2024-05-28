@@ -74,62 +74,73 @@
           </div>
         </div>
       </template>
-    </TabbedSections>
-    <div class="container main pt-5 mb-5">
-      <div class="row">
-        <div class="col-md-6">
-          <WebImages
-            v-if="term"
-            :text="term"
-            limit="10"
-            class="mt-5"
-            :key="`${term}-images`"
-            :preloaded="aImages"
-          />
-        </div>
-        <div class="col-md-6">
-          <WebImages
-            v-if="compareTerm"
-            :text="compareTerm"
-            limit="10"
-            class="mt-5"
-            :key="`${compareTerm}-images`"
-            :preloaded="bImages"
-          />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="focus">
-            <CompareCollocations
-              v-if="term && compareTerm"
-              :term="term"
-              :compareTerm="compareTerm"
-              class="mt-5"
-              :key="`${term}-${compareTerm}-col`"
+
+      <template #chatGPT>
+        <Widget>
+          <template #title>
+            {{ $t("Let ChatGPT explain “{text}”", { text: `${term} vs ${compareTerm}` }) }}
+          </template>
+          <template #body>
+            <ChatGPT
+              :maxTokens="50"
+              :initialMessages="[
+                $t(
+                  'What\'s the difference between these {l2} expressions: “{a}”{ap} and “{b}”{bp}?',
+                  {
+                    l2: $t($l2.name),
+                    l1: $t($l1.name),
+                    a: term,
+                    b: compareTerm,
+                    ap: '',
+                    bp: '',
+                  }
+                ),
+              ]"
             />
+          </template>
+        </Widget>
+      </template>
+      <template #collocations>
+        <CompareCollocations
+          v-if="term && compareTerm"
+          :term="term"
+          :compareTerm="compareTerm"
+          :key="`${term}-${compareTerm}-col`"
+        />
+      </template>
+      <template #examples>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <Concordance
+                v-if="term"
+                :text="term"
+                :key="`${term}-concordance`"
+              />
+            </div>
+            <div class="col-md-6">
+              <Concordance
+                v-if="compareTerm"
+                :text="compareTerm"
+                :key="`${compareTerm}-concordance`"
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <Concordance
-            v-if="term"
-            :text="term"
-            class="mt-5"
-            :key="`${term}-concordance`"
-          />
+      </template>
+      <template #related>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 my-3" v-if="term">
+              <LazyEntryRelated :key="`${term}-related`" :text="term" :columns="1" />
+            </div>
+            <div class="col-md-6  my-3" v-if="compareTerm">
+              <LazyEntryRelated :key="`${compareTerm}-related`" :text="compareTerm" :columns="1" />
+            </div>
+          </div>
         </div>
-        <div class="col-md-6">
-          <Concordance
-            v-if="compareTerm"
-            :text="compareTerm"
-            class="mt-5"
-            :key="`${compareTerm}-concordance`"
-          />
-        </div>
-      </div>
-    </div>
+      </template>
+    </TabbedSections>
   </div>
 </template>
 

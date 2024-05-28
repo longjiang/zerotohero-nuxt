@@ -21,7 +21,11 @@
       <WordList
         v-if="words && words.length > 0"
         :words="words"
-        class="related"
+        :class="{
+          'related': true,
+          'columns-1': columns === 1,
+          'columns-2': columns === 2,
+        }"
         :compareWith="entry"
         collapse="10"
       />
@@ -63,7 +67,11 @@ import SketchEngine from "@/lib/sketch-engine";
 export default {
   props: {
     entry: Object,
-    text: String
+    text: String,
+    columns: {
+      type: Number,
+      default: 2,
+    },
   },
   data() {
     return {
@@ -87,7 +95,8 @@ export default {
     try {
       response = await SketchEngine.thesaurus({
         l2: this.$l2,
-        term: this.entry.simplified || this.entry.head || term ,
+        term: this.entry?.simplified || this.entry?.head || this.term,
+        corpname: this.$l2Settings.corpname,
       });
     } catch (err) {}
     if (response && response.Words) {
@@ -125,8 +134,16 @@ export default {
 .related {
   list-style: none;
   padding: 0;
-  columns: 2;
 }
+
+.columns-1 {
+  column-count: 1;
+}
+
+.columns-2 {
+  column-count: 2;
+}
+
 
 .related .saved-words.collapsed li {
   display: block;
