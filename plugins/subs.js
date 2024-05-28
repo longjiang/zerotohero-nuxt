@@ -100,15 +100,15 @@ export default ({ app }, inject) => {
       sort,
       limit = 20,
       tvShowFilter,
-      talkFilter,
+      categoryFilter,
       exact = false,
       apostrophe = false,
       convertToSimplified = false,
       mustIncludeYouTubeId = undefined,
     } = {}) {
-      let tv_show, talk; // Undefined by default
+      let tv_show, category; // Undefined by default
       if (tvShowFilter) tv_show = tvShowFilter === "all" ? "nnull" : tvShowFilter.join(",");
-      if (talkFilter) talk = talkFilter === "all" ? "nnull" : talkFilter.join(",");
+      if (categoryFilter) category = categoryFilter === "all" ? "nnull" : categoryFilter.join(",");
       let hits = [];
       // terms = terms.filter((t) => t).map((t) => t.replace(/'/g, "&#39;"));
       terms = mutuallyExclusive(terms); // So if terms are ['dièdres', 'dièdre'], we search only 'dièdre' since results of the plural will be included automatically.
@@ -116,7 +116,7 @@ export default ({ app }, inject) => {
       let params = {
         l2Obj,
         tv_show,
-        talk,
+        category,
         terms,
         sort,
         limit,
@@ -167,7 +167,7 @@ export default ({ app }, inject) => {
       excludeTerms = [],
       l2Obj,
       tvShowFilter,
-      talkFilter,
+      categoryFilter,
       adminMode = false,
       continua = true,
       sort,
@@ -183,7 +183,7 @@ export default ({ app }, inject) => {
           terms,
           l2Obj,
           tvShowFilter,
-          talkFilter,
+          categoryFilter,
           adminMode,
           excludeTerms,
           continua,

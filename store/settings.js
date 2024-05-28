@@ -38,7 +38,7 @@ export const defaultL2Settings = {
   showQuiz: true,
   showByeonggi: true,
   tvShowFilter: null,
-  talkFilter: null,
+  categoryFilter: null,
   autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
   quizMode: false,
   disableAnnotation: false,
@@ -211,7 +211,7 @@ export const mutations = {
   RESET_SHOW_FILTERS(state) {
     if (!state.l2Settings[state.l2.code]) return;
     state.l2Settings[state.l2.code].tvShowFilter = null;
-    state.l2Settings[state.l2.code].talkFilter = null;
+    state.l2Settings[state.l2.code].categoryFilter = null;
   },
 };
 

@@ -254,7 +254,7 @@ export default ({ app }, inject) => {
       } else return [];
     },
 
-    async searchCaptions({ l2Obj, tv_show, talk, terms, limit, sort, timestamp }) {
+    async searchCaptions({ l2Obj, tv_show, category, terms, limit, sort, timestamp }) {
       if (!l2Obj) throw "Directus.searchCaptions: l2Obj is not set!";
 
       let url
@@ -274,7 +274,7 @@ export default ({ app }, inject) => {
         url = LP_DIRECTUS_TOOLS_URL + "videos";
       }
       if (tv_show) params.tv_show = tv_show;
-      if (talk) params.talk = talk;
+      if (category) params.category = category;
       if (terms) params.terms = terms.join(",");
       if (timestamp) params.timestamp = timestamp;
       if (limit) params.limit = limit;

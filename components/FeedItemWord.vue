@@ -151,7 +151,7 @@ export default {
           continua: this.$l2.continua,
           limit: 1,
           tvShowFilter: "all",
-          talkFilter: "all",
+          categoryFilter: "all",
           apostrophe: this.$l2.apostrophe,
         });
         if (hits && hits[0]) {

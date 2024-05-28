@@ -144,7 +144,7 @@
             t: currentHit.video.subs_l2[currentHit.lineIndex].starttime,
           },
         }"
-        class="btn btn-secondary"
+        class="btn btn-no-bg"
         :title="$t('Open this video with full transcript')"
       >
         {{ $t("View Full Video") }} <i class="fa-solid fa-chevron-right ml-1"></i>
@@ -252,7 +252,7 @@ export default {
       slideIndex: 0,
       sort: "views",
       tvShowFilter: this.tvShow ? [this.tvShow.id] : undefined,
-      talkFilter: undefined,
+      categoryFilter: undefined,
       NON_PRO_MAX_SUBS_SEARCH_HITS,
     };
   },
@@ -262,7 +262,7 @@ export default {
       if (this.$l2.continua && !["zh"].includes(this.$l2.code)) return false; // continua script without ngram index, so this filters out japanse and thai among other languages
       return true; // It seems like performance is not too bad for most common words in most languages
       // return false; // Stilll figuring out how this can be done without SQL filesort which is too slow
-      // return !this.talkFilter && !this.tvShowFilter;
+      // return !this.categoryFilter && !this.tvShowFilter;
     },
     hitIndex() {
       let hits = this.hits;
@@ -405,7 +405,7 @@ export default {
       this.tvShowFilter = this.tvShow
         ? [this.tvShow.id]
         : this.$l2Settings.tvShowFilter;
-      this.talkFilter = this.$l2Settings.talkFilter;
+      this.categoryFilter = this.$l2Settings.categoryFilter;
     },
     showPlaylistModal() {
       this.$refs["playlist-modal"].show();
@@ -445,7 +445,7 @@ export default {
         sort: this.canSortByViews ? "-views" : undefined,
         limit,
         tvShowFilter: this.tvShowFilter,
-        talkFilter: this.talkFilter,
+        categoryFilter: this.categoryFilter,
         exact: this.exact,
         apostrophe: true,
         convertToSimplified: this.$l2.han,
