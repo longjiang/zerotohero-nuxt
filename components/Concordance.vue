@@ -113,6 +113,9 @@ export default {
     level: {
       default: "outside",
     },
+    searchAsPhrase: {
+      default: false,
+    },
   },
   data() {
     return {
@@ -158,6 +161,7 @@ export default {
       this.words = [this.term].concat(forms);
       let examples = await SketchEngine.concordance({
         term: this.term,
+        searchAsPhrase: this.searchAsPhrase,
         l1: this.$l1,
         l2: this.$l2,
         corpname: this.$l2Settings.corpname,
