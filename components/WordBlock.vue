@@ -56,9 +56,10 @@
             lookupInProgress,
             loadingImages,
             context,
-            phraseObj: phraseItem(text),
+            phraseObj: phraseItem(text, this.translation),
           }"
           ref="popup"
+          @translation="translation = $event"
         />
       </div>
     </b-modal>
@@ -119,32 +120,54 @@ export default {
       reveal: false,
       t: 0,
       animate: false,
+      translation: null,
     };
   },
   computed: {
     ...mapState("savedWords", ["savedWords"]),
     shortDefinition() {
-      let shortDefinition =
-        this.savedWord?.definitions?.[0] || this.words?.[0]?.definitions?.[0];
+      let shortDefinition;
+
+      // If there's a saved phrase, get the definition in the current language
+      if (this.savedPhrase) {
+        shortDefinition = this.savedPhrase?.[this.$l1.code];
+      }
+
+      // If there's no saved phrase but there's a saved word, get the first definition
+      else if (this.savedWord) {
+        shortDefinition = this.savedWord?.definitions?.[0];
+      }
+
+      // If there's no saved phrase or word, get the first definition of the first word in the list
+      else {
+        shortDefinition = this.words?.[0]?.definitions?.[0];
+      }
+
+      // If there's no definition, return undefined
       if (!shortDefinition) return;
 
-      [
-        /\s*\(.*?\)/,
-        /\s*\（.*?）/,
-        /\s*.*?：/,
-        /^.*\./,
-        /^to /,
-        /^see .*/,
-        /^variant .*/,
-      ].forEach((rule) => {
+      // Define an array of regex rules to clean up the definition
+      const rules = [
+        /\s*\(.*?\)/, // Remove anything in parentheses
+        /\s*\（.*?）/, // Remove anything in full-width parentheses
+        /\s*.*?：/, // Remove anything before and including the full-width colon
+        /^.*\./, // Remove anything before and including the first period
+        /^to /, // Remove 'to ' at the start of the definition
+        /^see .*/, // Remove 'see ' and anything after it at the start of the definition
+        /^variant .*/, // Remove 'variant ' and anything after it at the start of the definition
+      ];
+
+      // Apply each rule to the definition
+      rules.forEach((rule) => {
         shortDefinition = shortDefinition.replace(rule, "");
       });
 
+      // Split the definition by commas or semicolons and take the first part
       shortDefinition = shortDefinition.split(/[，；,;]\s*/)[0];
 
-      return shortDefinition && shortDefinition.length < 20
-        ? shortDefinition
-        : undefined;
+      // If the resulting definition is less than 20 characters long, return it
+      // Otherwise, return undefined
+      return shortDefinition && shortDefinition.length < 20 ? shortDefinition : undefined;
     },
     pos() {
       let pos = this.bestWord?.pos || this.token?.pos;

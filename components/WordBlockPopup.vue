@@ -337,6 +337,7 @@ export default {
         l1Code: this.$l1.code,
         l2Code: this.$l2.code,
       });
+      this.$emit("translation", this.translation);
     },
     segment(text) {
       return text
