@@ -1,51 +1,9 @@
 <template>
   <div class="video">
     <client-only>
-      <div class="upload-wrapper pl-4 pr-4 pt-3" v-if="!loaded">
-        <div class="upload">
-          <div class="w-100 p-4">
-            <p>{{ $t("Upload your {l2} video file ({formats}), and subtitles files (.srt) in {l2} and {l1}, then press \"{button}\".", {
-                formats: formats.map(f => f.ext).join(', '),
-                l2: $t($l2.name),
-                l1: $t($l1.name),
-                button: $t('Load Video'),
-              }) }}</p>
-            <b-form-file
-              class="mb-2"
-              :accept="formats.map((f) => '.' + f.ext).join(',')"
-              v-model="videoFile"
-              :placeholder="$t($t('Choose a video ({formats}) to open:', {
-                  formats: formats.map(f => f.ext).slice(0,3).join(', '),
-                }))"
-              :drop-placeholder="$t('Drop file here...')"
-              :browse-text="$t('Browse')"
-            ></b-form-file>
-            <b-form-file
-              class="mb-2"
-              accept=".srt"
-              v-model="subsL2File"
-              :placeholder="$t('Upload original subtitles (.srt)')"
-              :drop-placeholder="$t('Drop file here...')"
-              :browse-text="$t('Browse')"
-            ></b-form-file>
-            <b-form-file
-              class="mb-4"
-              accept=".srt"
-              v-model="subsL1File"
-              :placeholder="$t('Upload translation subtitles (.srt)')"
-              :drop-placeholder="$t('Drop file here...')"
-              :browse-text="$t('Browse')"
-            ></b-form-file>
-            <b-button @click="loadVideo" variant="primary" class="d-block w-100" :disabled="!videoFile || !subsL2File">
-              {{ $t("Load Video") }}
-            </b-button>
-          </div>
-        </div>
-      </div>
       <video
         ref="videoPlayer"
         class="video-player"
-        v-if="loaded"
         @timeupdate="onTimeUpdate"
         @pause="onPause"
         @play="onPlay"
@@ -117,6 +75,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    video: {
+      type: Object,
+      required: true,
+    },
+    formats: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
@@ -125,12 +91,7 @@ export default {
       currentTime: 0,
       interval: undefined,
       duration: undefined,
-      loaded: false,
       randomSeeked: false,
-      formats: [],
-      videoFile: null, // The uploaded video file
-      subsL1File: null, // The uploaded translation subtitles file
-      subsL2File: null, // The uploaded original subtitles file
     };
   },
   computed: {
@@ -144,7 +105,6 @@ export default {
   },
   async mounted() {
     this.time = this.starttime;
-    this.formats = this.getFormats()
   },
   destroyed() {
     const videoPlayer = this.$refs.videoPlayer;
@@ -164,34 +124,8 @@ export default {
     },
   },
   methods: {
-    getFormats() {
-      const video = document.createElement("video");
-
-      // The different video formats to check for
-      const formats =  [
-        { ext: 'mp4', mime: 'video/mp4' },
-        { ext: 'webm', mime: 'video/webm' },
-        { ext: 'ogg', mime: 'video/ogg' },
-        { ext: 'mkv', mime: 'video/x-matroska' },
-        { ext: 'avi', mime: 'video/x-msvideo' },
-        { ext: 'mpeg', mime: 'video/mpeg' },
-        { ext: 'flv', mime: 'video/x-flv' },
-        { ext: 'mp3', mime: 'audio/mpeg' },
-        { ext: 'ogg', mime: 'audio/ogg' },
-        { ext: 'wav', mime: 'audio/wav' },
-        { ext: 'aac', mime: 'audio/aac' },
-        { ext: 'flac', mime: 'audio/flac' },
-        { ext: 'opus', mime: 'audio/opus' }
-      ]
-      let supportedFormats = formats.filter(
-        (format) => video.canPlayType(format.mime) !== ""
-      );
-      supportedFormats = [{ ext: 'mkv', mime: 'video/x-matroska' }, ...supportedFormats]
-      return supportedFormats;
-    },
     open() {
-      this.$emit("updateVideo", {});
-      this.loaded = false;
+      this.$emit("updateVideo", null);
     },
     onPause() {
       this.$emit("paused", true);
@@ -209,30 +143,6 @@ export default {
         this.$emit("updateVideo", {...this.video, duration: this.$refs.videoPlayer.duration, width: this.$refs.videoPlayer.videoWidth, height: this.$refs.videoPlayer.videoHeight });
         this.$refs.videoPlayer.play();
       }
-    },
-    async loadVideo() {
-      if (!this.videoFile) return;
-      const url = URL.createObjectURL(this.videoFile);
-      const subs_l1 = this.subsL1File ? await this.loadSubsFromFile(this.subsL1File) : null;
-      const subs_l2 = this.subsL2File ? await this.loadSubsFromFile(this.subsL2File) : null;
-      this.video = { url, subs_l1, subs_l2 };
-      this.$emit("updateVideo", this.video);
-      this.loaded = true;
-    },
-    async loadSubsFromFile(file) {
-      let reader = new FileReader();
-      
-      const fileContent = await new Promise((resolve, reject) => {
-        reader.onload = event => resolve(event.target.result);
-        reader.onerror = error => reject(error);
-        reader.readAsText(file);
-      });
-
-      let srt = fileContent;
-
-      let subs = this.$subs.parseSrt(srt)
-      
-      return subs;
     },
     getDuration() {
       if (this.$refs.videoPlayer) return this.$refs.videoPlayer.duration;

@@ -16,6 +16,7 @@
       controls,
       muted,
       video,
+      formats
     }"
     ref="concreteVideo"
     @paused="onPaused"
@@ -82,6 +83,10 @@ export default {
     muted: {
       type: Boolean,
       default: false,
+    },
+    formats: {
+      type: Array,
+      required: false,
     },
   },
   data() {

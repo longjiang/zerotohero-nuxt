@@ -36,6 +36,7 @@
             autoplay,
             startAtRandomTime,
             video,
+            formats,
             controls: false,
             starttime: startTimeOrLineIndex,
           }"
@@ -412,6 +413,10 @@ export default {
       type: String,
       default: "title", // or '-views' or '-date'
     },
+    formats: {
+      type: Array,
+      required: false,
+    },
   },
   data() {
     return {
@@ -669,8 +674,7 @@ export default {
       this.updateLayout();
     },
     onOpen() {
-      const video = this.$refs.video;
-      if (video) video.open();
+      this.$emit("open");
     },
     onCurrentTime(currentTime) {
       if (this.neverPlayed) {
