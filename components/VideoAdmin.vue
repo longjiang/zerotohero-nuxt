@@ -33,7 +33,7 @@
         ></b-form-file>
       </div>
       <div
-        class="mt-4 mb-5 rounded"
+        class="my-3"
         style="color: rgba(136, 136, 136, 0.85)"
         v-if="
           (!video.subs_l2 || video.subs_l2.length === 0) && !video.checkingSubs

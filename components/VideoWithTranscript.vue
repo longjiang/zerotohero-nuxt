@@ -172,7 +172,7 @@
 
         <!-- this is the public facing video admin -->
         <!-- if the video has no subs, allow the user to add subs -->
-        <div class="pl-4 pr-4" v-if="!checkingSubs && video">
+        <div class="pl-4 pr-4" v-if="!checkingSubs && video && mode === 'transcript'">
           <VideoAdmin
             :showVideoDetails="true"
             :showTextEditing="true"
