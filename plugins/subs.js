@@ -248,6 +248,7 @@ export default ({ app }, inject) => {
     },
     // Helper function to escape regular expressions
     escapeRegExp(text) {
+      if (!text) return text;
       return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
     },
 
