@@ -496,7 +496,7 @@ export default {
   },
   beforeDestroy() {
     this.unbindKeys();
-    this.unsubscribe();
+    if (this.unsubscribe) this.unsubscribe();
   },
   watch: {
     liked() {
