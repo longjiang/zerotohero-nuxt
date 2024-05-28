@@ -27,27 +27,55 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <Widget
-            class="mt-5"
-            id="search-subs"
-            v-if="term && compareTerm"
-            :key="`compare-subs-search-${term}-${compareTerm}`"
-          >
-            <template #title>“{{ term }}” in TV Shows</template>
-            <template #body>
-              <LazyCompareSearchSubs
-                ref="searchSubs"
-                level="outside"
-                :key="`${term}-${compareTerm}-compare-search-subs`"
-                :termsA="[term]"
-                :termsB="[compareTerm]"
+    </div>
+    <TabbedSections v-bind="{ sections }" class="dictionary-main">
+      <template #subtitles>
+        <Widget
+          v-if="term && compareTerm"
+          :key="`${term}-subs`"
+          skin="dark"
+          :withPadding="false"
+          id="compare-search-subs"
+        >
+          <template #title>
+            “{{ term }}” and “{{ compareTerm }}” in
+            <LazyShowFilter @showFilter="reloadSearchSubs" />
+          </template>
+          <template #body>
+            <LazyCompareSearchSubs
+              v-if="renderSearchSubs"
+              skin="dark"
+              ref="searchSubs"
+              level="outside"
+              :key="`${term}-${compareTerm}-compare-search-subs`"
+              :termsA="[term]"
+              :termsB="[compareTerm]"
+            />
+          </template>
+        </Widget>
+        <div class="container">
+          <div class="row mt-5">
+            <div class="col-sm-6">
+              <LazyWebImages
+                v-if="term"
+                :text="term"
+                limit="10"
+                :key="`${term}-images`"
               />
-            </template>
-          </Widget>
+            </div>
+            <div class="col-sm-6">
+              <LazyWebImages
+                v-if="compareTerm"
+                :text="compareTerm"
+                limit="10"
+                :key="`${compareTerm}-images`"
+              />
+            </div>
+          </div>
         </div>
-      </div>
+      </template>
+    </TabbedSections>
+    <div class="container main pt-5 mb-5">
       <div class="row">
         <div class="col-md-6">
           <WebImages
@@ -132,6 +160,7 @@ export default {
     return {
       aImages: [],
       bImages: [],
+      renderSearchSubs: true,
     };
   },
   async created() {
@@ -145,6 +174,36 @@ export default {
     });
   },
   computed: {
+
+    sections() {
+      return [
+        {
+          name: "subtitles",
+          title: "Subtitles",
+          visible: this.term && this.compareTerm,
+        },
+        {
+          name: "chatGPT",
+          title: "ChatGPT",
+          visible: true,
+        },
+        {
+          name: "collocations",
+          title: "Collocations",
+          visible: true,
+        },
+        {
+          name: "examples",
+          title: "Examples",
+          visible: true,
+        },
+        {
+          name: "related",
+          title: "Related",
+          visible: true,
+        },
+      ];
+    },
     title() {
       if (this.term && this.compareTerm) {
         return `“${this.term}” vs “${this.compareTerm}” - ${
@@ -178,6 +237,12 @@ export default {
     },
   },
   methods: {
+    reloadSearchSubs() {
+      this.renderSearchSubs = false;
+      this.$nextTick(() => {
+        this.renderSearchSubs = true;
+      });
+    },
     keydown(e) {
       if (
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&

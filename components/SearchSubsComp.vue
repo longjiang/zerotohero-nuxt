@@ -24,13 +24,6 @@
           @click="goToNextHit"
         />
 
-        <!-- Filter and List -->
-        <SimpleButton
-          v-if="!showFilter"
-          iconClass="fas fa-filter"
-          :title="$t('Filter Clips by Keywords')"
-          @click="showFilter = true"
-        />
 
         <!-- Show playlist modal, showing current Hit Index -->
         <SimpleButton
@@ -43,16 +36,23 @@
             $t('{num} of {total}', { num: hitIndex + 1, total: hits.length })
           "
         />
+        
+        <!-- Filter and List -->
+        <SimpleButton
+          v-if="!regex && hits.length > 0"
+          iconClass="fas fa-filter"
+          :title="$t('Filter Clips by Keywords')"
+          @click="showFilter = !showFilter"
+        />
 
         <!-- Search Input -->
         <b-form-input
-          v-if="showFilter"
+          v-if="regex || showFilter"
           type="text"
           class="d-inline-block"
           size="sm"
           v-model="regex"
           :placeholder="$t('Filter with regex...')"
-          @blur="showFilter = false"
         />
       </span>
     </div>
