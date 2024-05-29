@@ -29,7 +29,7 @@
                   method: 'md',
                   arg: message.text.replace('\n', '\n\n'),
                 },
-              }" class="text-success">
+              }" class="btn btn-unstyled text-success">
                 <i class="fa fa-book-open mr-1"></i>
                 {{ $t("Open in Reader") }}
                 <i class="fa fa-chevron-right ml-1"></i>
