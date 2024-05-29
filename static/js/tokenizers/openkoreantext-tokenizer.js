@@ -12,6 +12,7 @@ class OpenKoreanTextTokenizer extends BaseTokenizer {
       } catch (error) {
         console.error('There was a problem with the axios operation: ', error);
       }
+    }
     
     // Check if the tokenized is an array and not a string
     if (!tokenized || typeof tokenized === 'string') {
