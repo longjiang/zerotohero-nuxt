@@ -3,18 +3,18 @@ const InflectorFactory = {
     JapaneseInflector: ["jpn"],
     KoreanInflector: ["kor"],
     RussianInflector: ["rus"],
-    FrenchInflector: ["fra"],
+    // FrenchInflector: ["fra"],
     CompromiseInflector: [
       // Only English and German have inflectors
-      "eng",
-      "deu",
+      // "eng",
+      // "deu",
     ],
     PymorphyInflector: [
       "ukr",
     ],
     PatternInflector: [
-      // "eng",
-      // "deu",
+      "eng",
+      "deu",
       "ita",
       "spa",
       "fra",
