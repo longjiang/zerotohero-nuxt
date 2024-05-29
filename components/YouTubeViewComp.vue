@@ -636,12 +636,14 @@ export default {
     subsL1Problematic(subs_l1) {
       // Get the L2 subtitles from the video object. If it doesn't exist, default to an empty array.
       const subs_l2 = this.video?.subs_l2 ?? []
+      // Logout the lengths
+      // console.log('L1:', subs_l1.length, 'L2:', subs_l2.length)
 
       // Return true if either of the following conditions is met:
-      // 1. The length of subs_l1 is less than 95% of the length of subs_l2.
+      // 1. The length of subs_l1 is less than 50% of the length of subs_l2.
       // 2. The difference in length between subs_l2 and subs_l1 is greater than 10.
       // If neither condition is met, return false.
-      return subs_l1.length < subs_l2.length * 0.95 || subs_l2.length - subs_l1.length > 10
+      return subs_l1.length < subs_l2.length * 0.5
     },
     async loadMissingMetaFromYouTube(video) {
       // If the video has other missing information, we load it from YouTube
