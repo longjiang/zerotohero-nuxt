@@ -25,7 +25,7 @@
   </div>
 </template>
 <script>
-import { unique, uniqueByValue } from "@/lib/utils";
+import { uniqueByValue } from "@/lib/utils";
 
 export default {
   props: {
@@ -35,32 +35,8 @@ export default {
     ids: {
       type: Array,
     },
-    matchedWords: {
-      default: undefined,
-    },
-    compareWith: {
-      default: null,
-    },
-    traditional: {
-      default: false,
-    },
-    highlight: {
-      default: false,
-    },
-    collapse: {
-      default: 0,
-    },
     star: {
       default: true,
-    },
-    level: {
-      default: false,
-    },
-    url: {
-      type: Function,
-    },
-    skin: {
-      default: null,
     },
     hideWord: {
       default: false,
@@ -71,28 +47,27 @@ export default {
     hidePhonetics: {
       default: false,
     },
-    showCounters: {
+    showSpeak: {
       default: true,
     },
-    maxDefinitions: undefined,
+    collapse: {
+      default: false,
+    },
     removeSymbol: {
       default: false,
     },
-    showSpeak: {
-      default: true,
+    compareWith: {
+      type: Object,
+      default: () => {},
     },
   },
   computed: {
     classes() {
-      let classes = {
+      return {
         wordlist: true,
         "list-unstyled": true,
         'grid-container': true,
-        collapsed: this.collapse > 0,
       };
-      classes[`collapse-${this.collapse}`] = true;
-      classes[`skin-${this.$skin}`] = true;
-      return classes;
     },
   },
   asyncComputed: {
@@ -122,42 +97,6 @@ export default {
       }
       allWords = uniqueByValue(allWords, "id");
       return allWords;
-    },
-  },
-  methods: {
-    filterDefinitions(word) {
-      if (!word.definitions) return;
-      let definitions = word.definitions;
-      if (this.$l2.code === "zh")
-        definitions = definitions.filter((def) => !def.startsWith("CL"));
-      definitions = unique(definitions);
-      if (this.maxDefinitions)
-        definitions = definitions.slice(0, this.maxDefinitions);
-      return definitions;
-    },
-    unique(list) {
-      return unique(list);
-    },
-    getUrl(word, index) {
-      if (!word) return;
-      if (this.url) return this.url(word, index);
-      else
-        return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${word.id}`;
-    },
-    getLevel(word) {
-      if (this.$l2.code === "zh" && word) {
-        if (word.newHSK && word.newHSK === "7-9") {
-          return "7-9";
-        } else if (word.hsk !== "outside") {
-          return word.hsk;
-        } else if (word.hsk === "outside" && word.weight < 750) {
-          return "outside";
-        } else {
-          return false;
-        }
-      } else {
-        return word.level || "outside";
-      }
     },
   },
 };
