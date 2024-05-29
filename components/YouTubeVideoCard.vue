@@ -315,7 +315,7 @@ export default {
       type: Object,
     },
     playlistId: {
-      type: String,
+      type: Number,
     },
   },
   data() {

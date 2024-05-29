@@ -205,7 +205,7 @@
               showDate,
               showProgress,
               showLanguage: multilingual,
-              playlistId: playlistId ? playlistId : getAdHocPlaylistId(video.id), // If playlistId is not provided, use the ids of videos as an ad hoc playlist, so when the the user plays the videos, the next videos in the list are automatically queued up
+              playlistId: playlistId ? Number(playlistId) : getAdHocPlaylistId(video.id), // If playlistId is not provided, use the ids of videos as an ad hoc playlist, so when the the user plays the videos, the next videos in the list are automatically queued up
               sort,
             }"
           >
