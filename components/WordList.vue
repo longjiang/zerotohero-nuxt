@@ -39,7 +39,7 @@ export default {
       default: undefined,
     },
     compareWith: {
-      default: false,
+      default: null,
     },
     traditional: {
       default: false,

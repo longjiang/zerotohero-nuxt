@@ -346,7 +346,7 @@ export default {
         {
           name: "inflections",
           title: "Inflections",
-          visible: true,
+          visible: ['ja', 'ko', 'ru', 'uk', 'en', 'de', 'fr', 'es', 'it', 'nl'].includes(this.$l2.code),
         },
         {
           name: "related",
