@@ -1,129 +1,24 @@
 <template>
   <div>
     <ul :class="classes" data-collapse-target>
-      <li
-        :class="{
-          'wordlist-item': true,
-          matched:
-            matchedWords &&
-            matchedWords.map((word) => word.id).includes(word.id),
-        }"
+      <WordListItem
         v-for="(word, index) in asyncComputedWords"
         :key="`word-list-word-${index}-${word.id}`"
-      >
-        <Star
-          v-if="word && star === true"
-          :word="word"
-          :removeSymbol="removeSymbol"
-          :label="false"
-          class="pr-2"
-        ></Star>
-        <Speak
-          v-if="showSpeak"
-          :text="word.kana || word.head"
-          :l2="$l2"
-          class="text-secondary"
+        :word="word"
+        :index="index"
+        :star="star"
+        :showSpeak="showSpeak"
+        :hideWord="hideWord"
+        :hidePhonetics="hidePhonetics"
+        :hideDefinitions="hideDefinitions"
+        :compareWith="compareWith"
+        :removeSymbol="removeSymbol"
+        class="grid-row"
         />
-        <router-link
-          v-if="compareWith"
-          :to="`/${$l1.code}/${$l2.code}/compare/${$dictionaryName}/${compareWith.id},${word.id}`"
-          :class="`btn btn-sm btn-no-bg mr-0`"
-          style="margin-bottom: 0.4rem"
-        >
-          <i class="fas fa-adjust"></i>
-        </router-link>
-        <router-link
-          v-if="word"
-          :to="getUrl(word, index)"
-          :title="word.definitions ? filterDefinitions(word).join(',') : ''"
-        >
-          <span
-            :class="{ 'wordlist-item-word': true, transparent: hideWord }"
-            :data-level="skin !== 'dark' ? getLevel(word) : undefined"
-          >
-            <span v-if="$l2.code === 'de' && word.gender">
-              {{ { n: "das", m: "der", f: "die" }[word.gender] }}
-            </span>
-            {{ word.accented || word.head }}
-          </span>
-
-          <span :class="{ transparent: hidePhonetics }">
-            <span v-if="word.pronunciation" class="wordlist-item-pinyin">
-              <span
-                v-if="$l2.code === 'vi'"
-                v-html="
-                  '[' +
-                  word.pronunciation.replace(
-                    /\[\[(.+?)#Vietnamese\|.+?]]/g,
-                    '$1'
-                  ) +
-                  ']'
-                "
-              />
-              <span v-else>[{{ word.pronunciation }}]</span>
-            </span>
-            <span v-if="word.kana" class="wordlist-item-pinyin">
-              ( {{ word.kana }}
-              <template v-if="word.romaji">, {{ word.romaji }}</template> )
-            </span>
-            <span
-              v-if="
-                ['ko', 'vi'].includes($l2.code) &&
-                word.cjk &&
-                word.cjk.canonical
-              "
-              class="wordlist-item-byeonggi"
-            >
-              {{ word.cjk.canonical }}
-            </span>
-          </span>
-          <span
-            v-if="word.definitions"
-            :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
-          >
-            <span class="word-type" v-if="word.pos">
-              {{
-                word.gender
-                  ? { m: "masculine", f: "feminine", n: "neuter" }[word.gender]
-                  : ""
-              }}
-              {{ word.pos }}
-              {{
-                word.heads && word.heads[0] && word.heads[0][1]
-                  ? word.heads[0][1]
-                  : ""
-              }}:
-            </span>
-            <DefinitionsList class="d-inline" :definitions="filterDefinitions(word)" :translated="true" :singleColumn="true" :neverShowAsList="true" />
-          </span>
-          <span
-            :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
-            v-if="showCounters && word.counters"
-          >
-            :
-            <span style="font-style: normal">
-              {{
-                word.counters
-                  .map((counter) => "一" + counter.simplified)
-                  .join(word.simplified + "、") + word.simplified
-              }}。
-            </span>
-          </span>
-        </router-link>
-      </li>
-      <li
-        class="wordlist-item"
-        v-for="(text, index) in texts"
-        :key="`word-list-item-${index}`"
-      >
-        <Star v-if="text && star === true" :text="text" class="mr-1"></Star>
-        <span class="wordlist-item-word ml-1" data-level="outside">
-          {{ text }}
-        </span>
-      </li>
     </ul>
     <ShowMoreButton
       v-if="collapse > 0 && asyncComputedWords?.length > collapse"
+      class="mt-2 d-block w-100"
       :length="asyncComputedWords?.length"
       :min="collapse"
     />
@@ -138,9 +33,6 @@ export default {
       type: Array,
     },
     ids: {
-      type: Array,
-    },
-    texts: {
       type: Array,
     },
     matchedWords: {
@@ -195,6 +87,7 @@ export default {
       let classes = {
         wordlist: true,
         "list-unstyled": true,
+        'grid-container': true,
         collapsed: this.collapse > 0,
       };
       classes[`collapse-${this.collapse}`] = true;
@@ -216,19 +109,6 @@ export default {
         );
         wordFromIds = wordFromIds?.filter((w) => w) || []
         allWords = allWords.concat(wordFromIds)
-      }
-
-      if (this.texts) {
-        // This returns an array of arrays
-        let wordFromTexts = await Promise.all(
-          this.texts.map(async (text) => {
-            return await dictionary.lookupMultiple(text);
-          })
-        );
-        // Flatten it
-        wordFromTexts = wordFromTexts.reduce((acc, val) => acc.concat(val), []);
-        wordFromTexts = wordFromTexts.filter((w) => w) || []
-        allWords = allWords.concat(wordFromTexts)
       }
 
       // Transliterate to Romaji if Japanese
@@ -285,71 +165,25 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/assets/scss/variables.scss";
-.word-type {
-  opacity: 0.7;
+
+.grid-container {
+    display: grid;
+    gap: 10px; /* space between rows */
 }
 
-.wordlist-item {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.grid-row {
+    display: grid;
+    grid-template-columns: auto 1fr; /* first column size according to content, second takes the rest */
 }
 
-.wordlist.skin-light {
-  .wordlist-item a {
-    .wordlist-item-pinyin,
-    .wordlist-item-pinyin * {
-      color: #779bb5;
-    }
-
-    .wordlist-item-word[data-level="outside"],
-    .wordlist-item-l1 {
-      color: #666 !important;
-    }
-
-    .wordlist-item-byeonggi {
-      color: rgb(143, 158, 172);
-    }
-  }
+.col1 {
+    display: grid;
+    grid-template-columns: auto auto auto; /* each sub-column only as wide as necessary */
 }
 
-.wordlist.skin-dark {
-  .wordlist-item a {
-    .wordlist-item-pinyin,
-    .wordlist-item-pinyin * {
-      color: rgba(255, 255, 255, 0.589);
-    }
-    .wordlist-item-word[data-level="outside"],
-    .wordlist-item-l1 {
-      color: rgba(255, 255, 255, 0.781) !important;
-    }
-  }
+.col2 {
+
 }
 
-.wordlist {
-  margin-bottom: inherit;
 
-  .wordlist-item {
-    a {
-      // color: inherit;
-    }
-    a:hover {
-      text-decoration: none;
-    }
-
-    .wordlist-item-word {
-      font-weight: bold;
-      font-size: 1.4em;
-    }
-
-    &.matched {
-      opacity: 0.2;
-    }
-    .wordlist-item-pinyin,
-    .wordlist-item-pinyin * {
-      font-family: AndikaW, Andika, Arial, sans-serif;
-    }
-  }
-}
 </style>

@@ -23,9 +23,8 @@
         :words="words"
         :class="{
           'related': true,
-          'columns-1': columns === 1,
-          'columns-2': columns === 2,
         }"
+        :showSpeak="false"
         :compareWith="entry"
         collapse="10"
       />
@@ -68,10 +67,6 @@ export default {
   props: {
     entry: Object,
     text: String,
-    columns: {
-      type: Number,
-      default: 2,
-    },
   },
   data() {
     return {
@@ -134,14 +129,6 @@ export default {
 .related {
   list-style: none;
   padding: 0;
-}
-
-.columns-1 {
-  column-count: 1;
-}
-
-.columns-2 {
-  column-count: 2;
 }
 
 
