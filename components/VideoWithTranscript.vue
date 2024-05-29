@@ -128,6 +128,7 @@
             :video="video"
             ref="videoDetails"
             @updateVideo="onUpdateVideo"
+            @retranslate="$emit('retranslate', video)"
           />
           <EpisodeNav
             v-if="episodes"

@@ -559,7 +559,7 @@ export default {
     },
     async retranslate(video) {
       if (!video?.id) return;
-      this.retranslating = true
+      this.$nuxt.$emit("retranslating", true)
       let url = `${PYTHON_SERVER}translate_video_and_save?l1=${this.$l1.code}&l2=${this.$l2.code}&video_id=${video.id}`
       let jsonOrCSV = await axios(url).then((res) => res.data).catch((err) => err)
       if (!jsonOrCSV || typeof jsonOrCSV !== 'string') {
@@ -574,7 +574,7 @@ export default {
             duration: 5000,
           }
         );
-        this.retranslating = false
+        this.$nuxt.$emit("retranslating", false)
         return
       }
       this.$store.commit("shows/MODIFY_ITEM", {
@@ -589,7 +589,7 @@ export default {
           duration: 5000,
         }
       );
-      this.retranslating = false
+      this.$nuxt.$emit("retranslating", false)
     },
     async loadMissingSubsFromYouTube(video) {
       // If the video doesn't have L1 or L2 subtitles, we load it from YouTube

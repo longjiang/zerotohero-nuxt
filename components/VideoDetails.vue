@@ -166,6 +166,14 @@ export default {
           .join("\n");
     },
   },
+  created() {
+    this.$nuxt.$on("retranslating", (retranslating) => {
+      this.retranslating = retranslating;
+    });
+  },
+  destroyed() {
+    this.$nuxt.$off("retranslating");
+  },
   methods: {
     retranslate() {
       this.$emit("retranslate", this.video)
