@@ -40,7 +40,7 @@
         <p>{{ $t('Exclude results containing:') }}</p>
         <b-form-checkbox-group id="search-terms-checkbox-group" v-model="selectedExcludeTerms">
           <b-form-checkbox
-            v-for="term in allExcludeTerms"
+            v-for="term in limitedExcludeTerms"
             :key="`term-${term}`"
             :value="term"
             class="d-block mb-1"
@@ -78,6 +78,13 @@ export default {
       selectedExcludeTerms: this.allExcludeTerms,
       wholePhraseOnly: this.initialWholePhraseOnly
     };
+  },
+  computed: {
+    limitedExcludeTerms() {
+      // Sort by length, shortest first
+      let limitedExcludeTerms = this.allExcludeTerms.sort((a, b) => a.length - b.length);
+      return limitedExcludeTerms.slice(0, 100); // Don't render too many or else the rendering gets too slow
+    }
   },
   methods: {
     onModalHide() {

@@ -388,7 +388,8 @@ export default {
   },
   async mounted() {
     let allSearchTerms = await this.getSearchTerms();
-    this.allExcludeTerms = await this.getExcludeTerms(allSearchTerms);
+    let allExcludeTerms = await this.getExcludeTerms(allSearchTerms);
+    this.allExcludeTerms = allExcludeTerms
     if (this.context?.form) {
       allSearchTerms = unique([this.context.form, ...allSearchTerms]);
     }
@@ -500,8 +501,8 @@ export default {
         .filter((s) => s && s.length > 1);
 
       // Handling OpenRussian dictionary.
-      if (this.$dictionaryName === "openrussian") {
-        terms = terms.map((t) => t.replace(/'/gi, ""));
+      if (this.$l2.code === "ru") {
+        terms = terms.map((t) => t.replace(/\u0301/g, "")); // Cyrillic combining acute accent
       }
 
       return terms;
