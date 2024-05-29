@@ -635,9 +635,14 @@ export default {
     // This function checks if the length of the L1 subtitles (subs_l1) is problematic compared to L2 subtitles (subs_l2).
     subsL1Problematic(subs_l1) {
       // Get the L2 subtitles from the video object. If it doesn't exist, default to an empty array.
-      const subs_l2 = this.video?.subs_l2 ?? []
+      let subs_l2 = this.video?.subs_l2 ?? []
+
+      // Strip out empty lines and lines only containing '\n' and '\r'
+      subs_l2 = subs_l2.filter((line) => line && line.line.trim())
+      subs_l1 = subs_l1.filter((line) => line && line.line.trim())
+
       // Logout the lengths
-      // console.log('L1:', subs_l1.length, 'L2:', subs_l2.length)
+      // console.log('L1:', subs_l1.length, 'L2:', subs_l2.length, subs_l1, subs_l2)
 
       // Return true if either of the following conditions is met:
       // 1. The length of subs_l1 is less than 50% of the length of subs_l2.
