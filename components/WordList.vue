@@ -67,6 +67,8 @@ export default {
         wordlist: true,
         "list-unstyled": true,
         'grid-container': true,
+        'collapsed': this.collapse > 0,
+        [`collapse-${this.collapse}`]: this.collapse > 0,
       };
     },
   },
