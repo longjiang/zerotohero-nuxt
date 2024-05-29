@@ -190,7 +190,7 @@
           </b-button>
         </div>
         <ChannelCard v-if="video.channel_id" :channel_id="video.channel_id" class="mb-2"/>
-        <VideoDetails :video="video" ref="videoDetails" :showTitle="false" />
+        <VideoDetails :video="video" ref="videoDetails" :showTitle="false" @retranslate="$emit('retranslate', video)" />
         <VideoAdmin
           :video="video"
           ref="videoAdmin1"

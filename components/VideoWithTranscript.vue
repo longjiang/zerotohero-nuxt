@@ -94,6 +94,7 @@
           @updateSmoothScroll="(r) => (this.useSmoothScroll = r)"
           @updateAutoPause="(r) => (this.autoPause = r)"
           @updateRepeatMode="(r) => (this.repeatMode = r)"
+          @retranslate="$emit('retranslate', video)"
           @fullscreen="onFullscreen"
           @goToPreviousLine="
             $refs.transcript ? $refs.transcript.goToPreviousLine() : null

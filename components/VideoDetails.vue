@@ -167,39 +167,8 @@ export default {
     },
   },
   methods: {
-    async retranslate() {
-      this.retranslating = true
-      let url = `${PYTHON_SERVER}translate_video_and_save?l1=${this.$l1.code}&l2=${this.$l2.code}&video_id=${this.video.id}`
-      let jsonOrCSV = await axios(url).then((res) => res.data).catch((err) => err)
-      if (!jsonOrCSV || typeof jsonOrCSV !== 'string') {
-        console.error(`${url} responded with:`, jsonOrCSV)
-      }
-      let subs_l1 = this.$subs.parseSavedSubs(jsonOrCSV)
-      if (!subs_l1) {
-        this.$toast.error(
-          this.$t('Failed to retranslate subtitles.'),
-          {
-            position: "top-center",
-            duration: 5000,
-          }
-        );
-        this.retranslating = false
-        return
-      }
-      this.$store.commit("shows/MODIFY_ITEM", {
-        item: this.video,
-        key: "subs_l1",
-        value: subs_l1,
-      });
-      this.$emit('updateVideo', this.video)
-      this.$toast.success(
-        this.$t('The subtitles have been retranslated.'),
-        {
-          position: "top-center",
-          duration: 5000,
-        }
-      );
-      this.retranslating = false
+    retranslate() {
+      this.$emit("retranslate", this.video)
     },
     formatK(number) {
       return formatK(number, 2, this.$l1.code);
