@@ -18,6 +18,7 @@ const InflectorFactory = {
       "ita",
       "spa",
       "fra",
+      "nld",
     ],
     // NodeNlpInflector: [
     //   "ara",
