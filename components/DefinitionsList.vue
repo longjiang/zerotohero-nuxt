@@ -163,7 +163,7 @@ export default {
           stringAfter = m[m.length - 1];
         }
       } else {
-        if (this.$l2.code !== "en") {
+        if (this.$l2?.code !== "en") {
           let m = text.match(/(.* of )([^\s]+)(.*)/);
           if (m) {
             stringBefore = m[1];

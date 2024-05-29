@@ -3,6 +3,7 @@ class BaseInflector {
   constructor({ l2 = undefined } = {}) {
     this.l2 = l2;
     this.inflectionCache = {};
+    this.serverCache = {};
   }
 
   static async load({ l2 = undefined } = {}) {
@@ -24,6 +25,24 @@ class BaseInflector {
     this.inflectionCache[lemma] = inflectedForms;
 
     return inflectedForms;
+  }
+
+  loadServerCache(data) {
+    for (let key in data) {
+      // Initialize the serverCache object if it doesn't exist
+      if (!this.serverCache[this.l2.code]) {
+        this.serverCache[this.l2.code] = {};
+      }
+      this.serverCache[this.l2.code][key] = data[key];
+      // console.log("Loading server cache for", this.l2.code, key);
+    }
+  }
+
+  loadFromServerCache(text) {
+    const key = CryptoJS.MD5(text).toString();
+    const tokens = this.serverCache[this.l2.code]?.[key];
+    // console.log("Loading from server cache for", this.l2.code, key, tokens, {text});
+    return tokens
   }
 
   async inflect(lemma) {

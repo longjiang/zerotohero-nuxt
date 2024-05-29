@@ -9,27 +9,26 @@ const InflectorFactory = {
       "eng",
       "deu",
     ],
+    PymorphyInflector: [
+      "ukr",
+    ],
+    PatternInflector: [
+      // "eng",
+      // "deu",
+      "ita",
+      "spa",
+      "fra",
+    ],
     // NodeNlpInflector: [
     //   "ara",
-    //   "zho",
-    //   "zho",
-    //   "eng",
-    //   "fra",
-    //   "deu",
     //   "ell",
     //   "hin",
-    //   "ind",
-    //   "ita",
-    //   "jpn",
-    //   "kor",
     //   "por",
-    //   "spa",
     //   "swe",
-    //   "tha",
     //   "tur",
     //   "ukr",
-    //   "vie"
     // ],
+    // Note that some languages do not inflect, including Chinese, Vietnamese, Thai and Indonesian
   },
   async createInflector(l2) {
     // pick the right inflector for the language
