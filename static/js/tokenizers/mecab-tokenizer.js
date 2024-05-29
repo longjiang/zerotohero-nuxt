@@ -8,7 +8,12 @@ class MeCabTokenizer extends BaseTokenizer {
       let url = `${PYTHON_SERVER}lemmatize-japanese?text=${encodeURIComponent(
         text
       )}`;
-      tokenized = await proxy(url);
+      try {
+        const response = await axios.get(url, { timeout: 5000 });
+        tokenized = response.data;
+      } catch (error) {
+        console.error('There was a problem with the axios operation: ', error);
+      }
     }
 
     let tokens = [];
