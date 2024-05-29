@@ -140,7 +140,13 @@ export default {
     dataLevel() {
       // Determine the data-level attribute based on word's details like level or HSK
       if (this.$l2.code === "zh" && this.word) {
-        return this.word.level || "outside";
+        if (this.word.level === 'outside') {
+          if (this.word.newHSK) {
+            return "7-9"; // If the word is not in HSK 1-6 but is in any new HSK level, color it as 7-9
+          } else {
+            return "outside";
+          }
+        }
       }
       return this.word.level;
     },

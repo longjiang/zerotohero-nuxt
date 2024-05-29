@@ -67,7 +67,10 @@
                 :key="`minimal-pairs-row-${index}`"
                 style="position: relative"
               >
-                <td>
+                <td style="width: 50%" class="pl-0">
+                  <WordList :maxDefinitions="1" :words="[row.a.w]" :star="false" :showSpeak="false" />
+                </td>
+                <td class="pl-0 pr-0">
                   <router-link
                     :to="{
                       name: 'compare',
@@ -76,17 +79,13 @@
                         args: `${row.a.w.id},${row.b.w.id}`,
                       },
                     }"
-                    class="btn btn-medium btn-success mt-2"
-                    style="font-size: 0.7em; width: 1.5rem"
+                    class="btn btn-medium play-button btn-primary"
                   >
-                    <i class="fa fa-play" />
+                    <i class="fa fa-adjust" />
                   </router-link>
                 </td>
-                <td style="width: 50%">
-                  <WordList :maxDefinitions="1" :words="[row.a.w]" />
-                </td>
-                <td style="width: 50%">
-                  <WordList :maxDefinitions="1" :words="[row.b.w]" />
+                <td style="width: 50%" class="pr-0">
+                  <WordList :maxDefinitions="1" :words="[row.b.w]"  :star="false" :showSpeak="false" />
                 </td>
               </tr>
             </tbody>
@@ -262,4 +261,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.play-button {
+  font-size: 0.7em;
+  width: 2rem;
+}
+</style>
