@@ -66,6 +66,7 @@
               class="my-3 p-0"
               style="border: none; background: none;"
               :key="shared.title"
+              :showSnippet="false"
             />
           </client-only>
           <div v-if="loading" class="text-center pt-5 pb-5">
@@ -268,6 +269,10 @@ export default {
           l2: this.$l2,
           id: this.arg
         });
+        if (this.shared) { // Loaded from the store
+          text = this.shared.text;
+          translation = this.shared.translation;
+        }
       } catch (err) {
         logError(err);
       }
@@ -387,6 +392,15 @@ export default {
     readerTextChanged(text) {
       this.text = text;
       if (text === "") this.page = 1;
+      if (this.shared) {
+        console.log('updating shared text');
+        // Save the text to the store by dispatching the action
+        this.$store.dispatch('savedText/update', {
+          l2: this.$l2,
+          payload: { id: this.arg, text }
+        });
+
+      }
     },
     readerTranslationChanged(text) {
       this.translation = text;

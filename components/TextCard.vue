@@ -7,7 +7,11 @@
     }"
     @click="link ? $router.push(to) : null"
   >
-    <h5 class="mb-0">{{ text.title }}</h5>
+    <div style="width: calc(100% - 1rem);">
+      <h5 class="mb-0">{{ text.title }}</h5>
+      <!-- Show a little snippet as dimmed small text, just a line or two -->
+      <p class="text-muted mb-0 snippet mt-3" v-if="showSnippet && text.text">{{ text.text }}</p>
+    </div>
     <div>
       <b-button
         class="youtube-video-card-badge border-0"
@@ -48,6 +52,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    showSnippet: {
+      type: Boolean,
+      default: true,
+    }
   },
   computed: {
     to() {
@@ -99,4 +107,13 @@ export default {
     }
   }
 }
+
+.snippet {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: calc(100% - 3rem);
+  font-size: 0.8em;
+}
+
 </style>
