@@ -1,27 +1,41 @@
 <template>
   <div class="epub-reader">
-    <label for="epub-upload" class="d-block">
-      {{
-        $t("Choose an ebook (.epub) to open:")
-      }}
-    </label>
-    <input type="file" id="epub-upload" @change="openEpub" accept=".epub" />
-    <div v-if="book" ref="book">
+    <div class="text-right" v-if="book"><b-button @click="book = null" class="mb-1" size="sm" variant="dark"><i class="fas fa-times mr-1"></i> {{ $t('Close eBook') }}</b-button></div>
+    <div class="upload-container" v-if="!book">
+      <drop
+        @drop="handleDrop"
+        :class="{ over, 'drag-area': true }"
+        @dragover="over = true"
+        @dragleave="over = false"
+      >
+        <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
+        <p>
+          {{
+            $t("Choose an ebook (.epub) to open:")
+          }}
+        </p>
+        <b-button @click="triggerFileInput" variant="primary" class="mt-3 upload-button">{{ $t('Upload') }}</b-button>
+        <input type="file" hidden @change="openEpub($event.target.files[0])" ref="fileInput" />
+      </drop>
+    </div>
+    <div v-else ref="book">
       <b-modal ref="tocModal" :title="$t('Table of Contents')" :hide-footer="true" size="md">
         <div class="toc-container">
           <TocItem v-for="(item, index) in toc" :key="index" :item="item" @load-chapter="loadChapter" />
         </div>
       </b-modal>
       <img v-if="coverUrl && !coverTapped" :src="coverUrl" alt="" class="book-cover" @click="coverTapped = true" />
-      <div class="text-center mt-5 mb-5" v-if="loading" ><Loader :sticky="true" /></div>
+      <div class="text-center mt-5 mb-5" v-if="loading">
+        <Loader :sticky="true" />
+      </div>
       <TextWithSpeechBar class="mt-3" v-if="!loading && currentChapterHTML && coverTapped" v-bind="{
-        showTocButton: true,
-        hasPreviousChapter,
-        hasNextChapter,
-        html: currentChapterHTML,
-        page,
-        key: `text-with-speech-bar-${epubFileName}-${currentChapterHref}-${page}`,
-      }" ref="reader" @showTOC="onShowTOC" @previousPage="onPreviousPage" @nextPage="onNextPage" @goToPage="onGoToPage"
+          showTocButton: true,
+          hasPreviousChapter,
+          hasNextChapter,
+          html: currentChapterHTML,
+          page,
+          key: `text-with-speech-bar-${epubFileName}-${currentChapterHref}-${page}`,
+        }" ref="reader" @showTOC="onShowTOC" @previousPage="onPreviousPage" @nextPage="onNextPage" @goToPage="onGoToPage"
         @nextChapter="nextChapter" @prevChapter="previousChapter" />
     </div>
   </div>
@@ -29,10 +43,13 @@
 
 <script>
 import TextWithSpeechBar from "./TextWithSpeechBar.vue";
+import { Drag, Drop } from "vue-drag-drop";
 
 export default {
   components: {
     TextWithSpeechBar,
+    Drag,
+    Drop,
   },
   data() {
     return {
@@ -44,9 +61,11 @@ export default {
       nextChapterHref: null,
       currentChapterHTML: null,
       page: 1,
+      epubFile: null,
       epubFileName: undefined,
       coverUrl: null,
       coverTapped: false,
+      over: false // Whether the user is dragging a file over the drop area
     };
   },
   head() {
@@ -79,7 +98,21 @@ export default {
       );
     },
   },
+  watch: {
+    epubFile() {
+      this.openEpub(this.epubFile);
+    },
+  },
   methods: {
+    triggerFileInput() {
+      this.$refs.fileInput.click(); // Access the file input via refs and trigger click
+    },
+    handleDrop(data, event) {
+      event.preventDefault();
+      let file = event.dataTransfer.files[0];
+      this.openEpub(file);
+      this.over = false;
+    },
     onShowTOC() {
       this.$refs.tocModal.show();
     },
@@ -96,9 +129,8 @@ export default {
     onPreviousPage() {
       this.onGoToPage(this.page - 1);
     },
-    async openEpub(event) {
+    async openEpub(file) {
       this.coverTapped = false;
-      const file = event.target.files[0];
       if (!file) return;
       this.epubFileName = file.name;
 
@@ -266,14 +298,14 @@ export default {
       const allElements = startElement.parentNode.querySelectorAll(selector);
 
       let elementsBetween = Array.from(allElements)
-      
+
       if (endElement) {
         elementsBetween = elementsBetween
-        .filter(
-          (el) =>
-            el.compareDocumentPosition(endElement) &
-            Node.DOCUMENT_POSITION_PRECEDING
-        );
+          .filter(
+            (el) =>
+              el.compareDocumentPosition(endElement) &
+              Node.DOCUMENT_POSITION_PRECEDING
+          );
       }
 
       elementsBetween.unshift(startElement);
@@ -393,7 +425,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "~@/assets/scss/variables.scss";
+
 .chapter-navigation {
   margin-top: 10px;
 }
@@ -410,4 +444,59 @@ export default {
   display: block;
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
 }
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #121212;
+    color: white;
+    margin: 0;
+    padding: 20px;
+}
+
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    height: 100%;
+}
+
+.drag-area {
+    border: 2px dashed #333; /* Dimmer border color */
+    background-color: transparent;
+    transition: all 0.3s ease-in-out;
+    border-radius: 10px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 3rem;
+}
+
+/* Hover or drag-over state with brighter outline and subtle background */
+.drag-area.over {
+    border-color: $primary-color; /* Brighter border color */
+    background-color: #1e1e1e; /* Subtle background color */
+    .icon {
+        color: $primary-color; /* Brighter icon color */
+    }
+}
+
+
+.drag-area .icon {
+    margin-bottom: 10px;
+    font-size: 3rem;
+    color: #333;
+}
+
+.drag-area p {
+    margin: 5px 0;
+}
+
+.upload-button {
+    width: 10rem;
+}
+
 </style>
