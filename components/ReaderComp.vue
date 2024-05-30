@@ -123,7 +123,8 @@
             ></textarea>
           </div>
 
-          <TranslatorLinks v-bind="{ text }" class="mt-2"/>
+          <TranslatorLinks v-bind="{ text }" class="mt-2" v-if="text.length < 3400" />
+          <small v-else class="d-block mt-2 text-secondary">{{ $t("Text too long for translate links to work.") }}</small>
         </div>
         <iframe
           v-if="showTranslate"

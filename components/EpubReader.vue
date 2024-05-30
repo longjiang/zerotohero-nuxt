@@ -14,7 +14,7 @@
             $t("Choose an ebook (.epub) to open:")
           }}
         </p>
-        <b-button @click="triggerFileInput" variant="primary" class="mt-3 upload-button">{{ $t('Upload') }}</b-button>
+        <b-button @click="triggerFileInput" variant="primary" class="mt-3 upload-button">{{ $t('Browse') }}</b-button>
         <input type="file" hidden @change="openEpub($event.target.files[0])" ref="fileInput" />
       </drop>
     </div>
