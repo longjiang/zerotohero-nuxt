@@ -65,7 +65,7 @@ export default {
     classes() {
       return {
         wordlist: true,
-        "list-unstyled": true,
+        "list-unstyled mb-0": true,
         'grid-container': true,
         'collapsed': this.collapse > 0,
         [`collapse-${this.collapse}`]: this.collapse > 0,
