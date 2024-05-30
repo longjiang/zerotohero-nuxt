@@ -144,26 +144,6 @@ export default {
       },
     };
   },
-  async created() {
-    let canonical = `/${this.$l1.code}/${this.$l2.code}/resource/list/${this.topic}/${this.type}`;
-    let filters = "";
-    if (this.$router.currentRoute.path !== canonical) {
-      this.$router.push({ path: canonical });
-    } else {
-      this.loading = true;
-      let response = await this.$directus.get(
-        `items/resources?filter[l2][eq]=${this.$l2.id}${filters}&fields=*,thumbnail.*`
-      );
-      let resources = response.data.data.map((resource) => {
-          resource.thumbnail = resource.thumbnail.data.full_url;
-          return resource;
-        }) || [];
-
-      this.resources = resources
-        
-        this.loading = false;
-    }
-  },
   computed: {
     filteredResources() {
       return this.resources.filter((r) => {
@@ -190,12 +170,32 @@ export default {
         }, {});
     },
   },
+  mounted() {
+    this.fetchResources(); 
+  },
   methods: {
     countTopic(topic) {
       return this.resources.filter((r) => r.topic === topic).length;
     },
     countType(type) {
       return this.resources.filter((r) => r.type === type).length;
+    },
+    async fetchResources() {
+      this.loading = true;
+      let filters = "";  // Build your filter string based on `topic` and `type`
+      try {
+        let response = await this.$directus.get(
+          `items/resources?filter[l2][eq]=${this.$l2.id}${filters}&fields=*,thumbnail.*`
+        );
+        this.resources = response.data.data.map((resource) => {
+          resource.thumbnail = resource.thumbnail.data.full_url;
+          return resource;
+        }) || [];
+      } catch (error) {
+        console.error("Failed to fetch resources:", error);
+      } finally {
+        this.loading = false;
+      }
     },
   }
 };
