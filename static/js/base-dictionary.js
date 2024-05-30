@@ -481,4 +481,45 @@ class BaseDictionary {
       this.wordGroupsByLevelLessonDialog[book][lesson][dialog].push(word);
     }
   }
+
+  
+  // Util method to escape regex special characters
+  escapeRegExp(string) {
+    return string.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  // Util method to count occurrences of a substring using regex
+  countOccurrences(string, subString) {
+    const regex = new RegExp(this.escapeRegExp(subString), "g");
+    return (string.match(regex) || []).length;
+  }
+
+  // Method to process words and find minimal pairs based on occurrences of specific phonemes
+  findMinimalPairsByPhoneme(phoneme1, phoneme2, pronunciationKey = "pronunciation") {
+    const languageCode = this.l2.code;
+    let wordsWithPronunciations = this.words
+      .filter(word => word[pronunciationKey])
+      .map(word => {
+        const prons = word[pronunciationKey].split(", ").map(pron => pron.trim());
+        const chosenPronunciation = prons[languageCode === "vi" ? prons.length - 1 : 0];
+        return { word: word, chosenPronunciation };
+      });
+
+    let group1 = wordsWithPronunciations.filter(p => this.countOccurrences(p.chosenPronunciation, phoneme1) === 1);
+    let group2 = wordsWithPronunciations.filter(p => this.countOccurrences(p.chosenPronunciation, phoneme2) === 1);
+
+    let minimalPairs = [];
+    group1.forEach(p1 => {
+      group2.forEach(p2 => {
+        if (p1.chosenPronunciation === p2.chosenPronunciation) return;
+
+        const p1Modified = p1.chosenPronunciation.replace(phoneme1, phoneme2);
+        if (p1Modified === p2.chosenPronunciation) {
+          minimalPairs.push({ a: { chosenPronunciation: p1.chosenPronunciation, w: p1.word }, b: { chosenPronunciation: p2.chosenPronunciation, w: p2.word } });
+        }
+      });
+    });
+
+    return minimalPairs.sort((x, y) => y.a.chosenPronunciation.length - x.a.chosenPronunciation.length);
+  }
 }

@@ -28,7 +28,7 @@
               <b-input-group-append>
                 <b-button
                   variant="primary"
-                  @click="findMinimalPairs"
+                  @click="findAndSetMinimalPairs"
                   :disabled="!(a && b)"
                 >
                   {{ $t('Find Minimal Pairs')}}
@@ -63,7 +63,7 @@
           >
             <tbody>
               <tr
-                v-for="(row, index) in filteredRows"
+                v-for="row in filteredRows"
                 :key="`minimal-pairs-row-${row.a.w.id}-${row.b.w.id}`"
                 style="position: relative"
               >
@@ -155,7 +155,10 @@ export default {
           ["i", "ji"],
         ],
         fr: [["ɑ̃", "œ̃"]],
-        es: [["ɾo", "ro"]],
+        es: [
+          ["ɾ", "r"], // flapped verses trilled
+          ["a", "o"],
+        ],
         de: [["ʏ", "yː"]],
       },
       crunching: false,
@@ -170,7 +173,7 @@ export default {
       this.a = this.defaults[this.$l2.code][0][0];
       this.b = this.defaults[this.$l2.code][0][1];
     }
-    if (this.a && this.b) this.findMinimalPairs();
+    if (this.a && this.b) this.findAndSetMinimalPairs();
   },
   computed: {
     filteredRows() {
@@ -196,7 +199,7 @@ export default {
       let selected = this.defaults[this.$l2.code][this.presetSelect];
       this.a = selected[0];
       this.b = selected[1];
-      this.findMinimalPairs();
+      this.findAndSetMinimalPairs();
     },
   },
   methods: {
@@ -205,58 +208,18 @@ export default {
         this.numRowsVisible = this.numRowsVisible + this.perPage;
       }
     },
-    async findMinimalPairs() {
-      function countOccurrences(string, subString) {
-        const regex = new RegExp(escapeRegExp(subString), "g");
-        return (string.match(regex) || []).length;
-      }
-
-      function escapeRegExp(string) {
-        return string.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
-      }
-      let dictionaryName = this.$store.state.settings.dictionaryName;
-      let property = "pronunciation";
-      if (["ko", "ru", "it"].includes(this.$l2.code)) property = "head";
-      if (this.$l2.code === "ja") property = "kana";
-      this.crunching = true;
-      let dictionary = await this.$getDictionary();
-      let words = await dictionary.getWords();
-      let pronunciations = words
-        .filter((w) => w[property])
-        .map((w) => {
-          let pronunciations =
-            dictionaryName === "wiktionary"
-              ? w[property].split(",")
-              : [w[property]];
-          let chosenPornunciation =
-            pronunciations[
-              this.$l2.code === "vi" ? pronunciations.length - 1 : 0
-            ].trim();
-          return { w, chosenPornunciation };
-        });
-      let as = pronunciations.filter(
-        (p) => countOccurrences(p.chosenPornunciation, this.a) === 1
-      );
-      let bs = pronunciations.filter(
-        (p) => countOccurrences(p.chosenPornunciation, this.b) === 1
-      );
-      let minimalPairs = [];
-      for (let a of as) {
-        const aReplaced = a.chosenPornunciation;
-        for (let b of bs) {
-          const bReplaced = b.chosenPornunciation.replace(this.b, this.a);
-          if (aReplaced === bReplaced) {
-            minimalPairs.push({ a, b });
-          }
-        }
-      }
-      this.crunching = false;
-      minimalPairs = minimalPairs.sort(
-        (a, b) =>
-          b.a.chosenPornunciation.length - a.a.chosenPornunciation.length
-      );
-      return (this.minimalPairs = minimalPairs);
+    getPronunciationKey() {
+      let pronunciationKey = "pronunciation";
+      if (["ko", "ru", "it"].includes(this.$l2.code)) pronunciationKey = "head";
+      if (this.$l2.code === "ja") pronunciationKey = "kana";
+      return pronunciationKey;
     },
+    async findAndSetMinimalPairs() {
+      this.crunching = true;
+      const dictionary = await this.$getDictionary();
+      this.minimalPairs = await dictionary.findMinimalPairsByPhoneme(this.a, this.b, this.getPronunciationKey());
+      this.crunching = false;
+    }
   },
 };
 </script>
