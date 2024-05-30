@@ -94,7 +94,7 @@ export default {
   },
   computed: {
     likedVideos() {
-      return this.$store.getters["userLikes/likedVideos"](this.$l2.id).sort((a, b) => b.id - a.id);
+      return this.$store.getters["userLikes/likedVideos"](this.$l2.id).sort((a, b) => b.created_on - a.created_on);
     },
   },
   methods: {

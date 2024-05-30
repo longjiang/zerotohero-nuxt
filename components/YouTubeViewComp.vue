@@ -634,6 +634,8 @@ export default {
     },
     // This function checks if the length of the L1 subtitles (subs_l1) is problematic compared to L2 subtitles (subs_l2).
     subsL1Problematic(subs_l1) {
+      if (!subs_l1) return
+      
       // Get the L2 subtitles from the video object. If it doesn't exist, default to an empty array.
       let subs_l2 = this.video?.subs_l2 ?? []
 

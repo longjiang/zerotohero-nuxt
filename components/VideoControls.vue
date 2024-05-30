@@ -568,7 +568,7 @@ export default {
       } else {
         this.$store.dispatch("userLikes/like", {
           l2Id: this.$l2.id,
-          videoId: this.video.id,
+          video: this.video,
         });
       }
     },

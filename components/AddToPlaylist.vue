@@ -8,11 +8,10 @@
         :value="playlist.id"
         v-model="selectedPlaylists"
         class="playlist-checklist-item"
-        inline
       >
         {{ playlist.title }} ({{ playlist.videos?.length }})
       </b-form-checkbox>
-      <b-form-checkbox inline value="new" v-model="selectedPlaylists" 
+      <b-form-checkbox value="new" v-model="selectedPlaylists" 
         class="playlist-checklist-item">
         <template v-if="!selectedPlaylists.includes('new')">
           {{ $t('New Playlist ...') }}
@@ -21,6 +20,7 @@
           <b-form-input
             v-model="newPlaylistName"
             :placeholder="$t('Enter a name for the playlist')"
+            class="w-100 d-block"
           ></b-form-input>
         </template>
       </b-form-checkbox>
@@ -121,5 +121,10 @@ export default {
   display: block;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
+  width: 100%;
+}
+
+.custom-control-label {
+  width: 100%;
 }
 </style>

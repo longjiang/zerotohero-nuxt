@@ -31,12 +31,16 @@ export const actions = {
         logError('Error loading likes from the server', response);
         return;
       } else {
-        commit('SET_USER_LIKES', response.data || []);
+        let userLikes = response.data;
+        userLikes.forEach(item => {
+          item.created_on = new Date(item.created_on) // Date returned from the server is a Human-readable string
+        })
+        commit('SET_USER_LIKES', userLikes || []);
       }
     }
   },
-  async like({ commit, rootState }, { l2Id, videoId }) {
-    videoId = parseInt(videoId);
+  async like({ commit, rootState }, { l2Id, video }) {
+    const videoId = parseInt(video.id);
     if (!$nuxt.$auth.loggedIn) return
     const user = rootState.auth.user;
     const token = $nuxt.$auth.strategy.token.get();
@@ -68,7 +72,7 @@ export const actions = {
           return;
         }
 
-        commit('ADD_LIKE', {id, ...data});
+        commit('ADD_LIKE', { youtube_id: video.youtube_id, id: parseInt(video.id), l2: l2Id, tags: video.tags, title: video.title, created_on: new Date()});
         console.log(`User Likes: Liked video ${videoId} and L2 ${l2Id}`);
       }
     }
@@ -114,7 +118,7 @@ export const getters = {
   liked: (state) => ({ l2Id, videoId }) => {
     videoId = parseInt(videoId);
     return state.userLikes?.some(like => 
-      like.l2 === l2Id && like.video_id === videoId
+      like.l2 === l2Id && like.id === videoId
     );
   },
   likedVideos: (state) => (l2Id) => {
