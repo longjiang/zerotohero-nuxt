@@ -100,11 +100,11 @@ export default {
       let pronunciation = '';
 
       if (this.$l2.code === 'ja') {
-        pronunciation = `${this.word.kana}${this.word.romaji ? `, ${this.word.romaji}` : ''}`;
+        pronunciation = this.word.kana
       } else if (this.$l2.code === 'vi') {
-        pronunciation = `${this.word.pronunciation.replace(/\[\[(.+?)#Vietnamese\|.+?]]/g, '$1')}`;
+        pronunciation = this.word.pronunciation ? this.word.pronunciation.replace(/\[\[(.+?)#Vietnamese\|.+?]]/g, '$1') : '';
       } else {
-        pronunciation = `${this.word.pronunciation}`;
+        pronunciation = this.word.pronunciation;
       }
       // Sometimes pronunciations are comma-space-separated, we only show the first one
       pronunciation = pronunciation.split(', ')[0];

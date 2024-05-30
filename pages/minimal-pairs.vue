@@ -82,7 +82,6 @@
                       :maxDefinitions="1"
                       :words="[row.a.w]"
                       :star="false"
-                      :showSpeak="false"
                     />
                   </td>
                   <td class="pl-0 pr-0">
@@ -104,7 +103,6 @@
                       :maxDefinitions="1"
                       :words="[row.b.w]"
                       :star="false"
-                      :showSpeak="false"
                     />
                   </td>
                 </tr>
@@ -193,22 +191,24 @@ export default {
           ["sɪ", "θɪ"],
           ["sæ", "θæ"],
           ["i", "ji"],
-          ["bæt", "bɑt"], // bat vs. bot
-          ["sɪk", "sɪɡ"], // sick vs. sig
         ],
         fr: [
-          ["ɑ̃", "œ̃"],
-          ["ɛ", "ɛ̃"], // e vs en
-          ["ɔ", "ɔ̃"], // o vs on
+          ["y", "u"], // Close front rounded vowel vs. close back rounded vowel
+          ["ø", "œ"], // Close-mid front rounded vowel vs. open-mid front rounded vowel
+          ["ɑ", "a"], // Open back unrounded vowel vs. open front unrounded vowel
+          ["ɛ̃", "ɑ̃"], // Nasal open-mid front unrounded vowel vs. nasal open back unrounded vowel
+          ["ɔ̃", "ɑ̃"], // Nasal open-mid back rounded vowel vs. nasal open back unrounded vowel
+          ["ʃ", "ʒ"], // Voiceless postalveolar fricative vs. voiced postalveolar fricative
+          ["s", "z"], // Voiceless alveolar fricative vs. voiced alveolar fricative
+          ["p", "b"], // Voiceless bilabial plosive vs. voiced bilabial plosive
         ],
         es: [
-          ["ɾ", "r"], // flapped vs trilled
-          ["a", "o"],
-          ["e", "i"], // e vs i
+          ["ɾ", "r"], // Single 'r' is a tap [ɾ], double 'rr' is a trill [r].
+          ["a", "o"], // Vowel distinction.
+          ["e", "i"], // Vowel distinction.
         ],
         de: [
           ["ʏ", "yː"],
-          ["ɛ", "æ"], // e vs ae
           ["ɔ", "o"], // o vs closed o
         ],
       },
