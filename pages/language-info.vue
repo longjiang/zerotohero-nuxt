@@ -11,7 +11,7 @@
         <div class="col-sm-12" style="max-width: 50rem; margin: 0 auto">
           <div v-if="$route.params.l1 && $route.params.l1 && $l1 && $l2">
             <div class="pb-2">
-              <h4 class="text-center mb-4">
+              <h4 class="text-center my-4">
                 {{ $t("About the {l2} language", { l2: $t($l2.name) }) }}
               </h4>
               <LazyLanguageInfoBox :lang="$l2" class="mb-4" />
@@ -117,23 +117,6 @@
               </div>
             </div>
             <hr />
-            <div class="pt-3 pb-2">
-              <client-only>
-                <NavPage
-                  :l1="$l1"
-                  :l2="$l2"
-                  class="youtube-browse-nav"
-                  :showOnly="[
-                    'Map of Languages',
-                    'Face of the Language',
-                    'Phonological Features',
-                    'Compare Languages',
-                    'Web Translators',
-                    'Language Player Stats',
-                  ]"
-                  :limit="12"
-                />
-              </client-only>
             </div>
             <div class="pb-3 pt-3" v-if="$l2.han">
               <h4 class="text-center mb-4">{{ $t("Dialects of Chinese") }}</h4>
@@ -153,14 +136,6 @@
             <div class="pb-2 pt-2">
               <hr />
               <h5 class="mt-3 mb-3 text-center">{{ $t("Ask ChatGPT") }}</h5>
-              <div class="alert alert-danger text-center">
-                <b>{{ $t("Note:") }}</b>
-                {{
-                  $t(
-                    "Some information about lesser-known languages may not be accurate."
-                  )
-                }}
-              </div>
               <ChatGPT
                 :initialMessages="[
                   $t(
@@ -194,6 +169,14 @@
                   ),
                 ]"
               />
+              <div class="bg-accent rounded p-2 text-center">
+                <b>{{ $t("Note:") }}</b>
+                {{
+                  $t(
+                    "Some information about lesser-known languages may not be accurate."
+                  )
+                }}
+              </div>
             </div>
           </div>
         </div>

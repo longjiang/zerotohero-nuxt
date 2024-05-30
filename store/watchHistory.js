@@ -1,4 +1,5 @@
 import { logError } from '@/lib/helper'
+import { PYTHON_SERVER } from '@/lib/utils'
 import Vue from 'vue';
 
 
@@ -54,30 +55,23 @@ export const mutations = {
 }
 export const actions = {
   // Load the user's history if it hasn't been loaded yet.
-  async load({ commit, rootState }, l2Id) {
+  async load({ commit, rootState }, l2) {
+    let l2Id = l2.id
     if (state.watchHistoryLoadedForL2Id !== l2Id && !state.watchHistoryLoading) {
       if (!$nuxt.$auth.loggedIn) return
       state.watchHistoryLoading = true
       let user = rootState.auth.user
       let token = $nuxt.$auth.strategy.token.get()
       if (user && user.id && token) {
-        let path = 'items/user_watch_history'
-        let response = await this.$directus.get(path, { 'filter[owner][eq]': user.id, 'filter[l2][eq]': l2Id, 'sort': '-id' })
+        let response = await axios.post(`${PYTHON_SERVER}user-watch-history`, { id: user.id, token, l2: l2.code })
         if (response?.status !== 200) {
           logError('Error loading watch history from the server', response)
           return
         } else {
-          const watchHistoryItems = response.data?.data || []
-          // let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments,lex_div,word_freq,difficulty";
-          // let filter = `filter[id][in]=${watchHistoryItems.map(item => item.video_id).join(',')}`
-          // let query = `${fields}&${filter}`
-          // let videos = await this.$directus.getVideos({ l2Id, query })
-          // watchHistoryItems.forEach(item => {
-          //   let video = videos.find(video => video.id === item.video_id)
-          //   if (video) {
-          //     item.video = video
-          //   }
-          // })
+          const watchHistoryItems = response.data
+          watchHistoryItems.forEach(item => {
+            item.date = new Date(item.date) // Date returned from the server is a Human-readable string
+          })
           commit('LOAD_WATCH_HISTORY', { watchHistoryItems, l2Id })
           console.log(`Watch History: ${watchHistoryItems.length} items loaded for L2 ${l2Id}`)
         }
