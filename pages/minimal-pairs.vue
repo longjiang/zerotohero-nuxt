@@ -64,7 +64,7 @@
             <tbody>
               <tr
                 v-for="(row, index) in filteredRows"
-                :key="`minimal-pairs-row-${index}`"
+                :key="`minimal-pairs-row-${row.a.w.id}-${row.b.w.id}`"
                 style="position: relative"
               >
                 <td style="width: 50%" class="pl-0">

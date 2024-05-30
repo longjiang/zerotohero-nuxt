@@ -1,6 +1,5 @@
 // dictionary-utils.js
 
-// const PYTHON_SERVER = "https://python.zerotohero.ca/";  // Unavailable after Mar 31 2024
 const PYTHON_SERVER = "https://pythonvps.zerotohero.ca/";  // New since Mar 17 2024
 // const PYTHON_SERVER = "http://127.0.0.1:5001/";
 
