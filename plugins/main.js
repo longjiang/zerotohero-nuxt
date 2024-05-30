@@ -61,7 +61,7 @@ export default async ({ app, store, route }, inject) => {
   // https://qvault.io/javascript/vue-history-mode-support-legacy-hash-urls/
   app.router.beforeEach((to, from, next) => {
     // Redirect if fullPath begins with a hash (ignore hashes later in path)
-    if (to.fullPath.substr(0, 2) === '/#') {
+    if (to && to.fullPath.substr(0, 2) === '/#') {
       const path = to.fullPath.substr(2);
       // next(path);
       window.location.href = path

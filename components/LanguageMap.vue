@@ -121,10 +121,10 @@
             <router-link
               :to="
                 phrase.bookId === 'wiktionary'
-                  ? `/en/${phrase.l2.code}/phrase/search/${encodeURIComponent(
+                  ? `/${getL1Code(phrase.l2)}/${phrase.l2.code}/phrase/search/${encodeURIComponent(
                       phrase.phrase
                     )}/dict`
-                  : `/en/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
+                  : `/${getL1Code(phrase.l2)}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
                       phrase.id
                     }/${encodeURIComponent(phrase.phrase)}`
               "
