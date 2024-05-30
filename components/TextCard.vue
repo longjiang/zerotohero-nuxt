@@ -1,10 +1,11 @@
 <template>
   <div
     :class="{
-      'text-card p-4 cursor-pointer d-flex align-items-start justify-content-between': true,
+      'text-card d-flex align-items-start justify-content-between': true,
       [`skin-${$skin}`]: true,
+      'cursor-pointer p-4': link,
     }"
-    @click="$router.push(to)"
+    @click="link ? $router.push(to) : null"
   >
     <h5 class="mb-0">{{ text.title }}</h5>
     <div>
@@ -43,6 +44,10 @@ export default {
       type: String,
       default: "remote", // or 'local
     },
+    link: {
+      type: Boolean,
+      default: true,
+    },
   },
   computed: {
     to() {
@@ -54,6 +59,13 @@ export default {
   },
   methods: {
     async remove() {
+      // First prompt the user to confirm deletion
+      if (!confirm(this.$t("Are you sure you want to delete this text?"))) return;
+      // Then dispatch the action to delete the text
+      this.$store.dispatch("savedText/remove", {
+        l2: this.$l2,
+        itemId: this.text.id,
+      });
       this.$emit("removed", this.text.id);
     },
     async rename() {

@@ -15,7 +15,7 @@
             <div v-if="savedtexts.length > 0">
               <h4 class="my-4 text-center">{{ $t('My Texts') }}</h4>
               <div v-for="savedText in savedtexts" :key="savedText.id" class="mb-4">
-                <TextCard :text="savedText" @removed="onTextRemoved" />
+                <TextCard :text="savedText" />
               </div>
             </div>
             <div v-else class="my-text-message mt-5">
@@ -124,9 +124,6 @@ export default {
   methods: {
     updateLoaded() {
       this.loaded = this.loadedByL2?.[this.$l2.code];
-    },
-    onTextRemoved(id) {
-      this.$store.dispatch("savedText/remove", { l2: this.$l2, itemId: id });
     },
     async newText() {
       this.creating = true;
