@@ -12,7 +12,7 @@
           :skin="skin"
         />
       </div>
-      <div class="ethnic-group-simplified">
+      <div class="ethnic-group-simplified text-center">
         <Annotate :buttons="false">
           <span>{{ group.simplified }}</span>
         </Annotate>

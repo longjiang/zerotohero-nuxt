@@ -3,13 +3,7 @@
     <client-only>
       <WebImages
         v-if="lang && showImages"
-        :text="`${lang.name} people${
-          (!lang.speakers || lang.speakers < 500000) &&
-          lang.country &&
-          lang.country[0]
-            ? ' ' & lang.country.map((c) => c.name).join(' or ')
-            : ''
-        }`"
+        :text="imageSearchText"
         limit="3"
         ref="images"
         class="language-info-box-images"
@@ -69,6 +63,24 @@ export default {
       wikipediaSummary: undefined,
       page: undefined,
     };
+  },
+  computed: {
+    imageSearchText() {
+        // Extract the properties from the lang object
+        const { name, speakers, country } = this.lang;
+
+        // Start with the language name and "people"
+        let text = `${name} people`;
+
+        // Check if the speakers are less than 500000 and if there is a country
+        if ((!speakers || speakers < 500000) && country && country[0]) {
+          // Add the country names
+          const countryNames = country.map(c => c.name).join(' or ');
+          text += ' ' + countryNames;
+        }
+
+        return text;
+    },
   },
   async mounted() {
     if (this.lang) {

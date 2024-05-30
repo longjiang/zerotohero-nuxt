@@ -8,7 +8,7 @@
       <div class="dialect-languages">
         <LanguageList :langs="dialect.languages" :singleColumn="true" :skin="skin" />
       </div>
-      <div class="dialect-simplified">
+      <div class="dialect-simplified text-center">
         <Annotate :buttons="false">
           <span>{{ dialect.simplified }}</span>
         </Annotate>

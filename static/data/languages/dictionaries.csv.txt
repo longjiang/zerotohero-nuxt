@@ -14,13 +14,11 @@ jpn,zho,kdic-jc
 kor,eng,kengdic
 kor,zho,kengdic
 ltc,eng,hsk-cedict
-ltc,zho,hsk-cedict
 lzh,eng,hsk-cedict
-lzh,zho,hsk-cedict
 mnp,eng,hsk-cedict
+nan,eng,hsk-cedict
 nan,zho,chinese-dialect
 och,eng,hsk-cedict
-och,zho,hsk-cedict
 rus,eng,wiktionary-csv
 tlh,eng,klingonska
 wuu,eng,hsk-cedict

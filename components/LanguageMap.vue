@@ -272,10 +272,15 @@ export default {
     isDescendant() {
       return this.$languages.isDescendant(...arguments);
     },
+    getL1Code(l2) {
+      let l2Settings = this.$store.getters["settings/l2Settings"](l2.code);
+      if (l2Settings?.l1) {
+        return l2Settings.l1;
+      }
+      return this.$browserLanguage;
+    },
     to(l2) {
-      let l1Code = this.l1;
-      if (["hak", "nan", "lzh", "ltc", "och"].includes(l2.code))
-        l1Code = "zh";
+      let l1Code = this.getL1Code(l2);
       let name = "language-info";
       return {
         name,
