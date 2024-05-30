@@ -84,7 +84,7 @@
         </div>
       </div>
       <!-- Add an infinite scroll component here -->
-      <div class="w-100 text-center py-5" v-if="!limit && itemsFiltered?.length > 0" v-observe-visibility="visibilityChanged">
+      <div class="w-100 text-center py-5" v-if="!limit && itemsFiltered?.length > visible" v-observe-visibility="visibilityChanged">
         <div class="col-sm-12">
           <Loader
               key="rec-loader"

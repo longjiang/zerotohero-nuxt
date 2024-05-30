@@ -204,7 +204,6 @@ export default {
           "subscriptions/checkSubscription",
           this.$auth.user.id
         );
-        this.$store.dispatch("userLikes/fetchUserLikes");
         this.$gtag.event(
           "login",
           this.$auth.user.id
@@ -402,6 +401,7 @@ export default {
       // Set the locale
       if (this.$l1) this.updatei18n();
       if (this.$l2) await this.$store.dispatch("watchHistory/load", this.$l2);
+      if (this.$l2) this.$store.dispatch("userLikes/fetchUserLikes", this.$l2);
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
       if (this.$l1 && this.$l2) {
         this.loadLanguageSpecificData(); // This will trigger updateL2SettingsClasses()

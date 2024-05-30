@@ -1,5 +1,5 @@
 import { logError } from '@/lib/helper';
-import Vue from 'vue';
+import { PYTHON_SERVER } from '@/lib/utils';
 
 export const state = () => ({
   userLikes: []
@@ -12,34 +12,26 @@ export const mutations = {
   ADD_LIKE(state, like) {
     state.userLikes.push(like);
   },
-  ADD_VIDEO_DETAILS(state, { userLike, video }) {
-    Vue.set( userLike, 'video', video )
-  },
   REMOVE_LIKE(state, likeId) {
     state.userLikes = state.userLikes.filter(like => like.id !== likeId);
   }
 }
 
 export const actions = {
-  async fetchUserLikes({ commit, rootState }) {
+  async fetchUserLikes({ commit, rootState }, l2) {
     if (!$nuxt.$auth.loggedIn) return;
 
     let user = rootState.auth.user;
     let token = $nuxt.$auth.strategy.token.get();
 
     if (user && user.id && token) {
-      let path = 'items/user_likes';
-      let response = await this.$directus.get(path, { 
-        'filter[owner][eq]': user.id,
-        'sort': '-id',
-        'limit': -1
-      });
+      let response = await axios.post(`${PYTHON_SERVER}user-likes`, { id: user.id, l2: l2.code });
 
       if (response?.status !== 200) {
         logError('Error loading likes from the server', response);
         return;
       } else {
-        commit('SET_USER_LIKES', response.data?.data || []);
+        commit('SET_USER_LIKES', response.data || []);
       }
     }
   },
@@ -116,44 +108,6 @@ export const actions = {
     }
   },
 
-  async fetchVideoDetails({ commit, state }, { l2Id, videoId }) {
-    // Find the userLike item for this video in the state
-    let userLike = state.userLikes.find(like => like.video_id === videoId && like.l2 === l2Id)
-    if (userLike && ! userLike.video) {
-      let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments";
-      let filter = `filter[id][eq]=${videoId}`
-      let query = `${fields}&${filter}`
-      
-      let videos = await this.$directus.getVideos({ l2Id, query })
-      commit('ADD_VIDEO_DETAILS', { userLike, video: videos[0] })
-    }
-  },
-
-  async fetchMultipleVideoDetails({ commit, state }, { l2Id, videoIds }) {
-      // Filter watchHistory for those that are both in the videoIds array and have the same l2Id
-      let userLikes = state.userLikes.filter(like => 
-        videoIds.includes(like.video_id) && like.l2 === l2Id && !like.video
-      );
-
-      if (userLikes.length > 0) {
-        // Define the fields to fetch for each video
-        const fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments";
-        // Create a filter query string using the video IDs
-        const filter = `filter[id][in]=${userLikes.map(like => like.video_id).join(',')}`;
-        const query = `${fields}&${filter}`;
-
-        // Fetch the video details from the API
-        const videos = await this.$directus.getVideos({ l2Id, query });
-
-        // Commit each video detail back to the corresponding userLikes item
-        videos.forEach(video => {
-          const userLike = userLikes.find(watch => watch.video_id === video.id);
-          if (userLike) {
-            commit('ADD_VIDEO_DETAILS', { userLike, video });
-          }
-        });
-      }
-    }
 }
 
 export const getters = {

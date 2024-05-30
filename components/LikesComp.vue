@@ -9,7 +9,7 @@
         </div>
         <div class="row" v-if="likedVideos && likedVideos.length">
           <div
-            v-for="like in likedVideos"
+            v-for="like in likedVideos.slice(0, visible)"
             :class="{
               'pb-4': true,
               'col-compact': params.xs,
@@ -18,21 +18,31 @@
               'col-3': params.lg || params.xl,
             }"
             :key="like.id"
-            v-observe-visibility="{
-              callback: (isVisible, entry) => onVisibilityChange(isVisible, entry, like),
-            }"
           >
             <LazyYouTubeVideoCard
               :skin="skin === 'dark' ? 'dark' : 'card'"
-              :video="Object.assign({}, like.video)"
+              :video="Object.assign({}, like)"
               :showProgress="true"
               :showAdmin="false"
             />
           </div>
+          <!-- Add an infinite scroll component here -->
+          <div class="w-100 text-center py-5" v-if="!limit && likedVideos?.length > visible" v-observe-visibility="visibilityChanged">
+            <div class="col-sm-12">
+              <Loader
+                  key="rec-loader"
+                  :sticky="true"
+                  :message="
+                    $t('Loading...')
+                  "
+                  class="text-white"
+                />
+            </div>
+          </div>
         </div>
         <div class="row" v-else>
           <div class="col">
-            No likes found.
+            {{ $t('No liked videos.') }}
           </div>
         </div>
       </div>
@@ -42,12 +52,14 @@
 
 <script>
 import { ContainerQuery } from "vue-container-query";
-import debounce from "lodash/debounce";
 
 export default {
   props: {
     skin: {
       default: "light",
+    },
+    limit: {
+      type: Number,
     },
   },
   components: {
@@ -77,7 +89,7 @@ export default {
           minWidth: 1140,
         },
       },
-      visibleVideoIds: new Set(),
+      visible: 50,
     };
   },
   computed: {
@@ -86,25 +98,9 @@ export default {
     },
   },
   methods: {
-    onVisibilityChange(isVisible, entry, like) {
-      if (isVisible) {
-        this.visibleVideoIds.add(like.video_id);
-      } else {
-        this.visibleVideoIds.delete(like.video_id);
-      }
-      this.debouncedFetchVideoDetails();
+    visibilityChanged() {
+      this.visible = this.visible + 50;
     },
-    fetchVideoDetails() {
-      if (this.visibleVideoIds.size > 0) {
-        this.$store.dispatch("userLikes/fetchMultipleVideoDetails", {
-          l2Id: this.$l2.id,
-          videoIds: Array.from(this.visibleVideoIds),
-        });
-      }
-    },
-    debouncedFetchVideoDetails: debounce(function() {
-      this.fetchVideoDetails();
-    }, 300),
   },
 };
 </script>
