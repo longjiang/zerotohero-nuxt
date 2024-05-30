@@ -399,7 +399,6 @@ export default {
       }
     },
     updateStoreText(text) {
-      console.log('updateStoreText', text); 
       this.$store.dispatch('savedText/update', {
         l2: this.$l2,
         payload: { id: this.arg, text }
