@@ -39,10 +39,10 @@
           />
       </div>
       <div class="row" v-else>
-        <div class="col-sm-12 col-md-8 pr-4 mb-5">
+        <div :class="{'col-sm-12  pr-4 mb-5': true, 'col-md-8': resources.length }">
           <ResourceList :resources="filteredResources" />
         </div>
-        <div class="col-sm-12 col-md-4">
+        <div :class="{'col-sm-12': true, 'col-md-4': resources.length }" v-if="resources.length">
           <h6 class="text-center mb-4">{{ $t("Filter by Topic") }}</h6>
           <div class="list-group">
             <router-link

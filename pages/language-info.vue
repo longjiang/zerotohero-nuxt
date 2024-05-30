@@ -15,106 +15,7 @@
                 {{ $t("About the {l2} language", { l2: $t($l2.name) }) }}
               </h4>
               <LazyLanguageInfoBox :lang="$l2" class="mb-4" />
-              <div class="language-data">
-                <p v-if="$l2['iso639-1']">
-                  <b>{{ $t("ISO639-1:") }}</b>
-                  {{ $l2["iso639-1"] || $t("Not available") }}
-                </p>
-                <p>
-                  <b>{{ $t("ISO639-3:") }}</b>
-                  {{ $l2["iso639-3"] || $t("Not available") }}
-                </p>
-                <p v-if="$l2['glottologId']">
-                  <b>{{ $t("Glottolog ID:") }}</b>
-                  {{ $l2["glottologId"] }}
-                </p>
-                <p v-if="$l2['glottologFamilyId']?.length">
-                  <b>{{ $t("Glottolog Family ID:") }}</b>
-                  {{ $l2["glottologFamilyId"] }}
-                </p>
-                <p v-if="$l2['glottologParentId']?.length">
-                  <b>{{ $t("glottologParentId:") }}</b>
-                  {{ $l2["glottologParentId"] }}
-                </p>
-                <p>
-                  <b>{{ $t("Language Player Language ID:") }}</b>
-                  {{ $l2.id || $t("Not available") }}
-                </p>
-                <p v-if="$l2.lat && $l2.long">
-                  <b>{{ $t("Location (lat, long):") }}</b>
-                  <router-link
-                    :to="{
-                      name: 'ling-language-map',
-                      query: { c: `${$l2.lat},${$l2.long}`, z: 7 },
-                    }"
-                  >
-                    {{ $l2.lat }}, {{ $l2.long }}
-                  </router-link>
-                </p>
-                <p v-if="$l2.scope">
-                  <b>{{ $t("Language Scope:") }}</b>
-                  {{ scope[$l2.scope] }}
-                </p>
-                <p v-if="$l2.scope">
-                  <b>{{ $t("Language Type:") }}</b>
-                  {{ type[$l2.type] }}
-                </p>
-                <p v-if="$l2.scripts && $l2.scripts.length > 0">
-                  <b>{{ $t("Orthography Code:") }}</b>
-                  {{
-                    $l2.scripts
-                      ? $l2.scripts.map((s) => s.script).join(", ")
-                      : $t("Not available")
-                  }}
-                </p>
-                <p v-if="$l2.otherNames?.length > 0">
-                  <b>{{ $t("Other names:") }}</b>
-                  {{ $l2.otherNames.join(",") }}
-                </p>
-                <p v-if="$l2.vernacularName">
-                  <b>{{ $t("Vernacular name:") }}</b>
-                  {{ $l2.vernacularName }}
-                </p>
-                <p v-if="$l2.speakers > 0">
-                  <b>{{ $t("Number of Speakers:") }}</b>
-                  {{
-                    $l2.speakers
-                      ? $l2.speakers.toLocaleString()
-                      : $t("Not available")
-                  }}
-                </p>
-                <p>
-                  <b>{{ $t("Native to:") }}</b>
-                  <span
-                    v-for="c in $l2.country"
-                    :key="`lang-country-${c.alpha2Code}`"
-                    style="margin-right: 0.5rem"
-                  >
-                    <img
-                      :src="`/vendor/flag-svgs/${c.alpha2Code}.svg`"
-                      class="flag-icon mr-1"
-                    />
-                    {{ c.name }}
-                    <span v-if="c.languages?.length > 0">
-                      ({{ $t("Also speaks:") }}
-                      <span
-                        v-for="(language, index) in c.languages"
-                        :key="`c-${c.name}-l-${language}`"
-                      >
-                        <router-link
-                          :to="{
-                            name: 'language-info',
-                            params: { l1: 'en', l2: language },
-                          }"
-                        >
-                          {{ $t(languageName(language)) }} </router-link
-                        ><span v-if="index + 1 < c.languages.length">,</span>
-                      </span>
-                      )
-                    </span>
-                  </span>
-                </p>
-              </div>
+              <LanguageAttributes />
             </div>
             <hr />
             </div>
@@ -158,15 +59,6 @@
                       l1: $t($l1.name),
                     }
                   ),
-                  $t(
-                    'Please give a list of printed and online materials for learning the {l2} language (also known as {otherNames}, ISO639-3 code {isoCode}, glottolog ID {glottologId}).',
-                    {
-                      l2: $t($l2.name),
-                      otherNames: $l2.otherNames.join(','),
-                      isoCode: $l2['iso639-3'],
-                      glottologId: $l2['glottologId'],
-                    }
-                  ),
                 ]"
               />
               <div class="bg-accent rounded p-2 text-center">
@@ -187,23 +79,6 @@
 
 <script>
 export default {
-  data() {
-    return {
-      scope: {
-        I: "Individual",
-        M: "Macrolanguage",
-        S: "Special",
-      },
-      type: {
-        A: "Ancient",
-        C: "Constructed",
-        E: "Extinct",
-        H: "Historical",
-        L: "Living",
-        S: "Special",
-      },
-    };
-  },
   async mounted() {
     await this.$languages.loadFull();
   },
@@ -244,10 +119,5 @@ h3 {
   color: $primary-color;
 }
 
-// Show .language-data as two columns on medium to large displays
-@media (min-width: 640px) {
-  .language-data {
-    column-count: 2;
-  }
-}
+
 </style>
