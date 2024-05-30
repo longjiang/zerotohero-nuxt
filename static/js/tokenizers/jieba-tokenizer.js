@@ -11,12 +11,13 @@ class JiebaTokenizer extends BaseTokenizer {
         const response = await axios.get(url, { timeout: 5000 });
         tokenized = response.data;
       } catch (error) {
-        console.error('There was a problem with the axios operation: ', error);
+        console.error('Jieba Tokenizer: There was a problem tokenizing from the server. ', error);
       }
     }
 
     // check if the tokenized is an array and not a string
     if (!tokenized || typeof tokenized === 'string') {
+      tokenized = await this.tokenizeLocally(text);
       return this.tokenizeLocally(text);
     }
 

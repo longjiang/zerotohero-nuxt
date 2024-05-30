@@ -83,6 +83,7 @@ const TokenizerFactory = {
     // Initialize the tokenizer class
     const TokenizerClass = tokenizer === 'BaseTokenizer' ? BaseTokenizer : eval(tokenizer);
     const tokenizationType = this.getTokenizationType(l2);
+    console.log('Tokenization Factory: Creating tokenizer with type', tokenizationType);
     return tokenizer === 'BaseTokenizer'
       ? new TokenizerClass({l2, words, indexKeys, tokenizationType})
       : await TokenizerClass.load({l2, words, indexKeys, tokenizationType});
