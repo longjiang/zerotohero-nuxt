@@ -35,7 +35,6 @@
                   :message="
                     $t('Loading...')
                   "
-                  class="text-white"
                 />
             </div>
           </div>
