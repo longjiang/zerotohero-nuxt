@@ -113,7 +113,7 @@
         ref="phrase-picker-modal"
         centered
         hide-footer
-        title="Which one?"
+        :title="$tb('Which one?')"
         modal-class="safe-padding-top mt-4"
       >
         <div class="phrase-picker-modal">
@@ -134,8 +134,7 @@
               <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
               <Speak :text="phrase.phrase" :l2="phrase.l2" />
               <span class="similar-phrase-language">
-                <em>{{ phrase.en }}</em>
-                in {{ phrase.l2.name }}
+                “{{ $tb(phrase.en) }}” ({{ $tb(phrase.l2.name) }})
               </span>
             </router-link>
           </template>

@@ -219,13 +219,6 @@
               class="mb-4 text-center"
               style="margin-bottom: 0"
             />
-            <SimilarPhrases
-              v-if="entry.definitions && entry.definitions.length > 0"
-              :phrase="entry.head"
-              :translation="similarPhraseTranslation"
-              :hideDefinitions="hideDefinitions"
-              class="text-center mb-5"
-            />
             <!-- <Sale class="mb-5" style="border-radius: 1rem !important" v-if="$l2.code === 'zh'" /> -->
             <EntryCourseAd
               v-if="$l2.code === 'zh'"
@@ -282,15 +275,6 @@ export default {
   computed: {
     showAsFlashCard() {
       return this.saved();
-    },
-    similarPhraseTranslation() {
-      let en;
-      if (this.$l2.code === "en") en = this.entry.head;
-      else if (this.entry.definitions && this.entry.definitions[0]) {
-        en = this.entry.definitions[0].split(", ")[0];
-      }
-      if (en) en = en.replace(/\(.*\)/g, "").trim();
-      return en;
     },
     title() {
       if (this.entry) {

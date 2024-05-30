@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{
-      widget: true,
+      'bg-accent widget': true,
       'widget-dark': $skin === 'dark',
       'widget-light': $skin === 'light',
     }"
@@ -32,7 +32,6 @@ export default {
 .widget {
   border-radius: 0.3rem;
   overflow: hidden;
-  background: #f6f6f6;
   .widget-title {
     display: block;
     text-align: center;
@@ -45,7 +44,6 @@ export default {
     border-radius: 0 0 0.3rem 0.3rem;
   }
   &.widget-dark {
-    background: #222;
     color: rgba(255, 255, 255, 0.8);
     .widget-title {
       color: #ffffffc5;

@@ -249,6 +249,14 @@
           />
         </div>
       </div>
+      <div class="rounded bg-accent p-3 mb-4">
+        <SimilarPhrases
+          v-if="entry.definitions && entry.definitions.length > 0"
+          :phrase="entry.head"
+          :translation="similarPhraseTranslation"
+          class="text-center"
+        />
+      </div>
     </template>
   </TabbedSections>
 </template>
@@ -359,6 +367,15 @@ export default {
           visible: this.characters,
         },
       ];
+    },
+    similarPhraseTranslation() {
+      let en;
+      if (this.$l2.code === "en") en = this.entry.head;
+      else if (this.entry.definitions && this.entry.definitions[0]) {
+        en = this.entry.definitions[0].split(", ")[0];
+      }
+      if (en) en = en.replace(/\(.*\)/g, "").trim();
+      return en;
     },
     characters() {
       let canonical = this.entry?.cjk?.canonical;
