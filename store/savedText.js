@@ -17,8 +17,8 @@ export const mutations = {
     state.loadedByL2[l2.code] = true
   },
   LOAD_ITEM(state, { l2, id, data }) {
-    let item = (state.itemsByL2[l2.code] || []).find(i => i.id === id)
-    item = Object.assign(item, data)
+    let item = (state.itemsByL2[l2.code] || []).find(i => Number(i.id) === Number(id))
+    if (item) item = Object.assign(item, data)
   },
   ADD(state, { l2, item }) {
     if (!state.itemsByL2[l2.code]) state.itemsByL2[l2.code] = []
@@ -67,12 +67,10 @@ export const actions = {
   saveLocal({ commit }) {
     commit('SAVE_LOCAL')
   },
-  async load({ commit }, { l2, adminMode }) {
+  async load({ commit, state }, { l2, adminMode }) {
+    // Check if already loaded
+    if (state.loadedByL2[l2.code]) return
     let itemsByL2 = {}
-    // Server only for now...
-    // if (typeof localStorage !== 'undefined') {
-    //   itemsByL2 = JSON.parse(localStorage.getItem(LOCAL_KEY) || '{}')
-    // }
     let items = await loadFromServer({ l2, adminMode })
     if (items.length !== 0) {
       items = items.sort((x, y) =>

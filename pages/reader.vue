@@ -204,6 +204,7 @@ import { NodeHtmlMarkdown } from "node-html-markdown";
 import { parse } from "node-html-parser";
 import { baseUrl } from "@/lib/utils/url";
 import { mapState, mapGetters, mapActions } from 'vuex';
+import { debounce } from 'lodash';
 
 export default {
   template: "#reader-template",
@@ -227,6 +228,8 @@ export default {
       dictionaryCredit: undefined,
       page: 1,
       sharing: false,
+      // Initialize debounced methods
+      updateText: debounce(this.updateStoreText, 300),
     };
   },
   watch: {
@@ -241,14 +244,14 @@ export default {
     translation() {
       if (this.$refs?.reader) this.$refs.reader.translation = this.translation;
     },
-    'shared.text': function(newText) {
-      this.$refs.reader.text = newText;
-    },
     'shared.translation': function(newTranslation) {
-      this.$refs.reader.translation = newTranslation;
+      if (this.$refs?.reader) this.$refs.reader.translation = newTranslation;
     },
     'shared.title': function(title) {
-      this.$refs.reader.title = title;
+      if (this.$refs?.reader) this.$refs.reader.title = title;
+    },
+    'shared.text': function(text) {
+      if (this.$refs?.reader && !this.text) this.$refs.reader.text = text; // only on initial load
     }
   },
   async mounted() {
@@ -265,11 +268,10 @@ export default {
     }
     if (method === "shared") {
       try {
-        this.$store.dispatch('savedText/loadItem', {
+        this.$store.dispatch('savedText/load', {
           l2: this.$l2,
-          id: this.arg
         });
-        if (this.shared) { // Loaded from the store
+        if (this.shared) {
           text = this.shared.text;
           translation = this.shared.translation;
         }
@@ -393,14 +395,15 @@ export default {
       this.text = text;
       if (text === "") this.page = 1;
       if (this.shared) {
-        console.log('updating shared text');
-        // Save the text to the store by dispatching the action
-        this.$store.dispatch('savedText/update', {
-          l2: this.$l2,
-          payload: { id: this.arg, text }
-        });
-
+        this.updateText(text);
       }
+    },
+    updateStoreText(text) {
+      console.log('updateStoreText', text); 
+      this.$store.dispatch('savedText/update', {
+        l2: this.$l2,
+        payload: { id: this.arg, text }
+      });
     },
     readerTranslationChanged(text) {
       this.translation = text;
