@@ -39,11 +39,20 @@
               ( {{ $t('IPA') }} )
             </template>
           </h5>
-          <div
+          <textarea
+            v-if="!showIpa"
             class="mt-2 mb-2 form-control transcription"
-            style="overflow: visible; height: 16rem"
-            >{{ showIpa ? ipa : transcription }}</div
-          >
+            style="height: 16rem"
+            v-model="transcription"
+            readonly
+          ></textarea>
+          <textarea
+            v-else
+            class="mt-2 mb-2 form-control transcription"
+            style="height: 16rem"
+            v-model="ipa"
+            readonly
+          ></textarea>
         </div>
       </div>
       <div class="row mt-3">
