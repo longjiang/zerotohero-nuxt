@@ -4,7 +4,7 @@
     <router-link
       v-if="href && !href.endsWith('undefined')"
       :to="{
-        name: 'reader',
+        name: 'l1-l2-reader',
         params: { method: 'html-url', arg: absoluteURL(alt, href) },
       }"
       :title="title"

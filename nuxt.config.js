@@ -233,7 +233,7 @@ export default {
         {
           name: "l1-l2-lesson-videos",
           path: "/:l1/:l2/lesson-videos/:level?/:lesson?",
-          component: "./pages/_l1/_l2/lesson-videos",
+          component: "./pages/_l1/_l2/chinese/lesson-videos",
         },
         {
           name: "compare-languages",
@@ -286,9 +286,9 @@ export default {
           component: "./pages/_l1/_l2/gutenberg.vue",
         },
         {
-          name: "l1-l2-separable",
+          name: "l1-l2-chinese-separable",
           path: "/:l1/:l2/separable/:method?/:args?",
-          component: "./pages/_l1/_l2/separable.vue",
+          component: "./pages/_l1/_l2/chinese/separable.vue",
         },
         {
           name: "l1-l2-youtube-channel",
@@ -342,7 +342,7 @@ export default {
           component: "./pages/_l1/_l2/talks",
         },
         {
-          name: "l1-l2-resources",
+          name: "l1-l2-resource-list",
           path: "/:l1/:l2/resource/list/:topic?/:type?",
           component: "./pages/_l1/_l2/resource/list",
         },

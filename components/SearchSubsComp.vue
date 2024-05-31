@@ -82,7 +82,7 @@
               "Turn off ‘Limit “this word in TV Shows” search result (faster)’ in Settings."
             )
           }}
-          <router-link :to="{ name: 'settings' }">
+          <router-link :to="{ name: 'l1-l2settings' }">
             {{ $t("Go to settings") }}
           </router-link>
         </li>
@@ -135,7 +135,7 @@
       <router-link
         v-if="currentHit"
         :to="{
-          name: 'video-view',
+          name: 'l1-l2-video-view',
           params: {
             type: 'youtube',
             youtube_id: currentHit.video.youtube_id,

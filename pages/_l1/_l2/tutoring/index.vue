@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import { removeInlineStylesFromString, level } from "../../../lib/utils";
+import { removeInlineStylesFromString, level } from "../../../../lib/utils";
 
 export default {
   props: ["level"],

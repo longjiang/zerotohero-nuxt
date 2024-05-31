@@ -1,9 +1,3 @@
-<router>
-  {
-    path: '/:l1/:l2/delete-account/',
-    props: true
-  }
-</router>
 <template>
   <div class="main pb-5">
     <client-only>
@@ -21,7 +15,6 @@
         </div>
       </div>
       <div class="container" v-else>
-        {{ hasActiveSubscription }}
         <div class="row mb-3">
           <div class="col-sm-12 text-center">
             <h4>{{ formatName($auth.user.first_name, $auth.user.last_name) }}</h4>
@@ -77,6 +70,7 @@ export default {
       if (!this.subscription) return false;
       if (!this.subscription.payment_customer_id) return false; // Only those with a payment_customer_id have a renewing subscription with Stripe
       // Make sure subscription is active and not expired
+      if (!this.subscription.expires_on) return false;
       const expiresOn = new Date(this.subscription.expires_on.replace(' ', 'T')); // subscription.expires_on is in the format 2024-06-14 10:16:40, but we need a Date object for comparison
       const currentDate = new Date();
       return currentDate < expiresOn;

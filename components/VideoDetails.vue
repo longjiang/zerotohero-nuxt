@@ -69,7 +69,7 @@
       <span v-if="video.channel && $adminMode">
         <router-link
           :to="{
-            name: 'youtube-channel',
+            name: 'l1-l2-youtube-channel',
             params: {
               channel_id: video.channel.id,
               title: video.channel.title || undefined,

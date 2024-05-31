@@ -23,7 +23,7 @@
           href="mailto:jon.long@zerotohero.ca"
           :to="
             this.$l1 && this.$l2
-              ? { name: 'discussions' }
+              ? { name: 'l1-l2-discussions' }
               : `/en/zh/discussions`
           "
           class="btn btn-bg btn-success strong"

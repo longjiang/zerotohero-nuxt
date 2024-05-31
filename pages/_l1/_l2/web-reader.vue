@@ -30,7 +30,7 @@ export default {
   methods: {
     onSubmit(event) {
       event.preventDefault()
-      this.$router.push({name: 'reader', params: {method: 'html-url', arg: this.url}})
+      this.$router.push({name: 'l1-l2-reader', params: {method: 'html-url', arg: this.url}})
     }
   }
 };

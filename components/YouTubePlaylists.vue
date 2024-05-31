@@ -9,7 +9,7 @@
         :thumbnail="playlist.thumbnail"
         :title="playlist.title"
         :to="{
-          name: 'youtube-playlist',
+          name: 'l1-l2-youtube-playlist',
           params: { playlist_id: playlist.id, title: playlist.title },
         }"
       >

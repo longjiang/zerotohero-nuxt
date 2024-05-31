@@ -27,7 +27,7 @@
               <div class="p-4">
                 <router-link
                   :to="{
-                    name: 'gutenberg',
+                    name: 'l1-l2-gutenberg',
                     params: { id: bookData.id, title: bookData.title, book },
                   }"
                   class="three-to-two-aspect-wrapper shadow d-block"

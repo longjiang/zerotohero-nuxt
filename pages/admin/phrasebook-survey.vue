@@ -12,7 +12,7 @@
             surveyed, across {{ langs.length }} languages.
             <router-link
               :to="{
-                name: 'phrasebook-creator',
+                name: 'admin-phrasebook-creator',
                 params: {
                   l1: 'en',
                   l2: 'en',

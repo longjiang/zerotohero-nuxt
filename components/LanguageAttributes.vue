@@ -29,7 +29,7 @@
       <p v-if="$l2.lat && $l2.long">
         <b>{{ $t("Location (lat, long):") }}</b>
         <router-link :to="{
-        name: 'ling-language-map',
+        name: 'language-map',
         query: { c: `${$l2.lat},${$l2.long}`, z: 7 },
       }">
           {{ $l2.lat }}, {{ $l2.long }}
@@ -79,7 +79,7 @@
             <span v-if="c.languages?.length > 0">
               ({{ $t("Also speaks:") }}
               <span v-for="(language, index) in c.languages" :key="`c-${c.name}-l-${language}`">
-                <router-link :to="{ name: 'language-info', params: { l1: 'en', l2: language } }">
+                <router-link :to="{ name: 'l1-l2-language-info', params: { l1: 'en', l2: language } }">
                   {{ $t(languageName(language)) }} </router-link><span v-if="index + 1 < c.languages.length">,</span>
               </span>
               )

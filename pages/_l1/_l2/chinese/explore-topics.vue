@@ -22,12 +22,8 @@
 </template>
 
 <script>
-import ThemeBrowser from "@/components/ThemeBrowser.vue";
 
 export default {
-  components: {
-    ThemeBrowser,
-  },
   data() {
     return {};
   },

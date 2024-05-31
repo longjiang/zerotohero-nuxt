@@ -23,7 +23,10 @@
                 >
                   <td class="root">
                     <router-link
-                      :to="`/${$l1.code}/${$l2.code}/explore/roots/${root.pattern}`"
+                      :to="{
+                        name: 'l1-l2-chinese-explore-roots-arg',
+                        params: { arg: root.pattern }
+                      }"
                     >
                       <span
                         class="root-word"
@@ -84,7 +87,7 @@
 <script>
 import WordListExtended from "@/components/WordListExtended.vue";
 import EntryCharacters from "@/components/EntryCharacters.vue";
-import { highlight } from "../../../lib/utils";
+import { highlight } from "../../../../../lib/utils";
 
 export default {
   components: {
@@ -107,9 +110,8 @@ export default {
       const i = this.currentIndex();
       if (i > 0) {
         this.$router.push({
-          path:
-            `/${this.$l1.code}/${this.$l2.code}/explore/roots/` +
-            this.roots[i - 1].pattern,
+          name: "l1-l2-chinese-explore-roots-arg",
+          params: { arg: this.roots[i - 1].pattern }
         });
       }
     },
@@ -117,9 +119,8 @@ export default {
       const i = this.currentIndex();
       if (i < this.roots.length - 1) {
         this.$router.push({
-          path:
-            `/${this.$l1.code}/${this.$l2.code}/explore/roots/` +
-            this.roots[i + 1].pattern,
+          name: "l1-l2-chinese-explore-roots-arg",
+          params: { arg: this.roots[i + 1].pattern }
         });
       }
     },

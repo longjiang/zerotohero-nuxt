@@ -30,7 +30,7 @@
           :videos="playlist.videos"
           :title="playlist.title"
           :to="{
-            name: 'playlist',
+            name: 'l1-l2-playlist-id',
             params: { id: playlist.id },
           }"
         >

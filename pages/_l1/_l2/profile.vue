@@ -69,7 +69,7 @@
                   <router-link
                     class="text-success ml-2"
                     style="font-size: 1rem; font-weight: bold"
-                    :to="{ name: 'saved-words' }"
+                    :to="{ name: 'l1-l2-saved-words' }"
                   >
                     {{
                       $t("See All {wordCount}", {
@@ -96,7 +96,7 @@
                   <router-link
                     class="text-success ml-2"
                     style="font-size: 1rem; font-weight: bold"
-                    :to="{ name: 'watch-history' }"
+                    :to="{ name: 'l1-l2-youtube-history' }"
                   >
                     {{ $t("See All") }}
                     <i class="fas fa-angle-right ml-1"></i>

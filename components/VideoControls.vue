@@ -223,7 +223,7 @@
             <router-link
               v-if="playlist"
               :to="{
-                name: 'playlist',
+                name: 'l1-l2-youtube-playlist',
                 params: {
                   id: playlist.id,
                 },

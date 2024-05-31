@@ -21,7 +21,7 @@
             {{ videos.length }} videos surveyed.
             <router-link
               :to="{
-                name: 'phrasebook-creator',
+                name: 'admin-phrasebook-creator',
                 params: {
                   csvProp: lines
                     .filter((l) => l.instances.length > 2)

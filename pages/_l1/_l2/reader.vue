@@ -37,7 +37,7 @@
             <router-link
               v-if="shared"
               class="text-success mb-2"
-              :to="{ name: 'my-text' }"
+              :to="{ name: 'l1-l2-my-text' }"
             >
               <i class="fa fa-chevron-left"></i>
               {{ $t("My Texts") }}

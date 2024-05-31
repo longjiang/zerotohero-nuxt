@@ -81,7 +81,7 @@
                   <td class="pl-0 pr-0">
                     <router-link
                       :to="{
-                        name: 'compare',
+                        name: 'l1-l2-compare',
                         params: {
                           method: $store.state.settings.dictionaryName,
                           args: `${row.a.w.id},${row.b.w.id}`,

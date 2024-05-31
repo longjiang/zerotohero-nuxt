@@ -40,7 +40,7 @@
         <div class="row" v-if="books && books.length === 0">
           <div class="col-sm-12">
             <div class="text-center">
-              {{ $t("You don't have any books on your bookshelf.") }} <router-link :to="{ name: 'books' }">{{ $t('Browse books') }}</router-link>
+              {{ $t("You don't have any books on your bookshelf.") }} <router-link :to="{ name: 'l1-l2-books' }">{{ $t('Browse books') }}</router-link>
             </div>
           </div>
         </div>

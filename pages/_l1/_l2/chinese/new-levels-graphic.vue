@@ -47,7 +47,7 @@
                   class="word-square link-unstyled"
                   :key="`word-level-${level}-square-${word.id}-${index}`"
                   :to="{
-                    name: 'dictionary',
+                    name: 'l1-l2-dictionary',
                     params: { method: 'hsk-cedict', args: word.id },
                   }"
                 >

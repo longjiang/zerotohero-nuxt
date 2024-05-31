@@ -290,6 +290,7 @@ export default {
     },
     showDefinition() {
       return this.$l2Settings?.showDefinition;
+    }
   },
   asyncComputed: {
     /**

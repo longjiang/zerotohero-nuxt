@@ -1,7 +1,7 @@
 <template>
   <router-link
     class="channel-card link-unstyled"
-    :to="{ name: 'youtube-channel', params: { title, channel_id } }"
+    :to="{ name: 'l1-l2-youtube-channel', params: { title, channel_id } }"
   >
     <img :src="thumbnail" class="channel-thumbnail" @error="handleImageError" />
 

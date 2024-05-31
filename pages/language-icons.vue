@@ -154,11 +154,6 @@ export default {
       }
     },
   },
-  mounted() {
-    let l1 = this.$languages.getSmart(this.$browserLanguage);
-    this.$i18n.locale = l1.code;
-    this.$i18n.setLocaleMessage(l1.code);
-  },
   methods: {
     googleImagesURL(l2) {
       return `https://www.google.com/searchbyimage?q=${l2.name}+language&image_url=https://languageplayer.io/img/logo-square/${l2.code}.jpeg`;

@@ -367,7 +367,7 @@ export default {
     mediaUrlByLevel(levelNum) {
       return LANGS_WITH_LEVELS.includes(this.$l2.code)
         ? `/${this.$l1.code}/${this.$l2.code}/youtube/browse/all/${levelNum}`
-        : `/${this.$l1.code}/${this.$l2.code}/all-media`;
+        : `/${this.$l1.code}/${this.$l2.code}/explore-media`;
     },
     levelHours(level) {
       return Math.ceil(level.hours / 10) * 10;

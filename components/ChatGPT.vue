@@ -24,7 +24,7 @@
                 {{ $t("Regenerate") }}
               </span>
               <router-link :to="{
-                name: 'reader',
+                name: 'l1-l2-reader',
                 params: {
                   method: 'md',
                   arg: message.text.replace('\n', '\n\n'),

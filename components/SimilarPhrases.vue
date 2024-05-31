@@ -84,7 +84,7 @@
           v-if="youInOtherLangs.length > 0 || vousInOtherLangs.length > 0"
           class="mt-3 btn btn-primary btn-sm"
           :to="{
-            name: 'ling-compare-languages',
+            name: 'compare-languages',
             params: {
               bookId: 'adhoc',
               en: translation,

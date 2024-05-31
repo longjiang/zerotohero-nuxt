@@ -1,11 +1,3 @@
-<router>
-  {
-    path: '/verify-email',
-    meta: {
-      skin: 'dark'
-    }
-  }
-</router>
 <template>
   <div :style="`min-height: 100vh; ${backgroundImage
     ? 'background-image: url(' +

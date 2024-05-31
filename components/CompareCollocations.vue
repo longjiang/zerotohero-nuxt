@@ -55,7 +55,7 @@
           )
         }}
         <i18n path="You can set a different corpus in {0}.">
-          <router-link :to="{ name: 'settings' }">
+          <router-link :to="{ name: 'l1-l2-settings' }">
             {{ $t("Settings") }}
           </router-link>
         </i18n>

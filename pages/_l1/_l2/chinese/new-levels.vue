@@ -103,7 +103,7 @@
                       index === numRowsVisible - 1 ? visibilityChanged : false
                     "
                     :to="{
-                      name: 'dictionary',
+                      name: 'l1-l2-dictionary',
                       params: { method: 'hsk-cedict', args: word.id },
                     }"
                   >
@@ -200,7 +200,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "../../../assets/scss/variables.scss";
+@import "../../../../assets/scss/variables.scss";
 .new-levels-table-row {
   th,
   td {

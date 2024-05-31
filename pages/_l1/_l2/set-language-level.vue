@@ -9,7 +9,7 @@
         <div class="text-right" v-if="languageLevel">
           <router-link
             class="btn btn-primary pl-5 pr-5 mt-4"
-            :to="{ name: 'set-content-preferences' }"
+            :to="{ name: 'l1-l2-set-content-preferences' }"
           >
             {{ $t('Continue') }}
             <i class="fa fa-chevron-right"></i>

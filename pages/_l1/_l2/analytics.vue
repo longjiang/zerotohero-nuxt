@@ -150,7 +150,7 @@
                   <td class="text-center">
                     <router-link
                       :to="{
-                        name: 'home',
+                        name: DEFAULT_PAGE,
                         params: {
                           l1: l1(row.l2),
                           l2: row.l2.code,
@@ -236,14 +236,14 @@
 </template>
 
 <script>
-import { SERVER } from "../../../lib/utils";
+import { SERVER, DEFAULT_PAGE, unique, formatK } from "../../../lib/utils";
 import Papa from "papaparse";
 import Vue from "vue";
-import { unique, formatK } from "../../../lib/utils";
 
 export default {
   data() {
     return {
+      DEFAULT_PAGE,
       asc: false,
       analytics: undefined,
       numRowsVisible: 10,

@@ -92,7 +92,7 @@
                   If the above two options don't work for you, you can contact
                   us to have some all of your videos "blacklisted" and never
                   again show up on this website. Please contact us via the
-                  <router-link :to="{ name: 'contact-us' }">
+                  <router-link :to="{ name: 'l1-l2-contact-us' }">
                     Contact Us
                   </router-link>
                   page.

@@ -244,7 +244,7 @@ export default {
     enData() {
       if (!this.phrases || this.enData !== this.phrases[this.currentIndex].en) {
         this.$router.push({
-          name: "ling-compare-languages",
+          name: "compare-languages",
           params: {
             bookId: "adhoc",
             en: this.enData,

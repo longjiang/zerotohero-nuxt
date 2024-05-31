@@ -109,7 +109,7 @@
             :key="`annotate-grammar-${row.id}`"
             class="grammar-table-row"
             @click="
-              $router.push({ name: 'grammar-view', params: { id: row.id } })
+              $router.push({ name: 'l1-l2-grammar-view-id', params: { id: row.id } })
             "
           >
             <td class="align-left align-middle" style="min-width: 7rem">
@@ -131,7 +131,7 @@
               <router-link
                 class="text-success"
                 v-if="row"
-                :to="{ name: 'grammar-view', params: { id: row.id } }"
+                :to="{ name: 'l1-l2-grammar-view', params: { id: row.id } }"
               >
                 <i class="fas fa-chevron-right ml-1" />
               </router-link>

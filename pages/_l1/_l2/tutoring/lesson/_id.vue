@@ -19,13 +19,13 @@
           </h6>
           <div class="nav-btns mb-3 text-center">
             <router-link v-if="Number(id) > 1" :to="{
-              name: 'tutoring-lesson',
+              name: 'l1-l2-tutoring-lesson-id',
               params: { id: Number(id) - 1 },
             }" :class="`btn btn-sm btn-${$skin}`">
               <i class="fa fa-chevron-left"></i> {{ $t('Previous') }}
             </router-link>
             <router-link :to="{
-              name: 'tutoring-lesson',
+              name: 'l1-l2-tutoring-lesson-id',
               params: { id: Number(id) + 1 },
             }" :class="`btn btn-sm btn-${$skin}`">
               {{ $t('Next') }} <i class="fa fa-chevron-right"></i> 

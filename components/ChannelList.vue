@@ -13,7 +13,7 @@
             <ChannelCard :channel_id="channel.channel_id" />
           </div>
         </div>
-        <router-link :to="{name: 'youtube-channels'}" v-if="collapse" class="btn btn-outline-success w-100">
+        <router-link :to="{name: 'l1-l2-youtube-channels'}" v-if="collapse" class="btn btn-outline-success w-100">
           {{ $t('See All Channels') }}
           <i class="fa fa-chevron-right"></i>
         </router-link>

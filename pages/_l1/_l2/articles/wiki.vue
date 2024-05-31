@@ -122,7 +122,7 @@ export default {
         this.article = response.data.data;
       }
     } else {
-      this.$router.push({
+      this.$router.replace({
         path: `/${this.$l1.code}/${this.$l2.code}/articles/wiki/list`,
       });
     }

@@ -8,7 +8,7 @@
       <div class="head-and-pronunciation">
         <router-link
           :to="{
-            name: 'dictionary',
+            name: 'l1-l2-dictionary',
             params: { method: $dictionaryName, args: savedWord.id },
           }"
           class="text-success"

@@ -107,13 +107,9 @@
 </template>
 
 <script>
-import PinyinSquared from "../../../lib/pinyin-squared";
-import PinyinSquaredCharacter from "@/components/PinyinSquaredCharacter";
+import PinyinSquared from "../../../../lib/pinyin-squared";
 
 export default {
-  components: {
-    PinyinSquaredCharacter,
-  },
   data() {
     return {
       text: "",

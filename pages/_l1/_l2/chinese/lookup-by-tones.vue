@@ -60,7 +60,7 @@
                 <td>
                   <router-link
                     :to="{
-                      name: 'details',
+                      name: 'l1-l2-dictionary',
                       params: {
                         method: $store.state.settings.dictionaryName,
                         args: `${result.id}`,

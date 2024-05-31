@@ -89,7 +89,7 @@
             {{ $t("Only showing content made for kids.") }}
             <router-link
               :to="{
-                name: 'youtube-browse',
+                name: 'l1-l2-youtube-browse',
                 params: { category: 'all', level: 'all', start: 0 },
               }"
               >{{ $t("Clear") }}</router-link
@@ -160,8 +160,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
-import { languageLevels, LANGS_WITH_LEVELS, maxDifficultyByLevel, minDifficultyByLevel } from "../../../../lib/utils";
+import { mapState } from "vuex";
+import { languageLevels, LANGS_WITH_LEVELS, maxDifficultyByLevel, minDifficultyByLevel } from "../../../../../../../../lib/utils";
 
 export default {
   props: {

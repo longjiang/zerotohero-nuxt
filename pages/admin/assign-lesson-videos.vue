@@ -5,7 +5,7 @@
         <router-link
           class="btn btn-gray mr-2"
           :to="{
-            name: 'assign-lesson-videos',
+            name: 'l1-l2-assign-lesson-videos',
             params: { level: level, lesson: Number(lesson) - 1 },
           }"
         >
@@ -14,7 +14,7 @@
         <router-link
           class="btn btn-gray"
           :to="{
-            name: 'assign-lesson-videos',
+            name: 'l1-l2-assign-lesson-videos',
             params: { level: level, lesson: Number(lesson) + 1 },
           }"
         >

@@ -46,7 +46,6 @@ const popularPaths = `/
 /zh/en/live-tv
 /en/zh/youtube/search
 /en/ja/set-content-preferences
-/en/zh/all-media
 /en/zh/live-tv
 /en/zh/youtube/view/qIko053otwQ
 /en/zh/youtube/view/kqxzTZ6Jp-M

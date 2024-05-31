@@ -348,7 +348,8 @@ export default {
         const video = await this.getVideoFromDB(youtube_id, directus_id);
 
         this.video = video || this.video;
-        this.showDifficultyToast();
+        // We do not show the difficulty toast here because its animation may block iOS user interaction
+        // this.showDifficultyToast();
         this.loadTokenizationServerCache(video);
 
         if (this.video.tv_show || this.video.talk) this.loadShowAndEpisodes();

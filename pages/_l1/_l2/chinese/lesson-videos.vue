@@ -151,8 +151,7 @@
 </template>
 
 <script>
-import WordList from "@/components/WordList";
-import { languageLevels, uniqueByValue } from "../../../lib/utils";
+import { languageLevels, uniqueByValue } from "../../../../lib/utils";
 
 export default {
   data() {
@@ -175,9 +174,6 @@ export default {
       matchedWordsKey: 0,
       skin: "dark",
     };
-  },
-  components: {
-    WordList,
   },
   computed: {
     level() {
@@ -294,4 +290,4 @@ export default {
     margin: 0 auto;
   }
 }
-</style>
+</style>../../../../lib/utils

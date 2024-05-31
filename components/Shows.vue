@@ -444,7 +444,7 @@ export default {
     },
     handleCategoryFilter(value) {
       this.$router.push({
-        name: this.routeType,
+        name: 'l1-l2-' + this.routeType,
         params: { category: value, tag: this.tag, level: this.level },
       });
     },

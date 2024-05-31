@@ -9,7 +9,7 @@
     <span class="language-list-item-features" v-if="showFeatures">
       <router-link
         :to="{
-          name: 'live-tv',
+          name: 'l1-l2-live-tv',
           params: { l1: from || english, l2: language.code },
         }"
         :class="{
@@ -35,7 +35,7 @@
       </router-link>
       <router-link
         :to="{
-          name: 'dictionary',
+          name: 'l1-l2-dictionary',
           params: { l1: from || english, l2: language.code },
         }"
         :class="{

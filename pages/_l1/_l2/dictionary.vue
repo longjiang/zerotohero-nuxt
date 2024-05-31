@@ -104,7 +104,7 @@
                   class="d-inline-block ml-1 mr-1"
                   v-if="saved() && sW.length > 0"
                   :items="sW"
-                  :home="{ name: 'saved-words' }"
+                  :home="{ name: 'l1-l2-saved-words' }"
                   :findCurrent="(item) => item.id === entry.id"
                   :url="
                     (item) =>

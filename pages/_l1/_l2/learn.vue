@@ -11,7 +11,7 @@
             }"
           >
             <router-link
-              :to="{ name: 'chinese-levels' }"
+              :to="{ name: 'l1-l2-levels' }"
               :data-level="args[0]"
               class="mb-4 d-block text-center"
               v-if="method === 'hsk'"
