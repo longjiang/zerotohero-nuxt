@@ -176,35 +176,21 @@
       modal-class="safe-padding-top mt-4"
       size="md"
       :title="
-        video.title
+        video.title || $t('Actions')
       "
     >
       <div class="video-info-inner">
         <div v-if="showOpenButton">
-          <SimpleButton
-            iconClass="fa-solid fa-folder-open"
-            :title="$t('Open Another Video...') + ' (O)'"
-            :text="$t('Open Another Video...')"
+          <b-button
+            :title="$t('Close Video') + ' (O)'"
             @click="open()"
-            skin="light"
-          />
-          <div>
-            <SimpleButton
-              iconClass="fa-solid fa-angles-left"
-              :text="$t('Shift Subs Back 1s')"
-              skin="light"
-              @click="shiftSubs(-1)"
-            />
-            <SimpleButton
-              iconClass="fa-solid fa-angles-right"
-              :text="$t('Shift Subs Forward 1s')"
-              skin="light"
-              @click="shiftSubs(+1)"
-            />
-          </div>
+            class="d-block w-100"
+          >
+            <i class="fa-solid fa-folder-open" /> {{ $t('Open Another Video...') }}
+          </b-button>
         </div>
-        <ChannelCard :channel_id="video.channel_id" class="mb-2"/>
-        <VideoDetails :video="video" ref="videoDetails" :showTitle="false" />
+        <ChannelCard v-if="video.channel_id" :channel_id="video.channel_id" class="mb-2"/>
+        <VideoDetails :video="video" ref="videoDetails" :showTitle="false" @retranslate="$emit('retranslate', video)" />
         <VideoAdmin
           :video="video"
           ref="videoAdmin1"
@@ -223,6 +209,7 @@
           }"
           class="mt-3"
         />
+        <Sale class="mb-4" />
         <div class="mt-3">
           <h6 v-if="show">
             <hr class="mb-3" />
@@ -280,14 +267,14 @@
           skin="light"
           class="p-2"
         />
-        <client-only>
+        <!-- <client-only>
           <NavPage
             :l1="$l1"
             :l2="$l2"
             class="youtube-browse-nav mb-5 row"
             :showOnly="['Discover', 'Music', 'TV Shows', 'Movies', 'YouTube', 'Live TV', 'News', 'Kids', 'Categories', 'Open MP4...', 'Import from YouTube']"
           />
-        </client-only>
+        </client-only> -->
       </div>
     </b-modal>
     <b-modal
@@ -313,6 +300,9 @@
       </Toggle>
       <Toggle v-model="karaokeAnimation" label="Karaoke Highlighting">
         <i class="fa-sharp fa-solid fa-stars"></i>
+      </Toggle>
+      <Toggle v-model="showQuiz" label="Show Pop Quizzes">
+        <i class="fa-solid fa-rocket"></i>
       </Toggle>
       <div>
         <button
@@ -432,6 +422,7 @@ export default {
       progressPercentage: 0,
       transcriptMode: false,
       karaokeAnimation: false,
+      showQuiz: false,
       watcherActive: false,
       likePending: false,
     };
@@ -505,7 +496,7 @@ export default {
   },
   beforeDestroy() {
     this.unbindKeys();
-    this.unsubscribe();
+    if (this.unsubscribe) this.unsubscribe();
   },
   watch: {
     liked() {
@@ -548,6 +539,12 @@ export default {
         karaokeAnimation: this.karaokeAnimation,
       });
     },
+    showQuiz(oldValue, newValue) {
+      if (!this.watcherActive) return;
+      this.$store.dispatch("settings/setL2Settings", {
+        showQuiz: this.showQuiz,
+      });
+    },
   },
   methods: {
     shiftSubs(subsShift) {
@@ -571,7 +568,7 @@ export default {
       } else {
         this.$store.dispatch("userLikes/like", {
           l2Id: this.$l2.id,
-          videoId: this.video.id,
+          video: this.video,
         });
       }
     },

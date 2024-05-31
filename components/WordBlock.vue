@@ -1,33 +1,97 @@
 <template>
-  <span @click="wordBlockClick" :class="wordBlockClasses" :style="{ 'animation-duration': animationDuration + 'ms' }" @animationend="resetAnimation">
+  <span
+    @click="wordBlockClick"
+    :class="wordBlockClasses"
+    :style="{ 'animation-duration': animationDuration + 'ms' }"
+    @animationend="resetAnimation"
+  >
     <div v-if="showFillInTheBlank" class="word-block-quiz word-block-segment">
       <span class="transparent">{{ text }}</span>
     </div>
     <template v-else>
       <ruby
-        v-for="(segment, index) in attributes && attributes.mappedPronunciation || [
-          { type: 'kanji', surface: text, reading: attributes && attributes.phonetics },
+        v-for="(segment, index) in (attributes &&
+          attributes.mappedPronunciation) || [
+          {
+            type: 'kanji',
+            surface: text,
+            reading: attributes && attributes.phonetics,
+          },
         ]"
         :key="index"
       >
         <!-- <rt v-if="attributes?.showDefinition && index === 0">{{
           attributes?.definition || "&nbsp;"
         }}</rt> -->
-        {{ russianAccentText || segment.surface}}<rt v-if="showReading(segment)">{{ segment.reading }}</rt><rt v-else>&nbsp;</rt></ruby
+        {{ russianAccentText || segment.surface
+        }}<rt v-if="showReading(segment)">{{ segment.reading }}</rt
+        ><rt v-else>&nbsp;</rt></ruby
       ><span
         v-if="attributes && attributes.hanAnnotation"
-        class="word-block-text-byeonggi d-inline-block"
+        class="word-block-text-byeonggi"
         v-html="attributes && attributes.hanAnnotation"
       /><span
         v-if="
           this.showQuickGloss &&
-          attributes && attributes.isSaved &&
+          attributes &&
+          attributes.isSaved &&
           attributes.definition
         "
         class="word-block-text-quick-gloss"
         >‘{{ attributes.definition }}’</span
       >
     </template>
+
+    <!-- no-fade is turned on to prevent a "ghosted" modal on iOS that blocks and disables the entire UI -->
+    <b-modal
+      ref="popup-dictionary-modal"
+      size="sm"
+      centered
+      hide-footer
+      no-fade
+      modal-class="safe-padding-top my-5"
+      :title="$tb('Dictionary')"
+      :body-class="`popup-dictionary-modal-wrapper l2-${$l2.code}`"
+      @show="$nuxt.$emit('popupOpened')"
+      @hide="$nuxt.$emit('popupClosed')"
+    >
+      <template #modal-header="{ close }">
+        <!-- Emulate built in modal header close button action -->
+        <h5>{{ $tb("Dictionary") }}</h5>
+        <b-button size="sm" variant="outline-success" @click="close()">
+          <i class="fas fa-times"></i> {{ $tb("Close") }}
+        </b-button>
+      </template>
+      <div
+        v-if="
+          (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
+        "
+        class="popover-inner-hover-area"
+      >
+        {{ $t("Tap to show answer.") }}
+      </div>
+      <div
+        @mouseenter="tooltipHover = true"
+        @mouseleave="tooltipHover = false"
+        v-else
+        class="popover-inner-hover-area"
+      >
+        <WordBlockPopup
+          v-bind="{
+            text,
+            token,
+            words,
+            images,
+            lookupInProgress,
+            loadingImages,
+            context,
+            phraseObj: phraseItem(text, this.translation),
+          }"
+          ref="popup"
+          @translation="translation = $event"
+        />
+      </div>
+    </b-modal>
   </span>
 </template>
 
@@ -75,6 +139,7 @@ export default {
       animate: false,
       animationDuration: undefined,
       highlighted: false,
+      translation: null,
     };
   },
   computed: {
@@ -128,27 +193,196 @@ export default {
       (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal;
     },
     shortDefinition() {
-      let shortDefinition =
-        this.savedWord?.definitions?.[0] || this.words?.[0]?.definitions?.[0];
+      let shortDefinition;
+
+      // If there's a saved phrase, get the definition in the current language
+      if (this.savedPhrase) {
+        shortDefinition = this.savedPhrase?.[this.$l1.code];
+      }
+
+      // If there's no saved phrase but there's a saved word, get the first definition
+      else if (this.savedWord) {
+        shortDefinition = this.savedWord?.definitions?.[0];
+      }
+
+      // If there's no saved phrase or word, get the first definition of the first word in the list
+      else {
+        shortDefinition = this.words?.[0]?.definitions?.[0];
+      }
+
+      // If there's no definition, return undefined
       if (!shortDefinition) return;
 
-      [
-        /\s*\(.*?\)/,
-        /\s*\（.*?）/,
-        /\s*.*?：/,
-        /^.*\./,
-        /^to /,
-        /^see .*/,
-        /^variant .*/,
-      ].forEach((rule) => {
+      // Define an array of regex rules to clean up the definition
+      const rules = [
+        /\s*\(.*?\)/, // Remove anything in parentheses
+        /\s*\（.*?）/, // Remove anything in full-width parentheses
+        /\s*.*?：/, // Remove anything before and including the full-width colon
+        /^.*\./, // Remove anything before and including the first period
+        /^to /, // Remove 'to ' at the start of the definition
+        /^see .*/, // Remove 'see ' and anything after it at the start of the definition
+        /^variant .*/, // Remove 'variant ' and anything after it at the start of the definition
+      ];
+
+      // Apply each rule to the definition
+      rules.forEach((rule) => {
         shortDefinition = shortDefinition.replace(rule, "");
       });
 
+      // Split the definition by commas or semicolons and take the first part
       shortDefinition = shortDefinition.split(/[，；,;]\s*/)[0];
 
-      return shortDefinition && shortDefinition.length < 20
-        ? shortDefinition
-        : undefined;
+      // If the resulting definition is less than 20 characters long, return it
+      // Otherwise, return undefined
+      return shortDefinition && shortDefinition.length < 20 ? shortDefinition : undefined;
+    },
+    pos() {
+      let pos = this.bestWord?.pos || this.token?.pos;
+      if (pos) return pos.replace(/\-.*/, "").replace(/\s/g, "-");
+    },
+    bestWord() {
+      if (this.savedWord) return this.savedWord;
+      let firstCandidate = this.token?.candidates?.[0];
+      if (firstCandidate) return firstCandidate;
+      let firstFuzzyWord = this.words?.[0];
+      if (firstFuzzyWord) {
+        for (let key in ["head", "simplified", "traditional", "kana"]) {
+          if (firstFuzzyWord[key] === this.text) {
+            return firstFuzzyWord;
+          }
+        }
+      }
+    },
+    bestPhonetics() {
+      let phonetics;
+      if (this.token?.pronunciation) {
+        phonetics = this.token.pronunciation;
+      } else if (this.bestWord) {
+        phonetics = this.phoneticsFromWord(this.bestWord);
+      } else {
+        phonetics = tr(this.text).replace(/"/g, "");
+      }
+      if (phonetics) return phonetics;
+    },
+    wordBlockTextClasses() {
+      let classes = {
+        "word-block-text d-inline-block": true,
+        klingon: this.$l2.code === "tlh",
+        "word-block-hard": this.hard,
+      };
+      return classes;
+    },
+    wordBlockClasses() {
+      let classes = {
+        "word-block": true,
+        "with-quick-gloss":
+          this.attributes?.isSaved && this.attributes?.definition,
+        saved: this.attributes?.isSaved,
+        obscure: this.attributes?.obscure,
+        animate: this.animate,
+        highlighted: this.highlighted
+      };
+      if (this.pos) classes[`pos-${this.pos}`] = true;
+      return classes;
+    },
+    showQuickGloss() {
+      return !this.showDefinition && this.$l2Settings?.showQuickGloss;
+    },
+    showDefinition() {
+      return this.$l2Settings?.showDefinition;
+  },
+  asyncComputed: {
+    /**
+     * Asynchronously calculates the attributes object.
+     *
+     * The returned object has the following properties:
+     *
+     * - `saved`: A value indicating whether the word or phrase has been saved.
+     * - `phonetics`: The phonetics of the current word or phrase.
+     * - `pos`: The part of speech of the current word or phrase.
+     * - `definition`: The quick gloss definition of the current word or phrase.
+     * - `text`: The transformed text of the word or phrase.
+     * - `hanAnnotation`: For Vietnamese and Korean, the Han character form of the word, if it exists and should be shown in small print on the side.
+     * - `mappedPronunciation`: The pronunciation of the word as mapped for Japanese, if the current language is Japanese.
+     * - `data-hover-level`: Set to "outside" by default
+     * - `data-rank`: The rank of the word, if it exists.
+     * - `data-weight`: The weight of the word, if it exists.
+     *
+     * @async
+     * @computed
+     * @returns {Promise<Object>} The attributes object.
+     */
+    attributes() {
+      let isSaved = this.savedWord || this.savedPhrase ? true : false;
+      let phonetics = this.$l2Settings?.showPinyin ? this.bestPhonetics : false;
+      let text = this.getDisplayText(this.text);
+      let pos = this.pos;
+      let definition, hanAnnotation, mappedPronunciation;
+      if (this.$l2Settings?.showDefinition || this.$l2Settings?.showQuickGloss)
+        definition = this.shortDefinition;
+      if (this.$l2Settings?.showByeonggi && ["ko", "vi"].includes(this.$l2.code))
+        hanAnnotation = this.getHanAnnotation(this.bestWord);
+      if (this.$l2.code === "ja")
+        mappedPronunciation = this.getMappedPronunciation();
+      let level = this.bestWord?.level || "outside";
+      let attributes = {
+        isSaved,
+        phonetics,
+        pos,
+        definition,
+        text,
+        level,
+        hanAnnotation,
+        mappedPronunciation,
+      };
+      return attributes;
+    },
+    showFillInTheBlank() {
+      (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal;
+    },
+    shortDefinition() {
+      let shortDefinition;
+
+      // If there's a saved phrase, get the definition in the current language
+      if (this.savedPhrase) {
+        shortDefinition = this.savedPhrase?.[this.$l1.code];
+      }
+
+      // If there's no saved phrase but there's a saved word, get the first definition
+      else if (this.savedWord) {
+        shortDefinition = this.savedWord?.definitions?.[0];
+      }
+
+      // If there's no saved phrase or word, get the first definition of the first word in the list
+      else {
+        shortDefinition = this.words?.[0]?.definitions?.[0];
+      }
+
+      // If there's no definition, return undefined
+      if (!shortDefinition) return;
+
+      // Define an array of regex rules to clean up the definition
+      const rules = [
+        /\s*\(.*?\)/, // Remove anything in parentheses
+        /\s*\（.*?）/, // Remove anything in full-width parentheses
+        /\s*.*?：/, // Remove anything before and including the full-width colon
+        /^.*\./, // Remove anything before and including the first period
+        /^to /, // Remove 'to ' at the start of the definition
+        /^see .*/, // Remove 'see ' and anything after it at the start of the definition
+        /^variant .*/, // Remove 'variant ' and anything after it at the start of the definition
+      ];
+
+      // Apply each rule to the definition
+      rules.forEach((rule) => {
+        shortDefinition = shortDefinition.replace(rule, "");
+      });
+
+      // Split the definition by commas or semicolons and take the first part
+      shortDefinition = shortDefinition.split(/[，；,;]\s*/)[0];
+
+      // If the resulting definition is less than 20 characters long, return it
+      // Otherwise, return undefined
+      return shortDefinition && shortDefinition.length < 20 ? shortDefinition : undefined;
     },
     pos() {
       let pos = this.bestWord?.pos || this.token?.pos;
@@ -232,6 +466,8 @@ export default {
     unique,
     showReading(segment) {
       if (!this.$l2Settings?.showPinyin) return false; // If the user doesn't want to see phonetics (pinyin), don't show it
+      // If the segment's surface form and reading form are the same, don't show the reading
+      if (segment.surface === segment.reading) return false;
       if (segment.type !== "kanji") return false; // segment.type is 'kanji' for all words, except those in Japanese that do not have kanji
       if (
         this.attributes?.mappedPronunciation?.length &&
@@ -404,7 +640,7 @@ export default {
       if (this.$l2.code === "ru")
         this.russianAccentText = await this.getRussianAccentText();
     },
-    async openPopup() {      
+    async openPopup() {
       this.highlighted = true;
       if (this.$l2Settings.autoPronounce) {
         if (!this.quizMode || this.reveal) {
@@ -579,7 +815,6 @@ rt {
 
   10% {
     color: #54ff7c;
-    
   }
 
   100% {
@@ -596,7 +831,6 @@ rt {
   10% {
     color: #54ff7c;
     transform: translate3D(0, -5%, 0); // Force GPU acceleration
-    
   }
   100% {
     transform: translate3D(0, 0, 0);
@@ -613,7 +847,6 @@ rt {
   10% {
     color: #00d031;
     transform: translate3D(0, -5%, 0); // Force GPU acceleration
-    
   }
 
   100% {
@@ -691,7 +924,7 @@ rt {
 }
 
 .show-byeonggi .word-block .word-block-text-byeonggi {
-  display: inline;
+  display: inline-block;
 }
 
 .show-quick-gloss .word-block .word-block-text-quick-gloss {
@@ -711,9 +944,9 @@ rt {
 .word-block-pinyin,
 .word-block-definition {
   opacity: 0.7;
-  margin: 0 0.1rem -0 0.1rem;
-  font-size: 0.8rem;
-  line-height: 1.25;
+  margin: 0 0.1em 0.1em 0.1em;
+  font-size: max(0.5em, 0.8rem);
+  line-height: 1.33;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -757,7 +990,6 @@ rt {
 
 .word-block.highlighted {
   background-color: #88888888;
-  color: white;  
+  color: white;
 }
-
 </style>

@@ -4,20 +4,13 @@
       {{ $t('Collocations with “{term}” and “{compareTerm}”',  {term, compareTerm}) }}
     </template>
     <template #body>
+      <div class="text-center p-5" v-if="updating">
+        <Loader :sticky="true" message="Loading collocations..." />
+      </div>
       <div
         class="row"
-        v-for="(description, name) in colDesc"
+        v-for="(description, name) in filteredColDesc"
         :key="`collocation-${name}-${term}-${compareTerm}`"
-        v-if="
-          (aSketch &&
-            aSketch.Gramrels &&
-            getGramrelsByName(aSketch.Gramrels, name) &&
-            getGramrelsByName(aSketch.Gramrels, name).Words.length > 0) ||
-          (bSketch &&
-            bSketch.Gramrels &&
-            getGramrelsByName(bSketch.Gramrels, name) &&
-            getGramrelsByName(bSketch.Gramrels, name).Words.length > 0)
-        "
       >
         <div class="col-sm-6 mb-5">
           <Collocation
@@ -49,14 +42,23 @@
         </div>
       </div>
       <div
-        v-if="!aSketch || !bSketch || !aSketch.Gramrels || !bSketch.Gramrels"
+        v-if="
+          !updating &&
+          (!aSketch || !aSketch.Gramrels || aSketch.Gramrels.length === 0) &&
+          (!bSketch || !bSketch.Gramrels || bSketch.Gramrels.length === 0)
+        "
       >
-        Sorry, we could not find matching collocations for both words in this
-        corpus (dataset). You can set a different corpus in
-        <router-link :to="`/${$l1.code}/${$l2.code}/settings`">
-          Settings
-        </router-link>
-        .
+        {{
+          $t(
+            "Sorry, we could not find any collocations with “{term}” in this corpus.",
+            { term: `${term}”, “${compareTerm}` }
+          )
+        }}
+        <i18n path="You can set a different corpus in {0}.">
+          <router-link :to="{ name: 'settings' }">
+            {{ $t("Settings") }}
+          </router-link>
+        </i18n>
       </div>
       <div class="mt-2">
         {{ $t("Collocations provided by") }}
@@ -101,10 +103,22 @@ export default {
       aSketch: undefined,
       bSketch: undefined,
       SketchEngine,
-      colDesc: undefined,
+      colDesc: {},
       collocationsKey: 0,
-      corpname: undefined,
+      updating: false,
     };
+  },
+  computed: {
+    corpname() {
+      return this.$l2Settings?.corpname
+    },
+    filteredColDesc() {
+      return Object.entries(this.colDesc).filter(([name, description]) => {
+        const aSketchValid = this.aSketch && this.aSketch.Gramrels && this.getGramrelsByName(this.aSketch.Gramrels, name) && this.getGramrelsByName(this.aSketch.Gramrels, name).Words.length > 0;
+        const bSketchValid = this.bSketch && this.bSketch.Gramrels && this.getGramrelsByName(this.bSketch.Gramrels, name) && this.getGramrelsByName(this.bSketch.Gramrels, name).Words.length > 0;
+        return aSketchValid || bSketchValid;
+      }).reduce((acc, [name, description]) => ({ ...acc, [name]: description }), {});
+    },
   },
   watch: {
     term() {
@@ -115,31 +129,47 @@ export default {
     },
   },
   async mounted() {
-    if (!this.colDesc) {
+    // Check if this.colDesc is empty
+    if (!Object.keys(this.colDesc).length) {
       this.update();
     }
-    this.corpname = await SketchEngine.corpname(this.$l2);
   },
   methods: {
     async update() {
-      this.aSketch = await SketchEngine.wsketch({
-        term: this.term,
-        l2: this.$l2,
-      });
-      this.bSketch = await SketchEngine.wsketch({
-        term: this.compareTerm,
-        l2: this.$l2,
-      });
-      let colDesc = {};
-      if (this.aSketch && this.bSketch) {
-        for (let g of uniqueByValue(
-          (this.aSketch.Gramrels || []).concat(this.bSketch.Gramrels || []),
-          "name"
-        )) {
-          colDesc[g.name] = g.name.replace("%w", "{word}");
+      this.updating = true;
+
+      try {
+        const [aSketch, bSketch] = await Promise.all([
+          SketchEngine.wsketch({
+            term: this.term,
+            l2: this.$l2,
+            corpname: this.corpname,
+          }),
+          SketchEngine.wsketch({
+            term: this.compareTerm,
+            l2: this.$l2,
+            corpname: this.corpname,
+          }),
+        ]);
+
+        this.aSketch = aSketch;
+        this.bSketch = bSketch;
+
+        if (this.aSketch && this.bSketch) {
+          const combinedGramrels = [...(this.aSketch.Gramrels || []), ...(this.bSketch.Gramrels || [])];
+          const uniqueGramrels = uniqueByValue(combinedGramrels, "name");
+
+          this.colDesc = uniqueGramrels.reduce((colDesc, g) => {
+            colDesc[g.name] = g.name.replace("%w", "{word}");
+            return colDesc;
+          }, {});
+
+          this.collocationsKey += 1;
         }
-        this.colDesc = colDesc;
-        this.collocationsKey += 1;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.updating = false;
       }
     },
     getGramrelsByName(gramrels, name) {

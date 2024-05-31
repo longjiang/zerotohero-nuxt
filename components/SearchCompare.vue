@@ -67,9 +67,6 @@ export default {
     urlFunc: {
       type: Function,
     },
-    compareUrlFunc: {
-      type: Function,
-    },
     type: {
       default: "dictionary", // can also be 'generic'
     },
@@ -88,10 +85,31 @@ export default {
     this.loading = false;
   },
   methods: {
+    /**
+     * Where the user goes when they click on 'Look up this up as a phrase' in the Compare search field
+     * @param {String} compareTerm
+     * @returns {String}
+     */
+    compareUrlFunc(compareTerm) {
+      // In this scenario, the second search field is a phrase (not a dictionary entry)
+      // If the first search field is a phrase
+      if (!this.searchEntry) return `/${this.$l1.code}/${this.$l2.code}/phrase/compare/${this.term}/${compareTerm}`;
+      // If the first search field is a dictionary entry
+      if (this.searchEntry) return `/${this.$l1.code}/${this.$l2.code}/phrase/compare/${this.searchEntry.head}/${compareTerm}`;
+    },
+    /**
+     * Function to generate the href for the compare search when the user clicks on a dictionary entry suggestion (compareEntry)
+     * @param {Object} compareEntry
+     * @returns {String}
+     */
     compareHrefFunc(compareEntry) {
       const entry = this.$refs.search.entry || this.entry;
-      if (!entry || !compareEntry) return;
-      return `/${this.$l1.code}/${this.$l2.code}/compare/${this.$store.state.settings.dictionaryName}/${entry.id},${compareEntry.id}`;
+      // If the first search field is a dictionary entry
+      if (entry && compareEntry) {
+        return `/${this.$l1.code}/${this.$l2.code}/compare/${this.$store.state.settings.dictionaryName}/${entry.id},${compareEntry.id}`;
+      }
+      // If the first search field is a phrase
+      return `/${this.$l1.code}/${this.$l2.code}/phrase/compare/${this.term}/${compareEntry.head}`;
     },
     compareHrefFuncFirst(entry) {
       if (!entry) return;

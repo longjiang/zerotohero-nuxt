@@ -25,8 +25,10 @@
         style="width: 1rem; position: relative; bottom: 0.1rem" />
       {{ localeDescription || item.locale }}
     </span>
-    <span class="statistics-item" v-if="item.category && CATEGORIES[item.category]">
-      {{ $t(CATEGORIES[item.category]) }}
+    <span>
+      <router-link class="statistics-item" v-if="item.category && CATEGORIES[item.category]" :to="{ name: 'category', params: { slug: item.category } }" style="color: inherit">
+        {{ $t(CATEGORIES[item.category]) }}
+      </router-link>
     </span>
     <span
       class="statistics-item"

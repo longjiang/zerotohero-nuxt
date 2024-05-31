@@ -11,17 +11,20 @@
           }}</template>
         </p>
       </div>
-      <div class="mt-4">
+      <div class="mt-4" v-if="!SALE">
         <router-link class="btn btn-success pl-3 pr-3" :to="{ name: 'go-pro' }"
           >🚀 {{ $t("Upgrade to Pro") }}</router-link
         >
       </div>
+      <Sale class="mt-4 mx-2" />
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import { SALE } from "@/lib/utils";
+
 export default {
   props: {
     message: {
@@ -33,7 +36,7 @@ export default {
   },
   data() {
     return {
-      sale: false,
+      SALE
     };
   },
   computed: {

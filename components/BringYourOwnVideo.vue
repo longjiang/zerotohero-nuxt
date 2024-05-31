@@ -1,29 +1,9 @@
 <template>
   <div class="video">
     <client-only>
-      <div class="upload-wrapper pl-4 pr-4 pt-3" v-if="!loaded">
-        <div class="upload">
-          <div class="w-100 p-4">
-            <label for="video-upload">
-              {{
-                $t("Choose a video ({formats}) to open:", {
-                  formats: formats.map(f => f.ext).join(", "),
-                })
-              }}
-            </label>
-            <br />
-            <input
-              type="file"
-              :accept="formats.map((f) => '.' + f.ext).join(',')"
-              @change="loadVideo"
-            />
-          </div>
-        </div>
-      </div>
       <video
         ref="videoPlayer"
         class="video-player"
-        v-if="loaded"
         @timeupdate="onTimeUpdate"
         @pause="onPause"
         @play="onPlay"
@@ -95,6 +75,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    video: {
+      type: Object,
+      required: true,
+    },
+    formats: {
+      type: Array,
+      required: true,
+    },
   },
   data() {
     return {
@@ -103,9 +91,7 @@ export default {
       currentTime: 0,
       interval: undefined,
       duration: undefined,
-      loaded: false,
       randomSeeked: false,
-      formats: []
     };
   },
   computed: {
@@ -119,7 +105,6 @@ export default {
   },
   async mounted() {
     this.time = this.starttime;
-    this.formats = this.getFormats()
   },
   destroyed() {
     const videoPlayer = this.$refs.videoPlayer;
@@ -139,34 +124,8 @@ export default {
     },
   },
   methods: {
-    getFormats() {
-      const video = document.createElement("video");
-
-      // The different video formats to check for
-      const formats =  [
-        { ext: 'mp4', mime: 'video/mp4' },
-        { ext: 'webm', mime: 'video/webm' },
-        { ext: 'ogg', mime: 'video/ogg' },
-        { ext: 'mkv', mime: 'video/x-matroska' },
-        { ext: 'avi', mime: 'video/x-msvideo' },
-        { ext: 'mpeg', mime: 'video/mpeg' },
-        { ext: 'flv', mime: 'video/x-flv' },
-        { ext: 'mp3', mime: 'audio/mpeg' },
-        { ext: 'ogg', mime: 'audio/ogg' },
-        { ext: 'wav', mime: 'audio/wav' },
-        { ext: 'aac', mime: 'audio/aac' },
-        { ext: 'flac', mime: 'audio/flac' },
-        { ext: 'opus', mime: 'audio/opus' }
-      ]
-      let supportedFormats = formats.filter(
-        (format) => video.canPlayType(format.mime) !== ""
-      );
-      supportedFormats = [{ ext: 'mkv', mime: 'video/x-matroska' }, ...supportedFormats]
-      return supportedFormats;
-    },
     open() {
-      this.$emit("updateVideo", {});
-      this.loaded = false;
+      this.$emit("updateVideo", null);
     },
     onPause() {
       this.$emit("paused", true);
@@ -183,16 +142,6 @@ export default {
         this.$emit("duration", this.$refs.videoPlayer.duration);
         this.$emit("updateVideo", {...this.video, duration: this.$refs.videoPlayer.duration, width: this.$refs.videoPlayer.videoWidth, height: this.$refs.videoPlayer.videoHeight });
         this.$refs.videoPlayer.play();
-      }
-    },
-    loadVideo(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const url = URL.createObjectURL(file);
-        this.video = { url };
-          
-        this.$emit("updateVideo", this.video);
-        this.loaded = true;
       }
     },
     getDuration() {

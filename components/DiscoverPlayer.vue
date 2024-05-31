@@ -23,6 +23,7 @@
     </div>
     <LazyYouTubeVideo
       v-if="randomShowRandomEpisode"
+      :key="randomShowRandomEpisode.id"
       layout="vertical"
       v-bind="{
         video: randomShowRandomEpisode,
@@ -76,9 +77,6 @@ export default {
     routeType: {
       default: "tv-shows", // or 'talks'
     },
-    shows: {
-      default: undefined,
-    },
     l1: {
       default: undefined,
     },
@@ -93,6 +91,7 @@ export default {
       randomShowId: undefined,
       randomShowRandomEpisode: undefined,
       history: [],
+      shows: [],
     };
   },
   computed: {
@@ -114,13 +113,15 @@ export default {
     },
   },
   mounted() {
+    if (this.routeType === "tv-shows") {
+      let shows = this.$store.state.shows.tvShows[this.l2?.code || this.$l2.code];
+      this.shows = shows.filter((show) => show.title !== "Music" && show.title !== "Movies");
+    } else if (this.routeType === "talks") {
+      let shows = this.$store.state.shows.talks[this.l2?.code || this.$l2.code];
+      this.shows = shows.filter((show) => show.title !== "News");
+    }
     this.loadRandomShow();
   },
-  // watch: {
-  //   shows() {
-  //     this.loadRandomShow();
-  //   },
-  // },
   methods: {
     loadHistory() {
       let historyItem = this.history.pop();
@@ -149,6 +150,8 @@ export default {
     getRandomShow() {
       if (this.shows) {
         let shows = this.shows;
+        // filter out shows with the title "Music" and "Movies"
+        shows = shows.filter((show) => show.title !== "Music" && show.title !== "Movies");
         let randomShow = shows[Math.floor(Math.random() * shows.length)];
         return randomShow;
       }

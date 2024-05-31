@@ -36,21 +36,9 @@
             <div class="contact-block p-4" style="height: 100%">
               <div class="mb-3">
                 <h5>
-                  <b>{{ $t("Jiang (Jon) Long") }}</b>
+                  <b>{{ $t("Jon Long") }}</b>
                 </h5>
                 <p>{{ $t("Co-founder, Designer, Developer") }}</p>
-                <hr />
-                <div>
-                  {{ $t("Undergrad student at SFU (Linguistics)") }}
-                </div>
-                <p>
-                  <a
-                    href="https://www.sfu.ca/linguistics/events/2022/07/StudentProfile_JiangLong.html"
-                  >
-                    {{ $t('About Jiang at SFU') }}
-                  </a>
-                </p>
-                <hr />
               </div>
               <div>
                 <strong>{{ $t("Email:") }}</strong>

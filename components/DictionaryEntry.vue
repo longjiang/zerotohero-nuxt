@@ -1,6 +1,6 @@
 <template>
   <TabbedSections v-bind="{ sections }">
-    <template #media>
+    <template #subtitles>
       <Widget
         skin="dark"
         :withPadding="false"
@@ -29,7 +29,9 @@
             :level="entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk"
             :key="`subs-search-${
               entry.id
-            }-${wholePhraseOnly}-${selectedSearchTerms.join('-')}`"
+            }-${wholePhraseOnly}-${selectedSearchTerms.join('-')}-${
+              selectedExcludeTerms.join('-')
+            }-${tvShow?.id}`"
             :terms="selectedSearchTerms"
             :excludeTerms="selectedExcludeTerms"
             :tvShow="tvShow"
@@ -75,10 +77,12 @@
           {{ $t("Let ChatGPT explain “{text}”", { text: entry.head }) }}
         </template>
         <template #body>
+          <!-- Show a button, when the user clicks we show the chatgpt component -->
           <ChatGPT
+            :maxTokens="50"
             :initialMessages="[
               $t(
-                'Please explain the {l2} word “{word}”{pronunciation}, give its morphological breakdown, and some examples with {l1} translations, and a sample dialogue with {l1} translations.',
+                'Please explain the {l2} word “{word}”{pronunciation}, give its morphological breakdown, and some examples.',
                 {
                   l2: $t($l2.name),
                   l1: $t($l1.name),
@@ -86,6 +90,12 @@
                   pronunciation: pronunciation ? ` (${pronunciation})` : '',
                 }
               ),
+            ]"
+            v-if="showChatGPTBasic"
+          />
+          <ChatGPT
+            :maxTokens="50"
+            :initialMessages="[
               $t(
                 'Please explain how the {l2} word “{word}”{pronunciation} differs from other similar words in {l2}.',
                 {
@@ -95,8 +105,14 @@
                   pronunciation: pronunciation ? ` (${pronunciation})` : '',
                 }
               ),
+            ]"
+            v-if="showChatGPTDiff"
+          />
+          <ChatGPT
+            :maxTokens="50"
+            :initialMessages="[
               $t(
-                'Please make a {l2} story that illustrates the use of the {l2} word “{word}”{pronunciation}, with a {l1} translation after each paragraph.',
+                'Please make a {l2} story that illustrates the use of the {l2} word “{word}”{pronunciation}.',
                 {
                   l2: $t($l2.name),
                   l1: $t($l1.name),
@@ -105,7 +121,34 @@
                 }
               ),
             ]"
+            v-if="showChatGPTStory"
           />
+          <div style="max-width: 20rem; margin: 0 auto;">
+            <b-button
+              v-if="!showChatGPTBasic"
+              @click="showChatGPTBasic = true"
+              variant="primary"
+              class="mb-3 d-block w-100"
+            >
+              {{ $t("Pronunciation, Morphology, and Examples") }}
+            </b-button>
+            <b-button
+              v-if="!showChatGPTDiff"
+              @click="showChatGPTDiff = true"
+              variant="primary"
+              class="mb-3 d-block w-100"
+            >
+              {{ $t("Compare from Similar Words") }}
+            </b-button>
+            <b-button
+              v-if="!showChatGPTStory"
+              @click="showChatGPTStory = true"
+              variant="primary"
+              class="mb-3 d-block w-100"
+            >
+              {{ $t("Write a Story with the Word") }}
+            </b-button>
+          </div>
         </template>
       </Widget>
     </template>
@@ -206,6 +249,14 @@
           />
         </div>
       </div>
+      <div class="rounded bg-accent p-3 mb-4">
+        <SimilarPhrases
+          v-if="entry.definitions && entry.definitions.length > 0"
+          :phrase="entry.head"
+          :translation="similarPhraseTranslation"
+          class="text-center"
+        />
+      </div>
     </template>
   </TabbedSections>
 </template>
@@ -258,6 +309,9 @@ export default {
       renderSearchSubs: true,
       searchTermsWatcherActivated: false,
       wholePhraseOnly: this.exact ? true : false,
+      showChatGPTBasic: false,
+      showChatGPTDiff: false,
+      showChatGPTStory: false,
     };
   },
   computed: {
@@ -267,8 +321,8 @@ export default {
     sections() {
       return [
         {
-          name: "media",
-          title: "Media",
+          name: "subtitles",
+          title: "Subtitles",
           visible:
             this.entry && this.showSearchSubs && this.selectedSearchTerms,
         },
@@ -300,7 +354,7 @@ export default {
         {
           name: "inflections",
           title: "Inflections",
-          visible: true,
+          visible: ['ja', 'ko', 'ru', 'uk', 'en', 'de', 'fr', 'es', 'it', 'nl'].includes(this.$l2.code),
         },
         {
           name: "related",
@@ -313,6 +367,15 @@ export default {
           visible: this.characters,
         },
       ];
+    },
+    similarPhraseTranslation() {
+      let en;
+      if (this.$l2.code === "en") en = this.entry.head;
+      else if (this.entry.definitions && this.entry.definitions[0]) {
+        en = this.entry.definitions[0].split(", ")[0];
+      }
+      if (en) en = en.replace(/\(.*\)/g, "").trim();
+      return en;
     },
     characters() {
       let canonical = this.entry?.cjk?.canonical;
@@ -342,7 +405,8 @@ export default {
   },
   async mounted() {
     let allSearchTerms = await this.getSearchTerms();
-    this.allExcludeTerms = await this.getExcludeTerms(allSearchTerms);
+    let allExcludeTerms = await this.getExcludeTerms(allSearchTerms);
+    this.allExcludeTerms = allExcludeTerms
     if (this.context?.form) {
       allSearchTerms = unique([this.context.form, ...allSearchTerms]);
     }
@@ -382,26 +446,36 @@ export default {
     },
     async getExcludeTerms(allSearchTerms) {
       let excludeTerms = [];
+
       let dictionary = await this.$getDictionary();
+
+      // If the dictionary exists and there are search terms
       if (dictionary && allSearchTerms?.length > 0) {
+        // Loop over each search term
         for (let term of allSearchTerms) {
-          let t = await dictionary.getWordsThatContain(term);
-          t = this.simplifyExcludeTerms(t);
-          excludeTerms = excludeTerms.concat(t);
+          // Get words from the dictionary that contain the current term
+          let words = await dictionary.getWordsThatContain(term);
+
+          // Simplify the words and add them to the exclude terms
+          excludeTerms = excludeTerms.concat(this.simplifyExcludeTerms(words));
         }
-        excludeTerms = unique(excludeTerms);
-        return excludeTerms.filter(
-          (s) =>
+
+        // Remove duplicates from the exclude terms
+        excludeTerms = [...new Set(excludeTerms)];
+
+        // Filter out empty strings, strings with spaces, and strings that are in the search terms
+        excludeTerms = excludeTerms.filter((s) => {
+          const lowerCaseS = s.toLowerCase();
+          return (
             s !== "" &&
-            !s.includes(' ') &&
-            !allSearchTerms
-              .filter((t) => t)
-              .map((t) => t.toLowerCase())
-              .includes(s.toLowerCase())
-        );
-      } else {
-        return [];
+            !s.includes(" ") &&
+            !allSearchTerms.some((t) => t && t.toLowerCase() === lowerCaseS)
+          );
+        });
       }
+
+      // Return the exclude terms (or an empty array if there were no search terms or no dictionary)
+      return excludeTerms;
     },
     reloadSearchSubs() {
       this.renderSearchSubs = false;
@@ -444,8 +518,8 @@ export default {
         .filter((s) => s && s.length > 1);
 
       // Handling OpenRussian dictionary.
-      if (this.$dictionaryName === "openrussian") {
-        terms = terms.map((t) => t.replace(/'/gi, ""));
+      if (this.$l2.code === "ru") {
+        terms = terms.map((t) => t.replace(/\u0301/g, "")); // Cyrillic combining acute accent
       }
 
       return terms;

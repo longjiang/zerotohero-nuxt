@@ -15,92 +15,27 @@
         </div>
       </div>
       <div class="container" v-else>
-        <div class="row mb-3">
+        <div class="row">
           <div class="col-sm-12 text-center">
+            <LanguageFlag :language="$l2" :autocycle="true" class="my-3" />
             <h4>
               {{ formatName($auth.user.first_name, $auth.user.last_name) }}
             </h4>
             <div>{{ $auth.user.email }}</div>
-            <hr class="mt-3 mb-3" />
-            <div v-if="subscription && !pro">
-              {{
-                $t("Your Pro has expired on {date}.", {
-                  date: $d(
-                    new Date(subscription.expires_on),
-                    "short",
-                    $l1.code
-                  ),
-                })
-              }}
-            </div>
-            <div
-              v-if="
-                subscription &&
-                pro &&
-                subscription.type !== 'lifetime' &&
-                subscription.payment_processor === 'stripe'
-              "
-            >
-              🚀
-              {{
-                $t("Your Pro will auto-renew on {date}.", {
-                  date: $d(
-                    new Date(subscription.expires_on),
-                    "short",
-                    $l1.code
-                  ),
-                })
-              }}
-              <i18n path="To change or cancel, go to {stripe}.">
-                <template #stripe>
-                  <a href="https://billing.stripe.com/p/login/aEUeYr0Gu6GW9BSbII" target="_blank">{{
-                    $t("Stripe")
-                  }}</a>
-                </template>
-              </i18n>
-            </div>
-            <div
-              v-if="
-                subscription &&
-                pro &&
-                subscription.type !== 'lifetime' &&
-                subscription.payment_processor !== 'stripe'
-              "
-            >
-              🚀
-              {{
-                $t("Your Pro will expire on {date}.", {
-                  date: $d(
-                    new Date(subscription.expires_on),
-                    "short",
-                    $l1.code
-                  ),
-                })
-              }}
-            </div>
-            <div v-if="subscription && subscription.type === 'lifetime'">
-              🚀 {{ $t("You have lifetime access to Pro.") }}
-            </div>
-            <div v-if="!subscription">
-              {{ $t("You are not Pro yet.") }}
-            </div>
-            <div v-if="!pro">
-              <router-link :to="{ name: 'go-pro' }"
-                >{{ $t("Upgrade to Pro") }} 🚀</router-link
-              >
+            <Sale class="my-4" />
+            <div class="p-4 rounded bg-accent" style="margin: 2rem 0" >
+              <h6>🚀 {{ $t('Your Pro Subscription') }}</h6>
+              <hr />
+              <SubscriptionStatus />
             </div>
           </div>
         </div>
-        <hr class="mt-3 mb-3" />
-        <NavPage :showOnly="['My Words', 'My Phrases', 'My Watch History', 'My Liked Videos', 'My Bookshelf', 'My Texts']" class="my-3" />
         <template v-if="level">
-          <hr class="mt-3 mb-3" />
           <div class="row">
             <div class="col-sm-12">
-              <h5>
-                <LanguageFlag :language="$l2" :autocycle="true" class="mb-2" />
-                {{
-                  $t("{name}’s {l2} Language Progress", {
+              <div class="p-4 rounded bg-accent">
+                <h6 class="text-center">{{
+                  $t("Your {l2} Language Progress", {
                     name: formatName(
                       $auth.user.first_name,
                       $auth.user.last_name,
@@ -108,26 +43,23 @@
                     ),
                     l2: $t($l2.name),
                   })
-                }}
-              </h5>
-            </div>
-          </div>
-          <LanguageGoal />
-          <div class="row mt-3">
-            <div class="col-sm-12">
-              <LanguageProgress
-                class="mt-3"
-                :l1="$l1"
-                :l2="$l2"
-                :description="true"
-                :dot="true"
-                :edit="true"
-                :animated="true"
-                progressBarHeight="1.5rem"
-                :progressBarShowValue="false"
-              />
+                }}</h6>
+                <hr />
+                <LanguageGoal />
+                <LanguageProgress
+                  class="mt-3"
+                  :l1="$l1"
+                  :l2="$l2"
+                  :description="true"
+                  :dot="true"
+                  :edit="true"
+                  :animated="true"
+                  progressBarHeight="1.5rem"
+                  :progressBarShowValue="false"
+                />
+              </div>
               <div v-if="wordIds">
-                <h5 class="mt-4 mb-3">
+                <h5 class="mt-5 mb-3">
                   {{
                     $t("Your {l2} Words", {
                       name: $auth.user.first_name,
@@ -179,39 +111,22 @@
                 />
               </div>
               <div class="mt-4 pb-5">
-                <h5 class="mb-4">{{ $t("Danger Zone") }}</h5>
                 <div class="row">
-                  <div class="col-sm-12 col-md-6 mb-2">
-                    <div class="text-center alert-danger rounded p-4">
-                      <b-button variant="danger" @click="removeProgress">
-                        <i class="fas fa-trash mr-2"></i>
-                        {{ $t("Remove {l2}", { l2: $t($l2.name) }) }}
-                      </b-button>
-                      <p class="mt-3 mb-0">
-                        {{
-                          $t(
-                            "This will remove your logged time for {l2}, and remove {l2} from your home screen Dashboard.",
-                            { l2: $t($l2.name) }
-                          )
-                        }}
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col-sm-12 col-md-6 mb-2">
+                  <div class="col-sm-12 mb-2">
                     <div
-                      class="text-center alert-danger rounded p-4"
-                      style="height: 100%"
+                      class="bg-accent rounded p-3"
+                      style="height: 100%; font-size: 0.9em; color: #6c757d;"
                     >
-                      <b-button variant="danger" @click="deleteAccount">
-                        <i class="fas fa-times-circle mr-2"></i>
-                        {{ $t("Delete My Account") }}
-                      </b-button>
-                      <p class="mt-3 mb-0">
+                    <h6>{{ $t("Delete My Account") }}</h6>
+                      <p class="mt-2 mb-0">
                         {{
                           $t(
                             "This will permanently remove your Language Player account. There is no undo."
                           )
                         }}
+                        <router-link :to="{ name: 'delete-account' }" class="text-secondary">
+                          <u>{{ $t("Delete My Account") }}</u>
+                        </router-link>
                       </p>
                     </div>
                   </div>
@@ -264,12 +179,6 @@ export default {
     wordIds() {
       let savedWords = this.savedWords[this.$l2.code] || [];
       return savedWords.map((w) => w.id);
-    },
-    pro() {
-      return this.$store.state.subscriptions.active;
-    },
-    subscription() {
-      return this.$store.state.subscriptions.subscription;
     },
   },
   methods: {

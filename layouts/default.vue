@@ -191,11 +191,21 @@ export default {
       }
       await this.$directus.fetchOrCreateUserData(); // Make sure user data is fetched from the server
       if (this.$auth.loggedIn) {
+        let user = await this.$directus.getCurrentUser();
+        
+        // If the user cannot be fetched, or if the status is 'inactive' or 'draft', redirect to the email verification page
+        if (!user || ['inactive', 'draft'].includes(user.status)) {
+          this.$router.push({
+            name: "verify-email",
+            query: {
+              email: encodeURIComponent(this.$auth.user.email),
+            },
+          });
+        }
         await this.$store.dispatch(
           "subscriptions/checkSubscription",
           this.$auth.user.id
         );
-        this.$store.dispatch("userLikes/fetchUserLikes");
         this.$gtag.event(
           "login",
           this.$auth.user.id
@@ -394,7 +404,8 @@ export default {
     async onLanguageChange() {
       // Set the locale
       if (this.$l1) this.updatei18n();
-      await this.$store.dispatch("watchHistory/load", this.$l2.id);
+      if (this.$l2) await this.$store.dispatch("watchHistory/load", this.$l2);
+      if (this.$l2) this.$store.dispatch("userLikes/fetchUserLikes", this.$l2);
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
       if (this.$l1 && this.$l2) {
         this.loadLanguageSpecificData(); // This will trigger updateL2SettingsClasses()
@@ -412,6 +423,7 @@ export default {
         l1: this.$l1,
         l2: this.$l2,
       });
+      this.$store.dispatch('settings/setDefaultCorpname', { l2: this.$l2 })
       this.$store.dispatch("settings/resetShowFilters");
       if (!this.savedWordsLoaded) {
         this.$store.dispatch("savedWords/load");

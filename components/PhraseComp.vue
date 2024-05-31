@@ -12,7 +12,7 @@
     </div>
 
     <TabbedSections v-bind="{ sections }">
-      <template #media>
+      <template #subtitles>
         <Widget
           skin="dark"
           id="search-subs"
@@ -57,14 +57,14 @@
             <ChatGPT
               :initialMessages="[
                 $t(
-                  'Please explain the {l2} word “{word}” ({pronunciation}), give its morphological breakdown, and some examples with {l1} translations, and a sample dialogue with {l1} translations.',
+                  'Please explain the {l2} phrase “{word}” ({pronunciation}), its structure, usage, and give some examples.',
                   {
                     l2: $t($l2.name),
                     l1: $t($l1.name),
                     word: term,
                     pronunciation: '',
                   }
-                ),
+                )
               ]"
             />
           </template>
@@ -104,7 +104,7 @@
       <template #related>
         <EntryRelated
           @relatedReady="relatedReady = true"
-          :term="term"
+          :text="term"
           :key="`related-${term}`"
         />
         <div class="row">
@@ -129,7 +129,7 @@
       </template>
     </TabbedSections>
 
-    <!-- <Sale v-if="$l2.code === 'zh'" class="mb-5" /> -->
+    <Sale class="mb-5" />
   </article>
 </template>
 
@@ -177,8 +177,8 @@ export default {
     sections() {
       return [
         {
-          name: "media",
-          title: "Media",
+          name: "subtitles",
+          title: "Subtitles",
           visible: this.term,
         },
         {

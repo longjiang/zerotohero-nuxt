@@ -88,7 +88,8 @@ export default {
     },
     categoryId() {
       if (Number(this.slug) == this.slug)
-      return Number(this.slug)
+        return Number(this.slug)
+      return SLUG_TO_CATEGORY_ID[this.slug]
     },
     title() {
       if (!this.slug) return "";

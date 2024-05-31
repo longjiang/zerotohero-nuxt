@@ -1,22 +1,39 @@
 <template>
   <div
     :class="{
-      'text-card p-4 cursor-pointer': true,
+      'text-card d-flex align-items-start justify-content-between': true,
       [`skin-${$skin}`]: true,
+      'cursor-pointer p-4': link,
     }"
-    @click="$router.push(to)"
+    @click="link ? $router.push(to) : null"
   >
-    <h5 class="mb-0">{{ text.title }}</h5>
-    <div class="mt-3 text-right">
+    <div style="width: calc(100% - 1rem);">
+      <h5 class="mb-0">{{ text.title }}</h5>
+      <!-- Show a little snippet as dimmed small text, just a line or two -->
+      <p class="text-muted mb-0 snippet mt-3" v-if="showSnippet && text.text">{{ text.text }}</p>
+    </div>
+    <div>
       <b-button
         class="youtube-video-card-badge border-0"
         v-if="text.id"
         size="sm"
-        :variant="$skin"
-        @click="remove()"
+        variant="no-bg"
+        style="width: 2rem"
+        @click.stop="$bvModal.show('actionsModal' + text.id)"
       >
-        {{ $t("Delete") }}
+        <i class="fa-solid fa-ellipsis-v"></i>
       </b-button>
+
+      <b-modal :id="'actionsModal' + text.id" :title="$t('Actions')" centered hide-footer size="sm">
+        <b-button @click.stop="rename()" class="d-block w-100 text-left" variant="light">
+          <i class="fa-solid fa-edit mr-2"></i>
+          {{ $t("Rename") }}
+        </b-button>
+        <b-button @click.stop="remove()" class="d-block w-100 text-left" variant="light">
+          <i class="fa-solid fa-trash mr-2"></i>
+          {{ $t("Delete") }}
+        </b-button>
+      </b-modal>
     </div>
   </div>
 </template>
@@ -31,6 +48,14 @@ export default {
       type: String,
       default: "remote", // or 'local
     },
+    link: {
+      type: Boolean,
+      default: true,
+    },
+    showSnippet: {
+      type: Boolean,
+      default: true,
+    }
   },
   computed: {
     to() {
@@ -42,7 +67,24 @@ export default {
   },
   methods: {
     async remove() {
+      // First prompt the user to confirm deletion
+      if (!confirm(this.$t("Are you sure you want to delete this text?"))) return;
+      // Then dispatch the action to delete the text
+      this.$store.dispatch("savedText/remove", {
+        l2: this.$l2,
+        itemId: this.text.id,
+      });
       this.$emit("removed", this.text.id);
+    },
+    async rename() {
+      this.$bvModal.hide("actionsModal" + this.text.id);
+      let title = prompt(this.$t("Enter new title"), this.text.title);
+      if (title) {
+        this.$store.dispatch("savedText/update", {
+          l2: this.$l2,
+          payload: { id: this.text.id, title },
+        });
+      }
     },
   },
 };
@@ -53,18 +95,25 @@ export default {
   padding: 1rem;
   border-radius: 0.5rem;
   &.skin-light {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     &:hover {
-      background-color: rgba(0, 0, 0, 0.05);
+      background-color: rgba(0, 0, 0, 0.03);
     }
   }
   &.skin-dark {
-    box-shadow: 0 5px 15px rgba(245, 245, 245, 0.25);
-    border: 1px solid rgba(245, 245, 245, 0.25);
+    border: 1px solid rgba(245, 245, 245, 0.1);
     &:hover {
-      background-color: rgba(245, 245, 245, 0.1); 
+      background-color: rgba(245, 245, 245, 0.03); 
     }
   }
 }
+
+.snippet {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: calc(100% - 3rem);
+  font-size: 0.8em;
+}
+
 </style>

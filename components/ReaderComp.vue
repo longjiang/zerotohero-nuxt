@@ -3,7 +3,7 @@
     <div>
       <button
         v-if="iconMode && !fullscreen"
-        @click="fullscreen = !fullscreen"
+        @click="toggleFullscreen"
         class="reader-icon"
       >
         <i class="fas fa-pencil-alt" />
@@ -76,7 +76,7 @@
               :variant="$skin"
               class="reader-button"
             >
-              <i class="fa fa-expand" />
+              <i class="fa fa-up-right-and-down-left-from-center mr-1" />
               {{ $t("Fullscreen") }}
             </b-button>
             <b-button
@@ -85,7 +85,7 @@
               :variant="$skin"
               class="reader-button"
             >
-              <i class="fa fa-times" />
+              <i class="fa fa-down-left-and-up-right-to-center mr-1" />
               {{ $t("Close") }}
             </b-button>
             <b-button
@@ -97,14 +97,14 @@
               }"
               :variant="$skin"
             >
-              <i class="fas fa-keyboard"></i>
+              <i class="fas fa-keyboard mr-1"></i>
               {{ $t("Enter Translation") }}
             </b-button>
           </div>
           <div class="d-flex">
             <textarea
               id="reader-textarea"
-              class="form-control"
+              class="reader-textarea form-control"
               cols="30"
               rows="5"
               :placeholder="$t('Paste {l2} text here', { l2: $l2.name })"
@@ -113,7 +113,7 @@
             ></textarea>
             <textarea
               v-if="addTranslation"
-              class="form-control ml-1 flex-1"
+              class="reader-textarea form-control ml-1 flex-1"
               cols="30"
               rows="5"
               v-model="translation"
@@ -123,7 +123,8 @@
             ></textarea>
           </div>
 
-          <TranslatorLinks v-bind="{ text }" class="mt-2"/>
+          <TranslatorLinks v-bind="{ text }" class="mt-2" v-if="text.length < 3400" />
+          <small v-else class="d-block mt-2 text-secondary">{{ $t("Text too long for translate links to work.") }}</small>
         </div>
         <iframe
           v-if="showTranslate"
@@ -139,6 +140,7 @@
 import Marked from "marked";
 import { ContainerQuery } from "vue-container-query";
 import { unique, timeout } from "../lib/utils";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -151,7 +153,6 @@ export default {
       translation: this.initialTranslation,
       annotated: false,
       readerKey: 0, // used to force re-render this component
-      fullscreen: false,
       showTranslate: false,
       addTranslation: this.translation && this.translation !== "",
       loading: true,
@@ -191,6 +192,7 @@ export default {
     },
   },
   computed: {
+    ...mapState("settings", ["fullscreen"]),
     savedWordIdsInText() {
       if (!this.text) return;
       if (this.savedWords) {
@@ -214,8 +216,8 @@ export default {
     marked() {
       let text = this.textThrottled || this.text;
       let augmentedText = text.replace(/^ {4,}/gm, ""); // remove 4+ spaces, which in markdown is a code block
-      // Replace one or more newlines with 2 newlines, which in markdown is a paragraph break
-      augmentedText = augmentedText.replace(/\n+/g, "\n\n");
+      // Enforce double line breaks (only replace single line breaks with double but don't add any unnecessarily)
+      augmentedText = augmentedText.replace(/([^\n])\n([^\n])/g, "$1\n\n$2");
       Marked.setOptions({
         breaks: true
       });
@@ -284,7 +286,7 @@ export default {
       }
     },
     toggleFullscreen() {
-      this.fullscreen = !this.fullscreen;
+      this.$store.dispatch("settings/setFullscreen", !this.fullscreen);
     },
     toggleButtons() {
       this.buttons = !this.buttons;
@@ -301,7 +303,7 @@ export default {
 <style lang="scss" scoped>
 
 .reader.skin-dark {
-  #reader-textarea {
+  .reader-textarea {
     background: #333;
     color: #eee;
     border-color: #555;
@@ -395,13 +397,17 @@ export default {
   color: white;
 }
 
+// Dark mode
+.reader.skin-dark.fullscreen {
+  background: #1a1a1c;
+}
+
 .reader.fullscreen {
   position: fixed;
   left: 0;
   top: 0;
   width: 100vw;
   height: 100vh;
-  background: white;
   z-index: 10;
   overflow: auto;
   margin-top: 0 !important;
@@ -418,6 +424,7 @@ export default {
     position: fixed;
     width: calc(100vw - 2rem);
     height: calc(100vh - 15vh - 5.5rem);
+    padding-bottom: 10rem;
     overflow: auto;
   }
 }

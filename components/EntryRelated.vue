@@ -21,7 +21,10 @@
       <WordList
         v-if="words && words.length > 0"
         :words="words"
-        class="related"
+        :class="{
+          'related': true,
+        }"
+        :showSpeak="false"
         :compareWith="entry"
         collapse="10"
       />
@@ -48,7 +51,11 @@
               class="ml-2 logo-small"
             />
           </a>
-        </i18n>
+        </i18n> | 
+        <span v-if="$l2Settings?.corpname">
+          {{ $t("Corpus") }}:
+          <code>{{ $l2Settings?.corpname.replace("preloaded/", "") }}</code>
+        </span>
       </div>
     </template>
   </Widget>
@@ -59,7 +66,7 @@ import SketchEngine from "../lib/sketch-engine";
 export default {
   props: {
     entry: Object,
-    term: String
+    text: String,
   },
   data() {
     return {
@@ -68,13 +75,23 @@ export default {
       checking: false,
     };
   },
+  computed: {
+    term() {
+      if (!this.word) return this.text;
+      // If this.$l2.code is 'zh', determine if the corpus is traditional or simplified
+      const corpname = this.$l2Settings.corpname
+      const isChineseTraditional = this.$l2.code === 'zh' && corpname && corpname.includes("trad");
+      return isChineseTraditional ? this.word.traditional : this.word.head;
+    },
+  },
   async mounted() {
     this.checking = true;
     let response;
     try {
       response = await SketchEngine.thesaurus({
         l2: this.$l2,
-        term: this.entry.simplified || this.entry.head || term ,
+        term: this.entry?.simplified || this.entry?.head || this.term,
+        corpname: this.$l2Settings.corpname,
       });
     } catch (err) {}
     if (response && response.Words) {
@@ -112,8 +129,8 @@ export default {
 .related {
   list-style: none;
   padding: 0;
-  columns: 2;
 }
+
 
 .related .saved-words.collapsed li {
   display: block;

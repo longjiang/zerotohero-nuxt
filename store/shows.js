@@ -117,6 +117,10 @@ export const mutations = {
 
     state.categories = categories(l2, state.tvShows, state.talks);
   },
+  CLEAR_RECOMMENDED_VIDEOS(state, l2) {
+    state.recommendedVideos[l2.code] = [];
+    state.recommendedVideosLoaded[l2.code] = false;
+  },
   ADD_RECOMMENDED_VIDEOS(state, { l2, videos }) {
     let existingVideos = state.recommendedVideos[l2.code] || [];
     state.recommendedVideos[l2.code] = uniqueByValue(
@@ -230,16 +234,37 @@ export const actions = {
     
     context.commit("LOAD_SHOWS", { l2, tvShows: processedTvShows, talks: processedTalks });
   },
-  async loadRecommendedVideos({state, commit, rootState, rootGetters}, { userId, l2, level, preferredCategories, forceRefresh, start = 0, limit = 48 }) {
+/**
+ * Load recommended videos based on user preferences and progress.
+ *
+ * @param {Object} context - The Vuex context object.
+ * @param {Object} payload - The payload object.
+ * @param {string} payload.userId - The ID of the user.
+ * @param {Object} payload.l2 - The second language object.
+ * @param {number} [payload.level] - The user's level in the second language. If not provided, it will be fetched from the progress state.
+ * @param {Array} [payload.preferredCategories] - The user's preferred categories. If not provided, it will be fetched from the settings state.
+ * @param {boolean} [payload.clear=false] - Whether to clear the current recommended videos before adding new ones.
+ * @param {number} [payload.start=0] - The start index for the videos to fetch.
+ * @param {number} [payload.limit=48] - The maximum number of videos to fetch.
+ */
+async loadRecommendedVideos({state, commit, rootState, rootGetters}, { userId, l2, level, preferredCategories, clear = false, start = 0, limit = 48 }) {
+    // If level is not provided and progress is loaded, fetch level from progress state
     if (!level && rootState.progress.progressLoaded) {
       level =  Number(rootGetters["progress/level"](l2));
     }
+    // If preferred categories are not provided and settings are loaded, fetch preferred categories from settings state
     if (!preferredCategories && rootState.settings.settingsLoaded) {
       preferredCategories = rootState.settings.preferredCategories;
     }
-    // Do not load those videos that are already loaded
+    // Exclude videos that are already loaded
     const excludeIds = state.recommendedVideos[l2.code] ? state.recommendedVideos[l2.code].map((v) => v.id) : [];
+    // Fetch recommended videos
     let videos = await fetchRecommendedVideos(userId, l2, level, preferredCategories, start, limit, excludeIds);
+    // If clear is true, clear the current recommended videos
+    if (clear) {
+      commit("CLEAR_RECOMMENDED_VIDEOS", l2);
+    }
+    // Add the fetched videos to the recommended videos
     commit("ADD_RECOMMENDED_VIDEOS", { l2, videos });
   },
   async add(context, { l2, type, show }) {

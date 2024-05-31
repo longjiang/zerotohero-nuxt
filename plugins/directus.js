@@ -112,14 +112,18 @@ export default ({ app }, inject) => {
       if (res) return res;
     },
 
-    async post(path, payload) {
+    async post(path, payload, catchErrors = true) {
       let res = await axios
         .post(
           this.appendHostCors(DIRECTUS_API_URL + path),
           payload,
           this.tokenOptions()
         )
-        .catch((err) => logError(err));
+        .catch((err) => {
+          if (catchErrors) logError(err);
+          else 
+            throw err;
+        });
       if (res) return res;
     },
 
@@ -235,7 +239,7 @@ export default ({ app }, inject) => {
         params = parseQueryString(query);
       }
       let fields = 'id,l2,title,youtube_id,tv_show,talk,date,lex_div,word_freq,difficulty,views,category,locale,duration,made_for_kids,views,likes,comments,type';
-      if (subs) fields += ',subs_l2';
+      if (subs) fields += ',subs_l2,subs_l1';
       if (tags) fields += ',tags';
       params.fields = params.fields || fields;
       // No language filter is necessary since the table only has one language
@@ -250,7 +254,7 @@ export default ({ app }, inject) => {
       } else return [];
     },
 
-    async searchCaptions({ l2Obj, tv_show, talk, terms, limit, sort, timestamp }) {
+    async searchCaptions({ l2Obj, tv_show, category, terms, limit, sort, timestamp }) {
       if (!l2Obj) throw "Directus.searchCaptions: l2Obj is not set!";
 
       let url
@@ -270,7 +274,7 @@ export default ({ app }, inject) => {
         url = LP_DIRECTUS_TOOLS_URL + "videos";
       }
       if (tv_show) params.tv_show = tv_show;
-      if (talk) params.talk = talk;
+      if (category) params.category = category;
       if (terms) params.terms = terms.join(",");
       if (timestamp) params.timestamp = timestamp;
       if (limit) params.limit = limit;
@@ -397,7 +401,7 @@ export default ({ app }, inject) => {
       let res = await this.post(`auth/password/request`, {
         email,
         reset_url,
-      });
+      }, false); // Don't catch errors
       return res && res.status === 200;
     },
 
@@ -457,6 +461,13 @@ export default ({ app }, inject) => {
 
     isLoggedIn() {
       return app.$auth && app.$auth.loggedIn && app.$auth.user;
+    },
+
+    async getCurrentUser() {
+      // Make sure to bust cache
+      let res = await this.get(`users/me?timestamp=${Date.now()}`);
+      let user = res?.data?.data;
+      return user;
     },
 
     getToken() {

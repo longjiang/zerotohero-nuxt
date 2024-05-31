@@ -17,7 +17,7 @@
             <td>
               <router-link
                 :to="{
-                  name: 'recommended-video',
+                  name: DEFAULT_PAGE,
                   params: { l1: pair.l1, l2: pair.l2 },
                 }"
               >
@@ -37,7 +37,7 @@
 
 <script>
 import axios from "axios";
-import { PYTHON_SERVER } from "../lib/utils";
+import { PYTHON_SERVER, DEFAULT_PAGE } from "../lib/utils";
 
 export default {
   props: {
@@ -49,6 +49,7 @@ export default {
   data() {
     return {
       pairs: [],
+      DEFAULT_PAGE,
       loading: false,
       totalPageViews: 0,
     };

@@ -27,10 +27,11 @@
 </template>
 
 <script>
-import { background } from "../../../lib/utils";
+import { background, DEFAULT_PAGE } from "../../../lib/utils";
 export default {
   data() {
     return {
+      DEFAULT_PAGE,
       hasDashboard: false,
     };
   },
@@ -49,7 +50,7 @@ export default {
     },
   },
   mounted() {
-    this.$router.push({ name: "l1-l2-recommended-video" });
+    this.$router.push({ name: DEFAULT_PAGE });
   },
   methods: {
     hasDashboardUpdate(hasDashboard) {

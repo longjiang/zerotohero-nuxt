@@ -17,7 +17,8 @@ export default ({ app }, inject) => {
       return parsed;
     },
     parseSavedSubs(jsonOrCSV) {
-      if (jsonOrCSV) {
+      // Make sure jsonOrCSV is not null, undefined and is a string
+      if (jsonOrCSV && typeof jsonOrCSV === "string") {
         let isJSON = jsonOrCSV.charAt(0) === "[";
         let parsed = isJSON
           ? JSON.parse(jsonOrCSV)
@@ -122,23 +123,23 @@ export default ({ app }, inject) => {
       sort,
       limit = 20,
       tvShowFilter,
-      talkFilter,
+      categoryFilter,
       exact = false,
       apostrophe = false,
       convertToSimplified = false,
       mustIncludeYouTubeId = undefined,
     } = {}) {
-      let tv_show, talk; // Undefined by default
+      let tv_show, category; // Undefined by default
       if (tvShowFilter) tv_show = tvShowFilter === "all" ? "nnull" : tvShowFilter.join(",");
-      if (talkFilter) talk = talkFilter === "all" ? "nnull" : talkFilter.join(",");
+      if (categoryFilter) category = categoryFilter === "all" ? "nnull" : categoryFilter.join(",");
       let hits = [];
-      terms = terms.filter((t) => t).map((t) => t.replace(/'/g, "&#39;"));
+      // terms = terms.filter((t) => t).map((t) => t.replace(/'/g, "&#39;"));
       terms = mutuallyExclusive(terms); // So if terms are ['dièdres', 'dièdre'], we search only 'dièdre' since results of the plural will be included automatically.
       let timestamp = adminMode ? Date.now() : 0;
       let params = {
         l2Obj,
         tv_show,
-        talk,
+        category,
         terms,
         sort,
         limit,
@@ -193,7 +194,7 @@ export default ({ app }, inject) => {
       excludeTerms = [],
       l2Obj,
       tvShowFilter,
-      talkFilter,
+      categoryFilter,
       adminMode = false,
       continua = true,
       sort,
@@ -207,7 +208,7 @@ export default ({ app }, inject) => {
         terms,
         l2Obj,
         tvShowFilter,
-        talkFilter,
+        categoryFilter,
         adminMode,
         excludeTerms,
         continua,
@@ -219,6 +220,16 @@ export default ({ app }, inject) => {
         mustIncludeYouTubeId,
       })
       hits = uniqueByValue(hits, "id");
+      // Before slicing to a limit, the video with mustIncludeYouTubeId must be the first element for this to work properly, otherwise we won't have the video from which the user saved the word
+      if (mustIncludeYouTubeId) {
+        let mustIncludeHit = hits.find(
+          (hit) => hit.video.youtube_id === mustIncludeYouTubeId
+        );
+        if (mustIncludeHit) {
+          hits = [mustIncludeHit, ...hits.filter((hit) => hit.id !== mustIncludeHit.id)];
+        }
+      }
+      if (limit) hits = hits.slice(0, limit); 
       return hits.sort((a, b) => a.lineIndex - b.lineIndex);
     },
 
@@ -228,12 +239,15 @@ export default ({ app }, inject) => {
       const seenYouTubeIds = [];
 
       for (const video of videos) {
+
         if (!video || seenYouTubeIds.includes(video.youtube_id)) continue;
+
         seenYouTubeIds.push(video.youtube_id);
 
         for (const [index, { line: rawLine }] of Object.entries(
           video.subs_l2 || {}
         )) {
+
           const line = he.decode(rawLine).replace(/\n/g, " ");
 
           if (
@@ -258,6 +272,7 @@ export default ({ app }, inject) => {
     },
     // Helper function to escape regular expressions
     escapeRegExp(text) {
+      if (!text) return text;
       return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
     },
 
@@ -284,7 +299,6 @@ export default ({ app }, inject) => {
 
     // Helper function to check term and exclusion conditions
     lineMeetsTermAndExclusionCriteria(line, exact, regex, punctuationsRegex, excludeRegex) {
-      const notExcluded = !excludeRegex || !excludeRegex.test(line);
       let matchesTerms = false
       if (exact) {
         let segs = line
@@ -299,36 +313,9 @@ export default ({ app }, inject) => {
       } else {
         if (regex.test(line)) matchesTerms = true;
       }
-      return matchesTerms && notExcluded;
-    },
-
-    // Helper function to update hit contexts
-    updateHitContexts(hit, termsRegex) {
-      const getLeftContext = (prevLine, currentLine, regex) =>
-        (prevLine ? prevLine.trim() : "") + currentLine.replace(regex, "");
-
-      const getRightContext = (currentLine, nextLine, regex) =>
-        currentLine.replace(regex, "").trim() +
-        (nextLine ? nextLine.trim() : "");
-
-      let prev = hit.video.subs_l2[hit.lineIndex - 1];
-      let next = hit.video.subs_l2[Number(hit.lineIndex) + 1];
-      let regex = new RegExp(
-        `(${termsRegex.join("|").replace(/[*]/g, ".+").replace(/[_]/g, ".")})`,
-        "gim"
-      );
-
-      if (!hit.leftContext) {
-        hit.leftContext = getLeftContext(prev ? prev.line : "", hit.line, regex)
-          .split("")
-          .reverse()
-          .join("")
-          .trim();
-      }
-
-      if (!hit.rightContext) {
-        hit.rightContext = getRightContext(hit.line, next && next.line, regex);
-      }
+      if (!matchesTerms) return false;
+      const notExcluded = !excludeRegex || !excludeRegex.test(line);
+      return notExcluded;
     },
 
     // Convert subtitles to simplified Chinese
@@ -378,15 +365,10 @@ export default ({ app }, inject) => {
         if (convertToSimplified) {
           this.convertSubLinesToSimplified(hit, sify);
         }
-
-        this.updateHitContexts(hit, termsRegex);
       }
-
-      hits = hits.sort((a, b) =>
-        a.rightContext.localeCompare(b.rightContext, "zh-CN")
-      );
 
       return hits;
     },
   });
+  
 };

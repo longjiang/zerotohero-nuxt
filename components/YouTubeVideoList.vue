@@ -9,7 +9,7 @@
       <client-only>
         <div
           v-if="$adminMode && showAdminToolsInAdminMode"
-          class="mb-4 youtube-video-list-admin-bar rounded p-3 w-100"
+          class="mb-4 bg-accent rounded p-3 w-100"
         >
           <div>
             <b-button
@@ -205,7 +205,7 @@
               showDate,
               showProgress,
               showLanguage: multilingual,
-              playlistId: playlistId ? playlistId : getAdHocPlaylistId(video.id), // If playlistId is not provided, use the ids of videos as an ad hoc playlist, so when the the user plays the videos, the next videos in the list are automatically queued up
+              playlistId: playlistId ? String(playlistId) : getAdHocPlaylistId(video.id), // If playlistId is not provided, use the ids of videos as an ad hoc playlist, so when the the user plays the videos, the next videos in the list are automatically queued up
               sort,
             }"
           >
@@ -710,18 +710,6 @@ export default {
 <style lang="scss" scoped>
 .youtube-video-list-admin-bar {
   background: rgb(205, 207, 212);
-}
-
-.skin-dark {
-  .youtube-video-list-admin-bar {
-    background-color: #88888822;
-  }
-}
-
-.skin-light {
-  .youtube-video-list-admin-bar {
-    background-color: #88888822;
-  }
 }
 
 .col-compact {

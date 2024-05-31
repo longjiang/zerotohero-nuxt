@@ -113,7 +113,7 @@
             <a
               target="_blank"
               :href="`https://app.sketchengine.eu/#wordsketch?corpname=${encodeURIComponent(
-                corpname
+                $l2Settings?.corpname
               )}&tab=basic&lemma=${term}&showresults=1`"
             >
               <img
@@ -122,9 +122,9 @@
                 class="ml-2 mr-2 logo-small"
               />
             </a>
-            <span v-if="corpname">
+            <span v-if="$l2Settings?.corpname">
               {{ $t("Corpus") }}:
-              <code>{{ corpname.replace("preloaded/", "") }}</code>
+              <code>{{ $l2Settings?.corpname.replace("preloaded/", "") }}</code>
             </span>
           </div>
         </div>
@@ -158,7 +158,6 @@ export default {
     return {
       colDesc: undefined,
       sketch: undefined,
-      corpname: undefined,
       collapsed: false,
       updating: false,
       params: {},
@@ -196,7 +195,11 @@ export default {
         });
     },
     term() {
-      return this.word ? this.word.head : this.text;
+      if (!this.word) return this.text;
+      // If this.$l2.code is 'zh', determine if the corpus is traditional or simplified
+      const corpname = this.$l2Settings.corpname
+      const isChineseTraditional = this.$l2.code === 'zh' && corpname && corpname.includes("trad");
+      return isChineseTraditional ? this.word.traditional : this.word.head;
     },
     colDescArray() {
       let colDescArray = [];
@@ -217,7 +220,6 @@ export default {
     if (!this.updating) {
       this.update();
     }
-    this.corpname = await SketchEngine.corpname(this.$l2);
   },
   watch: {
     word() {
@@ -264,6 +266,7 @@ export default {
       let sketch = await SketchEngine.wsketch({
         term: this.term,
         l2: this.$l2,
+        corpname: this.$l2Settings.corpname,
       });
 
       if (sketch && sketch.Gramrels && sketch.Gramrels.length > 0) {

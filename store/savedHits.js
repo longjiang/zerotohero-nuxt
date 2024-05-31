@@ -36,7 +36,6 @@ export const mutations = {
       videoId: hit.video.id,
       lineIndex: hit.lineIndex
     }
-    console.log('hitToRemove', hitToRemove)
     if (typeof localStorage !== 'undefined' && state.savedHits[l2]) {
       let savedHits = Object.assign({}, state.savedHits)
       savedHits[l2] = savedHits[l2].filter(

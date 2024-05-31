@@ -6,7 +6,6 @@
           <LikesComp
             class="mt-3"
             :l2="$l2"
-            :limit="50"
             :showLanguage="false"
           />
         </div>

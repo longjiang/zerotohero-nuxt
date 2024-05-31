@@ -83,6 +83,7 @@ export default {
     this.loadMore();
     if (!this.collapse) {
       this.loadMore();
+      this.loadMore();
     }
   },
   computed: {

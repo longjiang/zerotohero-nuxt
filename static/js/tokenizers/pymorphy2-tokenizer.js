@@ -5,7 +5,12 @@ class Pymorphy2Tokenizer extends BaseTokenizer {
     let tokenized = this.loadFromServerCache(text);
     if (!tokenized) {
       let url = `${PYTHON_SERVER}lemmatize-russian?text=${encodeURIComponent(text)}`;
-      tokenized = await proxy(url);
+      try {
+        const response = await axios.get(url, { timeout: 5000 });
+        tokenized = response.data;
+      } catch (error) {
+        console.error('There was a problem with the axios operation: ', error);
+      }
     }
     
     // Make sure that tokenized is an array of objects

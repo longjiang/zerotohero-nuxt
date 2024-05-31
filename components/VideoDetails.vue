@@ -63,7 +63,7 @@
         </span>
       </template>
       <span @click="retranslate" v-if="this.video.id" class="text-success cursor-pointer">
-        <template v-if="this.retranslating">{{ $t('Retranslating...') }}</template>
+        <b-spinner small v-if="retranslating" />
         <template v-else>{{ $t('Retranslate') }}</template>
       </span>
       <span v-if="video.channel && $adminMode">
@@ -166,25 +166,17 @@ export default {
           .join("\n");
     },
   },
+  created() {
+    this.$nuxt.$on("retranslating", (retranslating) => {
+      this.retranslating = retranslating;
+    });
+  },
+  destroyed() {
+    this.$nuxt.$off("retranslating");
+  },
   methods: {
-    async retranslate() {
-      this.retranslating = true
-      let response = await proxy(`${PYTHON_SERVER}/translate_video_and_save?l1=${this.$l1.code}&l2=${this.$l2.code}&video_id=${this.video.id}`)
-      let subs_l1 = this.$subs.parseSavedSubs(response)
-      this.$store.commit("shows/MODIFY_ITEM", {
-        item: this.video,
-        key: "subs_l1",
-        value: subs_l1,
-      });
-      this.$emit('updateVideo', this.video)
-      this.$toast.success(
-        this.$t('The subtitles have been retranslated.'),
-        {
-          position: "top-center",
-          duration: 5000,
-        }
-      );
-      this.retranslating = false
+    retranslate() {
+      this.$emit("retranslate", this.video)
     },
     formatK(number) {
       return formatK(number, 2, this.$l1.code);

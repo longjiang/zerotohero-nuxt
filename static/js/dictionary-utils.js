@@ -1,6 +1,8 @@
 // dictionary-utils.js
 
-const PYTHON_SERVER = "https://python.zerotohero.ca/";
+// const PYTHON_SERVER = "https://python.zerotohero.ca/";  // different domain same server
+const PYTHON_SERVER = "https://python.zerotohero.ca/";  // different domain same server
+// const PYTHON_SERVER = "http://127.0.0.1:5001/";
 
 const SERVER = "https://server.chinesezerotohero.com/";
 

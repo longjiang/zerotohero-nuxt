@@ -35,7 +35,7 @@
               'col-sm-5 col-md-4 pl-0': !portrait,
             }"
           >
-            <b-input-group
+            <!-- <b-input-group
               :class="`${portrait ? 'mt-3' : ''} mb-3`"
             >
               <b-form-input
@@ -47,78 +47,54 @@
                   })
                 "
               />
-            </b-input-group>
-            <div v-if="channels" class="tabs text-center channel-category-tabs">
-              <button
-                v-if="hasFeatured"
-                :key="`live-tv-cat-tab-featured`"
-                :class="{
-                  'btn mr-1': true,
-                  'btn-dark': !featured && $skin === 'dark',
-                  'btn-light': !featured && $skin === 'light',
-                  'btn-success': featured,
-                }"
-                @click="
-                  keyword = undefined;
-                  country = undefined;
-                  category = undefined;
-                  featured = true;
-                "
-              >
-                Featured
-              </button>
-              <button
-                :key="`live-tv-cat-tab-all`"
-                :class="{
-                  'btn mr-1': true,
-                  'btn-dark': $skin === 'dark',
-                  'btn-light': $skin === 'light',
-                  'btn-success': all,
-                }"
-                @click="
-                  keyword = undefined;
-                  country = undefined;
-                  category = undefined;
+            </b-input-group> -->
+            <div v-if="channels" class="d-flex">
+              <b-form-select
+                v-model="country"
+                @change="
+                  keyword = null;
                   featured = false;
                 "
+                class="form-control mr-1"
               >
-                {{ $t("All") }}
-              </button>
-              <button
-                v-for="c in countries"
-                :key="`live-tv-cat-tab-${c}`"
-                :class="{
-                  'btn mr-1': true,
-                  'btn-dark': $skin === 'dark',
-                  'btn-light': $skin === 'light',
-                  'btn-success': country === c,
-                }"
-                @click="
-                  keyword = undefined;
-                  category = undefined;
-                  country = c;
-                  featured = false;
+                <b-form-select-option :value="null">
+                  {{ $t("All Countries/Regions") }}
+                </b-form-select-option>
+                <b-form-select-option
+                  v-for="c in countries"
+                  :key="`live-tv-cat-tab-${c}`"
+                  :value="c"
+                >
+                  {{ $t(c ? countryNameFromCode(c) : 'Other countries') }}
+                </b-form-select-option>
+              </b-form-select>
+              <b-form-select
+                v-model="category"
+                @change="
+                  keyword = null;
+                  if (category === 'featured') {
+                    featured = true;
+                    category = null;
+                  } else {
+                    featured = false;
+                  }
                 "
+                class="form-control"
               >
-                {{ $t(c ? countryNameFromCode(c) : "Other countries") }}
-              </button>
-              <button
-                v-for="cat in categories"
-                :key="`live-tv-cat-tab-${cat}`"
-                :class="{
-                  'btn mr-1': true,
-                  'btn-dark': $skin === 'dark',
-                  'btn-light': $skin === 'light',
-                  'btn-success text-white': category === cat,
-                }"
-                @click="
-                  keyword = undefined;
-                  country = undefined;
-                  category = cat;
-                "
-              >
-                {{ cat }}
-              </button>
+                <b-form-select-option :value="null">
+                  {{ $t("All Categories") }}
+                </b-form-select-option>
+                <b-form-select-option :value="'featured'" v-if="hasFeatured">
+                  {{ $t('Featured') }}
+                </b-form-select-option>
+                <b-form-select-option
+                  v-for="cat in categories"
+                  :key="`live-tv-cat-tab-${cat}`"
+                  :value="cat"
+                >
+                  {{ $t(cat) }}
+                </b-form-select-option>
+              </b-form-select>
             </div>
             <div
               v-if="channels"
@@ -131,7 +107,8 @@
                 size="sm"
                 :class="{
                   'channel-button': true,
-                  'channel-button-current': currentChannel === channel,
+                  'bg-secondary': currentChannel === channel,
+                  'text-white': currentChannel === channel,
                 }"
                 v-for="channel in filteredChannels"
                 :key="`channel-button-${channel.url}`"
@@ -164,7 +141,7 @@
 
 <script>
 import axios from "axios";
-import { uniqueByValue, unique, escapeRegExp, SERVER } from "../../../lib/utils";
+import { unique, escapeRegExp, SERVER } from "../../../lib/utils";
 import Papa from "papaparse";
 import Vue from "vue";
 import CountryCodeLookup from "country-code-lookup";
@@ -178,8 +155,8 @@ export default {
     return {
       channels: undefined,
       currentChannel: undefined,
-      category: undefined,
-      country: undefined,
+      category: null,
+      country: null,
       featured: false,
       bannedChannels: {
         zh: [
@@ -225,19 +202,21 @@ export default {
       return this.channels.find((c) => c.featured);
     },
     filteredChannels() {
-      let channels = this.channels;
-      channels = channels.filter((c) => {
-        if (this.keyword && this.keyword !== "")
-          return (
-            c.name &&
-            c.name.match(new RegExp(escapeRegExp(this.keyword), "i"))
-          );
-        if (this.featured) return c.featured;
-        if (this.category) return c.category === this.category;
-        if (this.country) return c.countries.includes(this.country);
+      return this.channels.filter((c) => {
+        if (this.keyword && !c.name.match(new RegExp(escapeRegExp(this.keyword), "i"))) {
+          return false;
+        }
+        if (this.featured && !c.featured) {
+          return false;
+        }
+        if (this.category && c.category !== this.category) {
+          return false;
+        }
+        if (this.country && !c.countries.includes(this.country)) {
+          return false;
+        }
         return true;
       });
-      return channels;
     },
     all() {
       let all =
@@ -298,7 +277,11 @@ export default {
       );
       if (res && res.data) {
         let channels = Papa.parse(res.data, { header: true }).data;
-        channels = uniqueByValue(channels, "url");
+        // Make sure each channel has only one country
+        channels = channels.map((c) => {
+          if (c.countries) c.countries = c.countries.split("|")[0];
+          return c;
+        });
         channels = channels
           .filter((c) => c.url && c.url.startsWith("https://"))
           .filter((c) => c.category !== "XXX")
@@ -338,7 +321,6 @@ export default {
             } else this.setChannel(channels[0]);
           }
         }
-        if (this.hasFeatured) this.featured = true;
         this.loadCategories();
         this.loadCountries();
       }
@@ -370,7 +352,9 @@ export default {
       this.countries = countries;
     },
     countryNameFromCode(code) {
-      if (code === "cn") return "China (Mainland)";
+      if (code === "cd") return "Democratic Republic of the Congo";
+      if (code === "cn") return "China";
+      if (code === "int") return "International";
       let country = CountryCodeLookup.byInternet(code.toUpperCase());
       if (country) return country.country;
       else return code;
@@ -392,10 +376,23 @@ export default {
     width: 100%;
   }
 }
+
+.skin-dark {
+  .channel-button {
+    color: $text-color-on-dark
+  }
+}
+.skin-light {
+  .channel-button {
+    color: $text-color-on-light;
+  }
+}
+
 .channel-button {
-  &.channel-button-current {
-    background-color: $primary-color;
-    color: white;
+  background: none;
+  border: none;
+  &:hover {
+    background: rgba(121, 121, 121, 0.2);
   }
   img {
     height: 2rem;

@@ -889,6 +889,12 @@ button.bg-primary:focus {
   color: white;
 }
 
+.btn-primary.disabled, .btn-primary:disabled {
+  background-color: #888;
+  border-color: #888;
+  color: white;
+}
+
 .btn-gray {
   background: #efefef;
   color: #8e8e8e;
@@ -965,16 +971,35 @@ button.bg-primary:focus {
   border-radius: 0.3rem;
 }
 
+// Style dark mode text input (Bootstrap Vue)
+.skin-dark .form-control,
 .input-ghost-dark {
-  background: $bg-color-dark-1;
+  background: #333;
   border-radius: 0.25rem;
   border: 1px solid #cccccc44;
-  color: rgba(255, 255, 255, 0.75);
-  height: 40px;
-  box-shadow: 0px 5px 14px 3px rgb(119 119 119 / 42%);
+  color: #eee;
   &::placeholder {
     color: rgba(255, 255, 255, 0.392);
   }
+}
+
+// Style dark mode file upload (Bootstrap Vue)
+.skin-dark .custom-file-label {
+  background: #333;
+  border: 1px solid #cccccc44;
+  color: #999;
+  &::after {
+    background: #666;
+    border: 1px solid #cccccc44;
+    color: #eee;
+  }
+}
+
+// Style dark mode select drop down (Bootstrap Vue)
+.skin-dark .custom-select {
+  background: #333 url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='4' height='5' viewBox='0 0 4 5'%3e%3cpath fill='%23999' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") right 0.75rem center/8px 10px no-repeat;
+  border: 1px solid #cccccc44;
+  color: #eee;
 }
 
 .article {

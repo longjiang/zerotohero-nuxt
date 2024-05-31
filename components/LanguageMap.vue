@@ -113,7 +113,7 @@
         ref="phrase-picker-modal"
         centered
         hide-footer
-        title="Which one?"
+        :title="$tb('Which one?')"
         modal-class="safe-padding-top mt-4"
       >
         <div class="phrase-picker-modal">
@@ -121,10 +121,10 @@
             <router-link
               :to="
                 phrase.bookId === 'wiktionary'
-                  ? `/en/${phrase.l2.code}/phrase/search/${encodeURIComponent(
+                  ? `/${getL1Code(phrase.l2)}/${phrase.l2.code}/phrase/search/${encodeURIComponent(
                       phrase.phrase
                     )}/dict`
-                  : `/en/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
+                  : `/${getL1Code(phrase.l2)}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
                       phrase.id
                     }/${encodeURIComponent(phrase.phrase)}`
               "
@@ -134,8 +134,7 @@
               <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
               <Speak :text="phrase.phrase" :l2="phrase.l2" />
               <span class="similar-phrase-language">
-                <em>{{ phrase.en }}</em>
-                in {{ phrase.l2.name }}
+                “{{ $tb(phrase.en) }}” ({{ $tb(phrase.l2.name) }})
               </span>
             </router-link>
           </template>
@@ -272,10 +271,15 @@ export default {
     isDescendant() {
       return this.$languages.isDescendant(...arguments);
     },
+    getL1Code(l2) {
+      let l2Settings = this.$store.getters["settings/l2Settings"](l2.code);
+      if (l2Settings?.l1) {
+        return l2Settings.l1;
+      }
+      return this.$browserLanguage;
+    },
     to(l2) {
-      let l1Code = this.l1;
-      if (["hak", "nan", "lzh", "ltc", "och"].includes(l2.code))
-        l1Code = "zh";
+      let l1Code = this.getL1Code(l2);
       let name = "language-info";
       return {
         name,
@@ -423,8 +427,7 @@ export default {
 @import "../assets/scss/variables.scss";
 .language-map {
   width: 100%;
-  height: 40rem;
-  max-height: 100vh;
+  height: 100%;
   .language-marker {
     width: 10rem;
     margin-left: -5rem;

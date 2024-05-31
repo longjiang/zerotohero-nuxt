@@ -12,7 +12,7 @@
           :skin="skin"
         />
       </div>
-      <div class="ethnic-group-simplified">
+      <div class="ethnic-group-simplified text-center">
         <TokenizedText :text="group.simplified" />
       </div>
       <b-progress

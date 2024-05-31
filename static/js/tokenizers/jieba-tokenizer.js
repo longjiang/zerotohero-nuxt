@@ -7,11 +7,17 @@ class JiebaTokenizer extends BaseTokenizer {
       let url = `${PYTHON_SERVER}lemmatize-chinese?text=${encodeURIComponent(
         text
       )}`;
-      tokenized = await proxy(url);
+      try {
+        const response = await axios.get(url, { timeout: 5000 });
+        tokenized = response.data;
+      } catch (error) {
+        console.error('Jieba Tokenizer: There was a problem tokenizing from the server. ', error);
+      }
     }
 
     // check if the tokenized is an array and not a string
     if (!tokenized || typeof tokenized === 'string') {
+      tokenized = await this.tokenizeLocally(text);
       return this.tokenizeLocally(text);
     }
 

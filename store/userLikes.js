@@ -1,5 +1,5 @@
 import { logError } from '../lib/helper';
-import Vue from 'vue';
+import { PYTHON_SERVER } from '../lib/utils';
 
 export const state = () => ({
   userLikes: []
@@ -12,39 +12,35 @@ export const mutations = {
   ADD_LIKE(state, like) {
     state.userLikes.push(like);
   },
-  ADD_VIDEO_DETAILS(state, { userLike, video }) {
-    Vue.set( userLike, 'video', video )
-  },
   REMOVE_LIKE(state, likeId) {
     state.userLikes = state.userLikes.filter(like => like.id !== likeId);
   }
 }
 
 export const actions = {
-  async fetchUserLikes({ commit, rootState }) {
+  async fetchUserLikes({ commit, rootState }, l2) {
     if (!$nuxt.$auth.loggedIn) return;
 
     let user = rootState.auth.user;
     let token = $nuxt.$auth.strategy.token.get();
 
     if (user && user.id && token) {
-      let path = 'items/user_likes';
-      let response = await this.$directus.get(path, { 
-        'filter[owner][eq]': user.id,
-        'sort': '-id',
-        'limit': -1
-      });
+      let response = await axios.post(`${PYTHON_SERVER}user-likes`, { id: user.id, l2: l2.code });
 
       if (response?.status !== 200) {
         logError('Error loading likes from the server', response);
         return;
       } else {
-        commit('SET_USER_LIKES', response.data?.data || []);
+        let userLikes = response.data;
+        userLikes.forEach(item => {
+          item.created_on = new Date(item.created_on) // Date returned from the server is a Human-readable string
+        })
+        commit('SET_USER_LIKES', userLikes || []);
       }
     }
   },
-  async like({ commit, rootState }, { l2Id, videoId }) {
-    videoId = parseInt(videoId);
+  async like({ commit, rootState }, { l2Id, video }) {
+    const videoId = parseInt(video.id);
     if (!$nuxt.$auth.loggedIn) return
     const user = rootState.auth.user;
     const token = $nuxt.$auth.strategy.token.get();
@@ -76,7 +72,7 @@ export const actions = {
           return;
         }
 
-        commit('ADD_LIKE', {id, ...data});
+        commit('ADD_LIKE', { youtube_id: video.youtube_id, id: parseInt(video.id), l2: l2Id, tags: video.tags, title: video.title, created_on: new Date()});
         console.log(`User Likes: Liked video ${videoId} and L2 ${l2Id}`);
       }
     }
@@ -116,25 +112,13 @@ export const actions = {
     }
   },
 
-  async fetchVideoDetails({ commit, state }, { l2Id, videoId }) {
-    // Find the userLike item for this video in the state
-    let userLike = state.userLikes.find(like => like.video_id === videoId && like.l2 === l2Id)
-    if (userLike && ! userLike.video) {
-      let fields = "fields=id,l2,title,youtube_id,tv_show,talk,date,views,tags,category,locale,duration,made_for_kids,views,likes,comments";
-      let filter = `filter[id][eq]=${videoId}`
-      let query = `${fields}&${filter}`
-      
-      let videos = await this.$directus.getVideos({ l2Id, query })
-      commit('ADD_VIDEO_DETAILS', { userLike, video: videos[0] })
-    }
-  }
 }
 
 export const getters = {
   liked: (state) => ({ l2Id, videoId }) => {
     videoId = parseInt(videoId);
     return state.userLikes?.some(like => 
-      like.l2 === l2Id && like.video_id === videoId
+      like.l2 === l2Id && like.id === videoId
     );
   },
   likedVideos: (state) => (l2Id) => {

@@ -7,14 +7,6 @@
         {{ $tb('Pay & Upgrade to Pro Now') }}
       </span>
     </b-button>
-    <!-- <div class="mt-3">
-      <u
-        class="text-secondary"
-        @click="restoreiOSInAppPurchase"
-      >
-        Restore Purchase
-      </u>
-    </div> -->
   </div>
 </template>
 

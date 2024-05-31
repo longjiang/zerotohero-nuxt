@@ -190,8 +190,6 @@ export default {
     speed() {
       this.setSpeed(this.speed);
     },
-  },
-  watch: {
     'video.youtube_id'() {
       if (typeof video === 'undefined') return;
       if (video.youtube_id) this.loadYouTubeiFrame()

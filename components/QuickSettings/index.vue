@@ -98,13 +98,10 @@
           :label="{ ko: 'Show Hanja', vi: 'Show Han Tự' }[$l2.code]"
         >
           <span>
-            <span>{{ { ko: "자", vi: "Tự" }[$l2.code] }}</span
+            <span style="font-size: 0.9em">{{ { ko: "자", vi: "Tự" }[$l2.code] }}</span
             ><small style="font-size: 0.5em">字</small>
           </span>
         </Toggle>
-        <hr />
-      </div>
-      <div class="quick-settings-general">
         <Toggle
           v-model="localL2Settings.autoPronounce"
           @change="updateL2Settings"
@@ -112,21 +109,18 @@
         >
           <i class="fa fa-volume-up"></i>
         </Toggle>
-        <Toggle v-model="isDarkMode" @change="updateSettings" label="Dark Mode">
-          <i class="fa fa-moon"></i>
-        </Toggle>
-        <Toggle
-          v-model="localL2Settings.showQuiz"
-          @change="updateL2Settings"
-          label="Show Pop Quizzes"
-        >
-          <i class="fa-solid fa-rocket"></i>
-        </Toggle>
         <Toggle
           v-model="localL2Settings.quizMode"
+          @change="updateL2Settings"
           label="Saved Words as Blanks"
         >
           <i class="fa-solid fa-pen-line"></i>
+        </Toggle>
+        <hr />
+      </div>
+      <div class="quick-settings-general">
+        <Toggle v-model="isDarkMode" @change="updateSettings" label="Dark Mode">
+          <i class="fa fa-moon"></i>
         </Toggle>
         <Toggle
           v-if="userIsAdmin"

@@ -727,7 +727,8 @@ export default {
 
 .translation-line {
   font-size: 0.8em;
-  color: #444;
+  opacity: 0.8;
+  line-height: 2;
 }
 
 .speech-content-wide.with-translation {
@@ -740,6 +741,7 @@ export default {
     .translation-line {
       width: 38.2%;
       margin-left: 1rem;
+      display: block;
     }
   }
 }

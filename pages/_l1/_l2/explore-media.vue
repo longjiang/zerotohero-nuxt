@@ -21,6 +21,7 @@
       </div>
       <div class="row" v-else>
         <div class="col-sm-12">
+          <Sale class="my-4" />
           <VideoHero
             v-if="heroVideo"
             :video="heroVideo"
@@ -28,21 +29,21 @@
             playlistId="recommended"
             class="mb-3"
           />
-          <client-only>
+          <!-- <client-only>
             <NavPage
               :l1="$l1"
               :l2="$l2"
               class="youtube-browse-nav mb-5 row"
               :showOnly="['Discover', 'Music', 'TV Shows', 'Movies', 'YouTube', 'Live TV', 'News', 'Audiobooks', 'Kids', 'Categories', 'Open MP4...', 'Import from YouTube']"
             />
-          </client-only>
+          </client-only> -->
 
           <YouTubeVideoList
             :videos="recommendedVideos && recommendedVideos[$l2.code]"
             playlistId="recommended"
           />
 
-          <div v-observe-visibility="visibilityChanged" class="text-center" v-if="recommendedVideos && recommendedVideos[$l2.code] && recommendedVideos[$l2.code].length" >
+          <div v-observe-visibility="visibilityChanged" class="text-center" v-if="!this.recommendedVideosLoaded[this.$l2.code] || recommendedVideos && recommendedVideos[$l2.code] && recommendedVideos[$l2.code].length" >
             <Loader
               key="rec-loader"
               :sticky="true"
@@ -52,8 +53,8 @@
               class="text-white"
             />
           </div>
-          <div v-else>
-            <p>We have limited content for {{ $l2.name}}. Below are all the videos in our library: </p>
+          <div v-else-if="!recommendedVideos?.[$l2.code]?.length">
+            <p>{{ $t('We have limited content for {l2}. Below are all the videos in our library:', { l2: $l2.name }) }}</p>
             <MediaSearchResults  />  
           </div>
           
@@ -127,11 +128,6 @@ export default {
         this.progress[this.$l2.code].level
       )
         return this.progress[this.$l2.code].level;
-    },
-  },
-  watch: {
-    loading() {
-      if (this.loading === false) this.loadHeroVideo();
     },
   },
   methods: {

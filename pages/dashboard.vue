@@ -84,10 +84,12 @@
 <script>
 import { mapState } from "vuex";
 import { background } from "../lib/utils/background";
+import { DEFAULT_PAGE } from "../lib/utils";
 
 export default {
   data() {
     return {
+      DEFAULT_PAGE,
       linguisticsTools: [
         {
           name: "language-map",
@@ -195,7 +197,7 @@ export default {
     redirectLastL2() {
       if (this.$lastL1L2) {
         const { l1, l2 } = this.$lastL1L2;
-        this.$router.push({ name: "recommended-video", params: { l1, l2 } });
+        this.$router.push({ name: DEFAULT_PAGE, params: { l1, l2 } });
       }
     },
   },

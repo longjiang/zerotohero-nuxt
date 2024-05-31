@@ -7,67 +7,53 @@
     }"
   >
     <div class="text-center pb-2">
-      <span v-if="hits.length > 0">
+      <span class="skin-dark">
         <!-- Navigation Buttons -->
         <SimpleButton
+          v-if="hits.length > 0"
           :disabled="hitIndex === 0"
           iconClass="fas fa-step-backward"
           :title="$t('Previous Clip')"
           @click="goToPrevHit"
         />
         <SimpleButton
+          v-if="hits.length > 0"
           :disabled="hitIndex >= hits.length - 1"
           iconClass="fas fa-step-forward"
           :title="$t('Next Clip')"
           @click="goToNextHit"
         />
 
-        <!-- Filter and List -->
-        <SimpleButton
-          v-if="!showFilter"
-          iconClass="fas fa-filter"
-          :title="$t('Filter Clips by Keywords')"
-          @click="showFilter = true"
-        />
-        
+
         <!-- Show playlist modal, showing current Hit Index -->
         <SimpleButton
+          v-if="hits.length > 0"
           iconClass="fa-solid fa-list mr-1"
+          skin="dark"
           :title="$t('List All Clips')"
           @click="showPlaylistModal"
-          :text="$t('{num} of {total}', {num: hitIndex + 1, total: hits.length})"
+          :text="
+            $t('{num} of {total}', { num: hitIndex + 1, total: hits.length })
+          "
+        />
+        
+        <!-- Filter and List -->
+        <SimpleButton
+          v-if="!regex && hits.length > 0"
+          iconClass="fas fa-filter"
+          :title="$t('Filter Clips by Keywords')"
+          @click="showFilter = !showFilter"
         />
 
         <!-- Search Input -->
         <b-form-input
-          v-if="showFilter && (hits.length > 0 || regex)"
+          v-if="regex || showFilter"
           type="text"
           class="d-inline-block"
           size="sm"
           v-model="regex"
-          :placeholder="$t('Filter...')"
-          @blur="showFilter = false"
+          :placeholder="$t('Filter with regex...')"
         />
-
-        <!-- Open Full Video -->
-        <router-link
-          v-if="currentHit"
-          :to="{
-            name: 'l1-l2-video-view-type',
-            params: {
-              type: 'youtube',
-              youtube_id: currentHit.video.youtube_id,
-            },
-            query: {
-              t: currentHit.video.subs_l2[currentHit.lineIndex].starttime,
-            },
-          }"
-          class="btn btn-ghost-dark-no-bg btn-sm"
-          title="Open this video with full transcript"
-        >
-          <i class="fa-solid fa-arrows-maximize mr-1"></i>
-          {{ $t("Open Full") }}
-        </router-link>
       </span>
     </div>
 
@@ -84,7 +70,11 @@
           {{ $t("Select different search terms from the dropdown above.") }}
         </li>
         <li>
-          {{ $t("Select more video categories and shows from the dropdown above.") }}
+          {{
+            $t(
+              "Select more video categories and shows from the dropdown above."
+            )
+          }}
         </li>
         <li v-if="$store.state.settings.subsSearchLimit">
           {{
@@ -140,7 +130,27 @@
         @videoUnavailable="onVideoUnavailable"
       />
     </template>
-    <template v-if="!pro">
+    <!-- Open Full Video -->
+    <div class="text-center my-4">
+      <router-link
+        v-if="currentHit"
+        :to="{
+          name: 'video-view',
+          params: {
+            type: 'youtube',
+            youtube_id: currentHit.video.youtube_id,
+          },
+          query: {
+            t: currentHit.video.subs_l2[currentHit.lineIndex].starttime,
+          },
+        }"
+        class="btn btn-no-bg"
+        :title="$t('Open this video with full transcript')"
+      >
+        {{ $t("View Full Video") }} <i class="fa-solid fa-chevron-right ml-1"></i>
+      </router-link>
+    </div>
+    <div v-if="!pro">
       <YouNeedPro
         v-if="hitIndex > NON_PRO_MAX_SUBS_SEARCH_HITS - 1"
         skin="dark"
@@ -150,7 +160,7 @@
           })
         "
       />
-    </template>
+    </div>
     <PlaylistModal
       ref="playlist-modal"
       v-bind="{
@@ -162,6 +172,10 @@
         goToHit,
       }"
       @updateSort="(newSortValue) => (sort = newSortValue)"
+      @goToNextHit="goToNextHit"
+      @removeSavedHit="removeSavedHit"
+      @saveHit="saveHit"
+      @removeHit="removeSavedHit"
     />
   </div>
 </template>
@@ -238,17 +252,17 @@ export default {
       slideIndex: 0,
       sort: "views",
       tvShowFilter: this.tvShow ? [this.tvShow.id] : undefined,
-      talkFilter: undefined,
+      categoryFilter: undefined,
       NON_PRO_MAX_SUBS_SEARCH_HITS,
     };
   },
   computed: {
     // Determines if we can sort by views without too much of a performance hit
     canSortByViews() {
-      if (this.$l2.continua && !['zh'].includes(this.$l2.code)) return false; // continua script without ngram index, so this filters out japanse and thai among other languages
+      if (this.$l2.continua && !["zh"].includes(this.$l2.code)) return false; // continua script without ngram index, so this filters out japanse and thai among other languages
       return true; // It seems like performance is not too bad for most common words in most languages
       // return false; // Stilll figuring out how this can be done without SQL filesort which is too slow
-      // return !this.talkFilter && !this.tvShowFilter;
+      // return !this.categoryFilter && !this.tvShowFilter;
     },
     hitIndex() {
       let hits = this.hits;
@@ -297,9 +311,13 @@ export default {
           : this.regex;
       let hits = [];
       for (let hit of this.unfilteredHits) {
-        let regex = new RegExp(r, "gim");
-        if (regex.test(hit.video.subs_l2[hit.lineIndex].line)) {
-          hits.push(hit);
+        try {
+          let regex = new RegExp(r, "gim");
+          if (regex.test(hit.video.subs_l2[hit.lineIndex].line)) {
+            hits.push(hit);
+          }
+        } catch (error) {
+          console.error(`Failed to create or test regex: ${error}`);
         }
       }
       this.collectContext(hits);
@@ -307,6 +325,8 @@ export default {
     },
     currentHit: {
       async handler(newVal, oldVal) {
+        // If currentHit is not set, we don't do anything
+        if (!newVal) return;
         let unavailable = await YouTube.videoUnavailable(
           this.currentHit?.video?.youtube_id
         );
@@ -342,6 +362,10 @@ export default {
     ucFirst,
     highlightMultiple,
     iOS,
+    pauseYouTube() {
+      if (this.$refs[`youtube-${this.hitIndex}`])
+        this.$refs[`youtube-${this.hitIndex}`].pause();
+    },
     async loadL1SubsIfNeeded() {
       let video = this.currentHit?.video;
       if (!video) return;
@@ -373,18 +397,19 @@ export default {
       }
     },
     async onVideoUnavailable(youtube_id) {
+      if (!this.currentHit) return;
       let video = this.currentHit.video;
       if (youtube_id && youtube_id !== video.youtube_id) return; // Always make sure the unavailable video is indeed what the user is looking at
       // Go to next video
       await timeout(2000);
-      if (this.currentHit.video.youtube_id === youtube_id)
+      if (this.currentHit?.video.youtube_id === youtube_id)
         this.removeCurrentHitAndGoToNext();
     },
     loadSettings() {
       this.tvShowFilter = this.tvShow
         ? [this.tvShow.id]
         : this.$l2Settings.tvShowFilter;
-      this.talkFilter = this.$l2Settings.talkFilter;
+      this.categoryFilter = this.$l2Settings.categoryFilter;
     },
     showPlaylistModal() {
       this.$refs["playlist-modal"].show();
@@ -424,7 +449,7 @@ export default {
         sort: this.canSortByViews ? "-views" : undefined,
         limit,
         tvShowFilter: this.tvShowFilter,
-        talkFilter: this.talkFilter,
+        categoryFilter: this.categoryFilter,
         exact: this.exact,
         apostrophe: true,
         convertToSimplified: this.$l2.han,
@@ -432,7 +457,6 @@ export default {
       };
 
       let hits = await this.$subs.searchSubs(options);
-
       hits = this.updateSaved(hits);
       hits = this.setShows(hits);
       this.collectContext(hits);
@@ -465,10 +489,75 @@ export default {
     get(name) {
       return this[name];
     },
+    // Helper function to update hit contexts
+    updateHitContexts(hit, termsRegex) {
+      // Helper function to get the context of a hit
+      const getContext = (line1 = "", line2 = "", regex, direction) => {
+
+        if (direction === 'left') {
+          let replacedLine2 = line2;
+          let match = line2.match(regex);
+          if (match) {
+            let index = replacedLine2.indexOf(match[0]);
+            replacedLine2 = replacedLine2.substring(0, index);
+          }
+
+          return (line1.trim() + replacedLine2).trim();
+        } else if (direction === 'right') {
+          let replacedLine1 = line1;
+          let match = line1.match(regex);
+          if (match) {
+            let index = replacedLine1.indexOf(match[0]);
+            replacedLine1 = replacedLine1.substring(index + match[0].length);
+          }
+
+          return (replacedLine1 + line2.trim()).trim();
+        }
+        throw new Error(`Invalid direction: ${direction}`);
+      };
+
+      // Get the previous and next lines from the video subtitles
+      let prev = hit.video.subs_l2[hit.lineIndex - 1];
+      let next = hit.video.subs_l2[Number(hit.lineIndex) + 1];
+
+      // Create a regex from the terms to match
+      let regex = new RegExp(
+        `(${termsRegex.join("|").replace(/[*]/g, ".+").replace(/[_]/g, ".")})`,
+        "gim"
+      );
+
+      // If the hit doesn't have a left context, calculate it
+      if (!hit.leftContext) {
+        hit.leftContext = getContext(prev ? prev.line : "", hit.line, regex, 'left')
+          .split("")
+          .reverse()
+          .join("")
+          .trim();
+      }
+
+      // If the hit doesn't have a right context, calculate it
+      if (!hit.rightContext) {
+        hit.rightContext = getContext(hit.line, next ? next.line : "", regex, 'right').trim();
+      }
+    },
     collectContext(hits) {
       let contextLeft = [];
       let contextRight = [];
+      // First run updateHitContexts over all hits, and collect the left and right contexts
       for (let hit of hits) {
+        // Get the previous and next lines from the video subtitles
+        let prev = hit.lineIndex > 0 ? hit.video.subs_l2[hit.lineIndex - 1] : null;
+        let next = hit.lineIndex < hit.video.subs_l2.length - 1 ? hit.video.subs_l2[Number(hit.lineIndex) + 1] : null;
+
+        // Print the previous line, current line, and next line joined together
+        // console.log('Joined lines:', [prev ? prev.line : '', hit.line, next ? next.line : ''].join(' '));
+
+        this.updateHitContexts(hit, this.terms);
+
+        // Print the left and right context
+        // console.log('Left context:', hit.leftContext);
+        // console.log('Right context:', hit.rightContext);
+
         contextLeft.push(hit.leftContext);
         contextRight.push(hit.rightContext);
       }
@@ -542,13 +631,18 @@ export default {
       let { savedHits, matchedHits, remainingHits } =
         this.getSavedAndMatchedHits(hits);
       // Only one group
-      hitGroups = { zthSaved: savedHits, contextMatched: matchedHits, views: remainingHits.sort((a, b) => b.video.views - a.video.views) };
+      hitGroups = {
+        zthSaved: savedHits,
+        contextMatched: matchedHits,
+        views: remainingHits.sort((a, b) => b.video.views - a.video.views),
+      };
       return hitGroups;
     },
     groupContext(context, hits, leftOrRight) {
       let hitGroups = {};
       let { savedHits, matchedHits, remainingHits } =
         this.getSavedAndMatchedHits(hits);
+
       for (let c of context.map((s) => s.charAt(0))) {
         if (!hitGroups[c.charAt(0)]) hitGroups[c.charAt(0)] = {};
         hitGroups[c.charAt(0)] = remainingHits.filter((hit) =>
@@ -557,10 +651,12 @@ export default {
             : hit[`${leftOrRight}Context`] === ""
         );
       }
+
       hitGroups = Object.assign(
         { zthSaved: savedHits, contextMatched: matchedHits },
         hitGroups
       );
+
       for (let key in hitGroups) {
         hitGroups[key] = hitGroups[key].sort((a, b) =>
           a.leftContext.localeCompare(
@@ -569,6 +665,7 @@ export default {
           )
         );
       }
+
       return hitGroups;
     },
     sortGroupIndex(group, sort = true) {
@@ -613,6 +710,27 @@ export default {
       index = Math.max(index, 0);
       this.currentHit = this.hits[index];
       this.navigated = true;
+    },
+
+    saveHit(hit) {
+      this.$store.dispatch("savedHits/add", {
+        terms: this.terms,
+        hit: hit,
+        l2: this.$l2.code,
+      });
+      hit.saved = true;
+      this.collectContext(this.hits);
+      if (this.currentHit === hit) this.$emit("goToNextHit");
+    },
+    removeSavedHit(hit) {
+      this.$store.dispatch("savedHits/remove", {
+        terms: this.terms,
+        hit: hit,
+        l2: this.$l2.code,
+      });
+      hit.saved = false;
+      this.collectContext(this.hits);
+      if (this.currentHit === hit) this.$emit("goToNextHit");
     },
   },
 };

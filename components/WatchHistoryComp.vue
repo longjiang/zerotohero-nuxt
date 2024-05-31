@@ -48,14 +48,10 @@
               </div>
               <LazyYouTubeVideoCard
                 :skin="skin === 'dark' ? 'dark' : 'card'"
-                :video="Object.assign({}, item.video)"
+                :video="Object.assign({}, item)"
                 :l2="itemL2"
                 :showProgress="true"
                 :showAdmin="false"
-                v-observe-visibility="{
-                  callback: (isVisible, entry) =>
-                    onVisibilityChange(isVisible, entry, item),
-                }"
               />
               <button
                 class="
@@ -80,11 +76,23 @@
             {{ $t("You haven't studied any {l2} videos yet.", {l2: l2 ? $t(l2.name) : ""}) }}
             <br />
             <br />
-            <router-link :to="{ name: 'recommended-video' }" class="btn btn-success">
+            <router-link :to="{ name: DEFAULT_PAGE }" class="btn btn-success">
               <i class="fas fa-play mr-1"></i>
               {{ $t('Start Watching') }}
             </router-link>
           </p>
+        </div>
+      </div>
+      <!-- Add an infinite scroll component here -->
+      <div class="w-100 text-center py-5" v-if="!limit && itemsFiltered?.length > visible" v-observe-visibility="visibilityChanged">
+        <div class="col-sm-12">
+          <Loader
+              key="rec-loader"
+              :sticky="true"
+              :message="
+                $t('Loading...')
+              "
+            />
         </div>
       </div>
     </div>
@@ -94,7 +102,7 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
-import { groupArrayBy } from "../lib/utils";
+import { groupArrayBy, DEFAULT_PAGE } from "../lib/utils";
 
 export default {
   components: {
@@ -109,7 +117,7 @@ export default {
       default: "light",
     },
     limit: {
-      type: Number,
+      type: Number, // For showing on the profile page
     },
     showClear: {
       type: Boolean,
@@ -126,7 +134,9 @@ export default {
   },
   data() {
     return {
+      DEFAULT_PAGE,
       params: {},
+      visible: 50,
       query: {
         xs: {
           minWidth: 0,
@@ -156,31 +166,51 @@ export default {
   computed: {
     ...mapState("watchHistory", ["watchHistory"]),
     groups() {
-      let history = this.itemsFiltered
-        .sort((a, b) => b.date.localeCompare(a.date))
-        .map((i) => {
-          let d = String(i.date).split(" ");
-          let obj = Object.assign({}, i);
-          obj.date = d.length === 2 ? d[0] : 0;
-          return obj;
-        });
-      if (this.limit) history = history.slice(0, this.limit);
+      let history = this.itemsFiltered;
+
+      // Sort the array
+      history = history.sort((a, b) => b.date > a.date);
+
+      // Map through the history array
+      history = history.map((i) => {        
+        // Create a new object from the current item
+        let obj = Object.assign({}, i);
+        // Convert the date to a yyyy-mm-dd
+        obj.date = new Date(i.date).toISOString().slice(0, 10);
+        // Return the new object
+        return obj;
+      });
+
+      // If a limit is set, slice the history array to only include the first 'limit' items
+      if (this.limit) history = history.slice(0, this.limit); // For showing on the profile page
+      else history = history.slice(0, this.visible); // For showing on the history page with infinite scroll
+
+      // Group the history array by date
       let groups = groupArrayBy(history, "date");
+
+      // Map through the keys of the groups object
       groups = Object.keys(groups).map((date) => {
+        // Return an object with the date and the items for that date
         return {
           date,
           items: groups[date],
         };
       });
-      groups = groups.sort((a, b) => b.date.localeCompare(a.date));
-      return groups
+
+      // Sort the groups array by date in descending order
+      groups = groups.sort((a, b) => b.date > a.date);
+
+      // Return the groups array
+      return groups;
     },
     itemsFiltered() {
       if (typeof this.watchHistory !== "undefined") {
-        return this.watchHistory.filter((i) => {
-          if (this.l2 && i.l2 !== this.l2.id) return false;
-          return i.video_id
-        });
+        const filterFunction = (i) => {
+          if (this.l2 && Number(i.l2) !== Number(this.l2.id)) return false;
+          return i.id // Only those with ids are returned
+        }
+        const itemsFiltered = this.watchHistory.filter(filterFunction);
+        return itemsFiltered;
       } else {
         return []
       }
@@ -192,13 +222,8 @@ export default {
     },
   },
   methods: {
-    onVisibilityChange(isVisible, entry, item) {
-      if (isVisible) {
-        this.$store.dispatch("watchHistory/fetchVideoDetails", {
-          l2Id: this.$l2.id,
-          videoId: item.video_id,
-        });
-      }
+    visibilityChanged() {
+      this.visible = this.visible + 50;
     },
     emitHasWatchHistory() {
       if (this.itemsFiltered && this.itemsFiltered.length > 0)

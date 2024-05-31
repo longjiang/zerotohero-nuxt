@@ -14,6 +14,7 @@
           single: singleColumn,
           'definitions-many':
             alwaysShowAsList || (augmentedDefinitions.length > 3 && !neverShowAsList),
+          'show-as-numbered-list': showAsNumberedList,
         }"
       >
         <li
@@ -68,15 +69,34 @@ export default {
   props: {
     entry: Object,
     definitions: Array,
-    singleColumn: false,
-    showPOS: true,
-    alwaysShowAsList: false,
-    neverShowAsList: false,
+    singleColumn: {
+      type: Boolean,
+      default: false,
+    },
+    showPOS: {
+      type: Boolean,
+      default: true,
+    },
+    alwaysShowAsList: {
+      type: Boolean,
+      default: false,
+    },
+    neverShowAsList: {
+      type: Boolean,
+      default: false,
+    },
+    showAsNumberedList: {
+      type: Boolean,
+      default: true,
+    },
     nodef: {
       type: String,
       default: "",
     },
-    translated: false,
+    translated: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -143,7 +163,7 @@ export default {
           stringAfter = m[m.length - 1];
         }
       } else {
-        if (this.$l2.code !== "en") {
+        if (this.$l2?.code !== "en") {
           let m = text.match(/(.* of )([^\s]+)(.*)/);
           if (m) {
             stringBefore = m[1];
@@ -178,20 +198,23 @@ export default {
     display: inline;
   }
   &.definitions-many {
-    list-style: decimal;
     display: block;
     .definition-list-item {
-      text-align: left;
       display: list-item;
       .definition-list-item-separator {
         display: none;
+      }
+    }
+    &.show-as-numbered-list {
+      list-style: decimal;
+      .definition-list-item {
+        text-align: left;
       }
     }
   }
 }
 @media (min-width: 768px) {
   .definitions-many {
-    text-align: left;
     display: inline-block;
     &:not(.single) {
       columns: 2;

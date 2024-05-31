@@ -22,23 +22,25 @@
     <div class="container pb-5">
       <SocialHead :title="title" :description="description" :image="image" />
       <client-only>
+        <PhrasebookComp
+          v-if="phrasebook"
+          :phrasebook="phrasebook"
+          :initId="initId"
+          class="mt-4"
+        />
         <div
           class="text-center mb-4"
           v-if="phrasebook && phrasebook.phrases.length > 0"
         >
           <b-button
-            variant="danger"
+            variant="no-bg"
+            class="text-danger my-5"
             @click="$bvModal.show('confirm-remove-all')"
           >
             <i class="fa fa-trash mr-1"></i>
             {{ $t("Remove All Saved Phrases") }}
           </b-button>
         </div>
-        <PhrasebookComp
-          v-if="phrasebook"
-          :phrasebook="phrasebook"
-          :initId="initId"
-        />
       </client-only>
     </div>
   </div>
@@ -90,7 +92,9 @@ export default {
   },
   async mounted() {
     let phrasebook = {
-      title: "Saved {l2} Phrases",
+      title: this.$t("Saved {l2} Phrases", {
+        l2: this.$t(this.$l2.name),
+      }),
       phrases: this.savedPhrases[this.$l2.code] || [],
       l2: this.$l2,
       id: "saved",

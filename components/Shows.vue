@@ -255,7 +255,7 @@ export default {
   data() {
     return {
       heroVideo: undefined,
-      sort: "recommended", // or 'views', 'title'
+      sort: "avg_views", // or 'title', 'created_on'
       type: {
         "tv-shows": "tvShows",
         talks: "talks",
@@ -273,7 +273,7 @@ export default {
         audiobooks: "Audiobooks",
       },
       sortOptions: [
-        { text: "Sort by Recommended", value: "recommended" },
+        // { text: "Sort by Recommended", value: "recommended" }, // Turn off for now because recommended is not accurate (shows no one watches tend to be recommended)
         { text: "Sort by Views", value: "avg_views" },
         { text: "Sort by Title", value: "title" },
         { text: "Sort by Date Added", value: "created_on" },

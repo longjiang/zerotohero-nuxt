@@ -1,5 +1,6 @@
 import { logError } from "../lib/utils";
 import Vue from "vue";
+import SketchEngine from "@/lib/sketch-engine";
 
 export const romanizationOffByDefault = [
   "ko",
@@ -37,7 +38,7 @@ export const defaultL2Settings = {
   showQuiz: true,
   showByeonggi: true,
   tvShowFilter: null,
-  talkFilter: null,
+  categoryFilter: null,
   autoPronounce: true, // Whether or not to play the audio automatically when opening a WordBlock popup
   quizMode: false,
   disableAnnotation: false,
@@ -210,7 +211,7 @@ export const mutations = {
   RESET_SHOW_FILTERS(state) {
     if (!state.l2Settings[state.l2.code]) return;
     state.l2Settings[state.l2.code].tvShowFilter = null;
-    state.l2Settings[state.l2.code].talkFilter = null;
+    state.l2Settings[state.l2.code].categoryFilter = null;
   },
 };
 
@@ -230,6 +231,18 @@ export const actions = {
   },
   setDictionaryName({ dispatch }, dictionaryName) {
     dispatch("setTransientSettings", { dictionaryName });
+  },
+  async setDefaultCorpname({ state, dispatch }, { l2 }) {
+    // Check if the user has already set a corpus
+    if (state.l2Settings[l2.code].corpname) {
+      console.log("📚 Corpus set to", state.l2Settings[l2.code].corpname);
+      return;
+    }
+    let corpname = await SketchEngine.corpname(l2)
+    console.log("📚 Initializing default corpus to", corpname);
+    if (corpname) {
+      dispatch("setL2Settings", { corpname });
+    }
   },
   setUseMachineTranslatedDictionary({ dispatch }, useMachineTranslatedDictionary) {
     dispatch("setTransientSettings", { useMachineTranslatedDictionary });

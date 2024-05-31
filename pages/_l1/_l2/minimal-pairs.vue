@@ -3,8 +3,12 @@
     <div class="container pt-3 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <h3 class="mb-5 text-center">{{ $t('{l2} Minimal Pairs', {l2: $t($l2.name)})}}</h3>
-          <p class="text-center mb-3">{{ $t('Enter two distinct phonetic segments:') }}</p>
+          <h3 class="mb-5 text-center">
+            {{ $t("{l2} Minimal Pairs", { l2: $t($l2.name) }) }}
+          </h3>
+          <p class="text-center mb-3">
+            {{ $t("Enter two distinct phonetic segments:") }}
+          </p>
           <div style="max-width: 20rem; margin: 0 auto">
             <b-input-group>
               <b-form-input
@@ -22,10 +26,10 @@
               <b-input-group-append>
                 <b-button
                   variant="primary"
-                  @click="findMinimalPairs"
+                  @click="findAndSetMinimalPairs"
                   :disabled="!(a && b)"
                 >
-                  {{ $t('Find Minimal Pairs')}}
+                  {{ $t("Find Minimal Pairs") }}
                 </b-button>
               </b-input-group-append>
             </b-input-group>
@@ -34,7 +38,7 @@
             v-if="defaults[$l2.code] && defaults[$l2.code].length > 1"
             class="mt-4 text-center"
           >
-            <p class="mb-3">{{ $t('Or use a preset:') }}</p>
+            <p class="mb-3">{{ $t("Or use a preset:") }}</p>
             <b-form-select
               v-model="presetSelect"
               :options="presetOptions"
@@ -48,51 +52,65 @@
           <div class="text-center mt-5 mb-5" v-if="crunching">
             <Loader :sticky="true" message="Looking for minimal pairs..." />
           </div>
-          <p v-if="minimalPairs && minimalPairs.length > 0" class="text-center">
-            <strong>{{ $t('{num} pairs found:', {num: minimalPairs.length}) }}</strong>
-          </p>
-          <table
-            class="table table-responsive mt-3"
-            v-if="minimalPairs && minimalPairs.length > 0"
-          >
-            <tbody>
-              <tr
-                v-for="(row, index) in filteredRows"
-                :key="`minimal-pairs-row-${index}`"
-                style="position: relative"
-              >
-                <td>
-                  <router-link
-                    :to="{
-                      name: 'compare',
-                      params: {
-                        method: $store.state.settings.dictionaryName,
-                        args: `${row.a.w.id},${row.b.w.id}`,
-                      },
-                    }"
-                    class="btn btn-medium btn-success mt-2"
-                    style="font-size: 0.7em; width: 1.5rem"
-                  >
-                    <i class="fa fa-play" />
-                  </router-link>
-                </td>
-                <td style="width: 50%">
-                  <WordList :maxDefinitions="1" :words="[row.a.w]" />
-                </td>
-                <td style="width: 50%">
-                  <WordList :maxDefinitions="1" :words="[row.b.w]" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div v-observe-visibility="infiniteScroll">
-            <div
-              class="mt-3 mb-3 text-center"
-              v-if="minimalPairs && numRowsVisible < minimalPairs.length"
+          <template v-else>
+            <p
+              v-if="minimalPairs && minimalPairs.length > 0"
+              class="text-center"
             >
-              <Loader :sticky="true" message="Loading . . ." />
+              <strong>{{
+                $t("{num} pairs found:", { num: minimalPairs.length })
+              }}</strong>
+            </p>
+            <table
+              class="table table-responsive mt-3"
+              v-if="minimalPairs && minimalPairs.length > 0"
+            >
+              <tbody>
+                <tr
+                  v-for="row in filteredRows"
+                  :key="`minimal-pairs-row-${row.a.w.id}-${row.b.w.id}`"
+                  style="position: relative"
+                >
+                  <td style="width: 50%" class="pl-0">
+                    <WordList
+                      :maxDefinitions="1"
+                      :words="[row.a.w]"
+                      :star="false"
+                    />
+                  </td>
+                  <td class="pl-0 pr-0">
+                    <router-link
+                      :to="{
+                        name: 'compare',
+                        params: {
+                          method: $store.state.settings.dictionaryName,
+                          args: `${row.a.w.id},${row.b.w.id}`,
+                        },
+                      }"
+                      class="btn btn-medium play-button btn-primary"
+                    >
+                      <i class="fa fa-adjust" />
+                    </router-link>
+                  </td>
+                  <td style="width: 50%" class="pr-0">
+                    <WordList
+                      :maxDefinitions="1"
+                      :words="[row.b.w]"
+                      :star="false"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div v-observe-visibility="infiniteScroll">
+              <div
+                class="mt-3 mb-3 text-center"
+                v-if="minimalPairs && numRowsVisible < minimalPairs.length"
+              >
+                <Loader :sticky="true" message="Loading . . ." />
+              </div>
             </div>
-          </div>
+          </template>
         </div>
       </div>
     </div>
@@ -106,18 +124,31 @@ export default {
       a: undefined,
       b: undefined,
       defaults: {
-        ko: [["사", "싸"]],
+        ko: [
+          ["사", "싸"],
+          ["바", "파"], // ba vs. pa
+          ["고", "코"], // go vs. ko
+          ["또", "도"], // tto vs. do
+          ["말", "몰"], // mal vs. mol
+          ["집", "찍"], // jip vs. jjik
+          ["벗", "번"], // beot vs. beon
+          ["국", "궁"], // guk vs. gung
+          ["달", "탈"], // dal vs. tal
+          ["빛", "핏"], // bit vs. pit
+        ],
         zh: [
           ["uāng", "uáng"],
           ["uāng", "uǎng"],
           ["uāng", "uàng"],
           ["ā", "a"],
-          ["uáng", "uǎng"],
-          ["uáng", "uàng"],
+          ["ā", "á"],
           ["á", "a"],
-          ["uǎng", "uàng"],
           ["ǎ", "a"],
           ["à", "a"],
+          ["uáng", "uǎng"],
+          ["uáng", "uàng"],
+          ["uǎng", "uàng"],
+          ["ēn", "ěn"],
         ],
         vi: [
           ["əŋ˧˧", "əŋ˨˩"],
@@ -138,21 +169,44 @@ export default {
           ["きょ", "ぎょ"],
           ["く", "ぐ"],
           ["とう", "どう"],
+          ["し", "じ"], // shi vs ji
+          ["す", "ず"], // su vs zu
         ],
-        ru: [["ш", "щ"]],
+        ru: [
+          ["ш", "щ"],
+          ["б", "п"], // b vs p
+          ["г", "к"], // g vs k
+        ],
         en: [
           ["iːt", "ɪt"],
           ["æt", "aɪt"],
-          ["fr", "θr"],
-          ["tr", "θr"],
+          ["fɹ", "θɹ"],
+          ["tɹ", "θɹ"],
           ["sɪ", "θɪ"],
           ["sæ", "θæ"],
           ["i", "ji"],
         ],
-        fr: [["ɑ̃", "œ̃"]],
-        es: [["ɾo", "ro"]],
-        de: [["ʏ", "yː"]],
+        fr: [
+          ["y", "u"], // Close front rounded vowel vs. close back rounded vowel
+          ["ø", "œ"], // Close-mid front rounded vowel vs. open-mid front rounded vowel
+          ["ɑ", "a"], // Open back unrounded vowel vs. open front unrounded vowel
+          ["ɛ̃", "ɑ̃"], // Nasal open-mid front unrounded vowel vs. nasal open back unrounded vowel
+          ["ɔ̃", "ɑ̃"], // Nasal open-mid back rounded vowel vs. nasal open back unrounded vowel
+          ["ʃ", "ʒ"], // Voiceless postalveolar fricative vs. voiced postalveolar fricative
+          ["s", "z"], // Voiceless alveolar fricative vs. voiced alveolar fricative
+          ["p", "b"], // Voiceless bilabial plosive vs. voiced bilabial plosive
+        ],
+        es: [
+          ["ɾ", "r"], // Single 'r' is a tap [ɾ], double 'rr' is a trill [r].
+          ["a", "o"], // Vowel distinction.
+          ["e", "i"], // Vowel distinction.
+        ],
+        de: [
+          ["ʏ", "yː"],
+          ["ɔ", "o"], // o vs closed o
+        ],
       },
+
       crunching: false,
       minimalPairs: undefined,
       numRowsVisible: 10,
@@ -165,7 +219,7 @@ export default {
       this.a = this.defaults[this.$l2.code][0][0];
       this.b = this.defaults[this.$l2.code][0][1];
     }
-    if (this.a && this.b) this.findMinimalPairs();
+    if (this.a && this.b) this.findAndSetMinimalPairs();
   },
   computed: {
     filteredRows() {
@@ -191,7 +245,7 @@ export default {
       let selected = this.defaults[this.$l2.code][this.presetSelect];
       this.a = selected[0];
       this.b = selected[1];
-      this.findMinimalPairs();
+      this.findAndSetMinimalPairs();
     },
   },
   methods: {
@@ -200,60 +254,29 @@ export default {
         this.numRowsVisible = this.numRowsVisible + this.perPage;
       }
     },
-    async findMinimalPairs() {
-      function countOccurrences(string, subString) {
-        const regex = new RegExp(escapeRegExp(subString), "g");
-        return (string.match(regex) || []).length;
-      }
-
-      function escapeRegExp(string) {
-        return string.replace(/[.*+\-?^${}()|[\]\\]/g, "\\$&");
-      }
-      let dictionaryName = this.$store.state.settings.dictionaryName;
-      let property = "pronunciation";
-      if (["ko", "ru", "it"].includes(this.$l2.code)) property = "head";
-      if (this.$l2.code === "ja") property = "kana";
+    getPronunciationKey() {
+      let pronunciationKey = "pronunciation";
+      if (["ko", "ru", "it"].includes(this.$l2.code)) pronunciationKey = "head";
+      if (this.$l2.code === "ja") pronunciationKey = "kana";
+      return pronunciationKey;
+    },
+    async findAndSetMinimalPairs() {
       this.crunching = true;
-      let dictionary = await this.$getDictionary();
-      let words = await dictionary.getWords();
-      let pronunciations = words
-        .filter((w) => w[property])
-        .map((w) => {
-          let pronunciations =
-            dictionaryName === "wiktionary"
-              ? w[property].split(",")
-              : [w[property]];
-          let chosenPornunciation =
-            pronunciations[
-              this.$l2.code === "vi" ? pronunciations.length - 1 : 0
-            ].trim();
-          return { w, chosenPornunciation };
-        });
-      let as = pronunciations.filter(
-        (p) => countOccurrences(p.chosenPornunciation, this.a) === 1
+      const dictionary = await this.$getDictionary();
+      this.minimalPairs = await dictionary.findMinimalPairsByPhoneme(
+        this.a,
+        this.b,
+        this.getPronunciationKey()
       );
-      let bs = pronunciations.filter(
-        (p) => countOccurrences(p.chosenPornunciation, this.b) === 1
-      );
-      let minimalPairs = [];
-      for (let a of as) {
-        const aReplaced = a.chosenPornunciation;
-        for (let b of bs) {
-          const bReplaced = b.chosenPornunciation.replace(this.b, this.a);
-          if (aReplaced === bReplaced) {
-            minimalPairs.push({ a, b });
-          }
-        }
-      }
       this.crunching = false;
-      minimalPairs = minimalPairs.sort(
-        (a, b) =>
-          b.a.chosenPornunciation.length - a.a.chosenPornunciation.length
-      );
-      return (this.minimalPairs = minimalPairs);
     },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.play-button {
+  font-size: 0.7em;
+  width: 2rem;
+}
+</style>

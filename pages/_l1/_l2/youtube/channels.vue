@@ -1,6 +1,6 @@
 <template>
   <div :class="`youtube-browse skin-${$skin}`">
-    <div class="youtube-browse container pb-5">
+    <div class="youtube-browse container pt-5 pb-5">
       <SocialHead
         :title="`Study ${$l2.name} videos with subs | Language Player`"
         :description="`Watch ${$l2.name} videos and study the ${
@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
-import { languageLevels, LANGS_WITH_LEVELS, maxDifficultyByLevel, minDifficultyByLevel } from "../../../../lib/utils";
+import { mapState } from "vuex";
+
 
 export default {
   props: {

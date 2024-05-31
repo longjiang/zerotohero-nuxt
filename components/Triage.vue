@@ -17,12 +17,18 @@
           <b-form-select :options="l1Options" v-model="l1"></b-form-select>
         </div>
       </div>
-      <div class="row mt-4" v-if="l1 && l2">
+      <div class="mt-3 text-center">
+        <router-link to="/language-map">
+          <i class="fa-solid fa-earth-asia mr-2"></i>
+          {{ $tb("See more languages on a map") }}
+        </router-link>
+      </div>
+      <div class="row mt-3" v-if="l1 && l2">
         <div class="col-sm-12 text-center">
           <router-link
             class="btn btn-success pl-5 pr-5"
             :to="{
-              name: 'l1-l2-recommended-video',
+              name: DEFAULT_PAGE,
               params: { l1: l1.code, l2: l2.code === 'cmn' ? 'zh' : l2.code },
             }"
           >
@@ -31,26 +37,20 @@
           </router-link>
         </div>
       </div>
-      <div class="mt-3 text-right">
-        <router-link to="/language-map">
-          <i class="fa-solid fa-earth-asia mr-2"></i>
-          {{ $tb("See more languages on a map") }}
-          <i class="fa-solid fa-chevron-right ml-2"></i>
-        </router-link>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { country } from "../lib/utils/countries";
-import { LANGS_WITH_CONTENT } from '../lib/utils';
+import { LANGS_WITH_CONTENT, DEFAULT_PAGE } from '../lib/utils';
 
 export default {
   data() {
     return {
       l1: undefined, // Object
       l2: undefined, // Object
+      DEFAULT_PAGE,
       popularCodes:
         "en zh ko it es fr de ja pt ru".split(
           " "
@@ -84,14 +84,12 @@ export default {
       return popularLanguages || [];
     },
     l2Options() {
-      let allLanguages = this.allLanguages;
+      let allLanguages = this.allLanguages.sort((a, b) => this.$tb(a.name).localeCompare(this.$tb(b.name), this.$browserLanguage));
       let popularOptions = this.popularLanguages
         .map(this.languageOption)
-        .sort((a, b) => a.code - b.code)
       let allOptions = allLanguages
         .map(this.languageOption)
-        .sort((a, b) => a.code - b.code)
-      
+
       if (this.$l2) this.l2 = this.$l2
       return [
         ...popularOptions,
@@ -111,8 +109,8 @@ export default {
 
       // Map the supported L1 languages to an array of objects with 'value' and 'text' properties
 
-      let popularOptions = popularL1s.map(this.languageOption).sort((a, b) => a.code - b.code)
-      let allOptions = supportedL1s.map(this.languageOption).sort((a, b) => a.code - b.code)
+      let popularOptions = popularL1s.map(this.languageOption)
+      let allOptions = supportedL1s.sort((a, b) => this.$tb(a.name).localeCompare(this.$tb(b.name), this.$browserLanguage)).map(this.languageOption)
 
       if (popularOptions.length) this.l1 = popularOptions[0].value;
 

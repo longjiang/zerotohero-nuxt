@@ -12,7 +12,6 @@
         v-if="showQuiz"
         ref="reviewItemCollector"
         @showQuiz="pause"
-        @hideQuiz="play"
         @goToLine="goToLine($event)"
         :active="paused"
       />
@@ -97,7 +96,7 @@
           <template v-if="!pro">
             <YouNeedPro
               v-if="showYouNeedPro"
-              class="transcript-you-need-pro pl-5 pr-5 rounded"
+              class="transcript-you-need-pro rounded"
             />
           </template>
         </client-only>

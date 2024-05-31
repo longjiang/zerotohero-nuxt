@@ -4,109 +4,137 @@
     <div class="container main pt-5 mb-5">
       <div class="row">
         <div class="col-sm-12">
-          <h2 class="text-center mb-3">Lookup phrases not in the dictionary</h2>
-          <p class="text-center mb-5">
-            and see how they are used in real contexts.
-          </p>
           <div class="search-compare-wrapper">
-            <SearchCompare
+            <LazySearchCompare
               placeholder="Enter a word or phrase"
-              type="generic"
+              type="dictionary"
               :term="term"
-              :compare="true"
               :compareTerm="compareTerm"
               :random="false"
+              :compare="true"
               :key="`${term}-${compareTerm}-search`"
               style="width: 100%"
               :urlFunc="
-                (text) =>
-                  `/${$l1.code}/${$l2.code}/phrase/${
-                    compareTerm ? 'compare' : 'search'
-                  }/${text}/${compareTerm ? compareTerm : ''}`
-              "
-              :compareUrlFunc="
-                (text) =>
-                  `/${$l1.code}/${$l2.code}/phrase/compare/${term}/${text}`
+                (text) => `/${$l1.code}/${$l2.code}/phrase/search/${text}`
               "
             />
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <Widget
-            class="mt-5"
-            id="search-subs"
-            v-if="term && compareTerm"
-            :key="`compare-subs-search-${term}-${compareTerm}`"
-          >
-            <template #title>“{{ term }}” in TV Shows</template>
-            <template #body>
-              <LazyCompareSearchSubs
-                ref="searchSubs"
-                level="outside"
-                :key="`${term}-${compareTerm}-compare-search-subs`"
-                :termsA="[term]"
-                :termsB="[compareTerm]"
-              />
-            </template>
-          </Widget>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <WebImages
-            v-if="term"
-            :text="term"
-            limit="10"
-            class="mt-5"
-            :key="`${term}-images`"
-            :preloaded="aImages"
-          />
-        </div>
-        <div class="col-md-6">
-          <WebImages
-            v-if="compareTerm"
-            :text="compareTerm"
-            limit="10"
-            class="mt-5"
-            :key="`${compareTerm}-images`"
-            :preloaded="bImages"
-          />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-12">
-          <div class="focus">
-            <CompareCollocations
-              v-if="term && compareTerm"
-              :term="term"
-              :compareTerm="compareTerm"
-              class="mt-5"
-              :key="`${term}-${compareTerm}-col`"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <Concordance
-            v-if="term"
-            :text="term"
-            class="mt-5"
-            :key="`${term}-concordance`"
-          />
-        </div>
-        <div class="col-md-6">
-          <Concordance
-            v-if="compareTerm"
-            :text="compareTerm"
-            class="mt-5"
-            :key="`${compareTerm}-concordance`"
-          />
         </div>
       </div>
     </div>
+    <TabbedSections v-bind="{ sections }" class="dictionary-main">
+      <template #subtitles>
+        <Widget
+          v-if="term && compareTerm"
+          :key="`${term}-subs`"
+          skin="dark"
+          :withPadding="false"
+          id="compare-search-subs"
+        >
+          <template #title>
+            “{{ term }}” and “{{ compareTerm }}” in
+            <LazyShowFilter @showFilter="reloadSearchSubs" />
+          </template>
+          <template #body>
+            <LazyCompareSearchSubs
+              v-if="renderSearchSubs"
+              skin="dark"
+              ref="searchSubs"
+              level="outside"
+              :key="`${term}-${compareTerm}-compare-search-subs`"
+              :termsA="[term]"
+              :termsB="[compareTerm]"
+            />
+          </template>
+        </Widget>
+        <div class="container">
+          <div class="row mt-5">
+            <div class="col-sm-6">
+              <LazyWebImages
+                v-if="term"
+                :text="term"
+                limit="10"
+                :key="`${term}-images`"
+              />
+            </div>
+            <div class="col-sm-6">
+              <LazyWebImages
+                v-if="compareTerm"
+                :text="compareTerm"
+                limit="10"
+                :key="`${compareTerm}-images`"
+              />
+            </div>
+          </div>
+        </div>
+      </template>
+
+      <template #chatGPT>
+        <Widget>
+          <template #title>
+            {{ $t("Let ChatGPT explain “{text}”", { text: `${term} vs ${compareTerm}` }) }}
+          </template>
+          <template #body>
+            <ChatGPT
+              :maxTokens="50"
+              :initialMessages="[
+                $t(
+                  'What\'s the difference between these {l2} expressions: “{a}”{ap} and “{b}”{bp}?',
+                  {
+                    l2: $t($l2.name),
+                    l1: $t($l1.name),
+                    a: term,
+                    b: compareTerm,
+                    ap: '',
+                    bp: '',
+                  }
+                ),
+              ]"
+            />
+          </template>
+        </Widget>
+      </template>
+      <template #collocations>
+        <CompareCollocations
+          v-if="term && compareTerm"
+          :term="term"
+          :compareTerm="compareTerm"
+          :key="`${term}-${compareTerm}-col`"
+        />
+      </template>
+      <template #examples>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6">
+              <Concordance
+                v-if="term"
+                :text="term"
+                :key="`${term}-concordance`"
+              />
+            </div>
+            <div class="col-md-6">
+              <Concordance
+                v-if="compareTerm"
+                :text="compareTerm"
+                :key="`${compareTerm}-concordance`"
+              />
+            </div>
+          </div>
+        </div>
+      </template>
+      <template #related>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 my-3" v-if="term">
+              <LazyEntryRelated :key="`${term}-related`" :text="term" :columns="1" />
+            </div>
+            <div class="col-md-6  my-3" v-if="compareTerm">
+              <LazyEntryRelated :key="`${compareTerm}-related`" :text="compareTerm" :columns="1" />
+            </div>
+          </div>
+        </div>
+      </template>
+    </TabbedSections>
   </div>
 </template>
 
@@ -138,6 +166,7 @@ export default {
     return {
       aImages: [],
       bImages: [],
+      renderSearchSubs: true,
     };
   },
   async created() {
@@ -151,6 +180,36 @@ export default {
     });
   },
   computed: {
+
+    sections() {
+      return [
+        {
+          name: "subtitles",
+          title: "Subtitles",
+          visible: this.term && this.compareTerm,
+        },
+        {
+          name: "chatGPT",
+          title: "ChatGPT",
+          visible: true,
+        },
+        {
+          name: "collocations",
+          title: "Collocations",
+          visible: true,
+        },
+        {
+          name: "examples",
+          title: "Examples",
+          visible: true,
+        },
+        {
+          name: "related",
+          title: "Related",
+          visible: true,
+        },
+      ];
+    },
     title() {
       if (this.term && this.compareTerm) {
         return `“${this.term}” vs “${this.compareTerm}” - ${
@@ -184,6 +243,12 @@ export default {
     },
   },
   methods: {
+    reloadSearchSubs() {
+      this.renderSearchSubs = false;
+      this.$nextTick(() => {
+        this.renderSearchSubs = true;
+      });
+    },
     keydown(e) {
       if (
         !["INPUT", "TEXTAREA"].includes(e.target.tagName.toUpperCase()) &&

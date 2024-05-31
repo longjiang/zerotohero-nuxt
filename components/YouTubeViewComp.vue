@@ -40,6 +40,7 @@
       @next="goToNextItem"
       @currentTime="onCurrentTime"
       @updateLayout="onUpdateLayout"
+      @retranslate="retranslate(video)"
     />
     <!-- Modal for a countdown after the video finishes playing, vertically centered -->
     <b-modal
@@ -81,7 +82,6 @@ import {
   uniqueByValue,
   toCamelCase,
   parseDuration,
-  proxy,
 } from "../lib/utils";
 
 export default {
@@ -238,6 +238,7 @@ export default {
       this.loadVideo(this.youtube_id, this.directus_id),
       this.handlePlaylistFromQueryString(),
     ]);
+    // this.showDifficultyToast(); // Do not show this as the toast interferes with the popup dictionary. Until we find a better way to show the toast, we disable it.
   },
   filters: {
     formatDuration(duration) {
@@ -367,7 +368,7 @@ export default {
     async loadTokenizationServerCache(video) {
       if (!video?.id) return;
       let url = `${PYTHON_SERVER}lemmatize-video?video_id=${video.id}&lang=${this.$l2.code}`;
-      const data = await proxy(url);
+      const data = await axios.get(url).then((res) => res.data);
       // Check if data is an object with content
       if (data && typeof data === "object" && Object.keys(data).length > 0) {
         const dictionary = await this.$getDictionary();
@@ -410,7 +411,7 @@ export default {
       }
     },
     async setEpisodesAndEpisodeCount() {
-      let limit = 5;
+      let limit = 100; // If this number is too small, sometimes the "previous" button will not work because the previous episode is not loaded
       let episodeCount = await this.getEpisodeCount();
       if (episodeCount)
         this.$store.dispatch("shows/setEpisodeCount", {
@@ -522,6 +523,7 @@ export default {
       if (!video && youtube_id) {
         let videos = await this.$directus.getVideos({
           l2Id: this.$l2.id,
+          subs: true,
           query: `filter[youtube_id][eq]=${youtube_id}`,
         });
         if (videos?.length > 0) video = videos[0];
@@ -573,6 +575,40 @@ export default {
         this.l2Name = l2Name;
       }
     },
+    async retranslate(video) {
+      if (!video?.id) return;
+      this.$nuxt.$emit("retranslating", true)
+      let url = `${PYTHON_SERVER}translate_video_and_save?l1=${this.$l1.code}&l2=${this.$l2.code}&video_id=${video.id}`
+      let jsonOrCSV = await axios(url).then((res) => res.data).catch((err) => err)
+      if (!jsonOrCSV || typeof jsonOrCSV !== 'string') {
+        console.error(`${url} responded with:`, jsonOrCSV)
+      }
+      let subs_l1 = this.$subs.parseSavedSubs(jsonOrCSV)
+      if (!subs_l1) {
+        this.$toast.error(
+          this.$t('Failed to retranslate subtitles.'),
+          {
+            position: "top-center",
+            duration: 5000,
+          }
+        );
+        this.$nuxt.$emit("retranslating", false)
+        return
+      }
+      this.$store.commit("shows/MODIFY_ITEM", {
+        item: video,
+        key: "subs_l1",
+        value: subs_l1,
+      });
+      this.$toast.success(
+        this.$t('The subtitles have been retranslated.'),
+        {
+          position: "top-center",
+          duration: 5000,
+        }
+      );
+      this.$nuxt.$emit("retranslating", false)
+    },
     async loadMissingSubsFromYouTube(video) {
       // If the video doesn't have L1 or L2 subtitles, we load it from YouTube
       // Do not load L1 subs if the current $l1 and $l2 are the same
@@ -598,6 +634,11 @@ export default {
               tlangs,
               generated,
             });
+            // If the translated subs are problematic, we retranslate
+            if (this.subsL1Problematic(subs)) {
+              console.log('Problematic L1 subs detected. Retranslating...')
+              this.retranslate(video)
+            }
           }
           if (subs && subs.length > 0)
             this.$store.commit("shows/MODIFY_ITEM", {
@@ -608,6 +649,26 @@ export default {
           this.$emit(`${l1OrL2}TranscriptLoaded`);
         }
       }
+    },
+    // This function checks if the length of the L1 subtitles (subs_l1) is problematic compared to L2 subtitles (subs_l2).
+    subsL1Problematic(subs_l1) {
+      if (!subs_l1) return
+      
+      // Get the L2 subtitles from the video object. If it doesn't exist, default to an empty array.
+      let subs_l2 = this.video?.subs_l2 ?? []
+
+      // Strip out empty lines and lines only containing '\n' and '\r'
+      subs_l2 = subs_l2.filter((line) => line && line.line.trim())
+      subs_l1 = subs_l1.filter((line) => line && line.line.trim())
+
+      // Logout the lengths
+      // console.log('L1:', subs_l1.length, 'L2:', subs_l2.length, subs_l1, subs_l2)
+
+      // Return true if either of the following conditions is met:
+      // 1. The length of subs_l1 is less than 50% of the length of subs_l2.
+      // 2. The difference in length between subs_l2 and subs_l1 is greater than 10.
+      // If neither condition is met, return false.
+      return subs_l1.length < subs_l2.length * 0.5
     },
     async loadMissingMetaFromYouTube(video) {
       // If the video has other missing information, we load it from YouTube

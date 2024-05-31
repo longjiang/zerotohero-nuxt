@@ -27,6 +27,7 @@
           controls: false,
         }"
         @videoUnavailable="onVideoUnavailable"
+        :key="video.youtube_id"
       />
     </div>
     <div class="hero-video-info-wrapper" v-if="wide">

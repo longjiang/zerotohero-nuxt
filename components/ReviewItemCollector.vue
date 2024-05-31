@@ -1,11 +1,13 @@
 <template>
   <div>
     <!-- show the quiz in a modal-->
+    <!-- no-fade is turned on to prevent a "ghosted" modal on iOS that blocks and disables the entire UI -->
     <b-modal
       id="quiz-modal"
       size="lg"
       centered
       hide-footer
+      no-fade
       :title="$t('Pop Quiz')"
       body-class="playlist-modal-wrapper p-4"
       modal-class="safe-padding-top mt-4"

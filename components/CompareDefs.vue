@@ -20,6 +20,7 @@
           :definitions="defDistinctA"
           :translated="$store.state.settings.useMachineTranslatedDictionary"
           :singleColumn="true"
+          :showAsNumberedList="false"
         ></DefinitionsList>
       </div>
       <div class="col-6 text-center">
@@ -28,6 +29,7 @@
           :definitions="defDistinctB"
           :translated="$store.state.settings.useMachineTranslatedDictionary"
           :singleColumn="true"
+          :showAsNumberedList="false"
         ></DefinitionsList>
       </div>
     </div>

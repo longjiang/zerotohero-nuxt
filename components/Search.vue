@@ -13,6 +13,7 @@
         type="text"
         class="form-control lookup"
         ref="lookup"
+        v-model="text"
         :placeholder="placeholder || $t('Search')"
       />
       <a
@@ -58,7 +59,7 @@
             ).length === 0 &&
             type === 'dictionary'
           "
-          :to="`/${$l1.code}/${$l2.code}/phrase/search/${text.trim()}`"
+          :to="dictionaryLookUpAsPhraseRoute"
         >
           <span class="suggestion-not-found">
             <i18n path="Look up “{0}” as a phrase">
@@ -87,6 +88,7 @@
             <span class="suggestion-alternate" v-if="getAlternate(suggestion)"
               >[{{ getAlternate(suggestion) }}]</span
             >
+            <span class="suggestion-pronunciation" v-if="suggestion.pronunciation">{{ suggestion.pronunciation.split(',')[0] }}</span>
             <DefinitionsList
               v-if="suggestion.definitions"
               class="suggestion-l1"
@@ -122,7 +124,7 @@ export default {
     },
     defaultURL: {
       type: Function,
-      default: () => {},
+      default: () => null,
     },
     type: {
       default: "dictionary", // can also be 'generic'
@@ -167,6 +169,16 @@ export default {
       suggestionsKey: 0,
       lookingUp: false,
     };
+  },
+  computed: {
+    dictionaryLookUpAsPhraseRoute() {
+      // First try to get the route from the defaultURL function
+      let route = this.defaultURL(this.text)
+      // If route is not null, return it
+      if (route) return route
+      // If route is null, the defaultURL function has not been set
+      else return { name: 'phrase', params: {term: this.text.trim() }};
+    },
   },
   watch: {
     $route() {
@@ -287,7 +299,11 @@ a.suggestion {
   text-decoration: none;
   display: flex;
   align-items: top;
-  padding: 0.5rem 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .suggestion:hover,
@@ -314,6 +330,13 @@ a.suggestion {
   display: inline;
   font-weight: bold;
 }
+
+.suggestion-pronunciation {
+  font-size: 1rem;
+  color: #779bb5;
+  font-family: AndikaW, Andika, Arial, sans-serif;
+}
+
 
 .btn-random {
   position: absolute;

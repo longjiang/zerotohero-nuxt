@@ -21,8 +21,8 @@
       <b>{{ $t("Lemmatized:") }}</b> {{ text }} →
       {{ token.lemmas.map((l) => l.lemma).join(", ") }}
       <template v-if="token.pos">({{ token.pos.toLowerCase() }})</template>
-      <hr />
     </div>
+    
     <div v-if="!loading && !preciseMatchFound" class="no-entry">
       <span v-if="$hasFeature('transliteration')">
         <Speak :text="text" class="mr-1" ref="speak" />
@@ -61,7 +61,21 @@
         <div><span v-html="highlight(this.immediateContext, this.text, 'outside')" /></div>
         <div class="mt-2"><Translate :text="immediateContext" /></div>
       </div>
-      <hr class="mt-2 mb-2" />
+    </div>
+
+    <div class="my-3">
+      <b-button v-if="!showChatGPT" @click="showChatGPT = true" size="sm" variant="outline-secondary" class="w-100">
+        <i class="fa fa-comment"></i>
+        {{ $t('Let ChatGPT Explain') }}
+      </b-button>
+      <ChatGPT
+        v-if="showChatGPT"
+        :maxTokens="30"
+        :showActions="false"
+        :showPrompt="false"
+        class="mt-4"
+        :initialMessages="[chatGPTPrompt]"
+      />
     </div>
     <div
       v-for="word in words"
@@ -237,7 +251,7 @@
     <div v-if="loading === true">
       <Loader :sticky="true" message="Looking up the dictionary..." />
     </div>
-    <TranslatorLinks v-bind="{ text }" class="mt-2 small" />
+    <!-- <TranslatorLinks v-bind="{ text }" class="mt-2 small" /> -->
     <LookUpIn
       v-if="text || (token && token.candidates && token.candidates[0])"
       :term="text ? text : token.candidates[0].head"
@@ -287,6 +301,7 @@ export default {
       IMAGE_PROXY,
       entryClasses: { "tooltip-entry": true }, // Other classes are added upon update
       levels: undefined,
+      showChatGPT: false,
       images: [],
     };
   },
@@ -313,6 +328,13 @@ export default {
       if (matchFoundInWords) return true;
       return false;
     },
+    chatGPTPrompt() {
+      const basePrompt = this.$t('Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’.', { text: this.context.text, word: this.text, l2: this.$t(this.$l2.name), l1: this.$t(this.$l1.name), code: this.$l2.code})
+      const inflectionPrompt = this.$t('Give its lemma, inflection, and morphology.')
+      // Languages that don't inflect dont' need the inflection prompt
+      const inflectionNotNeeded = ['zh', 'vi', 'th', 'lo', 'km']
+      return inflectionNotNeeded.includes(this.$l2.code) ? basePrompt : `${basePrompt} ${inflectionPrompt}`
+    }
   },
   async mounted() {
     if (this.$l1) this.entryClasses[`l1-${this.$l1.code}`] = true;
@@ -348,6 +370,7 @@ export default {
         l1Code: this.$l1.code,
         l2Code: this.$l2.code,
       });
+      this.$emit("translation", this.translation);
     },
     segment(text) {
       return text
@@ -424,7 +447,7 @@ export default {
       tempInput.select();
       document.execCommand("copy");
       popover.removeChild(tempInput);
-      this.$toast.success($t("Copied!"), {
+      this.$toast.success(this.$t("Copied!"), {
         duration: 2000,
       });
     },

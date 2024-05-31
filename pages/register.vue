@@ -94,7 +94,7 @@ export default {
         email: "",
         password: "",
         role: 3,
-        status: "active",
+        status: "draft", // Set the status to draft to prevent the user from logging in until the email is verified
       },
       show: true,
       loading: false,
@@ -106,74 +106,6 @@ export default {
     },
   },
   methods: {
-    async mailerLiteWebHook() {
-      let payload = {
-        email: this.form.email,
-        first_name: this.form.first_name,
-        last_name: this.form.last_name,
-        role: this.form.role,
-        user_id: this.$auth.user.id,
-        group_name: "Newcomers",
-      };
-      let res = await axios.post(
-        // "http://127.0.0.1:5000/new_mailer_lite_subscriber",
-        `${PYTHON_SERVER}new_mailer_lite_subscriber`,
-        payload
-      );
-      return res;
-    },
-    analytics() {
-      this.$gtag.event('user_register')
-    },
-    async onUserRegistered() {
-      this.analytics()
-
-      // Show success toast message
-      this.$toast.success(
-        this.$tb("Registration successful. Welcome aboard, {name}!", {
-          name: this.form.first_name,
-        }),
-        {
-          position: "top-center",
-          duration: 5000,
-        }
-      );
-
-      // Fetch or create user data
-      await this.$directus.fetchOrCreateUserData(); 
-
-      this.$gtag.event(
-        "login",
-        this.$auth.user.id
-          ? {
-              method: this.$auth.user.provider,
-              user_id: this.$auth.user.id,
-            }
-          : {
-              method: "anonymous",
-            }
-      );
-
-      // Send data to MailerLite
-      await this.mailerLiteWebHook();
-
-      this.redirectAfterRegistration();
-    },
-    redirectAfterRegistration() {
-      // Redirect the user to the appropriate page
-      if (this.$route.query.redirect) {
-        this.$router.push({ path: this.$route.query.redirect });
-      } else {
-        if (this.$l1 && this.$l2) {
-          this.$router.push({
-            name: "l1-l2-profile",
-            params: { l1: this.$l1.code, l2: this.$l2.code },
-          });
-        } else {
-          this.$router.push("/dashboard");
-        }
-      }
-    },
     async onSubmit(event) {
       try {
         this.loading = true;
@@ -181,26 +113,19 @@ export default {
         // Register the user in Directus
         const res = await axios.post(
           `${DIRECTUS_URL}zerotohero/users`,
-          this.form
+          { 
+            ...this.form,
+          }
         );
 
         if (res && res.data && res.data.public === true) {
-          // Log in the user using the local strategy
-          const loginResponse = await this.$auth.loginWith("local", {
-            data: this.form,
+          // Redirect to Verification Instruction Screen
+          this.$router.push({
+            name: "verify-email",
+            query: {
+              email: encodeURIComponent(this.form.email),
+            },
           });
-
-          if (loginResponse && loginResponse.data) {
-            // Fetch the user data from Directus
-            const userResponse = await this.$directus.get(`users/me`);
-
-            if (userResponse.data && userResponse.data.data) {
-              let user = userResponse.data.data;
-              this.$auth.setUser(user);
-
-              this.onUserRegistered();
-            }
-          }
         }
       } catch (err) {
         this.loading = false;

@@ -99,6 +99,8 @@ export const actions = {
   setLevel({ dispatch, commit }, { l2, level }) {
     commit('SET_LEVEL', { l2, level })
     dispatch('push')
+    // Dispatch shows/loadRecommendedVideos action after setting the level
+    dispatch('shows/loadRecommendedVideos', { userId: this.$auth.$storage.getUniversal('userId'), l2, level, clear: true }, { root: true })
   },
   setWeeklyHours({ dispatch, commit }, { l2, weeklyHours }) {
     commit('SET_WEEKLY_HOURS', { l2, weeklyHours })

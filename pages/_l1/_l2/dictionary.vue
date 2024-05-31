@@ -43,7 +43,6 @@
           <div class="container" v-if="!entry">
             <div class="row">
               <div class="col-sm-12">
-                <!-- <Sale style="border-radius: 1rem !important" class="pb-5 pl-5 pr-5" v-if="$l2.code === 'zh'" /> -->
                 <div style="max-width: 50rem; margin: 0 auto" class="mt-5">
                   <ul class="list-unstyled">
                     <li class="mt-2">
@@ -132,7 +131,8 @@
                       )
                     "
                   >
-                    <b>{{ w.head }}</b>
+                    <b class="text-success">{{ w.head }}</b>
+                    <span v-if="w.pronunciation || w.kana">({{ w.pronunciation || w.kana }})</span>
                     <em>{{ w.definitions[0] }}</em>
                   </b-dropdown-item>
                 </b-dropdown>
@@ -213,13 +213,6 @@
               class="mb-4 text-center"
               style="margin-bottom: 0"
             />
-            <SimilarPhrases
-              v-if="entry.definitions && entry.definitions.length > 0"
-              :phrase="entry.head"
-              :translation="similarPhraseTranslation"
-              :hideDefinitions="hideDefinitions"
-              class="text-center mb-5"
-            />
             <!-- <Sale class="mb-5" style="border-radius: 1rem !important" v-if="$l2.code === 'zh'" /> -->
             <EntryCourseAd
               v-if="$l2.code === 'zh'"
@@ -275,15 +268,6 @@ export default {
   computed: {
     showAsFlashCard() {
       return this.saved();
-    },
-    similarPhraseTranslation() {
-      let en;
-      if (this.$l2.code === "en") en = this.entry.head;
-      else if (this.entry.definitions && this.entry.definitions[0]) {
-        en = this.entry.definitions[0].split(", ")[0];
-      }
-      if (en) en = en.replace(/\(.*\)/g, "").trim();
-      return en;
     },
     title() {
       if (this.entry) {

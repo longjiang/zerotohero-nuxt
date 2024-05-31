@@ -8,11 +8,11 @@ class BaseTokenizer {
     this.words = words;
     this.indexKeys = indexKeys;
     this.tokenizationType = tokenizationType;
-    console.log("Base Tokenizer tokenization type:", this.tokenizationType);
+    console.log("Base Tokenizer initialized with tokenization type:", this.tokenizationType);
   }
 
-  static async load({ l2, words = [], indexKeys = ["search"] }) {
-    const instance = new this({ l2, words, indexKeys });
+  static async load({ l2, words = [], indexKeys = ["search"], tokenizationType = "integral" }) {
+    const instance = new this({ l2, words, indexKeys, tokenizationType });
     await instance.loadData();
     return instance;
   }
@@ -63,12 +63,15 @@ class BaseTokenizer {
     switch (tokenizationType) {
       // tokenizationType passed in from <TokenizedRichText>
       case "integral":
+        console.log("Tokenizing locally with integral method");
         tokenized = this.tokenizeIntegral(text);
         break;
       case "agglutenative":
+        console.log("Tokenizing locally with agglutenative method");
         tokenized = await this.tokenizeIntegral(text); // Using continua for agglutenative does not make sense because it may break the words into too many segments
         break;
       case "continua":
+        console.log("Tokenizing locally with continua method");
         tokenized = await this.tokenizeContinua(text);
         break;
       default:

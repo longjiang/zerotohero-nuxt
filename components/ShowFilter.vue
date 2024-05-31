@@ -27,39 +27,46 @@
         <b>{{ $t('All Videos') }}</b>
       </b-form-checkbox>
       <template v-if="!allVideosChecked">
-        <!-- <hr />
-        <b-form-checkbox v-model="musicChecked">
-          <i class="fa fa-music"></i>
-          <b>{{ $t('Music') }}</b>
-        </b-form-checkbox>
-        <b-form-checkbox v-model="moviesChecked">
-          <i class="fa fa-film"></i>
-          <b>{{ $t('Movies') }}</b>
-        </b-form-checkbox>
-        <b-form-checkbox v-model="newsChecked">
-          <i class="fa fa-newspaper"></i>
-          <b>{{ $t('News') }}</b>
-        </b-form-checkbox> -->
+        <template>
+          <hr />
+          <b-form-checkbox v-model="allCategoriesChecked" :class="{ 'mb-2': !allCategoriesChecked }">
+            <i class="fa fa-tags"></i>
+            <b>{{ $t('All Categories') }}</b>
+            <a
+              class="ml-2 quick-link"
+              @click.stop.prevent="categoriesChecked.length > 0 ? uncheckAll('categories') : checkAll('categories')"
+            >
+              {{ categoriesChecked.length > 0 ? $t('Uncheck All') : $t('Check All') }}
+            </a>
+          </b-form-checkbox>
+          <template v-if="!allCategoriesChecked">
+            <b-form-checkbox-group id="categories-checkbox-group" v-model="categoriesChecked" >
+              <b-form-checkbox
+                v-for="category of filteredCategories"
+                :key="`category-${category.id}`"
+                :value="category.id"
+                class="d-block mb-1"
+              >
+                <i :class="'fa ' + category.icon"></i>
+                {{ $t(category.title) }}
+              </b-form-checkbox>
+            </b-form-checkbox-group>
+          </template>
+        </template>
         <template v-if="tvShows">
           <hr />
           <b-form-checkbox v-model="allTVShowsChecked" :class="{ 'mb-2': !allTVShowsChecked }">
             <i class="fa fa-tv"></i>
             <b>{{ $t('All TV Shows') }}</b>
-            <template v-if="!allTVShowsChecked">
-              <a
-                class="ml-2 quick-link"
-                @click.stop.prevent="checkAll('tvShows')"
-                v-if="tvShowChecked.length < tvShowsFiltered.length"
-              >{{ $t('Check All') }}</a>
-              <a
-                class="ml-2 quick-link"
-                v-if="tvShowChecked.length > 0"
-                @click.stop.prevent="uncheckAll('tvShows')"
-              >{{ $t('Uncheck All') }}</a>
-            </template>
+            <a
+              class="ml-2 quick-link"
+              @click.stop.prevent="tvShowsChecked.length > 0 ? uncheckAll('tvShows') : checkAll('tvShows')"
+            >
+              {{ tvShowsChecked.length > 0 ? $t('Uncheck All') : $t('Check All') }}
+            </a>
           </b-form-checkbox>
           <template v-if="!allTVShowsChecked">
-            <b-form-checkbox-group id="tv-shows-checkbox-group" v-model="tvShowChecked">
+            <b-form-checkbox-group id="tv-shows-checkbox-group" v-model="tvShowsChecked">
               <b-form-checkbox
                 v-for="tvShow in tvShowsFiltered"
                 :key="`tv-show-${tvShow.id}`"
@@ -74,41 +81,7 @@
               </b-form-checkbox>
             </b-form-checkbox-group>
           </template>
-        </template>
-        <template v-if="talks">
-          <hr />
-          <b-form-checkbox v-model="allTalksChecked" :class="{ 'mb-2': !allTalksChecked }">
-            <i class="fas fa-graduation-cap"></i>
-            <b>{{ $t('All YouTube Channels') }}</b>
-            <template v-if="!allTalksChecked">
-              <a
-                class="ml-2 quick-link"
-                @click.stop.prevent="checkAll('talks')"
-                v-if="talkChecked.length < talksFiltered.length"
-              >{{ $t('Check All') }}</a>
-              <a
-                class="ml-2 quick-link"
-                v-if="talkChecked.length > 0"
-                @click.stop.prevent="uncheckAll('talks')"
-              >{{ $t('Uncheck All') }}</a>
-            </template>
-          </b-form-checkbox>
-          <template v-if="!allTalksChecked">
-            <b-form-checkbox-group id="tv-shows-checkbox-group" v-model="talkChecked">
-              <b-form-checkbox
-                v-for="talk in talksFiltered"
-                :key="`tv-show-${talk.id}`"
-                :value="talk.id"
-                class="d-block mb-1"
-              >
-                <img
-                  class="show-thumb"
-                  :src="`https://img.youtube.com/vi/${talk.youtube_id}/hqdefault.jpg`"
-                />
-                {{ talk.title }}
-              </b-form-checkbox>
-            </b-form-checkbox-group>
-          </template>
+          <!-- Filter by Category -->
         </template>
       </template>
     </b-modal>
@@ -116,25 +89,20 @@
 </template>
 
 <script>
-import { timeout, unique } from "../lib/utils";
+import { timeout } from "../lib/utils";
+import { CATEGORIES, CATEGORY_ICONS } from '../lib/youtube';
 
 export default {
   data() {
     return {
       tvShows: undefined,
-      talks: undefined,
-      allVideosChecked: false,
-      allTVShowsChecked: false,
-      allTalksChecked: false,
+      allVideosChecked: false, // Whether the checkbox next to "All Videos" is checked
+      allTVShowsChecked: false, // Whether the checkbox next to "All TV Shows" is checked
+      allCategoriesChecked: false, // Whether the checkbox next to "All Categories" is checked
       tvShowFilter: "all",
-      talkFilter: "all",
-      musicChecked: false,
-      newsChecked: false,
-      moviesChecked: false,
-      tvShowChecked: [],
-      talkChecked: [],
-      allTVShows: [],
-      allTalks: [],
+      categoryFilter: "all",
+      tvShowsChecked: [],
+      categoriesChecked: [],
       watchersActivated: false
     };
   },
@@ -143,23 +111,26 @@ export default {
       if (this.tvShows)
         return this.tvShows.filter(s => !["Movies", "Music"].includes(s.title));
     },
-    talksFiltered() {
-      if (this.talks)
-        return this.talks.filter(s => !["News"].includes(s.title));
+    filteredCategories() {
+      // Construct an array of { id, title } objects from the CATEGORIES object
+      const categoriesArray = Object.entries(CATEGORIES)
+        .map(([id, title]) => ({ id: Number(id), title, icon: CATEGORY_ICONS[id]}))
+        .filter(({ id }) => id < 30);
+      return categoriesArray;
     },
     title() {
       let titles = [];
       if (this.allVideosChecked) titles.push(this.$t("All Videos"));
       else {
         if (this.allTVShowsChecked) titles.push(this.$t("All TV Shows"));
-        else if (this.tvShowChecked && this.tvShowChecked.length > 0)
-          titles.push(this.$t('{num} TV Show(s)', {num: this.tvShowChecked.length}));
+        else if (this.tvShowsChecked && this.tvShowsChecked.length > 0)
+          titles.push(this.$t('{num} TV Show(s)', {num: this.tvShowsChecked.length}));
         if (this.musicChecked) titles.push(this.$t("Music"));
         if (this.moviesChecked) titles.push(this.$t("Movies"));
         if (this.newsChecked) titles.push(this.$t("News"));
-        if (this.allTalksChecked) titles.push(this.$t("All YouTube Channels"));
-        else if (this.talkChecked && this.talkChecked.length > 0)
-          titles.push(this.$t('{num} YouTube Channel(s)', {num: this.talkChecked.length}));
+        if (this.allCategoriesChecked) titles.push(this.$t("All Categories"));
+        else if (this.categoriesChecked && this.categoriesChecked.length > 0)
+          titles.push(this.$t('{num} Categories', {num: this.categoriesChecked.length}));
       }
       if (titles.length > 1) return titles[0] + this.$t(" & Other Videos");
       if (titles.length === 1) return titles[0];
@@ -195,76 +166,64 @@ export default {
     allTVShowsChecked() {
       if (this.watchersActivated) this.updateSettings();
     },
-    allTalksChecked() {
+    allCategoriesChecked() {
       if (this.watchersActivated) this.updateSettings();
     },
-    newsChecked() {
+    categoriesChecked() {
       if (this.watchersActivated) this.updateSettings();
     },
-    moviesChecked() {
-      if (this.watchersActivated) this.updateSettings();
-    },
-    musicChecked() {
-      if (this.watchersActivated) this.updateSettings();
-    },
-    talkChecked() {
-      if (this.watchersActivated) this.updateSettings();
-    },
-    tvShowChecked() {
+    tvShowsChecked() {
       if (this.watchersActivated) this.updateSettings();
     }
   },
   methods: {
     checkAll(type) {
       if (type === "tvShows") {
-        this.tvShowChecked = this.tvShows.map(s => Number(s.id));
+        this.tvShowsChecked = this.tvShows.map(s => Number(s.id));
       }
-      if (type === "talks") {
-        this.talkChecked = this.talks.map(s => Number(s.id));
+      if (type === "categories") {
+        this.categoriesChecked = this.filteredCategories.map(([id, title]) => Number(id));
       }
     },
     uncheckAll(type) {
       if (type === "tvShows") {
-        this.tvShowChecked = [];
+        this.tvShowsChecked = [];
       }
-      if (type === "talks") {
-        this.talkChecked = [];
+      if (type === "categories") {
+        this.categoriesChecked = [];
       }
     },
     onModalHide() {
       this.$emit("showFilter", {
         tvShowFilter: this.tvShowFilter,
-        talkFilter: this.talkFilter
+        categoryFilter: this.categoryFilter
       });
     },
     loadSettings() {
       this.tvShowFilter = this.$l2Settings.tvShowFilter || 'all';
-      this.talkFilter = this.$l2Settings.talkFilter || 'all';
+      this.categoryFilter = this.$l2Settings.categoryFilter || 'all';
       this.allVideosChecked =
-        this.tvShowFilter === "all" && this.talkFilter === "all";
+        this.tvShowFilter === "all" && this.categoryFilter === "all";
       if (!this.allVideosChecked) {
         this.allTVShowsChecked = this.tvShowFilter === "all";
-        this.allTalksChecked = this.talkFilter === "all";
+        this.allCategoriesChecked = this.categoryFilter === "all";
         if (!this.allTVShowsChecked) {
-          this.tvShowChecked = this.tvShowFilter;
+          this.tvShowsChecked = this.tvShowFilter;
         }
-        if (!this.allTalksChecked) {
-          this.talkChecked = this.talkFilter;
+        if (!this.allCategoriesChecked) {
+          this.categoriesChecked = this.categoryFilter;
         }
       }
     },
     updateSettings() {
       let tvShowFilter = this.getTvShowFilter();
-      let talkFilter = this.getTalkFilter();
-
+      let categoryFilter = this.getCategoryFilter();
       this.tvShowFilter = tvShowFilter;
+      this.categoryFilter = categoryFilter;
+      console.log("Updating settings", tvShowFilter, categoryFilter);
       this.$store.dispatch("settings/setL2Settings", {
-        tvShowFilter: this.tvShowFilter
-      });
-
-      this.talkFilter = talkFilter;
-      this.$store.dispatch("settings/setL2Settings", {
-        talkFilter: this.talkFilter
+        tvShowFilter: this.tvShowFilter,
+        categoryFilter: this.categoryFilter
       });
     },
     getTvShowFilter() {
@@ -272,14 +231,14 @@ export default {
       if (this.allTVShowsChecked) {
         return "all";
       }
-      return this.tvShowChecked;
+      return this.tvShowsChecked;
     },
-    getTalkFilter() {
+    getCategoryFilter() {
       if (this.allVideosChecked) return;
-      if (this.allTalksChecked) {
+      if (this.allCategoriesChecked) {
         return "all";
       }
-      return this.talkChecked;
+      return this.categoriesChecked;
     },
     showModal() {
       this.$refs["show-filter-modal"].show();
@@ -308,7 +267,6 @@ export default {
   .fa,
   .fas {
     width: calc(0.2rem * 16);
-    height: calc(0.2rem * 9);
     margin-right: 0.5rem;
     text-align: center;
   }
@@ -317,6 +275,12 @@ export default {
     height: calc(0.2rem * 9);
     object-fit: cover;
     margin-right: 0.5rem;
+  }
+}
+
+@media (min-width: 601px) {
+  .categories-checkbox-group {
+    columns: 2;
   }
 }
 </style>

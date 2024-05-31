@@ -53,7 +53,7 @@
             <client-only>
               <LazyIdenticalLanguages
                 class="mt-5 mb-5"
-                routeName="l1-l2-recommended-video"
+                :routeName="l1-l2-DEFAULT_PAGE"
                 v-if="!loading"
               />
             </client-only>
@@ -68,7 +68,7 @@
 <script>
 import { mapState } from "vuex";
 import { ContainerQuery } from "vue-container-query";
-import { shuffle, uniqueByValue, IMAGE_PROXY } from "../../../lib/utils";
+import { shuffle, uniqueByValue, IMAGE_PROXY, DEFAULT_PAGE } from "../../../lib/utils";
 import Papa from 'papaparse'
 
 export default {
@@ -88,6 +88,7 @@ export default {
       numLiveTVChannelsPerLoad: 1,
       liveTVChannels: [],
       params: {},
+      DEFAULT_PAGE,
       query: {
         xs: {
           minWidth: 0,

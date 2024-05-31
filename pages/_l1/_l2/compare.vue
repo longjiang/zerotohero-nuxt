@@ -66,9 +66,9 @@
       </div>
     </div>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
+
+    <TabbedSections v-bind="{ sections }" class="dictionary-main">
+        <template #subtitles>
           <Widget
             v-if="a && b"
             :key="`${a.id}-subs`"
@@ -85,107 +85,114 @@
                 skin="dark"
                 v-if="renderSearchSubs"
                 :key="`compare-search-subs-${a.id}-${b.id}`"
-                :levelA="
-                  a.newHSK && a.newHSK === '7-9'
-                    ? '7-9'
-                    : a.hsk || a.level || 'outside'
-                "
-                :termsA="
-                  ['zh', 'yue'].includes($l2.code)
-                    ? a.simplified === a.traditional
-                      ? [a.simplified]
-                      : [a.simplified, a.traditional]
-                    : [a.head]
-                "
-                :levelB="
-                  b.newHSK && b.newHSK === '7-9'
-                    ? '7-9'
-                    : b.hsk || a.level || 'outside'
-                "
-                :termsB="
-                  ['zh', 'yue'].includes($l2.code)
-                    ? b.simplified === b.traditional
-                      ? [b.simplified]
-                      : [b.simplified, b.traditional]
-                    : [b.head]
-                "
+                :levelA="getLevel(a)"
+                :termsA="getTerms(a)"
+                :levelB="getLevel(b)"
+                :termsB="getTerms(b)"
               />
             </template>
           </Widget>
-        </div>
-      </div>
-    </div>
+          <div class="container">
+            <div class="row mt-5">
+              <div class="col-sm-6">
+                <LazyWebImages
+                  v-if="a"
+                  :text="a.head"
+                  limit="10"
+                  :preloaded="aImages"
+                  :key="`${a.id}-images`"
+                />
+              </div>
+              <div class="col-sm-6">
+                <LazyWebImages
+                  v-if="b"
+                  :text="b.head"
+                  limit="10"
+                  :preloaded="bImages"
+                  :key="`${b.id}-images`"
+                />
+              </div>
+            </div>
+          </div>
+        </template>
 
-    <div class="container">
-      <div class="row mt-5">
-        <div class="col-sm-6">
-          <LazyWebImages
-            v-if="a"
-            :text="a.head"
-            limit="10"
-            :preloaded="aImages"
-            :key="`${a.id}-images`"
-          />
-        </div>
-        <div class="col-sm-6">
-          <LazyWebImages
-            v-if="b"
-            :text="b.head"
-            limit="10"
-            :preloaded="bImages"
-            :key="`${b.id}-images`"
-          />
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
+        <template #chatGPT>
+          <Widget>
+            <template #title>
+              {{ $t("Let ChatGPT explain “{text}”", { text: `${a.head} vs ${b.head}` }) }}
+            </template>
+            <template #body>
+              <!-- Show a button, when the user clicks we show the chatgpt component -->
+              <ChatGPT
+                :maxTokens="50"
+                :initialMessages="[
+                  $t(
+                    'What\'s the difference between these {l2} expressions: “{a}”{ap} and “{b}”{bp}?',
+                    {
+                      l2: $t($l2.name),
+                      l1: $t($l1.name),
+                      a: a.head,
+                      b: b.head,
+                      ap: a.pronunciation ? ` (${a.pronunciation})` : '',
+                      bp: b.pronunciation ? ` (${b.pronunciation})` : '',
+                    }
+                  ),
+                ]"
+              />
+            </template>
+          </Widget>
+        </template>
+        <template #collocations>
           <LazyCompareCollocations
-            class="mt-5 focus"
+            class="focus"
             v-if="a && b"
             :term="a.head"
             :compareTerm="b.head"
             :level="a.level"
             :compareLevel="b.level"
           />
-        </div>
-      </div>
-    </div>
+        </template>
+        <template #examples>
+          <div class="container focus">
+            <div class="row">
+              <div class="col-sm-6">
+                <LazyConcordance
+                  v-if="a"
+                  :text="a.head"
+                  :level="a.hsk"
+                  :key="`${a.id}-concordance`"
+                />
+              </div>
+              <div class="col-sm-6">
+                <LazyConcordance
+                  v-if="b"
+                  :text="b.head"
+                  :level="b.hsk"
+                  :key="`${b.id}-concordance`"
+                />
+              </div>
+            </div>
+          </div>
+        </template>
+        <template #related>
 
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12 mt-5" v-if="a">
-          <LazyEntryRelated :key="`${a.id}-related`" :entry="a" />
-        </div>
-        <div class="col-sm-12 mt-5" v-if="b">
-          <LazyEntryRelated :key="`${a.id}-related`" :entry="b" />
-        </div>
-      </div>
-    </div>
+
+          <div class="container">
+            <div class="row">
+              <div class="col-sm-12" v-if="a">
+                <LazyEntryRelated :key="`${a.id}-related`" :entry="a" />
+              </div>
+              <div class="col-sm-12" v-if="b">
+                <LazyEntryRelated :key="`${a.id}-related`" :entry="b" />
+              </div>
+            </div>
+          </div>
+        </template>
+      </TabbedSections>
+
+
 
     <!-- <EntryCharacters :entry="entry"></EntryCharacters> -->
-    <div class="container pt-5 pb-5 focus">
-      <div class="row">
-        <div class="col-sm-6">
-          <LazyConcordance
-            v-if="a"
-            :text="a.head"
-            :level="a.hsk"
-            :key="`${a.id}-concordance`"
-          />
-        </div>
-        <div class="col-sm-6">
-          <LazyConcordance
-            v-if="b"
-            :text="b.head"
-            :level="b.hsk"
-            :key="`${b.id}-concordance`"
-          />
-        </div>
-      </div>
-    </div>
 
     <LazyEntryCourseAd
       v-if="$l2 === 'zh' && a && b"
@@ -211,6 +218,36 @@ export default {
     };
   },
   computed: {
+
+    sections() {
+      return [
+        {
+          name: "subtitles",
+          title: "Subtitles",
+          visible: this.a && this.b
+        },
+        {
+          name: "chatGPT",
+          title: "ChatGPT",
+          visible: true,
+        },
+        {
+          name: "collocations",
+          title: "Collocations",
+          visible: true,
+        },
+        {
+          name: "examples",
+          title: "Examples",
+          visible: true,
+        },
+        {
+          name: "related",
+          title: "Related",
+          visible: true,
+        },
+      ];
+    },
     title() {
       if (this.a && this.b) {
         return `“${this.a.head}” vs “${this.b.head}” - ${
@@ -288,6 +325,18 @@ export default {
     });
   },
   methods: {
+    getLevel(item) {
+      return item.newHSK && item.newHSK === '7-9'
+        ? '7-9'
+        : item.hsk || item.level || 'outside';
+    },
+    getTerms(item) {
+      return ['zh', 'yue'].includes(this.$l2.code)
+        ? item.simplified === item.traditional
+          ? [item.simplified]
+          : [item.simplified, item.traditional]
+        : [item.head];
+    },
     reloadSearchSubs() {
       this.renderSearchSubs = false;
       this.$nextTick(() => {

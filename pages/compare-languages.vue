@@ -5,9 +5,9 @@
       description="See on a map how people say words like 'yes', 'no', 'thanks' on a map!"
       image="/img/thumbnail-compare-languages.jpg"
     />
-    <div class="container-fluid">
+    <div class="container-fluid d-grid">
       <div
-        class="row bg-dark text-white pt-2 pb-2 text-left"
+        class="row first-row bg-dark text-white py-2 text-left"
         style="overflow: visible; height: 56px"
       >
         <div class="col-sm-12 d-flex" style="overflow: visible">
@@ -74,32 +74,32 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12" style="height: calc(100vh - 56px); padding: 0">
+      <div class="row second-row">
+        <div class="col-12" style="height: calc(100vh - 103px); padding: 0">
           <div class="loader-wrapper p-5" v-if="loadingMap || updating">
             <Loader
               :sticky="true"
               :message="
                 wiktionary
-                  ? 'Searching through 7,669,735 words across 3,752 languages. This usualy takes 15 seconds...'
-                  : 'Looking for similar phrases in other languages'
+                  ? $tb('Searching through {num} words across {langs} languages. This usualy takes {s} seconds...', {num: '7,669,735', langs: '3,752', s: 15})
+                  : $tb('Looking for similar phrases in other languages')
               "
             />
           </div>
           <client-only>
             <LanguageMap
               v-if="phrasesInAllLangs"
-              style="height: 100%"
               ref="languageMap"
               :phrases="phrasesInAllLangs"
               @ready="onReady"
+              style="height: calc(100% - "
             />
           </client-only>
         </div>
       </div>
       <div
         :class="{
-          'similar-phrases-panel': true,
+          'similar-phrases-panel skin-light': true,
           'd-none': !showList,
         }"
       >
@@ -111,7 +111,7 @@
                 listType === 'all-phrases' ? 'secondary' : 'outline-secondary'
               "
             >
-              All Phrases
+              {{ $tb('All Phrases') }}
             </b-button>
             <b-button
               @click="listType = 'this-phrase'"
@@ -119,7 +119,7 @@
                 listType === 'this-phrase' ? 'secondary' : 'outline-secondary'
               "
             >
-              This Phrase
+              {{ $tb('This Phrase') }}
             </b-button>
           </b-button-group>
         </div>
@@ -236,13 +236,15 @@ export default {
           );
         }
       }
-      this.enData = this.phrases[this.currentIndex].phrase;
-      this.showList = false;
+      if (this.phrases) {
+        this.enData = this.phrases[this.currentIndex].phrase;
+        this.showList = false;
+      }
     },
     enData() {
       if (!this.phrases || this.enData !== this.phrases[this.currentIndex].en) {
         this.$router.push({
-          name: "compare-languages",
+          name: "ling-compare-languages",
           params: {
             bookId: "adhoc",
             en: this.enData,
@@ -267,27 +269,41 @@ export default {
       this.phrasesInAllLangs = youInOtherLangs;
     },
     async loadPhraseObj() {
+      // Set the current index to the value of the 'i' query parameter, or 0 if it's not set
       this.currentIndex = this.$route.query.i ? Number(this.$route.query.i) : 0;
+      
       this.updating = true;
+      
       try {
-        let res = await this.$directus.get(
-          `items/phrasebook/${this.bookId}`
-        );
+        // Fetch the phrasebook with the specified ID
+        let res = await this.$directus.get(`items/phrasebook/${this.bookId}`);
+        
         if (res && res.data) {
           let phrasebook = res.data.data;
+          
+          // Parse the 'phrases' field of the phrasebook, which is a CSV string, into an array of objects
+          // Each object represents a phrase and has properties corresponding to the CSV columns
           phrasebook.phrases = Papa.parse(phrasebook.phrases, {
             header: true,
           }).data.map((p, id) => {
+            // Add an 'id' property to each phrase object, using the index as the ID
             p.id = id;
             return p;
           });
+          
+          // Store the phrasebook and the phrases in the component's data
           this.phrasebook = phrasebook;
           this.phrases = phrasebook.phrases;
+          
+          // Store the English translation of the first phrase in the component's data
           this.enData = this.phrases[0].en;
         }
       } catch (err) {
+        // If an error occurs, stop the loading animation
         this.loadingMap = false;
       }
+      
+      // Set 'updating' to false to indicate that the data has finished loading
       this.updating = false;
     },
   },
@@ -297,6 +313,22 @@ export default {
 <style lang="scss" scoped>
 
 @import "../assets/scss/variables.scss";
+
+.d-grid {
+  display: grid;
+  grid-template-rows: 56px 1fr; /* 56px for the header, rest for the content */
+  height: 100vh;
+  overflow: hidden; /* Prevents overflow beyond the viewport */
+}
+
+.first-row {
+  grid-row: 1;
+}
+
+.second-row {
+  grid-row: 2;
+  overflow: auto; /* Allows scrolling within the row if content overflows */
+}
 
 .similar-phrases-panel {
   background: white;

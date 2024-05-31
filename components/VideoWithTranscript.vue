@@ -36,6 +36,7 @@
             autoplay,
             startAtRandomTime,
             video,
+            formats,
             controls: false,
             starttime: startTimeOrLineIndex,
           }"
@@ -93,6 +94,7 @@
           @updateSmoothScroll="(r) => (this.useSmoothScroll = r)"
           @updateAutoPause="(r) => (this.autoPause = r)"
           @updateRepeatMode="(r) => (this.repeatMode = r)"
+          @retranslate="$emit('retranslate', video)"
           @fullscreen="onFullscreen"
           @goToPreviousLine="
             $refs.transcript ? $refs.transcript.goToPreviousLine() : null
@@ -126,6 +128,7 @@
             :video="video"
             ref="videoDetails"
             @updateVideo="onUpdateVideo"
+            @retranslate="$emit('retranslate', video)"
           />
           <EpisodeNav
             v-if="episodes"
@@ -170,9 +173,9 @@
           ></i>
         </div>
 
-        <!-- this is the public facing video admin -->
-        <!-- if the video has no subs, allow the user to add subs -->
-        <div class="pl-4 pr-4" v-if="!checkingSubs && video && !video.subs_l2">
+        <!-- This is the public facing video admin -->
+        <!-- If the video has no subs, allow the user to add subs -->
+        <div class="pl-4 pr-4" v-if="!checkingSubs && type == 'youtube' && video && !video.subs_l2">
           <VideoAdmin
             :showVideoDetails="true"
             :showTextEditing="true"
@@ -411,6 +414,10 @@ export default {
     episodeSort: {
       type: String,
       default: "title", // or '-views' or '-date'
+    },
+    formats: {
+      type: Array,
+      required: false,
     },
   },
   data() {
@@ -669,8 +676,7 @@ export default {
       this.updateLayout();
     },
     onOpen() {
-      const video = this.$refs.video;
-      if (video) video.open();
+      this.$emit("open");
     },
     onCurrentTime(currentTime) {
       if (this.neverPlayed) {

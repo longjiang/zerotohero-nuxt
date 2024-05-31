@@ -15,6 +15,8 @@ export default async function (to, from, savedPosition) {
       }
     } else if (from.name === 'dictionary' && to.name === 'dictionary') {
       return '.dictionary-main'
+    } else if (from.name === 'compare' && to.name === 'compare') {
+      return '.dictionary-main'
     } else if (to.name === 'feed') {
       if (feedSavedPosition) return feedSavedPosition
     } else {

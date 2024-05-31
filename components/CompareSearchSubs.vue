@@ -35,7 +35,7 @@
         @click="showPlaylistModal"
       >
         <i class="fa fa-stream" />
-        Compare Hits
+        {{ $t('Compare Hits') }}
       </b-button>
       <b-button
         :class="{
@@ -80,7 +80,7 @@
         ref="playlist-modal"
         centered
         hide-footer
-        title="Video Caption Search Results"
+        :title="$t('Video Caption Search Results')"
         body-class="playlist-modal-wrapper"
         modal-class="safe-padding-top mt-4"
         size="xl"
@@ -96,7 +96,7 @@
               }"
               @click.stop.prevent="sort = 'left'"
             >
-              Sort Left
+              {{ $t('Sort Left') }}
             </button>
             <button
               :class="{
@@ -107,7 +107,7 @@
               }"
               @click.stop.prevent="sort = 'right'"
             >
-              Sort Right
+              {{ $t('Sort Right') }}
             </button>
           </div>
           <template v-for="group in groups[sort]">

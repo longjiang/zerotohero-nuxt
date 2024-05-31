@@ -91,7 +91,7 @@
       </div>
     </div>
     <b-modal
-      ref="grammar-modal"
+      ref="grammarModal"
       size="md"
       centered
       hide-footer
@@ -141,7 +141,20 @@
       </table>
     </b-modal>
     <b-modal
-      ref="annotate-menu-modal"
+      ref="chatGptModal"
+      :title="$t('Let ChatGPT Explain')"
+      size="lg"
+      centered
+      hide-footer
+    >
+      <ChatGPT 
+        :maxTokens="50"
+        :showPrompt="false"
+        :initialMessages="[$t('Please very briefly explain, in {l1}, what the {l2} ({code}) text ‘{text}’ means, give its structure breakdown.', {text, l2: $t($l2.name), l1: $t($l1.name), code: $l2.code})]"
+      />
+    </b-modal>
+    <b-modal
+      ref="annotateMenuModal"
       size="sm"
       centered
       hide-footer
@@ -152,45 +165,7 @@
       <div class="annotate-menu-modal">
         <div class="annotate-menu-modal-item">
           <span
-            :class="{
-              'annotator-button annotator-text-mode focus-exclude': true,
-              active: textMode,
-            }"
-            title="Look up as Phrase"
-            @click="lookupAsPhraseClick"
-          >
-            <i class="fas fa-search"></i>
-          </span>
-          <span @click.stop.prevent="lookupAsPhraseClick">
-            {{ $t("Look up as Phrase") }} <i class="fas fa-chevron-right ml-1" />
-          </span>
-        </div>
-        <div class="annotate-menu-modal-item">
-          <Saved
-            :item="phraseItem(text, translationData)"
-            store="savedPhrases"
-            icon="bookmark"
-            class="annotator-button focus-exclude"
-            title="Save Phrase"
-            ref="savePhrase"
-          />
-          <span @click.stop.prevent="saveAsPhraseClick">
-            {{ $t(phraseSaved ? "Remove Phrase" : "Save as Phrase") }}
-          </span>
-        </div>
-        <div class="annotate-menu-modal-item">
-          <Speak
-            :text="text"
-            class="annotator-button"
-            title="Speak"
-            ref="speak"
-          />
-          <span @click="readAloud">{{ $t("Read Aloud") }}</span>
-        </div>
-        <div class="annotate-menu-modal-item">
-          <span
-            class="annotator-button annotator-translate focus-exclude"
-            title="Translate Inline"
+            class="annotator-button annotator-translate"
             @click="translateClick"
             ref="translation"
           >
@@ -198,30 +173,69 @@
           </span>
           <span @click="translateClick">{{ $t("Get Translation") }}</span>
         </div>
+        <div
+          class="annotate-menu-modal-item"
+          @click="
+            $refs.chatGptModal.show();
+            $refs.annotateMenuModal.hide();
+          "
+        >
+          <!-- show a ChatGPT modal -->
+          <span class="annotator-button" ref="translation">
+            <i class="fa-solid fa-message-question"></i>
+          </span>
+          <span>{{ $t("Let ChatGPT Explain") }}</span>
+        </div>
+        <div class="annotate-menu-modal-item">
+          <span @click="copyClick" class="annotator-button annotator-copy">
+            <i class="fas fa-copy"></i>
+          </span>
+          <span @click="copyClick">{{ $t("Copy Text") }}</span>
+        </div>
+        <div class="annotate-menu-modal-item">
+          <Speak :text="text" class="annotator-button" ref="speak" />
+          <span @click="readAloud">{{ $t("Read Aloud") }}</span>
+        </div>
         <div class="annotate-menu-modal-item">
           <span
             :class="{
-              'annotator-button annotator-text-mode focus-exclude': true,
+              'annotator-button annotator-text-mode': true,
               active: textMode,
             }"
-            title="Edit"
             @click="editClick"
           >
             <i class="fas fa-edit"></i>
           </span>
           <span @click="editClick">{{ $t("Edit Text") }}</span>
         </div>
+        <!-- <TranslatorLinks class="mt-2 pl-1" :text="text" /> -->
+        <div class="annotate-menu-modal-item">
+          <Saved
+            :item="phraseItem(text, translationData)"
+            store="savedPhrases"
+            icon="bookmark"
+            class="annotator-button"
+            ref="savePhrase"
+          />
+          <span @click.stop.prevent="saveAsPhraseClick">
+            {{ $t(phraseSaved ? "Remove Phrase" : "Save as Phrase") }}
+          </span>
+        </div>
         <div class="annotate-menu-modal-item">
           <span
-            @click="copyClick"
-            title="Copy"
-            class="annotator-button annotator-copy focus-exclude"
+            :class="{
+              'annotator-button annotator-text-mode': true,
+              active: textMode,
+            }"
+            @click="lookupAsPhraseClick"
           >
-            <i class="fas fa-copy"></i>
+            <i class="fas fa-search"></i>
           </span>
-          <span @click="copyClick">{{ $t("Copy Text") }}</span>
+          <span @click.stop.prevent="lookupAsPhraseClick">
+            {{ $t("Look up as Phrase") }}
+            <i class="fas fa-chevron-right ml-1" />
+          </span>
         </div>
-        <TranslatorLinks class="mt-2 pl-1" :text="text" />
       </div>
     </b-modal>
   </div>
@@ -292,7 +306,7 @@ export default {
       default: false,
     },
     showTranslation: {
-      default: false,
+      default: true,
     },
     showLoading: {
       default: true, // Whether to show a loading animation before annotation is complete
@@ -626,16 +640,18 @@ export default {
       return highlightMultiple(...args);
     },
     showMenuModal() {
-      this.$refs["annotate-menu-modal"].show();
+      this.$refs.annotateMenuModal.show();
     },
     hideMenuModal() {
-      this.$refs["annotate-menu-modal"].hide();
+      this.$refs.annotateMenuModal.hide();
+      this.$refs.grammarModal.hide();
+      this.$refs.chatGptModal.hide();
     },
     showGrammarModal() {
-      this.$refs["grammar-modal"].show();
+      this.$refs.grammarModal.show();
     },
     hideGrammarModal() {
-      this.$refs["grammar-modal"].hide();
+      this.$refs.grammarModal.hide();
     },
     saveAsPhraseClick() {
       let s = this.$refs["savePhrase"];
@@ -692,13 +708,17 @@ export default {
       this.hideMenuModal();
       this.translationLoading = true;
       this.$emit("translationLoading", true);
-      let translation = await this.translate(this.text)
+      let translation = await this.translate(this.text);
       // let translation = await this.trnslateWithIframe(this.text)
       this.setTranslation(translation);
     },
     async translate(text) {
       let translator = this.$languages.getTranslator(this.$l1, this.$l2);
-      return await translator.translateWithBing({text, l1Code: this.$l1.code, l2Code: this.$l2.code});
+      return await translator.translateWithBing({
+        text,
+        l1Code: this.$l1.code,
+        l2Code: this.$l2.code,
+      });
     },
     /**
      * @param {Number} startFrom Starting time in seconds
@@ -717,14 +737,15 @@ export default {
             for (const wb of wordBlockComponents) {
               let blockLength = wb.text?.length || 0;
               let blockDuration =
-                blockLength / aggregateText.length * this.animationDuration;
+                (blockLength / aggregateText.length) * this.animationDuration;
               if (blockDuration === 0) continue;
               durationAlreadyPlayed = durationAlreadyPlayed + blockDuration;
               // Which ones should skip
               if (durationAlreadyPlayed > startFrom) {
                 if (!this.animate) return;
-                const animationDuration = (blockDuration * 1000) / this.animationSpeed
-                const fadeDuration = animationDuration * 2000; 
+                const animationDuration =
+                  (blockDuration * 1000) / this.animationSpeed;
+                const fadeDuration = animationDuration * 2000;
                 wb.playAnimation(fadeDuration);
                 await timeout(animationDuration);
               }
@@ -733,20 +754,18 @@ export default {
         }
       } else {
         const timeBeforeRetry = Date.now();
-        this.$on('annotated', (annotated) => {
+        this.$on("annotated", (annotated) => {
           if (annotated) {
             this.$nextTick(() => {
               let wordBlockComponents =
                 this.$refs["run-time-template"]?.[0]?.$children?.[0]?.$children;
               if (wordBlockComponents?.length > 0) {
-
-            const delay = (Date.now() - timeBeforeRetry) / 1000;
-            this.playAnimation(startFrom + delay);
+                const delay = (Date.now() - timeBeforeRetry) / 1000;
+                this.playAnimation(startFrom + delay);
               }
-                
             });
           }
-        })
+        });
       }
     },
     async pauseAnimation() {
