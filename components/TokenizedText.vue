@@ -118,19 +118,7 @@ export default {
      */
     async playAnimation(startFrom = 0) {
 
-      // Function to delay until next DOM update
-      const waitForNextTick = () => new Promise(resolve => this.$nextTick(resolve));
-
-      // Wait until `this.tokenized` is true
-      while (!this.tokenized) {
-          await waitForNextTick();
-      }
-
-      // Wait until `wordBlockComponents` has items
-      while (!this.$children || this.$children.length === 0) {
-          await waitForNextTick();
-      }
-
+      await timeout(50); // Give a brief delay to allow the WordBlocks components to render fully.
       this.animate = true;
 
       if (this.animationDuration) {

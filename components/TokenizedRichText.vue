@@ -76,7 +76,8 @@
 </template>
 
 <script>
-import { stripTags } from "../lib/utils";
+import { time } from "vue-gtag";
+import { stripTags, timeout } from "../lib/utils";
 import { mapState } from "vuex";
 
 export default {
@@ -118,7 +119,6 @@ export default {
       editedText: "", // this will store the text edited by the user
       translationData: this.translation, // For translation
       annotated: false,
-      methodQueue: [], // Queue for methods that need to be called on the TokenizedText component once it's mounted
     };
   },
   // Provide/Inject: Vue provides a provide and inject mechanism which is
@@ -163,22 +163,6 @@ export default {
     },
     translationData(translation) {
       if (translation) this.$emit("translation", translation);
-    },
-    editMode(editMode) {
-      if (editMode) {
-        this.$nextTick(() => {
-          this.adjustTextareaHeight();
-        });
-      }
-    },
-    async annotated(annotated) {
-        // Clear the method queue once the TokenizedText component is mounted
-        if (annotated) {
-            for (const { methodName, args } of this.methodQueue) {
-                await this.delegateToTokenizedText(methodName, ...args);
-            }
-            this.methodQueue = [];
-        }
     },
   },
   mounted() {
@@ -232,12 +216,9 @@ export default {
     },
 
     async delegateToTokenizedText(methodName, ...args) {
-      let tokenizedTextComponent = this.getTokenizedTextComponent();
-      if (!tokenizedTextComponent) {
-        // Queue the method call if the TokenizedText component is not yet mounted
-        this.methodQueue.push({ methodName, args });
-        return;
-      }
+
+      const tokenizedTextComponent = this.getTokenizedTextComponent();
+
       if (tokenizedTextComponent[methodName]) {
         await tokenizedTextComponent[methodName](...args);
       }
@@ -247,6 +228,7 @@ export default {
      * @param {Number} startFrom Starting time in seconds
      */
     async playAnimation(startFrom = 0) {
+      await timeout(50); // Give a brief delay to allow the WordBlocks components to render fully.
       await this.delegateToTokenizedText("playAnimation", startFrom);
     },
 
