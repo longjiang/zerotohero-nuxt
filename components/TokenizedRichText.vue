@@ -33,6 +33,7 @@
             :animationDuration="animationDuration"
             :animationSpeed="animationSpeed"
             v-on="$listeners"
+            @annotated="annotated = true"
             ref="tokenizedText"
           />
         </div>
@@ -116,6 +117,8 @@ export default {
       slotText: "", // this will store the text extracted from the slot
       editedText: "", // this will store the text edited by the user
       translationData: this.translation, // For translation
+      annotated: false,
+      methodQueue: [], // Queue for methods that need to be called on the TokenizedText component once it's mounted
     };
   },
   // Provide/Inject: Vue provides a provide and inject mechanism which is
@@ -167,6 +170,15 @@ export default {
           this.adjustTextareaHeight();
         });
       }
+    },
+    async annotated(annotated) {
+        // Clear the method queue once the TokenizedText component is mounted
+        if (annotated) {
+            for (const { methodName, args } of this.methodQueue) {
+                await this.delegateToTokenizedText(methodName, ...args);
+            }
+            this.methodQueue = [];
+        }
     },
   },
   mounted() {
@@ -221,7 +233,12 @@ export default {
 
     async delegateToTokenizedText(methodName, ...args) {
       let tokenizedTextComponent = this.getTokenizedTextComponent();
-      if (tokenizedTextComponent && tokenizedTextComponent[methodName]) {
+      if (!tokenizedTextComponent) {
+        // Queue the method call if the TokenizedText component is not yet mounted
+        this.methodQueue.push({ methodName, args });
+        return;
+      }
+      if (tokenizedTextComponent[methodName]) {
         await tokenizedTextComponent[methodName](...args);
       }
     },

@@ -117,43 +117,47 @@ export default {
      * @param {Number} startFrom Starting time in seconds
      */
     async playAnimation(startFrom = 0) {
-      if (this.tokenized) {
-        this.animate = true;
-        if (this.animationDuration) {
-          let wordBlockComponents = this.$children; // directly get the word block components
 
-          if (wordBlockComponents?.length > 0) {
-            let durationAlreadyPlayed = 0;
-            for (const wb of wordBlockComponents) {
-              let blockLength = wb.token?.text?.length || 0;
-              let blockDuration =
-                (blockLength / this.sanitizedText.length) *
-                this.animationDuration;
+      // Function to delay until next DOM update
+      const waitForNextTick = () => new Promise(resolve => this.$nextTick(resolve));
 
-              if (blockDuration === 0) continue;
+      // Wait until `this.tokenized` is true
+      while (!this.tokenized) {
+          await waitForNextTick();
+      }
 
-              durationAlreadyPlayed = durationAlreadyPlayed + blockDuration;
+      // Wait until `wordBlockComponents` has items
+      while (!this.$children || this.$children.length === 0) {
+          await waitForNextTick();
+      }
 
-              // Which ones should skip
-              if (durationAlreadyPlayed > startFrom) {
-                if (!this.animate) return;
-                const blockAnimationDuration =
-                  blockDuration / this.animationSpeed;
-                wb.playAnimation(blockAnimationDuration);
-                await timeout(blockAnimationDuration * 1000);
-              }
+      this.animate = true;
+
+      if (this.animationDuration) {
+        let wordBlockComponents = this.$children; // directly get the word block components
+
+        if (wordBlockComponents?.length > 0) {
+          let durationAlreadyPlayed = 0;
+          for (const wb of wordBlockComponents) {
+            let blockLength = wb.token?.text?.length || 0;
+            let blockDuration =
+              (blockLength / this.sanitizedText.length) *
+              this.animationDuration;
+
+            if (blockDuration === 0) continue;
+
+            durationAlreadyPlayed = durationAlreadyPlayed + blockDuration;
+
+            // Which ones should skip
+            if (durationAlreadyPlayed > startFrom) {
+              if (!this.animate) return;
+              const blockAnimationDuration =
+                blockDuration / this.animationSpeed;
+              wb.playAnimation(blockAnimationDuration);
+              await timeout(blockAnimationDuration * 1000);
             }
           }
         }
-      } else {
-        const timeBeforeRetry = Date.now();
-
-        this.$on("annotated", () => {
-          this.$nextTick(() => {
-            const delay = (Date.now() - timeBeforeRetry) / 1000;
-            this.playAnimation(startFrom + delay);
-          });
-        });
       }
     },
     async pauseAnimation() {
