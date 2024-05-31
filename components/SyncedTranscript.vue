@@ -19,10 +19,7 @@
         <client-only>
           <Loader class="text-center w-100" />
           <template
-            v-for="(line, index) in filteredLines.slice(
-              this.visibleMin,
-              this.visibleMax - this.visibleMin
-            )"
+            v-for="(line, index) in filteredLines.slice(this.visibleMin, this.visibleMax)"
           >
             <TranscriptLine
               v-bind="{
@@ -312,21 +309,29 @@ export default {
       this.previousTime = this.currentTime;
     },
     async currentLineIndex(newValue, oldValue) {
-      let visibleMax = Math.max(
-        this.visibleMax,
-        this.currentLineIndex + this.visibleRange
-      );
-      if (visibleMax > this.visibleMax + this.visibleRange / 2) {
-        this.visibleMax = visibleMax;
-      }
-      if (this.single) this.tokenizeNextLines();
-      let shouldScroll = !this.single && !this.paused;
-      if (this.showSubsEditing) {
-        if (this.currentLineVisible && Math.abs(newValue - oldValue) < 5)
-          shouldScroll = false;
-      }
-      if (shouldScroll) {
-        this.scrollTo(this.currentLineIndex);
+      if (!this.single) {
+        let visibleMax = Math.max(
+          this.visibleMax,
+          this.currentLineIndex + this.visibleRange
+        );
+        if (visibleMax > this.visibleMax + this.visibleRange / 2) {
+          this.visibleMax = visibleMax;
+        }
+        // Do this only every this.visibileRange * 2 lines (e.g. 30 * 2 = 60 lines) so smooth scrolling is not interrupted
+        if (this.currentLineIndex % (this.visibleRange * 2) === 0 || this.currentLineIndex < this.visibleMin + this.visibleRange)
+          this.visibleMin = Math.max(0, this.currentLineIndex - this.visibleRange);
+
+        let shouldScroll = !this.paused
+        if (this.showSubsEditing) {
+          if (this.currentLineVisible && Math.abs(newValue - oldValue) < 5)
+            shouldScroll = false;
+        }
+        if (shouldScroll) {
+          this.scrollTo(this.currentLineIndex);
+        }
+      } else {
+        // Single line mode
+        this.tokenizeNextLines();
       }
     },
     parallellines() {

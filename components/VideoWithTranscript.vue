@@ -692,6 +692,7 @@ export default {
       }
       if (this.$refs.transcript) {
         if (this.$refs.videoControls) {
+          // Transcript's current line is updated via a prop
           this.$refs.videoControls.currentLine =
             this.$refs.transcript.currentLine;
         }
