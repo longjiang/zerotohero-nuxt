@@ -56,11 +56,6 @@
         {{ translation }}
         <small class="text-muted"> ({{ $t("machine translated") }}) </small>
       </div>
-      <div class="context small">
-        <hr />
-        <div><span v-html="highlight(this.immediateContext, this.text, 'outside')" /></div>
-        <div class="mt-2"><Translate :text="immediateContext" /></div>
-      </div>
     </div>
 
     <div class="my-3">
@@ -242,12 +237,6 @@
       </div>
       <div class="mt-2 mb-2" />
     </div>
-    <hr />
-    <div class="context small">
-      <div><span v-html="highlight(this.immediateContext, this.text, 'outside')" /></div>
-      <div class="mt-2"><Translate :text="immediateContext" /></div>
-    </div>
-    <hr />
     <div v-if="loading === true">
       <Loader :sticky="true" message="Looking up the dictionary..." />
     </div>

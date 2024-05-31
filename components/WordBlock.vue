@@ -124,6 +124,8 @@ export default {
   data() {
     return {
       open: false,
+      images: [],
+      loadingImages: true,
       showPhrase: {},
       lookupInProgress: false,
       text: this.token.text,
@@ -291,155 +293,6 @@ export default {
     showDefinition() {
       return this.$l2Settings?.showDefinition;
     }
-  },
-  asyncComputed: {
-    /**
-     * Asynchronously calculates the attributes object.
-     *
-     * The returned object has the following properties:
-     *
-     * - `saved`: A value indicating whether the word or phrase has been saved.
-     * - `phonetics`: The phonetics of the current word or phrase.
-     * - `pos`: The part of speech of the current word or phrase.
-     * - `definition`: The quick gloss definition of the current word or phrase.
-     * - `text`: The transformed text of the word or phrase.
-     * - `hanAnnotation`: For Vietnamese and Korean, the Han character form of the word, if it exists and should be shown in small print on the side.
-     * - `mappedPronunciation`: The pronunciation of the word as mapped for Japanese, if the current language is Japanese.
-     * - `data-hover-level`: Set to "outside" by default
-     * - `data-rank`: The rank of the word, if it exists.
-     * - `data-weight`: The weight of the word, if it exists.
-     *
-     * @async
-     * @computed
-     * @returns {Promise<Object>} The attributes object.
-     */
-    attributes() {
-      let isSaved = this.savedWord || this.savedPhrase ? true : false;
-      let phonetics = this.$l2Settings?.showPinyin ? this.bestPhonetics : false;
-      let text = this.getDisplayText(this.text);
-      let pos = this.pos;
-      let definition, hanAnnotation, mappedPronunciation;
-      if (this.$l2Settings?.showDefinition || this.$l2Settings?.showQuickGloss)
-        definition = this.shortDefinition;
-      if (this.$l2Settings?.showByeonggi && ["ko", "vi"].includes(this.$l2.code))
-        hanAnnotation = this.getHanAnnotation(this.bestWord);
-      if (this.$l2.code === "ja")
-        mappedPronunciation = this.getMappedPronunciation();
-      let level = this.bestWord?.level || "outside";
-      let attributes = {
-        isSaved,
-        phonetics,
-        pos,
-        definition,
-        text,
-        level,
-        hanAnnotation,
-        mappedPronunciation,
-      };
-      return attributes;
-    },
-    showFillInTheBlank() {
-      (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal;
-    },
-    shortDefinition() {
-      let shortDefinition;
-
-      // If there's a saved phrase, get the definition in the current language
-      if (this.savedPhrase) {
-        shortDefinition = this.savedPhrase?.[this.$l1.code];
-      }
-
-      // If there's no saved phrase but there's a saved word, get the first definition
-      else if (this.savedWord) {
-        shortDefinition = this.savedWord?.definitions?.[0];
-      }
-
-      // If there's no saved phrase or word, get the first definition of the first word in the list
-      else {
-        shortDefinition = this.words?.[0]?.definitions?.[0];
-      }
-
-      // If there's no definition, return undefined
-      if (!shortDefinition) return;
-
-      // Define an array of regex rules to clean up the definition
-      const rules = [
-        /\s*\(.*?\)/, // Remove anything in parentheses
-        /\s*\（.*?）/, // Remove anything in full-width parentheses
-        /\s*.*?：/, // Remove anything before and including the full-width colon
-        /^.*\./, // Remove anything before and including the first period
-        /^to /, // Remove 'to ' at the start of the definition
-        /^see .*/, // Remove 'see ' and anything after it at the start of the definition
-        /^variant .*/, // Remove 'variant ' and anything after it at the start of the definition
-      ];
-
-      // Apply each rule to the definition
-      rules.forEach((rule) => {
-        shortDefinition = shortDefinition.replace(rule, "");
-      });
-
-      // Split the definition by commas or semicolons and take the first part
-      shortDefinition = shortDefinition.split(/[，；,;]\s*/)[0];
-
-      // If the resulting definition is less than 20 characters long, return it
-      // Otherwise, return undefined
-      return shortDefinition && shortDefinition.length < 20 ? shortDefinition : undefined;
-    },
-    pos() {
-      let pos = this.bestWord?.pos || this.token?.pos;
-      if (pos) return pos.replace(/\-.*/, "").replace(/\s/g, "-");
-    },
-    bestWord() {
-      if (this.savedWord) return this.savedWord;
-      let firstCandidate = this.token?.candidates?.[0];
-      if (firstCandidate) return firstCandidate;
-      let firstFuzzyWord = this.words?.[0];
-      if (firstFuzzyWord) {
-        for (let key in ["head", "simplified", "traditional", "kana"]) {
-          if (firstFuzzyWord[key] === this.text) {
-            return firstFuzzyWord;
-          }
-        }
-      }
-    },
-    bestPhonetics() {
-      let phonetics;
-      if (this.token?.pronunciation) {
-        phonetics = this.token.pronunciation;
-      } else if (this.bestWord) {
-        phonetics = this.phoneticsFromWord(this.bestWord);
-      } else {
-        phonetics = tr(this.text).replace(/"/g, "");
-      }
-      if (phonetics) return phonetics;
-    },
-    wordBlockTextClasses() {
-      let classes = {
-        "word-block-text d-inline-block": true,
-        klingon: this.$l2.code === "tlh",
-        "word-block-hard": this.hard,
-      };
-      return classes;
-    },
-    wordBlockClasses() {
-      let classes = {
-        "word-block": true,
-        "with-quick-gloss":
-          this.attributes?.isSaved && this.attributes?.definition,
-        saved: this.attributes?.isSaved,
-        obscure: this.attributes?.obscure,
-        animate: this.animate,
-        highlighted: this.highlighted
-      };
-      if (this.pos) classes[`pos-${this.pos}`] = true;
-      return classes;
-    },
-    showQuickGloss() {
-      return !this.showDefinition && this.$l2Settings?.showQuickGloss;
-    },
-    showDefinition() {
-      return this.$l2Settings?.showDefinition;
-    },
   },
   mounted() {
     this.checkSavedItems();
@@ -751,7 +604,6 @@ export default {
 rt {
   font-size: 50%; /* Smaller size for phonetic annotation */
   line-height: 1.2; /* Adjust line-height if needed */
-  display: block;
 }
 
 .word-block {
