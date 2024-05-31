@@ -18,8 +18,8 @@
             <div v-for="(line, index) in message.text.split('\n')" :key="`gpt-respnose-${index}`" class="mb-2">
               <div v-html="Marked(line.trim())" />
             </div>
-            <div class="text-center" v-if="showActions">
-              <span @click="resendMessage(messages[index - 1])" class="btn btn-unstyled text-success mr-2">
+            <div class="text-center">
+              <span @click="resendMessage(messages[index - 1])" class="btn btn-unstyled text-success mr-2" v-if="showActions">
                 <i class="fa fa-sync mr-1"></i>
                 {{ $t("Regenerate") }}
               </span>
@@ -29,11 +29,15 @@
                   method: 'md',
                   arg: message.text.replace('\n', '\n\n'),
                 },
-              }" class="btn btn-unstyled text-success">
+              }" class="btn btn-unstyled text-success"  v-if="showActions">
                 <i class="fa fa-book-open mr-1"></i>
                 {{ $t("Open in Reader") }}
                 <i class="fa fa-chevron-right ml-1"></i>
               </router-link>
+              <a :href="`https://chat.openai.com/?q=${encodeURIComponent(messages[index-1].text)}`" target="_blank" class="btn btn-unstyled text-success ml-2" v-if="showActions || showFollowUp">
+                {{ $t("Open in ChatGPT") }}
+                <i class="fa fa-external-link-alt ml-1"></i>
+              </a>
             </div>
           </div>
         </div>
@@ -63,6 +67,9 @@ export default {
     },
     showActions: {
       default: true, // Whether or not to show the action buttons
+    },
+    showFollowUp: {
+      default: true, // Whether or not to show the follow-up button, even if showActions is false
     },
   },
   data() {
