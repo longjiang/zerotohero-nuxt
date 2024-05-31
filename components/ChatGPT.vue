@@ -18,9 +18,8 @@
             <div v-for="(line, index) in message.text.split('\n')" :key="`gpt-respnose-${index}`" class="mb-2">
               <div v-html="Marked(line.trim())" />
             </div>
-            <div class="text-center">
-              <span @click="resendMessage(messages[index - 1])" class="btn btn-unstyled text-success mr-2" v-if="showActions">
-                <i class="fa fa-sync mr-1"></i>
+            <div class="text-center mb-2">
+              <span @click="resendMessage(messages[index - 1])" class="btn btn-unstyled text-success px-1" v-if="showActions">
                 {{ $t("Regenerate") }}
               </span>
               <router-link :to="{
@@ -29,12 +28,10 @@
                   method: 'md',
                   arg: message.text.replace('\n', '\n\n'),
                 },
-              }" class="btn btn-unstyled text-success"  v-if="showActions">
-                <i class="fa fa-book-open mr-1"></i>
+              }" class="btn btn-unstyled text-success px-1"  v-if="showActions">
                 {{ $t("Open in Reader") }}
-                <i class="fa fa-chevron-right ml-1"></i>
               </router-link>
-              <a :href="`https://chat.openai.com/?q=${encodeURIComponent(messages[index-1].text)}`" target="_blank" class="btn btn-unstyled text-success ml-2" v-if="showActions || showFollowUp">
+              <a :href="`https://chat.openai.com/?q=${encodeURIComponent(messages[index-1].text)}`" target="_blank" class="btn btn-unstyled text-success px-1" v-if="showActions || showFollowUp">
                 {{ $t("Open in ChatGPT") }}
                 <i class="fa fa-external-link-alt ml-1"></i>
               </a>
