@@ -35,6 +35,7 @@
           data-level="outside"
           :to="{ name: 'l1-l2-phrase-search', params: { term: text } }"
           style="font-size: 1.5rem; font-weight: bold"
+          :lang="$l2.code"
           >{{ text }} <i class="fa fa-chevron-right"></i
         ></router-link>
         <span class="copy-button">
@@ -118,6 +119,7 @@
         >
           <b
             :data-level="word.level || 'outside'"
+            :lang="$l2.code"
             :class="{
               klingon: $l2.code === 'tlh',
             }"

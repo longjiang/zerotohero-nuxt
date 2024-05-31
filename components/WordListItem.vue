@@ -30,6 +30,7 @@
         :title="titleText"
         :class="{ 'wordlist-item-word': true, transparent: hideWord }"
         :data-level="dataLevel"
+        :lang="$l2.code"
       >
         <span v-if="$l2.code === 'de' && word.gender">{{ genderArticle }}</span>
         {{ word.accented || word.head }}

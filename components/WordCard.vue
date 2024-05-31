@@ -42,10 +42,10 @@
         v-if="word"
         :to="`/${$l1.code}/${$l2.code}/dictionary/${$dictionaryName}/${word.id}`"
       >
-        <div :data-level="word.hsk" class="word-list-ext-item-word simplified">
+        <div :data-level="word.hsk" class="word-list-ext-item-word simplified" lang="zh-Hanz">
           {{ word.simplified }}
         </div>
-        <div :data-level="word.hsk" class="word-list-ext-item-word traditional">
+        <div :data-level="word.hsk" class="word-list-ext-item-word traditional" lang="zh-Hant">
           {{ word.traditional }}
         </div>
       </router-link>

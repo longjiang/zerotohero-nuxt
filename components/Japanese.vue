@@ -9,7 +9,7 @@
               :to="`/en/ja/dictionary/edict/${word.id}`"
               class="link-unstyled"
             >
-              <b :data-level="hsk" class="bigger">{{ word.kanji }}</b>
+              <b :data-level="hsk" class="bigger" lang="ja">{{ word.kanji }}</b>
               ({{ word.kana }})
             </router-link>
             <Speak :text="word.kana || word.kanji" :l2="japanese" />

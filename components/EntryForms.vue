@@ -18,7 +18,7 @@
             <tbody>
               <tr v-for="(row, rowIndex) in filteredAndSortedTableRows(table)" :key="`form-table-row-${rowIndex}`">
                 <td class="field-name">{{ row.field }}</td>
-                <td class="field-value" :data-level="word.level || 'outside'"><strong>{{ row.form || "n/a" }}</strong></td>
+                <td class="field-value" :data-level="word.level || 'outside'" :lang="$l2.code"><strong>{{ row.form || "n/a" }}</strong></td>
               </tr>
             </tbody>
           </table>

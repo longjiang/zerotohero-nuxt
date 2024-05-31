@@ -110,7 +110,7 @@
                     <td style="min-width: 3rem">{{ word.level }}</td>
                     <td>{{ word.num }}</td>
                     <td>
-                      <b :data-level="word.hsk">{{ word.simplified }}</b>
+                      <b :data-level="word.hsk" lang="zh-Hans">{{ word.simplified }}</b>
                     </td>
                     <td>{{ word.pinyin }}</td>
                     <td>{{ word.definitions }}</td>

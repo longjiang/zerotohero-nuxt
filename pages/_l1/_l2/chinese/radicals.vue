@@ -42,6 +42,7 @@
                       v-for="(character, index) in radical.characters"
                       :key="`character-${character.character}`"
                       :data-level="character.hsk"
+                      lang="zh"
                       @click="learnCharacter(radical, index)"
                       class="cursor-pointer"
                     >

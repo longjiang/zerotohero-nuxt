@@ -17,7 +17,7 @@
       <div class="character-parts" style="overflow: hidden; position: relative;">
         <h6>{{ $t('Character Decomposition') }}</h6>
         <div class="part character-example" v-for="(part, index) in character.parts" :key="`character-part-${part.character}-${index}`">
-          <span class="part-part mr-2" v-if="part && part.character !== '？'">
+          <span class="part-part mr-2" v-if="part && part.character !== '？'" :lang="$l2.code">
             <b>{{ part.character }}</b> =
           </span>
           <span

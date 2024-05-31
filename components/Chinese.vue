@@ -11,11 +11,11 @@
               },${word.pinyin.replace(/ /g, '_')},${word.index}`"
               class="link-unstyled"
             >
-              <b class="bigger" :data-level="'outside'">
+              <b class="bigger" :data-level="'outside'" lang="zh-Hans">
                 {{ word.simplified }}
               </b>
 
-              [{{ word.traditional }}]
+              [<span lang="zh-Hant">{{ word.traditional }}</span>]
               <span>({{ word.pinyin }})</span>
             </router-link>
             <Speak :text="word.traditional" :l2="chinese" />

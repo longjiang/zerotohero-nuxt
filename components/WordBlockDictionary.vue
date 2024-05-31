@@ -13,6 +13,7 @@
       target="_blank"
       :href="this.$l2.code === 'zh' ? `plecoapi://x-callback-url/s?q=${token.candidates[0].simplified}` : this.$l2.code === 'en' ? `https://dictionary.cambridge.org/dictionary/english-chinese-simplified/${token.candidates[0].head}` : undefined"
       :data-level="token.candidates[0].level"
+      :lang="$l2.code"
       >{{ token.candidates[0].head }}</a
     >
     <span v-if="this.$l2.code === 'zh'"

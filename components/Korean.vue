@@ -9,9 +9,9 @@
               :to="`/en/ko/dictionary/kengdic/${word.kid}`"
               class="link-unstyled"
             >
-              <b>{{ word.hangul }}</b>
+              <b lang="ko">{{ word.hangul }}</b>
               [
-              <b data-level="outside" class="bigger">{{ word.hanja }}</b>
+              <b data-level="outside" class="bigger" lang="ko">{{ word.hanja }}</b>
               ]
             </router-link>
             <Speak :text="word.hangul" :l2="korean" />

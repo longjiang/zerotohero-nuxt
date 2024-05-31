@@ -20,6 +20,7 @@
         ]"
         :key="index"
         :data-hover-level="attributes.level"
+        :lang="$l2.code"
       >
         <!-- <rt v-if="attributes?.showDefinition && index === 0">{{
           attributes?.definition || "&nbsp;"

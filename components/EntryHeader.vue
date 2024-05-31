@@ -79,10 +79,12 @@
                     : entry.level || 'outside'
                 "
                 v-html="entry.simplified"
+                lang="zh-Hans"
               ></span>
               <span
                 class="entry-word traditional"
                 :data-level="entry.level || 'outside'"
+                lang="zh-Hant"
                 v-html="entry.traditional"
               ></span>
             </template>

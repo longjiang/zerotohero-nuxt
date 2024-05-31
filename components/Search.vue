@@ -63,7 +63,7 @@
         >
           <span class="suggestion-not-found">
             <i18n path="Look up “{0}” as a phrase">
-              <b data-level="outside">{{ text }}</b>
+              <b data-level="outside" :lang="$l2.code">{{ text }}</b>
             </i18n>
           </span>
         </router-link>
@@ -82,6 +82,7 @@
             <span
               class="suggestion-word font-weight-bold mr-1"
               :data-level="suggestion.level || 'outside'"
+              :lang="$l2.code"
             >
               {{ suggestion.head }}
             </span>
