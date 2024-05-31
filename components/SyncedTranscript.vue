@@ -306,6 +306,7 @@ export default {
       }
     },
     async currentTime() {
+      console.log(this.preventCurrentTimeUpdate)
       if (this.preventCurrentTimeUpdate) return;
       this.executeTimeBasedMethods();
       this.previousTime = this.currentTime;
