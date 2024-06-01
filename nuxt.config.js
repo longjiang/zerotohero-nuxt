@@ -312,9 +312,9 @@ export default {
           component: "./pages/_l1/_l2/page/_id",
         },
         {
-          name: "l1-l2-phrase",
+          name: "l1-l2-phrase-search-term",
           path: "/:l1/:l2/phrase/search/:term?/:dict?",
-          component: "./pages/_l1/_l2/phrase/search",
+          component: "./pages/_l1/_l2/phrase/search/_term",
         },
         {
           name: "l1-l2-phrasebook",

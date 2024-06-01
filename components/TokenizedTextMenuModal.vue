@@ -131,7 +131,7 @@ export default {
 
     lookupAsPhraseClick() {
       this.$router.push({
-        name: "l1-l2-phrase-search",
+        name: "l1-l2-phrase-search-term",
         params: {
           term: this.text,
         },

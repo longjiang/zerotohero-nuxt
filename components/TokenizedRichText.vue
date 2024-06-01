@@ -76,7 +76,6 @@
 </template>
 
 <script>
-import { time } from "vue-gtag";
 import { stripTags, timeout } from "../lib/utils";
 import { mapState } from "vuex";
 
@@ -135,7 +134,7 @@ export default {
   computed: {
     sanitizedText() {
       // combine the text from the prop and from the slot, then sanitize
-      let textFromPropOrSlot = (this.text || "") + this.slotText;
+      let textFromPropOrSlot = (this.text || "") + this.slotText; // this.text is a prop, this.slotText is from the slot
       // If the user has edited the text, use that instead
       return stripTags(this.editedText || textFromPropOrSlot).trim();
     },
@@ -174,7 +173,8 @@ export default {
       const node = this.$slots.default[0].elm;
       if (node) {
         this.processedNode = this.processNode(node);
-        this.slotText = node.innerText || ""; // Extract the text content from the slot
+        // Extract the text content from the slot
+        this.slotText = node.textContent || ""; 
       }
     }
   },

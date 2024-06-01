@@ -178,7 +178,7 @@ export default {
       // If route is not null, return it
       if (route) return route
       // If route is null, the defaultURL function has not been set
-      else return { name: 'l1-l2-phrase-search', params: {term: this.text.trim() }};
+      else return { name: 'l1-l2-phrase-search-term', params: {term: this.text.trim() }};
     },
   },
   watch: {

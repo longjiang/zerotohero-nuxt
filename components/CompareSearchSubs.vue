@@ -225,7 +225,6 @@
       @loaded="searchSubsALoaded"
       :keyboard="false"
       :fullscreenToggle="false"
-      :skin="skin"
     />
     <SearchSubsComp
       :class="{ 'd-none': hitAB === 'A' }"
@@ -236,7 +235,7 @@
       @loaded="searchSubsBLoaded"
       :keyboard="false"
       :fullscreenToggle="false"
-      :skin="skin"
+
     />
   </div>
 </template>

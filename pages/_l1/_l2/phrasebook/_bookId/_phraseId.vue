@@ -522,7 +522,7 @@ export default {
         else await this.matchPhraseToDictionaryEntries();
       } else {
         this.$router.push({
-          name: "l1-l2-phrase-search",
+          name: "l1-l2-phrase-search-term",
           params: {
             term: this.phrase,
           },

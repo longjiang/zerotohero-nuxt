@@ -14,7 +14,6 @@
     <TabbedSections v-bind="{ sections }">
       <template #subtitles>
         <Widget
-          skin="dark"
           id="search-subs"
           v-if="term"
           :key="`subs-search-${term}`"
@@ -29,7 +28,6 @@
               v-if="term && renderSearchSubs"
               ref="searchSubs"
               level="outside"
-              skin="dark"
               :key="`${term}-search-subs`"
               :terms="[term]"
               :tvShow="tvShow"

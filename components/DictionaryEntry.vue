@@ -24,7 +24,6 @@
           <LazySearchSubsComp
             v-if="selectedSearchTerms && renderSearchSubs"
             ref="searchSubs"
-            skin="dark"
             :level="entry.newHSK && entry.newHSK === '7-9' ? '7-9' : entry.hsk"
             :key="`subs-search-${
               entry.id
