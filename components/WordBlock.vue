@@ -27,7 +27,7 @@
         }}</rt> -->
         {{ russianAccentText || segment.surface
         }}<rt v-if="showReading(segment)">{{ segment.reading }}</rt
-        ><rt v-else>&nbsp;</rt></ruby
+        ><rt v-else-if="$l2Settings.showPinyin">&nbsp;</rt></ruby
       ><span
         v-if="attributes && attributes.hanAnnotation"
         class="word-block-text-byeonggi"
