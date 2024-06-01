@@ -12,8 +12,8 @@ export const mutations = {
   ADD_LIKE(state, like) {
     state.userLikes.push(like);
   },
-  REMOVE_LIKE(state, likeId) {
-    state.userLikes = state.userLikes.filter(like => like.id !== likeId);
+  REMOVE_LIKE(state, videoId) {
+    state.userLikes = state.userLikes.filter(like => like.id !== videoId);
   }
 }
 
@@ -73,7 +73,6 @@ export const actions = {
         }
 
         commit('ADD_LIKE', { youtube_id: video.youtube_id, id: parseInt(video.id), l2: l2Id, tags: video.tags, title: video.title, created_on: new Date()});
-        console.log(`User Likes: Liked video ${videoId} and L2 ${l2Id}`);
       }
     }
   },
@@ -106,8 +105,8 @@ export const actions = {
           return;
         }
 
-        commit('REMOVE_LIKE', likes[0].id);
-        console.log(`User Likes: Unliked video ${videoId} and L2 ${l2Id}`);
+        commit('REMOVE_LIKE', videoId);
+        console.log(`User Likes: Unliked video with ID ${videoId} and L2 ${l2Id}`);
       }
     }
   },
