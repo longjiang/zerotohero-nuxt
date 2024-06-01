@@ -4,7 +4,6 @@
       @click="showModal"
       variant="unstyled"
       style="
-        color: rgba(255, 255, 255, 0.77255);
         padding: 0;
         padding-bottom: 0.2em;
         font-weight: bold;

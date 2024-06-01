@@ -7,7 +7,7 @@
     }"
   >
     <div class="text-center pb-2">
-      <span class="skin-dark">
+      <span>
         <!-- Navigation Buttons -->
         <SimpleButton
           v-if="hits.length > 0"
@@ -119,7 +119,6 @@
           showInfo: true,
           showLineList: false,
           showType: currentHit.showType,
-          skin: 'dark',
           speed,
           startLineIndex: Math.max(startLineIndex, 0),
           type: 'youtube',
@@ -153,7 +152,6 @@
     <div v-if="!pro">
       <YouNeedPro
         v-if="hitIndex > NON_PRO_MAX_SUBS_SEARCH_HITS - 1"
-        skin="dark"
         :message="
           $t('See all {num} search results with a Pro account', {
             num: hits.length,

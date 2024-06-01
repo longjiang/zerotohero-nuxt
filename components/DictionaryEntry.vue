@@ -2,7 +2,6 @@
   <TabbedSections v-bind="{ sections }">
     <template #subtitles>
       <Widget
-        skin="dark"
         :withPadding="false"
         v-if="entry && showSearchSubs && selectedSearchTerms"
       >

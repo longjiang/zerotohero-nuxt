@@ -1,7 +1,7 @@
 <template>
   <div
     :class="{
-      'bg-accent widget': true,
+      'widget': true,
       'widget-dark': $skin === 'dark',
       'widget-light': $skin === 'light',
     }"
@@ -28,7 +28,9 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@import "../assets/scss/variables.scss";
+
 .widget {
   border-radius: 0.3rem;
   overflow: hidden;
@@ -36,7 +38,6 @@ export default {
     display: block;
     text-align: center;
     font-weight: bold;
-    color: #2b3f44b0;
     padding-top: 0.75rem;
   }
   .widget-body {
@@ -44,10 +45,10 @@ export default {
     border-radius: 0 0 0.3rem 0.3rem;
   }
   &.widget-dark {
-    color: rgba(255, 255, 255, 0.8);
-    .widget-title {
-      color: #ffffffc5;
-    }
+    background-color: $bg-color-dark-3;
+  }
+  &.widget-light {
+    background-color: $bg-color-light-3;
   }
 }
 </style>
