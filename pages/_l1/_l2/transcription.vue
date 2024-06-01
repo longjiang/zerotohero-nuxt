@@ -76,7 +76,6 @@
 </template>
 
 <script>
-import pinyin2ipa from "pinyin2ipa";
 
 export default {
   data() {

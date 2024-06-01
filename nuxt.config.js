@@ -169,7 +169,10 @@ try {
 
 
 export default defineNuxtConfig({
-  bridge: false,
+  bridge: {
+    capi: true,
+    nitro: false // If migration to Nitro is complete, set to true
+  },
   env: {
     baseUrl: hostname,
     openAIToken: process.env.OPEN_AI_TOKEN,

@@ -255,10 +255,9 @@
 <script>
 import { transliterate as tr } from "transliteration";
 import { IMAGE_PROXY } from "../lib/config";
-import { timeout, PYTHON_SERVER, LANGS_WITH_AZURE_TRANSLATE, languageLevels } from "../lib/utils";
+import { timeout, LANGS_WITH_AZURE_TRANSLATE, languageLevels } from "../lib/utils";
 import WordPhotos from "../lib/word-photos";
 import Klingon from "../lib/klingon";
-import pinyin2ipa from "pinyin2ipa";
 import  { breakSentences, highlight } from "../lib/utils";
 
 export default {
@@ -423,10 +422,7 @@ export default {
         formattedPronunciation = word.head + " " + formattedPronunciation;
       if (this.$l2.code === "zh")
         formattedPronunciation =
-          word.pronunciation +
-          " [" +
-          pinyin2ipa(word.pronunciation, { toneMarker: "chaoletter" }) +
-          "]";
+          word.pronunciation;
       return formattedPronunciation;
     },
     onCopyClick(text) {

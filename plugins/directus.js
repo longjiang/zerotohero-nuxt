@@ -72,8 +72,10 @@ export const YOUTUBE_VIDEOS_TABLES = {
   ]
 };
 
-export default ({ app }, inject) => {
-  inject("directus", {
+
+
+export default defineNuxtPlugin(app => {
+  const directus = {
     host: process.server
       ? process.env.baseUrl
       : window.location.protocol +
@@ -515,11 +517,12 @@ export default ({ app }, inject) => {
       settings,
     }) {
       app.$auth.$storage.setUniversal("dataId", id);
-      app.store.dispatch("savedWords/importFromJSON", saved_words);
-      app.store.dispatch("savedPhrases/importFromJSON", saved_phrases);
-      // app.store.dispatch("history/importFromJSON", history);
-      app.store.dispatch("progress/importFromJSON", progress);
-      app.store.dispatch("settings/importFromJSON", settings);
+      const { $store } = useNuxtApp(); // const { $store } = useNuxtApp() (was app.$store) before
+      $store.dispatch("savedWords/importFromJSON", saved_words);
+      $store.dispatch("savedPhrases/importFromJSON", saved_phrases);
+      // $store.dispatch("history/importFromJSON", history);
+      $store.dispatch("progress/importFromJSON", progress);
+      $store.dispatch("settings/importFromJSON", settings);
     },
 
     async checkSubscription() {
@@ -550,5 +553,8 @@ export default ({ app }, inject) => {
       }
       return true;
     },
-  });
-};
+  };
+
+  // Inject the 'directus' instance to be usable in the app context
+  app.provide('directus', directus);
+});

@@ -183,7 +183,6 @@
 <script>
 import ReaderComp from "@/components/ReaderComp";
 import { logError, proxy } from "../../../lib/utils";
-import { markdownToTxt } from "markdown-to-txt";
 import { NodeHtmlMarkdown } from "node-html-markdown";
 import { parse } from "node-html-parser";
 import { baseUrl } from "../../../lib/utils/url";
@@ -307,7 +306,7 @@ export default {
     },
     title() {
       let lines = this.text.trim().split(/\n+/) || [""];
-      return markdownToTxt(lines[0]);
+      return lines[0];
     },
     /**
      * Whether or not to show a "share this" button

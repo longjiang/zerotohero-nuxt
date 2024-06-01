@@ -20,7 +20,7 @@ Vue.mixin({
       return this.$state.store.settings;
     },
     $browserLanguage() {
-      if (process.browser) {
+      if (process.browser) { 
         let code = navigator.language.replace(/-.*/, "");
         return code;
       }
