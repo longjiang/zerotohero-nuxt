@@ -1,4 +1,6 @@
 import { DIRECTUS_URL } from "./lib/utils";
+import { $content } from '@nuxt/content'; // Originally const { $content } = require("@nuxt/content"); inside the routes function before upgrading to Nuxt Bridge
+import { defineNuxtConfig } from '@nuxt/bridge'
 
 let popularPaths = `/
 /dashboard
@@ -114,7 +116,6 @@ popularPaths = popularPaths.map((path) =>
 const hostname = process.env.URL ? process.env.URL : "http://localhost:3000";
 
 const routes = async () => {
-  const { $content } = require("@nuxt/content");
   const files = await $content().only(["path"]).fetch();
 
   return files
@@ -166,7 +167,9 @@ try {
   console.error("Error while getting Git information:", error);
 }
 
-export default {
+
+export default defineNuxtConfig({
+  bridge: false,
   env: {
     baseUrl: hostname,
     openAIToken: process.env.OPEN_AI_TOKEN,
@@ -720,4 +723,4 @@ export default {
     ],
     routes,
   },
-};
+});

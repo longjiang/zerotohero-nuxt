@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
+    "dev": "nuxt2",
+    "build": "nuxt2 build",
+    "start": "nuxt2 start",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint": "npm run lint:js",
@@ -69,7 +69,7 @@
     "money": "^0.2.0",
     "node-html-markdown": "^1.2.0",
     "node-html-parser": "^3.3.6",
-    "nuxt": "^2.15.8",
+    "nuxt": "^2.17.3",
     "nuxt-delay-hydration": "^0.3.2",
     "nuxt-i18n": "^6.27.0",
     "nuxt-lazy-load": "^1.2.6",
@@ -128,6 +128,7 @@
     "@capacitor/cli": "^4.0.0",
     "@capacitor/core": "^4.0.0",
     "@capacitor/ios": "^4.0.0",
+    "@nuxt/bridge": "^3.2.1",
     "@nuxt/types": "^2.15.3",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/pwa": "^3.3.5",
@@ -142,6 +143,7 @@
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-vue": "^7.7.0",
     "node-sass": "8",
+    "nuxi": "^3.11.1",
     "raw-loader": "^4.0.2",
     "vue-jest": "^3.0.4"
   }
