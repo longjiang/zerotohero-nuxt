@@ -713,7 +713,7 @@ export default defineNuxtConfig({
     },
     transpile: ["iframe-translator", "defu"],
   },
-  target: "static",
+  target: "server",
   generate: {
     routes,
     fallback: true,

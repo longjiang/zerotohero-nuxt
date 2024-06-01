@@ -96,3 +96,5 @@ dist_electron/
 # Package locks
 yarn.lock
 package-lock.json
+# Local Netlify folder
+.netlify
