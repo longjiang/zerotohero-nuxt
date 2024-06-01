@@ -25,7 +25,7 @@
         <!-- <rt v-if="attributes?.showDefinition && index === 0">{{
           attributes?.definition || "&nbsp;"
         }}</rt> -->
-        {{ russianAccentText || segment.surface
+        {{ transformText(segment.surface)
         }}<rt v-if="showReading(segment)">{{ segment.reading }}</rt
         ><rt v-else-if="$l2Settings.showPinyin">&nbsp;</rt></ruby
       ><span
@@ -171,7 +171,7 @@ export default {
     attributes() {
       let isSaved = this.savedWord || this.savedPhrase ? true : false;
       let phonetics = this.$l2Settings?.showPinyin ? this.bestPhonetics : false;
-      let text = this.getDisplayText(this.text);
+      let text = this.transformText(this.text);
       let pos = this.pos;
       let definition, hanAnnotation, mappedPronunciation;
       if (this.$l2Settings?.showDefinition || this.$l2Settings?.showQuickGloss)
@@ -357,7 +357,7 @@ export default {
         return hanja ? hanja.split(/[,\-]/)[0] : "";
       }
     },
-    getDisplayText(text) {
+    transformText(text) {
       if (typeof text === "undefined" || text.trim() === "") {
         return "";
       }
@@ -366,6 +366,9 @@ export default {
       }
       if (this.$l2.han) {
         text = this.getSimplifiedOrTraditionalText();
+      }
+      if (this.$l2.code === "ru") {
+        return this.russianAccentText
       }
       return text;
     },
