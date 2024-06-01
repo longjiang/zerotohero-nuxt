@@ -1,5 +1,4 @@
 import { DIRECTUS_URL } from "./lib/utils";
-import { $content } from '@nuxt/content'; // Originally const { $content } = require("@nuxt/content"); inside the routes function before upgrading to Nuxt Bridge
 import { defineNuxtConfig } from '@nuxt/bridge'
 
 let popularPaths = `/
@@ -115,13 +114,16 @@ popularPaths = popularPaths.map((path) =>
 
 const hostname = process.env.URL ? process.env.URL : "http://localhost:3000";
 
+// No content support in Nuxt Bridge
 const routes = async () => {
-  const files = await $content().only(["path"]).fetch();
+//   const { $content } = require("@nuxt/content");
+//   const files = await $content().only(["path"]).fetch();
 
-  return files
-    .map((file) => (file.path === "/index" ? "/" : file.path))
-    .concat(["/privacy-policy", "/"])
-    .concat(popularPaths);
+//   return files
+//     .map((file) => (file.path === "/index" ? "/" : file.path))
+//     .concat(["/privacy-policy", "/"])
+//     .concat(popularPaths);
+      return ["/privacy-policy", "/"].concat(popularPaths);
 };
 
 let defaultDateTimeFormat = {
@@ -171,7 +173,7 @@ try {
 export default defineNuxtConfig({
   bridge: {
     capi: true,
-    nitro: false // If migration to Nitro is complete, set to true
+    nitro: true
   },
   env: {
     baseUrl: hostname,
@@ -439,7 +441,6 @@ export default defineNuxtConfig({
     "bootstrap-vue/nuxt",
     "@nuxtjs/sitemap",
     "@nuxtjs/axios",
-    "@nuxt/content",
     [
       "nuxt-i18n",
       {
