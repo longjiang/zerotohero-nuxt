@@ -556,7 +556,7 @@ export default {
             this.savedWord.head
           );
           if (accentText) return accentText;
-        }
+        } else return this.text
       }
     },
     async closePopup() {
