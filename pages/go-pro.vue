@@ -100,9 +100,10 @@ export default {
     pro() {
       return this.forcePro || this.$store.state.subscriptions.active;
     },
-    hasActiveSubscription() {
+    hasActiveNonTrialSubscription() {
       if (!this.subscription) return false;
       if (!this.subscription.payment_customer_id) return false; // Only those with a payment_customer_id have a renewing subscription with Stripe
+      if (this.subscription.type === 'trial') return false; // If this is a trial subscription (such in the case where an existing customer with an expired subscription got a free trial) 
       // Make sure subscription is active and not expired
       const expiresOn = new Date(this.subscription.expires_on.replace(' ', 'T')); // subscription.expires_on is in the format 2024-06-14 10:16:40, but we need a Date object for comparison
       const currentDate = new Date();
