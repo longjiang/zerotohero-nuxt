@@ -79,49 +79,48 @@ class BaseTokenizer {
     return tokenized;
   }
 
-  tokenizeIntegral(text) {
+// ChatGPT: Removed look-behind regex for compatibility with older Safari
+tokenizeIntegral(text) {
     let modifiedText = text;
-    let apostrophePatterns = null;
+    let apostrophePatterns = [];
+    let tempText = text.split(/\s+/); // Split text into words by whitespace.
 
     // If language is "apostrophe-sensitive" like Klingon and Welsh
     if (this.l2 && this.l2.apostrophe) {
-      // Identify and replace patterns where the apostrophe is part of a word
-      apostrophePatterns = text.match(
-        /(?<=\s|^)(?:[’']?[\p{L}\p{M}]+[’']?)+(?=\s|$)/gu
-      );
-      if (apostrophePatterns) {
-        apostrophePatterns.forEach((pattern, index) => {
-          modifiedText = modifiedText.replace(
-            pattern,
-            `APOSTROPHEWORD${index}`
-          );
+        // Manually find and replace patterns where the apostrophe is part of a word
+        tempText.forEach((word, index) => {
+            const match = word.match(/^[’']?[\p{L}\p{M}]+[’']?$/u);
+            if (match) {
+                apostrophePatterns.push(word);
+                const placeholder = `APOSTROPHEWORD${index}`;
+                modifiedText = modifiedText.replace(new RegExp("\\b" + word + "\\b", "gu"), placeholder);
+            }
         });
-      }
     }
 
-    // Continue with the usual tokenization
+    // Continue with the usual tokenization using Unicode property escapes
     let tokens = modifiedText.match(/[\p{L}\p{M}\d]+|[^\p{L}\p{M}\d\s]+|\s+/gu);
 
     // If language is "apostrophe-sensitive", restore the original words with apostrophes
-    if (this.l2 && this.l2.apostrophe && apostrophePatterns) {
-      tokens = tokens.map((token) => {
-        const match = token.match(/APOSTROPHEWORD(\d+)/);
-        return match ? apostrophePatterns[parseInt(match[1], 10)] : token;
-      });
+    if (this.l2 && this.l2.apostrophe && apostrophePatterns.length > 0) {
+        tokens = tokens.map((token) => {
+            const match = token.match(/APOSTROPHEWORD(\d+)/);
+            return match ? apostrophePatterns[parseInt(match[1], 10)] : token;
+        });
     }
 
     // Label the tokens
     const labeledTokens = tokens.map((tokenString) => {
-      let isWord = /[\p{L}\p{M}]+/u.test(tokenString);
-      if (isWord) {
-        return { text: tokenString };
-      } else {
-        return tokenString;
-      }
+        let isWord = /[\p{L}\p{M}]+/u.test(tokenString);
+        if (isWord) {
+            return { text: tokenString };
+        } else {
+            return token<|vq_189|>String;
+        }
     });
 
     return labeledTokens;
-  }
+}}
 
   longest(text, filteredWords) {
     let longest = {
