@@ -971,6 +971,10 @@ button.bg-primary:focus {
   border-radius: 0.3rem;
 }
 
+.btn-unstyled {
+  color: inherit;
+}
+
 // Style dark mode text input (Bootstrap Vue)
 .skin-dark .form-control,
 .input-ghost-dark {
