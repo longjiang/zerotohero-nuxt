@@ -97,7 +97,7 @@ export default {
     async allForms() {
       let dictionary = await this.$getDictionary();
       let wordForms = await dictionary.inflect(this.word.head) || [];
-      wordForms = wordForms.filter((form) => form !== "");
+      wordForms = wordForms.filter((form) => form?.from && from.form !== "");
       wordForms = [this.word.head].concat(
         wordForms.map((form) => form.form.replace(/'/g, ""))
       );

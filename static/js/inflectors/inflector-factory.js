@@ -3,21 +3,23 @@ const InflectorFactory = {
     JapaneseInflector: ["jpn"],
     KoreanInflector: ["kor"],
     RussianInflector: ["rus"],
-    // FrenchInflector: ["fra"],
-    CompromiseInflector: [
-      // Only English and German have inflectors
-      // "eng",
-      // "deu",
+    FrenchInflector: ["fra"],
+    CompromiseInflector: [ // Local and fast
+      "eng",
+      "deu",
+      // "fra", // Handled with FrenchInflector, which shows subjonctif better
+      "ita",
+      "spa",
     ],
     PymorphyInflector: [
       "ukr",
     ],
     PatternInflector: [
-      "eng",
-      "deu",
-      "ita",
-      "spa",
-      "fra",
+      // "eng", // Handled with CompromiseInflector locally for faster word-saving
+      // "deu", // Handled with CompromiseInflector locally for faster word-saving
+      // "ita", // Handled with CompromiseInflector locally for faster word-saving
+      // "spa", // Handled with CompromiseInflector locally for faster word-saving
+      // "fra", // Handled with FrenchInflector locally for faster word-saving
       "nld",
     ],
     // NodeNlpInflector: [

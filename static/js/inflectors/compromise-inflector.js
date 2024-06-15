@@ -7,21 +7,21 @@ class CompromiseInflector extends BaseInflector {
         importScripts("../vendor/compromise@14.8.2/compromise.js");
         this.nlp = nlp;
         break;
-      case "fra":
-        importScripts("../vendor/fr-compromise@b24c7ba/fr-compromise.min.js");
-        this.nlp = frCompromise;
-        break;
-      case "ita":
-        importScripts("../vendor/it-compromise@38f40d4/it-compromise.min.js");
-        this.nlp = itCompromise;
-        break;
-      case "spa":
-        importScripts("../vendor/es-compromise@2018e73/es-compromise.min.js");
-        this.nlp = esCompromise;
-        break;
       case "deu":
         importScripts("../vendor/de-compromise@5a2275a/de-compromise.min.js");
         this.nlp = deCompromise;
+        break;
+      case "fra":
+        importScripts("../vendor/fr-compromise@b24c7ba/fr-compromise.min.js"); // not yet implemented
+        this.nlp = frCompromise;
+        break;
+      case "ita":
+        importScripts("../vendor/it-compromise@38f40d4/it-compromise.min.js"); // not yet implemented
+        this.nlp = itCompromise;
+        break;
+      case "spa":
+        importScripts("../vendor/es-compromise@2018e73/es-compromise.min.js"); // not yet implemented
+        this.nlp = esCompromise;
         break;
     }
   }
@@ -63,7 +63,7 @@ class CompromiseInflector extends BaseInflector {
 
     // If there are verb inflections
     if (verbInflections?.length > 0) {
-      // If the language is English
+      // If the language is English, use a simpler table structure
       if (this.l2["iso639-3"] === "eng") {
         // Map each tense object to an array of form objects
         moreForms = verbInflections.flatMap((tenseObj) =>
@@ -74,8 +74,8 @@ class CompromiseInflector extends BaseInflector {
           }))
         );
       }
-      // If the language is German
-      if (this.l2["iso639-3"] === "deu") {
+      // For other languages, use a more detailed table structure
+      else {
         // Map each verb inflection to a form object
         moreForms = Object.entries(verbInflections[0]).flatMap(
           ([key, value]) => {
