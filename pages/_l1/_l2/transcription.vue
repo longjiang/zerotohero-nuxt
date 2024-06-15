@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import pinyin2ipa from "pinyin2ipa";
+import { convertPinyinToIPA } from "@/lib/utils/string";
 
 export default {
   data() {
@@ -130,7 +130,7 @@ export default {
           transcription = t.candidates[0].pronunciation;
         }
         if (useIPA) {
-          transcription = this.convertToIPA(transcription, {
+          transcription = convertPinyinToIPA(transcription, {
             toneMarker: "chaoletter",
           });
         }
@@ -143,137 +143,6 @@ export default {
       }
       let dictionary = await this.$getDictionary();
       this.tokens = await dictionary.tokenizeWithCache(this.text);
-    },
-    convertSyllableToIPA(pinyinWord) {
-      const pinyinToIPA = {
-        a: "a",
-        ai: "aɪ̯",
-        an: "an",
-        ang: "aŋ",
-        ao: "aʊ̯",
-        e: "ɤ",
-        ei: "eɪ̯",
-        en: "ən",
-        eng: "əŋ",
-        i: "i",
-        ia: "ja",
-        ian: "jɛn",
-        iang: "jɛŋ",
-        iao: "jau̯",
-        ie: "je",
-        in: "in",
-        ing: "iŋ",
-        iong: "joŋ",
-        iu: "joʊ̯",
-        o: "uo",
-        ou: "oʊ̯",
-        ong: "oŋ",
-        u: "u",
-        ua: "wa",
-        uai: "waɪ̯",
-        uan: "wan",
-        uang: "waŋ",
-        ue: "we",
-        ui: "weɪ̯",
-        un: "wən",
-        uo: "wɔ",
-        ü: "y",
-        üe: "yɛ",
-        üan: "yɛn",
-        ün: "yn",
-        // initial consonants
-        b: "p",
-        p: "pʰ",
-        m: "m",
-        f: "f",
-        d: "t",
-        t: "tʰ",
-        n: "n",
-        l: "l",
-        g: "k",
-        k: "kʰ",
-        h: "x",
-        j: "t͡ɕ",
-        q: "t͡ɕʰ",
-        x: "ɕ",
-        zh: "ʈ͡ʂ",
-        ch: "ʈ͡ʂʰ",
-        sh: "ʂ",
-        r: "ʐ",
-        z: "ts",
-        c: "tsʰ",
-        s: "s",
-        // tones
-        1: "˥",
-        2: "˧˥",
-        3: "˨˩˦",
-        4: "˥˩",
-        5: "",
-      };
-      // Tone processing
-      const tones = {
-        ā: ["a", "1"],
-        á: ["a", "2"],
-        ǎ: ["a", "3"],
-        à: ["a", "4"],
-        ē: ["e", "1"],
-        é: ["e", "2"],
-        ě: ["e", "3"],
-        è: ["e", "4"],
-        ī: ["i", "1"],
-        í: ["i", "2"],
-        ǐ: ["i", "3"],
-        ì: ["i", "4"],
-        ō: ["o", "1"],
-        ó: ["o", "2"],
-        ǒ: ["o", "3"],
-        ò: ["o", "4"],
-        ū: ["u", "1"],
-        ú: ["u", "2"],
-        ǔ: ["u", "3"],
-        ù: ["u", "4"],
-        ǖ: ["ü", "1"],
-        ǘ: ["ü", "2"],
-        ǚ: ["ü", "3"],
-        ǜ: ["ü", "4"],
-      };
-
-      for (let toneChar in tones) {
-        if (pinyinWord.includes(toneChar)) {
-          pinyinWord = pinyinWord.replace(toneChar, tones[toneChar][0]);
-          pinyinWord += tones[toneChar][1];
-        }
-      }
-
-      let ipaWord = "";
-
-      // Convert consonants and vowels
-      while (pinyinWord.length > 0) {
-        let matchFound = false;
-
-        for (let syllable of Object.keys(pinyinToIPA).sort(
-          (a, b) => b.length - a.length
-        )) {
-          if (pinyinWord.startsWith(syllable)) {
-            ipaWord += pinyinToIPA[syllable];
-            pinyinWord = pinyinWord.slice(syllable.length);
-            matchFound = true;
-            break;
-          }
-        }
-
-        if (!matchFound) {
-          ipaWord += pinyinWord[0];
-          pinyinWord = pinyinWord.slice(1);
-        }
-      }
-
-      return ipaWord;
-    },
-    convertToIPA(pinyin) {
-      const syllables = pinyin.split(" ");
-      const ipaArray = syllables.map(this.convertSyllableToIPA);
-      return ipaArray.join(" ");
     },
   },
 };

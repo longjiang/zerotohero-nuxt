@@ -142,8 +142,7 @@
 <script>
 import Klingon from "../lib/klingon";
 import { transliterate as tr } from "transliteration";
-import pinyin2ipa from "pinyin2ipa";
-import { languageLevels } from "../lib/utils/language-levels";
+import { convertPinyinToIPA, languageLevels } from "../lib/utils";
 
 export default {
   props: {
@@ -187,9 +186,7 @@ export default {
       } else if (this.$l2.code === "ja" && entry.kana) {
         return `${entry.kana} (${await dictionary.transliterate(entry.kana)})`;
       } else if (this.$l2.code === "zh") {
-        return `${entry.pronunciation} [${pinyin2ipa(entry.pronunciation, {
-          toneMarker: "chaoletter",
-        })}]`;
+        return `${entry.pronunciation} [${convertPinyinToIPA(entry.pronunciation)}]`;
       } else if (entry.pronunciation) {
         return `[${entry.pronunciation}]`;
       } else {
@@ -208,9 +205,6 @@ export default {
     if (this.$l2) this.levels = languageLevels(this.$l2);
   },
   methods: {
-    pinyin2ipa(...args) {
-      return pinyin2ipa(...args);
-    },
     transliterate(text) {
       let transliteration = tr(text);
       if (transliteration !== text) return tr(text);
