@@ -7,6 +7,7 @@
       :text="sentence"
       v-on="$listeners"
       ref="tokenizedTexts"
+      v-bind="attributesObject"
     />
   </span>
   
@@ -17,14 +18,15 @@
         node.type
       )
     "
-     v-html="node.element.outerHTML"
+    v-html="node.element.outerHTML"
+    v-bind="attributesObject"
   />
   <!-- For custom components, use vue-runtime-template -->
   <span v-else-if="['popupnote'].includes(node.type)">
     <v-runtime-template v-once :template="node.element.outerHTML" />
   </span>
-  <span v-else>
-    <div :is="node.type">
+  <span v-else v-bind="attributesObject">
+    <div :is="node.type" v-bind="node.attributes">
       <RecursiveRenderer
         v-for="(child, index) in node.children"
         :node="child"
@@ -41,7 +43,6 @@ import TokenizedText from "./TokenizedText.vue";
 import popupnote from "./PopupNote.vue"; // Must be lower-case
 import { SpeechSingleton } from "../lib/utils";
 import VRuntimeTemplate from "v-runtime-template";
-import sbd from "sbd";
 
 export default {
   props: {

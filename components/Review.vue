@@ -37,17 +37,7 @@
         </div>
         <div class="line-wrapper">
           <TokenizedRichText tag="span" :showMenu="true" class="transcript-line-l2">
-            <span
-              v-if="$l2.han && $l2.code !== 'ja'"
-              v-html="
-                highlightMultiple(
-                  reviewItem.line.line,
-                  unique([reviewItem.simplified, reviewItem.traditional]),
-                  hsk
-                )
-              "
-            />
-            <span v-else v-html="highlight(reviewItem.line.line, reviewItem.text, reviewItem.hsk)" />
+            <span v-html="highlightedQuestionText"></span>
           </TokenizedRichText>
           <div
             :dir="$l1.direction === 'rtl' ? 'rtl' : 'ltr'"
@@ -99,6 +89,20 @@ export default {
   },
   computed: {
     ...mapState("savedWords", ["savedWords"]),
+    highlightedQuestionText() {
+      let html;
+      if (this.$l2.han && this.$l2.code !== 'ja') {
+        html = highlightMultiple(
+          this.reviewItem.line.line,
+          unique([this.reviewItem.simplified, this.reviewItem.traditional]),
+          this.hsk
+        );
+      } else {
+        html = highlight(this.reviewItem.line.line, this.reviewItem.text, this.reviewItem.hsk);
+      }
+      console.log(html);
+      return html;
+    },
   },
 // 
 // text: savedForm,
@@ -300,18 +304,17 @@ export default {
     display: inline-block;
     min-width: 5rem;
     text-align: center;
-    border-bottom: 1px solid rgba(125, 125, 125, 0.5);
-    color: #00000000 !important;
   }
   .transcript-line-l1 {
     font-size: 13.44px;
   }
   &:not(.show-answer) {
     :deep(.highlight) {
-      background: rgba(0, 0, 0, 0);
       margin: 0 0.2rem;
       position: relative;
       bottom: 0.2rem;
+      color: #00000000 !important;
+      border-bottom: 1px solid rgba(125, 125, 125, 0.5);
     }
     :deep(.transcript-line-l2) {
       .highlight {

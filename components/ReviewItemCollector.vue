@@ -20,6 +20,16 @@
         @goToLine="$emit('goToLine', $event); $bvModal.hide('quiz-modal');"
       />
     </b-modal>
+    <!-- The following div is for testing purposes -->
+    <div class="test-container">
+      <div class="review-items-count">{{ reviewItems.length }} review items</div>
+      <ul class="review-items-list">
+        <li v-for="reviewItem in reviewItems" :key="reviewItem.word.id">
+          {{ reviewItem.text }}
+        </li>
+      </ul>
+      <b-button class="show-quiz-button" @click="showQuizIfThereAreReviewItems">Show Quiz</b-button>
+    </div>
   </div>
 </template>
 <script>
@@ -34,14 +44,13 @@ export default {
   data() {
     return {
       reviewItems: [],
+      reviewIntervalMinutes: 2, // Interval in minutes to show the quiz
     };
   },
   mounted() {
-    // If there are review items, show them every two minutes
     this.interval = setInterval(() => {
       this.showQuizIfThereAreReviewItems();
-    }, 1000 * 60 * 2);
-    // listen to vuex savedWords removed mutation
+    }, 1000 * 60 * this.reviewIntervalMinutes);
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
         this.reviewItems = this.reviewItems.filter(

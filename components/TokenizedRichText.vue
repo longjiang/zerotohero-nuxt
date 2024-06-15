@@ -26,6 +26,7 @@
             text ||
             (processedNode && processedNode.type === 'text')
           "
+          v-bind="processedNode.attributes"
         >
           <TokenizedText
             :text="editedText || text || processedNode.text"
@@ -42,6 +43,7 @@
         <div
           v-else-if="processedNode && processedNode.type !== 'text'"
           class="annotate-text"
+          v-bind="processedNode.attributes"
         >
           <RecursiveRenderer
             :node="processedNode"
@@ -259,6 +261,11 @@ export default {
           text: node.textContent.trim(),
         };
       } else if (node.nodeType === Node.ELEMENT_NODE) {
+        let attributes = {};
+        node.getAttributeNames().forEach(attr => {
+          attributes[attr] = node.getAttribute(attr);
+        });
+
         let children = [];
         node.childNodes.forEach((childNode) => {
           const processedChild = this.processNode(childNode);
@@ -269,7 +276,7 @@ export default {
 
         return {
           type: node.nodeName.toLowerCase(),
-          element: node,
+          attributes: attributes,
           children: children,
         };
       }
