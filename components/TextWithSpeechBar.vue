@@ -600,24 +600,19 @@ export default {
       }
       this.speed = speeds[index];
     },
+    normalizeUrl(baseUrl, src) {
+      // Ensure there's exactly one slash between the base URL and src
+      return `${baseUrl.replace(/\/+$/, '')}/${src.replace(/^\/+/, '')}`;
+    },
     augmentedHtmlFromDomNode(dom) {
       // Remove ruby tags
       let rtTags = dom.querySelectorAll("rt");
       rtTags.forEach((rt) => rt.remove());
-
-      let as = dom.querySelectorAll("a");
-      as.forEach((a) => {
-        let bookLinkHtml = a
-          .toString()
-          .replace(/^<a/, `<ReaderLink alt="${this.baseUrl}"`)
-          .replace(/<\/a>$/, "</ReaderLink>");
-        a.replaceWith(parse(bookLinkHtml));
-      });
       let elms = dom.querySelectorAll("[src]");
       elms.forEach((elm) => {
         let src = elm.getAttribute("src");
-        if (src && !src.startsWith("http")) {
-          elm.setAttribute("src", this.baseUrl + src);
+        if (src && !src.startsWith("http") && !src.startsWith("//")) {
+          elm.setAttribute("src", this.normalizeUrl(this.baseUrl, src));
         }
       });
       const html = dom.outerHTML;

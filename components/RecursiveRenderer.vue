@@ -25,6 +25,17 @@
   <span v-else-if="['popupnote'].includes(node.type)">
     <v-runtime-template v-once :template="node.element.outerHTML" />
   </span>
+  <span v-else-if="['a'].includes(node.type)">
+    <ReaderLink v-once v-bind="attributesObject">
+      <RecursiveRenderer
+        v-for="(child, index) in node.children"
+        :node="child"
+        :key="index"
+        v-on="$listeners"
+        ref="recursiveRenderers"
+      />
+    </ReaderLink>
+  </span>
   <span v-else v-bind="attributesObject">
     <div :is="node.type" v-bind="node.attributes">
       <RecursiveRenderer
