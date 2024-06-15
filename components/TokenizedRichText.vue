@@ -278,6 +278,7 @@ export default {
           type: node.nodeName.toLowerCase(),
           attributes: attributes,
           children: children,
+          element: node,
         };
       }
     },

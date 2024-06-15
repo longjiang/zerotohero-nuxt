@@ -70,6 +70,31 @@ export default {
     },
   },
   methods: {
+    /**
+     * Check if an attribute name is valid and should be preserved.
+     * This function can be modified to allow more or block certain attributes as needed.
+     * @param {String} attrName The name of the attribute to check.
+     * @return {Boolean} Returns true if the attribute should be preserved.
+     */
+    isValidAttrName(attrName) {
+      // List of attributes to exclude (commonly event handlers or potentially unsafe attributes)
+      const excludedAttributes = [
+        'onclick', 'onerror', 'onload', 'onmouseover', 'onfocus', 'onblur',
+        'onsubmit', 'onreset', 'onresize', 'onkeydown', 'onkeypress', 'onkeyup',
+        'oncontextmenu'
+      ];
+
+      // Check if the attribute is in the excluded list
+      if (excludedAttributes.includes(attrName.toLowerCase())) {
+        return false;
+      }
+
+      // Further checks can be added here to customize which attributes are allowed
+      // For example, you might want to allow only 'class', 'id', 'data-*', etc.
+
+      // Allow all attributes not explicitly excluded
+      return true;
+    },
     highlightFirstSentence() {
       if (this.$refs.recursiveRenderers) {
         this.$refs.recursiveRenderers[0].highlightFirstSentence();
