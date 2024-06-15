@@ -611,7 +611,7 @@ export default {
       let elms = dom.querySelectorAll("[src]");
       elms.forEach((elm) => {
         let src = elm.getAttribute("src");
-        if (src && !src.startsWith("http") && !src.startsWith("//")) {
+        if (src && !src.startsWith("http") && !src.startsWith("//") && !src.startsWith("blob:")) {
           elm.setAttribute("src", this.normalizeUrl(this.baseUrl, src));
         }
       });
