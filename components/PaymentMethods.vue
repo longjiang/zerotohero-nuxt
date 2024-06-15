@@ -1,10 +1,10 @@
 <template>
   <section v-if="selectedPlan" id="payment-methods" ref="paymentMethods">
     <div v-if="iOS">
-      <div class="pt-4 pb-5">
+      <div class="pt-4 pb-5 text-center">
         <div v-if="selectedPlan.name === 'lifetime'">
           <PurchaseiOS />
-          <div v-if="SALE" class="alert alert-danger mt-2" style="max-width: 15.5rem; margin: 0 auto;">{{ $tb('Note: Discount price is not available through iOS in-app purchase.') }}</div>
+          <!-- <div v-if="SALE" class="alert alert-danger mt-2" style="max-width: 15.5rem; margin: 0 auto;">{{ $tb('Note: Discount price is not available through iOS in-app purchase.') }}</div> -->
         </div>
         <div v-else class="alert alert-warning" style="max-width: 15.5rem; margin: 0 auto;">⚠️ {{ $tb('Only the lifetime plan is available as an in -app purchase.') }}</div>
       </div>
