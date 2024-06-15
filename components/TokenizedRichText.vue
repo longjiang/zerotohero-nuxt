@@ -221,7 +221,7 @@ export default {
 
       const tokenizedTextComponent = this.getTokenizedTextComponent();
 
-      if (tokenizedTextComponent[methodName]) {
+      if (tokenizedTextComponent && tokenizedTextComponent[methodName]) {
         await tokenizedTextComponent[methodName](...args);
       }
     },
