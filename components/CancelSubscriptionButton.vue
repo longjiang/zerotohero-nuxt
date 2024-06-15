@@ -1,5 +1,5 @@
 <template>
-  <b-button @click="cancelSubscriptionAtEndOfPeriod" :variant="variant" :class="{
+  <b-button @click="cancelSubscriptionAtEndOfPeriod" :variant="variant" :size="size" :class="{
     'p-0 mb-1 text-danger': variant === 'link'
   }" :disabled="cancelling">
     <b-spinner small v-if="cancelling" />
@@ -18,6 +18,10 @@ export default {
     variant: {
       type: String,
       default: 'danger',
+    },
+    size: {
+      type: String,
+      default: 'small',
     },
     subscription: {
       type: Object,
