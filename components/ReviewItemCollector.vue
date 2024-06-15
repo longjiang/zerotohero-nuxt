@@ -21,7 +21,7 @@
       />
     </b-modal>
     <!-- The following div is for testing purposes -->
-    <div class="test-container">
+    <!-- <div class="test-container">
       <div class="review-items-count">{{ reviewItems.length }} review items</div>
       <ul class="review-items-list">
         <li v-for="reviewItem in reviewItems" :key="reviewItem.word.id">
@@ -29,7 +29,7 @@
         </li>
       </ul>
       <b-button class="show-quiz-button" @click="showQuizIfThereAreReviewItems">Show Quiz</b-button>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
