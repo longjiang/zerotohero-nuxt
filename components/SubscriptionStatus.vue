@@ -58,8 +58,8 @@ export default {
     },
     subscription() {
       const subscription = this.$store.state.subscriptions.subscription;
-      if (!subscription || new Date(subscription.expires_on) < new Date()) {
-        return null;
+      if (!subscription || (subscription.type !== 'lifetime' && new Date(subscription.expires_on) < new Date())) {
+        return null; // No active subscription or subscription has expired, so we show it as 'free'
       }
       return subscription;
     },

@@ -47,7 +47,7 @@
           <div>
             <span><span style="position: relative; bottom: 1.2rem; color: red">{{
       plan.currency
-    }}</span><b style="font-size: 2.68rem; color: red">{{ Math.floor(plan.amount * SALE_DISCOUNT) }}</b></span><span style="
+    }}</span><b style="font-size: 2.68rem; color: red">{{ Math.ceil(plan.amount * SALE_DISCOUNT) }}</b></span><span style="
                 display: inline-block;
                 position: relative;
                 bottom: 1.2rem;
