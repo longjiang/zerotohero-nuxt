@@ -1,9 +1,7 @@
 <template>
   <span class="use-zoom" :class="{ speaking: speaking }">
     <template v-if="tokenized">
-      <template v-for="(token, index) in tokens">
-        {{ typeof token === "string" ? token : "" }}
-        <word-block
+      <template v-for="(token, index) in tokens">{{ typeof token === "string" ? token : "" }}<word-block
           v-if="typeof token !== 'string'"
           :key="index"
           :token="token"
