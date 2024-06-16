@@ -4,6 +4,7 @@
     :class="wordBlockClasses"
     :style="{ 'animation-duration': animationDuration + 'ms' }"
     @animationend="resetAnimation"
+    :data-hover-level="attributes.level"
   >
     <div v-if="showFillInTheBlank" class="word-block-quiz word-block-segment">
       <span class="transparent">{{ text }}</span>
@@ -19,7 +20,6 @@
           },
         ]"
         :key="index"
-        :data-hover-level="attributes.level"
         :lang="$l2.code"
       >
         <!-- <rt v-if="attributes?.showDefinition && index === 0">{{
