@@ -87,6 +87,7 @@
     "smoothscroll-polyfill": "^0.4.4",
     "speak-tts": "^2.0.8",
     "subsrt": "^1.1.1",
+    "subtitle": "^4.2.1",
     "timeago-reverse": "^1.0.10",
     "transliteration": "^2.2.0",
     "unescape": "^1.0.1",
