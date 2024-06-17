@@ -26,10 +26,10 @@
             text ||
             (processedNode && processedNode.type === 'text')
           "
-          v-bind="processedNode.attributes"
+          v-bind="processedNode ? processedNode.attributes : {}"
         >
           <TokenizedText
-            :text="editedText || text || processedNode.text"
+            :text="editedText || text || (processedNode && processedNode.text)"
             :context="context"
             :animationDuration="animationDuration"
             :animationSpeed="animationSpeed"

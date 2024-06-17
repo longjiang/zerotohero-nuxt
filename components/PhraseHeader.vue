@@ -13,7 +13,7 @@
     </div>
     <h2 class="phrase-header-phrase text-center font-weight-normal mt-3">
       <div class="d-inline-block">
-        <TokenizedRichText :showMenu="true" :text="term" />
+        <TokenizedText :text="term" />
       </div>
     </h2>
   </div>

@@ -280,7 +280,7 @@ export default {
     },
     to(l2) {
       let l1Code = this.getL1Code(l2);
-      let name = "language-info";
+      let name = "l1-l2-language-info";
       return {
         name,
         params: { l1: l1Code, l2: l2.code },
