@@ -203,9 +203,13 @@
 </template>
 
 <script>
-import WordPhotos from "../../../lib/word-photos";
+import WordPhotos from "@/lib/word-photos";
 
 export default {
+  props: {
+    method: String,
+    args: String,
+  },
   data() {
     return {
       a: undefined,
@@ -281,8 +285,8 @@ export default {
     },
   },
   async mounted() {
-    let method = this.$route.params.method;
-    let args = this.$route.params.args.split(",");
+    let method = this.method;
+    let args = this.args.split(",");
     let aId = args[0];
     let bId = args[1];
     if (args.length === 6) {
