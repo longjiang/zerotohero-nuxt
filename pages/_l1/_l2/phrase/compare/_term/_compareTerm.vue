@@ -145,7 +145,7 @@ import CompareCollocations from "@/components/CompareCollocations";
 import SearchCompare from "@/components/SearchCompare";
 import WebImages from "@/components/WebImages";
 import CompareSearchSubs from "@/components/CompareSearchSubs";
-import WordPhotos from "../../../../lib/word-photos";
+import WordPhotos from "@/lib/word-photos";
 
 export default {
   components: {
