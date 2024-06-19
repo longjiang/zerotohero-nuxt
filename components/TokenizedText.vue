@@ -60,7 +60,8 @@ export default {
   },
   computed: {
     sanitizedText() {
-      return stripTags(this.textData || this.text).trim();
+      let sanitizedText = stripTags(this.textData || this.text).trim();
+      return sanitizedText
     },
     phraseSaved() {
       return this.$refs["savePhrase"] && this.$refs["savePhrase"].saved;
@@ -84,6 +85,10 @@ export default {
     async tokenize() {
       let dictionary = await this.$getDictionary();
       this.tokens = await dictionary.tokenizeWithCache(this.sanitizedText);
+      // Sometimes SpaCy returns line breaks as { text: '\n', type: 'SPACE' }, we convert that to a string
+      this.tokens = this.tokens.map((token) =>
+        token.text?.trim() === "" ? token.text : token
+      );
       this.tokenized = true;
       this.$emit("annotated", true);
     },
