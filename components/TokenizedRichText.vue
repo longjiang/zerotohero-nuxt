@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Conditionally render tokenized text -->
-    <span class="d-flex justify-content-between">
+    <span class="annotate-text-wrapper" :dir="$l2.direction">
       <!-- When the user wants to edit the text, show a textarea -->
 
       <textarea
@@ -27,6 +27,7 @@
             (processedNode && processedNode.type === 'text')
           "
           v-bind="processedNode ? processedNode.attributes : {}"
+          :dir="$l2.direction"
         >
           <TokenizedText
             :text="editedText || text || (processedNode && processedNode.text)"
@@ -44,6 +45,7 @@
           v-else-if="processedNode && processedNode.type !== 'text'"
           class="annotate-text"
           v-bind="processedNode.attributes"
+          :dir="$l2.direction"
         >
           <RecursiveRenderer
             :node="processedNode"
@@ -53,7 +55,7 @@
         </div>
 
         <!-- Default case: render the slot content -->
-        <div v-else class="annotate-text">
+        <div v-else class="annotate-text" :dir="$l2.direction">
           <slot></slot>
         </div>
         <!-- the translation -->
@@ -66,13 +68,13 @@
       </div>
 
       <!-- Action Button -->
-      <SimpleButton
-        iconClass="fa fa-ellipsis-v"
-        style="display: flex; align-items: flex-start; padding-top: 0.5rem"
-        @click="showModal"
-        :title="$t('Actions')"
-        v-if="showMenu"
-      />
+      <div class="annotate-action-button" v-if="showMenu">
+        <SimpleButton
+          iconClass="fa fa-ellipsis-v"
+          @click="showModal"
+          :title="$t('Actions')"
+        />
+      </div>
     </span>
   </div>
 </template>
@@ -298,5 +300,24 @@ export default {
 .annotate-translation {
   opacity: 0.7;
   font-size: 0.8rem;
+}
+.annotate-text[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+.annotate-text-wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+
+  // Ensure the order is applied for RTL languages
+  &[dir="rtl"] .annotate-action-button {
+    order: 1;
+  }
+
+  // Ensure the order is correct for LTR languages
+  &[dir="ltr"] .annotate-action-button {
+    order: -1;
+  }
 }
 </style>

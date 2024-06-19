@@ -14,6 +14,10 @@ class HazmTokenizer extends BaseTokenizer {
         console.error('There was a problem with the axios operation: ', error);
       }
     }
+    // Check if the tokenized is an array and not a string
+    if (!tokens || typeof tokens === 'string') {
+      return this.tokenizeLocally(text);
+    }
     tokens = tokens.map((token) => {
       return this.normalizeToken(token);
     });

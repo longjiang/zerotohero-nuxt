@@ -1,5 +1,5 @@
 <template>
-  <span class="use-zoom" :class="{ speaking: speaking }">
+  <span :class="{ 'use-zoom': true, speaking }" :dir="$l2.direction">
     <template v-if="tokenized">
       <template v-for="(token, index) in tokens">{{ typeof token === "string" ? token : "" }}<word-block
           v-if="typeof token !== 'string'"

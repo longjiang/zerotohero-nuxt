@@ -9,21 +9,60 @@
     body-class="annotate-menu-modal-wrapper"
   >
     <div class="annotate-menu-modal">
+      <div
+          class="annotate-menu-modal-item"
+          @click="showChatGptModal"
+        >
+        <!-- show a ChatGPT modal -->
+        <span class="annotator-button">
+          <i class="fa-solid fa-message-question"></i>
+        </span>
+        <span>{{ $t("Let ChatGPT Explain") }}</span>
+      </div>
+      <div class="annotate-menu-modal-item">
+        <span
+          class="annotator-button annotator-translate focus-exclude"
+          title="Translate Inline"
+          @click="translateClick"
+          ref="translation"
+        >
+          <i class="fas fa-language"></i>
+        </span>
+        <span @click="translateClick">{{ $t("Get Translation") }}</span>
+      </div>
+      <div class="annotate-menu-modal-item">
+        <span
+          @click="copyClick"
+          title="Copy"
+          class="annotator-button annotator-copy focus-exclude"
+        >
+          <i class="fas fa-copy"></i>
+        </span>
+        <span @click="copyClick">{{ $t("Copy Text") }}</span>
+      </div>
+      <div class="annotate-menu-modal-item">
+        <span
+          class="annotator-button annotator-translate focus-exclude"
+          title="Read Aloud"
+          @click="readAloud"
+          ref="translation"
+        >
+          <i class="fas fa-volume-up"></i>
+        </span>
+        <span @click="readAloud">{{ $t("Read Aloud") }}</span>
+      </div>
       <div class="annotate-menu-modal-item">
         <span
           :class="{
             'annotator-button annotator-text-mode focus-exclude': true,
             active: editMode,
           }"
-          title="Look up as Phrase"
-          @click="lookupAsPhraseClick"
+          title="Edit"
+          @click="editClick"
         >
-          <i class="fas fa-search"></i>
+          <i class="fas fa-edit"></i>
         </span>
-        <span @click.stop.prevent="lookupAsPhraseClick">
-          {{ $t("Look up as Phrase") }}
-          <i class="fas fa-chevron-right ml-1" />
-        </span>
+        <span @click="editClick">{{ $t("Edit Text") }}</span>
       </div>
       <div class="annotate-menu-modal-item">
         <Saved
@@ -40,51 +79,36 @@
       </div>
       <div class="annotate-menu-modal-item">
         <span
-          class="annotator-button annotator-translate focus-exclude"
-          title="Read Aloud"
-          @click="readAloud"
-          ref="translation"
-        >
-          <i class="fas fa-volume-up"></i>
-        </span>
-        <span @click="readAloud">{{ $t("Read Aloud") }}</span>
-      </div>
-      <div class="annotate-menu-modal-item">
-        <span
-          class="annotator-button annotator-translate focus-exclude"
-          title="Translate Inline"
-          @click="translateClick"
-          ref="translation"
-        >
-          <i class="fas fa-language"></i>
-        </span>
-        <span @click="translateClick">{{ $t("Get Translation") }}</span>
-      </div>
-      <div class="annotate-menu-modal-item">
-        <span
           :class="{
             'annotator-button annotator-text-mode focus-exclude': true,
             active: editMode,
           }"
-          title="Edit"
-          @click="editClick"
+          title="Look up as Phrase"
+          @click="lookupAsPhraseClick"
         >
-          <i class="fas fa-edit"></i>
+          <i class="fas fa-search"></i>
         </span>
-        <span @click="editClick">{{ $t("Edit Text") }}</span>
-      </div>
-      <div class="annotate-menu-modal-item">
-        <span
-          @click="copyClick"
-          title="Copy"
-          class="annotator-button annotator-copy focus-exclude"
-        >
-          <i class="fas fa-copy"></i>
+        <span @click.stop.prevent="lookupAsPhraseClick">
+          {{ $t("Look up as Phrase") }}
+          <i class="fas fa-chevron-right ml-1" />
         </span>
-        <span @click="copyClick">{{ $t("Copy Text") }}</span>
       </div>
-      <TranslatorLinks class="mt-2 pl-1" :text="text" />
+      <!-- <TranslatorLinks class="mt-2 pl-1" :text="text" /> -->
     </div>
+    <b-modal
+      ref="chatGptModal"
+      :title="$t('Let ChatGPT Explain')"
+      size="lg"
+      centered
+      hide-footer
+      @hide="hide"
+    >
+      <ChatGPT 
+        :maxTokens="50"
+        :showPrompt="false"
+        :initialMessages="[$t('Please very briefly explain, in {l1}, what the {l2} ({code}) text ‘{text}’ means, give its structure breakdown.', {text, l2: $t($l2.name), l1: $t($l1.name), code: $l2.code})]"
+      />
+    </b-modal>
   </b-modal>
 </template>
 
@@ -122,6 +146,10 @@ export default {
 
     hide() {
       this.$refs["tokenized-text-menu-modal"].hide();
+    },
+
+    showChatGptModal() {
+      this.$refs["chatGptModal"].show();
     },
 
     setTranslation(translation) {
