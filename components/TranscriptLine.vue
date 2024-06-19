@@ -400,6 +400,10 @@ export default {
     padding-left: 1.5rem;
     &.transcript-line-l1-rtl {
       padding-right: 1.5rem;
+    }
+  }
+  &:not(.transcript-line-wide) {
+    .transcript-line-l1-rtl {
       text-align: right;
     }
   }
