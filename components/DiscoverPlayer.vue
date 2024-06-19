@@ -1,6 +1,6 @@
 <template>
-  <div class="widget widget-dark mb-5" style="max-width: 70vh; margin: 0 auto">
-    <div class="widget-title">
+  <Widget class="mb-5" style="max-width: 70vh; margin: 0 auto">
+    <template #title>
       <i18n
         path="A Random {0} in {1}"
         tag="span"
@@ -17,56 +17,58 @@
           }}
         </span>
       </i18n>
-    </div>
-    <div class="text-center pt-5 pb-5" v-if="!randomShowRandomEpisode">
-      <Loader :sticky="true" message="Getting shows..." />
-    </div>
-    <LazyYouTubeVideo
-      v-if="randomShowRandomEpisode"
-      :key="randomShowRandomEpisode.id"
-      layout="vertical"
-      v-bind="{
-        video: randomShowRandomEpisode,
-        autoload: true,
-        autoplay: true,
-        startAtRandomTime: true
-      }"
-      ref="youtube"
-      @currentTime="updateCurrentTime"
-    />
-    <div class="text-center pt-3 pb-3" v-if="randomShowRandomEpisode">
-      <b-button
-        variant="ghost-dark-no-bg"
-        @click="loadHistory"
-        :disabled="history.length <= 1"
-        :class="{ disabled: history.length <= 1, 'mr-2': true }"
-      >
-        <i class="fas fa-step-backward mr-1"></i>
-      </b-button>
-
-      <router-link
-        :to="{
-          name: 'l1-l2-video-view-type',
-          params: {
-            type: 'youtube',
-            l1: l1 ? l1.code : l1Code(randomShowRandomEpisodeL2Code),
-            l2: l2 ? l2.code : randomShowRandomEpisodeL2Code,
-            youtube_id: randomShowRandomEpisode.youtube_id,
-          },
-          query: {
-            t: currentTime,
-          },
+    </template>
+    <template #body>
+      <div class="text-center pt-5 pb-5" v-if="!randomShowRandomEpisode">
+        <Loader :sticky="true" message="Getting shows..." />
+      </div>
+      <LazyYouTubeVideo
+        v-if="randomShowRandomEpisode"
+        :key="randomShowRandomEpisode.id"
+        layout="vertical"
+        v-bind="{
+          video: randomShowRandomEpisode,
+          autoload: true,
+          autoplay: true,
+          startAtRandomTime: true
         }"
-        class="btn btn-success"
-      >
-        <i class="fas fa-window-restore mr-1"></i>
-        {{ $t("Open in Full Player") }}
-      </router-link>
-      <b-button variant="ghost-dark-no-bg" class="ml-2" @click="loadRandomShow">
-        <i class="fas fa-step-forward mr-1"></i>
-      </b-button>
-    </div>
-  </div>
+        ref="youtube"
+        @currentTime="updateCurrentTime"
+      />
+      <div class="text-center pt-3 pb-3" v-if="randomShowRandomEpisode">
+        <b-button
+          variant="ghost-dark-no-bg"
+          @click="loadHistory"
+          :disabled="history.length <= 1"
+          :class="{ disabled: history.length <= 1, 'mr-2': true }"
+        >
+          <i class="fas fa-step-backward mr-1"></i>
+        </b-button>
+
+        <router-link
+          :to="{
+            name: 'l1-l2-video-view-type',
+            params: {
+              type: 'youtube',
+              l1: l1 ? l1.code : l1Code(randomShowRandomEpisodeL2Code),
+              l2: l2 ? l2.code : randomShowRandomEpisodeL2Code,
+              youtube_id: randomShowRandomEpisode.youtube_id,
+            },
+            query: {
+              t: currentTime,
+            },
+          }"
+          class="btn btn-success"
+        >
+          <i class="fas fa-window-restore mr-1"></i>
+          {{ $t("Open in Full Player") }}
+        </router-link>
+        <b-button variant="ghost-dark-no-bg" class="ml-2" @click="loadRandomShow">
+          <i class="fas fa-step-forward mr-1"></i>
+        </b-button>
+      </div>
+    </template>
+  </Widget>
 </template>
 
 <script>

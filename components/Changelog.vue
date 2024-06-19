@@ -13,7 +13,7 @@ export default {
   },
   data() {
     return {
-      changelogContent,
+      changelogContent: undefined,
     };
   },
   mounted() {

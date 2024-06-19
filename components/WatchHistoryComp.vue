@@ -1,6 +1,5 @@
 <template>
   <container-query :query="query" v-model="params">
-    
     <div :class="`watch-history watch-history-${skin}`">
       <div class="history-items" v-if="itemsFiltered && itemsFiltered.length > 0">
         <div class="row" v-if="showClear">
@@ -102,7 +101,7 @@
 <script>
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
-import { groupArrayBy, DEFAULT_PAGE } from "../lib/utils";
+import { groupArrayBy, DEFAULT_PAGE, uniqueByValue } from "../lib/utils";
 
 export default {
   components: {
@@ -170,6 +169,9 @@ export default {
 
       // Sort the array
       history = history.sort((a, b) => b.date > a.date);
+      
+      // Make sure there aren't any duplicates
+      history = uniqueByValue(history, "youtube_id");
 
       // Map through the history array
       history = history.map((i) => {        

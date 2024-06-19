@@ -66,7 +66,7 @@ import { CATEGORIES, SLUG_TO_CATEGORY_ID } from '../../../../lib/youtube';
 
 export default {
   props: {
-    slug: String, // Either the category id, or a custom slug like 'music' that maps to category 10
+    slug: [String, Number], // Either the category id, or a custom slug like 'music' that maps to category 10
   },
   data() {
     return {

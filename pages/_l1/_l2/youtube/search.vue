@@ -80,12 +80,12 @@
       <div v-if="!term" class="mt-3">
         {{ $t("Popular search terms in {l2}:", { l2: $t($l2.name) }) }}
         <span v-for="topic in popularTopics" class="mr-2" :key="topic['en']">
+          <!-- We must use path routing here rather than name routing, otherwise the page props won't update -->
           <router-link
             :key="`topic-${topic['en']}`"
-            :to="{
-              name: 'l1-l2-youtube-search',
-              params: { term: topic[$l2.code] || topic['en'], start: 0 },
-            }"
+            :to="`/${$l1.code}/${
+              $l2.code
+            }/youtube/search/${encodeURIComponent(topic[$l2.code] || topic['en'])}/0`"
             >{{ topic[$l2.code] || topic["en"] }}</router-link
           >
           <small

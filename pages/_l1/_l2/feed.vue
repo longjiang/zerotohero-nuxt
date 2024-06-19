@@ -53,7 +53,7 @@
             <client-only>
               <LazyIdenticalLanguages
                 class="mt-5 mb-5"
-                :routeName="l1-l2-DEFAULT_PAGE"
+                :routeName="DEFAULT_PAGE"
                 v-if="!loading"
               />
             </client-only>

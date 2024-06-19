@@ -96,7 +96,7 @@
                 :to="{
                   name: DEFAULT_PAGE,
                   params: {
-                    l1: l1Code,
+                    l1: l1Code(row),
                     l2: row.language.code,
                   },
                 }"
@@ -107,7 +107,7 @@
             <td>
               {{ formatNumber(row.count) }}
               <!-- Show delta from previously loaded stats with green and red arrows and numbers -->
-              <small v-if="previousLanguageData" :set="(delta = countMe(row))">
+              <small v-if="previousLanguageData?.length" :set="(delta = countMe(row))">
                 <span v-if="delta > 0" class="text-success">
                   <i class="fas fa-arrow-up"></i>
                   {{ formatNumber(Math.abs(delta)) }}
@@ -168,10 +168,6 @@ export default {
     await this.getStats();
   },
   computed: {
-    l1Code() {
-      return this.supportedL1s(row.language["iso639-3"], $browserLanguage)?.[0]
-        ?.code;
-    },
     langsWithEnDict() {
       if (this.$languages) {
         let langsWithEnDict = this.$languages.l1s.filter(
@@ -182,6 +178,10 @@ export default {
     },
   },
   methods: {
+    l1Code(row) {
+      return this.supportedL1s(row.language["iso639-3"], this.$browserLanguage)?.[0]
+        ?.code;
+    },
     countMe(row) {
       const foundLang = this.previousLanguageData.find((l) => l.language.id === row.language.id)
       const minusCount = foundLang ? foundLang.count : 0;
@@ -198,8 +198,8 @@ export default {
         }`,
         { cacheLife: refresh ? 0 : 86400 } // cache the count for one day (86400 seconds)
       );
-      if (this.stats) this.previousStats = this.stats;
-      if (this.languageData) this.previousLanguageData = this.languageData;
+      if (refresh && this.stats) this.previousStats = this.stats;
+      if (refresh && this.languageData) this.previousLanguageData = this.languageData;
       if (data?.langCounts) {
         let languages = await this.$languagesPromise;
         if (!languages) return;

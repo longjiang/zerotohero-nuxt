@@ -6,22 +6,32 @@
       <div class="row">
         <div class="col-sm-12 text-center pt-4">
           <div class="error-page text-dark">
-            <h3 v-if="error.statusCode === 404">Route Not Found</h3>
-            <h3 v-else>A {{ error.statusCode }} error has occurred.</h3>
-            <p v-if="error.statusCode === 404">
-              The route you requested
-              <code>{{ $route.path }}</code>
-              is invalid.
-            </p>
-            <p class="mt-3">
+            <h3 v-if="error.statusCode === 404">{{ $tb('Route Not Found') }}</h3>
+            <h3 v-else>{{ $tb('A {status} error has occurred.', { status: error.statusCode}) }}</h3>
+            <div v-if="error.statusCode === 404">
+              <p>{{ $tb('The route you requested is invalid.') }}</p>
+              <div><code>{{ $route.path }}</code></div>
+            </div>
+            <div class="rounded p-3 text-left my-4" style="background: #eee"><code>{{ error.message }}</code></div>
+            <div class="mt-3">
+              <b-button
+                variant="success px-5"
+                size="lg"
+                @click="$router.back()"
+              >
+                <i class="fas fa-arrow-left"></i>
+                {{ $tb('Back') }}
+              </b-button>
+            </div>
+            <div class="mt-3">
               <a
-                class="btn btn-success"
+                class="text-success ml-2"
                 :href="bugReportMailToURL"
               >
                 <i class="fas fa-paper-plane"></i>
-                Send bug report
+                {{ $tb('Send bug report') }}
               </a>
-            </p>
+            </div>
           </div>
         </div>
       </div>
@@ -36,7 +46,7 @@ export default {
   layout: "error",
   data() {
     return {
-      host: process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '')
+      host: process.server ? process.env.baseUrl : window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : ''),
     }
   },
   mounted() {
@@ -79,6 +89,7 @@ Please attach a screenshot or screen recording (with your voice explaining your 
 Diagnostic information:
 
 Error code: ${this.error.statusCode}
+Error message: ${this.error.message}
 Full error: ${JSON.stringify(this.error)}
 Current URL: ${currentURL}
 Previous URL: ${previousURL}

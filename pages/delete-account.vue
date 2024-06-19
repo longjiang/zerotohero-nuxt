@@ -41,7 +41,7 @@
                 <button class="btn btn-danger" @click="confirmDeletion" :disabled="confirmText !== 'delete'">
                   {{ $t("Confirm Deletion") }}
                 </button>
-                <router-link to="/profile" class="btn btn-secondary ml-2">{{ $t("Cancel") }}</router-link>
+                <b-button @click="$router.back()" variant="secondary ml-2">{{ $t("Cancel") }}</b-button>
               </div>
             </div>
           </div>

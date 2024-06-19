@@ -246,6 +246,11 @@ export default {
           component: "./pages/_l1/_l2/articles/reddit",
         },
         {
+          name: "l1-l2-youtube-search",
+          path: "/:l1/:l2/youtube/search/:term?/:start?",
+          component: "./pages/_l1/_l2/youtube/search",
+        },
+        {
           name: "l1-l2-wiki-articles",
           path: "/:l1/:l2/articles/wiki/:method?/:args?",
           component: "./pages/_l1/_l2/articles/wiki",

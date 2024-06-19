@@ -25,17 +25,21 @@ export const actions = {
     let token = $nuxt.$auth.strategy.token.get();
 
     if (user && user.id && token) {
-      let response = await axios.post(`${PYTHON_SERVER}user-likes`, { id: user.id, l2: l2.code });
-
-      if (response?.status !== 200) {
-        logError('Error loading likes from the server', response);
-        return;
-      } else {
-        let userLikes = response.data;
-        userLikes.forEach(item => {
-          item.created_on = new Date(item.created_on) // Date returned from the server is a Human-readable string
-        })
-        commit('SET_USER_LIKES', userLikes || []);
+      try {
+        let response = await axios.post(`${PYTHON_SERVER}user-likes`, { id: user.id, l2: l2.code });
+        // Handle success (e.g., update UI or state)
+        if (response?.status !== 200) {
+          logError('Error loading likes from the server', response);
+          return;
+        } else {
+          let userLikes = response.data;
+          userLikes.forEach(item => {
+            item.created_on = new Date(item.created_on) // Date returned from the server is a Human-readable string
+          })
+          commit('SET_USER_LIKES', userLikes || []);
+        }
+      } catch (error) {
+        // User likes not found for this language.
       }
     }
   },
