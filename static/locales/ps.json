@@ -39,7 +39,7 @@
   "{num} words found:": "{num}} ټکی وموندل شول:",
   "{num} year(s) and": "{num} کال او",
   "{num} YouTube Channel(s)": "زموږ په {num} اړه د یوټیوب چینل(ان)",
-  "{num1} translators, {num2} languages.": "ژباړه {num1}: ژباړه، ژباړه او {num2} ژباړه.",
+  "{num1} translators, {num2} languages.": "{num1} translators, {num2} languages.",
   "{resources} Resources to Help You Learn {l2}": "په {resources} اړه هغه سرچینې چې تاسو سره د زده کړې {l2} لپاره مرسته کوی",
   "/lifetime": "عمر",
   "/mo": "/دوه نۍ",

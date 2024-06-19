@@ -234,10 +234,10 @@
 </template>
 
 <script>
-import DateHelper from "../../../../../lib/date-helper";
+import DateHelper from "@/lib/date-helper";
 import { ContainerQuery } from "vue-container-query";
 import { mapState } from "vuex";
-import { dictionaryTooLargeAndWillCauseServerCrash } from "../../../../../lib/utils";
+import { dictionaryTooLargeAndWillCauseServerCrash, uniqueByValue } from "@/lib/utils";
 
 export default {
   components: {
@@ -280,7 +280,7 @@ export default {
         };
       else {
         route = {
-          name: "l1-l2-phrasebook",
+          name: "l1-l2-phrasebook-bookId",
           params: {
             bookId: String(this.phrasebook.id),
           },
@@ -532,10 +532,11 @@ export default {
     async matchPhraseToDictionaryEntries() {
       let dictionary = await this.$getDictionary();
       if (dictionary) {
-        this.words = await dictionary.lookupMultiple(
+        let words = await dictionary.lookupMultiple(
           this.phraseObj.phrase,
           true
         );
+        this.words = uniqueByValue(words, "id");
         if (this.words && this.words.length > 0) {
           for (let word of this.words) {
             if (!word.pronunciation)

@@ -231,7 +231,7 @@ export default {
           component: "./pages/admin/assign-lesson-videos",
         },
         {
-          name: "l1-l2-lesson-videos",
+          name: "l1-l2-lesson-videos", // We omit 'chinese' in the name to support legacy urls.
           path: "/:l1/:l2/lesson-videos/:level?/:lesson?",
           component: "./pages/_l1/_l2/chinese/lesson-videos",
         },
@@ -239,6 +239,11 @@ export default {
           name: "compare-languages",
           path: "/compare-languages/:bookId?/:en?/:wiktionary?",
           component: "./pages/compare-languages",
+        },
+        {
+          name: "l1-l2-articles-wiki",
+          path: "/:l1/:l2/articles/wiki/:method?/:args?",
+          component: "./pages/_l1/_l2/articles/wiki",
         },
         {
           name: "l1-l2-reddit-articles",

@@ -315,7 +315,7 @@ export default {
       type: Object,
     },
     playlistId: {
-      type: String, // Either an actual id or an adhoc list of ids as a string like '1,2,3'
+      type: [ String, Number ], // Either an actual id or an adhoc list of ids as a string like '1,2,3'
     },
   },
   data() {

@@ -10,23 +10,23 @@
     <div class="block" @mouseover="hover = true" @mouseleave="hover = false">
       <div class="pinyin" v-if="pinyinParsed">{{ pinyinParsed }}</div>
       <div class="character" v-if="initial">
-        <simple-svg
+        <img
           v-if="initial"
           :src="`/img/pinyin-squared/${initial}.svg`"
           :fill="`#717171`"
-          custom-class-name="initial"
+          class="initial"
         />
-        <simple-svg
+        <img
           v-if="final"
           :src="`/img/pinyin-squared/${final}.svg`"
           :fill="`#717171`"
-          custom-class-name="final"
+          class="final"
         />
-        <simple-svg
+        <img
           v-if="tone"
           :src="`/img/pinyin-squared/tone-${tone}.svg`"
           :fill="`#28a745`"
-          custom-class-name="tone"
+          class="tone"
         />
       </div>
       <div class="string" v-if="string">{{ string }}</div>
@@ -34,29 +34,29 @@
     <template slot="popover">
       <div class="pinyin-squared-legend">
         <div>
-          <simple-svg
+          <img
             v-if="initial"
             :src="`/img/pinyin-squared/${initial}.svg`"
             :fill="`#717171`"
-            custom-class-name="legend-initial"
+            class="legend-initial"
           />
           = {{ initial }}
         </div>
         <div>
-          <simple-svg
+          <img
             v-if="final"
             :src="`/img/pinyin-squared/${final}.svg`"
             :fill="`#717171`"
-            custom-class-name="legend-final"
+            class="legend-final"
           />
           = {{ final }}
         </div>
         <div>
-          <simple-svg
+          <img
             v-if="tone"
             :src="`/img/pinyin-squared/tone-${tone}.svg`"
             :fill="`#28a745`"
-            custom-class-name="legend-tone"
+            class="legend-tone"
           />
           = tone {{ tone }}
         </div>

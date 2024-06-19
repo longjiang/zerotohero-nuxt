@@ -11,7 +11,7 @@
         <div class="row">
           <div class="col-md-12 text-center">
             <h3 class="mt-5">Expansion Videos</h3>
-            <div class="mt-3">
+            <div class="mt-3" v-if="levels[level]">
               <b-dropdown
                 id="dropdown-1"
                 :text="levels[level].exam.name + ' ' + levels[level].level"
@@ -177,10 +177,10 @@ export default {
   },
   computed: {
     level() {
-      return this.$route.params.level;
+      return this.$route.params.level || 1;
     },
     lesson() {
-      return this.$route.params.lesson;
+      return this.$route.params.lesson || 1;
     },
     levels() {
       return languageLevels(this.$l2);

@@ -51,6 +51,7 @@
 
 <script>
 import { ContainerQuery } from "vue-container-query";
+import { uniqueByValue } from "~/lib/utils";
 
 export default {
   props: {
@@ -93,7 +94,10 @@ export default {
   },
   computed: {
     likedVideos() {
-      return this.$store.getters["userLikes/likedVideos"](this.$l2.id).sort((a, b) => b.created_on - a.created_on);
+      let likedVideos = this.$store.getters["userLikes/likedVideos"](this.$l2.id)
+      likedVideos = likedVideos.sort((a, b) => b.created_on - a.created_on);
+      likedVideos = uniqueByValue(likedVideos, "id");
+      return likedVideos;
     },
   },
   methods: {

@@ -76,8 +76,6 @@ export default {
     return {
       articles: undefined,
       article: undefined,
-      method: undefined,
-      args: undefined,
     };
   },
   methods: {
@@ -93,12 +91,11 @@ export default {
       return this.$route.params.method;
     },
     args() {
-      return this.$route.params.args;
+      return this.$route.params.args.split(",");
     }
   },
   async created() {
     if (this.$route.params.method) {
-      this.method = this.$route.params.method;
       if (this.method === "list") {
         this.articles = [];
         let response = await this.$directus.get(
@@ -114,7 +111,6 @@ export default {
           return article;
         });
       } else if (this.method === "view" && this.$route.params.args) {
-        this.args = this.$route.params.args.split(",");
         this.article = undefined;
         let response = await this.$directus.get(
           `items/articles/${this.args[0]}`
