@@ -46,7 +46,7 @@ export default {
   },
   computed: {
     getDisplayText() {
-      const selectedItem = this.items.find(
+      const selectedItem = this.items?.find(
         (item) => item.value === this.selectedItem
       );
       return this.$t(selectedItem ? selectedItem.text : this.defaultText);
@@ -67,6 +67,7 @@ export default {
 <style scoped>
 .filter-dropdown {
   cursor: pointer;
+  display: inline-block;
 }
 
 .item-count {

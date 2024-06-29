@@ -125,7 +125,7 @@ export default {
   watch: {
     topicData() {
       this.$router.push({
-        name: "l1-l2-youtube-browse-category-level-start",
+        name: "l1-l2-youtube-browse-category-level-locale-start",
         params: {
           topic: this.topicData,
           level: "all",

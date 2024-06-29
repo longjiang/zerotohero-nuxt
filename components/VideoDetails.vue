@@ -23,17 +23,6 @@
       <MediaItemStats :item="video" :showDate="true" />
       <!-- <span v-if="video.date && !isNaN(Date.parse(video.date))">
         {{ formatDate(video.date) }}
-      </span>
-      <span v-if="localeDescription">
-        <img
-          v-if="country"
-          :alt="`Flag of ${country.name}`"
-          :title="`Flag of ${country.name} (${country.alpha2Code})`"
-          :src="`/vendor/flag-svgs/${country.alpha2Code}.svg`"
-          class="flag-icon mr-1"
-          style="width: 1rem; position: relative; bottom: 0.1rem"
-        />
-        {{ localeDescription }}
       </span> -->
       <span>
         <a :href="`https://www.youtube.com/watch?v=${video.youtube_id}`" target="_blank"><i class="fab fa-youtube"></i></a>
@@ -142,12 +131,6 @@ export default {
         let language = await this.$languages.getSmart(langCode);
         return language;
       }
-    },
-    localeDescription() {
-      let localeDescription = `${
-        this.language ? this.$t(this.language.name) : ""
-      }`;
-      return localeDescription;
     },
   },
   computed: {

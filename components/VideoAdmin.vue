@@ -276,7 +276,6 @@ export default {
       firstLineTime: 0,
       isNewVideo: false,
       language: undefined, // the language object as defined in the locale
-      localeDescription: undefined, // a description string of the locale e.g. French (France)
       mounted: false,
       notes: "",
       originalText: "",

@@ -89,7 +89,7 @@
             {{ $t("Only showing content made for kids.") }}
             <router-link
               :to="{
-                name: 'l1-l2-youtube-browse-category-level-start',
+                name: 'l1-l2-youtube-browse-category-level-locale-start',
                 params: { category: 'all', level: 'all', start: 0 },
               }"
               >{{ $t("Clear") }}</router-link
@@ -115,6 +115,17 @@
               title="Levels"
               default-text="All Levels"
               @filter="handleLevelFilter"
+            />
+            <FilterDropdown
+              v-if="
+                $l2.locales?.length > 0
+              "
+              :items="localeOptions"
+              :selected-item="locale"
+              type="locales"
+              title="Locales"
+              default-text="All Locales"
+              @filter="handleLocalesFilter"
             />
             <FilterDropdown
               v-if="sortOptions.length > 0"
@@ -180,6 +191,9 @@ export default {
     kidsOnly: {
       default: false,
     },
+    locale: {
+      default: "all",
+    },
   },
   data() {
     return {
@@ -233,6 +247,9 @@ export default {
       if (this.sort && this.sort !== "-views") {
         params.sort = this.sort // The table is mostly already sorted by views, so we don't need to sort by views
       }
+      if (this.locale && this.locale !== "all") {
+        params["filter[locale][eq]"] = this.locale;
+      }
       params.start = this.start;
       return params;
     },
@@ -271,6 +288,26 @@ export default {
       return items;
     },
   },
+  asyncComputed: {
+    async localeOptions() {
+      let items = [{ value: "all", text: this.$t("All Locales") }];
+      if (this.$l2.locales) {
+        // Map each locale to a promise that resolves to the desired object structure
+        let promises = this.$l2.locales.map(async (locale) => {
+          const { country, language, description } = await this.$languages.getLocaleDescription(locale);
+          return {
+            text: description,
+            value: locale,
+          }
+        });
+
+        // Wait for all promises to resolve and then concatenate the results
+        let moreItems = await Promise.all(promises);
+        items = items.concat(moreItems);
+      }
+      return items;
+    },
+  },
   watch: {
     sort() {
       this.$refs["sortModal"]?.hide();
@@ -282,37 +319,53 @@ export default {
     },
     handleSearch($event) {
       this.$router.push({
-        name: "l1-l2-youtube-browse-category-level-start",
+        name: "l1-l2-youtube-browse-category-level-locale-start",
         params: {
           category: this.category,
           level: this.level,
           start: this.start,
           keyword: $event.target.value || null,
           kidsOnly: this.kidsOnly,
+          locale: this.locale,
         },
       });
     },
     handleCategoryFilter(value) {
       this.$router.push({
-        name: "l1-l2-youtube-browse-category-level-start",
+        name: "l1-l2-youtube-browse-category-level-locale-start",
         params: {
           category: value,
           level: this.level,
           start: this.start,
           keyword: this.keyword,
           kidsOnly: this.kidsOnly,
+          locale: this.locale,
         },
       });
     },
     handleLevelFilter(value) {
       this.$router.push({
-        name: "l1-l2-youtube-browse-category-level-start",
+        name: "l1-l2-youtube-browse-category-level-locale-start",
         params: {
           category: this.category,
           level: value,
           start: this.start,
           keyword: this.keyword,
           kidsOnly: this.kidsOnly,
+          locale: this.locale,
+        },
+      });
+    },
+    handleLocalesFilter(value) {
+      this.$router.push({
+        name: "l1-l2-youtube-browse-category-level-locale-start",
+        params: {
+          category: this.category,
+          level: this.level,
+          start: this.start,
+          keyword: this.keyword,
+          kidsOnly: this.kidsOnly,
+          locale: value,
         },
       });
     },
