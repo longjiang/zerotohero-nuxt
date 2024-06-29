@@ -19,12 +19,7 @@
     >
       {{ level(levelByDifficulty(item.difficulty, $l2.code), $l2).name }}
     </span>
-    <span class="statistics-item" v-if="item.locale">
-      <img v-if="country" :alt="`Flag of ${country.name}`" :title="`Flag of ${country.name} (${country.alpha2Code})`"
-        :src="`/vendor/flag-svgs/${country.alpha2Code}.svg`" class="flag-icon mr-1"
-        style="width: 1rem; position: relative; bottom: 0.1rem" />
-      {{ localeDescription || item.locale }}
-    </span>
+    <Locale class="statistics-item" v-if="item.locale" :locale="item.locale" />
     <span>
       <router-link class="statistics-item" v-if="item.category && CATEGORIES[item.category]" :to="{ name: 'category', params: { slug: item.category } }" style="color: inherit">
         {{ $t(CATEGORIES[item.category]) }}
@@ -64,57 +59,17 @@ export default {
   },
   data() {
     return {
-      localeDescription: undefined,
-      country: undefined,
       language: undefined,
       CATEGORIES
     }
   },
-  async mounted() {
-    this.updateLocaleDescription();
-  },
   computed: {
     ...mapState("shows", ["categories"]),
-  },
-  watch: {
-    async item() {
-      this.updateLocaleDescription();
-    },
   },
   methods: {
     level,
     levelByDifficulty,
     formatK,
-    async updateLocaleDescription() {
-      if (this.item?.locale) {
-        const { country, language, description } = await this.getLocaleDescription(this.item.locale);
-        this.country = country;
-        this.language = language;
-        this.localeDescription = description;
-      }
-    },
-    async getLocaleDescription(locale) {
-      let language, country, script;
-      let [langCode, countryCodeOrScript] = locale.split("-");
-      language = await this.$languages.getSmart(langCode);
-      if (countryCodeOrScript) {
-        const scripts = [
-          { code: 'Hans', name: 'Simplified' },
-          { code: 'Hant', name: 'Traditional' },
-          { code: 'Latn', name: 'Latin' },
-          { code: 'Cyrl', name: 'Cyrillic' },
-        ];
-        script = scripts.find(s => s.code === countryCodeOrScript)
-        if (!script){
-          const countryCode = countryCodeOrScript;
-          country = await this.$languages.countryFromCode(countryCode);
-        }
-      }
-      let description = `${language ? this.$t(language.name) : ""}`;
-      if (country) description += ` (${this.$t(country.name)})`;
-      if (script) description += ` (${this.$t(script.name)})`;
-      return { country, language, description };
-    },
   },
 };
 </script>
