@@ -89,7 +89,7 @@
             {{ $t("Only showing content made for kids.") }}
             <router-link
               :to="{
-                name: 'l1-l2-youtube-browse',
+                name: 'l1-l2-youtube-browse-category-level-start',
                 params: { category: 'all', level: 'all', start: 0 },
               }"
               >{{ $t("Clear") }}</router-link
@@ -282,7 +282,7 @@ export default {
     },
     handleSearch($event) {
       this.$router.push({
-        name: "l1-l2-youtube-browse",
+        name: "l1-l2-youtube-browse-category-level-start",
         params: {
           category: this.category,
           level: this.level,
@@ -294,7 +294,7 @@ export default {
     },
     handleCategoryFilter(value) {
       this.$router.push({
-        name: "l1-l2-youtube-browse",
+        name: "l1-l2-youtube-browse-category-level-start",
         params: {
           category: value,
           level: this.level,
@@ -306,7 +306,7 @@ export default {
     },
     handleLevelFilter(value) {
       this.$router.push({
-        name: "l1-l2-youtube-browse",
+        name: "l1-l2-youtube-browse-category-level-start",
         params: {
           category: this.category,
           level: value,
