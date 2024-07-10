@@ -8,7 +8,7 @@
       }"
       v-if="$adminMode && tvShow"
       :to="{
-        name: 'l1-l2-show',
+        name: 'l1-l2-show-type-id',
         params: { type: 'tv-show', id: String(tvShow.id) },
       }"
     >
@@ -30,7 +30,7 @@
       }"
       v-if="$adminMode && talk"
       :to="{
-        name: 'l1-l2-show',
+        name: 'l1-l2-show-type-id',
         params: { type: 'talk', id: String(talk.id) },
       }"
     >

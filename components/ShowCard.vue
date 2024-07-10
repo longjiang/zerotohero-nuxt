@@ -101,7 +101,7 @@ export default {
     },
     to() {
       const showList = {
-        name: "l1-l2-show",
+        name: "l1-l2-show-type-id",
         params: { type: this.slug, id: this.show.id },
       };
       const firstEpisode = {
