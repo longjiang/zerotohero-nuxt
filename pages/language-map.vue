@@ -69,7 +69,7 @@
       </ul>
       <!-- Add the slider control here -->
       <div class="slider-control">
-        <label for="magicScaleSlider">Adjust Marker Spacing:</label>
+        <span style="position: relative; bottom: 0.2rem;">Map Density</span>
         <input
           id="magicScaleSlider"
           type="range"
@@ -78,7 +78,6 @@
           step="0.1"
           v-model.number="magicScale"
         />
-        <span>{{ magicScale.toFixed(1) }}</span>
       </div>
     </div>
     <div class="container-fluid flex-1">
@@ -329,8 +328,6 @@ export default {
 }
 .slider-control {
   margin-top: 20px;
-  background: white;
-  padding: 10px;
   border-radius: 5px;
 }
 </style>
