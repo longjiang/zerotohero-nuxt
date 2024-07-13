@@ -101,7 +101,6 @@ export default {
       type: Number,
       required: true
     },
-    // Show word count instead of speaker count
     showDictionaryWordCount: {
       type: Boolean,
       default: false
@@ -118,13 +117,17 @@ export default {
       return Math.max(Math.ceil(Math.log(this.language.speakers) / 9), 1);
     },
     shouldShowCount() {
-      return this.showDictionaryWordCount ? !!this.language.wiktionary : true;
+      if (this.showDictionaryWordCount) {
+        return this.language.wiktionary && this.language.wiktionary > 0;
+      } else {
+        return this.language.speakers && this.language.speakers > 0;
+      }
     },
     countDisplay() {
       if (this.showDictionaryWordCount) {
-        return this.$tb('{num} word(s)', {num: this.formatK(this.language.wiktionary || 0, 1, this.$browserLanguage)});
+        return this.$tb('{num} word(s)', {num: this.formatK(this.language.wiktionary, 1, this.$browserLanguage)});
       } else {
-        return this.$tb('{num} speakers', {num: this.formatK(this.language.speakers || 0, 1, this.$browserLanguage)});
+        return this.$tb('{num} speakers', {num: this.formatK(this.language.speakers, 1, this.$browserLanguage)});
       }
     }
   },
@@ -222,6 +225,6 @@ export default {
 
 .count-display {
   font-size: 0.8em;
-  opacity: 0.5;
+  opacity: 0.7;
 }
 </style>
