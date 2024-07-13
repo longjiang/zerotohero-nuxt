@@ -12,14 +12,8 @@
         @ready="ready"
         ref="myMap"
       >
-        <l-tile-layer
-          :url="mapTileURL[mapStyle]"
-        ></l-tile-layer>
-        <l-control-scale
-          position="topright"
-          :imperial="false"
-          :metric="true"
-        ></l-control-scale>
+        <l-tile-layer :url="mapTileURL[mapStyle]"></l-tile-layer>
+        <l-control-scale position="topright" :imperial="false" :metric="true"></l-control-scale>
         <LanguageMapMarker
           v-for="(language, index) in filteredLanguages"
           :key="`language-marker-${index}`"
@@ -32,21 +26,23 @@
           @marker-click="handleMarkerClick"
           @is-descendant="isDescendant"
         />
+        <div class="slider-control">
+          <label for="magicScaleSlider">Adjust Marker Spacing:</label>
+          <input
+            id="magicScaleSlider"
+            type="range"
+            min="0.1"
+            max="5"
+            step="0.1"
+            v-model.number="magicScale"
+          />
+          <span>{{ magicScale.toFixed(1) }}</span>
+        </div>
       </l-map>
-      <b-modal
-        ref="phrase-picker-modal"
-        centered
-        hide-footer
-        :title="$tb('Which one?')"
-        modal-class="safe-padding-top mt-4"
-      >
+      <b-modal ref="phrase-picker-modal" centered hide-footer :title="$tb('Which one?')" modal-class="safe-padding-top mt-4">
         <div class="phrase-picker-modal">
           <template v-for="(phrase, index) of modalPhrases">
-            <router-link
-              :to="getPhraseLink(phrase)"
-              :key="`you-in-other-langs-${index}`"
-              class="d-block link-unstyled text-left similar-phrase"
-            >
+            <router-link :to="getPhraseLink(phrase)" :key="`you-in-other-langs-${index}`" class="d-block link-unstyled text-left similar-phrase">
               <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
               <Speak :text="phrase.phrase" :l2="phrase.l2" />
               <span class="similar-phrase-language">
@@ -69,10 +65,6 @@ import { LANGS_WITH_CONTENT, uniqueByValue, formatK } from "@/lib/utils";
 import LanguageMapper from "@/lib/language-mapper";
 import LanguageMapMarker from "@/components/LanguageMapMarker.vue";
 
-/**
- * @component
- * @description A component that renders an interactive map of languages using Leaflet
- */
 export default {
   components: {
     LanguageMapMarker,
@@ -96,24 +88,12 @@ export default {
     },
   },
   props: {
-    /**
-     * @type {Array}
-     * @description Array of language objects to be displayed on the map
-     */
     langs: {
       type: Array,
     },
-    /**
-     * @type {Array}
-     * @description Array of phrase objects associated with languages
-     */
     phrases: {
       type: Array,
     },
-    /**
-     * @type {string}
-     * @description Default language code
-     */
     l1: {
       default: 'en'
     }
@@ -134,10 +114,7 @@ export default {
       street: 'http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
       satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
     },
-    /**
-     * @type {LanguageMapper}
-     * @description Instance of LanguageMapper class for handling language data
-     */
+    magicScale: 2.2, // Initialize magicScale as a number
     languageMapper: null,
   }),
   created() {
@@ -145,6 +122,7 @@ export default {
       minZoom: 3,
       maxZoom: 9,
     });
+    this.magicScale = this.languageMapper.magicScale;
   },
   async mounted() {
     this.initialZoom = this.$route.query.z ? Number(this.$route.query.z) : 3;
@@ -154,31 +132,23 @@ export default {
       : [35, 105];
     this.initLangs();
   },
-  computed: {
-    /**
-     * @returns {Object} English language object
-     */
-    english() {
-      return this.$languages.l1s.find((language) => language.code === "en");
-    },
-    /**
-     * @returns {Object} Arabic language object
-     */
-    arabic() {
-      return this.$languages.l1s.find((language) => language.code === "ar");
-    },
-  },
   watch: {
     phrases() {
       this.initLangs();
+    },
+    magicScale(newScale) {
+      this.languageMapper.setMagicScale(newScale);
+      this.filterLanguages(); // Re-filter languages when magicScale changes
     },
   },
   methods: {
     formatK,
     uniqueByValue,
-    /**
-     * @description Initializes the languages to be displayed on the map
-     */
+    updateMagicScale(event) {
+      const scale = parseFloat(event.target.value);
+      this.languageMapper.setMagicScale(scale);
+      this.filterLanguages(); // Re-filter languages based on new magicScale
+    },
     initLangs() {
       if (this.phrases) {
         let languages = this.phrases.map((p) => p.l2).filter(l2 => l2);
@@ -201,18 +171,9 @@ export default {
         this.languages = languages;
       }
     },
-    /**
-     * @description Checks if one language is a descendant of another
-     * @returns {boolean}
-     */
     isDescendant() {
       return this.$languages.isDescendant(...arguments);
     },
-    /**
-     * @description Gets the L1 code for a given L2 language
-     * @param {Object} l2 - L2 language object
-     * @returns {string} L1 language code
-     */
     getL1Code(l2) {
       let l2Settings = this.$store.getters["settings/l2Settings"](l2.code);
       if (l2Settings?.l1) {
@@ -220,11 +181,6 @@ export default {
       }
       return this.$browserLanguage;
     },
-    /**
-     * @description Generates a route object for a given language
-     * @param {Object} l2 - L2 language object
-     * @returns {Object} Route object
-     */
     to(l2) {
       let l1Code = this.getL1Code(l2);
       let name = "l1-l2-language-info";
@@ -233,17 +189,9 @@ export default {
         params: { l1: l1Code, l2: l2.code },
       };
     },
-    /**
-     * @description Navigates to a language page
-     * @param {Object} l2 - L2 language object
-     */
     goTo(l2) {
       this.$router.push(this.to(l2));
     },
-    /**
-     * @description Opens phrases for a given language
-     * @param {Object} l2 - L2 language object
-     */
     openPhrases(l2) {
       let filteredPhrases = this.phrases.filter((phrase) => phrase.l2 === l2);
       if (filteredPhrases && filteredPhrases.length === 1) {
@@ -255,28 +203,18 @@ export default {
         this.$refs["phrase-picker-modal"].show();
       }
     },
-    /**
-     * @description Initializes the map when it's ready
-     * @param {Object} mapObj - Leaflet map object
-     */
     ready(mapObj) {
       this.map = mapObj;
       let bounds = mapObj.getBounds();
       this.updateBounds(bounds);
       this.$emit("ready");
     },
-    /**
-     * @description Updates the URL when the map center changes
-     * @param {Object} center - New map center coordinates
-     */
     updateCenter(center) {
       if (typeof window !== "undefined" && "URLSearchParams" in window) {
         var searchParams = new URLSearchParams(window.location.search);
         searchParams.set(
           "c",
-          `${Math.round(center.lat * 100) / 100},${
-            Math.round(center.lng * 100) / 100
-          }`
+          `${Math.round(center.lat * 100) / 100},${Math.round(center.lng * 100) / 100}`
         );
         searchParams.set("z", this.currentZoom);
         window.history.replaceState("", "", `?${searchParams.toString()}`);
@@ -286,10 +224,6 @@ export default {
         );
       }
     },
-    /**
-     * @description Updates the displayed languages when map bounds change
-     * @param {Object} bounds - New map bounds
-     */
     updateBounds(bounds) {
       const boundsObj = {
         northEast: bounds._northEast,
@@ -298,52 +232,23 @@ export default {
       this.filteredLanguages = this.languageMapper.filterLanguagesByBounds(this.languages, boundsObj);
       this.filterLanguages();
     },
-    /**
-     * @description Filters languages to prevent overlapping
-     */
     filterLanguages() {
       this.filteredLanguages = this.languageMapper.filterOverlappingLanguages(this.filteredLanguages, this.currentZoom);
     },
-    /**
-     * @description Calculates the diameter of a language marker
-     * @param {Object} language - Language object
-     * @returns {number} Marker diameter
-     */
     diameter(language) {
       return this.languageMapper.calculateMarkerDiameter(language, this.currentZoom);
     },
-    /**
-     * @description Updates the current zoom level
-     * @param {number} zoom - New zoom level
-     */
     updateZoom(zoom) {
       this.currentZoom = zoom;
     },
-    /**
-     * @description Checks if a dictionary feature exists for given languages
-     * @param {Object} l1 - L1 language object
-     * @param {Object} l2 - L2 language object
-     * @returns {boolean}
-     */
     hasDictionary(l1, l2) {
-      console.log('language map', {l1, l2})
       return (
         this.$languages.hasFeature(l1, l2, "dictionary") || l2.code === "en"
       );
     },
-    /**
-     * @description Checks if YouTube feature exists for given languages
-     * @param {Object} l1 - L1 language object
-     * @param {Object} l2 - L2 language object
-     * @returns {boolean}
-     */
     hasYouTube(l1, l2) {
       return this.$languages.hasYouTube(l1, l2) || l2.code === "en";
     },
-    /**
-     * @description Loads country data from CSV
-     * @returns {Promise<Array>} Array of country objects
-     */
     async loadCountries() {
       let res = await axios.get(`${SERVER}data/countries/countries.csv`);
       if (res && res.data) {
@@ -358,10 +263,6 @@ export default {
         }
       }
     },
-    /**
-     * @description Moves the map view to a specific language
-     * @param {Object} lang - Language object
-     */
     goToLang(lang) {
       this.currentLang = lang;
       let zoomLevel = this.languageMapper.calculateLanguageZoomLevel(lang);
@@ -369,10 +270,6 @@ export default {
         animation: true,
       });
     },
-    /**
-     * @description Handles clicks on language markers
-     * @param {Object} language - Clicked language object
-     */
     handleMarkerClick(language) {
       if (!this.phrases) {
         this.goTo(language);
@@ -380,11 +277,6 @@ export default {
         this.openPhrases(language);
       }
     },
-    /**
-     * @description Generates a link for a phrase
-     * @param {Object} phrase - Phrase object
-     * @returns {string} URL for the phrase
-     */
     getPhraseLink(phrase) {
       return phrase.bookId === "wiktionary"
         ? `/${this.getL1Code(phrase.l2)}/${phrase.l2.code}/phrase/search/${encodeURIComponent(phrase.phrase)}/dict`
@@ -412,5 +304,14 @@ export default {
       font-style: italic;
     }
   }
+}
+.slider-control {
+  position: absolute;
+  bottom: 50px;
+  left: 10px;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 1000;
 }
 </style>
