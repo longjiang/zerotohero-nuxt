@@ -20,94 +20,18 @@
           :imperial="false"
           :metric="true"
         ></l-control-scale>
-        <l-marker
+        <LanguageMapMarker
           v-for="(language, index) in filteredLanguages"
-          :lat-lng="[language.lat, language.long]"
           :key="`language-marker-${index}`"
-          @click="!phrases ? goTo(language) : openPhrases(language)"
-        >
-          <l-icon>
-            <div
-              :class="{
-                'language-marker': true,
-                'language-marker-current': language === currentLang,
-                'language-marker-current-child': isDescendant(
-                  language,
-                  currentLang
-                ),
-              }"
-            >
-              <div
-                :class="`language-marker-size language-marker-size-family-${language.glottologFamilyId}`"
-                :style="`width: ${diameter(language)}px; height: ${diameter(
-                  language
-                )}px; left: calc(50% - ${diameter(
-                  language
-                )}px / 2); top: calc(50% - ${diameter(language)}px / 2);`"
-              ></div>
-              <LanguageList
-                v-if="!phrases"
-                variant="icon"
-                skin="dark"
-                class="language-marker-language-list"
-                :langs="[language]"
-                :singleColumn="true"
-                :showFeatures="false"
-                :l1="l1"
-              />
-              <span class="word-count" v-if="language.wiktionary">{{ $tb('{num} word(s)', {num: formatK(language.wiktionary || 0, 1, $browserLanguage) }) }}</span>
-              <div
-                v-if="phrases"
-                :class="{
-                  'text-center': true,
-                }"
-                class="language-marker-phrases"
-              >
-                <div
-                  :set="
-                    (filteredPhrases = uniqueByValue(
-                      phrases.filter((phrase) => phrase.l2 === language),
-                      'phrase'
-                    ))
-                  "
-                  :set2="
-                    (maxPhraes = Math.max(
-                      Math.ceil(Math.log(language.speakers) / 9),
-                      1
-                    ))
-                  "
-                  class="language-marker-phrases-phrase"
-                  :direction="language.direction === 'rtl' ? 'rtl' : 'ltr'"
-                >
-                  <span
-                    v-for="(phrase, index) in filteredPhrases.slice(
-                      0,
-                      maxPhraes
-                    )"
-                    :key="`you-in-other-langs-${index}`"
-                    class="d-inline-block link-unstyled mr-1 ml-1"
-                  >
-                    <span class="similar-phrase-l2">
-                      {{ phrase.phrase }}
-                      <span
-                        v-if="
-                          index <
-                          Math.min(filteredPhrases.length - 1, maxPhraes - 1)
-                        "
-                      >
-                        ,
-                      </span>
-                    </span>
-                  </span>
-                  <span v-if="filteredPhrases.length > maxPhraes">...</span>
-                </div>
-                <span class="language-marker-phrases-language">
-                  {{ $tb(language.name) }}
-                </span>
-              </div>
-            </div>
-          </l-icon>
-        </l-marker>
+          :language="language"
+          :current-lang="currentLang"
+          :l1="l1"
+          :show-phrases="!!phrases"
+          :phrases="phrases"
+          :diameter="diameter(language)"
+          @marker-click="handleMarkerClick"
+          @is-descendant="isDescendant"
+        />
       </l-map>
       <b-modal
         ref="phrase-picker-modal"
@@ -119,15 +43,7 @@
         <div class="phrase-picker-modal">
           <template v-for="(phrase, index) of modalPhrases">
             <router-link
-              :to="
-                phrase.bookId === 'wiktionary'
-                  ? `/${getL1Code(phrase.l2)}/${phrase.l2.code}/phrase/search/${encodeURIComponent(
-                      phrase.phrase
-                    )}/dict`
-                  : `/${getL1Code(phrase.l2)}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
-                      phrase.id
-                    }/${encodeURIComponent(phrase.phrase)}`
-              "
+              :to="getPhraseLink(phrase)"
               :key="`you-in-other-langs-${index}`"
               class="d-block link-unstyled text-left similar-phrase"
             >
@@ -146,18 +62,16 @@
 
 <script>
 import axios from "axios";
-import { SERVER } from "../lib/utils";
+import { SERVER } from "@/lib/utils";
 import Papa from "papaparse";
 import "leaflet/dist/leaflet.css";
-import { LANGS_WITH_CONTENT, uniqueByValue, formatK } from "../lib/utils";
-import LanguageMapper from "@/lib/language-mapper"; // Import the new class
+import { LANGS_WITH_CONTENT, uniqueByValue, formatK } from "@/lib/utils";
+import LanguageMapper from "@/lib/language-mapper";
+import LanguageMapMarker from "@/components/LanguageMapMarker.vue";
 
-/**
- * @component
- * This component creates an interactive language map using Leaflet
- */
 export default {
   components: {
+    LanguageMapMarker,
     "l-map": async () => {
       if (process.client) {
         let { LMap } = await import("vue2-leaflet");
@@ -168,18 +82,6 @@ export default {
       if (process.client) {
         let { LTileLayer } = await import("vue2-leaflet");
         return LTileLayer;
-      }
-    },
-    "l-marker": async () => {
-      if (process.client) {
-        let { LMarker } = await import("vue2-leaflet");
-        return LMarker;
-      }
-    },
-    "l-icon": async () => {
-      if (process.client) {
-        let { LIcon } = await import("vue2-leaflet");
-        return LIcon;
       }
     },
     "l-control-scale": async () => {
@@ -216,7 +118,7 @@ export default {
       street: 'http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
       satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
     },
-    languageMapper: null, // New property to hold the LanguageMapper instance
+    languageMapper: null,
   }),
   created() {
     this.languageMapper = new LanguageMapper({
@@ -295,14 +197,7 @@ export default {
       let filteredPhrases = this.phrases.filter((phrase) => phrase.l2 === l2);
       if (filteredPhrases && filteredPhrases.length === 1) {
         let phrase = filteredPhrases[0];
-        let path =
-          phrase.bookId === "wiktionary"
-            ? `/${this.getL1Code(phrase.l2)}/${phrase.l2.code}/phrase/search/${encodeURIComponent(
-                phrase.phrase
-              )}/dict`
-            : `/${this.getL1Code(phrase.l2)}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
-                phrase.id
-              }/${encodeURIComponent(phrase.phrase)}`;
+        let path = this.getPhraseLink(phrase);
         this.$router.push(path);
       } else {
         this.modalPhrases = filteredPhrases;
@@ -379,113 +274,30 @@ export default {
         animation: true,
       });
     },
+    handleMarkerClick(language) {
+      if (!this.phrases) {
+        this.goTo(language);
+      } else {
+        this.openPhrases(language);
+      }
+    },
+    getPhraseLink(phrase) {
+      return phrase.bookId === "wiktionary"
+        ? `/${this.getL1Code(phrase.l2)}/${phrase.l2.code}/phrase/search/${encodeURIComponent(phrase.phrase)}/dict`
+        : `/${this.getL1Code(phrase.l2)}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${phrase.id}/${encodeURIComponent(phrase.phrase)}`;
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 @import "../assets/scss/variables.scss";
+
 .language-map {
   width: 100%;
   height: 100%;
-  .language-marker {
-    width: 10rem;
-    margin-left: -5rem;
-    text-shadow: 0 1px 10px rgba(0, 0, 0, 1);
-    font-size: 1.2em;
-    line-height: 1;
-    padding: 0.3rem 0.6rem;
-    border-radius: 0.3rem;
-    margin-top: -100%;
-    text-align: center;
-    position: relative;
-    .language-marker-language-list {
-      text-transform: uppercase;
-      font-weight: bold;
-    }
-    .language-marker-phrases {
-      .language-marker-phrases-language {
-        color: #ddd;
-        display: inline-block;
-      }
-      .language-marker-phrases-phrase {
-        color: white;
-        font-size: 1.2em;
-        font-weight: bold;
-        font-style: italic;
-      }
-    }
-    .language-marker-size {
-      background-color: #000000;
-      opacity: 0.7;
-      position: absolute;
-      z-index: -1;
-      border-radius: 100%;
-      pointer-events: none;
-      &.language-marker-size-family-atla1278 {
-        background-color: #fd4f1c;
-      }
-      &.language-marker-size-family-aust1307 {
-        background-color: #6a3669;
-      }
-      &.language-marker-size-family-indo1319 {
-        background-color: #1b3e76;
-      }
-      &.language-marker-size-family-sino1245 {
-        background-color: #bb1718;
-      }
-      &.language-marker-size-family-afro1255 {
-        background-color: #f8b51e;
-      }
-      &.language-marker-size-family-nucl1709 {
-        background-color: #0076ba;
-      }
-      &.language-marker-size-family-turk1311 {
-        background-color: #005f58;
-      }
-      &.language-marker-size-family-drav1251 {
-        background-color: $primary-color;
-      }
-      &.language-marker-size-family-aust1305 {
-        background-color: #5b0516;
-      }
-      &.language-marker-size-family-taik1256 {
-        background-color: #b1c751;
-      }
-    }
-    :deep(.language-list-item) {
-      a {
-        pointer-events: none;
-      }
-    }
-    &.language-marker-current {
-      .language-marker-size {
-        background-color: #fd4f1c88;
-      }
-      :deep(.language-list-item) {
-        a {
-          color: white;
-        }
-        .feature-icon {
-          color: white;
-        }
-      }
-    }
-    &.language-marker-current-child {
-      .language-marker-size {
-        background-color: #fd4f1c88;
-      }
-      :deep(.language-list-item) {
-        a {
-          color: white;
-        }
-        .feature-icon {
-          color: white;
-        }
-      }
-    }
-  }
 }
+
 .phrase-picker-modal {
   .similar-phrase {
     .similar-phrase-l2 {
@@ -495,10 +307,5 @@ export default {
       font-style: italic;
     }
   }
-}
-
-.word-count {
-  font-size: 0.8em;
-  opacity: 0.5;
 }
 </style>
