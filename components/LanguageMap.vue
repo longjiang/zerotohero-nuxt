@@ -55,7 +55,7 @@
                 :showFeatures="false"
                 :l1="l1"
               />
-              <span class="word-count" v-if="language.wiktionary">{{  $tb('{num} word(s)', {num: formatK(language.wiktionary || 0, 1, $browserLanguage) }) }}</span>
+              <span class="word-count" v-if="language.wiktionary">{{ $tb('{num} word(s)', {num: formatK(language.wiktionary || 0, 1, $browserLanguage) }) }}</span>
               <div
                 v-if="phrases"
                 :class="{
@@ -134,7 +134,7 @@
               <span class="similar-phrase-l2">{{ phrase.phrase }}</span>
               <Speak :text="phrase.phrase" :l2="phrase.l2" />
               <span class="similar-phrase-language">
-                “{{ $tb(phrase.en) }}” ({{ $tb(phrase.l2.name) }})
+                "{{ $tb(phrase.en) }}" ({{ $tb(phrase.l2.name) }})
               </span>
             </router-link>
           </template>
@@ -151,8 +151,16 @@ import Papa from "papaparse";
 import "leaflet/dist/leaflet.css";
 import { LANGS_WITH_CONTENT, uniqueByValue, formatK } from "../lib/utils";
 
+/**
+ * @component
+ * This component creates an interactive language map using Leaflet
+ */
 export default {
   components: {
+    /**
+     * Dynamically import Leaflet map component for client-side rendering
+     * @returns {Promise<import("vue2-leaflet").LMap>}
+     */
     "l-map": async () => {
       if (process.client) {
         let { LMap } = await import("vue2-leaflet");
@@ -185,12 +193,15 @@ export default {
     },
   },
   props: {
+    /** @type {Array} Array of language objects */
     langs: {
       type: Array,
     },
+    /** @type {Array} Array of phrase objects */
     phrases: {
       type: Array,
     },
+    /** @type {string} Default language code */
     l1: {
       default: 'en'
     }
@@ -198,15 +209,25 @@ export default {
   data: () => ({
     initialZoom: 3,
     initialCenter: [35, 105],
+    /** @type {Array} Array of all languages */
     languages: [],
+    /** @type {Array} Array of filtered languages based on current view */
     filteredLanguages: [],
+    /** @type {Array} Array of phrases for the modal */
     modalPhrases: [],
+    /** @type {Array} Array of country objects */
     countries: [],
+    /** @type {Array} Array of overlapped language objects */
     overlapped: [],
+    /** @type {number} Current zoom level of the map */
     currentZoom: 4,
+    /** @type {Object|undefined} Leaflet map object */
     map: undefined,
+    /** @type {Object|undefined} Currently selected language */
     currentLang: undefined,
+    /** @type {string} Current map style */
     mapStyle: 'street',
+    /** @type {Object} URLs for different map tile styles */
     mapTileURL: {
       street: 'http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
       satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
@@ -221,23 +242,33 @@ export default {
     this.initLangs();
   },
   computed: {
+    /**
+     * @returns {Object} English language object
+     */
     english() {
       return this.$languages.l1s.find((language) => language.code === "en");
     },
+    /**
+     * @returns {Object} Arabic language object
+     */
     arabic() {
       return this.$languages.l1s.find((language) => language.code === "ar");
     },
   },
   watch: {
+    /**
+     * Re-initialize languages when phrases change
+     */
     phrases() {
       this.initLangs();
     },
   },
   methods: {
     formatK,
-    uniqueByValue() {
-      return uniqueByValue(...arguments);
-    },
+    uniqueByValue,
+    /**
+     * Initialize language data based on props or default languages
+     */
     initLangs() {
       if (this.phrases) {
         let languages = this.phrases.map((p) => p.l2).filter(l2 => l2);
@@ -268,9 +299,18 @@ export default {
         this.languages = languages;
       }
     },
+    /**
+     * Check if one language is a descendant of another
+     * @returns {boolean}
+     */
     isDescendant() {
       return this.$languages.isDescendant(...arguments);
     },
+    /**
+     * Get the L1 code for a given L2 language
+     * @param {Object} l2 - L2 language object
+     * @returns {string} L1 language code
+     */
     getL1Code(l2) {
       let l2Settings = this.$store.getters["settings/l2Settings"](l2.code);
       if (l2Settings?.l1) {
@@ -278,6 +318,11 @@ export default {
       }
       return this.$browserLanguage;
     },
+    /**
+     * Generate route for a language
+     * @param {Object} l2 - L2 language object
+     * @returns {Object} Route object
+     */
     to(l2) {
       let l1Code = this.getL1Code(l2);
       let name = "l1-l2-language-info";
@@ -286,9 +331,17 @@ export default {
         params: { l1: l1Code, l2: l2.code },
       };
     },
+    /**
+     * Navigate to a language page
+     * @param {Object} l2 - L2 language object
+     */
     goTo(l2) {
       this.$router.push(this.to(l2));
     },
+    /**
+     * Open phrases modal or navigate to phrase page
+     * @param {Object} l2 - L2 language object
+     */
     openPhrases(l2) {
       let filteredPhrases = this.phrases.filter((phrase) => phrase.l2 === l2);
       if (filteredPhrases && filteredPhrases.length === 1) {
@@ -307,31 +360,41 @@ export default {
         this.$refs["phrase-picker-modal"].show();
       }
     },
+    /**
+     * Initialize map object and update bounds
+     * @param {Object} mapObj - Leaflet map object
+     */
     ready(mapObj) {
       this.map = mapObj;
       let bounds = mapObj.getBounds();
       this.updateBounds(bounds);
       this.$emit("ready");
     },
+    /**
+     * Update URL parameters when map center changes
+     * @param {Object} center - New map center coordinates
+     */
     updateCenter(center) {
-      if (typeof window !== "undefined") {
-        if ("URLSearchParams" in window) {
-          var searchParams = new URLSearchParams(window.location.search);
-          searchParams.set(
-            "c",
-            `${Math.round(center.lat * 100) / 100},${
-              Math.round(center.lng * 100) / 100
-            }`
-          );
-          searchParams.set("z", this.currentZoom);
-          window.history.replaceState("", "", `?${searchParams.toString()}`);
-          this.$nuxt.$emit(
-            "history",
-            window.location.pathname + window.location.search
-          );
-        }
+      if (typeof window !== "undefined" && "URLSearchParams" in window) {
+        var searchParams = new URLSearchParams(window.location.search);
+        searchParams.set(
+          "c",
+          `${Math.round(center.lat * 100) / 100},${
+            Math.round(center.lng * 100) / 100
+          }`
+        );
+        searchParams.set("z", this.currentZoom);
+        window.history.replaceState("", "", `?${searchParams.toString()}`);
+        this.$nuxt.$emit(
+          "history",
+          window.location.pathname + window.location.search
+        );
       }
     },
+    /**
+     * Filter languages based on current map bounds
+     * @param {Object} bounds - Map bounds object
+     */
     updateBounds(bounds) {
       this.filteredLanguages = this.languages.filter((l) => {
         return (
@@ -345,13 +408,21 @@ export default {
       });
       this.filterLanguages();
     },
-    diameter(language) {
+/**
+     * Calculate marker diameter based on number of speakers and zoom level
+     * @param {Object} language - Language object
+     * @returns {number} Marker diameter
+     */
+     diameter(language) {
       return (
         ((Math.sqrt(language.speakers / Math.PI) / Math.pow(10, 3)) *
           Math.pow(this.currentZoom, 3 - this.currentZoom * 0.14)) /
         2.5
       );
     },
+    /**
+     * Filter out overlapping languages based on zoom level
+     */
     filterLanguages() {
       let filteredLanguages = this.filteredLanguages;
       for (let language of this.languages) {
@@ -383,18 +454,38 @@ export default {
       }
       this.filteredLanguages = filteredLanguages;
     },
+    /**
+     * Update current zoom level
+     * @param {number} zoom - New zoom level
+     */
     updateZoom(zoom) {
       this.currentZoom = zoom;
     },
+    /**
+     * Check if a dictionary feature exists for given languages
+     * @param {Object} l1 - L1 language object
+     * @param {Object} l2 - L2 language object
+     * @returns {boolean}
+     */
     hasDictionary(l1, l2) {
       console.log('language map', {l1, l2})
       return (
         this.$languages.hasFeature(l1, l2, "dictionary") || l2.code === "en"
       );
     },
+    /**
+     * Check if YouTube feature exists for given languages
+     * @param {Object} l1 - L1 language object
+     * @param {Object} l2 - L2 language object
+     * @returns {boolean}
+     */
     hasYouTube(l1, l2) {
       return this.$languages.hasYouTube(l1, l2) || l2.code === "en";
     },
+    /**
+     * Load and parse countries data from CSV
+     * @returns {Promise<Array>} Array of country objects
+     */
     async loadCountries() {
       let res = await axios.get(`${SERVER}data/countries/countries.csv`);
       if (res && res.data) {
@@ -409,6 +500,10 @@ export default {
         }
       }
     },
+    /**
+     * Fly to a specific language on the map
+     * @param {Object} lang - Language object
+     */
     goToLang(lang) {
       this.currentLang = lang;
       let x = lang.speakers ? Math.max(Math.log10(lang.speakers), 0) : 0;
@@ -434,10 +529,8 @@ export default {
     text-shadow: 0 1px 10px rgba(0, 0, 0, 1);
     font-size: 1.2em;
     line-height: 1;
-    // background-color: #00000088;
     padding: 0.3rem 0.6rem;
     border-radius: 0.3rem;
-    // border: 1px solid #88888888;
     margin-top: -100%;
     text-align: center;
     position: relative;
@@ -465,52 +558,33 @@ export default {
       border-radius: 100%;
       pointer-events: none;
       &.language-marker-size-family-atla1278 {
-        // Atlantic-Congo
         background-color: #fd4f1c;
       }
-
       &.language-marker-size-family-aust1307 {
-        // Austronesian
         background-color: #6a3669;
       }
-
       &.language-marker-size-family-indo1319 {
-        // Indo-European
         background-color: #1b3e76;
       }
-
       &.language-marker-size-family-sino1245 {
-        // Sino-Tibetan
         background-color: #bb1718;
       }
-
       &.language-marker-size-family-afro1255 {
-        // Afro-Asiatic
         background-color: #f8b51e;
       }
-
       &.language-marker-size-family-nucl1709 {
-        // Nuclear Trans New Guinea
         background-color: #0076ba;
       }
-
       &.language-marker-size-family-turk1311 {
-        // Turkic
         background-color: #005f58;
       }
-
       &.language-marker-size-family-drav1251 {
-        // Dravidian
         background-color: $primary-color;
       }
-
       &.language-marker-size-family-aust1305 {
-        // Austroasiatic
         background-color: #5b0516;
       }
-
       &.language-marker-size-family-taik1256 {
-        // Tai-Kadai
         background-color: #b1c751;
       }
     }
