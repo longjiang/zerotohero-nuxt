@@ -150,6 +150,7 @@ import { SERVER } from "../lib/utils";
 import Papa from "papaparse";
 import "leaflet/dist/leaflet.css";
 import { LANGS_WITH_CONTENT, uniqueByValue, formatK } from "../lib/utils";
+import LanguageMapper from "@/lib/language-mapper"; // Import the new class
 
 /**
  * @component
@@ -157,10 +158,6 @@ import { LANGS_WITH_CONTENT, uniqueByValue, formatK } from "../lib/utils";
  */
 export default {
   components: {
-    /**
-     * Dynamically import Leaflet map component for client-side rendering
-     * @returns {Promise<import("vue2-leaflet").LMap>}
-     */
     "l-map": async () => {
       if (process.client) {
         let { LMap } = await import("vue2-leaflet");
@@ -193,15 +190,12 @@ export default {
     },
   },
   props: {
-    /** @type {Array} Array of language objects */
     langs: {
       type: Array,
     },
-    /** @type {Array} Array of phrase objects */
     phrases: {
       type: Array,
     },
-    /** @type {string} Default language code */
     l1: {
       default: 'en'
     }
@@ -209,30 +203,27 @@ export default {
   data: () => ({
     initialZoom: 3,
     initialCenter: [35, 105],
-    /** @type {Array} Array of all languages */
     languages: [],
-    /** @type {Array} Array of filtered languages based on current view */
     filteredLanguages: [],
-    /** @type {Array} Array of phrases for the modal */
     modalPhrases: [],
-    /** @type {Array} Array of country objects */
     countries: [],
-    /** @type {Array} Array of overlapped language objects */
     overlapped: [],
-    /** @type {number} Current zoom level of the map */
     currentZoom: 4,
-    /** @type {Object|undefined} Leaflet map object */
     map: undefined,
-    /** @type {Object|undefined} Currently selected language */
     currentLang: undefined,
-    /** @type {string} Current map style */
     mapStyle: 'street',
-    /** @type {Object} URLs for different map tile styles */
     mapTileURL: {
       street: 'http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
       satellite: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'
-    }
+    },
+    languageMapper: null, // New property to hold the LanguageMapper instance
   }),
+  created() {
+    this.languageMapper = new LanguageMapper({
+      minZoom: 3,
+      maxZoom: 9,
+    });
+  },
   async mounted() {
     this.initialZoom = this.$route.query.z ? Number(this.$route.query.z) : 3;
     this.currentZoom = this.initialZoom;
@@ -242,23 +233,14 @@ export default {
     this.initLangs();
   },
   computed: {
-    /**
-     * @returns {Object} English language object
-     */
     english() {
       return this.$languages.l1s.find((language) => language.code === "en");
     },
-    /**
-     * @returns {Object} Arabic language object
-     */
     arabic() {
       return this.$languages.l1s.find((language) => language.code === "ar");
     },
   },
   watch: {
-    /**
-     * Re-initialize languages when phrases change
-     */
     phrases() {
       this.initLangs();
     },
@@ -266,9 +248,6 @@ export default {
   methods: {
     formatK,
     uniqueByValue,
-    /**
-     * Initialize language data based on props or default languages
-     */
     initLangs() {
       if (this.phrases) {
         let languages = this.phrases.map((p) => p.l2).filter(l2 => l2);
@@ -283,34 +262,17 @@ export default {
         this.languages = this.langs;
       } else {
         let languages = this.$languages.l1s;
-        languages = languages
-          .filter((l) => {
-            if (!(l.lat && l.long)) return false;
-            if (l.name.includes("Sign Language")) return false;
-            if (["A", "E", "H"].includes(l.type)) return false;
-            if (
-              !this.hasDictionary(this.english, l) &&
-              !this.hasYouTube(this.english, l)
-            )
-              return false;
-            return true;
-          })
-          .sort((x, y) => y.speakers - x.speakers);
+        languages = this.languageMapper.filterLanguages(
+          languages,
+          (l) => this.hasDictionary(this.english, l),
+          (l) => this.hasYouTube(this.english, l)
+        );
         this.languages = languages;
       }
     },
-    /**
-     * Check if one language is a descendant of another
-     * @returns {boolean}
-     */
     isDescendant() {
       return this.$languages.isDescendant(...arguments);
     },
-    /**
-     * Get the L1 code for a given L2 language
-     * @param {Object} l2 - L2 language object
-     * @returns {string} L1 language code
-     */
     getL1Code(l2) {
       let l2Settings = this.$store.getters["settings/l2Settings"](l2.code);
       if (l2Settings?.l1) {
@@ -318,11 +280,6 @@ export default {
       }
       return this.$browserLanguage;
     },
-    /**
-     * Generate route for a language
-     * @param {Object} l2 - L2 language object
-     * @returns {Object} Route object
-     */
     to(l2) {
       let l1Code = this.getL1Code(l2);
       let name = "l1-l2-language-info";
@@ -331,27 +288,19 @@ export default {
         params: { l1: l1Code, l2: l2.code },
       };
     },
-    /**
-     * Navigate to a language page
-     * @param {Object} l2 - L2 language object
-     */
     goTo(l2) {
       this.$router.push(this.to(l2));
     },
-    /**
-     * Open phrases modal or navigate to phrase page
-     * @param {Object} l2 - L2 language object
-     */
     openPhrases(l2) {
       let filteredPhrases = this.phrases.filter((phrase) => phrase.l2 === l2);
       if (filteredPhrases && filteredPhrases.length === 1) {
         let phrase = filteredPhrases[0];
         let path =
           phrase.bookId === "wiktionary"
-            ? `/en/${phrase.l2.code}/phrase/search/${encodeURIComponent(
+            ? `/${this.getL1Code(phrase.l2)}/${phrase.l2.code}/phrase/search/${encodeURIComponent(
                 phrase.phrase
               )}/dict`
-            : `/en/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
+            : `/${this.getL1Code(phrase.l2)}/${phrase.l2.code}/phrasebook/${phrase.bookId}/${
                 phrase.id
               }/${encodeURIComponent(phrase.phrase)}`;
         this.$router.push(path);
@@ -360,20 +309,12 @@ export default {
         this.$refs["phrase-picker-modal"].show();
       }
     },
-    /**
-     * Initialize map object and update bounds
-     * @param {Object} mapObj - Leaflet map object
-     */
     ready(mapObj) {
       this.map = mapObj;
       let bounds = mapObj.getBounds();
       this.updateBounds(bounds);
       this.$emit("ready");
     },
-    /**
-     * Update URL parameters when map center changes
-     * @param {Object} center - New map center coordinates
-     */
     updateCenter(center) {
       if (typeof window !== "undefined" && "URLSearchParams" in window) {
         var searchParams = new URLSearchParams(window.location.search);
@@ -391,101 +332,32 @@ export default {
         );
       }
     },
-    /**
-     * Filter languages based on current map bounds
-     * @param {Object} bounds - Map bounds object
-     */
     updateBounds(bounds) {
-      this.filteredLanguages = this.languages.filter((l) => {
-        return (
-          l.lat &&
-          l.long &&
-          l.lat < bounds._northEast.lat &&
-          l.lat > bounds._southWest.lat &&
-          l.long > bounds._southWest.lng &&
-          l.long < bounds._northEast.lng
-        );
-      });
+      const boundsObj = {
+        northEast: bounds._northEast,
+        southWest: bounds._southWest,
+      };
+      this.filteredLanguages = this.languageMapper.filterLanguagesByBounds(this.languages, boundsObj);
       this.filterLanguages();
     },
-/**
-     * Calculate marker diameter based on number of speakers and zoom level
-     * @param {Object} language - Language object
-     * @returns {number} Marker diameter
-     */
-     diameter(language) {
-      return (
-        ((Math.sqrt(language.speakers / Math.PI) / Math.pow(10, 3)) *
-          Math.pow(this.currentZoom, 3 - this.currentZoom * 0.14)) /
-        2.5
-      );
-    },
-    /**
-     * Filter out overlapping languages based on zoom level
-     */
     filterLanguages() {
-      let filteredLanguages = this.filteredLanguages;
-      for (let language of this.languages) {
-        let magicNumbers = {
-          1: 8,
-          2: 4,
-          3: 2,
-          4: 1,
-          5: 0.5,
-          6: 0.25,
-          7: 0.125,
-          8: 0.0625,
-          9: 0.0375,
-        };
-        let magicScale = 2;
-        if (filteredLanguages.includes(language)) {
-          filteredLanguages = filteredLanguages
-            .filter((l) => {
-              let overlapped =
-                l !== language &&
-                Math.abs(l.lat - language.lat) <
-                  magicNumbers[this.currentZoom] * magicScale &&
-                Math.abs(l.long - language.long) <
-                  magicNumbers[this.currentZoom] * magicScale * 3;
-              return !overlapped;
-            })
-            .slice(0, 50);
-        }
-      }
-      this.filteredLanguages = filteredLanguages;
+      this.filteredLanguages = this.languageMapper.filterOverlappingLanguages(this.filteredLanguages, this.currentZoom);
     },
-    /**
-     * Update current zoom level
-     * @param {number} zoom - New zoom level
-     */
+    diameter(language) {
+      return this.languageMapper.calculateMarkerDiameter(language, this.currentZoom);
+    },
     updateZoom(zoom) {
       this.currentZoom = zoom;
     },
-    /**
-     * Check if a dictionary feature exists for given languages
-     * @param {Object} l1 - L1 language object
-     * @param {Object} l2 - L2 language object
-     * @returns {boolean}
-     */
     hasDictionary(l1, l2) {
       console.log('language map', {l1, l2})
       return (
         this.$languages.hasFeature(l1, l2, "dictionary") || l2.code === "en"
       );
     },
-    /**
-     * Check if YouTube feature exists for given languages
-     * @param {Object} l1 - L1 language object
-     * @param {Object} l2 - L2 language object
-     * @returns {boolean}
-     */
     hasYouTube(l1, l2) {
       return this.$languages.hasYouTube(l1, l2) || l2.code === "en";
     },
-    /**
-     * Load and parse countries data from CSV
-     * @returns {Promise<Array>} Array of country objects
-     */
     async loadCountries() {
       let res = await axios.get(`${SERVER}data/countries/countries.csv`);
       if (res && res.data) {
@@ -500,16 +372,9 @@ export default {
         }
       }
     },
-    /**
-     * Fly to a specific language on the map
-     * @param {Object} lang - Language object
-     */
     goToLang(lang) {
       this.currentLang = lang;
-      let x = lang.speakers ? Math.max(Math.log10(lang.speakers), 0) : 0;
-      let minZoom = 6;
-      let maxZoom = 11;
-      let zoomLevel = maxZoom - ((maxZoom - minZoom) / 9) * x;
+      let zoomLevel = this.languageMapper.calculateLanguageZoomLevel(lang);
       this.map.flyTo([lang.lat, lang.long], zoomLevel, {
         animation: true,
       });
