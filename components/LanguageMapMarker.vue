@@ -25,7 +25,9 @@
           :showFeatures="false"
           :l1="l1"
         />
-        <span class="word-count" v-if="language.wiktionary">{{ $tb('{num} word(s)', {num: formatK(language.wiktionary || 0, 1, $browserLanguage) }) }}</span>
+        <span class="count-display" v-if="shouldShowCount">
+          {{ countDisplay }}
+        </span>
         <div
           v-if="showPhrases"
           class="text-center language-marker-phrases"
@@ -98,6 +100,11 @@ export default {
     diameter: {
       type: Number,
       required: true
+    },
+    // Show word count instead of speaker count
+    showDictionaryWordCount: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -109,12 +116,21 @@ export default {
     },
     maxPhrases() {
       return Math.max(Math.ceil(Math.log(this.language.speakers) / 9), 1);
+    },
+    shouldShowCount() {
+      return this.showDictionaryWordCount ? !!this.language.wiktionary : true;
+    },
+    countDisplay() {
+      if (this.showDictionaryWordCount) {
+        return this.$tb('{num} word(s)', {num: this.formatK(this.language.wiktionary || 0, 1, this.$browserLanguage)});
+      } else {
+        return this.$tb('{num} speakers', {num: this.formatK(this.language.speakers || 0, 1, this.$browserLanguage)});
+      }
     }
   },
   methods: {
     formatK,
     isDescendant(lang1, lang2) {
-      // Implement isDescendant logic here or emit to parent component
       this.$emit('is-descendant', lang1, lang2);
     },
     handleClick() {
@@ -204,7 +220,7 @@ export default {
   }
 }
 
-.word-count {
+.count-display {
   font-size: 0.8em;
   opacity: 0.5;
 }
