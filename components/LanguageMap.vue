@@ -26,18 +26,6 @@
           @marker-click="handleMarkerClick"
           @is-descendant="isDescendant"
         />
-        <div class="slider-control">
-          <label for="magicScaleSlider">Adjust Marker Spacing:</label>
-          <input
-            id="magicScaleSlider"
-            type="range"
-            min="0.1"
-            max="5"
-            step="0.1"
-            v-model.number="magicScale"
-          />
-          <span>{{ magicScale.toFixed(1) }}</span>
-        </div>
       </l-map>
       <b-modal ref="phrase-picker-modal" centered hide-footer :title="$tb('Which one?')" modal-class="safe-padding-top mt-4">
         <div class="phrase-picker-modal">
@@ -300,14 +288,5 @@ export default {
       font-style: italic;
     }
   }
-}
-.slider-control {
-  position: absolute;
-  bottom: 50px;
-  left: 10px;
-  background: white;
-  padding: 10px;
-  border-radius: 5px;
-  z-index: 1000;
 }
 </style>

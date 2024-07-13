@@ -1,3 +1,5 @@
+// @/components/LanguageMapMarker.vue
+
 <template>
   <l-marker
     :lat-lng="[language.lat, language.long]"

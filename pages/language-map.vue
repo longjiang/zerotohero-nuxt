@@ -67,6 +67,19 @@
           <span>{{ $tb(family.name) }}</span>
         </li>
       </ul>
+      <!-- Add the slider control here -->
+      <div class="slider-control">
+        <label for="magicScaleSlider">Adjust Marker Spacing:</label>
+        <input
+          id="magicScaleSlider"
+          type="range"
+          min="0.1"
+          max="5"
+          step="0.1"
+          v-model.number="magicScale"
+        />
+        <span>{{ magicScale.toFixed(1) }}</span>
+      </div>
     </div>
     <div class="container-fluid flex-1">
       <div class="row">
@@ -131,12 +144,9 @@ export default {
         { id: "turk1311", name: "Turkic", color: "#005f58" },
         { id: "", name: "Others", color: "#000" },
       ],
+      magicScale: 2.2, // Initialize magicScale
     };
   },
-  /**
-   * Include the LanguageMap this way to avoid nuxt complaining 'window is not defined'
-   * https://stackoverflow.com/questions/59347414/why-is-my-client-only-component-in-nuxt-complaining-that-window-is-not-define
-   */
   components: {
     LanguageMap: () => {
       if (process.client) {
@@ -156,6 +166,10 @@ export default {
   watch: {
     l1() {
       this.updateLanguages();
+    },
+    magicScale(newScale) {
+      this.$refs.languageMap.magicScale = newScale;
+      this.$refs.languageMap.filterLanguages();
     },
   },
   computed: {
@@ -194,11 +208,8 @@ export default {
     getFilteredLangs() {
       let languages = this.$languages.l1s;
       languages = languages.filter((l) => {
-        // if (["hbo", "enm", "arc", "grc", "sjn", "ang", "non"].includes(l["iso639-3"]))
-        //   return true;
-        if (l["iso639-3"] === "cmn") return false; // Mandarin overlaps Chinese, which is annoying
+        if (l["iso639-3"] === "cmn") return false;
         if (!l["iso639-3"]) return false;
-        // if (["A", "E", "H"].includes(l.type)) return false;
         return true;
       });
       return languages;
@@ -315,5 +326,11 @@ export default {
       display: none;
     }
   }
+}
+.slider-control {
+  margin-top: 20px;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
 }
 </style>
