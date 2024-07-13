@@ -102,6 +102,7 @@ export default {
     initialZoom: 3,
     initialCenter: [35, 105],
     languages: [],
+    languagesByBounds: [], // New array to store languages filtered by bounds
     filteredLanguages: [],
     modalPhrases: [],
     countries: [],
@@ -137,6 +138,7 @@ export default {
       this.initLangs();
     },
     magicScale(newScale) {
+      console.log("Magic scale set to", newScale);
       this.languageMapper.setMagicScale(newScale);
       this.filterLanguages(); // Re-filter languages when magicScale changes
     },
@@ -144,11 +146,6 @@ export default {
   methods: {
     formatK,
     uniqueByValue,
-    updateMagicScale(event) {
-      const scale = parseFloat(event.target.value);
-      this.languageMapper.setMagicScale(scale);
-      this.filterLanguages(); // Re-filter languages based on new magicScale
-    },
     initLangs() {
       if (this.phrases) {
         let languages = this.phrases.map((p) => p.l2).filter(l2 => l2);
@@ -229,11 +226,11 @@ export default {
         northEast: bounds._northEast,
         southWest: bounds._southWest,
       };
-      this.filteredLanguages = this.languageMapper.filterLanguagesByBounds(this.languages, boundsObj);
+      this.languagesByBounds = this.languageMapper.filterLanguagesByBounds(this.languages, boundsObj);
       this.filterLanguages();
     },
     filterLanguages() {
-      this.filteredLanguages = this.languageMapper.filterOverlappingLanguages(this.filteredLanguages, this.currentZoom);
+      this.filteredLanguages = this.languageMapper.filterOverlappingLanguages(this.languagesByBounds, this.currentZoom);
     },
     diameter(language) {
       return this.languageMapper.calculateMarkerDiameter(language, this.currentZoom);
@@ -285,7 +282,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import "../assets/scss/variables.scss";
