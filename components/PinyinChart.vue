@@ -42,7 +42,8 @@
 </template>
 
 <script>
-import { pinyinMapping, pinyinToCharacter } from '~/lib/pinyin-chart';
+import { pinyinMapping } from '~/lib/pinyin-mapping';
+import { pinyinToCharacter } from '~/lib/pinyin-to-character';
 
 export default {  
   name: 'PinyinChart',
