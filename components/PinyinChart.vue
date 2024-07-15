@@ -1,16 +1,35 @@
 <template>
   <div class="pinyin-chart">
-    <table>
+    <table @mouseleave="resetHover">
       <thead>
         <tr>
           <th></th>
-          <th v-for="final in finals" :key="final">{{ final }}</th>
+          <th 
+            v-for="(final, index) in finals" 
+            :key="final" 
+            :class="{ 'highlight-column': index === hoveredColumn }"
+          >
+            {{ final }}
+          </th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="initial in initials" :key="initial">
+        <tr 
+          v-for="(initial, rowIndex) in initials" 
+          :key="initial"
+          :class="{ 'highlight-row': rowIndex === hoveredRow }"
+        >
           <th>{{ initial }}</th>
-          <td v-for="final in finals" :key="final">
+          <td 
+            v-for="(final, colIndex) in finals" 
+            :key="final"
+            @mouseenter="setHover(rowIndex, colIndex)"
+            :class="{
+              'highlight-row': rowIndex === hoveredRow,
+              'highlight-column': colIndex === hoveredColumn,
+              'highlight-cell': rowIndex === hoveredRow && colIndex === hoveredColumn
+            }"
+          >
             <TokenizedText 
               v-if="hasExampleWord(initial, final)"
               :text="getExampleWord(initial, final)"
@@ -35,7 +54,9 @@ export default {
       initials: ['b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'zh', 'ch', 'sh', 'r', 'z', 'c', 's', 'y', 'w'],
       finals: ['a', 'o', 'e', 'i', 'u', 'ü', 'ai', 'ei', 'ui', 'ao', 'ou', 'iu', 'ie', 'üe', 'er', 'an', 'en', 'in', 'un', 'ün', 'ang', 'eng', 'ing', 'ong'],
       combinations: pinyinCombinations,
-      exampleWords: examplePinyinWords
+      exampleWords: examplePinyinWords,
+      hoveredRow: null,
+      hoveredColumn: null
     }
   },
   created() {
@@ -66,6 +87,14 @@ export default {
     hasExampleWord(initial, final) {
       const combo = initial + final;
       return this.exampleWords[combo] !== undefined;
+    },
+    setHover(rowIndex, colIndex) {
+      this.hoveredRow = rowIndex;
+      this.hoveredColumn = colIndex;
+    },
+    resetHover() {
+      this.hoveredRow = null;
+      this.hoveredColumn = null;
     }
   }
 }
@@ -81,18 +110,21 @@ table {
 th, td {
   padding: 8px;
   text-align: center;
+  transition: background-color 0.3s ease;
 }
 th {
   font-weight: bold;
 }
-a {
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
 .non-word {
   opacity: 0.5;
   font-size: 66.7%;
+}
+.highlight-row > th,
+.highlight-row > td,
+.highlight-column {
+  background-color: #7c7c7c5c;
+}
+.highlight-cell {
+  background-color: #7c7c7c5c;
 }
 </style>
