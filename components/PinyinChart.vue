@@ -29,12 +29,11 @@
             'highlight-cell': rowIndex === hoveredRow && colIndex === hoveredColumn
           }"
         >
-          <TokenizedText 
-            v-if="hasExampleWord(initial, final)"
-            :text="getExampleWord(initial, final)"
-          />
-          <s class="non-word" v-else> 
-              {{ initial + final }}
+          <template v-if="pinyinToCharacter[pinyinMapping[initial + final]] !== undefined">
+            <TokenizedText :text="pinyinToCharacter[pinyinMapping[initial + final]]" />
+          </template>
+          <s v-else>
+            {{ pinyinMapping[initial + final] }}
           </s>
         </td>
       </tr>
@@ -43,49 +42,29 @@
 </template>
 
 <script>
-import { examplePinyinWords, pinyinCombinations } from '@/lib/pinyin-chart';
+import { pinyinMapping, pinyinToCharacter } from '~/lib/pinyin-chart';
 
 export default {  
   name: 'PinyinChart',
   data() {
     return {
-      initials: ['b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'zh', 'ch', 'sh', 'r', 'z', 'c', 's', 'y', 'w'],
-      finals: ['a', 'o', 'e', 'i', 'u', 'ü', 'ai', 'ei', 'ui', 'ao', 'ou', 'iu', 'ie', 'üe', 'er', 'an', 'en', 'in', 'un', 'ün', 'ang', 'eng', 'ing', 'ong'],
-      combinations: pinyinCombinations,
-      exampleWords: examplePinyinWords,
+      pinyinMapping,
+      pinyinToCharacter,
+      initials: ['', 'b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'z', 'c', 's', 'zh', 'ch', 'sh', 'r'],
+      finals: [
+        'i', 'a', 'ai', 'an', 'ang', 'ao', 'e', 'ei', 'en', 'eng', 'er',
+        'ia', 'ian', 'iang', 'iao', 'ie', 'in', 'ing', 'iong', 'iou',
+        'o', 'ong', 'ou', 'u', 'ua', 'uai', 'uan', 'uang', 'uei', 'uen',
+        'ueng', 'uo', 'ü', 'üan', 'üe', 'ün'
+      ],
       hoveredRow: null,
       hoveredColumn: null
     }
   },
-  created() {
-    this.generateCombinations();
+  mounted() {
+    console.log(this.generateCombinations());
   },
   methods: {
-    generateCombinations() {
-      this.combinations = this.initials.flatMap(initial => 
-        this.finals.map(final => initial + final)
-      );
-
-      // Add combinations without initials
-      this.finals.forEach(final => {
-        this.combinations.push(final);
-      });
-
-      // Special cases
-      ['yi', 'wu', 'yu'].forEach(special => {
-        if (!this.combinations.includes(special)) {
-          this.combinations.push(special);
-        }
-      });
-    },
-    getExampleWord(initial, final) {
-      const combo = initial + final;
-      return this.exampleWords[combo] || '';
-    },
-    hasExampleWord(initial, final) {
-      const combo = initial + final;
-      return this.exampleWords[combo] !== undefined;
-    },
     setHover(rowIndex, colIndex) {
       this.hoveredRow = rowIndex;
       this.hoveredColumn = colIndex;
@@ -93,6 +72,15 @@ export default {
     resetHover() {
       this.hoveredRow = null;
       this.hoveredColumn = null;
+    },
+    generateCombinations() {
+      const combinations = [];
+      for (const initial of this.initials) {
+        for (const final of this.finals) {
+          combinations.push(pinyinMapping[initial + final]);
+        }
+      }
+      return combinations;
     }
   }
 }
@@ -110,10 +98,6 @@ th, td {
 th {
   font-weight: bold;
 }
-.non-word {
-  opacity: 0.5;
-  font-size: 66.7%;
-}
 .highlight-row > th,
 .highlight-row > td,
 .highlight-column {
@@ -121,5 +105,10 @@ th {
 }
 .highlight-cell {
   background-color: #7c7c7c5c;
+}
+s {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 66.67%;
 }
 </style>
