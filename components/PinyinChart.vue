@@ -1,47 +1,45 @@
 <template>
-  <div class="pinyin-chart">
-    <table @mouseleave="resetHover">
-      <thead>
-        <tr>
-          <th></th>
-          <th 
-            v-for="(final, index) in finals" 
-            :key="final" 
-            :class="{ 'highlight-column': index === hoveredColumn }"
-          >
-            {{ final }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr 
-          v-for="(initial, rowIndex) in initials" 
-          :key="initial"
-          :class="{ 'highlight-row': rowIndex === hoveredRow }"
+  <table @mouseleave="resetHover" class="pinyin-chart">
+    <thead>
+      <tr>
+        <th></th>
+        <th 
+          v-for="(final, index) in finals" 
+          :key="final" 
+          :class="{ 'highlight-column': index === hoveredColumn }"
         >
-          <th>{{ initial }}</th>
-          <td 
-            v-for="(final, colIndex) in finals" 
-            :key="final"
-            @mouseenter="setHover(rowIndex, colIndex)"
-            :class="{
-              'highlight-row': rowIndex === hoveredRow,
-              'highlight-column': colIndex === hoveredColumn,
-              'highlight-cell': rowIndex === hoveredRow && colIndex === hoveredColumn
-            }"
-          >
-            <TokenizedText 
-              v-if="hasExampleWord(initial, final)"
-              :text="getExampleWord(initial, final)"
-            />
-            <s class="non-word" v-else> 
-                {{ initial + final }}
-            </s>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+          {{ final }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr 
+        v-for="(initial, rowIndex) in initials" 
+        :key="initial"
+        :class="{ 'highlight-row': rowIndex === hoveredRow }"
+      >
+        <th>{{ initial }}</th>
+        <td 
+          v-for="(final, colIndex) in finals" 
+          :key="final"
+          @mouseenter="setHover(rowIndex, colIndex)"
+          :class="{
+            'highlight-row': rowIndex === hoveredRow,
+            'highlight-column': colIndex === hoveredColumn,
+            'highlight-cell': rowIndex === hoveredRow && colIndex === hoveredColumn
+          }"
+        >
+          <TokenizedText 
+            v-if="hasExampleWord(initial, final)"
+            :text="getExampleWord(initial, final)"
+          />
+          <s class="non-word" v-else> 
+              {{ initial + final }}
+          </s>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script>
@@ -101,9 +99,6 @@ export default {
 </script>
 
 <style scoped>
-.pinyin-chart {
-  font-family: Arial, sans-serif;
-}
 table {
   border-collapse: collapse;
 }

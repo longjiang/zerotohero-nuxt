@@ -3,7 +3,7 @@
     <div class="container pt-3 pb-5">
       <div class="row">
         <div class="col-sm-12">
-          <PinyinChart />
+          <PinyinChart style="margin: 0 auto;"/>
         </div>
       </div>
     </div>
