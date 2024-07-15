@@ -210,6 +210,8 @@ export default {
         if (l["iso639-3"] === "cmn") return false;
         if (l["iso639-3"] === "arb") return false;
         if (!l["iso639-3"]) return false;
+        if (!(l.type === "L")) return false;
+        if (!(l.speakers > 0)) return false;
         return true;
       });
       return languages;
