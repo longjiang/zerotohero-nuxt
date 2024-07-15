@@ -208,6 +208,7 @@ export default {
       let languages = this.$languages.l1s;
       languages = languages.filter((l) => {
         if (l["iso639-3"] === "cmn") return false;
+        if (l["iso639-3"] === "arb") return false;
         if (!l["iso639-3"]) return false;
         return true;
       });
