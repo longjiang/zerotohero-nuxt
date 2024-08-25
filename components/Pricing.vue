@@ -152,8 +152,12 @@ export default {
       return planRank[planNameA] > planRank[planNameB];
     },
     selectPlan(plan) {
-      this.selectedPlan = plan;
-      this.$emit("plan-selected", plan);
+      if (this.$auth.loggedIn && this.$auth.user) {
+        this.selectedPlan = plan;
+        this.$emit("plan-selected", plan);
+      } else {
+        this.$router.push({ path: '/login', query: { redirect: '/go-pro' } });
+      }
     },
   },
 };
