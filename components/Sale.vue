@@ -1,7 +1,7 @@
 <template>
   <transition name="fade-scale" mode="out-in">
     <div v-if="SALE && ready && (!subscription || subscription.type !== 'lifetime')" class="text-white p-3 rounded text-center sale-ad" v-cloak>
-      <div><b>{{ $tb('{name} SALE!', { name: $tb(SALE_NAME) }) }}</b> {{ $tb('{discount} on lifetime Pro account', { discount: $tb(`${(1 - SALE_DISCOUNT) * 100}% off`) }) }}</div>
+      <div><b>{{ $tb('{name} SALE!', { name: $tb(SALE_NAME) }) }}</b> {{ $tb('{discount} on lifetime Pro account', { discount: $tb(`${Math.round((1 - SALE_DISCOUNT) * 100)}% off`) }) }}</div>
       <small>{{ $tb('Offer ends:') }} {{ $db(SALE_END_DATE, 'short') }}</small>
       <div class="mt-2" v-if="actionButton">
         <router-link to="/go-pro" class="btn btn-outline-light">{{ $tb('Upgrade to Lifetime & Save') }} <i class="fas fa-chevron-right"></i></router-link>
