@@ -20,7 +20,7 @@
                   </div>
                   <p>{{ $tb('Please choose your plan.') }}</p>
                   <Pricing @plan-selected="handlePlanSelection" />
-                  <b-modal ref="paymentMethods" hide-footer centered class="safe-padding-top mt-4" size="sm" :title="selectedPlan ? selectedPlan.currency + Math.floor(selectedPlan.amount * (selectedPlan.name === 'lifetime' && SALE ? SALE_DISCOUNT : 1)) + $tb(selectedPlan.intervalText) : 'Pro'"
+                  <b-modal ref="paymentMethods" hide-footer centered class="safe-padding-top mt-4" size="sm" :title="selectedPlan ? selectedPlan.currency + Math.round(selectedPlan.amount * (selectedPlan.name === 'lifetime' && SALE ? SALE_DISCOUNT : 1)) + $tb(selectedPlan.intervalText) : 'Pro'"
                     @shown="modalRendered = true" @hidden="modalRendered = false" >
                     <div v-if="modalRendered"><!-- We load this only after the modal is shown to prevent PayPal button errors -->
                       <!-- If there is an active subscription, the customer must cancel it first. -->
