@@ -24,7 +24,7 @@
                     @shown="modalRendered = true" @hidden="modalRendered = false" >
                     <div v-if="modalRendered"><!-- We load this only after the modal is shown to prevent PayPal button errors -->
                       <!-- If there is an active subscription, the customer must cancel it first. -->
-                      <div v-if="hasActiveSubscription">
+                      <div v-if="hasActiveNonTrialSubscription">
                         <p>{{ $tb('You have an existing active subscription:') }}</p>
                         <SubscriptionStatus class="my-3" :showActionButtons="false" />
                         <p><strong>{{ $tb('You must cancel it before you can upgrade.') }}</strong></p>
