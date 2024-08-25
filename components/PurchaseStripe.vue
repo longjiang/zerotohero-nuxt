@@ -1,5 +1,5 @@
 <template>
-  <div class="purchase-stripe">
+  <div class="purchase-stripe" v-if="prices?.length">
     <!-- If there are USD prices, show the Credit Card button -->
     <template v-if="usdPrice">
       <stripe-checkout
