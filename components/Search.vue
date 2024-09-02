@@ -82,7 +82,7 @@
             <span
               class="suggestion-word font-weight-bold mr-1"
               :data-level="suggestion.level || 'outside'"
-              :lang="$l2.code"
+              :lang="$l2?.code"
             >
               {{ suggestion.head }}
             </span>
