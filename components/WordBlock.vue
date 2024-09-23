@@ -1,62 +1,39 @@
 <template>
-  <span
-    @click="wordBlockClick"
-    :class="wordBlockClasses"
-    :style="{ 'animation-duration': animationDuration + 'ms' }"
-    @animationend="resetAnimation"
-    :data-hover-level="attributes.level"
-  >
+  <span @click="wordBlockClick" :class="wordBlockClasses" :style="{ 'animation-duration': animationDuration + 'ms' }"
+    @animationend="resetAnimation" :data-hover-level="attributes.level">
     <div v-if="showFillInTheBlank" class="word-block-quiz word-block-segment">
       <span class="transparent">{{ text }}</span>
     </div>
     <template v-else>
-      <ruby
-        v-for="(segment, index) in (attributes &&
+      <ruby>
+        <ruby v-for="(segment, index) in (attributes &&
           attributes.mappedPronunciation) || [
-          {
-            type: 'kanji',
-            surface: text,
-            reading: attributes && attributes.phonetics,
-          },
-        ]"
-        :key="index"
-        :lang="$l2.code"
-      >
-        <!-- <rt v-if="attributes?.showDefinition && index === 0">{{
+            {
+              type: 'kanji',
+              surface: text,
+              reading: attributes && attributes.phonetics,
+            },
+          ]" :key="index" :lang="$l2.code">{{ transformText(segment.surface)
+          }}<rt v-if="showReading(segment)">{{ segment.reading }}</rt>
+        </ruby>
+        <rt v-if="$l2Settings?.showDefinition">{{
           attributes?.definition || "&nbsp;"
-        }}</rt> -->
-        {{ transformText(segment.surface)
-        }}<rt v-if="showReading(segment)">{{ segment.reading }}</rt
-        ><rt v-else-if="$l2Settings.showPinyin">&nbsp;</rt></ruby
-      ><span
-        v-if="attributes && attributes.hanAnnotation"
-        class="word-block-text-byeonggi"
-        v-html="attributes && attributes.hanAnnotation"
-      /><span
-        v-if="
+          }}</rt>
+      </ruby>
+
+      <span v-if="attributes && attributes.hanAnnotation" class="word-block-text-byeonggi"
+        v-html="attributes && attributes.hanAnnotation" /><span v-if="
           this.showQuickGloss &&
           attributes &&
           attributes.isSaved &&
           attributes.definition
-        "
-        class="word-block-text-quick-gloss"
-        >‘{{ attributes.definition }}’</span
-      >
+        " class="word-block-text-quick-gloss">‘{{ attributes.definition }}’</span>
     </template>
 
     <!-- no-fade is turned on to prevent a "ghosted" modal on iOS that blocks and disables the entire UI -->
-    <b-modal
-      ref="popup-dictionary-modal"
-      size="sm"
-      centered
-      hide-footer
-      no-fade
-      modal-class="safe-padding-top my-5"
-      :title="$tb('Dictionary')"
-      :body-class="`popup-dictionary-modal-wrapper l2-${$l2.code}`"
-      @show="$nuxt.$emit('popupOpened')"
-      @hide="$nuxt.$emit('popupClosed')"
-    >
+    <b-modal ref="popup-dictionary-modal" size="sm" centered hide-footer no-fade modal-class="safe-padding-top my-5"
+      :title="$tb('Dictionary')" :body-class="`popup-dictionary-modal-wrapper l2-${$l2.code}`"
+      @show="$nuxt.$emit('popupOpened')" @hide="$nuxt.$emit('popupClosed')">
       <template #modal-header="{ close }">
         <!-- Emulate built in modal header close button action -->
         <h5>{{ $tb("Dictionary") }}</h5>
@@ -64,34 +41,22 @@
           <i class="fas fa-times"></i> {{ $tb("Close") }}
         </b-button>
       </template>
-      <div
-        v-if="
-          (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
-        "
-        class="popover-inner-hover-area"
-      >
+      <div v-if="
+        (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
+      " class="popover-inner-hover-area">
         {{ $t("Tap to show answer.") }}
       </div>
-      <div
-        @mouseenter="tooltipHover = true"
-        @mouseleave="tooltipHover = false"
-        v-else
-        class="popover-inner-hover-area"
-      >
-        <WordBlockPopup
-          v-bind="{
-            text,
-            token,
-            words,
-            images,
-            lookupInProgress,
-            loadingImages,
-            context,
-            phraseObj: phraseItem(text, this.translation),
-          }"
-          ref="popup"
-          @translation="translation = $event"
-        />
+      <div @mouseenter="tooltipHover = true" @mouseleave="tooltipHover = false" v-else class="popover-inner-hover-area">
+        <WordBlockPopup v-bind="{
+          text,
+          token,
+          words,
+          images,
+          lookupInProgress,
+          loadingImages,
+          context,
+          phraseObj: phraseItem(text, this.translation),
+        }" ref="popup" @translation="translation = $event" />
       </div>
     </b-modal>
   </span>
@@ -606,15 +571,33 @@ export default {
 <style lang="scss">
 @import "../assets/scss/variables.scss";
 
-rt {
-  font-size: 50%; /* Smaller size for phonetic annotation */
-  line-height: 1.2; /* Adjust line-height if needed */
-}
 
 .word-block {
   will-change: color, transform;
   backface-visibility: hidden;
   display: inline-block;
+
+  /* The phonetics line */
+  > ruby {
+    ruby-align: center;
+    ruby-position: under;
+
+    > rt {
+      font-size: 50%;
+      opacity: 0.5;
+    }
+
+    /* The definitions line as a nested ruby element */
+
+    > ruby {
+      ruby-align: center;
+      ruby-position: over;
+
+      > rt {
+        font-size: 50%;
+      }
+    }
+  }
 }
 
 .zerotohero-dark {
@@ -638,6 +621,10 @@ rt {
 .show-pinyin .word-block .word-block-hard {
   // text-decoration: underline;
   background-color: rgba(255, 226, 129, 0.137);
+}
+
+.show-definition .word-block {
+  padding-bottom: 0.7em;
 }
 
 .word-block-text-byeonggi {
