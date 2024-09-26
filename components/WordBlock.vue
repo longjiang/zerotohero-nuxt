@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { SpeechSingleton, unique, uniqueByValue, hasKanji, timeout } from "../lib/utils";
+import { SpeechSingleton, unique, uniqueByValue, hasKanji, timeout, convertVowelEtoIAndOtoU } from "../lib/utils";
 import { mapState } from "vuex";
 import { tify, sify } from "chinese-conv";
 import { transliterate as tr } from "transliteration";
@@ -371,7 +371,7 @@ export default {
           return mapKana(this.text, this.savedWord.kana);
         } else {
           const pronunciation = this.token.pronunciation;
-          return mapKana(this.token.text, wanakana.toHiragana(pronunciation));
+          return mapKana(this.token.text, convertVowelEtoIAndOtoU(wanakana.toHiragana(pronunciation)));
         }
       }
     },
