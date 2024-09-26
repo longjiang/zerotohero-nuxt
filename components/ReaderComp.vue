@@ -71,6 +71,14 @@
         <div class="reader-editor">
           <div class="mt-3 mb-3">
             <b-button
+              @click="clear"
+              :variant="$skin"
+              class="reader-button"
+            >
+              <i class="fa fa-eraser mr-1" />
+              {{ $t("Clear") }}
+            </b-button>
+            <b-button
               v-if="!fullscreen"
               @click="toggleFullscreen"
               :variant="$skin"
@@ -296,6 +304,11 @@ export default {
       if (marked) {
         $("#reader-annotated").html(marked);
       }
+    },
+    clear() {
+      this.text = "";
+      this.translation = "";
+      this.addTranslation = false;
     },
   },
 };
