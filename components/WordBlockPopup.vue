@@ -23,14 +23,14 @@
       <template v-if="token.pos">({{ token.pos.toLowerCase() }})</template>
     </div>
     
-    <div v-if="!loading && !preciseMatchFound" class="no-entry">
+    <div v-if="!loading" class="no-entry">
       <span v-if="$hasFeature('transliteration')">
         <Speak :text="text" class="mr-1" ref="speak" />
         <span class="word-pronunciation"
-          >[{{ transliterationprop || (token && token.pronunciation) || tr(text) }}]</span
+          >[{{ phonetic }}]</span
         >
       </span>
-      <div>
+      <div v-if="!preciseMatchFound">
         <router-link
           data-level="outside"
           :to="{ name: 'l1-l2-phrase-search-term', params: { term: text } }"
@@ -255,7 +255,7 @@
 <script>
 import { transliterate as tr } from "transliteration";
 import { IMAGE_PROXY } from "../lib/config";
-import { timeout, LANGS_WITH_AZURE_TRANSLATE, languageLevels, breakSentences, highlight, convertPinyinToIPA } from "../lib/utils";
+import { timeout, LANGS_WITH_AZURE_TRANSLATE, languageLevels, breakSentences, highlight, convertPinyinToIPA, convertVowelEtoIAndOtoU } from "../lib/utils";
 import WordPhotos from "../lib/word-photos";
 import Klingon from "../lib/klingon";
 
@@ -295,6 +295,15 @@ export default {
     };
   },
   computed: {
+    phonetic() {
+      let phonetic = '';
+      if (this.transliterationprop) phonetic = this.transliterationprop;
+      else if (this.token && this.token.pronunciation) phonetic = this.token.pronunciation;
+      else phonetic = tr(this.text)
+      console.log(convertVowelEtoIAndOtoU)
+      if (this.$l2.code === 'ja' && typeof wanakana !== "undefined") phonetic = convertVowelEtoIAndOtoU(wanakana.toHiragana(phonetic)); // Convert katagana returned from Mecab to hiragana
+      return phonetic;
+    },
     /**
      * The `context` attribute can have many sentences. This find the sentence (the immediate context) that contains the word.
      */
