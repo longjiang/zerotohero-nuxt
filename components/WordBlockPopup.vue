@@ -23,14 +23,14 @@
       <template v-if="token.pos">({{ token.pos.toLowerCase() }})</template>
     </div>
     
-    <div v-if="!loading" class="no-entry">
+    <div v-if="!loading && (!preciseMatchFound || words?.length > 1)" class="no-entry">
       <span v-if="$hasFeature('transliteration')">
         <Speak :text="text" class="mr-1" ref="speak" />
         <span class="word-pronunciation"
           >[{{ phonetic }}]</span
         >
       </span>
-      <div v-if="!preciseMatchFound">
+      <div>
         <router-link
           data-level="outside"
           :to="{ name: 'l1-l2-phrase-search-term', params: { term: text } }"
