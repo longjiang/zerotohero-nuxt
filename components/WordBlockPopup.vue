@@ -300,7 +300,6 @@ export default {
       if (this.transliterationprop) phonetic = this.transliterationprop;
       else if (this.token && this.token.pronunciation) phonetic = this.token.pronunciation;
       else phonetic = tr(this.text)
-      console.log(convertVowelEtoIAndOtoU)
       if (this.$l2.code === 'ja' && typeof wanakana !== "undefined") phonetic = convertVowelEtoIAndOtoU(wanakana.toHiragana(phonetic)); // Convert katagana returned from Mecab to hiragana
       return phonetic;
     },
