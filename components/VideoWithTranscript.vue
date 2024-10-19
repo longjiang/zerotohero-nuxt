@@ -583,7 +583,7 @@ export default {
     initialMode() {
       this.mode = this.initialMode;
     },
-    video() {
+    'video.youtube_id'() {
       this.paused = true;
     },
     mode() {
