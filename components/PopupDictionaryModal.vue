@@ -4,6 +4,7 @@
     size="sm"
     centered
     hide-footer
+    no-fade
     modal-class="safe-padding-top mt-4"
     :title="$tb(info ? 'Note' : 'Dictionary')"
     :body-class="`popup-dictionary-modal-wrapper l2-${$l2 ? $l2.code : ''}`"

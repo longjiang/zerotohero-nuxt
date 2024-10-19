@@ -29,36 +29,6 @@
           attributes.definition
         " class="word-block-text-quick-gloss">‘{{ attributes.definition }}’</span>
     </template>
-
-    <!-- no-fade is turned on to prevent a "ghosted" modal on iOS that blocks and disables the entire UI -->
-    <b-modal ref="popup-dictionary-modal" size="sm" centered hide-footer no-fade modal-class="safe-padding-top my-5"
-      :title="$tb('Dictionary')" :body-class="`popup-dictionary-modal-wrapper l2-${$l2.code}`"
-      @show="$nuxt.$emit('popupOpened')" @hide="$nuxt.$emit('popupClosed')">
-      <template #modal-header="{ close }">
-        <!-- Emulate built in modal header close button action -->
-        <h5>{{ $tb("Dictionary") }}</h5>
-        <b-button size="sm" variant="outline-success" @click="close()">
-          <i class="fas fa-times"></i> {{ $tb("Close") }}
-        </b-button>
-      </template>
-      <div v-if="
-        (this.savedWord || this.savedPhrase) && this.quizMode && !this.reveal
-      " class="popover-inner-hover-area">
-        {{ $t("Tap to show answer.") }}
-      </div>
-      <div @mouseenter="tooltipHover = true" @mouseleave="tooltipHover = false" v-else class="popover-inner-hover-area">
-        <WordBlockPopup v-bind="{
-          text,
-          token,
-          words,
-          images,
-          lookupInProgress,
-          loadingImages,
-          context,
-          phraseObj: phraseItem(text, this.translation),
-        }" ref="popup" @translation="translation = $event" />
-      </div>
-    </b-modal>
   </span>
 </template>
 
