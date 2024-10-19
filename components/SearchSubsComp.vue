@@ -107,7 +107,7 @@
         :ref="`youtube-${hitIndex}`"
         v-bind="{
           autoload: true,
-          autoplay: navigated,
+          autoplay: false,
           cc: true,
           episodes: hits.map((h) => h.video),
           forcePro: true,
