@@ -46,7 +46,6 @@
           @ended="onEnded"
           @duration="onDuration"
           @videoUnavailable="onVideoUnavailable"
-          @l1TranscriptLoaded="onL1TranscriptLoaded"
         />
         <LazyVideoControls
           v-if="showControls && (video.youtube_id || video.url)"
@@ -671,9 +670,6 @@ export default {
     },
     onUpdateVideo(video) {
       this.$emit("updateVideo", video);
-    },
-    onL1TranscriptLoaded() {
-      this.updateLayout();
     },
     onOpen() {
       this.$emit("open");
