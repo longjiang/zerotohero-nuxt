@@ -181,7 +181,7 @@ export default {
         this.tvShowsChecked = this.tvShows.map(s => Number(s.id));
       }
       if (type === "categories") {
-        this.categoriesChecked = this.filteredCategories.map(([id, title]) => Number(id));
+        this.categoriesChecked = this.filteredCategories.map(({id, title}) => Number(id));
       }
     },
     uncheckAll(type) {
