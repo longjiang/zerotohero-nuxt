@@ -327,7 +327,7 @@ export default {
           component: "./pages/_l1/_l2/phrase/search/_term",
         },
         {
-          name: "l1-l2-phrasebook",
+          name: "l1-l2-phrasebook-bookId-phraseId",
           path: "/:l1/:l2/phrasebook/:bookId/:phraseId/:phrase?",
           component: "./pages/_l1/_l2/phrasebook/_bookId/_phraseId",
         },

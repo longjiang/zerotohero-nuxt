@@ -431,24 +431,17 @@ export default {
       let nextSavedPhrase = savedPhrases[Number(this.phraseId)];
       let phraseId = this.phraseId; // If the phrase was removed, the next phrase will have the same id
       if (nextSavedPhrase) {
-        let route = {
-          name: "l1-l2-phrasebook-bookId-phraseId",
-          params: {
-            bookId: "saved",
-            phraseId,
-            phrase: nextSavedPhrase.phrase,
-          },
+        const phraseObj = {
+          phrase: nextSavedPhrase.phrase,
+          id: phraseId,
         };
-        this.$router.push(route);
+        this.$router.push(this.url(phraseObj));
       } else if (savedPhrases.length > 0) {
-        this.$router.push({
-          name: "l1-l2-phrasebook-phrase-bookId-phraseId",
-          params: {
-            bookId: "saved",
-            phraseId: "0",
-            phrase: savedPhrases[0].phrase,
-          },
-        });
+        const phraseObj = {
+          phrase: savedPhrases[0].phrase,
+          id: "0",
+        };
+        this.$router.push(this.url(phraseObj));
       } else {
         this.$router.push({
           name: "l1-l2-saved-phrases",
