@@ -740,20 +740,4 @@ export default {
     }
   }
 }
-
-
-.speech-content-wide {
-  :deep(.annotate-with-translation) {
-    display: flex;
-
-    .annotate-text {
-      width: 61.8%;
-    }
-
-    .annotate-translation {
-      width: 38.2%;
-      margin-left: 1rem;
-    }
-  }
-}
 </style>
