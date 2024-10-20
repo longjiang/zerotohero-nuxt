@@ -760,47 +760,56 @@ ul.collapse-10.collapsed li:nth-child(-n + 10) {
   }
 }
 
+:root {
+  --zoom-factor: 1.05;
+}
+
 .zerotohero-zoom-1 {
   .use-zoom,
   .word-block {
-    font-size: calc(1em * 1.25);
+    font-size: calc(1em * var(--zoom-factor));
   }
 }
 
 .zerotohero-zoom-2 {
   .use-zoom,
   .word-block {
-    font-size: calc(1em * 1.25 * 1.25);
+    font-size: calc(1em * var(--zoom-factor) * var(--zoom-factor));
   }
 }
+
 .zerotohero-zoom-3 {
   .use-zoom,
   .word-block {
-    font-size: calc(1em * 1.25 * 1.25 * 1.25);
+    font-size: calc(1em * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor));
   }
 }
+
 .zerotohero-zoom-4 {
   .use-zoom,
   .word-block {
-    font-size: calc(1em * 1.25 * 1.25 * 1.25 * 1.25);
+    font-size: calc(1em * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor));
   }
 }
+
 .zerotohero-zoom-5 {
   .use-zoom,
   .word-block {
-    font-size: calc(1em * 1.25 * 1.25 * 1.25 * 1.25 * 1.25);
+    font-size: calc(1em * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor));
   }
 }
+
 .zerotohero-zoom-6 {
   .use-zoom,
   .word-block {
-    font-size: calc(1em * 1.25 * 1.25 * 1.25 * 1.25 * 1.25 * 1.25);
+    font-size: calc(1em * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor));
   }
 }
+
 .zerotohero-zoom-7 {
   .use-zoom,
   .word-block {
-    font-size: calc(1em * 1.25 * 1.25 * 1.25 * 1.25 * 1.25 * 1.25 * 1.25);
+    font-size: calc(1em * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor) * var(--zoom-factor));
   }
 }
 
