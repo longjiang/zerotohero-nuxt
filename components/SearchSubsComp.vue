@@ -46,14 +46,24 @@
         />
 
         <!-- Search Input -->
-        <b-form-input
-          v-if="regex || showFilter"
-          type="text"
-          class="d-inline-block"
-          size="sm"
-          v-model="regex"
-          :placeholder="$t('Filter with regex...')"
-        />
+        <div class="d-flex" style="gap: 0.25rem;">
+          <b-form-input
+            v-if="regex || showFilter"
+            type="text"
+            class="d-inline-block"
+            size="sm"
+            v-model="regex"
+            :placeholder="$t('Filter with regex...')"
+          />
+          <b-form-input
+            v-if="regex || showFilter"
+            type="text"
+            class="d-inline-block"
+            size="sm"
+            v-model="regexExclude"
+            :placeholder="$t('Exclude with regex...')"
+          />
+        </div>
       </span>
     </div>
 
@@ -244,6 +254,7 @@ export default {
       maxNumOfHitsForSanity: 500,
       showFilter: false,
       regex: undefined,
+      regexExclude: undefined,
       reels: false,
       excludeArr: [],
       speed: 1,
@@ -302,24 +313,11 @@ export default {
   },
   watch: {
     regex() {
-      if (!this.unfilteredHits) this.unfilteredHits = this.hits;
-      let r =
-        this.regex.startsWith("!") || this.regex.startsWith("！")
-          ? `^((?!${this.regex.substr(1).replace(/[,，]/gi, "|")}).)*$`
-          : this.regex;
-      let hits = [];
-      for (let hit of this.unfilteredHits) {
-        try {
-          let regex = new RegExp(r, "gim");
-          if (regex.test(hit.video.subs_l2[hit.lineIndex].line)) {
-            hits.push(hit);
-          }
-        } catch (error) {
-          console.error(`Failed to create or test regex: ${error}`);
-        }
-      }
-      this.collectContext(hits);
-      this.$emit("updated", hits);
+      this.filterHits(this.regex, true);
+    },
+    regexExclude() {
+      console.log("regexExclude", this.regexExclude);
+      this.filterHits(this.regexExclude, false);
     },
     currentHit: {
       async handler(newVal, oldVal) {
@@ -360,6 +358,30 @@ export default {
     ucFirst,
     highlightMultiple,
     iOS,
+    filterHits(pattern, include) {
+      if (!this.unfilteredHits) this.unfilteredHits = this.hits;
+      if (!pattern) {
+        this.collectContext(this.unfilteredHits);
+        this.$emit("updated", this.unfilteredHits);
+        return;
+      }
+      let r = pattern.startsWith("!") || pattern.startsWith("！")
+      ? `^((?!${pattern.substr(1).replace(/[,，]/gi, "|")}).)*$`
+      : pattern;
+      let hits = [];
+      for (let hit of this.unfilteredHits) {
+      try {
+        let regex = new RegExp(r, "gim");
+        if (include ? regex.test(hit.video.subs_l2[hit.lineIndex].line) : !regex.test(hit.video.subs_l2[hit.lineIndex].line)) {
+        hits.push(hit);
+        }
+      } catch (error) {
+        console.error(`Failed to create or test regex: ${error}`);
+      }
+      }
+      this.collectContext(hits);
+      this.$emit("updated", hits);
+    },
     pauseYouTube() {
       if (this.$refs[`youtube-${this.hitIndex}`])
         this.$refs[`youtube-${this.hitIndex}`].pause();
