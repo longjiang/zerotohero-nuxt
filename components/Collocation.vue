@@ -128,9 +128,7 @@ export default {
         let words = this.collocation.Words.filter((Word) => Word.cm).filter(
           (Word) => !Word.cm.match(/[。？，→]/)
         );
-        words = uniqueByValue(words, "cm").sort(
-          (a, b) => a.cm.length - b.cm.length
-        );
+        words = uniqueByValue(words, "cm")
         this.collocation.Words = words.slice(0, 20);
         let lines = [];
         for (let Word of this.collocation.Words) {
