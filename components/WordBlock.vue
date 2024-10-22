@@ -449,6 +449,10 @@ export default {
         phraseObj: this.phraseItem(this.text),
         words: this.words,
         info: this.quizModeItem ? "Tap to show answer." : undefined,
+        savedWord: this.savedWord,
+        savedPhrase: this.savedPhrase,
+        quizMode: this.quizMode,
+        reveal: this.reveal,
       });
       let needToLookUp = this.lookupInProgress === false && !(this.words?.length > 0)
       if (needToLookUp) {
