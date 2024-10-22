@@ -197,8 +197,7 @@ export default {
   async mounted() {
     if (
       this.$refs.speak &&
-      this.$l2Settings.autoPronounce &&
-      !this.hidePhonetics
+      this.$l2Settings.autoPronounce
     ) {
       this.$refs.speak.speak({ rate: 0.75, volume: 0.5 }); // Speed and volume
     }

@@ -38,20 +38,20 @@ export default {
       default: true,
     },
   },
-  data() {
-    return {
-      canSpeak: false,
-    };
-  },
   async mounted() {
     await this.$getDictionary();
-    const hasAudioFile = this.mp3 && !this.mp3.endsWith(".flac");
-    const english = this.$languages.getSmart("en");
-    const l1 = this.$l1 || english;
-    const l2 = this.l2 || this.$l2;
-    const hasSpeechFeature = l1 && l2 ? this.$languages.hasFeature(l1, l2, "speech") : false;
-    const canGenerateSpeech = this.text && hasSpeechFeature
-    this.canSpeak = hasAudioFile || canGenerateSpeech;
+  },
+  computed: {
+    canSpeak() {
+      const hasAudioFile = this.mp3 && !this.mp3.endsWith(".flac");
+      const english = this.$languages.getSmart("en");
+      const l1 = this.$l1 || english;
+      const l2 = this.l2 || this.$l2;
+      const hasSpeechFeature = l1 && l2 ? this.$languages.hasFeature(l1, l2, "speech") : false;
+      const canGenerateSpeech = this.text && hasSpeechFeature
+      const canSpeak = hasAudioFile || canGenerateSpeech;
+      return canSpeak;
+    }, 
   },
   methods: {
     // https://www.npmjs.com/package/ogv
