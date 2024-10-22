@@ -1,13 +1,22 @@
 <template>
   <span :class="{ 'use-zoom': true, speaking }" :dir="$l2.direction">
     <template v-if="tokenized">
-      <template v-for="(token, index) in tokens">{{ typeof token === "string" ? token : "" }}<word-block
+      <template v-for="(token, index) in tokens"><word-block
           v-if="typeof token !== 'string'"
           :key="index"
           :token="token"
           :context="context ? { ...context, text } : { text }"
           :mappedPronunciation="token.mappedPronunciation"
-        />
+        /><template v-else>
+          <br v-if="token === '\n' || token === '\r'" :key="index" />
+          <template v-else-if="/^\s+$/.test(token)">{{ token }}</template>
+          <word-block
+            v-else
+            :key="index"
+            :token="{ text: token }"
+            :context="context ? { ...context, text } : { text }"
+          />
+        </template>
       </template>
     </template>
     <template v-else
