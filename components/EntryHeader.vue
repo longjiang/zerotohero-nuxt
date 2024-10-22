@@ -57,7 +57,7 @@
             <Speak
               :class="{ 'ml-1 mr-2': true, transparent: hidePhonetics }"
               ref="speak"
-              :text="entry.head"
+              :text="this.$l2.code === 'ja' ? entry.kana : entry.head"
               :mp3="entry.audio"
               :wiktionary="entry.wiktionary"
             />
