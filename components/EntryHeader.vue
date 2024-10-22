@@ -197,7 +197,8 @@ export default {
   async mounted() {
     if (
       this.$refs.speak &&
-      this.$l2Settings.autoPronounce
+      this.$l2Settings.autoPronounce &&
+      this.hidePhonetics // Means that this is the front side of the card
     ) {
       this.$refs.speak.speak({ rate: 0.75, volume: 0.5 }); // Speed and volume
     }
