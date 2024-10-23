@@ -84,7 +84,7 @@ export default {
       return popularLanguages || [];
     },
     l2Options() {
-      let allLanguages = this.allLanguages.sort((a, b) => this.$tb(a.name).localeCompare(this.$tb(b.name), this.$browserLanguage));
+      let allLanguages = this.allLanguages.sort((a, b) => this.$tb(a.name).localeCompare(this.$tb(b.name), this.$l2 || this.$browserLanguage));
       let popularOptions = this.popularLanguages
         .map(this.languageOption)
       let allOptions = allLanguages
@@ -110,7 +110,7 @@ export default {
       // Map the supported L1 languages to an array of objects with 'value' and 'text' properties
 
       let popularOptions = popularL1s.map(this.languageOption)
-      let allOptions = supportedL1s.sort((a, b) => this.$tb(a.name).localeCompare(this.$tb(b.name), this.$browserLanguage)).map(this.languageOption)
+      let allOptions = supportedL1s.sort((a, b) => this.$tb(a.name).localeCompare(this.$tb(b.name), this.$l2 || this.$browserLanguage)).map(this.languageOption)
 
       if (popularOptions.length) this.l1 = popularOptions[0].value;
 
