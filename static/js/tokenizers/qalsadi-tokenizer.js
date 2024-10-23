@@ -6,14 +6,15 @@ class QalsadiTokenizer extends BaseTokenizer {
   async tokenize(text) {
     let tokenized = this.loadFromServerCache(text);
     if (!tokenized) {
-      let url = `${PYTHON_SERVER}lemmatize-arabic?text=${encodeURIComponent(
-        text
-      )}`;
+      let url = `${PYTHON_SERVER}lemmatize-arabic`;  // クエリパラメータは不要
       try {
-        const response = await axios.get(url, { timeout: 5000 });
-        tokenized = response.data;
+        const response = await axios.post(url, 
+          { text: text },  // POSTのペイロードとして`text`を送信
+          { timeout: 5000 }
+        );
+        tokenized = response.data;  // 結果を `tokenized` に格納
       } catch (error) {
-        console.error('There was a problem with the axios operation: ', error);
+        console.error('QalsadiTokenizer: There was a problem with the axios operation: ', error);
       }
     }
     // Check if the tokenized is an array and not a string

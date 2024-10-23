@@ -10,12 +10,18 @@ class SimplemmaTokenizer extends BaseTokenizer {
 
     let tokenized = this.loadFromServerCache(text); // L2 is taken care of in the base class
     if (!tokenized) { 
-      let url = `${PYTHON_SERVER}lemmatize-simple?lang=${langCode}&text=${encodeURIComponent(text)}`;
+      let url = `${PYTHON_SERVER}lemmatize-simple`;
       try {
-        const response = await axios.get(url, { timeout: 5000 });
+        const response = await axios.post(url, 
+          {
+            lang: langCode,  // 言語コードをPOSTのペイロードに含める
+            text: text       // テキストもPOSTのペイロードに含める
+          },
+          { timeout: 5000 }
+        );
         tokenized = response.data;
       } catch (error) {
-        console.error('There was a problem with the axios operation: ', error);
+        console.error('SimplemmaTokenizer: There was a problem with the axios operation: ', error);
       }
     }
     // Check if the tokenized is an array and not a string

@@ -5,11 +5,14 @@ class MeCabTokenizer extends BaseTokenizer {
   async tokenize(text) {
     let tokenized = this.loadFromServerCache(text);
     if (!tokenized) {
-      let url = `${PYTHON_SERVER}lemmatize-japanese?text=${encodeURIComponent(
-        text
-      )}`;
+      let url = `${PYTHON_SERVER}lemmatize-japanese`;
+
       try {
-        const response = await axios.get(url, { timeout: 5000 });
+        const response = await axios.post(
+          url,
+          { text: text },  // リクエストボディにデータを含める
+          { timeout: 5000 }
+        );
         tokenized = response.data;
       } catch (error) {
         console.error('There was a problem with the axios operation: ', error);

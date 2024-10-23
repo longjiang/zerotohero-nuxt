@@ -4,14 +4,16 @@ class PyidaungsuTokenizer extends BaseTokenizer {
   async tokenize(text) {
     let tokenized = this.loadFromServerCache(text);
     if (!tokenized) {
-      let url = `${PYTHON_SERVER}lemmatize-burmese?text=${encodeURIComponent(
-        text
-      )}`;
+      let url = `${PYTHON_SERVER}lemmatize-burmese`;
       try {
-        const response = await axios.get(url, { timeout: 5000 });
+        const response = await axios.post(
+          url,
+          { text: text },  // POSTリクエストのペイロードとしてtextを送信
+          { timeout: 5000 }
+        );
         tokenized = response.data;
       } catch (error) {
-        console.error('There was a problem with the axios operation: ', error);
+        console.error('PyidaungsuTokenizer: There was a problem with the axios operation: ', error);
       }
     }
 

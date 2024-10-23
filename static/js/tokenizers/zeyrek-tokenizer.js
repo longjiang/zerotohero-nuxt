@@ -5,11 +5,12 @@ class ZeyrekTokenizer extends BaseTokenizer {
   async tokenize(text) {
     let tokenized = this.loadFromServerCache(text); // L2 is taken care of in the base class
     if (!tokenized) { 
-      let url = `${PYTHON_SERVER}lemmatize-turkish?text=${encodeURIComponent(
-        text
-      )}`;
+      let url = `${PYTHON_SERVER}lemmatize-turkish`;
       try {
-        const response = await axios.get(url, { timeout: 5000 });
+        const response = await axios.post(url, 
+          { text: text },  // POSTリクエストのペイロードとしてtextを送信
+          { timeout: 5000 }
+        );
         tokenized = response.data;
       } catch (error) {
         console.error('There was a problem with the axios operation: ', error);

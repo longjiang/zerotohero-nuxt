@@ -5,12 +5,15 @@ class OpenKoreanTextTokenizer extends BaseTokenizer {
     let tokenized = this.loadFromServerCache(text);
     if (!tokenized) {
       // let url = `http://py.zerotohero.ca:4567/tokenize?text=${encodeURIComponent(text)}`; // Old server, no longer working
-      let url = `${PYTHON_SERVER}lemmatize-korean?text=${encodeURIComponent(text)}`;
+      let url = `${PYTHON_SERVER}lemmatize-korean`;
       try {
-        const response = await axios.get(url, { timeout: 5000 });
+        const response = await axios.post(url, 
+          { text: text },  // POSTリクエストのペイロードとしてtextを送信
+          { timeout: 5000 }
+        );
         tokenized = response.data;
       } catch (error) {
-        console.error('There was a problem with the axios operation: ', error);
+        console.error('OpenKoreanTextTokenizer: There was a problem with the axios operation: ', error);
       }
     }
     

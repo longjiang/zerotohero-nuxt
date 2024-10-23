@@ -4,11 +4,12 @@ class HazmTokenizer extends BaseTokenizer {
   async tokenize(text) {
     let tokens = this.loadFromServerCache(text);
     if (!tokens) {
-      let url = `${PYTHON_SERVER}lemmatize-persian?text=${encodeURIComponent(
-        text
-      )}`;
+      let url = `${PYTHON_SERVER}lemmatize-persian`;
       try {
-        const response = await axios.get(url, { timeout: 5000 });
+        const response = await axios.post(url, 
+          { text: text },  // POSTリクエストのペイロードとしてtextを送信
+          { timeout: 5000 }
+        );
         tokens = response.data;
       } catch (error) {
         console.error('There was a problem with the axios operation: ', error);

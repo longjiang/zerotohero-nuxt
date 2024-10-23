@@ -4,11 +4,12 @@ class JiebaTokenizer extends BaseTokenizer {
   async tokenize(text) {
     let tokenized = this.loadFromServerCache(text);
     if (!tokenized) {
-      let url = `${PYTHON_SERVER}lemmatize-chinese?text=${encodeURIComponent(
-        text
-      )}`;
+      let url = `${PYTHON_SERVER}lemmatize-chinese`;
       try {
-        const response = await axios.get(url, { timeout: 5000 });
+        const response = await axios.post(url, 
+          { text: text },  // POSTリクエストのペイロードとしてtextを送信
+          { timeout: 5000 }
+        );
         tokenized = response.data;
       } catch (error) {
         console.error('Jieba Tokenizer: There was a problem tokenizing from the server. ', error);
