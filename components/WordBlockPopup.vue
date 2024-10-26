@@ -341,7 +341,7 @@ export default {
     this.loadImages();
     if (!this.preciseMatchFound) {
       await timeout(1000);
-      if (!this.preciseMatchFound && LANGS_WITH_AZURE_TRANSLATE.includes(this.$l2.code)) this.translate(this.text);
+      if (!this.preciseMatchFound && LANGS_WITH_AZURE_TRANSLATE.includes(this.$l2.code) && this.$l1.code !== this.$l2.code) this.translate(this.text);
     }
   },
   methods: {
