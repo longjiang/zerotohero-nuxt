@@ -376,7 +376,7 @@ export default {
     },
     historyItem() {
       if (this.watchHistory)
-        return this.watchHistory.find((i) => i.video_id === this.video.id);
+        return this.watchHistory.find((i) => i.id === this.video.id);
     },
     progress() {
       if (this.showProgress && this.historyItem) {
