@@ -52,14 +52,16 @@
           <div
             v-for="(group, index) in groups"
             :key="`group-${index}`"
-            style="color: #ccc"
           >
             <div v-if="group.date === '0'" class="small mb-3 mt-3">
               {{ $t("Earlier") }}
             </div>
-            <div v-else class="small mt-3 mb-3">
-              {{ $d(new Date(group.date), "short", $l1.code) }}
-            </div>
+            <h5 v-else class="mt-5 mb-2">
+                {{ $d(new Date(group.date), "short", $l1.code) }} 
+                <span class="badge badge-danger" style="position: relative; bottom: 0.1rem">
+                {{ group.sW.length }}
+                </span>
+            </h5>
             <hr class="mt-1" />
             <WordList
               :words="group.sW.map((s) => s.word)"
@@ -166,11 +168,24 @@ export default {
       }
     },
     groups() {
+      let userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
       let savedWords = this.sW.map((savedWord) => {
         let r = Object.assign({}, savedWord);
-        r.date = savedWord.date
-          ? new Date(Number(savedWord.date)).toISOString().replace(/T.*/, "")
-          : 0;
+        if (savedWord.date) {
+          let date = new Date(Number(savedWord.date));
+          // ユーザのタイムゾーンでのローカル時間を取得
+          let localDate = new Date(date.toLocaleString("en-US", { timeZone: userTimeZone }));
+          
+          // 年、月、日を取得し、ISO形式の文字列に整形
+          let year = localDate.getFullYear();
+          let month = String(localDate.getMonth() + 1).padStart(2, '0');
+          let day = String(localDate.getDate()).padStart(2, '0');
+
+          r.date = `${year}-${month}-${day}`;
+        } else {
+          r.date = 0;
+        }
         return r;
       });
       let groups = groupArrayBy(savedWords, "date");
