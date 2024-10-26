@@ -51,7 +51,6 @@
           video,
           formats,
           starttime,
-          startLineIndex,
           skin: $skin,
           useAutoTextSize: true,
           showInfoButton: true,
@@ -103,7 +102,6 @@ export default {
       currentTime: 0,
       fetchDone: false,
       mountedDone: false,
-      startLineIndex: 0,
       video: null,
       largeEpisodeCount: undefined,
       loaded: false, // Whether the video has been loaded

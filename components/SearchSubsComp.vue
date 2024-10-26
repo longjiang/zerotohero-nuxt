@@ -130,7 +130,7 @@
           showLineList: false,
           showType: currentHit.showType,
           speed,
-          startLineIndex: Math.max(startLineIndex, 0),
+          starttime: currentHit.video.subs_l2[currentHit.lineIndex].starttime,
           type: 'youtube',
           video: currentHit.video,
         }"
@@ -302,10 +302,6 @@ export default {
       if (this.hitIndex < this.hits.length - 1)
         return this.hits[this.hitIndex + 1];
       else return this.hits[0];
-    },
-    startLineIndex() {
-      let startLineIndex = this.currentHit.lineIndex;
-      return startLineIndex;
     },
     pro() {
       return this.forcePro || this.$store.state.subscriptions.active;

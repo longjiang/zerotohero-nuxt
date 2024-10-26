@@ -38,7 +38,7 @@
             video,
             formats,
             controls: false,
-            starttime: startTimeOrLineIndex,
+            starttime,
           }"
           @paused="onPaused"
           @updateVideo="onUpdateVideo"
@@ -195,7 +195,7 @@
           v-bind="{
             lines: video.subs_l2 || [],
             parallellines: video.subs_l1 || [],
-            starttime: startTimeOrLineIndex,
+            starttime,
             currentTime,
             single: (forceMode || mode) === 'subtitles' || size === 'mini',
             showAnimation,
@@ -367,9 +367,6 @@ export default {
     autoplay: {
       default: false,
     },
-    startLineIndex: {
-      default: undefined,
-    },
     starttime: {
       default: 0,
     },
@@ -438,6 +435,7 @@ export default {
       overlaySubsAlign: "bottom",
       showSubsEditing: false,
       speaking: false,
+      startLineIndex: 0,
       speed: 1,
       textSize: 1,
       transcriptKey: 0,
@@ -469,21 +467,6 @@ export default {
 
     overlayControlsVisible() {
       return this.hovering || this.paused;
-    },
-
-    startTimeOrLineIndex() {
-      let starttime = 0;
-      if (this.starttime) starttime = this.starttime;
-      else if (this.startLineIndex) {
-        if (
-          this.video.subs_l2 &&
-          this.video.subs_l2.length > 0 &&
-          this.video.subs_l2[this.startLineIndex]
-        ) {
-          starttime = this.video.subs_l2[this.startLineIndex].starttime;
-        }
-      }
-      return starttime;
     },
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
@@ -526,6 +509,7 @@ export default {
     }
   },
   async mounted() {
+    this.startLineIndex = this.getStartLineIndex();
     this.updateLayout();
     if (typeof this.$store.state.settings !== "undefined") {
       this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
@@ -595,6 +579,13 @@ export default {
   },
   methods: {
 
+    getStartLineIndex() {
+      if (this.video.subs_l2 && this.video.subs_l2.length > 0) {
+        return this.video.subs_l2.findIndex(
+          (line) => line.starttime >= this.startTimeOrLineIndex
+        );
+      }
+    },
     getContainerElementWidth() {
       if (typeof document === "undefined") return;
       let containerElement = document.querySelector(".video-view-content");

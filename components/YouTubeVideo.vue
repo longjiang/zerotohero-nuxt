@@ -341,7 +341,6 @@ export default {
       }
     },
     updateCurrentTime() {
-      console.log('updateCurrentTime')
       // This cannot be a computed property because the player is not monitored by Vue
       if (this.player && this.player.getCurrentTime) {
         let newTime = this.player.getCurrentTime();

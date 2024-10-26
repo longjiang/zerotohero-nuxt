@@ -28,7 +28,6 @@
         showQuiz,
         showType,
         skin,
-        startLineIndex,
         starttime,
         type: 'youtube',
         useAutoTextSize: true,
@@ -139,7 +138,6 @@ export default {
       savedToHistory: false,
       show: undefined,
       showType: undefined,
-      startLineIndex: 0,
       video: undefined,
     };
   },
