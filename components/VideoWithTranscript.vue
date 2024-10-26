@@ -551,6 +551,12 @@ export default {
     if (this.$refs.video) this.$refs.video.speed = this.speed;
   },
   watch: {
+    starttime() {
+      this.startLineIndex = this.getStartLineIndex();
+      if (this.$refs.video?.$refs.concreteVideo?.player?.seekTo) {
+        this.$refs.video?.$refs.concreteVideo?.player?.seekTo(this.starttime);
+      }
+    },
     repeatMode() {
       if (this.$refs.transcript)
         this.$refs.transcript.repeatMode = this.repeatMode;
@@ -558,11 +564,6 @@ export default {
     audioMode() {
       if (this.$refs.transcript)
         this.$refs.transcript.audioMode = this.audioMode;
-    },
-    startLineIndex() {
-      if (this.$refs.video?.$refs.concreteVideo?.player?.seekTo) {
-        this.rewind();
-      }
     },
     initialMode() {
       this.mode = this.initialMode;
