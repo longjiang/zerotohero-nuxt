@@ -104,13 +104,12 @@ export default {
         name: "l1-l2-show-type-id",
         params: { type: this.slug, id: this.show.id },
       };
-      const firstEpisode = {
-        name: "l1-l2-video-view-type",
-        params: { type: "youtube" },
-        query: { v: this.show.youtube_id },
-      };
-      const to =
-        this.$adminMode || !this.show.youtube_id ? showList : firstEpisode;
+      // const firstEpisode = {
+      //   name: "l1-l2-video-view-type",
+      //   params: { type: "youtube" },
+      //   query: { v: this.show.youtube_id },
+      // };
+      const to = showList
       return to;
     },
   },
