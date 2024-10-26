@@ -210,6 +210,10 @@ export default {
       tries: 0,
       view: "grid",
       musicOffset: 0,
+      captions: "all",
+      start: 0,
+      long: false,
+      searchResultKey: 0,
     };
   },
   computed: {
