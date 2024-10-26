@@ -282,7 +282,9 @@ export default {
                     this.interval = setInterval(() => {
                       if (!this.player) return
                       let currentTime = this.player.getCurrentTime();
-                      if (currentTime < 0.5) {
+                      if (currentTime % 1 < 0.25) {
+                        this.updateCurrentTime();
+                      } else if (currentTime < 0.5) {
                         this.updateCurrentTime();
                       } else if (crossingTimes) {
                         // If crossingTimes is set, check if the current time is in the vicinity of a crossing time
@@ -290,14 +292,7 @@ export default {
                         let crossingTime = crossingTimes.find((time) => {
                           return Math.abs(currentTime - time) < 0.25;
                         });
-                        if (crossingTime) {
-                          this.updateCurrentTime();
-                        }
-                      } else {
-                        // crossingTimes not available, just emit the current time if it's % 1s
-                        if (currentTime % 1 < 0.1) {
-                          this.updateCurrentTime();
-                        }
+                        if (crossingTime) this.updateCurrentTime();
                       }
                     }, 250);
                   }
@@ -346,6 +341,7 @@ export default {
       }
     },
     updateCurrentTime() {
+      console.log('updateCurrentTime')
       // This cannot be a computed property because the player is not monitored by Vue
       if (this.player && this.player.getCurrentTime) {
         let newTime = this.player.getCurrentTime();

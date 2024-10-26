@@ -228,7 +228,8 @@ export default {
         if (this.paused) {
           this.pauseAnimation();
         } else {
-          this.playAnimation();
+          const elapased = this.getTimeElapsedOnCurrentLine();
+          this.playAnimation(elapased);
         }
       }
     },
@@ -237,6 +238,9 @@ export default {
     ...mapState("settings", ["karaokeAnimation"]),
   },
   methods: {
+    getTimeElapsedOnCurrentLine() {
+      return this.currentTime - this.line.starttime;
+    },
     onTranslation(translation) {
       this.translation = translation;
       this.translationLoading = false;
