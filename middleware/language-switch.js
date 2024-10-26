@@ -50,7 +50,8 @@ export default async function ({ error, route, app, store, params, i18n }) {
             if (dictionaries) {
               console.log('Setting dictionary name to', dictionaries[0], ' (Azure translated)')
               store.dispatch('settings/setDictionaryName', dictionaries[0])
-              store.dispatch('settings/setUseMachineTranslatedDictionary', true)
+              // Use machine translated definitions, unless the L2 is the same as the L1 (e.g. learning Japanese from Japanese)
+              if (params.l1 !== params.l2) store.dispatch('settings/setUseMachineTranslatedDictionary', true)
             }
           }
         }
