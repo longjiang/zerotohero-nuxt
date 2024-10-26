@@ -137,7 +137,7 @@
                   </div>
                 </div>
               </div>
-              <template v-if="hasEpisodes">
+              <template v-if="hasEpisodes && !keyword">
                 <LazyYouTubeVideoList
                   ref="youtubeVideoList"
                   :skin="$skin"
@@ -153,13 +153,16 @@
                 />
                 <div v-observe-visibility="visibilityChanged"></div>
               </template>
-              <div v-if="keyword">
-                <MediaSearchResults :params="{'filter[title][contains]': keyword}" class="mt-4" />
+              <div v-else-if="keyword">
+                <MediaSearchResults :params="mediaSearchParams" class="mt-4" 
+                  :key="`media-search-${searchResultKey}-${keyword}`"
+                />
+                <hr class="mb-5"/>
                 <YouTubeSearchResults
                   :term="keyword"
                   :start="start"
                   :captions="captions"
-                  :key="searchResultKey"
+                  :key="`youtube-search-${searchResultKey}-${keyword}`"
                   :long="long"
                   :infinite="true"
                   :showProgress="false"
@@ -219,6 +222,16 @@ export default {
   computed: {
     hasEpisodes() {
       return this.show && this.show.episodes && this.show.episodes.length > 0;
+    },
+    mediaSearchParams() {
+      const params = {
+        "filter[title][contains]": this.keyword,
+        "filter[l2]": this.$l2.id,
+        sort: this.sort,
+      };
+      params[`filter[${this.collection}][eq]`] = this.show.id;
+      return params;
+
     },
     randomEpisodeYouTubeId() {
       if (this.show.episodes?.length > 0) {
