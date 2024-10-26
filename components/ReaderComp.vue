@@ -226,6 +226,8 @@ export default {
       let augmentedText = text.replace(/^ {4,}/gm, ""); // remove 4+ spaces, which in markdown is a code block
       // Enforce double line breaks (only replace single line breaks with double but don't add any unnecessarily)
       augmentedText = augmentedText.replace(/([^\n])\n([^\n])/g, "$1\n\n$2");
+      // Remove initial tabs so they don't get rendered as code blocks
+      augmentedText = augmentedText.replace(/^\t+/gm, "");
       Marked.setOptions({
         breaks: true
       });
