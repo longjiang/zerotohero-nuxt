@@ -54,6 +54,7 @@
         :class="{ 'text-danger': liked }"
         :pending="likePending"
         @click="toggleLike()"
+        :disabled="!video.id"
         v-show="size !== 'mini'"
       />
       <SimpleButton
