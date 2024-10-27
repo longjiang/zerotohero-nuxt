@@ -98,13 +98,6 @@
                 <span>{{ speed }}x</span>
               </b-button>
             </template>
-            <!-- <b-button
-              :variant="$skin"
-              @click="translateAll()"
-              :title="$t('Translate') + ' (T)'"
-            >
-              <i class="fas fa-language"></i>
-            </b-button> -->
           </b-button-group>
         </client-only>
       </div>
@@ -117,22 +110,8 @@
         <div
           class="line w-100 mb-4"
           v-for="(line, lineIndex) of lines"
-          :key="`chapter-line-${lineIndex}`"
+          :key="`chapter-line-${page}-${lineIndex}`"
         >
-          <!-- <Annotate
-            class="annotated-line"
-            tag="div"
-            :foreign="foreign"
-            :emitSentenceTextAsAttr="true"
-            
-            :showLoading="showLoading"
-            ref="annotate"
-            @translation="onTranslation($event, lineIndex)"
-            @translationLoading="onTranslationLoading($event, lineIndex)"
-            @sentenceClick="onSentenceClick"
-          >
-            <div v-html="line.trim()" />
-          </Annotate> -->
           <TokenizedRichText
             :showTranslation="translation ? false : true"
             ref="tokenizedRichTexts"
@@ -269,7 +248,6 @@ export default {
       translationOffset: 0, // When translation and content is out of sync, the user can click on the translation to put them in sync.
       voice: 0,
       speed: 1,
-      linesPerPage: 15,
       speaking: false,
       focusLineIndex: 0,
       speakingLineIndex: 0,
@@ -284,6 +262,19 @@ export default {
     };
   },
   computed: {
+    linesPerPage() {
+      // Get the default
+      let linesPerPage = 15;
+
+      // If the text is longer than 1000 characters, adjust the number of lines per page
+      const maxCharCountPerPage = 2000;
+      let text = this.allLines.join("\n");
+      let idealPageCount = text.length / maxCharCountPerPage
+      if (idealPageCount > 1) {
+        linesPerPage = Math.ceil(this.allLines.length / idealPageCount);
+      }
+      return linesPerPage;
+    },
     pageOptions() {
       let options = [];
       for (let i = 1; i <= this.pageCount; i++) {
@@ -342,7 +333,6 @@ export default {
     },
   },
   mounted() {
-    this.linesPerPage = this.calculateLinesPerPage();
     this.voices = SpeechSingleton.instance.getVoices(this.$l2.code);
     this.bindKeys();
   },
@@ -378,19 +368,6 @@ export default {
      * Calculate the number of lines per page based on the length of the text.
      * @returns {number} The number of lines per page.
      */
-    calculateLinesPerPage() {
-      // Get the default
-      let linesPerPage = this.linesPerPage;
-
-      // If the text is longer than 1000 characters, adjust the number of lines per page
-      const maxCharCountPerPage = 2000;
-      let text = this.allLines.join("\n");
-      let idealPageCount = text.length / maxCharCountPerPage
-      if (idealPageCount > 1) {
-        linesPerPage = Math.ceil(this.allLines.length / idealPageCount);
-      }
-      return linesPerPage;
-    },
     speakPreviousSentence() {
       this.speakingLineIndex = Math.max(0, this.speakingLineIndex - 1);
       this.scrollToCurrentLine();
