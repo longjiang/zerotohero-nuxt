@@ -19,9 +19,8 @@
         <rt v-if="$l2Settings?.showDefinition">{{
           attributes?.definition || "&nbsp;"
           }}</rt>
-      </ruby>
-
-      <span v-if="attributes && attributes.hanAnnotation" class="word-block-text-byeonggi"
+      </ruby><span
+        v-if="attributes && attributes.hanAnnotation" class="word-block-text-byeonggi"
         v-html="attributes && attributes.hanAnnotation" /><span v-if="
           this.showQuickGloss &&
           attributes &&
