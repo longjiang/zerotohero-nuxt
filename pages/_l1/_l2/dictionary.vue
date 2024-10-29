@@ -205,7 +205,7 @@
               ref="dictionaryEntry"
               :key="`dictionary-entry-${entry.id}`"
             />
-            <EntryExternal
+            <LookUpIn
               :term="entry.head"
               :traditional="entry.traditional"
               :level="entry.level"

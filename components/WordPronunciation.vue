@@ -33,7 +33,9 @@ export default {
 
       if (this.$l2.code === "ja" && this.word.accentPatterns?.length) {
         const accentedPronunciations = this.addPitchAccent(pronunciation, this.word.accentPatterns);
-        pronunciation = accentedPronunciations.map(p => this.convertPitchToUnderline(p)).join(', ');
+        const pronunciations = accentedPronunciations.map(p => this.convertPitchToUnderline(p))
+        // Make unique
+        pronunciation = [...new Set(pronunciations)].join(', ');
       }
 
       let formattedPronunciation = pronunciation ? `[${pronunciation}]` : "";

@@ -44,7 +44,7 @@
         />
       </div>
       <div class="entry-word-wrapper" style="display: inline-block">
-        <div class="mb-2">
+        <div class="my-2">
           <div class="entry-pinyin">
             <span
               :class="{
