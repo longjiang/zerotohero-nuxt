@@ -58,24 +58,29 @@ export default {
         url: `http://dict.youdao.com/w/ko/${this.term}`
       },
       {
+        title: 'JPDB',
+        available: this.$l2.code === 'ja',
+        url: `https://jpdb.io/search?q=${this.term}`
+      },
+      {
+        title: 'JapanDict',
+        available: this.$l2.code === 'ja',
+        url: `https://www.japandict.com/${this.term}`
+      },
+      {
         title: 'Jisho',
         available: this.$l2.code === 'ja',
         url: `https://jisho.org/search/${this.term}`
       },
       {
-        title: 'Weblio',
-        available: this.$l2.code === 'ja',
-        url: `https://ejje.weblio.jp/content/${this.term}`
-      },
-      {
-        title: 'JapanDict',
-        available: this.$l2.code === 'ja',
-        url: `https://www.japandict.com/?s=${this.term}&lang=eng`
-      },
-      {
         title: 'Tangorin',
         available: this.$l2.code === 'ja',
         url: `https://tangorin.com/words?search=${this.term}&lang=eng`
+      },
+      {
+        title: 'Weblio',
+        available: this.$l2.code === 'ja',
+        url: `https://ejje.weblio.jp/content/${this.term}`
       },
       {
         title: "汉典(ZDIC)",
