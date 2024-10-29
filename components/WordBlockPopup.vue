@@ -485,9 +485,6 @@ export default {
   .word-pronunciation span {
     color: #779bb5;
     font-family: AndikaW, Andika, Arial, sans-serif;
-    u {
-      text-decoration: overline;
-    }
   }
 
   .wordlist-item {

@@ -37,8 +37,8 @@
       </router-link>
       <span :class="{ transparent: hidePhonetics }">
         <!-- Check if there's a pronunciation and handle different language specifics -->
-        <span v-if="pronunciation" class="wordlist-item-pinyin">
-          [{{ pronunciation }}]
+        <span class="wordlist-item-pinyin">
+          <WordPronunciation :word="word" />
         </span>
         <!-- Display canonical CJK representation if applicable -->
         <span
@@ -97,21 +97,6 @@ export default {
     removeSymbol: Boolean, // Flag to optionally remove symbols (like star)
   },
   computed: {
-    pronunciation() {
-      let pronunciation = '';
-
-      if (this.$l2.code === 'ja') {
-        pronunciation = this.word.kana
-      } else if (this.$l2.code === 'vi') {
-        pronunciation = this.word.pronunciation ? this.word.pronunciation.replace(/\[\[(.+?)#Vietnamese\|.+?]]/g, '$1') : '';
-      } else {
-        pronunciation = this.word.pronunciation;
-      }
-      // Sometimes pronunciations are comma-space-separated, we only show the first one
-      pronunciation = pronunciation.split(', ')[0];
-
-      return pronunciation;
-    },
     isMatched() {
       // Compute if the current word is matched with a criteria
       return (

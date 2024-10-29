@@ -140,7 +140,7 @@ export default {
 .word-pronunciation {
   color: #779bb5;
   font-family: AndikaW, Andika, Arial, sans-serif;
-  u {
+  :deep(u) {
     text-decoration: overline;
   }
 }

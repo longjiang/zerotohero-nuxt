@@ -52,7 +52,9 @@
                 transparent: hidePhonetics && !reveal,
               }"
             >
-              {{ formattedPronunciation }}
+              <WordPronunciation
+                :word="entry"
+              />
             </span>
             <Speak
               :class="{ 'ml-1 mr-2': true, transparent: hidePhonetics }"
@@ -141,8 +143,7 @@
 
 <script>
 import Klingon from "../lib/klingon";
-import { transliterate as tr } from "transliteration";
-import { convertPinyinToIPA, languageLevels } from "../lib/utils";
+import { languageLevels } from "../lib/utils";
 
 export default {
   props: {
@@ -171,29 +172,6 @@ export default {
       levels: null,
     };
   },
-  asyncComputed: {
-    async formattedPronunciation() {
-      const entry = this.entry;
-      const dictionary = await this.$getDictionary();
-
-      if (this.$l2.code === "tlh") {
-        return `${entry.head} /${this.klingonIPA(entry.head)}/`;
-      } else if (this.$l2.code === "vi" && entry.pronunciation) {
-        return `[${entry.pronunciation.replace(
-          /\[\[(.+?)#Vietnamese\|.+?]]/g,
-          "$1"
-        )}]`;
-      } else if (this.$l2.code === "ja" && entry.kana) {
-        return `${entry.kana} (${await dictionary.transliterate(entry.kana)})`;
-      } else if (this.$l2.code === "zh") {
-        return `${entry.pronunciation} [${convertPinyinToIPA(entry.pronunciation)}]`;
-      } else if (entry.pronunciation) {
-        return `[${entry.pronunciation}]`;
-      } else {
-        return this.transliterate(entry.head);
-      }
-    },
-  },
   async mounted() {
     if (
       this.$refs.speak &&
@@ -205,16 +183,6 @@ export default {
     if (this.$l2) this.levels = languageLevels(this.$l2);
   },
   methods: {
-    transliterate(text) {
-      let transliteration = tr(text);
-      if (transliteration !== text) return tr(text);
-    },
-    klingonIPA(text) {
-      return Klingon.latinToIPA(text);
-    },
-    fixKlingonTypos(text) {
-      return Klingon.fixTypos(text);
-    },
     transform(text) {
       if (typeof text === "undefined") {
         text = "";
