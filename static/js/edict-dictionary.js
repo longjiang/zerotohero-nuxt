@@ -144,10 +144,10 @@ class EdictDictionary extends BaseDictionary  {
     // For each accent data row, find the corresponding word using this.kanjiIndex, then check if the kana matches.
     // If it does, add the accent data to the word.
     this.accents.forEach(row => {
-      let words = this.kanjiIndex[row.kanji]
+      let words = this.kanjiIndex[row.kanji] || this.kanaIndex[row.kanji]
       if (!words) return
       for (let word of words) {
-        if (word.kana === row.kana) {
+        if (!row.kana || word.kana === row.kana) {
           word.accentPatterns = row.accents.split(',').map(a => parseInt(a))
         }
       }

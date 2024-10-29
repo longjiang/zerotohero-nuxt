@@ -413,7 +413,7 @@ export default {
         );
       } else if (this.$l2.code === "tlh")
         pronunciation = this.klingonIPA(word.head);
-      else if (word.kana && word.kana !== word.head) pronunciation = word.kana;
+      else if (word.kana) pronunciation = word.kana;
       else if (word.jyutping && word.pinyin)
         pronunciation = [word.jyutping, word.pinyin].join(", ");
       else if (
@@ -425,7 +425,7 @@ export default {
       }
       if (this.$l2.code === "ja" && word.accentPatterns?.length) {
         const accentedPronunciations = this.addPitchAccent(pronunciation, word.accentPatterns); 
-        pronunciation = accentedPronunciations.concat(accentedPronunciations.map(p => this.convertPitchToUnderline(p))).join(', ');
+        pronunciation = accentedPronunciations.map(p => this.convertPitchToUnderline(p)).join(', ');
       }
 
       let formattedPronunciation = pronunciation ? `[${pronunciation}]` : "";
@@ -437,7 +437,7 @@ export default {
           " [" +
           convertPinyinToIPA(word.pronunciation) +
           "]";
-      if (this.$l2.code === "ja") formattedPronunciation += ' (' + word.accentPatterns.join(', ') + ')';
+      if (this.$l2.code === "ja" && word.accentPatterns?.length) formattedPronunciation += ' (' + word.accentPatterns.join(', ') + ')';
       return formattedPronunciation;
     },
     addPitchAccent(hiragana, accentPatterns) {
@@ -599,6 +599,9 @@ export default {
   .word-pronunciation span {
     color: #779bb5;
     font-family: AndikaW, Andika, Arial, sans-serif;
+    u {
+      text-decoration: overline;
+    }
   }
 
   .wordlist-item {
