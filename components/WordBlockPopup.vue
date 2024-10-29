@@ -103,7 +103,7 @@
             class="mr-1"
             ref="speak"
           />
-          <span class="word-pronunciation">{{ pronunciation(word) }}</span>
+          <span class="word-pronunciation" v-html="pronunciation(word)" />
           <Star
             :word="word"
             :text="text"
@@ -423,6 +423,10 @@ export default {
       ) {
         pronunciation = tr(word.head);
       }
+      if (this.$l2.code === "ja" && word.accentPatterns?.length) {
+        const accentedPronunciations = this.addPitchAccent(pronunciation, word.accentPatterns); 
+        pronunciation = accentedPronunciations.concat(accentedPronunciations.map(p => this.convertPitchToUnderline(p))).join(', ');
+      }
 
       let formattedPronunciation = pronunciation ? `[${pronunciation}]` : "";
       if (this.$l2.code === "tlh")
@@ -433,7 +437,84 @@ export default {
           " [" +
           convertPinyinToIPA(word.pronunciation) +
           "]";
+      if (this.$l2.code === "ja") formattedPronunciation += ' (' + word.accentPatterns.join(', ') + ')';
       return formattedPronunciation;
+    },
+    addPitchAccent(hiragana, accentPatterns) {
+      // Define small kana characters
+      const smallKanaSet = new Set(["ぁ", "ぃ", "ぅ", "ぇ", "ぉ", "っ", "ゃ", "ゅ", "ょ", "ゎ", "ゕ", "ゖ"]);
+
+      // Function to split hiragana into moras
+      function splitIntoMoras(hiraganaStr) {
+        const moras = [];
+        let currentMora = "";
+        for (let i = 0; i < hiraganaStr.length; i++) {
+          const c = hiraganaStr[i];
+          if (smallKanaSet.has(c)) {
+            // Small kana, append to current mora
+            currentMora += c;
+          } else {
+            // Base kana
+            if (currentMora !== "") {
+              moras.push(currentMora);
+            }
+            currentMora = c;
+          }
+        }
+        if (currentMora !== "") {
+          moras.push(currentMora);
+        }
+        return moras;
+      }
+
+      // Function to apply accent pattern to moras
+      function applyAccentPattern(moras, accentPattern) {
+        let result = "";
+        for (let i = 0; i < moras.length; i++) {
+          result += moras[i];
+          if (accentPattern === 0 && i === 0) {
+            result += "↑";
+          } else if (accentPattern === 1 && i === 0) {
+            result += "↓";
+          } else if (accentPattern >= 2) {
+            if (i === 0) {
+              result += "↑";
+            }
+            if (i === accentPattern - 1) {
+              result += "↓";
+            }
+          }
+        }
+        return result;
+      }
+
+      // Main processing
+      const moras = splitIntoMoras(hiragana);
+      const results = accentPatterns.map((pattern) => applyAccentPattern(moras, pattern));
+      return results;
+    },
+    convertPitchToUnderline(text) {
+      // Define the regex patterns for different cases
+      const upDownPattern = /\u2191([^\u2193]*)\u2193/g; // Up arrow followed by down arrow
+      const upPattern = /\u2191([^\u2193]*)/g; // Only up arrow
+      const downPattern = /([^\u2191]*)\u2193/g; // Only down arrow
+
+      // Replace up-down pattern with <u> tags
+      let result = text.replace(upDownPattern, (match, p1) => {
+        return `<u>${p1}</u>`;
+      });
+
+      // Replace up arrow pattern with <u> tags for all after it
+      result = result.replace(upPattern, (match, p1) => {
+        return `<u>${p1}</u>`;
+      });
+
+      // Replace down arrow pattern with <u> tags for all before it
+      result = result.replace(downPattern, (match, p1) => {
+        return `<u>${p1}</u>`;
+      });
+
+      return result;
     },
     onCopyClick(text) {
       let tempInput = document.createElement("input");

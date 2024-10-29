@@ -46,6 +46,9 @@ class BaseDictionary {
         instance.groupWordsByLevelAndLesson(row);
       }
     }
+    if (instance.beforeLoadingCompleted) {
+      instance.beforeLoadingCompleted();
+    }
     return instance;
   }
 

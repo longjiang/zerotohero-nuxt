@@ -8,11 +8,15 @@ class EdictDictionary extends BaseDictionary  {
   
   constructor({ l1 = undefined, l2 = undefined } = {}) {
     super({l1, l2});
-    this.indexKeys = ['search', 'kana', 'romaji'];
+    this.indexKeys = ['kanji', 'search', 'kana', 'romaji'];
+    this.accents = [];
     this.kanaIndex = {};
+    this.kanjiIndex = {};
     this.romajiIndex = {};
+    this.accentIndex = {};
     this.file = 'https://server.chinesezerotohero.com/data/edict/edict.tsv.txt';
     this.wiktionaryFile = 'https://server.chinesezerotohero.com/data/wiktionary-csv/jpn-eng.csv.txt';
+    this.accentsFile = 'https://server.chinesezerotohero.com/data/ja-accents/accents.csv.txt';
     this.posLookupTable = {
       "adj-f": "noun or verb acting prenominally",
       "adj-i": "adjective (keiyoushi)",
@@ -116,9 +120,39 @@ class EdictDictionary extends BaseDictionary  {
   async loadData() {
     let words = await this.loadAndNormalizeDictionaryData({ name: `edict`, file:this.file, delimiter: "\t" })
     let wiktionaryWords = await this.loadAndNormalizeDictionaryData({ name: `wiktionary-jpn-eng`, file: this.wiktionaryFile })
+    this.accents = await this.loadDictionaryData({ name: `ja-accents`, file: this.accentsFile })
     this.words = uniqueByValues([...words, ...wiktionaryWords], ['id'])
+    
     words = null
     wiktionaryWords = null
+  }
+
+  beforeLoadingCompleted() {
+    this.addAccentDataToWords()
+  }
+
+  addAccentDataToWords() {
+    // this.accent data looks like:
+    //
+    // kanji,kana,accents
+    // 1,いち,2
+    // 1,ひと,"0,2"
+    // １０００円,せんえん,0
+    // １０月,じゅうがつ,"4,0"
+    // １０進,じっしん,0
+    //
+    // For each accent data row, find the corresponding word using this.kanjiIndex, then check if the kana matches.
+    // If it does, add the accent data to the word.
+    this.accents.forEach(row => {
+      let words = this.kanjiIndex[row.kanji]
+      if (!words) return
+      for (let word of words) {
+        if (word.kana === row.kana) {
+          word.accentPatterns = row.accents.split(',').map(a => parseInt(a))
+        }
+      }
+    })
+    
   }
 
   // Normalizes the input 'row' object and modifies it in place.
@@ -137,6 +171,7 @@ class EdictDictionary extends BaseDictionary  {
       phonetics: row.kana
     };
     row.romaji = wanakana.toRomaji(row.kana);
+    row.accentPatterns = [];
   
     // Delete unused properties
     delete row.english;
@@ -157,8 +192,8 @@ class EdictDictionary extends BaseDictionary  {
   }
 
   lookup(text) {
-    let word = this.words.find(word => word && (word.kanji === text || word.kana === text))
-    return word
+    // Match either kanji or kana
+    return this.words.find(word => word && (word.kanji === text || word.kana === text))
   }
   
   lookupMultiple(text) {
