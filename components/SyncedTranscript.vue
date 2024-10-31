@@ -149,8 +149,8 @@ export default {
     highlightSavedWords: {
       default: true,
     },
-    startLineIndex: {
-      default: undefined,
+    starttime: {
+      default: 0,
     },
     stopLineIndex: {
       default: -1,
@@ -219,6 +219,12 @@ export default {
     };
   },
   computed: {
+    startLineIndex() {
+      // Compute startLineIndex based on the starttime prop
+      if (this.starttime) {
+        return this.nearestLineIndex(this.starttime);
+      }
+    },
     currentLineVisible() {
       if (this.single) return true;
       const transcriptLineRef = `transcript-line-${
