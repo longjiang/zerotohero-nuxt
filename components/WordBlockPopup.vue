@@ -249,6 +249,13 @@
       :sticky="false"
       class="mt-2 small"
     />
+    <div v-if="context?.text">
+      <hr class="my-3" />
+      <h6>{{ $t("Context Sentence") }}</h6>
+      <TokenizedRichText
+        :text="context.text"
+      />
+    </div>
   </div>
 </template>
 
@@ -287,7 +294,6 @@ export default {
   data() {
     return {
       translation: undefined,
-      immediateContextTranslation: undefined,
       IMAGE_PROXY,
       entryClasses: { "tooltip-entry": true }, // Other classes are added upon update
       levels: undefined,
@@ -303,15 +309,6 @@ export default {
       else phonetic = tr(this.text)
       if (this.$l2.code === 'ja' && typeof wanakana !== "undefined") phonetic = convertVowelEtoIAndOtoU(wanakana.toHiragana(phonetic)); // Convert katagana returned from Mecab to hiragana
       return phonetic;
-    },
-    /**
-     * The `context` attribute can have many sentences. This find the sentence (the immediate context) that contains the word.
-     */
-    immediateContext() {
-      if (!this.context?.text) return undefined;
-      let sentences = breakSentences(this.context.text);
-      let sentencesWithText = sentences.filter((s) => s.includes(this.text));
-      return sentencesWithText.length ? sentencesWithText[0] : this.context.text;
     },
     preciseMatchFound() {
       let tokenCandidatesFound = this.token && this.token.candidates && this.token.candidates.length > 0;
