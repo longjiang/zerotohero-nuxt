@@ -21,6 +21,7 @@
               >
                 <i class="fas fa-bars"></i>
               </b-button>
+              <!--
               <b-dropdown
                 :variant="$skin"
                 right
@@ -97,6 +98,7 @@
               >
                 <span>{{ speed }}x</span>
               </b-button>
+              -->
             </template>
           </b-button-group>
         </client-only>
@@ -248,9 +250,7 @@ export default {
       translationOffset: 0, // When translation and content is out of sync, the user can click on the translation to put them in sync.
       voice: 0,
       speed: 1,
-      speaking: false,
       focusLineIndex: 0,
-      speakingLineIndex: 0,
       translationLoading: {},
       voices: [],
       params: {},
@@ -349,118 +349,9 @@ export default {
     goToPage() {
       this.$emit("goToPage", this.goToPage);
     },
-    speed() {
-      if (this.speaking) {
-        this.pause();
-        this.play();
-      }
-    },
-    voice() {
-      if (this.speaking) {
-        this.pause();
-        this.play();
-      }
-    },
   },
   methods: {
     stripTags,
-    /**
-     * Calculate the number of lines per page based on the length of the text.
-     * @returns {number} The number of lines per page.
-     */
-    speakPreviousSentence() {
-      this.speakingLineIndex = Math.max(0, this.speakingLineIndex - 1);
-      this.scrollToCurrentLine();
-      if (this.speaking) {
-        this.pause();
-        this.play();
-      }
-    },
-    speakNextSentence() {
-      this.speakingLineIndex = Math.min(
-        this.lines.length - 1,
-        this.speakingLineIndex + 1
-      );
-      this.scrollToCurrentLine();
-      if (this.speaking) {
-        this.pause();
-        this.play();
-      }
-    },
-
-    async play() {
-      if (this.paused) {
-        this.resume();
-        return;
-      }
-      // Set the speaking flag to true
-      this.speaking = true;
-      const totalLines = this.$refs.tokenizedRichTexts.length;
-      // Speak all the <TokenizedRichText> components in order, starting from speakingLineIndex
-      for (let i = this.speakingLineIndex; i < totalLines; i++) {
-        // keep track of which one is speaking
-        this.speakingLineIndex = i;
-        if (this.$refs.tokenizedRichTexts[i])
-          await this.$refs.tokenizedRichTexts[i].speak();
-      }
-    },
-
-    resume() {
-      // Check if the browser supports the Speech Synthesis API
-      if (!SpeechSingleton.instance) return;
-
-      // Set the speaking flag to true
-      this.speaking = true;
-
-      // Check if speech synthesis is paused and if the focused line is being spoken
-      if (
-        SpeechSingleton.instance.paused &&
-        this.speakingLineIndex === this.focusLineIndex
-      ) {
-        // If paused, resume speaking
-        SpeechSingleton.instance.resume();
-      } else {
-        // If not paused, or if there's a mismatch between focused and speaking lines,
-        // update the currently speaking line and get the next sentence to speak
-        this.speakingLineIndex = this.focusLineIndex;
-        this.play();
-      }
-    },
-
-    pause() {
-      if (SpeechSingleton.instance) {
-        SpeechSingleton.instance.pause();
-        this.speaking = false;
-      }
-    },
-
-    togglePlay() {
-      if (this.speaking) {
-        this.pause();
-      } else {
-        this.play();
-      }
-    },
-
-    scrollToCurrentLine() {
-      this.$nextTick(() => {
-        // scrollIntoView to the <TokenizedRichText> component that is currently being spoken
-        const lineComp = this.$refs.tokenizedRichTexts[
-          this.speakingLineIndex
-        ]
-        lineComp.highlightFirstSentence();
-        // Remove highlight from the rest
-        for (let i = 0; i < this.$refs.tokenizedRichTexts.length; i++) {
-          if (i !== this.speakingLineIndex) {
-            this.$refs.tokenizedRichTexts[i].removeHighlight();
-          }
-        }
-        lineComp.$el.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
-      });
-    },
 
     // Other methods below
     bindKeys() {
@@ -504,16 +395,16 @@ export default {
             }
             return false;
           }
-          if (["ArrowUp"].includes(e.code)) {
-            this.speakPreviousSentence();
-            e.preventDefault();
-            return false;
-          }
-          if (e.code === "Space") {
-            this.togglePlay();
-            e.preventDefault(); // Prevent the default spacebar behavior
-            return false;
-          }
+          // if (["ArrowUp"].includes(e.code)) {
+          //   this.speakPreviousSentence();
+          //   e.preventDefault();
+          //   return false;
+          // }
+          // if (e.code === "Space") {
+          //   this.togglePlay();
+          //   e.preventDefault(); // Prevent the default spacebar behavior
+          //   return false;
+          // }
           if (["KeyM"].includes(e.code)) {
             this.toggleSpeed();
             return false;
