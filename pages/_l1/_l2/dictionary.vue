@@ -158,6 +158,12 @@
                       :showText="true"
                       class="mt-2 transparent"
                     />
+                    <WordContext
+                      v-if="entry?.saved?.context"
+                      :word="entry"
+                      :key="`word-context-${entry.id}`"
+                      class="mb-2 transparent"
+                    />
                   </div>
                 </template>
                 <template v-slot:back>
@@ -178,6 +184,12 @@
                       :entry="entry"
                       :showText="true"
                       class="mt-2"
+                    />
+                    <WordContext
+                      v-if="entry?.saved?.context"
+                      :word="entry"
+                      :key="`word-context-${entry.id}`"
+                      class="mb-2"
                     />
                   </div>
                 </template>
