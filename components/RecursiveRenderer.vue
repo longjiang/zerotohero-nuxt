@@ -1,3 +1,4 @@
+<!-- RecursiveRenderer.vue -->
 <template>
   <!-- Base case: if node is a text node, render it -->
   <span v-if="node.type === 'text'">

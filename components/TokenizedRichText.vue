@@ -1,3 +1,4 @@
+<!-- TokenizedRichText.vue -->
 <template>
   <div>
     <!-- Conditionally render tokenized text -->
@@ -136,6 +137,28 @@ export default {
     };
   },
   computed: {
+    // 再帰的にTokenizedTextコンポーネントのみを取得
+    allTokenizedTextDescendants(component) {
+      let tokenizedTextComponents = [];
+
+      function getDescendantsRecursive(comp) {
+        // 子コンポーネントがTokenizedTextの場合、追加
+        if (comp.$options.name === 'TokenizedText') {
+          tokenizedTextComponents.push(comp);
+        }
+
+        // 各子コンポーネントの子孫も探索
+        if (comp.$children && comp.$children.length > 0) {
+          comp.$children.forEach((child) => {
+            getDescendantsRecursive(child);
+          });
+        }
+      }
+
+      getDescendantsRecursive(component);
+
+      return tokenizedTextComponents;
+    },
     sanitizedText() {
       // combine the text from the prop and from the slot, then sanitize
       let textFromPropOrSlot = (this.text || "") + this.slotText; // this.text is a prop, this.slotText is from the slot

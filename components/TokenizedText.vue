@@ -1,3 +1,4 @@
+<!-- TokenizedText.vue -->
 <template>
   <span :class="{ 'use-zoom': true, speaking }" :dir="$l2.direction">
     <template v-if="tokenized">
