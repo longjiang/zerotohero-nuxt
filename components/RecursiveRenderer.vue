@@ -2,7 +2,7 @@
   <!-- Base case: if node is a text node, render it -->
   <span v-if="node.type === 'text'">
     <TokenizedText
-      v-for="(sentence, index) in breakSentencesAndTokenizeText(node.text)"
+      v-for="(sentence, index) in sentences"
       :key="index"
       :text="sentence"
       v-on="$listeners"
@@ -66,6 +66,12 @@ export default {
     VRuntimeTemplate,
   },
   computed: {
+    sentences() {
+      const text = this.node.text;
+      // 句点に加え、行末や特定の言語の文区切りに対応
+      const sentences = text.match(/[^.!?。！？\n]+[.!?。！？\n]*/g) || [text];
+      return sentences;
+    },
     attributesObject() {
       if (this.node && this.node.element) {
         let attrs = {};
@@ -152,15 +158,6 @@ export default {
       if (event && event.name) {
         this.$emit(event.name, event.payload);
       }
-    },
-    breakSentencesAndTokenizeText(text) {
-      // Sentence-breaking leads to large number of tokenization server requests, turning off for now...
-      // // Use sbd library to tokenize the text into sentences
-      // const sentences = sbd.sentences(text);
-      // return [sentences];
-
-      // Return the text as-is instead
-      return [ text ];
     },
   },
 };
