@@ -5,7 +5,7 @@
       [`skin-${$skin}`]: true,
       'cursor-pointer p-4': link,
     }"
-    @click="link ? $router.push(to) : null"
+    @click="link ? $router.push(toWithPageNumber) : null"
   >
     <div style="width: calc(100% - 1rem);">
       <h5 class="mb-0">{{ text.title }}</h5>
@@ -63,6 +63,25 @@ export default {
       if (this.type === "remote")
         to.params = { method: "shared", arg: this.text.id };
       return to;
+    },
+    toWithPageNumber() {
+      return this.lastOpenedPage
+        ? { ...this.to, query: { page: this.lastOpenedPage } }
+        : this.to;
+    },
+    // The last opened page
+    lastOpenedPage() {
+      // Convert this.to to a path
+      const pathToThisText = this.$router.resolve(this.to).href;
+      const pathMatchesFromFullHistory = this.fullHistory.filter(
+        (item) => item.path.includes(pathToThisText)
+      );
+      // Get the last item in the array if it exists
+      const lastItem = pathMatchesFromFullHistory.length
+        ? pathMatchesFromFullHistory[pathMatchesFromFullHistory.length - 1]
+        : null;
+      // If it has a page number in the path (e.g. '?p=2'), return that number
+      return lastItem ? lastItem.path.match(/p=(\d+)/)?.[1] : null;
     },
   },
   methods: {
