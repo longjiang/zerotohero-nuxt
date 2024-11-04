@@ -5,8 +5,8 @@
     centered
     hide-footer
     :title="$t('Annotated Text')"
-    modal-class="safe-padding-top mt-4"
     body-class="annotate-menu-modal-wrapper"
+    modal-class="safe-padding-top safe-padding-bottom py-5"
   >
     <div class="annotate-menu-modal">
       <div
@@ -101,6 +101,7 @@
       size="lg"
       centered
       hide-footer
+      modal-class="safe-padding-top safe-padding-bottom py-5"
       @hide="hide"
     >
       <ChatGPT 

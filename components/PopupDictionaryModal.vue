@@ -6,7 +6,7 @@
     centered
     hide-footer
     no-fade
-    modal-class="safe-padding-top my-5"
+    modal-class="safe-padding-top safe-padding-bottom py-5"
     :body-class="`popup-dictionary-modal-wrapper l2-${$l2 ? $l2.code : ''}`"
     :header-class="`popup-dictionary-modal-header l2-${$l2 ? $l2.code : ''}`"
     @show="$nuxt.$emit('popupOpened')"
