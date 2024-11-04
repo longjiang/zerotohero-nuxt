@@ -1,145 +1,143 @@
 <template>
   <container-query :query="query" v-model="params">
     <div id="speech-container" :class="`skin-${$skin}`">
-      <div class="speech-nav text-center d-flex mb-4 rounded p-2 shadow">
+      <div v-if="pageCount > 1 || showTocButton" class="speech-nav text-center d-flex mb-4 rounded p-2 shadow">
         <client-only>
-            <template
-              v-if="pageCount > 1 || showTocButton"
-            >
-              <b-button
-                v-if="showTocButton"
-                class="mr-1"
-                :disabled="!hasPreviousChapter"
-                :variant="$skin"
-                :title="$t('Previous Chapter') + ' (⇧ + ←)'"
-                @click="$emit('previousChapter')"
-              >
-                <i class="fas fa-step-backward"></i>
-              </b-button>
-              <b-button
-                v-if="Number(page) > 1"
-                :variant="$skin"
-                :title="$t('Previous Page') + ' (←)'"
-                @click="$emit('previousPage')"
-                class="mr-1"
-              >
-                <i class="fas fa-arrow-left"></i>
-              </b-button>
-              <b-button
-                :variant="$skin"
-                @click="$emit('showTOC')"
-                v-if="showTocButton"
-                :title="$t('Table of Contents') + ' (C)'"
-                class="mr-1"
-              >
-                <i class="fas fa-bars"></i>
-              </b-button>
-              <b-form-select
-                size="md"
-                v-model="goToPage"
-                class="speech-nav-page-select text-center border-0"
-                :options="pageOptions"
-                :variant="$skin"
-              />
-              <b-button
-                v-if="Number(page) < pageCount"
-                :variant="$skin"
-                @click="$emit('nextPage')"
-                :title="$t('Next Page') + ' (→)'"
-                class="mr-1"
-              >
-                <i class="fas fa-arrow-right"></i>
-              </b-button>
-              <b-button
-                v-if="showTocButton"
-                :disabled="!hasNextChapter"
-                :variant="$skin"
-                @click="$emit('nextChapter')"
-                :title="$t('Next Chapter') + ' (⇧ + →)'"
-              >
-                <i class="fas fa-step-forward"></i>
-              </b-button>
-              <!--
-              <b-dropdown
-                :variant="$skin"
-                right
-                :text="$t('Voice')"
-                :title="$t('Voice') + ': ' + voices[voice].name"
-                style="flex: 1"
-              >
-                <template #button-content>
-                  <i class="fa-solid fa-lips"></i>
-                </template>
-                <b-dropdown-item
-                  v-for="(voice, index) in voices"
-                  :key="`speech-bar-voice-${index}-${voice.name}`"
-                  @click="setvoice(index)"
-                >
-                  {{ voice.name }}
-                </b-dropdown-item>
-              </b-dropdown>
-              <b-button
-                v-if="showTocButton"
-                :disabled="!hasPreviousChapter"
-                :variant="$skin"
-                @click="$emit('prevChapter')"
-                :title="$t('Previous Chapter') + ' (⇧ + ←)'"
-              >
-                <i class="fas fa-step-backward"></i>
-              </b-button>
-
-              <b-button
-                :variant="$skin"
-                @click="speakPreviousSentence()"
-                :title="$t('Previous Sentence') + ' (↑)'"
-              >
-                <i class="fas fa-arrow-up"></i>
-              </b-button>
-              <b-button
-                class="text-success"
-                :variant="$skin"
-                v-if="!speaking"
-                @click="play()"
-                :title="$t('Play') + ` (${$t('SPACE BAR')})`"
-              >
-                <i class="fas fa-play"></i>
-              </b-button>
-              <b-button
-                class="text-success"
-                :variant="$skin"
-                v-if="speaking"
-                @click="pause()"
-                :title="$t('Pause') + ` (${$t('SPACE BAR')})`"
-              >
-                <i class="fas fa-pause"></i>
-              </b-button>
-              <b-button
-                :variant="$skin"
-                @click="speakNextSentence()"
-                :title="$t('Next Sentence') + ' (↓)'"
-              >
-                <i class="fas fa-arrow-down"></i>
-              </b-button>
-              <b-button
-                v-if="showTocButton"
-                :disabled="!hasNextChapter"
-                :variant="$skin"
-                @click="$emit('nextChapter')"
-                :title="$t('Next Chapter') + ' (⇧ + →)'"
-              >
-                <i class="fas fa-step-forward"></i>
-              </b-button>
-              <b-button
-                :variant="$skin"
-                @click="toggleSpeed"
-                :title="$t('Playback Speed: {speed}x', { speed }) + ' (M)'"
-              >
-                <span>{{ speed }}x</span>
-              </b-button>
-              -->
+          <b-button
+            v-if="showTocButton"
+            class="mr-1"
+            :disabled="!hasPreviousChapter"
+            :variant="$skin"
+            :title="$t('Previous Chapter') + ' (⇧ + ←)'"
+            @click="$emit('previousChapter')"
+          >
+            <i class="fas fa-step-backward"></i>
+          </b-button>
+          <b-button
+            v-if="Number(page) > 1"
+            :variant="$skin"
+            :title="$t('Previous Page') + ' (←)'"
+            @click="$emit('previousPage')"
+            class="mr-1"
+          >
+            <i class="fas fa-arrow-left"></i>
+          </b-button>
+          <b-button
+            :variant="$skin"
+            @click="$emit('showTOC')"
+            v-if="showTocButton"
+            :title="$t('Table of Contents') + ' (C)'"
+            class="mr-1"
+          >
+            <i class="fas fa-bars"></i>
+          </b-button>
+          <b-form-select
+            size="md"
+            v-model="goToPage"
+            class="speech-nav-page-select text-center border-0"
+            :options="pageOptions"
+            :variant="$skin"
+          />
+          <b-button
+            v-if="Number(page) < pageCount"
+            :variant="$skin"
+            @click="$emit('nextPage')"
+            :title="$t('Next Page') + ' (→)'"
+            class="mr-1"
+          >
+            <i class="fas fa-arrow-right"></i>
+          </b-button>
+          <b-button
+            v-if="showTocButton"
+            :disabled="!hasNextChapter"
+            :variant="$skin"
+            @click="$emit('nextChapter')"
+            :title="$t('Next Chapter') + ' (⇧ + →)'"
+          >
+            <i class="fas fa-step-forward"></i>
+          </b-button>
+          <!--
+          <b-dropdown
+            :variant="$skin"
+            right
+            :text="$t('Voice')"
+            :title="$t('Voice') + ': ' + voices[voice].name"
+            style="flex: 1"
+          >
+            <template #button-content>
+              <i class="fa-solid fa-lips"></i>
             </template>
+            <b-dropdown-item
+              v-for="(voice, index) in voices"
+              :key="`speech-bar-voice-${index}-${voice.name}`"
+              @click="setvoice(index)"
+            >
+              {{ voice.name }}
+            </b-dropdown-item>
+          </b-dropdown>
+          <b-button
+            v-if="showTocButton"
+            :disabled="!hasPreviousChapter"
+            :variant="$skin"
+            @click="$emit('prevChapter')"
+            :title="$t('Previous Chapter') + ' (⇧ + ←)'"
+          >
+            <i class="fas fa-step-backward"></i>
+          </b-button>
+
+          <b-button
+            :variant="$skin"
+            @click="speakPreviousSentence()"
+            :title="$t('Previous Sentence') + ' (↑)'"
+          >
+            <i class="fas fa-arrow-up"></i>
+          </b-button>
+          <b-button
+            class="text-success"
+            :variant="$skin"
+            v-if="!speaking"
+            @click="play()"
+            :title="$t('Play') + ` (${$t('SPACE BAR')})`"
+          >
+            <i class="fas fa-play"></i>
+          </b-button>
+          <b-button
+            class="text-success"
+            :variant="$skin"
+            v-if="speaking"
+            @click="pause()"
+            :title="$t('Pause') + ` (${$t('SPACE BAR')})`"
+          >
+            <i class="fas fa-pause"></i>
+          </b-button>
+          <b-button
+            :variant="$skin"
+            @click="speakNextSentence()"
+            :title="$t('Next Sentence') + ' (↓)'"
+          >
+            <i class="fas fa-arrow-down"></i>
+          </b-button>
+          <b-button
+            v-if="showTocButton"
+            :disabled="!hasNextChapter"
+            :variant="$skin"
+            @click="$emit('nextChapter')"
+            :title="$t('Next Chapter') + ' (⇧ + →)'"
+          >
+            <i class="fas fa-step-forward"></i>
+          </b-button>
+          <b-button
+            :variant="$skin"
+            @click="toggleSpeed"
+            :title="$t('Playback Speed: {speed}x', { speed }) + ' (M)'"
+          >
+            <span>{{ speed }}x</span>
+          </b-button>
+          -->
+
         </client-only>
       </div>
+      <hr v-else class="my-4" />
       <div
         :class="`speech-content ${params.lg ? 'speech-content-wide' : ''} ${
           translation ? 'with-translation' : ''
