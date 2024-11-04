@@ -34,14 +34,24 @@
             </i18n>
           </div>
           <client-only>
-            <router-link
-              v-if="shared"
-              class="text-success mb-2"
-              :to="{ name: 'l1-l2-my-text' }"
-            >
-              <i class="fa fa-chevron-left"></i>
-              {{ $t("My Texts") }}
-            </router-link>
+            <div v-if="$auth.loggedIn" class="d-flex justify-content-between align-items-center">
+              <router-link
+                v-if="shared"
+                class="text-success mb-2"
+                :to="{ name: 'l1-l2-my-text' }"
+              >
+                <i class="fa fa-chevron-left"></i>
+                {{ $t("My Texts") }}
+              </router-link>
+              <b-button class="new-button text-success py-1 px-2" variant="no-bg" size="lg" @click="newText" :disabled="creating" :title="$t('New Text')">
+                <span v-if="!creating">
+                  <i class="fas fa-edit"></i>
+                </span>
+                <span v-else>
+                  <b-spinner small v-if="creating" />
+                </span>
+              </b-button>
+            </div>
             <TextCard
               v-if="shared"
               :text="shared"
@@ -214,6 +224,7 @@ export default {
       sharing: false,
       // Initialize debounced methods
       updateText: debounce(this.updateStoreText, 300),
+      creating: false,
     };
   },
   watch: {
@@ -321,6 +332,17 @@ export default {
   },
   methods: {
     ...mapActions('savedTexts', ['update']),
+    async newText() {
+      this.creating = true;
+      let item = await this.$store.dispatch("savedText/add", { l2: this.$l2 });
+      if (item) {
+        this.$router.push({
+          name: "l1-l2-reader",
+          params: { method: "shared", arg: item.id },
+        });
+      }
+      this.creating = false;
+    },
     onTextRemoved() {
       // Navigate to my texts
       this.$router.replace({ name: "my-text" });

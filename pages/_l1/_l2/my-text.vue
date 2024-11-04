@@ -7,7 +7,18 @@
         <div class="col-sm-12">
           <div v-if="loaded">
             <div v-if="savedtexts.length > 0">
-              <h4 class="my-4 text-center">{{ $t('My Texts') }}</h4>
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="my-4">{{ $t('My Texts') }}</h5>
+                <b-button v-if="$auth.loggedIn" class="new-button" variant="success" @click="newText" :disabled="creating">
+                  <span v-if="!creating">
+                    <i class="fas fa-edit mr-1"></i>
+                    {{ $t("New Text") }}
+                  </span>
+                  <span v-else>
+                    <b-spinner small v-if="creating" />
+                  </span>
+                </b-button>
+              </div>
               <div v-for="savedText in savedtexts" :key="savedText.id" class="mb-4">
                 <TextCard :text="savedText" />
               </div>
@@ -49,18 +60,6 @@
                   }}
                 </p>
               </div>
-            </div>
-            <div class="mt-3 text-center">
-              <b-button v-if="$auth.loggedIn" class="new-button" variant="success" @click="newText">
-                <span v-if="!creating">
-                  <i class="fas fa-plus mr-1"></i>
-                  {{ $t("New Text") }}
-                </span>
-                <span v-else>
-                  <i class="fas fa-sync-alt"></i>
-                  {{ $t("Creating...") }}
-                </span>
-              </b-button>
             </div>
           </div>
           <div class="text-center mt-5 mb-5" v-else>
