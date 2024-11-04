@@ -1,25 +1,63 @@
 <template>
   <container-query :query="query" v-model="params">
     <div id="speech-container" :class="`skin-${$skin}`">
-      <div class="speech-bar mb-4">
+      <div class="speech-nav text-center d-flex mb-4 rounded p-2 shadow">
         <client-only>
-          <b-button-group class="d-flex speech-bar-inner shadow rounded">
             <template
-              v-if="
-                html &&
-                voices &&
-                voices.length > 0 &&
-                ($hasFeature('speech') || !foreign) &&
-                browser()
-              "
+              v-if="pageCount > 1 || showTocButton"
             >
+              <b-button
+                v-if="showTocButton"
+                class="mr-1"
+                :disabled="!hasPreviousChapter"
+                :variant="$skin"
+                :title="$t('Previous Chapter') + ' (⇧ + ←)'"
+                @click="$emit('previousChapter')"
+              >
+                <i class="fas fa-step-backward"></i>
+              </b-button>
+              <b-button
+                v-if="Number(page) > 1"
+                :variant="$skin"
+                :title="$t('Previous Page') + ' (←)'"
+                @click="$emit('previousPage')"
+                class="mr-1"
+              >
+                <i class="fas fa-arrow-left"></i>
+              </b-button>
               <b-button
                 :variant="$skin"
                 @click="$emit('showTOC')"
                 v-if="showTocButton"
                 :title="$t('Table of Contents') + ' (C)'"
+                class="mr-1"
               >
                 <i class="fas fa-bars"></i>
+              </b-button>
+              <b-form-select
+                size="md"
+                v-model="goToPage"
+                class="speech-nav-page-select text-center border-0"
+                :options="pageOptions"
+                :variant="$skin"
+              />
+              <b-button
+                v-if="Number(page) < pageCount"
+                :variant="$skin"
+                @click="$emit('nextPage')"
+                :title="$t('Next Page') + ' (→)'"
+                class="mr-1"
+              >
+                <i class="fas fa-arrow-right"></i>
+              </b-button>
+              <b-button
+                v-if="showTocButton"
+                :disabled="!hasNextChapter"
+                :variant="$skin"
+                @click="$emit('nextChapter')"
+                :title="$t('Next Chapter') + ' (⇧ + →)'"
+              >
+                <i class="fas fa-step-forward"></i>
               </b-button>
               <!--
               <b-dropdown
@@ -100,7 +138,6 @@
               </b-button>
               -->
             </template>
-          </b-button-group>
         </client-only>
       </div>
       <div
@@ -147,51 +184,62 @@
         </div>
       </div>
       <div
-        class="speech-nav mt-5 text-center d-flex mb-4 rounded p-2 shadow"
+        class="speech-nav my-5 text-center d-flex rounded p-2 shadow"
         v-if="pageCount > 1 || showTocButton"
       >
-        <b-button
-          v-if="showTocButton"
-          class="mr-1"
-          :disabled="!hasPreviousChapter"
-          :variant="$skin"
-          :title="$t('Previous Chapter') + ' (⇧ + ←)'"
-          @click="$emit('previousChapter')"
-        >
-          <i class="fas fa-step-backward"></i>
-        </b-button>
-        <b-button
-          v-if="Number(page) > 1"
-          :variant="$skin"
-          :title="$t('Previous Page') + ' (←)'"
-          @click="$emit('previousPage')"
-        >
-          <i class="fas fa-arrow-left"></i>
-        </b-button>
-        <b-form-select
-          size="md"
-          v-model="goToPage"
-          class="speech-nav-page-select text-center border-0"
-          :options="pageOptions"
-          :variant="$skin"
-        />
-        <b-button
-          v-if="Number(page) < pageCount"
-          :variant="$skin"
-          @click="$emit('nextPage')"
-          :title="$t('Next Page') + ' (→)'"
-        >
-          <i class="fas fa-arrow-right"></i>
-        </b-button>
-        <b-button
-          v-if="showTocButton"
-          :disabled="!hasNextChapter"
-          :variant="$skin"
-          @click="$emit('nextChapter')"
-          :title="$t('Next Chapter') + ' (⇧ + →)'"
-        >
-          <i class="fas fa-step-forward"></i>
-        </b-button>
+          <b-button
+            v-if="showTocButton"
+            class="mr-1"
+            :disabled="!hasPreviousChapter"
+            :variant="$skin"
+            :title="$t('Previous Chapter') + ' (⇧ + ←)'"
+            @click="$emit('previousChapter')"
+          >
+            <i class="fas fa-step-backward"></i>
+          </b-button>
+          <b-button
+            v-if="Number(page) > 1"
+            :variant="$skin"
+            :title="$t('Previous Page') + ' (←)'"
+            @click="$emit('previousPage')"
+            class="mr-1"
+          >
+            <i class="fas fa-arrow-left"></i>
+          </b-button>
+          <b-button
+            :variant="$skin"
+            @click="$emit('showTOC')"
+            v-if="showTocButton"
+            :title="$t('Table of Contents') + ' (C)'"
+            class="mr-1"
+          >
+            <i class="fas fa-bars"></i>
+          </b-button>
+          <b-form-select
+            size="md"
+            v-model="goToPage"
+            class="speech-nav-page-select text-center border-0"
+            :options="pageOptions"
+            :variant="$skin"
+          />
+          <b-button
+            v-if="Number(page) < pageCount"
+            :variant="$skin"
+            @click="$emit('nextPage')"
+            :title="$t('Next Page') + ' (→)'"
+            class="mr-1"
+          >
+            <i class="fas fa-arrow-right"></i>
+          </b-button>
+          <b-button
+            v-if="showTocButton"
+            :disabled="!hasNextChapter"
+            :variant="$skin"
+            @click="$emit('nextChapter')"
+            :title="$t('Next Chapter') + ' (⇧ + →)'"
+          >
+            <i class="fas fa-step-forward"></i>
+          </b-button>
       </div>
     </div>
   </container-query>
