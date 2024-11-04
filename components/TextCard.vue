@@ -66,7 +66,7 @@ export default {
     },
     toWithPageNumber() {
       return this.lastOpenedPage
-        ? { ...this.to, query: { page: this.lastOpenedPage } }
+        ? { ...this.to, query: { p: this.lastOpenedPage } }
         : this.to;
     },
     // The last opened page
