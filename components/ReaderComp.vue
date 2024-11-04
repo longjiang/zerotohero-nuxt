@@ -311,6 +311,15 @@ export default {
       this.text = "";
       this.translation = "";
       this.addTranslation = false;
+      // Scroll to top
+      window.scrollTo(0, 0);
+      // Go to the first page
+      this.$emit("goToPage", 1);
+      // Show a toast
+      this.$toast.success(this.$t("Text cleared!"), {
+        position: "top-center",
+        duration: 1000,
+      });
     },
   },
 };
