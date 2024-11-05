@@ -39,7 +39,7 @@
               <rt>pīn</rt>
             </ruby>
             <ruby v-else-if="$l2.code === 'ja'">
-              假
+              仮
               <rt>か</rt>
             </ruby>
             <ruby
@@ -54,6 +54,13 @@
             </ruby>
             <span v-else>[pʰ]</span>
           </span>
+        </Toggle>
+        <Toggle
+          v-model="localL2Settings.phoneticsOnly"
+          @change="updateL2Settings"
+          label="Phonetics Only"
+        >
+          Āぁ
         </Toggle>
         <Toggle
           v-model="localL2Settings.showDefinition"

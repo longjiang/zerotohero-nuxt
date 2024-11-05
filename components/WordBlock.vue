@@ -13,8 +13,8 @@
               surface: text,
               reading: attributes && attributes.phonetics,
             },
-          ]" :key="index" :lang="$l2.code">{{ transformText(segment.surface)
-          }}<rt v-if="showReading(segment)">{{ segment.reading }}</rt>
+          ]" :key="index" :lang="$l2.code">{{ showReading(segment) && $l2Settings?.phoneticsOnly ? segment.reading : transformText(segment.surface)
+          }}<rt v-if="showReading(segment) && !$l2Settings?.phoneticsOnly">{{ segment.reading }}</rt>
         </ruby>
         <rt v-if="$l2Settings?.showDefinition">{{
           attributes?.definition || "&nbsp;"
