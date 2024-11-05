@@ -139,13 +139,8 @@ export default {
       }
 
       // If there's no saved phrase but there's a saved word, get the first definition
-      else if (this.savedWord) {
-        shortDefinition = this.savedWord?.definitions?.[0];
-      }
-
-      // If there's no saved phrase or word, get the first definition of the first word in the list
-      else {
-        shortDefinition = this.words?.[0]?.definitions?.[0];
+      else if (this.bestWord?.definitions?.[0]) {
+        shortDefinition = this.bestWord?.definitions?.[0];
       }
 
       // If there's no definition, return undefined
@@ -179,7 +174,7 @@ export default {
       if (pos) return pos.replace(/\-.*/, "").replace(/\s/g, "-");
     },
     bestWord() {
-      if (this.savedWord) return this.savedWord;
+      if (this.savedWord && this.savedWord.head.length >= this.text.length) return this.savedWord;
       let firstCandidate = this.token?.candidates?.[0];
       if (firstCandidate) return firstCandidate;
       let firstFuzzyWord = this.words?.[0];
