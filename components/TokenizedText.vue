@@ -1,6 +1,6 @@
 <!-- TokenizedText.vue -->
 <template>
-  <span :class="{ 'use-zoom': true, speaking }" :dir="$l2.direction">
+  <span :class="{ 'use-zoom': useZoom, speaking }" :dir="$l2.direction">
     <template v-if="tokenized">
       <template v-for="(token, index) in tokens"><word-block
           v-if="typeof token !== 'string'"
@@ -56,6 +56,10 @@ export default {
     text: {
       type: String,
       required: true,
+    },
+    useZoom: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

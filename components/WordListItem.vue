@@ -78,6 +78,12 @@
             :neverShowAsList="true"
             :showAsNumberedList="false"
           />
+          <TokenizedRichText
+            v-if="word.saved?.context?.text"
+            :text="word.saved.context.text"
+            :useZoom="false"
+            class="small text-subdued"
+          />
         </span>
       </span>
     </span>

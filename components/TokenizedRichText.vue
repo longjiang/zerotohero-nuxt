@@ -35,6 +35,7 @@
             :context="context"
             :animationDuration="animationDuration"
             :animationSpeed="animationSpeed"
+            :useZoom="useZoom"
             v-on="$listeners"
             @annotated="annotated = true"
             ref="tokenizedText"
@@ -113,6 +114,10 @@ export default {
       type: Number,
       required: false,
       default: 1,
+    },
+    useZoom: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
