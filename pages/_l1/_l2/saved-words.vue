@@ -64,7 +64,7 @@
             </h5>
             <hr class="mt-1" />
             <WordList
-              :words="group.sW.map((s) => s.word)"
+              :words="group.sW.map((s) => Object.assign(s.word, {saved: {context: s.context, date: s.date, forms: s.forms, id: s.id}}))"
               :hideDefinitions="hideDefinitions"
               :hidePhonetics="hidePhonetics"
               :hideWord="hideWord"
