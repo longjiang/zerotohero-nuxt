@@ -119,8 +119,8 @@ export default {
       return `/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${this.word.id}`;
     },
     titleText() {
-      // Generate the title text to be shown on hover, typically the definitions
-      return this.word.saved?.context?.text ? this.word.saved?.context.text : this.word.definitions ? this.word.definitions.join(", ") : "";
+      // Generate the title text to be shown on hover (e.g., for tooltips)
+      return this.word.saved?.context?.text ? this.word.saved?.context.text : "";
     },
     dataLevel() {
       // Determine the data-level attribute based on word's details like level or HSK
