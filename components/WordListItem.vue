@@ -120,7 +120,7 @@ export default {
     },
     titleText() {
       // Generate the title text to be shown on hover, typically the definitions
-      return this.word.definitions ? this.word.definitions.join(", ") : "";
+      return this.word.saved?.context?.text ? this.word.saved?.context.text : this.word.definitions ? this.word.definitions.join(", ") : "";
     },
     dataLevel() {
       // Determine the data-level attribute based on word's details like level or HSK
