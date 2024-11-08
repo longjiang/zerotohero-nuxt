@@ -76,6 +76,7 @@
             :translated="true"
             :singleColumn="true"
             :neverShowAsList="true"
+            :showAsNumberedList="false"
           />
         </span>
       </span>

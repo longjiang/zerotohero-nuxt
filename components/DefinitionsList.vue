@@ -38,16 +38,7 @@
                 : ""
             }}:
           </span>
-          <span v-html="definition.html" />
-          <span
-            v-if="
-              !alwaysShowAsList &&
-              augmentedDefinitions.length < 4 &&
-              index < augmentedDefinitions.length - 1
-            "
-          >
-            ;
-          </span>
+          <span v-html="definition.html" /><template v-if="index < augmentedDefinitions.length - 1">;</template>
         </li>
       </ol>
     </template>
