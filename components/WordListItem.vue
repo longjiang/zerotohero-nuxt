@@ -78,11 +78,10 @@
             :neverShowAsList="true"
             :showAsNumberedList="false"
           />
-          <TokenizedRichText
+          <span
             v-if="word.saved?.context?.text"
-            :text="word.saved.context.text"
-            :useZoom="false"
-            class="small text-subdued"
+            v-html="': ' + highlightMultiple(word.saved.context.text, word.saved.forms, word.level)"
+            class="small"
           />
         </span>
       </span>
@@ -91,6 +90,7 @@
 </template>
 
 <script>
+import { highlightMultiple } from "../lib/utils";
 export default {
   props: {
     word: Object, // Word object containing details like pronunciation, definitions, etc.
@@ -151,6 +151,7 @@ export default {
     },
   },
   methods: {
+    highlightMultiple,
     filterDefinitions() {
       // Filter definitions to remove certain unwanted entries or format them
       if (!this.word.definitions) return [];
