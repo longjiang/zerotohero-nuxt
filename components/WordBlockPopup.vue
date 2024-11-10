@@ -67,7 +67,7 @@
       <ChatGPT
         v-if="showChatGPT"
         :maxTokens="30"
-        :showActions="false"
+        :showRegenerate="false"
         :showPrompt="false"
         class="mt-4"
         :initialMessages="[chatGPTPrompt]"

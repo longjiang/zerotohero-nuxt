@@ -19,7 +19,7 @@
               <div v-html="Marked(line.trim())" />
             </div>
             <div class="text-center mb-2">
-              <span @click="resendMessage(messages[index - 1])" class="btn btn-unstyled text-success px-1" v-if="showActions">
+              <span @click="resendMessage(messages[index - 1])" class="btn btn-unstyled text-success px-1" v-if="showRegenerate">
                 {{ $t("Regenerate") }}
               </span>
               <router-link :to="{
@@ -28,12 +28,11 @@
                   method: 'md',
                   arg: message.text.replace('\n', '\n\n'),
                 },
-              }" class="btn btn-unstyled text-success px-1"  v-if="showActions">
+              }" class="btn btn-unstyled text-success px-1"  v-if="showOpenInReader">
                 {{ $t("Open in Reader") }}
               </router-link>
-              <a :href="`https://chat.openai.com/?q=${encodeURIComponent(messages[index-1].text)}`" target="_blank" class="btn btn-unstyled text-success px-1" v-if="showActions || showFollowUp">
+              <a v-if="showOpenInChatGPT || showFollowUp" :href="`https://chat.openai.com/?q=${encodeURIComponent(messages[index-1].text)}`" target="_blank" class="btn btn-unstyled text-success px-1">
                 {{ $t("Open in ChatGPT") }}
-                <i class="fa fa-external-link-alt ml-1"></i>
               </a>
             </div>
           </div>
@@ -62,8 +61,14 @@ export default {
     showPrompt: {
       default: true, // Whether or not to show the question prompt
     },
-    showActions: {
+    showRegenerate: {
       default: true, // Whether or not to show the action buttons
+    },
+    showOpenInReader: {
+      default: true, // Whether or not to show the open in reader button
+    },
+    showOpenInChatGPT: {
+      default: true, // Whether or not to show the open in ChatGPT button
     },
     showFollowUp: {
       default: true, // Whether or not to show the follow-up button, even if showActions is false
