@@ -345,7 +345,14 @@ export default {
     },
     onTextRemoved() {
       // Navigate to my texts
-      this.$router.replace({ name: "my-text" });
+      this.$router.replace({ name: "l1-l2-my-text" });
+      this.$toast.success(
+      this.$tb("Text deleted"),
+        {
+          position: "top-center",
+          duration: 5000,
+        }
+      );
     },
     urlCopyClick() {
       let text = this.shareURL;
