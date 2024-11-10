@@ -1,97 +1,105 @@
 <template>
-  <li :class="{ 'wordlist-item': true, matched: isMatched }">
-    <span class="col1" v-if="word">
-      <Star
-        v-if="star === true"
-        :word="word"
-        :removeSymbol="removeSymbol"
-        :label="false"
-        style="height: 1rem; margin-right: 0.25rem"
-      ></Star>
-      <Speak
-        v-if="showSpeak"
-        :text="word.kana || word.head"
-        :l2="$l2"
-        class="text-secondary"
-        style="height: 1rem; margin-right: 0.25rem"
-      />
-      <router-link
-        v-if="compareWith"
-        :to="compareUrl"
-        :class="`btn btn-sm btn-no-bg mr-0 text-secondary`"
-        style="line-height: 1rem; margin-right: 0.25rem"
-      >
-        <i class="fas fa-adjust"></i>
-      </router-link>
-    </span>
-    <span v-if="word" class="col2">
-      <router-link
-        :to="wordUrl"
-        :title="titleText"
-        :class="{ 'wordlist-item-word': true, transparent: hideWord }"
-        :data-level="dataLevel"
-        :lang="$l2.code"
-      >
-        <span v-if="$l2.code === 'de' && word.gender">{{ genderArticle }}</span>
-        {{ word.accented || word.head }}
-      </router-link>
-      <span :class="{ transparent: hidePhonetics }">
-        <!-- Check if there's a pronunciation and handle different language specifics -->
-        <span class="wordlist-item-pinyin">
-          <WordPronunciation :word="word" />
-        </span>
-        <!-- Display canonical CJK representation if applicable -->
-        <span
-          v-if="
-            ['ko', 'vi'].includes($l2.code) && word.cjk && word.cjk.canonical
-          "
-          class="wordlist-item-byeonggi"
+  <li v-observe-visibility="{ callback: visibilityChanged, throttle: 300 }" :class="{ 'wordlist-item': true, matched: isMatched }">
+    <template v-if="visible">
+      <span class="col1" v-if="word" >
+        <Star
+          v-if="star === true"
+          :word="word"
+          :removeSymbol="removeSymbol"
+          :label="false"
+          style="height: 1rem; margin-right: 0.25rem"
+        ></Star>
+        <Speak
+          v-if="showSpeak"
+          :text="word.kana || word.head"
+          :l2="$l2"
+          class="text-secondary"
+          style="height: 1rem; margin-right: 0.25rem"
+        />
+        <router-link
+          v-if="compareWith"
+          :to="compareUrl"
+          :class="`btn btn-sm btn-no-bg mr-0 text-secondary`"
+          style="line-height: 1rem; margin-right: 0.25rem"
         >
-          {{ word.cjk.canonical }}
-        </span>
-        <span
-          v-if="word.definitions"
-          :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
+          <i class="fas fa-adjust"></i>
+        </router-link>
+      </span>
+      <span v-if="word" class="col2">
+        <router-link
+          :to="wordUrl"
+          :title="titleText"
+          :class="{ 'wordlist-item-word': true, transparent: hideWord }"
+          :data-level="dataLevel"
+          :lang="$l2.code"
         >
-          <span class="word-type" v-if="word.pos">
-            <!-- Display gender for languages like German, where gendered articles are used -->
-            {{
-              word.gender
-                ? { m: "masculine", f: "feminine", n: "neuter" }[word.gender]
-                : ""
-            }}
-            {{ word.pos }}
-            <!-- Part of speech -->
-            <!-- Display additional grammatical info from the word's heads array if available -->
-            {{
-              word.heads && word.heads[0] && word.heads[0][1]
-                ? word.heads[0][1]
-                : ""
-            }}:
+          <span v-if="$l2.code === 'de' && word.gender">{{ genderArticle }}</span>
+          {{ word.accented || word.head }}
+        </router-link>
+        <span :class="{ transparent: hidePhonetics }">
+          <!-- Check if there's a pronunciation and handle different language specifics -->
+          <span class="wordlist-item-pinyin">
+            <WordPronunciation :word="word" />
           </span>
-          <!-- Component for listing definitions. Assumes DefinitionsList is a separate component -->
-          <DefinitionsList
-            class="d-inline"
-            :definitions="filterDefinitions(word)"
-            :translated="true"
-            :singleColumn="true"
-            :neverShowAsList="true"
-            :showAsNumberedList="false"
-          />
+          <!-- Display canonical CJK representation if applicable -->
           <span
-            v-if="word.saved?.context?.text"
-            v-html="': ' + highlightMultiple(word.saved.context.text, word.saved.forms, word.level)"
-            class="small"
-          />
+            v-if="
+              ['ko', 'vi'].includes($l2.code) && word.cjk && word.cjk.canonical
+            "
+            class="wordlist-item-byeonggi"
+          >
+            {{ word.cjk.canonical }}
+          </span>
+          <span
+            v-if="word.definitions"
+            :class="{ 'wordlist-item-l1': true, transparent: hideDefinitions }"
+          >
+            <span class="word-type" v-if="word.pos">
+              <!-- Display gender for languages like German, where gendered articles are used -->
+              {{
+                word.gender
+                  ? { m: "masculine", f: "feminine", n: "neuter" }[word.gender]
+                  : ""
+              }}
+              {{ word.pos }}
+              <!-- Part of speech -->
+              <!-- Display additional grammatical info from the word's heads array if available -->
+              {{
+                word.heads && word.heads[0] && word.heads[0][1]
+                  ? word.heads[0][1]
+                  : ""
+              }}:
+            </span>
+            <!-- Component for listing definitions. Assumes DefinitionsList is a separate component -->
+            <DefinitionsList
+              class="d-inline"
+              :definitions="filterDefinitions(word)"
+              :translated="true"
+              :singleColumn="true"
+              :neverShowAsList="true"
+              :showAsNumberedList="false"
+            />
+            <span
+              v-if="word.saved?.context?.text"
+              v-html="': ' + highlightMultiple(word.saved.context.text, word.saved.forms, word.level)"
+              class="small"
+            />
+          </span>
         </span>
       </span>
-    </span>
+    </template>
   </li>
 </template>
 
 <script>
 import { highlightMultiple } from "../lib/utils";
 export default {
+  data() {
+    return {
+      visible: false,
+      isHighlighted: false,
+    };
+  },
   props: {
     word: Object, // Word object containing details like pronunciation, definitions, etc.
     index: Number, // Index of the word in the list, used for unique keys
@@ -151,6 +159,9 @@ export default {
     },
   },
   methods: {
+    visibilityChanged(visible) {
+      if (visible) this.visible = true;
+    },
     highlightMultiple,
     filterDefinitions() {
       // Filter definitions to remove certain unwanted entries or format them
