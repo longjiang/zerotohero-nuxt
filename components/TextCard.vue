@@ -11,6 +11,7 @@
       <h5 class="mb-0">{{ text.title }}</h5>
       <!-- Show a little snippet as dimmed small text, just a line or two -->
       <p class="text-muted mb-0 snippet mt-3" v-if="showSnippet && text.text">{{ text.text }}</p>
+      <span v-if="lastOpenedPage" class="small badge bg-secondary"><i class="fa fa-history"></i> {{ $t('Page') }} {{ lastOpenedPage }}</span>
     </div>
     <div>
       <b-button
