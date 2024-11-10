@@ -19,7 +19,7 @@
                   </span>
                 </b-button>
               </div>
-              <div v-for="savedText in savedtexts" :key="savedText.id" class="mb-4">
+              <div v-for="savedText in savedTextSortedByLastOpened" :key="savedText.id" class="mb-4">
                 <TextCard :text="savedText" />
               </div>
             </div>
@@ -100,6 +100,23 @@ export default {
   computed: {
     ...mapState("savedText", ["loadedByL2"]),
     ...mapState("savedText", ["itemsByL2"]),
+    savedTextSortedByLastOpened() {
+      if (!this.fullHistory) return this.savedtexts;
+      // Clone and reverse fullHistory to get the most recently opened items first
+      const fullHistory = [...this.fullHistory].reverse();
+      return [...this.savedtexts].sort((a, b) => {
+        const aIndex = fullHistory.findIndex(
+          (item) => item.path.includes(`/${this.$l1.code}/${this.$l2.code}/reader/shared/${a.id}`)
+        );
+        const bIndex = fullHistory.findIndex(
+          (item) => item.path.includes(`/${this.$l1.code}/${this.$l2.code}/reader/shared/${b.id}`)
+        );
+        // Make sure negative numbers are at the end of the list
+        if (aIndex < 0) return 1;
+        if (bIndex < 0) return -1;
+        return aIndex - bIndex;
+      });
+    },
     $adminMode() {
       if (typeof this.$store.state.settings.adminMode !== "undefined")
         return this.$store.state.settings.adminMode;
