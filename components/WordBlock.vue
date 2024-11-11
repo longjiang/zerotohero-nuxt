@@ -81,6 +81,8 @@ export default {
   },
   asyncComputed: {
     async savedWord() {
+      let savedWord = this.words.find((w) => w.saved);
+      if (savedWord) return savedWord;
       const saved = this.$store.getters["savedWords/has"]({
         l2: this.$l2.code,
         text: this.token?.text,
