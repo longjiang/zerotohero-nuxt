@@ -79,13 +79,19 @@ export default {
       translation: null,
     };
   },
-  computed: {
-    savedWord() {
-      return this.$store.getters["savedWords/has"]({
+  asyncComputed: {
+    async savedWord() {
+      const saved = this.$store.getters["savedWords/has"]({
         l2: this.$l2.code,
         text: this.token?.text,
       });
+      if (saved) {
+        const savedWord = await (await this.$dictionary).get(saved.id, saved.forms[0]);
+        return { ...savedWord, saved };
+      }
     },
+  },
+  computed: {
     /**
      * Calculates the attributes object.
      *
