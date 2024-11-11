@@ -79,17 +79,27 @@ export default {
     };
   },
   asyncComputed: {
-    async savedWord() {
-      let savedWord = this.words.find((w) => w.saved);
-      if (savedWord) return savedWord;
-      const saved = this.$store.getters["savedWords/has"]({
-        l2: this.$l2.code,
-        text: this.token?.text,
-      });
-      if (saved) {
-        const savedWord = await (await this.$dictionary).get(saved.id, saved.forms[0]);
-        return { ...savedWord, saved };
-      }
+    savedWord: {
+      async get() {
+        let savedWord = this.words.find((w) => w.saved);
+        if (savedWord) return savedWord;
+        let saved = false;
+        const forms = [this.token?.text, ...this.words? this.words.map((w) => w.head) : []];
+        while (!saved && forms.length > 0) {
+          const form = forms.shift();
+          if (form) {
+            saved = this.$store.getters["savedWords/has"]({
+              l2: this.$l2.code,
+              text: form,
+            });
+          }
+        }
+        if (saved) {
+          const savedWord = await (await this.$dictionary).get(saved.id, saved.forms[0]);
+          return { ...savedWord, saved };
+        }
+      },
+      watch: ["words"],
     },
     async russianAccentText() {
       if (this.$l2.code === "ru") {
@@ -267,6 +277,9 @@ export default {
     $route() {
       this.closePopup();
     },
+    words() {
+      this.$asyncComputed.savedWord.update();
+    }
   },
   methods: {
     unique,
