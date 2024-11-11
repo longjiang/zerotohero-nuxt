@@ -66,10 +66,12 @@ export default {
       lookupInProgress: false,
       text: this.token.text,
       words: this.token?.candidates || [],
+      savedWord: undefined,
       savedPhrase: undefined,
       checkSaved: true,
       tooltipHover: false,
       lastLookupWasQuick: false,
+      russianAccentText: undefined,
       reveal: false,
       t: 0,
       animate: false,
@@ -78,44 +80,8 @@ export default {
       translation: null,
     };
   },
-  asyncComputed: {
-    savedWord: {
-      async get() {
-        let savedWord = this.words.find((w) => w.saved);
-        if (savedWord) return savedWord;
-        let saved = false;
-        const forms = [this.token?.text, ...this.words? this.words.map((w) => w.head) : []];
-        while (!saved && forms.length > 0) {
-          const form = forms.shift();
-          if (form) {
-            saved = this.$store.getters["savedWords/has"]({
-              l2: this.$l2.code,
-              text: form,
-            });
-          }
-        }
-        if (saved) {
-          const savedWord = await (await this.$dictionary).get(saved.id, saved.forms[0]);
-          return { ...savedWord, saved };
-        }
-      },
-      watch: ["words"],
-    },
-    async russianAccentText() {
-      if (this.$l2.code === "ru") {
-        if (this.savedWord && this.text) {
-          let dictionary = await this.$getDictionary();
-          let accentText = await dictionary.getAccentForm(
-            this.text,
-            this.savedWord.head
-          );
-          console.log(this.text, this.savedWord.head, accentText);
-          return accentText || this.text;
-        } else return this.text
-      }
-    },
-  },
   computed: {
+    ...mapState("savedWords", ["savedWords"]),
     /**
      * Calculates the attributes object.
      *
@@ -208,7 +174,7 @@ export default {
       if (pos) return pos.replace(/\-.*/, "").replace(/\s/g, "-");
     },
     bestWord() {
-      if (this.savedWord?.head?.length >= this.text.length) return this.savedWord;
+      if (this.savedWord && this.savedWord.head.length >= this.text.length) return this.savedWord;
       let firstCandidate = this.token?.candidates?.[0];
       if (firstCandidate) return firstCandidate;
       let firstFuzzyWord = this.words?.[0];
@@ -260,8 +226,12 @@ export default {
     }
   },
   async mounted() {
+    await this.checkSavedWord();
     this.checkSavedPhrase();
     this.unsubscribe = this.$store.subscribe(async (mutation, state) => {
+      if (mutation.type.startsWith("savedWords")) {
+        await this.checkSavedWord();
+      }
       if (mutation.type.startsWith("savedPhrases")) {
         this.checkSavedPhrase();
       }
@@ -277,9 +247,6 @@ export default {
     $route() {
       this.closePopup();
     },
-    words() {
-      this.$asyncComputed.savedWord.update();
-    }
   },
   methods: {
     unique,
@@ -331,7 +298,7 @@ export default {
         text = this.getSimplifiedOrTraditionalText();
       }
       if (this.$l2.code === "ru") {
-        return this.russianAccentText;
+        return this.russianAccentText || this.text
       }
       return text;
     },
@@ -382,6 +349,62 @@ export default {
         };
         if (translation) phraseItem.translations[this.$l1.code] = translation;
         return phraseItem;
+      }
+    },
+    /**
+     * checkSavedWord function:
+     * Checks whether the first word in `this.words` array or `this.tokens` array is saved in the store.
+     * If not found in `this.words` and `this.tokens`, it checks for the word in `this.text`.
+     * If the word is saved, it assigns it to `this.savedWord` and returns it, else it sets `this.savedWord` as undefined.
+     * @return {Promise<void>}
+     */
+    async checkSavedWord() {
+      if (!this.checkSaved) return false;
+      let saved;
+      let firstWord = this.words[0] || this.tokens?.[0];
+      let text = this.text;
+      if (!text) return false;
+      let textLowerCase = text.toLowerCase();
+      if (firstWord && firstWord.search === textLowerCase) {
+        saved = this.$store.getters["savedWords/has"]({
+          id: firstWord.id,
+          l2: this.$l2.code,
+        });
+        if (saved) {
+          saved = Object.assign({ firstWord }, saved);
+        }
+      }
+      if (!saved && text) {
+        saved = this.$store.getters["savedWords/has"]({
+          text: textLowerCase,
+          l2: this.$l2.code,
+        });
+      }
+      if (saved) {
+        await this.setSavedWord(saved.id, saved.forms[0]);
+      } else {
+        this.savedWord = undefined;
+      }
+      if (this.$l2.code === "ru")
+        this.russianAccentText = await this.getRussianAccentText();
+    },
+    /**
+     * setSavedWord function:
+     * Finds the word with the given id in `this.words` array and sets it as `this.savedWord`.
+     * If the word is not found, it retrieves the word from the dictionary and sets it as `this.savedWord`.
+     * @param {string} id - The id of the word to be found.
+     * @param {string} head - The head form of the word to be found.
+     * @return {Promise<void>}
+     */
+    async setSavedWord(id, head) {
+      let savedWord = this.words.find((w) => w.id === id);
+      if (!savedWord) {
+        let dictionary = await this.$getDictionary();
+        savedWord = await dictionary.get(id, head);
+      }
+      if (savedWord) {
+        this.words = uniqueByValue([savedWord, ...this.words], "id");
+        this.savedWord = savedWord;
       }
     },
     checkSavedPhrase() {
@@ -454,6 +477,18 @@ export default {
         SpeechSingleton.instance.speak({ text, l2: this.$l2, rate, volume });
       }
     },
+    async getRussianAccentText() {
+      if (this.$l2.code === "ru") {
+        if (this.savedWord && this.text) {
+          let dictionary = await this.$getDictionary();
+          let accentText = await dictionary.getAccentForm(
+            this.text,
+            this.savedWord.head
+          );
+          return accentText || this.text;
+        } else return this.text
+      }
+    },
     async closePopup() {
       this.$nuxt.$emit("hidePopupDictionary");
     },
@@ -490,6 +525,7 @@ export default {
         : [];
       words = uniqueByValue([...words, ...this.words], "id");
       this.words = words;
+      await this.checkSavedWord();
       this.checkSavedPhrase();
       this.lookupInProgress = false;
       return words // to pass to popup as a promise
