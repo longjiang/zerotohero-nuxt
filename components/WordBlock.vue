@@ -225,14 +225,15 @@ export default {
       return this.$l2Settings?.showDefinition;
     }
   },
-  mounted() {
-    this.checkSavedItems();
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (
-        mutation.type.startsWith("savedWords") ||
-        mutation.type.startsWith("savedPhrases")
-      ) {
-        this.checkSavedItems();
+  async mounted() {
+    await this.checkSavedWord();
+    this.checkSavedPhrase();
+    this.unsubscribe = this.$store.subscribe(async (mutation, state) => {
+      if (mutation.type.startsWith("savedWords")) {
+        await this.checkSavedWord();
+      }
+      if (mutation.type.startsWith("savedPhrases")) {
+        this.checkSavedPhrase();
       }
     });
   },
@@ -384,6 +385,8 @@ export default {
       } else {
         this.savedWord = undefined;
       }
+      if (this.$l2.code === "ru")
+        this.russianAccentText = await this.getRussianAccentText();
     },
     /**
      * setSavedWord function:
@@ -421,12 +424,6 @@ export default {
         event.stopPropagation();
       }
       this.openPopup();
-    },
-    async checkSavedItems() {
-      await this.checkSavedWord();
-      this.checkSavedPhrase();
-      if (this.$l2.code === "ru")
-        this.russianAccentText = await this.getRussianAccentText();
     },
     async openPopup() {
       this.highlighted = true;
@@ -528,7 +525,8 @@ export default {
         : [];
       words = uniqueByValue([...words, ...this.words], "id");
       this.words = words;
-      this.checkSavedItems();
+      await this.checkSavedWord();
+      this.checkSavedPhrase();
       this.lookupInProgress = false;
       return words // to pass to popup as a promise
     },

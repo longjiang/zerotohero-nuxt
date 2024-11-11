@@ -252,9 +252,9 @@
     <div v-if="context?.text">
       <hr class="my-3" />
       <h6>{{ $t("Context Sentence") }}</h6>
-      <TokenizedRichText
+      <!-- <TokenizedRichText
         :text="context.text"
-      />
+      /> -->
     </div>
   </div>
 </template>

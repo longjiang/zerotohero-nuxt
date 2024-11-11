@@ -38,7 +38,6 @@ export const mutations = {
         path,
         date: Date.now()
       }
-      console.log('Adding to history:', payload)
       history.push(payload)
       // trim history to the last 1000 items
       if (history.length > 1000) {
