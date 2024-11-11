@@ -70,7 +70,6 @@ export default {
       checkSaved: true,
       tooltipHover: false,
       lastLookupWasQuick: false,
-      russianAccentText: undefined,
       reveal: false,
       t: 0,
       animate: false,
@@ -90,6 +89,19 @@ export default {
       if (saved) {
         const savedWord = await (await this.$dictionary).get(saved.id, saved.forms[0]);
         return { ...savedWord, saved };
+      }
+    },
+    async russianAccentText() {
+      if (this.$l2.code === "ru") {
+        if (this.savedWord && this.text) {
+          let dictionary = await this.$getDictionary();
+          let accentText = await dictionary.getAccentForm(
+            this.text,
+            this.savedWord.head
+          );
+          console.log(this.text, this.savedWord.head, accentText);
+          return accentText || this.text;
+        } else return this.text
       }
     },
   },
@@ -306,7 +318,7 @@ export default {
         text = this.getSimplifiedOrTraditionalText();
       }
       if (this.$l2.code === "ru") {
-        return this.russianAccentText
+        return this.russianAccentText;
       }
       return text;
     },
@@ -427,18 +439,6 @@ export default {
         if (this.$l2.code === "ja" && this.token?.pronunciation)
           text = this.token.pronunciation;
         SpeechSingleton.instance.speak({ text, l2: this.$l2, rate, volume });
-      }
-    },
-    async getRussianAccentText() {
-      if (this.$l2.code === "ru") {
-        if (this.savedWord && this.text) {
-          let dictionary = await this.$getDictionary();
-          let accentText = await dictionary.getAccentForm(
-            this.text,
-            this.savedWord.head
-          );
-          if (accentText) return accentText;
-        } else return this.text
       }
     },
     async closePopup() {
