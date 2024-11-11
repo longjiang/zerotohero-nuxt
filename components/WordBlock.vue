@@ -353,32 +353,21 @@ export default {
     },
     /**
      * checkSavedWord function:
-     * Checks whether the first word in `this.words` array or `this.tokens` array is saved in the store.
-     * If not found in `this.words` and `this.tokens`, it checks for the word in `this.text`.
-     * If the word is saved, it assigns it to `this.savedWord` and returns it, else it sets `this.savedWord` as undefined.
+     * Checks if any of the words in `this.words` array is saved using its id.
+     * If any of the words is saved, it assigns it to `this.savedWord` and returns it, else it sets `this.savedWord` as undefined.
      * @return {Promise<void>}
      */
     async checkSavedWord() {
       if (!this.checkSaved) return false;
+      let ids = this.words.map((w) => w.id);
       let saved;
-      let firstWord = this.words[0] || this.tokens?.[0];
-      let text = this.text;
-      if (!text) return false;
-      let textLowerCase = text.toLowerCase();
-      if (firstWord && firstWord.search === textLowerCase) {
+      while (ids.length > 0) {
+        let id = ids.shift();
         saved = this.$store.getters["savedWords/has"]({
-          id: firstWord.id,
+          id,
           l2: this.$l2.code,
         });
-        if (saved) {
-          saved = Object.assign({ firstWord }, saved);
-        }
-      }
-      if (!saved && text) {
-        saved = this.$store.getters["savedWords/has"]({
-          text: textLowerCase,
-          l2: this.$l2.code,
-        });
+        if (saved) break;
       }
       if (saved) {
         await this.setSavedWord(saved.id, saved.forms[0]);
