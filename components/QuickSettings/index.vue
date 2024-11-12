@@ -150,6 +150,7 @@
             <b-dropdown-item
               v-for="(voice, index) in voices"
               :key="index"
+              @click="selectVoice(voice)"
             >
               {{ voice.name }} <template v-if="!voice.localService">(Remote)</template>
             </b-dropdown-item>
@@ -195,6 +196,12 @@ import { SpeechSingleton } from "../../lib/utils";
 
 export default {
   mixins: [settingsMixin],
+  methods: {
+    selectVoice(voice) {
+      this.localL2Settings.voice = voice.name;
+      this.updateL2Settings();
+    },
+  },
   computed: {
     voices() {
       return SpeechSingleton.instance.getVoices(this.$l2.code);

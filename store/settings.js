@@ -45,6 +45,7 @@ export const defaultL2Settings = {
   disableAnnotation: false,
   zoomLevel: 0,
   corpname: null,
+  voice: null,
 };
 
 // These settings are not saved to storage
