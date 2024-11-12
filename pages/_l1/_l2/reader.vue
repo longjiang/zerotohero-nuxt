@@ -414,7 +414,7 @@ export default {
     updateStoreText(text) {
       this.$store.dispatch('savedText/update', {
         l2: this.$l2,
-        payload: { id: this.arg, text }
+        payload: { id: Number(this.arg), text }
       });
     },
     readerTranslationChanged(text) {
