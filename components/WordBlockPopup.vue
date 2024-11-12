@@ -243,7 +243,7 @@
           {{ $t('Studied on {date}:', {date: $d(new Date(word.saved.date), 'short', $l1.code)})}}
         </h6>
         <TokenizedRichText
-          v-if="word.saved.context"
+          v-if="word.saved.context?.text"
           :text="word.saved.context.text"
         />
       </div>
