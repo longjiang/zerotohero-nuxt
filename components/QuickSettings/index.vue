@@ -137,6 +137,25 @@
         >
           <i class="fa fa-wrench"></i>
         </Toggle>
+        <!-- make a select drop down menu -->
+        
+        <div>
+          <i class="fa-solid fa-lips mx-1"></i>
+          <b-dropdown
+            size="sm"
+            :items="words"
+            :text="$t('Choose Speech Voice')"
+            variant="light"
+          >
+            <b-dropdown-item
+              v-for="(voice, index) in voices"
+              :key="index"
+            >
+              {{ voice.name }} <template v-if="!voice.localService">(Remote)</template>
+            </b-dropdown-item>
+          </b-dropdown>
+        </div>
+
         <hr />
         <div :class="`annotation-setting-toggle`" v-if="$l1 && $l2">
           <router-link :to="{ name: 'l1-l2-settings' }" class="text-success">
@@ -172,10 +191,14 @@
 
 <script>
 import settingsMixin from "../../lib/mixins/settings-mixin";
+import { SpeechSingleton } from "../../lib/utils";
 
 export default {
   mixins: [settingsMixin],
   computed: {
+    voices() {
+      return SpeechSingleton.instance.getVoices(this.$l2.code);
+    },
     isDarkMode: {
       get() {
         return this.localSettings.skin === "dark";
