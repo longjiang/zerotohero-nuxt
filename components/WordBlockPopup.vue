@@ -238,6 +238,16 @@
         />
       </div>
       <div class="mt-2 mb-2" />
+      <div v-if="word.saved">
+        <h6>
+          {{ $t('Studied on {date}:', {date: $d(new Date(word.saved.date), 'short', $l1.code)})}}
+        </h6>
+        <TokenizedRichText
+          v-if="word.saved.context"
+          :text="word.saved.context.text"
+        />
+      </div>
+      <hr class="my-3" />
     </div>
     <div v-if="loading === true">
       <Loader :sticky="true" message="Looking up the dictionary..." />
