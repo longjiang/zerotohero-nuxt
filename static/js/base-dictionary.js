@@ -66,7 +66,13 @@ class BaseDictionary {
 
   async tokenizeWithCache(text) {
     const tokens = await this.tokenizer.tokenizeWithCache(text);
-    if (tokens) tokens.forEach((token) => this.addCandidatesToToken(token));
+    if (tokens) {
+      await Promise.all(
+        tokens.map(async (token) => {
+          await this.addCandidatesToToken(token);
+        })
+      );
+    }
     return tokens;
   }
 
@@ -94,7 +100,7 @@ class BaseDictionary {
       }
     }
     token.candidates = uniqueByValues(candidates, ["id"]);
-    return candidates;
+    return token.candidates;
   }
 
   dictionaryFile({ l1Code = undefined, l2Code = undefined } = {}) {
