@@ -110,19 +110,39 @@
           </span>
         </Toggle>
         <Toggle
-          v-model="localL2Settings.autoPronounce"
-          @change="updateL2Settings"
-          label="Auto Pronounce"
-        >
-          <i class="fa fa-volume-up"></i>
-        </Toggle>
-        <Toggle
           v-model="localL2Settings.quizMode"
           @change="updateL2Settings"
           label="Saved Words as Blanks"
         >
           <i class="fa-solid fa-pen-line"></i>
         </Toggle>
+        <Toggle
+          v-model="localL2Settings.autoPronounce"
+          @change="updateL2Settings"
+          label="Auto Pronounce"
+        >
+          <i class="fa fa-volume-up"></i>
+        </Toggle>
+        <div class="d-flex" style="justify-content: space-between; align-items: center">
+          <i class="fa-solid fa-lips mx-1"></i>
+          <div class="d-flex ml-2" style="flex: 1; justify-content: space-between; align-items: center">
+            <b-dropdown
+              size="sm"
+              :items="words"
+              :text="localL2Settings.voice || $t('Choose Voice')"
+              variant="light"
+            >
+              <b-dropdown-item
+                v-for="(voice, index) in voices"
+                :key="index"
+                @click="selectVoice(voice)"
+              >
+                {{ voice.name }} <template v-if="!voice.localService">({{ $t('Remote') }})</template>
+              </b-dropdown-item>
+            </b-dropdown>
+            <b-button size="small" variant="success" @click="playSample"><i class="fa-solid fa-play"></i> {{ $t('Sample') }}</b-button>
+          </div>
+        </div>
         <hr />
       </div>
       <div class="quick-settings-general">
@@ -137,25 +157,6 @@
         >
           <i class="fa fa-wrench"></i>
         </Toggle>
-        <!-- make a select drop down menu -->
-        
-        <div>
-          <i class="fa-solid fa-lips mx-1"></i>
-          <b-dropdown
-            size="sm"
-            :items="words"
-            :text="$t('Choose Speech Voice')"
-            variant="light"
-          >
-            <b-dropdown-item
-              v-for="(voice, index) in voices"
-              :key="index"
-              @click="selectVoice(voice)"
-            >
-              {{ voice.name }} <template v-if="!voice.localService">(Remote)</template>
-            </b-dropdown-item>
-          </b-dropdown>
-        </div>
 
         <hr />
         <div :class="`annotation-setting-toggle`" v-if="$l1 && $l2">
@@ -200,6 +201,13 @@ export default {
     selectVoice(voice) {
       this.localL2Settings.voice = voice.name;
       this.updateL2Settings();
+      SpeechSingleton.instance.setVoice(voice);
+    },
+    playSample() {
+      SpeechSingleton.instance.speak({
+        text: this.$l2.vernacularName,
+        l2: this.$l2,
+      });
     },
   },
   computed: {
