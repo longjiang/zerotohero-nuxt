@@ -78,11 +78,11 @@
               :singleColumn="true"
               :neverShowAsList="true"
               :showAsNumberedList="false"
-            />
-            <span
+            /><template v-if="word.saved?.context?.text">: </template>
+            <TokenizedText
               v-if="word.saved?.context?.text"
-              v-html="': ' + highlightMultiple(word.saved.context.text, word.saved.forms, word.level)"
-              class="small"
+              :text="word.saved.context.text"
+              :useZoom="false"
             />
           </span>
         </span>
