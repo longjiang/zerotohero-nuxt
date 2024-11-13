@@ -1,6 +1,6 @@
 <template>
   <span @click="wordBlockClick" :class="wordBlockClasses" :style="{ 'animation-duration': animationDuration + 'ms' }"
-    @animationend="resetAnimation" :data-hover-level="attributes.level">
+    @animationend="resetAnimation" data-hover-level="outside">
     <div v-if="showFillInTheBlank" class="word-block-quiz word-block-segment">
       <span class="transparent">{{ text }}</span>
     </div>
@@ -13,7 +13,7 @@
               surface: text,
               reading: attributes && attributes.phonetics,
             },
-          ]" :key="index" :lang="$l2.code">{{ showReading(segment) && $l2Settings?.phoneticsOnly ? segment.reading + ($l2.continua && $l2.code !== "ja" ? "&nbsp;" : "") : transformText(segment.surface)
+          ]" :key="index" :lang="$l2.code" :class="{highlight: attributes?.isSaved}">{{ showReading(segment) && $l2Settings?.phoneticsOnly ? segment.reading + ($l2.continua && $l2.code !== "ja" ? "&nbsp;" : "") : transformText(segment.surface)
           }}<rt v-if="showReading(segment) && !$l2Settings?.phoneticsOnly">{{ segment.reading }}</rt>
         </ruby>
         <rt v-if="$l2Settings?.showDefinition">{{
@@ -76,7 +76,7 @@ export default {
       t: 0,
       animate: false,
       animationDuration: undefined,
-      highlighted: false,
+      pressed: false,
       translation: null,
     };
   },
@@ -210,10 +210,10 @@ export default {
         "word-block": true,
         "with-quick-gloss":
           this.attributes?.isSaved && this.attributes?.definition,
-        saved: this.attributes?.isSaved,
+        // saved: this.attributes?.isSaved,
         obscure: this.attributes?.obscure,
         animate: this.animate,
-        highlighted: this.highlighted
+        pressed: this.pressed
       };
       if (this.pos) classes[`pos-${this.pos}`] = true;
       return classes;
@@ -415,7 +415,7 @@ export default {
       this.openPopup();
     },
     async openPopup() {
-      this.highlighted = true;
+      this.pressed = true;
       if (this.$l2Settings.autoPronounce) {
         if (!this.quizMode || this.reveal) {
           this.playWordAudio();
@@ -443,7 +443,7 @@ export default {
       });
       this.$nuxt.$on("popupClosed", async () => {
         await timeout(300);
-        this.highlighted = false;
+        this.pressed = false;
       });
     },
     playWordAudio() {
@@ -788,7 +788,7 @@ export default {
   transition: background-color 0.2s ease-in-out;
 }
 
-.word-block.highlighted {
+.word-block.pressed {
   background-color: #88888888;
   color: white;
 }
