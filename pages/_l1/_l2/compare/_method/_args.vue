@@ -72,7 +72,6 @@
           <Widget
             v-if="a && b"
             :key="`${a.id}-subs`"
-            skin="dark"
             :withPadding="false"
             id="compare-search-subs"
           >
@@ -82,7 +81,6 @@
             </template>
             <template #body>
               <LazyCompareSearchSubs
-                skin="dark"
                 v-if="renderSearchSubs"
                 :key="`compare-search-subs-${a.id}-${b.id}`"
                 :levelA="getLevel(a)"

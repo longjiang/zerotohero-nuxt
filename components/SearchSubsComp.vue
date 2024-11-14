@@ -29,7 +29,6 @@
         <SimpleButton
           v-if="hits.length > 0"
           iconClass="fa-solid fa-list mr-1"
-          skin="dark"
           :title="$t('List All Clips')"
           @click="showPlaylistModal"
           :text="

@@ -166,7 +166,6 @@
                   :long="long"
                   :infinite="true"
                   :showProgress="false"
-                  skin="dark"
                   ref="youtubeSearchResults"
                   :cloakVideosWithoutSubs="!$adminMode"
                 />

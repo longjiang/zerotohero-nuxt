@@ -170,7 +170,6 @@
               :term="keyword"
               :infinite="true"
               :showProgress="false"
-              skin="dark"
               ref="youtubeSearchResults"
               :cloakVideosWithoutSubs="!$adminMode"
             />

@@ -27,7 +27,6 @@
         <Widget
           v-if="term && compareTerm"
           :key="`${term}-subs`"
-          skin="dark"
           :withPadding="false"
           id="compare-search-subs"
         >
@@ -38,7 +37,6 @@
           <template #body>
             <LazyCompareSearchSubs
               v-if="renderSearchSubs"
-              skin="dark"
               ref="searchSubs"
               level="outside"
               :key="`${term}-${compareTerm}-compare-search-subs`"

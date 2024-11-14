@@ -64,7 +64,6 @@
         >
           <div class="col-md-6">
             <LazyYouTubeVideoList
-              skin="dark"
               :checkSubs="false"
               :lesson="true"
               :updateVideos="updateLessonVideos"
@@ -83,7 +82,6 @@
               :words="video.matches"
               :key="`matched-words-${videoIndex}-${matchedWordsKey}`"
               ref="wordList"
-              skin="dark"
             ></WordList>
             <button
               v-if="video.matches && video.matches.length > 0"
@@ -111,7 +109,6 @@
               <WordList
                 :words="unmatchedWords"
                 :key="`unmatched-words-${matchedWordsKey}`"
-                skin="dark"
               ></WordList>
             </div>
             <div class="col-sm-12 text-center">
