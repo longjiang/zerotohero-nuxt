@@ -333,14 +333,15 @@ export default {
       ) {
         let surfaceText, pronunciation;
         // If the word is saved, use the saved pronunciation
-        if (this.bestWord && this.bestWord.head === this.text) {
+        if (this.savedWord && this.savedWord.head === this.text) {
           surfaceText = this.text;
-          pronunciation = this.bestWord.kana;
+          pronunciation = this.savedWord.kana;
         } else {
           surfaceText = this.token.text
+          pronunciation = this.token.pronunciation;
           pronunciation = convertVowelEtoIAndOtoU(wanakana.toHiragana(pronunciation));
         }
-        const pattern = this.bestWord?.accentPatterns?.[0];
+        const pattern = (this.savedWord || this.bestWord)?.accentPatterns?.[0];
         if (pattern) {
           pronunciation = applyAccentPattern(splitIntoMoras(pronunciation), pattern)
           pronunciation = pronunciation.replace(/↑/g, "").replace(/↓/g, "⌝")
