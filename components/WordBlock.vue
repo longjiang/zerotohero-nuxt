@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { SpeechSingleton, unique, uniqueByValue, hasKanji, timeout, convertVowelEtoIAndOtoU, addPitchAccent, convertPitchToUnderline } from "../lib/utils";
+import { SpeechSingleton, unique, uniqueByValue, hasKanji, timeout, convertVowelEtoIAndOtoU, splitIntoMoras, applyAccentPattern, addPitchAccent, convertPitchToUnderline } from "../lib/utils";
 import { mapState } from "vuex";
 import { tify, sify } from "chinese-conv";
 import { transliterate as tr } from "transliteration";
@@ -336,8 +336,13 @@ export default {
           return mapKana(this.text, this.savedWord.kana);
         } else {
           const pronunciation = this.token.pronunciation;
-          const transformedPronunciation = convertVowelEtoIAndOtoU(wanakana.toHiragana(pronunciation))
-          const surfaceText = this.token.text
+          let transformedPronunciation = convertVowelEtoIAndOtoU(wanakana.toHiragana(pronunciation))
+          let pattern = this.bestWord?.accentPatterns?.[0]
+          if (pattern) {
+            transformedPronunciation = applyAccentPattern(splitIntoMoras(transformedPronunciation), pattern)
+            transformedPronunciation = transformedPronunciation.replace(/↑/g, "").replace(/↓/g, "⌝")
+          }
+          let surfaceText = this.token.text
           return mapKana(surfaceText, transformedPronunciation);
         }
       }
