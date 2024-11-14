@@ -344,7 +344,7 @@ export default {
         const pattern = (this.savedWord || this.bestWord)?.accentPatterns?.[0];
         if (pattern) {
           pronunciation = applyAccentPattern(splitIntoMoras(pronunciation), pattern)
-          pronunciation = pronunciation.replace(/↑/g, "").replace(/↓/g, "⌝")
+          pronunciation = pronunciation.replace(/↑/g, "").replace(/↓/g, "ꜜ") // Alternatively ⌝
         }
         return mapKana(surfaceText, pronunciation);
 

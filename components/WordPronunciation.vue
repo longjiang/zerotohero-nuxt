@@ -5,7 +5,7 @@
 <script>
 import { transliterate as tr} from "transliteration";
 import { convertPinyinToIPA } from "@/lib/utils";
-import { addPitchAccent, convertPitchToUnderline } from "@/lib/utils";
+import { addPitchAccent, convertPitchToUnderline, STYLIZED_NUMBERS } from "@/lib/utils";
 
 export default {
   props: {
@@ -35,7 +35,7 @@ export default {
 
       if (this.$l2.code === "ja" && this.word.accentPatterns?.length) {
         const accentedPronunciations = addPitchAccent(pronunciation, this.word.accentPatterns);
-        const pronunciations = accentedPronunciations.map(p => convertPitchToUnderline(p))
+        const pronunciations = accentedPronunciations.map(p => p.replace(/↑/g, "").replace(/↓/g, "ꜜ")) // Alternatively ⌝
         // Make unique
         pronunciation = [...new Set(pronunciations)].join(', ');
       }
@@ -50,7 +50,7 @@ export default {
           " [" + convertPinyinToIPA(this.word.pronunciation) + "]";
       }
       if (this.$l2.code === "ja" && this.word.accentPatterns?.length) {
-        formattedPronunciation += ' (' + this.word.accentPatterns.join(', ') + ')';
+        formattedPronunciation += this.word.accentPatterns.map(p => STYLIZED_NUMBERS[0][p]).join(", ");
       }
       return formattedPronunciation;
     },
