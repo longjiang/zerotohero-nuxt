@@ -148,7 +148,11 @@ class EdictDictionary extends BaseDictionary  {
       if (!words) return
       for (let word of words) {
         if (!row.kana || word.kana === row.kana) {
-          word.accentPatterns = row.accents.split(',').map(a => parseInt(a))
+          word.accentPatterns = row.accents.split(',').map(a => {
+            // Remove any text in parentheses
+            a = a.replace(/\(.*?\)/gi, '')
+            return parseInt(a)
+          })
         }
       }
     })
