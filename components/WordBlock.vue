@@ -331,20 +331,23 @@ export default {
         typeof mapKana !== "undefined" &&
         typeof wanakana !== "undefined"
       ) {
+        let surfaceText, pronunciation;
         // If the word is saved, use the saved pronunciation
-        if (this.savedWord && this.savedWord.head === this.text) {
-          return mapKana(this.text, this.savedWord.kana);
+        if (this.bestWord && this.bestWord.head === this.text) {
+          surfaceText = this.text;
+          pronunciation = this.bestWord.kana;
         } else {
-          const pronunciation = this.token.pronunciation;
-          let transformedPronunciation = convertVowelEtoIAndOtoU(wanakana.toHiragana(pronunciation))
-          let pattern = this.bestWord?.accentPatterns?.[0]
-          if (pattern) {
-            transformedPronunciation = applyAccentPattern(splitIntoMoras(transformedPronunciation), pattern)
-            transformedPronunciation = transformedPronunciation.replace(/↑/g, "").replace(/↓/g, "⌝")
-          }
-          let surfaceText = this.token.text
-          return mapKana(surfaceText, transformedPronunciation);
+          surfaceText = this.token.text
+          pronunciation = convertVowelEtoIAndOtoU(wanakana.toHiragana(pronunciation));
         }
+        const pattern = this.bestWord?.accentPatterns?.[0];
+        if (pattern) {
+          pronunciation = applyAccentPattern(splitIntoMoras(pronunciation), pattern)
+          pronunciation = pronunciation.replace(/↑/g, "").replace(/↓/g, "⌝")
+        }
+        return mapKana(surfaceText, pronunciation);
+
+        
       }
     },
     phraseItem(phrase, translation = undefined) {
