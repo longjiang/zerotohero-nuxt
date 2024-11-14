@@ -18,7 +18,7 @@
 <script>
 import smoothscroll from "smoothscroll-polyfill";
 import MyLayout from "@/layouts/MyLayout.vue";
-import { wide, tall, landscape, timeout } from "../lib/utils";
+import { wide, tall, landscape, timeout, SpeechSingleton } from "../lib/utils";
 import { mapState } from "vuex";
 import { DelayHydration } from "nuxt-delay-hydration/dist/components";
 
@@ -287,6 +287,12 @@ export default {
                 adminMode: this.$adminMode,
               });
             }
+          }
+        }
+        if (mutation.type === "settings/LOAD_JSON_FROM_LOCAL") {
+          if (this.$l2 && this.$l2Settings?.voice) {
+            console.log("Setting voice to", this.$l2Settings.voice);
+            SpeechSingleton.instance.setVoice(this.$l2Settings.voice);
           }
         }
       });
