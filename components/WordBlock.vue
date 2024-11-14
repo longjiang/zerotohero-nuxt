@@ -336,7 +336,9 @@ export default {
           return mapKana(this.text, this.savedWord.kana);
         } else {
           const pronunciation = this.token.pronunciation;
-          return mapKana(this.token.text, convertVowelEtoIAndOtoU(wanakana.toHiragana(pronunciation)));
+          const transformedPronunciation = convertVowelEtoIAndOtoU(wanakana.toHiragana(pronunciation))
+          const surfaceText = this.token.text
+          return mapKana(surfaceText, transformedPronunciation);
         }
       }
     },
