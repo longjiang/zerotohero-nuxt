@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { SpeechSingleton, unique, uniqueByValue, hasKanji, timeout, convertVowelEtoIAndOtoU } from "../lib/utils";
+import { SpeechSingleton, unique, uniqueByValue, hasKanji, timeout, convertVowelEtoIAndOtoU, addPitchAccent, convertPitchToUnderline } from "../lib/utils";
 import { mapState } from "vuex";
 import { tify, sify } from "chinese-conv";
 import { transliterate as tr } from "transliteration";
