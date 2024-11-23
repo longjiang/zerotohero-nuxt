@@ -138,6 +138,19 @@
         @videoUnavailable="onVideoUnavailable"
       />
     </template>
+    <div v-if="!pro">
+      <YouNeedPro
+        v-if="hitIndex > NON_PRO_MAX_SUBS_SEARCH_HITS - 1"
+        :showLogo="false"
+        :showScreen="false"
+        class="pb-5"
+        :message="
+          $t('See all {num} search results with a Pro account', {
+            num: hits.length,
+          })
+        "
+      />
+    </div>
     <!-- Open Full Video -->
     <div class="text-center my-4">
       <router-link
@@ -157,16 +170,6 @@
       >
         {{ $t("View Full Video") }} <i class="fa-solid fa-chevron-right ml-1"></i>
       </router-link>
-    </div>
-    <div v-if="!pro">
-      <YouNeedPro
-        v-if="hitIndex > NON_PRO_MAX_SUBS_SEARCH_HITS - 1"
-        :message="
-          $t('See all {num} search results with a Pro account', {
-            num: hits.length,
-          })
-        "
-      />
     </div>
     <PlaylistModal
       ref="playlist-modal"

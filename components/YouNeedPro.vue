@@ -1,7 +1,7 @@
 <template>
-  <div :class="`screen skin-${$skin} pt-5 pb-5`">
+  <div :class="`${showScreen ? 'screen' : ''} skin-${$skin}`">
     <div class="text-center">
-      <Logo :forcePro="true" :skin="$skin" to="/go-pro" />
+      <Logo v-if="showLogo" :forcePro="true" :skin="$skin" to="/go-pro" />
       <div class="mt-3" />
       <div>
         <p class="mb-1 strong" style="font-size: 1.2em">
@@ -27,6 +27,14 @@ import { SALE } from "@/lib/utils";
 
 export default {
   props: {
+    showScreen: {
+      type: Boolean,
+      default: true,
+    },
+    showLogo: {
+      type: Boolean,
+      default: true,
+    },
     message: {
       type: String,
     },

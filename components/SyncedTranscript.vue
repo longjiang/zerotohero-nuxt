@@ -93,7 +93,11 @@
           <template v-if="!pro">
             <YouNeedPro
               v-if="showYouNeedPro"
-              class="transcript-you-need-pro rounded"
+              :showLogo="!single"
+              :class="{
+                'transcript-you-need-pro rounded': true,
+                'pb-3 px-3': true,
+              }"
             />
           </template>
         </client-only>
@@ -860,7 +864,7 @@ export default {
   position: relative;
 }
 
-.transcript-you-need-pro {
+.synced-transcript-multi-line .transcript-you-need-pro {
   position: absolute;
   bottom: 0;
   width: 100%;
