@@ -548,6 +548,10 @@ export default {
     ruby-align: center;
     ruby-position: under;
 
+    &:hover {
+      background-color: #88888822;
+    }
+
     > rt {
       font-size: 50%;
       opacity: 0.5;
