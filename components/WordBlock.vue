@@ -1,6 +1,6 @@
 <template>
   <span @click="wordBlockClick" :class="wordBlockClasses" :style="{ 'animation-duration': animationDuration + 'ms' }"
-    @animationend="resetAnimation">
+    @animationend="resetAnimation" :data-highlight-level="(savedWord || bestWord) ? (savedWord || bestWord).level : 'outside'">
     <div v-if="showFillInTheBlank" class="word-block-quiz word-block-segment">
       <span class="transparent">{{ text }}</span>
     </div>

@@ -691,6 +691,32 @@ h6,
   background-color: #4bff742b;
 }
 
+[data-highlight-level="1"] .highlight {
+  background-color: rgba(red($color-hsk-1), green($color-hsk-1), blue($color-hsk-1), 0.17);
+}
+
+
+[data-highlight-level="2"] .highlight {
+  background-color: rgba(red($color-hsk-2), green($color-hsk-2), blue($color-hsk-2), 0.17);
+}
+
+
+[data-highlight-level="3"] .highlight {
+  background-color: rgba(red($color-hsk-3), green($color-hsk-3), blue($color-hsk-3), 0.17);
+}
+
+[data-highlight-level="4"] .highlight {
+  background-color: rgba(red($color-hsk-4), green($color-hsk-4), blue($color-hsk-4), 0.17);
+}
+
+[data-highlight-level="5"] .highlight {
+  background-color: rgba(red($color-hsk-5), green($color-hsk-5), blue($color-hsk-5), 0.17);
+}
+
+[data-highlight-level="6"] .highlight {
+  background-color: rgba(red($color-hsk-6), green($color-hsk-6), blue($color-hsk-6), 0.17);
+}
+
 ul.collapsed li:nth-child(n + 5) {
   display: none;
 }
