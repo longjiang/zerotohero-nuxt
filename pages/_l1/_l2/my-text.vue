@@ -6,9 +6,9 @@
       <div class="row">
         <div class="col-sm-12">
           <div v-if="loaded">
-            <div v-if="savedtexts.length > 0">
+            <div>
               <div class="d-flex justify-content-between align-items-center">
-                <h5 class="my-4">{{ $t('My Texts') }}</h5>
+                <h5 class="mt-4">{{ $t('My Texts') }}</h5>
                 <b-button v-if="$auth.loggedIn" class="new-button" variant="success" @click="newText" :disabled="creating">
                   <span v-if="!creating">
                     <i class="fas fa-edit mr-1"></i>
@@ -19,11 +19,14 @@
                   </span>
                 </b-button>
               </div>
-              <div v-for="savedText in savedTextSortedByLastOpened" :key="savedText.id" class="mb-4">
-                <TextCard :text="savedText" />
-              </div>
+              <hr class="mt-2 mb-4" />
+              <template v-if="savedtexts.length > 0">
+                <div v-for="savedText in savedTextSortedByLastOpened" :key="savedText.id" class="mb-4">
+                  <TextCard :text="savedText" />
+                </div>
+              </template>
             </div>
-            <div v-else class="my-text-message mt-5">
+            <div class="my-text-message mt-5">
               <div v-if="!$auth.loggedIn" class="text-center alert-success p-3 pb-4 rounded mt-4 w-100">
                 <p>{{ $t("To create new texts, please login.") }}</p>
                 <router-link :to="{ name: 'login' }" class="btn btn-success">
@@ -31,7 +34,7 @@
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
               </div>
-              <div v-else>
+              <div>
                 <p>
                   <i18n path="This tool will annotate {l2} text with {transliteration} and a popup dictionary."
                     class="text-center mb-4">
