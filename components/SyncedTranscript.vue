@@ -114,9 +114,9 @@ import {
   documentOffsetTop,
   NON_PRO_MAX_LINES,
 } from "../lib/utils";
-import Vue from "vue";
 
 const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
+const VISIBLE_RANGE = 30; // lines
 
 export default {
   props: {
@@ -215,8 +215,7 @@ export default {
       neverPlayed: true,
       matchedParallelLines: undefined,
       visibleMin: 0,
-      visibleMax: this.startLineIndex ? Number(this.startLineIndex) + 30 : 30,
-      visibleRange: 30,
+      visibleMax: this.startLineIndex ? Number(this.startLineIndex) + VISIBLE_RANGE : VISIBLE_RANGE,
       autoPausedLineIndex: undefined,
       NON_PRO_MAX_LINES,
       preventCurrentTimeUpdate: false,
@@ -321,14 +320,14 @@ export default {
       if (!this.single) {
         let visibleMax = Math.max(
           this.visibleMax,
-          this.currentLineIndex + this.visibleRange
+          this.currentLineIndex + VISIBLE_RANGE
         );
-        if (visibleMax > this.visibleMax + this.visibleRange / 2) {
+        if (visibleMax > this.visibleMax + VISIBLE_RANGE / 2) {
           this.visibleMax = visibleMax;
         }
         // Do this only every this.visibileRange * 2 lines (e.g. 30 * 2 = 60 lines) so smooth scrolling is not interrupted
-        if (this.currentLineIndex % (this.visibleRange * 2) === 0 || this.currentLineIndex < this.visibleMin + this.visibleRange)
-          this.visibleMin = Math.max(0, this.currentLineIndex - this.visibleRange);
+        if (this.currentLineIndex % (VISIBLE_RANGE * 2) === 0 || this.currentLineIndex < this.visibleMin + VISIBLE_RANGE)
+          this.visibleMin = Math.max(0, this.currentLineIndex - VISIBLE_RANGE);
 
         let shouldScroll = !this.paused
         if (this.showSubsEditing) {
@@ -454,7 +453,7 @@ export default {
     },
     visibilityChanged(isVisible) {
       if (isVisible) {
-        this.visibleMax = this.visibleMax + this.visibleRange;
+        this.visibleMax = this.visibleMax + VISIBLE_RANGE;
       }
     },
     trasnlationLineBlur(e) {
