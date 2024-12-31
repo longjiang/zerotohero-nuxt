@@ -116,7 +116,7 @@ import {
 } from "../lib/utils";
 
 const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
-const VISIBLE_RANGE = 30; // lines
+const VISIBLE_RANGE = 5; // lines
 
 export default {
   props: {
@@ -316,30 +316,50 @@ export default {
       this.executeTimeBasedMethods();
       this.previousTime = this.currentTime;
     },
-    async currentLineIndex(newValue, oldValue) {
-      if (!this.single) {
-        let visibleMax = Math.max(
-          this.visibleMax,
-          this.currentLineIndex + VISIBLE_RANGE
-        );
-        if (visibleMax > this.visibleMax + VISIBLE_RANGE / 2) {
-          this.visibleMax = visibleMax;
-        }
-        // Do this only every this.visibileRange * 2 lines (e.g. 30 * 2 = 60 lines) so smooth scrolling is not interrupted
-        if (this.currentLineIndex % (VISIBLE_RANGE * 2) === 0 || this.currentLineIndex < this.visibleMin + VISIBLE_RANGE)
-          this.visibleMin = Math.max(0, this.currentLineIndex - VISIBLE_RANGE);
+    currentLineIndex(newValue, oldValue) {
+      // すでに画面内にあるならスクロールせず何もしない
+      if (this.isLineVisible(newValue)) {
+        return;
+      }
 
-        let shouldScroll = !this.paused
-        if (this.showSubsEditing) {
-          if (this.currentLineVisible && Math.abs(newValue - oldValue) < 5)
-            shouldScroll = false;
-        }
-        if (shouldScroll) {
-          this.scrollTo(this.currentLineIndex);
-        }
+      // 可視範囲を少しずつ拡張する (例: currentLineIndex の数行先まで)
+      const NEXT_VISIBLE_RANGE = 5;
+      if (newValue + NEXT_VISIBLE_RANGE > this.visibleMax) {
+        this.visibleMax = newValue + NEXT_VISIBLE_RANGE;
+      }
+      if (newValue < this.visibleMin) {
+        // 逆方向に戻った場合にも対応したいならこういう処理も必要
+        this.visibleMin = Math.max(0, newValue - NEXT_VISIBLE_RANGE);
+      }
+
+      // スクロール先の要素を探す
+      const el = this.$el.querySelector(
+        `.transcript-line[data-line-index="${newValue}"]`
+      );
+      if (!el) return;
+
+      // スクロール位置を計算
+      const elementTop = this.documentOffsetTop(el);
+      const offset = this.scrollOffset(el); // 半画面分中央寄せにしたければこのあたりで計算
+
+      const top = elementTop + offset;
+      const contentArea = document.querySelector(".content-area");
+      if (!contentArea) return;
+
+      const currentScrollY = contentArea.scrollTop;
+      const distance = Math.abs(currentScrollY - top);
+
+      // 大きすぎるスクロールならアニメーション無し、近距離ならスムーズに
+      const scrollDistanceIsLarge= distance > 1000;
+
+      if (this.useSmoothScroll && !scrollDistanceIsLarge) {
+        this.smoothScrollToCurrentLine(offset, el);
       } else {
-        // Single line mode
-        this.tokenizeNextLines();
+        this.$nuxt.$emit("scroll-to", {
+          top,
+          left: 0,
+          behavior: scrollDistanceIsLarge ? "auto" : "smooth",
+        });
       }
     },
     parallellines() {
@@ -347,6 +367,42 @@ export default {
     },
   },
   methods: {
+    // transcript-line-[lineIndex] というクラス・IDを持つ要素が
+    // 画面に収まっているかを判定
+    isLineVisible(lineIndex) {
+      const lineRef = this.$refs[`transcript-line-${lineIndex}`];
+      if (!lineRef || !lineRef[0]) return false;
+      const el = lineRef[0].$el;
+      const bounding = el.getBoundingClientRect();
+      const container = el.closest(".content-area");
+      if (!container) return false;
+      const containerRect = container.getBoundingClientRect();
+
+      // 要素がコンテナ内で完全に表示されている場合だけ true を返す
+      return (
+        bounding.top >= containerRect.top &&
+        bounding.bottom <= containerRect.bottom
+      );
+    },
+
+    // 画面中央に寄せたいときの座標計算
+    scrollOffset(el) {
+      // 画面レイアウトやコントロールバーの高さを考慮しつつ
+      // 例えば画面中央に行を配置したいなら以下のように
+      const transcriptLineHeight = el.clientHeight;
+      const halfViewport = window.innerHeight / 2;
+      return -halfViewport + transcriptLineHeight / 2;
+    },
+
+    // 絶対座標を取得するヘルパー (既存実装があるならそれを使う)
+    documentOffsetTop(el) {
+      let top = 0;
+      while (el) {
+        top += el.offsetTop;
+        el = el.offsetParent;
+      }
+      return top;
+    },
     matchedParallelLine(index) {
       return this.matchedParallelLines
         ? this.matchedParallelLines[
