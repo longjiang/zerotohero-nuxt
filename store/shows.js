@@ -82,7 +82,6 @@ export const fetchRecommendedVideos = async (userId, l2, level, preferredCategor
     if (userId) params.user_id = userId;
     if (preferredCategories) params.preferred_categories = preferredCategories.join(',');
     if (excludeIds) params.exclude_ids = excludeIds.join(',');
-    console.log({music})
     if (music !== null) params.music = music;
     params.timestamp = Date.now(); // We don't want to cache this, otherwise when the user refreshes they will get the same videos
     // unset params with empty values

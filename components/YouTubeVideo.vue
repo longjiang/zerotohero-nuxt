@@ -310,6 +310,7 @@ export default {
                 }
               }
               if (this.muted && this.player) this.player.mute();
+              this.$emit("loaded");
             },
           },
         });

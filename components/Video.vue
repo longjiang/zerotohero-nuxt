@@ -25,6 +25,7 @@
     @duration="onDuration"
     @videoUnavailable="onVideoUnavailable"
     @updateVideo="onUpdateVideo"
+    @loaded="onLoaded"
   />
 </template>
 
@@ -118,6 +119,9 @@ export default {
     },
     onDuration(duration) {
       this.$emit("duration", duration);
+    },
+    onLoaded(loaded) {
+      this.$emit("loaded", loaded);
     },
     onVideoUnavailable(videoUnavailable) {
       this.$emit("videoUnavailable", videoUnavailable);

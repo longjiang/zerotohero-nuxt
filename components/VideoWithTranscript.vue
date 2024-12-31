@@ -33,7 +33,7 @@
             speed,
             cc,
             autoload,
-            autoplay,
+            autoplay: false,
             startAtRandomTime,
             video,
             formats,
@@ -46,6 +46,7 @@
           @ended="onEnded"
           @duration="onDuration"
           @videoUnavailable="onVideoUnavailable"
+          @loaded="onLoaded"
         />
         <LazyVideoControls
           v-if="showControls && (video.youtube_id || video.url)"
@@ -710,7 +711,13 @@ export default {
       }
       if (this.$refs.transcript) this.$refs.transcript.paused = paused;
     },
-
+    onLoaded(loaded) {
+      this.$emit("loaded", loaded);
+      // If autoplay is enabled, play the video
+      if (this.autoplay && this.$refs.video && this.$refs.video.play) {
+        this.$refs.video.play();
+      }
+    },
     goToPreviousLine() {
       if (this.$refs.transcript) this.$refs.transcript.goToPreviousLine();
     },
