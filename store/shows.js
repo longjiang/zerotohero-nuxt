@@ -7,9 +7,11 @@ export const state = () => {
     tvShows: {},
     talks: {},
     recommendedVideos: {},
+    recommendedMusicVideos: {},
     stats: {},
     showsLoaded: {},
     recommendedVideosLoaded: {},
+    recommendedMusicVideosLoaded: {},
     categories: {},
   };
 };
@@ -68,7 +70,7 @@ const normalizeDifficulty = (video) => {
   return video;
 }
 
-export const fetchRecommendedVideos = async (userId, l2, level, preferredCategories, start, limit, excludeIds) => {
+export const fetchRecommendedVideos = async (userId, l2, level, preferredCategories, music, start, limit, excludeIds) => {
   try {
     let params = {
       l2: l2.code,
@@ -80,6 +82,8 @@ export const fetchRecommendedVideos = async (userId, l2, level, preferredCategor
     if (userId) params.user_id = userId;
     if (preferredCategories) params.preferred_categories = preferredCategories.join(',');
     if (excludeIds) params.exclude_ids = excludeIds.join(',');
+    console.log({music})
+    if (music !== null) params.music = music;
     params.timestamp = Date.now(); // We don't want to cache this, otherwise when the user refreshes they will get the same videos
     // unset params with empty values
     Object.keys(params).forEach((key) => params[key] === undefined && delete params[key]);
@@ -121,6 +125,11 @@ export const mutations = {
     state.recommendedVideos[l2.code] = [];
     state.recommendedVideosLoaded[l2.code] = false;
   },
+  CLEAR_RECOMMENDED_MUSIC_VIDEOS(state, l2) {
+    // 新規に追加
+    state.recommendedMusicVideos[l2.code] = [];
+    state.recommendedMusicVideosLoaded[l2.code] = false;
+  },
   ADD_RECOMMENDED_VIDEOS(state, { l2, videos }) {
     let existingVideos = state.recommendedVideos[l2.code] || [];
     state.recommendedVideos[l2.code] = uniqueByValue(
@@ -128,6 +137,15 @@ export const mutations = {
       "youtube_id"
     );
     state.recommendedVideosLoaded[l2.code] = true;
+  },
+  ADD_RECOMMENDED_MUSIC_VIDEOS(state, { l2, videos }) {
+    // 新規に追加
+    let existingVideos = state.recommendedMusicVideos[l2.code] || [];
+    state.recommendedMusicVideos[l2.code] = uniqueByValue(
+      [...existingVideos, ...videos],
+      "youtube_id"
+    );
+    state.recommendedMusicVideosLoaded[l2.code] = true;
   },
   ADD_SHOW(state, { l2, type, show }) {
     state[type][l2.code].push(show);
@@ -234,38 +252,83 @@ export const actions = {
     
     context.commit("LOAD_SHOWS", { l2, tvShows: processedTvShows, talks: processedTalks });
   },
-/**
- * Load recommended videos based on user preferences and progress.
- *
- * @param {Object} context - The Vuex context object.
- * @param {Object} payload - The payload object.
- * @param {string} payload.userId - The ID of the user.
- * @param {Object} payload.l2 - The second language object.
- * @param {number} [payload.level] - The user's level in the second language. If not provided, it will be fetched from the progress state.
- * @param {Array} [payload.preferredCategories] - The user's preferred categories. If not provided, it will be fetched from the settings state.
- * @param {boolean} [payload.clear=false] - Whether to clear the current recommended videos before adding new ones.
- * @param {number} [payload.start=0] - The start index for the videos to fetch.
- * @param {number} [payload.limit=48] - The maximum number of videos to fetch.
- */
-async loadRecommendedVideos({state, commit, rootState, rootGetters}, { userId, l2, level, preferredCategories, clear = false, start = 0, limit = 48 }) {
-    // If level is not provided and progress is loaded, fetch level from progress state
+  /**
+   * Load recommended videos based on user preferences and progress.
+   *
+   * @param {Object} context - The Vuex context object.
+   * @param {Object} payload - The payload object.
+   * @param {string} payload.userId - The ID of the user.
+   * @param {Object} payload.l2 - The second language object.
+   * @param {number} [payload.level] - The user's level in the second language. If not provided, it will be fetched from the progress state.
+   * @param {Array} [payload.preferredCategories] - The user's preferred categories. If not provided, it will be fetched from the settings state.
+   * @param {string} [payload.music] - The music genre to filter the recommended videos by. '0' to exclude music videos, '1' to include only music videos. If not provided, all videos will be included.
+   * @param {boolean} [payload.clear=false] - Whether to clear the current recommended videos before adding new ones.
+   * @param {number} [payload.start=0] - The start index for the videos to fetch.
+   * @param {number} [payload.limit=48] - The maximum number of videos to fetch.
+   */
+  // 非音楽動画用
+  async loadRecommendedVideos(
+    { state, commit, rootState, rootGetters },
+    { userId, l2, level, preferredCategories, clear = false, start = 0, limit = 48 }
+  ) {
+    // レベルやカテゴリ設定が無ければ既存ロジックで取得
     if (!level && rootState.progress.progressLoaded) {
-      level =  Number(rootGetters["progress/level"](l2));
+      level = Number(rootGetters["progress/level"](l2));
     }
-    // If preferred categories are not provided and settings are loaded, fetch preferred categories from settings state
     if (!preferredCategories && rootState.settings.settingsLoaded) {
       preferredCategories = rootState.settings.preferredCategories;
     }
-    // Exclude videos that are already loaded
-    const excludeIds = state.recommendedVideos[l2.code] ? state.recommendedVideos[l2.code].map((v) => v.id) : [];
-    // Fetch recommended videos
-    let videos = await fetchRecommendedVideos(userId, l2, level, preferredCategories, start, limit, excludeIds);
-    // If clear is true, clear the current recommended videos
+    // 既存の非音楽動画を除外するためのIDリスト
+    const excludeIds = state.recommendedVideos[l2.code]
+      ? state.recommendedVideos[l2.code].map((v) => v.id)
+      : [];
+    // music=0 (False) のパラメータを付与して非音楽動画を取得
+    let videos = await fetchRecommendedVideos(
+      userId,
+      l2,
+      level,
+      preferredCategories,
+      0, // music=0
+      start,
+      limit,
+      excludeIds
+    );
     if (clear) {
       commit("CLEAR_RECOMMENDED_VIDEOS", l2);
     }
-    // Add the fetched videos to the recommended videos
     commit("ADD_RECOMMENDED_VIDEOS", { l2, videos });
+  },
+
+  // 音楽動画用
+  async loadRecommendedMusicVideos(
+    { state, commit, rootState, rootGetters },
+    { userId, l2, level, preferredCategories, clear = false, start = 0, limit = 48 }
+  ) {
+    if (!level && rootState.progress.progressLoaded) {
+      level = Number(rootGetters["progress/level"](l2));
+    }
+    if (!preferredCategories && rootState.settings.settingsLoaded) {
+      preferredCategories = rootState.settings.preferredCategories;
+    }
+    // 既存の音楽動画を除外するためのIDリスト
+    const excludeIds = state.recommendedMusicVideos[l2.code]
+      ? state.recommendedMusicVideos[l2.code].map((v) => v.id)
+      : [];
+    // music=1 (True) のパラメータを付与して音楽動画を取得
+    let videos = await fetchRecommendedVideos(
+      userId,
+      l2,
+      level,
+      preferredCategories,
+      1, // music=1
+      start,
+      limit,
+      excludeIds
+    );
+    if (clear) {
+      commit("CLEAR_RECOMMENDED_MUSIC_VIDEOS", l2);
+    }
+    commit("ADD_RECOMMENDED_MUSIC_VIDEOS", { l2, videos });
   },
   async add(context, { l2, type, show }) {
     let response = await this.$directus.post(

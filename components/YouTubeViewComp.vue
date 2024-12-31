@@ -147,9 +147,14 @@ export default {
       "showsLoaded",
       "recommendedVideosLoaded",
       "recommendedVideos",
+      "recommendedMusicVideos",
+      "recommendedMusicVideosLoaded",
     ]),
     recommendedVideosLoadedForL2() {
       return this.recommendedVideosLoaded?.[this.$l2.code];
+    },
+    recommendedMusicVideosLoadedForL2() {
+      return this.recommendedMusicVideosLoaded?.[this.$l2.code];
     },
     collection() {
       return this.showType === "tv_show" ? "tvShows" : "talks";
@@ -229,6 +234,14 @@ export default {
         }
       }
     },
+    recommendedMusicVideosLoadedForL2(loaded) {
+      console.log("recommendedMusicVideosLoadedForL2", loaded);
+      if (loaded) {
+        if (this.$route.query.p === "recommended_music") {
+          this.loadRecommendedMusicVideosAsPlaylist();
+        }
+      }
+    },
   },
   async mounted() {
     this.episodeSort = this.$route.query.sort || "title";
@@ -277,6 +290,8 @@ export default {
         } else if (this.$route.query.p === "recommended") {
           // loadRecommendedVideosAsPlaylist is called again in the watcher because we have to wait until the computed value recommendedVideosLoadedForL2 is true (from the store)
           this.loadRecommendedVideosAsPlaylist();
+        } else if (this.$route.query.p === "recommended_music") {
+          this.loadRecommendedMusicVideosAsPlaylist();
         } else {
           // The playlist querystring value is a comma-separated list of ids passed from YouTubeVideoList (so we can play the next videos from the list)
           let ids = this.$route.query.p.split(",").map((id) => Number(id));
@@ -317,6 +332,16 @@ export default {
           l2: this.$l2,
         });
       }
+    },
+    loadRecommendedMusicVideosAsPlaylist() {
+      console.log("Loading recommended music videos as playlist");
+      let playlist = {
+        l2: this.$l2.id,
+        id: "recommended_music",
+        title: "Recommended Music Videos",
+        videos: this.recommendedMusicVideos[this.$l2.code],
+      };
+      this.playlist = playlist;
     },
     /**
      * Streamline the video loading process.
