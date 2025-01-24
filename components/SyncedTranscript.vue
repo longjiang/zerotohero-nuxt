@@ -116,7 +116,7 @@ import {
 } from "../lib/utils";
 
 const NEXT_LINE_STARTED_TOLERANCE = 0.15; // seconds
-const VISIBLE_RANGE = 5; // lines
+const VISIBLE_RANGE = 15; // lines
 
 export default {
   props: {
