@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import { groupArrayBy, makeTextFile } from "../../../lib/utils";
+import { groupArrayBy, makeTextFile, formatPronunciation } from "../../../lib/utils";
 import Papa from "papaparse";
 
 export default {
@@ -212,6 +212,17 @@ export default {
         mapped.l2 = this.$l2.code;
         mapped.definitions = word.definitions.join("; ");
         mapped.date = savedWord.date;
+        mapped.pronunciation = formatPronunciation({
+          word: word,
+          langCode: this.$l2.code,
+          hasFeature: (feature) => this.$hasFeature(feature),
+        });
+        mapped.contextForm = savedWord.context?.form;
+        mapped.contextStartTime = savedWord.context?.starttime;
+        mapped.contextText = savedWord.context?.text;
+        mapped.contextYouTubeID = savedWord.context?.youtube_id;
+        mapped.ankiBack = mapped.pronunciation + ' ' + word.definitions.join("; ");
+        mapped.ankiFront = mapped.contextForm && mapped.contextText ? word.head + ': ' + mapped.contextText.replace(mapped.contextForm, '<b>' + mapped.contextForm + '</b>') : word.head;
         if (word.simplified || word.kana || word.hangul) delete mapped.head;
         delete mapped.cjk;
         delete mapped.search;
