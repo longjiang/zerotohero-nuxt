@@ -241,6 +241,11 @@ export default {
         delete mapped.wiktionary;
         return mapped;
       });
+      // Convert date to ISO date (ignore time)
+      csvWords = csvWords.map((word) => {
+        word.date = new Date(Number(word.date)).toISOString().split("T")[0];
+        return word;
+      });
       let csv = Papa.unparse(csvWords);
       return csv;
     },
