@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import { groupArrayBy, makeTextFile, formatPronunciation } from "../../../lib/utils";
+import { groupArrayBy, makeTextFile, formatPronunciation, l2LevelNameByLevel } from "../../../lib/utils";
 import Papa from "papaparse";
 
 export default {
@@ -222,6 +222,8 @@ export default {
         mapped.contextText = savedWord.context?.text;
         mapped.contextYouTubeID = savedWord.context?.youtube_id;
         mapped.ankiBack = mapped.pronunciation + ' ' + word.definitions.join("; ");
+        const level = l2LevelNameByLevel(this.$l2, word.level);
+        if (level) mapped.ankiBack += ` (${level})`;
         mapped.ankiFront = mapped.contextForm && mapped.contextText ? word.head + ': ' + mapped.contextText.replace(mapped.contextForm, '<b>' + mapped.contextForm + '</b>') : word.head;
         if (word.simplified || word.kana || word.hangul) delete mapped.head;
         delete mapped.cjk;
