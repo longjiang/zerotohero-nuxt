@@ -95,7 +95,7 @@ class BaseDictionary {
             if (lemma.morphologies) morphology = lemma.morphologies.join("; ");
             c.morphology = morphology;
           });
-          candidates = [...candidates, ...lemmaCandidates];
+          candidates = [...lemmaCandidates, ...candidates];
         }
       }
     }
