@@ -85,7 +85,9 @@ class BaseDictionary {
     if (token.candidates) {
       return;
     }
+    // Sort candidates by level from lowest to highest. If level is falsy or is a non-numeric string, treat it as 1000
     let candidates = await this.lookupMultiple(token.text);
+    candidates.sort((a, b) => (Number(a.level)|| 1000) - (Number(b.level) || 1000));
     if (token.lemmas) {
       for (let lemma of token.lemmas) {
         if (lemma.lemma && lemma.lemma !== token.text) {
@@ -95,6 +97,8 @@ class BaseDictionary {
             if (lemma.morphologies) morphology = lemma.morphologies.join("; ");
             c.morphology = morphology;
           });
+          // Sort lemmaCandidates by level from lowest to highest. If level is falsy or is a non-numeric string, treat it as 1000
+          lemmaCandidates.sort((a, b) => (Number(a.level)|| 1000) - (Number(b.level) || 1000));
           candidates = [...lemmaCandidates, ...candidates];
         }
       }
