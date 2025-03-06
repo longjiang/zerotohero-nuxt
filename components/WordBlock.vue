@@ -223,7 +223,12 @@ export default {
     },
     showDefinition() {
       return this.$l2Settings?.showDefinition;
-    }
+    },
+    level() {
+      return this.$store.state.progress.progressLoaded
+        ? Number(this.$store.getters["progress/level"](this.$l2))
+        : 0;
+    },
   },
   async mounted() {
     await this.checkSavedWord();
@@ -252,6 +257,11 @@ export default {
     unique,
     showReading(segment) {
       if (!this.$l2Settings?.showPinyin) return false; // If the user doesn't want to see phonetics (pinyin), don't show it
+      if (this.$l2Settings?.showPinyinForHigherLevelWordsOnly) {
+        // Only show words that are at a higher level than the user's current level and that are not saved
+        if (this.savedWord || this.savedPhrase) return false;
+        if (this.bestWord?.level && Number(this.bestWord?.level) <= this.level) return false;
+      }
       // If the segment's surface form and reading form are the same, don't show the reading
       if (segment.surface === segment.reading) return false;
       if (segment.type !== "kanji") return false; // segment.type is 'kanji' for all words, except those in Japanese that do not have kanji

@@ -31,6 +31,7 @@ export const defaultL2Settings = {
   l1: "en", // the L1 the user used last time when they studied this language
   showDefinition: false,
   showPinyin: true,
+  showPinyinForHigherLevelWordsOnly: false,
   phoneticsOnly: false,
   useTraditional: false,
   showTranslation: true,

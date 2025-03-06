@@ -56,6 +56,14 @@
           </span>
         </Toggle>
         <Toggle
+          v-model="localL2Settings.showPinyinForHigherLevelWordsOnly"
+          v-if="localL2Settings.showPinyin"
+          label="Only For Hard Words"
+          @change="updateL2Settings"
+        >
+          &nbsp;
+        </Toggle>
+        <Toggle
           v-model="localL2Settings.phoneticsOnly"
           @change="updateL2Settings"
           label="Phonetics Only"
