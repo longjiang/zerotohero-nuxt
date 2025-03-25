@@ -351,11 +351,12 @@ export default {
           pronunciation = this.token.pronunciation;
           pronunciation = convertVowelEtoIAndOtoU(wanakana.toHiragana(pronunciation));
         }
-        const pattern = (this.savedWord || this.bestWord)?.accentPatterns?.[0];
-        if (pattern) {
-          pronunciation = applyAccentPattern(splitIntoMoras(pronunciation), pattern)
-          pronunciation = pronunciation.replace(/↑/g, "").replace(/↓/g, "ꜜ") // Alternatively ⌝
-        }
+        // Uncomment this to apply pitch accent to the pronunciation (adding the "↓" marks)
+        // const pattern = (this.savedWord || this.bestWord)?.accentPatterns?.[0];
+        // if (pattern) {
+        //   pronunciation = applyAccentPattern(splitIntoMoras(pronunciation), pattern)
+        //   pronunciation = pronunciation.replace(/↑/g, "").replace(/↓/g, "ꜜ") // Alternatively ⌝
+        // }
         return mapKana(surfaceText, pronunciation);
 
         
