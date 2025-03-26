@@ -57,7 +57,7 @@
               {{ $t("Earlier") }}
             </div>
             <h5 v-else class="mt-5 mb-2">
-                {{ $d(new Date(group.date), "short", $l1.code) }} 
+                {{ $d(new Date(group.date + "T00:00:00"), "short", $l1.code) }} 
                 <span class="badge badge-danger" style="position: relative; bottom: 0.1rem">
                 {{ group.sW.length }}
                 </span>
