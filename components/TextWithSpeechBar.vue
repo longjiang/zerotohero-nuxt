@@ -382,6 +382,11 @@ export default {
     this.voices = SpeechSingleton.instance.getVoices(this.$l2.code);
     this.bindKeys();
   },
+  updated() {
+    if (this.pageCount < this.page) {
+      this.goToPage = this.pageCount;
+    }
+  },
   beforeDestroy() {
     this.unbindKeys();
   },
