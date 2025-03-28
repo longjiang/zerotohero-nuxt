@@ -261,6 +261,11 @@ export default {
         // Only show words that are at a higher level than the user's current level and that are not saved
         if (this.savedWord || this.savedPhrase) return false;
         if (this.bestWord?.level && Number(this.bestWord?.level) <= this.level) return false;
+        // For HSK-CEDICT dictionary, we have three levels: the standard HSK level, the new HSK level, and the frequencyAssignedLevel
+        if (this.$l2.code === "zh") {
+          if (this.bestWord?.newHSK && Number(this.bestWord?.newHSK) <= this.level) return false;
+          if (this.bestWord?.frequencyAssignedLevel && Number(this.bestWord?.frequencyAssignedLevel) <= this.level) return false;
+        }
       }
       // If the segment's surface form and reading form are the same, don't show the reading
       if (segment.surface === segment.reading) return false;
