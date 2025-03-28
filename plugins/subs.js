@@ -1,4 +1,3 @@
-import { sify } from "chinese-conv";
 import { parseSync } from "subtitle"; // Incompatible with Vite
 import Papa from "papaparse";
 import he from "he"; // html entities
@@ -129,7 +128,6 @@ export default ({ app }, inject) => {
       categoryFilter,
       exact = false,
       apostrophe = false,
-      convertToSimplified = false,
       mustIncludeYouTubeId = undefined,
     } = {}) {
       let tv_show, category; // Undefined by default
@@ -182,7 +180,6 @@ export default ({ app }, inject) => {
             terms,
             excludeTerms,
             continua,
-            convertToSimplified,
             exact,
             apostrophe,
             mustIncludeYouTubeId,
@@ -204,7 +201,6 @@ export default ({ app }, inject) => {
       limit = 20,
       exact = false,
       apostrophe = false,
-      convertToSimplified = false,
       mustIncludeYouTubeId = undefined,
     } = {}) {
       let hits = await this.searchWithLike({
@@ -219,7 +215,6 @@ export default ({ app }, inject) => {
         limit,
         exact,
         apostrophe,
-        convertToSimplified,
         mustIncludeYouTubeId,
       })
       hits = uniqueByValue(hits, "id");
@@ -321,22 +316,11 @@ export default ({ app }, inject) => {
       return notExcluded;
     },
 
-    // Convert subtitles to simplified Chinese
-    convertSubLinesToSimplified(hit, sify) {
-      [hit.lineIndex - 1, hit.lineIndex, hit.lineIndex + 1].forEach((index) => {
-        const lineObj = hit.video.subs_l2[index];
-        if (lineObj) {
-          lineObj.line = sify(lineObj.line);
-        }
-      });
-    },
-
     getHits(
       videos,
       terms,
       excludeTerms,
       continua = true,
-      convertToSimplified = false,
       exact = false,
       apostrophe = false,
       mustIncludeYouTubeId
@@ -365,9 +349,6 @@ export default ({ app }, inject) => {
       for (let hit of hits) {
         hit.line = hit.video.subs_l2[hit.lineIndex].line.trim();
 
-        if (convertToSimplified) {
-          this.convertSubLinesToSimplified(hit, sify);
-        }
       }
 
       return hits;

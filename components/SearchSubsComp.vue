@@ -470,7 +470,6 @@ export default {
         categoryFilter: this.categoryFilter,
         exact: this.exact,
         apostrophe: true,
-        convertToSimplified: this.$l2.han,
         mustIncludeYouTubeId,
       };
 

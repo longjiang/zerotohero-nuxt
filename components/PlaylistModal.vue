@@ -101,7 +101,7 @@
                   <span
                     v-html="
                       highlightMultiple(
-                        hit.video.subs_l2[Number(hit.lineIndex)].line,
+                        lineText(hit.video.subs_l2[Number(hit.lineIndex)].line),
                         terms.map((term) => term),
                         level
                       )
@@ -127,6 +127,7 @@
 
 <script>
 import { ucFirst, timeout, highlightMultiple } from "../lib/utils";
+import { sify, tify } from "chinese-conv";
 
 export default {
   props: {
@@ -177,6 +178,14 @@ export default {
     removeHit(hit) {
       this.$emit('removeHit', hit)
     },
+    // This function converts the text to simplified or traditional Chinese based on the settings
+    lineText(text) {
+      if (this.$l2.han && this.$l2Settings.useTraditional) {
+        return tify(text);
+      } else {
+        return sify(text);
+      }
+    }
   },
 };
 </script>
