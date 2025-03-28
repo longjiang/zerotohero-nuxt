@@ -34,6 +34,7 @@
 
 <script>
 import { timeout, stripTags, SpeechSingleton } from "../lib/utils";
+import { sify } from "chinese-conv";
 
 export default {
   name: "TokenizedText",
@@ -98,7 +99,12 @@ export default {
     },
     async tokenize() {
       let dictionary = await this.$getDictionary();
-      this.tokens = await dictionary.tokenizeWithCache(this.sanitizedText);
+      let text = this.sanitizedText;
+      // If the language is Han, it uses the Jieba tokenizer, which works best with simplified Chinese characters. Therefore, we convert the text to simplified Chinese characters.
+      if (this.$l2.han) {
+        text = sify(text);
+      }
+      this.tokens = await dictionary.tokenizeWithCache(text);
       // Sometimes SpaCy returns line breaks as { text: '\n', type: 'SPACE' }, we convert that to a string
       this.tokens = this.tokens.map((token) =>
         token.text?.trim() === "" ? token.text : token
