@@ -81,15 +81,10 @@
           v-if="$l2.han"
           v-model="localL2Settings.useTraditional"
           @change="updateL2Settings"
-          :label="
-            localL2Settings.useTraditional
-              ? 'Show Traditional'
-              : 'Show Simplified'
-          "
+          :label="'Show Traditional'"
         >
           <span>
-            <span v-if="localL2Settings.useTraditional">繁</span>
-            <span v-if="!localL2Settings.useTraditional">简</span>
+            <span>繁</span>
           </span>
         </Toggle>
         <Toggle
