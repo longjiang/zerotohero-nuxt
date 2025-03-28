@@ -96,7 +96,7 @@ export default ({ app }, inject) => {
           let duration;
           if (l.duration) {
             duration = l.duration;
-          } else if (index < subs.length - 1) {
+          } else if (index < subs.length - 1 && subs[index + 1]) {
             // Calculate duration based on starttime of next line
             duration = subs[index + 1].starttime - l.starttime;
           } else {
