@@ -1,0 +1,1 @@
+These frequency lists are generated via the Python package `wordfreq` (https://github.com/rspeer/wordfreq) and generated with the function `top_n_list`.

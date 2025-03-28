@@ -14,14 +14,15 @@ class FrequencyAssigner {
     this.frequencyKey = "frequency";
     this.name = "FrequencyAssigner";
     this.levelThresholds = {
-      1: 5.79,
-      2: 5.35,
-      3: 4.99,
-      4: 4.56,
-      5: 4.09,
-      6: 3.57,
-      7: 3.01,
-    };
+      // The minimum Zipf frequency for each level. For example, a word with a frequency greater than or equal to 5.59 is assigned to level 1, and a word with a frequency greater than or equal to 3.01 is level 7, etc.
+      // 1: 5.59
+      // 2: 5.16
+      // 3: 4.8
+      // 4: 4.39
+      // 5: 3.95
+      // 6: 3.5
+      // 7: 3.01
+    }; // This will be set when loading the data, calling the determineLevelThresholds method
   }
 
   static hasFrequencyData(l2) {
@@ -93,7 +94,7 @@ class FrequencyAssigner {
     if (data?.[0]?.lemma) this.lemmatized = true;
     this.wordKey = this.lemmatized ? "lemma" : "word";
     this.frequencyKey = this.lemmatized ? "folded_frequency" : "frequency";
-    data = data.filter((word) => word[this.frequencyKey] > 3); // Remove words with frequency <= 3
+    // data = data.filter((word) => word[this.frequencyKey] > 3); // Remove words with frequency <= 3
     this.createIndices(data);
     this.levelThresholds = this.determineLevelThresholds(data);
     data = null;
