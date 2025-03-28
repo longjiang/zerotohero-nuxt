@@ -180,7 +180,8 @@ export default {
     },
     // This function converts the text to simplified or traditional Chinese based on the settings
     lineText(text) {
-      if (this.$l2.han && this.$l2Settings.useTraditional) {
+      if (!this.$l2.han) return text;
+      if (this.$l2Settings.useTraditional) {
         return tify(text);
       } else {
         return sify(text);
