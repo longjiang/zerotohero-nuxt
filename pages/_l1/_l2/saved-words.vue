@@ -221,13 +221,13 @@ export default {
         mapped.contextStartTime = savedWord.context?.starttime;
         mapped.contextText = savedWord.context?.text;
         mapped.contextYouTubeID = savedWord.context?.youtube_id;
-        mapped.ankiBack = mapped.pronunciation + ' ' + word.definitions.join("; ");
+        mapped.ankiBack = word.head + ' ' + mapped.pronunciation + ' ' + word.definitions.join("; ");
         const level = l2LevelNameByLevel(this.$l2, word.level);
         if (level) mapped.ankiBack += ` (${level})`;
-        mapped.ankiFront = mapped.contextForm && mapped.contextText ? word.head + ': ' + mapped.contextText.replace(mapped.contextForm, '<b>' + mapped.contextForm + '</b>') : word.head;
+        mapped.ankiFront = mapped.contextForm && mapped.contextText ? mapped.contextText.replace(mapped.contextForm, '<b>' + mapped.contextForm + '</b>') : word.head;
         if (mapped.contextYouTubeID && mapped.contextStartTime) {
             // For some reason, 'src=' automatically gets replaced with 'v-lazy-load data-src='. We replace it back in the final csv string.
-            mapped.ankiFront += `<br><br><iframe width="320" height="180" src="https://www.youtube.com/embed/${mapped.contextYouTubeID}?start=${Math.round(mapped.contextStartTime)}" frameborder="0"></iframe>`;
+            mapped.ankiFront += `<br><br><iframe width="320" height="180" src="https://www.youtube.com/embed/${mapped.contextYouTubeID}?start=${Math.floor(mapped.contextStartTime) - 1}" frameborder="0"></iframe>`;
         }
         if (word.simplified || word.kana || word.hangul) delete mapped.head;
         delete mapped.cjk;
