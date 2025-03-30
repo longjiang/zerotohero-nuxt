@@ -128,41 +128,6 @@
         </li>
         <li v-if="dictionaryCredit" v-html="$t(dictionaryCredit)"></li>
       </ul>
-      <div class="row mt-3">
-        <div class="col-sm-12">
-          <h5 class="mb-3">{{ $t("Not sure what to read?") }}</h5>
-          <ul>
-            <li>
-              {{
-                $t("Look for {l2} music lyrics on Google.", {
-                  l2: $t($l2.name),
-                })
-              }}
-            </li>
-            <li
-              v-html="
-                $t(
-                  'Read various {l2} documents directly on the “Books” page.',
-                  { l2: $t($l2.name) }
-                )
-              "
-            />
-          </ul>
-        </div>
-      </div>
-      <h5 class="mt-2">{{ $t("Keywords for search engines") }}</h5>
-      <ul>
-        <li>{{ $t("Online {l2} lemmatizer", { l2: $t($l2.name) }) }}</li>
-        <li>{{ $t("Online {l2} annotator", { l2: $t($l2.name) }) }}</li>
-        <li>{{ $t("Online {l2} reader", { l2: $t($l2.name) }) }}</li>
-        <li>{{ $t("Online {l2} tokenizer", { l2: $t($l2.name) }) }}</li>
-        <li>{{ $t("Online {l2} NLP tool", { l2: $t($l2.name) }) }}</li>
-      </ul>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12 text-center"></div>
-      </div>
     </div>
   </div>
 </template>
