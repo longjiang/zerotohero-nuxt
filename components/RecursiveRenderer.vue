@@ -37,17 +37,15 @@
       />
     </ReaderLink>
   </span>
-  <span v-else v-bind="attributesObject">
-    <div :is="node.type" v-bind="node.attributes">
-      <RecursiveRenderer
-        v-for="(child, index) in node.children"
-        :node="child"
-        :key="index"
-        v-on="$listeners"
-        ref="recursiveRenderers"
-      />
-    </div>
-  </span>
+  <div :is="node.type" v-bind="node.attributes" v-else>
+    <RecursiveRenderer
+      v-for="(child, index) in node.children"
+      :node="child"
+      :key="index"
+      v-on="$listeners"
+      ref="recursiveRenderers"
+    />
+  </div>
 </template>
 
 <script>
