@@ -59,7 +59,7 @@ export const loadFromServer = async ({ l2, adminMode }) => {
   if ($nuxt.$auth.loggedIn) {
     try {
       let path = `items/text?sort=title&filter[l2][eq]=${l2.id
-        }&filter[owner][eq]=${$nuxt.$auth.user.id}&fields=id,title,text&timestamp=${Date.now()}`
+        }&filter[owner][eq]=${$nuxt.$auth.user.id}&fields=id,title,text,translation,owner&timestamp=${Date.now()}`
       let res = await $nuxt.$directus.get(path);
       items = res?.data?.data || []
     } catch (e) {

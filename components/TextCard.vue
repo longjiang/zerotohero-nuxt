@@ -16,10 +16,9 @@
     <div>
       <b-button
         class="youtube-video-card-badge border-0"
-        v-if="text.id"
+        v-if="text.id && $auth.loggedIn && Number($auth.user.id) === text.owner"
         size="sm"
         variant="no-bg"
-        style="width: 2rem"
         @click.stop="$bvModal.show('actionsModal' + text.id)"
       >
         <i class="fa-solid fa-ellipsis-v"></i>
