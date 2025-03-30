@@ -19,6 +19,11 @@ export const mutations = {
   LOAD_ITEM(state, { l2, id, data }) {
     let item = (state.itemsByL2[l2.code] || []).find(i => Number(i.id) === Number(id))
     if (item) item = Object.assign(item, data)
+    else {
+      item = data
+      if (!state.itemsByL2[l2.code]) state.itemsByL2[l2.code] = []
+      state.itemsByL2[l2.code].push(item)
+    }
   },
   ADD(state, { l2, item }) {
     if (!state.itemsByL2[l2.code]) state.itemsByL2[l2.code] = []
@@ -81,14 +86,13 @@ export const actions = {
     commit('LOAD', { l2, itemsByL2 })
   },
   async loadItem({ commit }, { l2, id, adminMode }) {
-    if ($nuxt.$auth.loggedIn) {
-      let path = `items/text/${id}?timestamp=${Date.now()}`;
-      let res = await $nuxt.$directus.get(path);
-      if (res.data && res.data.data) {
-        let data = res.data.data;
-        commit('LOAD_ITEM', { l2, id, data })
-      }
+    let path = `items/text/${id}?timestamp=${Date.now()}`;
+    let res = await $nuxt.$directus.get(path);
+    if (res.data && res.data.data) {
+      let data = res.data.data;
+      commit('LOAD_ITEM', { l2, id, data })
     }
+    return res.data.data
   },
   async add({ commit }, { l2, item }) {
     item = item || { text: '', translation: '', title: 'Untitled', l2: l2.id }

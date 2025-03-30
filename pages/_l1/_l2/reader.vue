@@ -10,29 +10,6 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-12">
-          <div class="reader-header-message" v-if="!$auth.loggedIn">
-            <h3 class="text-center mt-4 mb-3">
-              {{ $t("{l2} Text Reader (Annotator)", { l2: $t($l2.name) }) }}
-            </h3>
-            <i18n
-              path="This tool will annotate {l2} text with {transliteration} and a popup dictionary."
-              class="text-center mb-4"
-            >
-              <template #l2>{{ $t($l2.name) }}</template>
-              <template #transliteration>
-                <span v-if="$hasFeature('transliteration')">
-                  {{
-                    {
-                      zh: $t("pinyin annotation"),
-                      ja: $t("furigana (Japanese syllabary) annotation"),
-                      ko: $t("Hanja byeonggi (Chinese character annotation)"),
-                      vi: $t("Hán tự (Chinese character) annotation"),
-                    }[$l2.code] || $t("phonetic transcription")
-                  }}
-                </span>
-              </template>
-            </i18n>
-          </div>
           <client-only>
             <div v-if="$auth.loggedIn" class="d-flex justify-content-between align-items-center">
               <router-link
@@ -224,6 +201,7 @@ export default {
       sharing: false,
       // Initialize debounced methods
       updateText: debounce(this.updateStoreText, 300),
+      refreshKey: 0,
       creating: false,
     };
   },
@@ -263,12 +241,19 @@ export default {
     }
     if (method === "shared") {
       try {
-        this.$store.dispatch('savedText/load', {
+        await this.$store.dispatch('savedText/load', {
           l2: this.$l2,
         });
+        if (!this.shared) {
+          const item = await this.$store.dispatch('savedText/loadItem', {
+            l2: this.$l2,
+            id: this.arg,
+          });
+          this.refreshKey = item.id;
+        }
         if (this.shared) {
-          text = this.shared.text;
-          translation = this.shared.translation;
+          text = this.shared.text || "";
+          translation = this.shared.translation || "";
         }
       } catch (err) {
         logError(err);
@@ -306,6 +291,7 @@ export default {
     ...mapGetters('savedText', ['getItems']),
      // The object corresponding to the text object in our store shared (uploaded) to the server: {id: 1, text: '...', translation: '...'}
     shared() { 
+      this.refreshKey;
       let items = this.getItems(this.$l2.code);
       if (items) return items.find(item => Number(item.id) === Number(this.arg)) || { text: '', translation: '' };
     },
