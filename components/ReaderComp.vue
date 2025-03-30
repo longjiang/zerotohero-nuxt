@@ -432,11 +432,12 @@ export default {
   left: 0;
   top: 0;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   z-index: 10;
   overflow: auto;
   margin-top: 0 !important;
   padding: 1rem;
+  background-color: white;
 
   .reader-editor {
     position: fixed;
@@ -448,7 +449,7 @@ export default {
   #translation-iframe {
     position: fixed;
     width: calc(100vw - 2rem);
-    height: calc(100vh - 15vh - 5.5rem);
+    height: calc(100vh - 15vh - 7rem);
     padding-bottom: 10rem;
     overflow: auto;
   }
