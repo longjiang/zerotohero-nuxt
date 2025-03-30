@@ -244,7 +244,6 @@
 </template>
 
 <script>
-import { parse } from "node-html-parser";
 import { ContainerQuery } from "vue-container-query";
 import { timeout } from "../lib/utils/timeout";
 import { breakSentences, stripTags } from "../lib/utils/string";
@@ -594,6 +593,17 @@ export default {
 :deep(.annotate-translation-sentence.current) {
   background-color: rgba($primary-color, 0.25);
 }
+
+:deep(td), :deep(th) {
+    padding: 0.2rem 0.6rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    vertical-align: top;
+}
+
+:deep(th) {
+    background: rgba(0, 0, 0, 0.1);
+}
+
 
 #speech-container.skin-light {
   .speech-bar,
