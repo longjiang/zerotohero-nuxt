@@ -219,9 +219,20 @@ export default {
         if (this.shared) {
           text = this.shared.text || "";
           translation = this.shared.translation || "";
+        } else {
+          this.$toast.error(this.$tb("Text not found"), {
+            position: "top-center",
+            duration: 5000,
+          });
+          this.$router.replace({ name: "l1-l2-my-text" });
         }
       } catch (err) {
         logError(err);
+        this.$toast.error(this.$tb("Text not found"), {
+          position: "top-center",
+          duration: 5000,
+        });
+        this.$router.replace({ name: "l1-l2-my-text" });
       }
     } else if (method === "html-url") {
       this.baseUrl = baseUrl(this.arg);
@@ -258,7 +269,7 @@ export default {
     shared() { 
       this.refreshKey;
       let items = this.getItems(this.$l2.code);
-      if (items) return items.find(item => Number(item.id) === Number(this.arg)) || { text: '', translation: '' };
+      if (items) return items.find(item => Number(item.id) === Number(this.arg));
     },
     shareURL() {
       if (typeof location !== "undefined")
