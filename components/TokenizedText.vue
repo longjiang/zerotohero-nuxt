@@ -179,7 +179,7 @@ export default {
 </script>
 <style>
 .tokenized-text.show-pinyin {
-  line-height: 1.85;
+  line-height: 2;
 }
 .annotate-input {
   width: 100%;
