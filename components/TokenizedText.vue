@@ -1,6 +1,6 @@
 <!-- TokenizedText.vue -->
 <template>
-  <span :class="{ 'use-zoom': useZoom, speaking }" :dir="$l2.direction">
+  <span :class="{ 'tokenized-text': true, 'show-pinyin': $l2Settings.showPinyin, 'use-zoom': useZoom, speaking }" :dir="$l2.direction">
     <template v-if="tokenized">
       <template v-for="(token, index) in tokens"><word-block
           v-if="typeof token !== 'string'"
@@ -178,6 +178,9 @@ export default {
 };
 </script>
 <style>
+.tokenized-text.show-pinyin {
+  line-height: 1.85;
+}
 .annotate-input {
   width: 100%;
   resize: none; /* to prevent manual resizing */
