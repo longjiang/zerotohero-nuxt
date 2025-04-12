@@ -294,7 +294,7 @@ class HskCedictDictionary extends BaseDictionary {
       pronunciation: row.pinyin,
       definitions,
       search: removeToneMarks(row.pinyin.replace(/ /g, "")),
-      frequencyAssignedLevel: row.level, // This is the level assigned by the FrequencyAssigner
+      frequencyAssignedLevel: undefined, // This will be the level assigned by the FrequencyAssigner
       level: row.hsk, // This uses the standard HSK curriculum and overrides the level assigned by the FrequencyAssigner
       pos,
     });

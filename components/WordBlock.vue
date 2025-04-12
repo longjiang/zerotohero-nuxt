@@ -242,6 +242,9 @@ export default {
         this.checkSavedPhrase();
       }
     });
+    if (!this.bestWord && this.$l2.han) {
+      this.lookup()
+    }
   },
   beforeDestroy() {
     this.words = [];
@@ -266,6 +269,18 @@ export default {
         if (this.$l2.code === "zh") {
           if (this.bestWord?.newHSK && Number(this.bestWord?.newHSK) <= this.level) return false;
           if (this.bestWord?.frequencyAssignedLevel && Number(this.bestWord?.frequencyAssignedLevel) <= this.level) return false;
+          if (this.words?.length) {
+            const hardestWord = this.words.reduce((maxObj, current) => {
+              if (
+                maxObj === null ||
+                current.frequencyAssignedLevel > maxObj.frequencyAssignedLevel
+              ) {
+                return current;
+              }
+              return maxObj;
+            }, null);
+            if (hardestWord?.frequencyAssignedLevel <= this.level) return false;
+          }
         }
       }
       // If the segment's surface form and reading form are the same, don't show the reading

@@ -180,8 +180,11 @@ class FrequencyAssigner {
     if (!item.frequency) {
       item.frequency = this.getFrequency(item.search);
     }
-    if (!item.level) item.level = this.getLevelByFrequency(item.frequency); // Sometimes the dictionary already has level info
+    const level = this.getLevelByFrequency(item.frequency)
+    if (!item.level) item.level = level; // Sometimes the dictionary already has level info
+    item.frequencyAssignedLevel = level; // Add an extra frequencyAssignedLevel field in case as a redundancy
   }
+
   addFrequencyAndLevelToItems(items) {
     for (let item of items) {
       this.addFrequencyAndLevel(item); // Assuming this function assigns both frequency and level to the item
