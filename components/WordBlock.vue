@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { SpeechSingleton, unique, uniqueByValue, hasKanji, timeout, convertVowelEtoIAndOtoU, splitIntoMoras, applyAccentPattern, addPitchAccent, convertPitchToUnderline } from "../lib/utils";
+import { SpeechSingleton, unique, uniqueByValue, hasKanji, isPunctuation, timeout, convertVowelEtoIAndOtoU, splitIntoMoras, applyAccentPattern, addPitchAccent, convertPitchToUnderline } from "../lib/utils";
 import { mapState } from "vuex";
 import { tify, sify } from "chinese-conv";
 import { transliterate as tr } from "transliteration";
@@ -187,6 +187,7 @@ export default {
       }
     },
     bestPhonetics() {
+      if (isPunctuation(this.text)) return;
       let phonetics;
       if (this.token?.pronunciation) {
         phonetics = this.token.pronunciation;
