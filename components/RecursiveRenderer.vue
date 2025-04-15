@@ -2,14 +2,17 @@
 <template>
   <!-- Base case: if node is a text node, render it -->
   <span v-if="node.type === 'text'">
-    <TokenizedText
-      v-for="(sentence, index) in sentences"
-      :key="index"
-      :text="sentence"
-      v-on="$listeners"
-      ref="tokenizedTexts"
-      v-bind="attributesObject"
-    />
+    <template v-for="(sentence, index) in sentences">
+      <TokenizedText
+        
+        :key="index"
+        :text="sentence"
+        v-on="$listeners"
+        ref="tokenizedTexts"
+        v-bind="attributesObject"
+      />
+      <template> </template>
+    </template>
   </span>
   
   <!-- Base case: if the node is type 'code' or 'pre', or any of the non-text types like images, render it as is -->
