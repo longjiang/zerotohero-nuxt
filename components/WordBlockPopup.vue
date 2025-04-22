@@ -67,8 +67,9 @@
       <ChatGPT
         v-if="showChatGPT"
         :maxTokens="30"
-        :showRegenerate="false"
+        :showRegenerate="true"
         :showPrompt="false"
+        :showOpenInReader="false"
         class="mt-4"
         :initialMessages="[chatGPTPrompt]"
       />
@@ -335,7 +336,7 @@ export default {
     },
     chatGPTPrompt() {
       const basePrompt = this.$t('Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’.', { text: this.context.text, word: this.text, l2: this.$t(this.$l2.name), l1: this.$t(this.$l1.name), code: this.$l2.code})
-      const inflectionPrompt = this.$t('Give its lemma, inflection, and morphology.')
+      const inflectionPrompt = 'Give its morphology or etymology if appropriate. If it\'s an inflected form, give its lemma and inflection.'
       // Languages that don't inflect dont' need the inflection prompt
       const inflectionNotNeeded = ['zh', 'vi', 'th', 'lo', 'km']
       return inflectionNotNeeded.includes(this.$l2.code) ? basePrompt : `${basePrompt} ${inflectionPrompt}`
