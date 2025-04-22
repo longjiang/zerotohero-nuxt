@@ -453,6 +453,10 @@ class BaseDictionary {
     return words;
   }
 
+  getByHSKId() {
+    // Only implemented for Chinese
+  }
+
   getNewHSK() {
     // Only implemented for Chinese
   }
