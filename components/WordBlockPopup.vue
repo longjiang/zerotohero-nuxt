@@ -336,7 +336,7 @@ export default {
     },
     chatGPTPrompt() {
       const basePrompt = this.$t('Succinctly explain using {l1}, what the {l2} ({code}) word ‘{word}’ means in the phrase ‘{text}’.', { text: this.context.text, word: this.text, l2: this.$t(this.$l2.name), l1: this.$t(this.$l1.name), code: this.$l2.code})
-      const inflectionPrompt = 'Give its morphology or etymology if appropriate. If it\'s an inflected form, give its lemma and inflection.'
+      const inflectionPrompt = 'Give its pronunciation and morphology (or etymology if appropriate). If inflected, give its lemma and inflection; otherwise do not mention inflection or lemma.'
       // Languages that don't inflect dont' need the inflection prompt
       const inflectionNotNeeded = ['zh', 'vi', 'th', 'lo', 'km']
       return inflectionNotNeeded.includes(this.$l2.code) ? basePrompt : `${basePrompt} ${inflectionPrompt}`
