@@ -204,7 +204,18 @@ export const actions = {
   }
 }
 
+// 「今日」の単語を抽出する関数
+export const getTodayWords = (words) => {
+  const now = new Date();
+  const userTimezoneOffset = now.getTimezoneOffset() * 60000; // 分 → ミリ秒
+  const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() - userTimezoneOffset;
+  const endOfDay = startOfDay + 86400000; // 24時間
 
+  return words.filter(word => {
+    const wordDate = new Date(word.date - userTimezoneOffset).getTime();
+    return wordDate >= startOfDay && wordDate < endOfDay;
+  });
+}
 
 
 export const getters = {
@@ -219,6 +230,14 @@ export const getters = {
         if (savedWords) return savedWords[0]
       }
       return savedWord
+    }
+  },
+  todayWordCount: state => ({ l2 }) => {
+    if (state.savedWords[l2]) {
+      let todayWords = getTodayWords(state.savedWords[l2])
+      return todayWords.length
+    } else {
+      return 0
     }
   },
   count: state => ({ l2 }) => {
