@@ -5,7 +5,7 @@
       sale: SALE && plan.name === 'lifetime',
       active: subscription && subscription.type === plan.name && subscription.payment_customer_id,
       selected: selectedPlan && selectedPlan.name === plan.name,
-    }" @click="subscription && subscription.type === plan.name ? null : selectPlan(plan)">
+    }" @click="subscription && !isHigherPlan(plan.name, subscription?.type) ? null : selectPlan(plan)">
       <div class="price" style="white-space: nowrap">
         <div v-if="plan.name !== 'lifetime' || !SALE">
           <span>
@@ -64,7 +64,7 @@
       </div>
       <div>{{ $tb(plan.description) }}</div>
       <div class="mt-2">
-        <b-button v-if="plan.name === subscription?.type && subscription?.payment_customer_id" size="sm" disabled>{{
+        <b-button v-if="plan.name === subscription?.type" size="sm" disabled>{{
       $tb('Current Plan') }}</b-button>
         <b-button v-else-if="isHigherPlan(plan.name, subscription?.type)" size="sm" variant="success" @click="selectPlan(plan)">{{
           $tb('Select Plan') }}</b-button>
@@ -96,7 +96,8 @@ export default {
       return this.$store.state.subscriptions.active;
     },
     subscription() {
-      return this.$store.state.subscriptions.subscription;
+      const subscription = this.$store.state.subscriptions.subscription;
+      return this.pro ? subscription : null;
     },
   },
   async created() {
