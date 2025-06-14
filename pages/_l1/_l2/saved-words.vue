@@ -142,6 +142,42 @@
 import { groupArrayBy, makeTextFile, formatPronunciation, l2LevelNameByLevel } from "../../../lib/utils";
 import Papa from "papaparse";
 
+// ───────── ヘルパ関数群 ─────────
+function buildAnkiBack({ head, pronunciation, definitions, level, l2Code = "en" }) {
+  const base = [head, pronunciation, definitions.join("; ")].join(" ");
+  let back = "";
+  back += `${base}`;
+  if (level) {
+    back += ` (${level})`;
+  }
+  back += `<br><br>`;
+  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/${l2Code}/1/" style="height: 130px"> `;
+  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/${l2Code}/2" style="height: 130px"> `;
+  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/${l2Code}/3/" style="height: 130px"> `;
+  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/${l2Code}/4/" style="height: 130px"> `;
+  return back;
+}
+
+function buildAnkiFront({
+  contextForm,
+  contextText,
+  head,
+  youtubeID,
+  startTime,
+}) {
+  // ① 表示語のハイライト
+  let front = contextForm && contextText
+    ? contextText.replace(contextForm, `<b>${contextForm}</b>`)
+    : head;
+
+  // ② 必要なら YouTube 埋め込みを付与
+  if (youtubeID && startTime) {
+    const t = Math.floor(startTime) - 1;
+    front += `<br><br><iframe width="320" height="180" src="https://www.youtube.com/embed/${youtubeID}?start=${t}" frameborder="0"></iframe>`;
+  }
+  return front;
+}
+
 export default {
   data() {
     return {
@@ -204,58 +240,78 @@ export default {
     $dictionaryName() {
       return this.$store.state.settings.dictionaryName;
     },
+
+    // ───────── Vue メソッド ─────────
     csv() {
-      let csvWords = this.sW.map((savedWord) => {
-        let word = savedWord.word;
-        let mapped = { id: word.id, head: word.head };
-        mapped = Object.assign(mapped, word);
+      let csvWords = this.sW.map(savedWord => {
+        const word = savedWord.word;
+        // 基本フィールド
+        const mapped = { id: word.id, head: word.head, ...word };
+
         mapped.l2 = this.$l2.code;
-        mapped.definitions = word.definitions.join("; ");
+        mapped.definitions = word.definitions;
         mapped.date = savedWord.date;
+
         mapped.pronunciation = formatPronunciation({
-          word: word,
+          word,
           langCode: this.$l2.code,
-          hasFeature: (feature) => this.$hasFeature(feature),
+          hasFeature: f => this.$hasFeature(f),
         });
-        mapped.contextForm = savedWord.context?.form;
-        mapped.contextStartTime = savedWord.context?.starttime;
-        mapped.contextText = savedWord.context?.text;
-        mapped.contextYouTubeID = savedWord.context?.youtube_id;
-        mapped.ankiBack = word.head + ' ' + mapped.pronunciation + ' ' + word.definitions.join("; ");
+
+        mapped.contextForm       = savedWord.context?.form;
+        mapped.contextStartTime  = savedWord.context?.starttime;
+        mapped.contextText       = savedWord.context?.text;
+        mapped.contextYouTubeID  = savedWord.context?.youtube_id;
+
         const level = l2LevelNameByLevel(this.$l2, word.level);
-        if (level) mapped.ankiBack += ` (${level})`;
-        mapped.ankiFront = mapped.contextForm && mapped.contextText ? mapped.contextText.replace(mapped.contextForm, '<b>' + mapped.contextForm + '</b>') : word.head;
-        if (mapped.contextYouTubeID && mapped.contextStartTime) {
-            // For some reason, 'src=' automatically gets replaced with 'v-lazy-load data-src='. We replace it back in the final csv string.
-            mapped.ankiFront += `<br><br><iframe width="320" height="180" src="https://www.youtube.com/embed/${mapped.contextYouTubeID}?start=${Math.floor(mapped.contextStartTime) - 1}" frameborder="0"></iframe>`;
-        }
+
+        // ── Anki 用フィールドをヘルパで生成 ──
+        mapped.ankiBack = buildAnkiBack({
+          head: word.head,
+          pronunciation: mapped.pronunciation,
+          definitions: mapped.definitions,
+          level,
+          l2Code: this.$l2.code,
+        });
+
+        mapped.ankiFront = buildAnkiFront({
+          contextForm: mapped.contextForm,
+          contextText: mapped.contextText,
+          head: word.head,
+          youtubeID: mapped.contextYouTubeID,
+          startTime: mapped.contextStartTime,
+        });
+
         if (word.simplified || word.kana || word.hangul) delete mapped.head;
-        delete mapped.cjk;
-        delete mapped.search;
-        delete mapped.newHSKMatches;
-        delete mapped.saved;
-        delete mapped.phrase;
-        delete mapped.username;
-        delete mapped.created;
-        delete mapped.audio;
-        delete mapped.c;
-        delete mapped.e;
-        delete mapped.f;
-        delete mapped.i;
-        delete mapped.k;
-        delete mapped.l;
-        delete mapped.wiktionary;
+
+        // 不要キーの削除（従前と同じ）
+        [
+          "cjk","search","newHSKMatches","saved","phrase","username","created",
+          "audio","c","e","f","i","k","l","wiktionary"
+        ].forEach(k => delete mapped[k]);
+
         return mapped;
       });
-      // Convert date to ISO date (ignore time)
-      csvWords = csvWords.map((word) => {
-        word.date = new Date(Number(word.date)).toISOString().split("T")[0];
-        return word;
+
+      // 日付を ISO（yyyy-mm-dd）化
+      csvWords = csvWords.map(w => {
+        w.date = new Date(Number(w.date)).toISOString().split("T")[0];
+        return w;
       });
-      let csv = Papa.unparse(csvWords);
-      csv = csv.replace(/v-lazy-load data-src=/g, 'src=');
+
+      // 列順指定
+      const firstRowKeys = Object.keys(csvWords[0] || {});
+      const columns = ["ankiFront", "ankiBack", "date"].concat(
+        firstRowKeys.filter(k => !["ankiFront", "ankiBack", "date"].includes(k))
+      );
+
+      // CSV 化
+      let csv = Papa.unparse(csvWords, { columns });
+      csv = csv.replace(/v-lazy-load data-src=/g, "src=");
+
       return csv;
     },
+    
   },
   mounted() {
     this.updateWords();
