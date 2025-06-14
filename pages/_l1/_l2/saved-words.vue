@@ -151,10 +151,10 @@ function buildAnkiBack({ head, pronunciation, definitions, level, l2Code = "en" 
     back += ` (${level})`;
   }
   back += `<br><br>`;
-  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/${l2Code}/1/" style="height: 130px"> `;
-  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/${l2Code}/2" style="height: 130px"> `;
-  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/${l2Code}/3/" style="height: 130px"> `;
-  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/${l2Code}/4/" style="height: 130px"> `;
+  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/1/${l2Code}" style="height: 100px"> `;
+  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/2"${l2Code} style="height: 100px"> `;
+  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/3/${l2Code}" style="height: 100px"> `;
+  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/4/${l2Code}" style="height: 100px"> `;
   return back;
 }
 
