@@ -143,13 +143,15 @@ import { groupArrayBy, makeTextFile, formatPronunciation, l2LevelNameByLevel } f
 import Papa from "papaparse";
 
 // ───────── ヘルパ関数群 ─────────
-function buildAnkiBack({ head, pronunciation, definitions, level, l2Code = "en" }) {
+function buildAnkiBack({ head, chatGPTPrompt, lpURL, pronunciation, definitions, level, l2Code = "en" }) {
   const base = [head, pronunciation, definitions.join("; ")].join(" ");
   let back = "";
   back += `${base}`;
   if (level) {
     back += ` (${level})`;
   }
+  back += `<br><br>`;
+  back += `<a href="${lpURL}" target="_blank">Language Player</a>・<a href="https://chat.openai.com/?q=${encodeURIComponent(chatGPTPrompt)}" target="_blank">ChatGPT</a>`;
   back += `<br><br>`;
   back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/1/${l2Code}" style="height: 100px"> `;
   back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/2"${l2Code} style="height: 100px"> `;
@@ -268,6 +270,8 @@ export default {
         // ── Anki 用フィールドをヘルパで生成 ──
         mapped.ankiBack = buildAnkiBack({
           head: word.head,
+          chatGPTPrompt: `Explain in ${this.$l1.name}, the meaning and pronunciation of the ${this.$l2.name} (${this.$l2.code}) word ‘${mapped.contextForm}’ in ‘${mapped.contextText}’. Rephrase it in various ways with synonyms, give additional examples, and provide mnemonic tips.`,
+          lpURL: `https://languageplayer.io/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${word.id}`,
           pronunciation: mapped.pronunciation,
           definitions: mapped.definitions,
           level,

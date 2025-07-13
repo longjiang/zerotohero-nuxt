@@ -1,3 +1,4 @@
+<!-- ChatGPT.vue -->
 <template>
   <div>
     <div>
