@@ -334,8 +334,6 @@ export default {
     border-color: #555;
   }
 }
-.reader.skin-light {
-}
 
 .reader-annotated-wide.with-translation {
   .line {

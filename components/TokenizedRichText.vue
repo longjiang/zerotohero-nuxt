@@ -329,9 +329,19 @@ export default {
   opacity: 0.7;
   font-size: 0.8rem;
 }
+.annotate-text {
+  blockquote {
+    border-left: 0.25rem solid #888;
+    padding-left: 1rem;
+  }
+}
 .annotate-text[dir="rtl"] {
   direction: rtl;
   text-align: right;
+  blockquote {
+    border-right: 0.25rem solid #888;
+    padding-right: 1rem;
+  }
 }
 .annotate-text-wrapper {
   display: flex;
