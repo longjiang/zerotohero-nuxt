@@ -308,7 +308,7 @@ export default {
 
 
 
-.zth-main-nav-wrapper {
+.zth-main-nav-wrapper.zth-nav-side-bar {
   &:not(.zth-nav-collapsed) {
     width: 13rem;
   }    
