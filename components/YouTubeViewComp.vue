@@ -41,6 +41,7 @@
       @updateLayout="onUpdateLayout"
       @retranslate="retranslate(video)"
     />
+    
     <!-- Modal for a countdown after the video finishes playing, vertically centered -->
     <b-modal
       id="countdown-modal"
@@ -708,6 +709,7 @@ export default {
         "tags",
         "title",
         "views",
+        "description",
       ];
 
       if (!properties.every((property) => property in this.video)) {

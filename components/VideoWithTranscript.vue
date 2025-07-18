@@ -173,6 +173,26 @@
           ></i>
         </div>
 
+        <div
+          class="video-info video-info-top"
+          v-if="(forceMode || mode) === 'transcript' && size !== 'mini'"
+        >
+          <div class="px-3">
+            <TokenizedRichText
+              v-if="showDescription"
+              ref="tokenizedRichTexts"
+              class="mt-2"
+            >
+              <div>
+                <p v-for="(line, index) in video.description.split('\n')" :key="index">{{ line }}</p>
+              </div>
+            </TokenizedRichText>
+            <b-button variant="outline-secondary" class="w-100" @click="showDescription = !showDescription">
+              {{ showDescription ? 'Hide Description' : 'Show Description' }} <i class="fa-solid fa-angle-down" v-if="!showDescription"></i><i class="fa-solid fa-angle-up" v-if="showDescription"></i>
+            </b-button>
+          </div>
+        </div>
+        
         <!-- This is the public facing video admin -->
         <!-- If the video has no subs, allow the user to add subs -->
         <div class="pl-4 pr-4" v-if="!checkingSubs && type == 'youtube' && video && !video.subs_l2">
@@ -188,6 +208,7 @@
             @updateTranscript="onUpdateTranscript"
           />
         </div>
+
         <SyncedTranscript
           v-if="video.subs_l2 && video.subs_l2.length > 0"
           ref="transcript"
@@ -231,6 +252,7 @@
           <div class="text-center mt-2 mb-2" v-show="checkingSubs">
             <Loader :sticky="true" message="Loading subtitles..." />
           </div>
+          
           <client-only>
             <EpisodeNav
               v-if="episodes"
@@ -445,6 +467,7 @@ export default {
       viewportWidth: undefined,
       videoHeightWithoutControls: undefined,
       overlayTranscriptVerticalPercentage: 0.75,
+      showDescription: false,
     };
   },
   computed: {
