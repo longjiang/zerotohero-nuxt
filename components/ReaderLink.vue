@@ -3,7 +3,7 @@
     <slot></slot>
     <router-link
       v-if="href && !href.endsWith('undefined')"
-      :to="{
+      :to="youtubeRoute || {
         name: 'l1-l2-reader',
         params: { method: 'html-url', arg: absoluteURL(alt, href) },
       }"
@@ -38,6 +38,29 @@ export default {
     };
   },
   mounted() {},
+  computed: {
+    youtubeRoute() {
+      try {
+        const url = new URL(this.href, this.alt || window.location.origin);
+        if (url.hostname.includes("youtube.com") || url.hostname.includes("youtu.be")) {
+          let videoId = url.searchParams.get("v");
+          if (!videoId && url.hostname.includes("youtu.be")) {
+            videoId = url.pathname.slice(1);
+          }
+          if (videoId) {
+            return {
+              name: 'l1-l2-video-view-type',
+              params: {
+                type: 'youtube',
+                youtube_id: videoId,
+              },
+            };
+          }
+        }
+      } catch (e) {}
+      return null;
+    },
+  },
   methods: {
     absoluteURL(...args) {
       return absoluteURL(...args);
