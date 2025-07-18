@@ -20,7 +20,7 @@
                 <i class="fa fa-chevron-left"></i>
                 {{ $t("My Texts") }}
               </router-link>
-              <b-button class="new-button text-success py-1 px-2" variant="no-bg" size="lg" @click="newText" :disabled="creating" :title="$t('New Text')">
+              <b-button class="new-button text-success py-1 px-2" variant="no-bg" size="lg" @click="newText" :disabled="creating" :title="$t('New Text')" v-if="method === 'shared'">
                 <span v-if="!creating">
                   <i class="fas fa-edit"></i>
                 </span>
@@ -242,6 +242,12 @@ export default {
         let body = dom.querySelector("body");
         // Remove <nav>, <header>, <footer> and other non-content elements
         body.querySelectorAll("nav, header, footer, aside, .sidebar, .menu, .navigation").forEach(el => el.remove());
+        // Make all URLs absolute
+        body.querySelectorAll("a").forEach(el => {
+          if (el.getAttribute("href")) {
+            el.setAttribute("href", new URL(el.getAttribute("href"), this.baseUrl).href);
+          }
+        });
         // Try to find the main content area
         let article = dom.querySelector("article");
         let wikipediaContent = dom.querySelector("#mw-content-text");
