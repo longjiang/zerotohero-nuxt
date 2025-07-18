@@ -240,6 +240,9 @@ export default {
         let html = await proxy(arg);
         let dom = parse(html);
         let body = dom.querySelector("body");
+        // Remove <nav>, <header>, <footer> and other non-content elements
+        body.querySelectorAll("nav, header, footer, aside, .sidebar, .menu, .navigation").forEach(el => el.remove());
+        // Try to find the main content area
         let article = dom.querySelector("article");
         let wikipediaContent = dom.querySelector("#mw-content-text");
         dom = wikipediaContent || article || body || dom;
