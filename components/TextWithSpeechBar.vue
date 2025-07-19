@@ -307,18 +307,29 @@ export default {
     };
   },
   computed: {
-    linesPerPage() {
-      // Get the default
-      let linesPerPage = 15;
+    pageBreaks() {
+      // Split pages so that each page (except possibly the last) contains **at least** 3,000 visible characters.
+      const minCharCountPerPage = 3000;
+      const breaks = [0]; // first page always starts at index 0
+      let charCount = 0;
 
-      // If the text is longer than 1000 characters, adjust the number of lines per page
-      const maxCharCountPerPage = 2000;
-      let text = this.allLines.join("\n");
-      let idealPageCount = text.length / maxCharCountPerPage
-      if (idealPageCount > 1) {
-        linesPerPage = Math.ceil(this.allLines.length / idealPageCount);
+      for (let i = 0; i < this.allLines.length; i++) {
+        const len = this.stripTags(this.allLines[i]).length;
+        charCount += len;
+
+        // When we've reached the minimum quota, start a new page at the *next* line.
+        if (charCount >= minCharCountPerPage && i + 1 < this.allLines.length) {
+          breaks.push(i + 1);
+          charCount = 0;
+        }
       }
-      return linesPerPage;
+
+      breaks.push(this.allLines.length); // sentinel marking the end of the last page
+      return breaks;
+    },
+    linesPerPage() {
+      const p = Number(this.page) || 1;
+      return this.pageBreaks[p] - this.pageBreaks[p - 1];
     },
     pageOptions() {
       let options = [];
@@ -354,25 +365,22 @@ export default {
     },
 
     lines() {
-      let lines = this.allLines;
-      if (this.page)
-        lines = lines.slice(
-          this.linesPerPage * (this.page - 1),
-          this.linesPerPage * this.page
-        );
-      return lines;
+      const p = Number(this.page) || 1;
+      return this.allLines.slice(this.pageBreaks[p - 1], this.pageBreaks[p]);
     },
     pageCount() {
-      return Math.ceil(this.allLines.length / this.linesPerPage);
+      return this.pageBreaks.length - 1;
     },
     parallellines() {
       if (this.translation) {
         let parallelLines = this.translation.replace(/\n+/g, "\n").split("\n");
-        if (this.page)
+        if (this.page) {
+          const p = Number(this.page) || 1;
           parallelLines = parallelLines.slice(
-            this.linesPerPage * (this.page - 1),
-            this.linesPerPage * this.page
+            this.pageBreaks[p - 1],
+            this.pageBreaks[p]
           );
+        }
         return parallelLines.map((l) => breakSentences(l));
       }
     },
@@ -503,8 +511,10 @@ export default {
           parallellines.push("-");
         }
       }
-      if (this.page)
-        lineIndex = Number(lineIndex) + (this.page - 1) * this.linesPerPage;
+      if (this.page) {
+        const p = Number(this.page) || 1;
+        lineIndex = Number(lineIndex) + this.pageBreaks[p - 1];
+      }
       parallellines[lineIndex] = t;
       let translation = parallellines.join("\n");
       this.$emit("translation", translation);

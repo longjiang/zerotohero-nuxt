@@ -315,7 +315,7 @@ export default {
       }
     },
     removeBoldFromMarkdown() {
-      this.text = this.text.replace(/(\*\*|__)(.*?)\1/g, "$2");
+      this.text = this.text.replace(/(\*\*|\\\*\\\*|__)(.*?)\1/g, "$2");
     },
     clear() {
       this.text = "";
