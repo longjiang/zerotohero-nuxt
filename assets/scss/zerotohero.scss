@@ -117,6 +117,11 @@ html * {
   font-display: swap;
 }
 
+html pre,
+html pre * {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+}
+
 h1,
 h2,
 h3,
