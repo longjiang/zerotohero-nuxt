@@ -78,6 +78,15 @@
               <i class="fa fa-eraser mr-1" />
               {{ $t("Clear") }}
             </b-button>
+            <!-- Remove Bold -->
+            <b-button
+              @click="removeBoldFromMarkdown"
+              :variant="$skin"
+              class="reader-button"
+            >
+              <i class="fa fa-bold mr-1" />
+              {{ $t("Remove Bold") }}
+            </b-button>
             <b-button
               v-if="!fullscreen"
               @click="toggleFullscreen"
@@ -304,6 +313,9 @@ export default {
       if (marked) {
         $("#reader-annotated").html(marked);
       }
+    },
+    removeBoldFromMarkdown() {
+      this.text = this.text.replace(/(\*\*|__)(.*?)\1/g, "$2");
     },
     clear() {
       this.text = "";
