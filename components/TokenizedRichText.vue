@@ -330,9 +330,21 @@ export default {
   font-size: 0.8rem;
 }
 .annotate-text {
+  /* レイアウト文脈を確保 */
+  width: 100%;
+  /* 横方向だけスクロール可能にする */
+  overflow-x: auto;
+  /* iOS Safari などで慣性スクロールを有効化 */
+  -webkit-overflow-scrolling: touch;
   blockquote {
     border-left: 0.25rem solid #888;
     padding-left: 1rem;
+  }
+  table {
+    min-width: 50rem;
+    table-layout: auto;             /* デフォルトだが念押し */
+    /* 境界扱いを統一（Bootstrap の .table と同様） */
+    border-collapse: collapse;
   }
 }
 .annotate-text[dir="rtl"] {
