@@ -79,49 +79,31 @@ class BaseTokenizer {
     return tokenized;
   }
 
-// Modified by ChatGPT to improve compatibility with older safari by removing regex look behind 
+
+// Tokenizer for apostrophe‑sensitive languages (Klingon, Welsh, etc.)
 tokenizeIntegral(text) {
-    let modifiedText = text;
-    let apostrophePatterns = [];
-    let tempText = text.split(/\s+/); // Split text into words by whitespace.
+    const apostropheSensitive = this.l2 && this.l2.apostrophe;
 
-    // If language is "apostrophe-sensitive" like Klingon and Welsh
-    if (this.l2 && this.l2.apostrophe) {
-        // Manually find and replace patterns where the apostrophe is part of a word
-        tempText.forEach((word, index) => {
-            const match = word.match(/^[’']?[\p{L}\p{M}]+[’']?$/u);
-            if (match) {
-                apostrophePatterns.push(word);
-                const placeholder = `APOSTROPHEWORD${index}`;
-                // Replace the word in the modified text with a placeholder
-                modifiedText = modifiedText.replace(new RegExp("\\b" + this.escapeRegExp(word) + "\\b", "gu"), placeholder);
-            }
-        });
-    }
+    // 語パターン: 語末の ' / ’ を許可
+    const wordPattern = apostropheSensitive
+        ? /[\p{L}\p{M}\d]+(?:['’][\p{L}\p{M}\d]+)*['’]?/u
+        : /[\p{L}\p{M}\d]+/u;
 
-    // Continue with the usual tokenization using Unicode property escapes
-    let tokens = modifiedText.match(/[\p{L}\p{M}\d]+|[^\p{L}\p{M}\d\s]+|\s+/gu);
+    // 語・記号・空白を単一の RegExp で抽出
+    const tokenPattern = new RegExp(
+        `${wordPattern.source}|[^\p{L}\p{M}\d\\s]+|\\s+`,
+        'gu'
+    );
 
-    // If language is "apostrophe-sensitive", restore the original words with apostrophes
-    if (this.l2 && this.l2.apostrophe && apostrophePatterns.length > 0) {
-        tokens = tokens.map((token) => {
-            const match = token.match(/APOSTROPHEWORD(\d+)/);
-            return match ? apostrophePatterns[parseInt(match[1], 10)] : token;
-        });
-    }
+    // トークン化
+    const rawTokens = text.match(tokenPattern) || [];
 
-    // Label the tokens
-    const labeledTokens = tokens.map((tokenString) => {
-        let isWord = /[\p{L}\p{M}]+/u.test(tokenString);
-        if (isWord) {
-            return { text: tokenString };
-        } else {
-            return tokenString;
-        }
-    });
-
-    return labeledTokens;
+    // 語か否かでラベリング
+    return rawTokens.map(t => wordPattern.test(t) ? { text: t } : t);
 }
+
+
+
 
 // Utility function to escape special characters in regex patterns
 escapeRegExp(string) {

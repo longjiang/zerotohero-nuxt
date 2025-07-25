@@ -35,6 +35,7 @@
 <script>
 import { timeout, stripTags, SpeechSingleton } from "../lib/utils";
 import { sify } from "chinese-conv";
+import Klingon from "../lib/klingon";
 
 export default {
   name: "TokenizedText",
@@ -103,6 +104,9 @@ export default {
       // If the language is Han, it uses the Jieba tokenizer, which works best with simplified Chinese characters. Therefore, we convert the text to simplified Chinese characters.
       if (this.$l2.han) {
         text = sify(text);
+      }
+      if (this.$l2.code === "tlh") {
+        text = Klingon.normalizeLatin(text);
       }
       this.tokens = await dictionary.tokenizeWithCache(text);
       // Sometimes SpaCy returns line breaks as { text: '\n', type: 'SPACE' }, we convert that to a string
