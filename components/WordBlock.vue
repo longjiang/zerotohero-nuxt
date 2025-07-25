@@ -200,7 +200,6 @@ export default {
     },
     wordBlockTextClasses() {
       let classes = {
-        "word-block-text d-inline-block": true,
         klingon: this.$l2.code === "tlh",
         "word-block-hard": this.hard,
         highlight: this.attributes?.isSaved
