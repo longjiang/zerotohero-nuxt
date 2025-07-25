@@ -13,7 +13,7 @@
               surface: text,
               reading: attributes && attributes.phonetics,
             },
-          ]" :key="index" :lang="$l2.code" :class="{highlight: attributes?.isSaved}">{{ showReading(segment) && $l2Settings?.phoneticsOnly ? segment.reading + ($l2.continua && $l2.code !== "ja" ? "&nbsp;" : "") : transformText(segment.surface)
+          ]" :key="index" :lang="$l2.code" :class="wordBlockTextClasses">{{ showReading(segment) && $l2Settings?.phoneticsOnly ? segment.reading + ($l2.continua && $l2.code !== "ja" ? "&nbsp;" : "") : transformText(segment.surface)
           }}<rt v-if="showReading(segment) && !$l2Settings?.phoneticsOnly">{{ segment.reading }}</rt>
         </ruby>
         <rt v-if="$l2Settings?.showDefinition">{{
@@ -203,6 +203,7 @@ export default {
         "word-block-text d-inline-block": true,
         klingon: this.$l2.code === "tlh",
         "word-block-hard": this.hard,
+        highlight: this.attributes?.isSaved
       };
       return classes;
     },
