@@ -94,7 +94,7 @@
             style="cursor: pointer"
           >
             <LanguageFlag
-              v-if="$l2 && flagCode"
+              v-if="$l2"
               ref="flag"
               :key="`top-bar-flag-${$l2.code}`"
               :autocycle="false"
