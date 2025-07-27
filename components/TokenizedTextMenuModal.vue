@@ -176,6 +176,8 @@ export default {
           l1Code: this.$l1.code,
           l2Code: this.$l2.code,
         });
+        // Remove line breaks and extra spaces
+        translation = translation.replace(/\s+/g, " ").trim();
         return translation;
       } catch (e) {
         console.error(e);

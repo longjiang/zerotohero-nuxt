@@ -369,12 +369,13 @@ export default {
       this.loadingImages = false;
       return this.images // to pass to popup as a promise
     },
-    async translate(text) {
+    async translate(text, context = undefined) {
       let translator = this.$languages.getTranslator(this.$l1, this.$l2) || [];
       this.translation = await translator.translateWithBing({
         text,
         l1Code: this.$l1.code,
         l2Code: this.$l2.code,
+        context: this.context?.text,
       });
       this.$emit("translation", this.translation);
     },
