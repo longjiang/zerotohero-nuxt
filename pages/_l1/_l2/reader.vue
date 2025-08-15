@@ -220,18 +220,18 @@ export default {
           text = this.shared.text || "";
           translation = this.shared.translation || "";
         } else {
-          this.$toast.error(this.$tb("Text not found"), {
-            position: "top-center",
-            duration: 5000,
-          });
+          // this.$toast.error(this.$tb("Text not found"), {
+          //   position: "top-center",
+          //   duration: 5000,
+          // });
           this.$router.replace({ name: "l1-l2-my-text" });
         }
       } catch (err) {
         logError(err);
-        this.$toast.error(this.$tb("Text not found"), {
-          position: "top-center",
-          duration: 5000,
-        });
+        // this.$toast.error(this.$tb("Text not found"), {
+        //   position: "top-center",
+        //   duration: 5000,
+        // });
         this.$router.replace({ name: "l1-l2-my-text" });
       }
     } else if (method === "html-url") {

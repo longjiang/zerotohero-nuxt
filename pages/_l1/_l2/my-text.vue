@@ -34,7 +34,7 @@
                   <i class="fas fa-chevron-right"></i>
                 </router-link>
               </div>
-              <div>
+              <div v-else-if="savedtexts.length === 0" class="text-center alert-info p-3 rounded w-100">
                 <p>
                   <i18n path="This tool will annotate {l2} text with {transliteration} and a popup dictionary."
                     class="text-center mb-4">
@@ -126,12 +126,6 @@ export default {
     },
     savedtexts() {
       return this.itemsByL2[this.$l2.code] || [];
-    },
-    hasLocalText() {
-      if (typeof localStorage !== "undefined") {
-        let localText = localStorage.getItem("zthReaderText");
-        return localText;
-      }
     },
   },
   methods: {
