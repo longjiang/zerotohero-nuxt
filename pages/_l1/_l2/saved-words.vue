@@ -270,7 +270,7 @@ export default {
         // ── Anki 用フィールドをヘルパで生成 ──
         mapped.ankiBack = buildAnkiBack({
           head: word.head,
-          chatGPTPrompt: `Explain in ${this.$l1.name}, the meaning and pronunciation of the ${this.$l2.name} (${this.$l2.code}) word ‘${mapped.contextForm}’ in ‘${mapped.contextText}’. Rephrase it in various ways with synonyms, give additional examples, and provide mnemonic tips.`,
+          chatGPTPrompt: `Explain in ${this.$l1.name}, the meaning and pronunciation of the ${this.$l2.name} (${this.$l2.code}) word ‘${mapped.contextForm}’ in ‘${mapped.contextText}’. Rephrase it in various ways with ${this.$l2.name} synonyms (with pronunciations), give additional examples, and provide mnemonic tips.`,
           lpURL: `https://languageplayer.io/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${word.id}`,
           pronunciation: mapped.pronunciation,
           definitions: mapped.definitions,
