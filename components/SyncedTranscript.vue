@@ -1,3 +1,10 @@
+<!-- SyncedTranscript.vue -->
+<!-- None-Pro users can only view a set number of lines. After these lines, a prompt is shown
+ to ask the user to upgrade to Pro, using the <YouNeedPro /> component. How this is shown depends on
+ the current mode of this component.
+ If this component is shown in "Transcript Mode," the component, we dim the last few lines with a gradient overlay,
+ with the <YouNeedPro /> prompt over top. If this component is shown in "Subtitles Mode," the
+ <YouNeedPro /> prompt pops up as a modal. -->
 <template>
   <div
     :class="{

@@ -1,3 +1,6 @@
+<!-- SearchSubsComp.vue -->
+<!-- None-Pro users can only view a set number of Hits. After these Hits, a prompt is shown
+ to ask the user to upgrade to Pro, using the <YouNeedPro /> component, shown inside a modal. -->
 <template>
   <div
     :class="{
