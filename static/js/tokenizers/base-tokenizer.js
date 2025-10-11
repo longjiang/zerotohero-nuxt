@@ -127,8 +127,15 @@ escapeRegExp(string) {
         if (match[0].length > longest.text.length) {
           longest.text = match[0];
           longest.matches = [word];
-        } else if (match[0].length === longest.text.length) {
-          longest.matches.push(word);
+        }
+        // Else if the length is the same and any of 'simplified', 'traditional', 'head', 'search', 'kana' of the word matches the longest.text, add it to longest.matches
+        else if (match[0].length === longest.text.length) {
+          for (let key of ['simplified', 'traditional', 'head', 'search', 'kana']) {
+            if (word[key] && word[key].toLowerCase() === longest.text.toLowerCase()) {
+              longest.matches.push(word);
+              break;
+            }
+          }
         }
       }
     }
