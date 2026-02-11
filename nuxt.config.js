@@ -714,7 +714,7 @@ export default {
         loader: "raw-loader",
       });
     },
-    transpile: ["iframe-translator", "defu"],
+    transpile: ["iframe-translator", "defu", "transliteration"],
   },
   target: "static",
   generate: {
