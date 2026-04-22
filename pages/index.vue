@@ -98,7 +98,7 @@
                 <YouTubeVideo
                   :video="{ youtube_id: 'rGRcL_Jr6qo' }"
                   :autoload="true"
-                  :autoplay="true"
+                  :autoplay="false"
                   :fullscreen="true"
                   style="overflow: hidden; border-radius: 1rem"
                 />
@@ -208,13 +208,13 @@
                     <div class="platform-icon">
                       <i class="fa-brands fa-android"></i>
                     </div>
-                    <div class="mt-3 text-white">
+                    <!-- <div class="mt-3 text-white">
                       <a
                         href="https://play.google.com/store/apps/details?id=ca.zerotohero.app"
                         target="_blank"
                         >{{ $tb("Download on Google Play.") }}</a
                       >
-                    </div>
+                    </div> -->
                     <p class="mt-3">
                       {{ $tb("Or, download the Android app as an") }}
                       <a
