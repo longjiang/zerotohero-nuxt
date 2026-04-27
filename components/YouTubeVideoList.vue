@@ -172,7 +172,7 @@
             </div>
           </div>
         </div>
-        <div v-if="$auth.loggedIn" class="mb-2 d-flex align-items-center">
+        <div v-if="isYouTubePage" class="mb-2">
           <b-form-checkbox v-model="hideWatched" switch>
             Hide watched
           </b-form-checkbox>
@@ -306,6 +306,10 @@ export default {
     limit: {
       type: Number,
     },
+    hideWatchedProp: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -325,7 +329,7 @@ export default {
       subsChecked: 3,
       unavailableYouTubeIds: [],
       videosInfoKey: 0,
-      hideWatched: false,
+      hideWatched: this.hideWatchedProp,
       params: {},
       cachedVideoMetaFromYouTube: [],
       sort: this.initialSort,
@@ -410,6 +414,9 @@ export default {
       return this.checkSubs
         ? this.filteredVideos.slice(0, this.subsChecked).filter((v) => v.id)
         : this.filteredVideos.filter((v) => v.id);
+    },
+    isYouTubePage() {
+      return this.$route.name?.includes('youtube')
     },
   },
   watch: {
