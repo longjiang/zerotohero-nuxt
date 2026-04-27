@@ -29,6 +29,9 @@ export const mutations = {
     state.watchHistoryLoadedForL2Id = l2Id
     state.l2Id = l2Id
   },
+  SET_LOADING(state, value) {
+    state.watchHistoryLoading = value
+  },
   // Add a new history item to the user's history.
   ADD_HISTORY_ITEM(state, historyItem) {
     state.watchHistory.push(historyItem)
@@ -55,7 +58,7 @@ export const actions = {
     let l2Id = l2.id
     if (state.watchHistoryLoadedForL2Id !== l2Id && !state.watchHistoryLoading) {
       if (!$nuxt.$auth.loggedIn) return
-      state.watchHistoryLoading = true
+      commit('SET_LOADING', true)
       let user = rootState.auth.user
       let token = $nuxt.$auth.strategy.token.get()
       if (user && user.id && token) {
@@ -72,7 +75,7 @@ export const actions = {
           console.log(`Watch History: ${watchHistoryItems.length} items loaded for L2 ${l2Id}`)
         }
       }
-      state.watchHistoryLoading = false
+      commit('SET_LOADING', false)
     }
   },
 
@@ -146,6 +149,16 @@ export const getters = {
     } else {
       return 0
     }
+  },
+
+   watchedVideoIds: state => {
+    const ids = new Set()
+    if (state.watchHistory) {
+      state.watchHistory.forEach(item => {
+        if (item.id) ids.add(item.id)
+      })
+    }
+    return ids
   }
 }
 

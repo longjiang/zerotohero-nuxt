@@ -172,6 +172,11 @@
             </div>
           </div>
         </div>
+        <div v-if="$auth.loggedIn" class="mb-2 d-flex align-items-center">
+          <b-form-checkbox v-model="hideWatched" switch>
+            Hide watched
+          </b-form-checkbox>
+        </div>
       </client-only>
 
       <draggable
@@ -320,6 +325,7 @@ export default {
       subsChecked: 3,
       unavailableYouTubeIds: [],
       videosInfoKey: 0,
+      hideWatched: false,
       params: {},
       cachedVideoMetaFromYouTube: [],
       sort: this.initialSort,
@@ -356,6 +362,7 @@ export default {
   computed: {
     filteredVideos() {
       if (!this.videos) return [];
+      const watchedIds = this.$store.getters['watchHistory/watchedVideoIds']
       let keyword = this.keyword ? this.keyword.toLowerCase() : undefined;
       let filteredVideos = this.videos.filter((video) => {
         if (this.unavailableVideos.includes(video)) return false;
@@ -367,6 +374,8 @@ export default {
         )
           return false;
         if (keyword && !video.title.toLowerCase().includes(keyword))
+          return false;
+        if (this.hideWatched && video.id && watchedIds.has(video.id))
           return false;
         return true;
       });
