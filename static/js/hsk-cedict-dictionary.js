@@ -7,7 +7,7 @@ class HskCedictDictionary extends BaseDictionary {
     this.cedictFile = `/data/hsk-cedict/hsk_cedict.csv.txt`;
     this.characterFile = `/data/hsk-cedict/hsk_characters.csv.txt`;
     this.newHSKFile = `/data/hsk-cedict/new_hsk.csv.txt`;
-    this.version = "1.1.11";
+    this.version = "1.2";
     this.characters = [];
     this.newHSK = [];
     this.maxWeight = 0;
