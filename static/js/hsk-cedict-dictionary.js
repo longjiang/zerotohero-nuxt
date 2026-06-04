@@ -143,8 +143,7 @@ class HskCedictDictionary extends BaseDictionary {
     return this.newHSK.filter(
       (row) =>
         row.simplified === word.simplified &&
-        row.pinyin == word.pinyin &&
-        row.definitions.includes(word.definitions[0])
+        row.pinyin == word.pinyin
     );
   }
 
