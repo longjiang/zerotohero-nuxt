@@ -59,7 +59,7 @@ class BaseTokenizer {
     // normalize depending on the serverCacheTokenizer type
     if (tokens && this.serverCacheTokenizer) {
       // call the normalizeTokens method from the respective tokenizer class...
-      let normalizedTokens = this.serverCacheTokenizer.normalizeTokens(tokens);
+      let normalizedTokens = this.serverCacheTokenizer.normalizeTokens(tokens, text);
       return this.recoverSpaces(normalizedTokens, text);
     }
 

@@ -148,7 +148,6 @@ const TokenizerFactory = {
     // Initialize the tokenizer class
     const TokenizerClass = tokenizer === 'BaseTokenizer' ? BaseTokenizer : eval(tokenizer);
     const tokenizationType = this.getTokenizationType(l2);
-    console.log('Tokenization Factory: Creating tokenizer with type', tokenizationType);
 
     // return tokenizer === 'BaseTokenizer'
     //   ? new TokenizerClass({l2, words, indexKeys, tokenizationType})
@@ -164,6 +163,8 @@ const TokenizerFactory = {
         }
       }
     }
+
+    console.log('Tokenization Factory: Creating tokenizer with type', tokenizationType, 'and server cache tokenizer', serverCacheTokenizerName);
 
     // Instanciate the class
     let instance;
