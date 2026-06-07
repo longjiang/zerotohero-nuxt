@@ -1,10 +1,11 @@
+// components/ChannelList.vue
 <template>
   <container-query :query="query" v-model="params">
     <div class="youtube-channel-list">
       <client-only>
         <!-- Similar admin tools can be added here if necessary -->
 
-        <div v-if="channels && channels.length" class="row" v-infinite-scroll="loadMore" infinite-scroll-distance="10">
+        <div v-if="channels && channels.length" class="row">
           <div
             v-for="(channel) in channelsToShow"
             :key="channel.channel_id"
@@ -53,49 +54,40 @@ export default {
   data() {
     return {
       showAllChannels: false,
-      limit: 0,           // For inifinite scroll
-      channelsToShow: [], // For inifinite scroll
+      limit: 0,           
+      channelsToShow: [], 
       params: {},
       query: {
-        xs: {
-          minWidth: 0,
-          maxWidth: 423,
-        },
-        sm: {
-          minWidth: 423,
-          maxWidth: 720,
-        },
-        md: {
-          minWidth: 720,
-          maxWidth: 960,
-        },
-        lg: {
-          minWidth: 960,
-          maxWidth: 1140,
-        },
-        xl: {
-          minWidth: 1140,
-        },
+        xs: { minWidth: 0, maxWidth: 423 },
+        sm: { minWidth: 423, maxWidth: 720 },
+        md: { minWidth: 720, maxWidth: 960 },
+        lg: { minWidth: 960, maxWidth: 1140 },
+        xl: { minWidth: 1140 },
       },
     };
   },
   mounted() {
-    this.loadMore();
-    if (!this.collapse) {
-      this.loadMore();
-      this.loadMore();
+    this.resetAndLoad();
+  },
+  watch: {
+    // CRITICAL: Watcher ensures that typing into the string filter variable 
+    // forces channelsToShow to recalculate from index 0 of the new subset array length.
+    channels: {
+      handler() {
+        this.resetAndLoad();
+      },
+      deep: true
     }
   },
   computed: {
     colClasses() {
-      let classes = {
+      return {
         'pb-4': true,
         "col-12": this.params.xs,
         "col-6": this.params.sm,
         "col-4": this.params.md,
         "col-3": this.params.lg || this.params.xl,
       };
-      return classes;
     },
   },
   methods: {
@@ -104,15 +96,27 @@ export default {
         this.loadMore();
       }
     },
-    loadMore() {
-      const newLimit = this.params.xs ? 3 : this.params.sm ? 6 : 12;
-      this.limit += newLimit;
-      const sortedChannels = this.channels.sort((a, b) => {
+    // Extracted index pointer reset functionality out of basic lifecycle mounting routines
+    resetAndLoad() {
+      const initialStep = this.params.xs ? 3 : this.params.sm ? 6 : 12;
+      this.limit = this.collapse ? initialStep : initialStep * 3;
+      this.loadMore(true);
+    },
+    loadMore(isReset = false) {
+      if (!isReset) {
+        const newLimit = this.params.xs ? 3 : this.params.sm ? 6 : 12;
+        this.limit += newLimit;
+      }
+      
+      // Perform fallback safe array allocations checking context states
+      const channelsArray = this.channels ? [...this.channels] : [];
+      
+      const sortedChannels = channelsArray.sort((a, b) => {
         const aValue = a.video_count * (a.subscribers > 0 ? a.subscribers : 0);
         const bValue = b.video_count * (b.subscribers > 0 ? b.subscribers : 0);
-
         return bValue - aValue;
       });
+      
       this.channelsToShow = sortedChannels.slice(0, this.limit);
     }
   }

@@ -1,3 +1,4 @@
+// components/Shows.vue
 <template>
   <div :class="`shows skin-${$skin}`">
     <SocialHead
