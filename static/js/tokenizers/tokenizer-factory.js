@@ -43,7 +43,71 @@ const TokenizerFactory = {
     // We remove 'fra' from SimplemmaTokenizer because it's not getting lemmas for verbs
     SimplemmaTokenizer: ['ast', 'bul', 'cat', 'ces', 'dan', 'deu', 'ell', 'eng', 'enm', 'est', 'fin', 'gla', 'gle', 'glg', 'glv', 'hbs', 'hun', 'hye', 'ind', 'isl', 'ita', 'kat', 'lat', 'lav', 'lit', 'ltz', 'mkd', 'msa', 'nld', 'nno', 'nor', 'nob', 'pol', 'por', 'por', 'ron', 'rus', 'slk', 'slv', 'sme', 'spa', 'sqi', 'swa', 'swe', 'tgl', 'tur', 'ukr'],
     LemmatizationListTokenizer: ["ast", "bul", "cat", "ces", "cym", "deu", "eng", "est", "fas", "fra", "gla", "gle", "glg", "glv", "hun", "ita", "por", "ron", "rus", "slk", "slv", "spa", "swe", "ukr"], // tokenized and lemmatized by lemmatization list
+  },
 
+  serverTokenizers: {
+    // These tokenizers have their tokenization and lemmatization cached on the server, and this is a record of which languages used which tokenizers so that we can parse the server cache correctly.
+    QalsadiTokenizer: ["ara"],
+    ZeyrekTokenizer: ["tur"],
+    HazmTokenizer: ["fas"],
+    MeCabTokenizer: ["jpn"],
+    OpenKoreanTextTokenizer: ["kor"],
+    JiebaTokenizer: ["zho"],
+    Pymorphy2Tokenizer: ["rus"],
+    PyidaungsuTokenizer: ["mya"],
+    SpacyTokenizer: [
+      'cat',
+      'dan',
+      'deu',
+      'ell',
+      'eng',
+      'spa',
+      'fin',
+      'fra',
+      'hrv',
+      'ita',
+      'lit',
+      'mkd',
+      'nor',
+      'nob',
+      'nld',
+      'pol',
+      'por',
+      'ron',
+      'swe',
+      'ukr',
+    ],
+    SimplemmaTokenizer: [
+      'ast', 
+      'bul', 
+      'ces', 
+      'enm', 
+      'est', 
+      'gla', 
+      'gle', 
+      'glg', 
+      'glv', 
+      'hbs', 
+      'hun', 
+      'hye', 
+      'ind', 
+      'isl', 
+      'kat', 
+      'lat', 
+      'lav', 
+      'ltz', 
+      'msa', 
+      'nno', 
+      'slk', 
+      'slv', 
+      'sme', 
+      'sqi', 
+      'swa', 
+      'tgl', 
+    ],
+    LemmatizationListTokenizer: [
+      'cym', 
+    ], 
   },
 
   getTokenizerName(languageCode) {
@@ -85,9 +149,35 @@ const TokenizerFactory = {
     const TokenizerClass = tokenizer === 'BaseTokenizer' ? BaseTokenizer : eval(tokenizer);
     const tokenizationType = this.getTokenizationType(l2);
     console.log('Tokenization Factory: Creating tokenizer with type', tokenizationType);
-    return tokenizer === 'BaseTokenizer'
-      ? new TokenizerClass({l2, words, indexKeys, tokenizationType})
-      : await TokenizerClass.load({l2, words, indexKeys, tokenizationType});
+
+    // return tokenizer === 'BaseTokenizer'
+    //   ? new TokenizerClass({l2, words, indexKeys, tokenizationType})
+    //   : await TokenizerClass.load({l2, words, indexKeys, tokenizationType});
+
+    // Find which tokenizer name corresponds to the current language code in your serverTokenizers registry
+    let serverCacheTokenType = null;
+    if (this.serverTokenizers) {
+      for (const [tokenizerName, langCodes] of Object.entries(this.serverTokenizers)) {
+        if (langCodes.includes(languageCode)) {
+          serverCacheTokenType = tokenizerName;
+          break;
+        }
+      }
+    }
+
+    // Instanciate the class
+    let instance;
+    if (tokenizer === 'BaseTokenizer') {
+      instance = new TokenizerClass({ l2, words, indexKeys, tokenizationType });
+    } else {
+      instance = await TokenizerClass.load({ l2, words, indexKeys, tokenizationType });
+    }
+
+    // Inject the server cache token type into the initialized instance
+    instance.serverCacheTokenType = serverCacheTokenType;
+
+
+    return instance;
   },
 
 }

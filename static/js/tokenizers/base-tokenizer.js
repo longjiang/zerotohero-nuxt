@@ -5,11 +5,11 @@ class BaseTokenizer {
   constructor({ l2, words = [], indexKeys = ["search"], tokenizationType = "integral" }) {
     this.l2 = l2;
     this.tokenizationCache = {};
-    this.serverCache = {};
+    this.serverCache = {}; // These are raw tokens that need to be normalized according to tokenizer type.
+    this.serverCacheTokenType = null; // The tokenization type of the tokens in the server cache. This is used to determine how to normalize the tokens from the server cache.
     this.words = words;
     this.indexKeys = indexKeys;
     this.tokenizationType = tokenizationType;
-    console.log("Base Tokenizer initialized with tokenization type:", this.tokenizationType);
   }
 
   static async load({ l2, words = [], indexKeys = ["search"], tokenizationType = "integral" }) {
