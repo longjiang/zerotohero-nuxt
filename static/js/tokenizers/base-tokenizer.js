@@ -53,7 +53,7 @@ class BaseTokenizer {
   }
 
   loadFromServerCache(text) {
-    const key = CryptoJS.MD5(text).toString();
+    const key = CryptoJS.MD5(text).toString(); // Note: The server by mistake have used htmlentities-encoded text to generate the cache, and the keys won't match if we use the raw text. However, since the lemmatization is erroneous on the server anyway, we simply ignore the mismatch and try to load the cache with the hash of the raw text.
     const tokens = this.serverCache[this.l2.code]?.[key];
 
 
