@@ -1,3 +1,4 @@
+// simplemma-tokenizer.js
 importScripts('../js/tokenizers/base-tokenizer.js')
 
 class SimplemmaTokenizer extends BaseTokenizer {

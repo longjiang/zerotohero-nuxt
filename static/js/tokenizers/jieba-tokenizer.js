@@ -1,3 +1,4 @@
+// jieba-tokenizer.js
 importScripts('../js/tokenizers/base-tokenizer.js')
 
 class JiebaTokenizer extends BaseTokenizer {

@@ -1,3 +1,4 @@
+// pyidaungsu-tokenizer.js
 importScripts('../js/tokenizers/base-tokenizer.js')
 
 class PyidaungsuTokenizer extends BaseTokenizer {

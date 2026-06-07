@@ -1,3 +1,4 @@
+// zeyrek-tokenizer.js
 importScripts('../js/tokenizers/base-tokenizer.js')
 
 class ZeyrekTokenizer extends BaseTokenizer {

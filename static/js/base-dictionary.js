@@ -1,3 +1,4 @@
+// base-dictionary.js
 importScripts("../vendor/papaparse/papaparse.min.js");
 importScripts("../vendor/axios/axios.min.js");
 importScripts("../vendor/localforage/localforage.js");

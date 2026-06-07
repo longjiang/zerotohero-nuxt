@@ -1,3 +1,4 @@
+// base-tokenizer.js
 importScripts("../vendor/crypto-js/crypto-js.js");
 
 class BaseTokenizer {

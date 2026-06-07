@@ -1,3 +1,4 @@
+// spacy-tokenizer.js
 importScripts('../js/tokenizers/base-tokenizer.js')
 
 class SpacyTokenizer extends BaseTokenizer {

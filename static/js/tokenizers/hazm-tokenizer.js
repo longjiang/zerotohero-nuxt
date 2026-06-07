@@ -1,3 +1,4 @@
+// hazm-tokenizer.js
 importScripts("../js/tokenizers/base-tokenizer.js");
 
 class HazmTokenizer extends BaseTokenizer {

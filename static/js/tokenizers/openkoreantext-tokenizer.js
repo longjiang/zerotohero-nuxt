@@ -1,3 +1,4 @@
+// openkoreantext-tokenizer.js
 importScripts('../js/tokenizers/base-tokenizer.js')
 
 class OpenKoreanTextTokenizer extends BaseTokenizer {

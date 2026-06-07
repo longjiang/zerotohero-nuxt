@@ -1,3 +1,4 @@
+// qalsadi-tokenizer.js
 importScripts('../js/tokenizers/base-tokenizer.js')
 
 // arabic-tokenizer.js

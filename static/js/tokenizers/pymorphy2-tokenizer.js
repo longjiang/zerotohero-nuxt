@@ -1,3 +1,4 @@
+// pymorphy2-tokenizer.js
 importScripts('../js/tokenizers/base-tokenizer.js')
 
 class Pymorphy2Tokenizer extends BaseTokenizer {

@@ -1,3 +1,4 @@
+// YouTubeViewComp.vue
 <template>
   <div class="youtube-view">
     <SocialHead
