@@ -32,7 +32,6 @@ class BaseTokenizer {
     // Check server cache before tokenizing
     const serverCacheTokens = this.loadFromServerCache(text);
     if (serverCacheTokens) {
-      console.log("BaseTokenizer: Server cache hit for text:", { text, tokens: serverCacheTokens });
       return serverCacheTokens;
     }
 
@@ -78,7 +77,7 @@ class BaseTokenizer {
     switch (tokenizationType) {
       // tokenizationType passed in from <TokenizedRichText>
       case "integral":
-        console.log("Tokenizing locally with integral method");
+        console.log("Tokenizing locally with integral method with apostrophe sensitivity set to", this.l2.apostrophe);
         tokenized = this.tokenizeIntegral(text);
         break;
       case "agglutenative":
@@ -95,8 +94,10 @@ class BaseTokenizer {
   }
 
 
-// Tokenizer for apostrophe‑sensitive languages (Klingon, Welsh, etc.)
+// Tokenizer for languages with clear word boundaries (e.g. spaces)
 tokenizeIntegral(text) {
+    // For apostrophe‑sensitive languages (Klingon, Welsh, etc.), this is set to true, and the tokenizer will treat apostrophes as part of the word. For example, in Welsh, "Llywelyn's book" would be tokenized as ["Llywelyn's", "book"] instead of ["Llywelyn", "'s", "book"].
+    // Otherwise, apostrophes are treated as separate tokens. For example, in English, "Llywelyn's book" would be tokenized as ["Llywelyn", "'s", "book"].
     const apostropheSensitive = this.l2 && this.l2.apostrophe;
 
     // 語パターン: 語末の ' / ’ を許可
@@ -106,7 +107,7 @@ tokenizeIntegral(text) {
 
     // 語・記号・空白を単一の RegExp で抽出
     const tokenPattern = new RegExp(
-        `${wordPattern.source}|[^\p{L}\p{M}\d\\s]+|\\s+`,
+        `${wordPattern.source}|[^\\p{L}\\p{M}\\d\\s]+|\\s+`,
         'gu'
     );
 
