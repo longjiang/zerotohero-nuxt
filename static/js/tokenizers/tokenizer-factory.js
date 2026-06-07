@@ -45,7 +45,7 @@ const TokenizerFactory = {
     LemmatizationListTokenizer: ["ast", "bul", "cat", "ces", "cym", "deu", "eng", "est", "fas", "fra", "gla", "gle", "glg", "glv", "hun", "ita", "por", "ron", "rus", "slk", "slv", "spa", "swe", "ukr"], // tokenized and lemmatized by lemmatization list
   },
 
-  serverTokenizers: {
+  serverCacheTokenizers: {
     // These tokenizers have their tokenization and lemmatization cached on the server, and this is a record of which languages used which tokenizers so that we can parse the server cache correctly.
     QalsadiTokenizer: ["ara"],
     ZeyrekTokenizer: ["tur"],
@@ -154,12 +154,12 @@ const TokenizerFactory = {
     //   ? new TokenizerClass({l2, words, indexKeys, tokenizationType})
     //   : await TokenizerClass.load({l2, words, indexKeys, tokenizationType});
 
-    // Find which tokenizer name corresponds to the current language code in your serverTokenizers registry
-    let serverCacheTokenType = null;
-    if (this.serverTokenizers) {
-      for (const [tokenizerName, langCodes] of Object.entries(this.serverTokenizers)) {
+    // Find which tokenizer name corresponds to the current language code in your serverCacheTokenizers registry
+    let serverCacheTokenizerName = null;
+    if (this.serverCacheTokenizers) {
+      for (const [tokenizerName, langCodes] of Object.entries(this.serverCacheTokenizers)) {
         if (langCodes.includes(languageCode)) {
-          serverCacheTokenType = tokenizerName;
+          serverCacheTokenizerName = tokenizerName;
           break;
         }
       }
@@ -173,8 +173,23 @@ const TokenizerFactory = {
       instance = await TokenizerClass.load({ l2, words, indexKeys, tokenizationType });
     }
 
-    // Inject the server cache token type into the initialized instance
-    instance.serverCacheTokenType = serverCacheTokenType;
+    instance.serverCacheTokenizer = instance; // Default to itself if no separate server cache tokenizer
+
+    if (serverCacheTokenizerName && tokenizer !== serverCacheTokenizerName) {
+      let serverCacheTokenizer
+      // Check if already loaded
+      if (typeof self[serverCacheTokenizerName] === 'undefined') {
+        // Load the serverCacheTokenizer class
+        importScripts(`../js/tokenizers/${serverCacheTokenizerName.replace('Tokenizer', '').toLowerCase()}-tokenizer.js`);
+        // Initialize the serverCacheTokenizer class
+        const ServerCacheTokenizerClass = eval(serverCacheTokenizerName);
+        serverCacheTokenizer = await ServerCacheTokenizerClass.load({ l2, words, indexKeys, tokenizationType });
+      }
+
+      // Inject the server cache token type into the initialized instance
+      instance.serverCacheTokenizer = serverCacheTokenizer;
+    }
+
 
 
     return instance;

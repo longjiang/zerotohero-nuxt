@@ -6,7 +6,7 @@ class BaseTokenizer {
     this.l2 = l2;
     this.tokenizationCache = {};
     this.serverCache = {}; // These are raw tokens that need to be normalized according to tokenizer type.
-    this.serverCacheTokenType = null; // The tokenization type of the tokens in the server cache. This is used to determine how to normalize the tokens from the server cache.
+    this.serverCacheTokenizer = null; // The tokenizer instance used when generating the server cache. This is used to determine how to normalize the tokens from the server cache.
     this.words = words;
     this.indexKeys = indexKeys;
     this.tokenizationType = tokenizationType;
@@ -29,6 +29,13 @@ class BaseTokenizer {
       return this.tokenizationCache[hash];
     }
 
+    // Check server cache before tokenizing
+    const serverCacheTokens = this.loadFromServerCache(text);
+    if (serverCacheTokens) {
+      console.log("BaseTokenizer: Server cache hit for text:", { text, tokens: serverCacheTokens });
+      return serverCacheTokens;
+    }
+
     const tokenized = await this.tokenize(text);
     this.tokenizationCache[hash] = tokenized;
 
@@ -42,14 +49,21 @@ class BaseTokenizer {
         this.serverCache[this.l2.code] = {};
       }
       this.serverCache[this.l2.code][key] = data[key];
-      // console.log("Loading server cache for", this.l2.code, key);
     }
   }
 
   loadFromServerCache(text) {
     const key = CryptoJS.MD5(text).toString();
     const tokens = this.serverCache[this.l2.code]?.[key];
-    // console.log("Loading from server cache for", this.l2.code, key, tokens, {text});
+
+
+    // normalize depending on the serverCacheTokenizer type
+    if (tokens && this.serverCacheTokenizer) {
+      // call the normalizeTokens method from the respective tokenizer class...
+      let normalizedTokens = this.serverCacheTokenizer.normalizeTokens(tokens);
+      return this.recoverSpaces(normalizedTokens, text);
+    }
+
     return tokens
   }
 
@@ -281,3 +295,6 @@ escapeRegExp(string) {
     return recoveredTokens;
   }
 }
+
+// Explicitly export it to the worker global scope so other files can check if it's already loaded
+self.BaseTokenizer = BaseTokenizer;

@@ -1,5 +1,5 @@
 // qalsadi-tokenizer.js
-importScripts('../js/tokenizers/base-tokenizer.js')
+if (typeof self.BaseTokenizer === 'undefined') importScripts('../js/tokenizers/base-tokenizer.js')
 
 // arabic-tokenizer.js
 class QalsadiTokenizer extends BaseTokenizer {

@@ -1,5 +1,5 @@
 // pyidaungsu-tokenizer.js
-importScripts('../js/tokenizers/base-tokenizer.js')
+if (typeof self.BaseTokenizer === 'undefined') importScripts('../js/tokenizers/base-tokenizer.js')
 
 class PyidaungsuTokenizer extends BaseTokenizer {
   async tokenize(text) {
