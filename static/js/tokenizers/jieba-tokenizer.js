@@ -18,17 +18,18 @@ class JiebaTokenizer extends BaseTokenizer {
     }
 
     // check if the tokenized is an array and not a string
-    if (!tokenized || typeof tokenized === 'string') {
-      tokenized = await this.tokenizeLocally(text);
-      return this.tokenizeLocally(text);
-    }
+    if (!tokenized || typeof tokenized === 'string') return this.tokenizeLocally(text);
 
+    return this.normalizeTokens(tokenized);
+  }
+
+  normalizeTokens(tokenized) {
     let tokens = [];
     for (let token of tokenized) {
       if (!token) {
         tokens.push(" ");
       } else if (token.pos === 'x' && !isChinese(token.word)) {
-        tokens.push(token.word);
+        tokens.push(token.word); // Push raw string for foreign punctuation
       } else {
         tokens.push(this.normalizeToken(token));
       }

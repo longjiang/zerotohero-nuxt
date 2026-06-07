@@ -29,15 +29,19 @@ class SimplemmaTokenizer extends BaseTokenizer {
     if (!tokenized || typeof tokenized === 'string') {
       return this.tokenizeLocally(text);
     }
+
+    return this.normalizeTokens(tokenized);
+  }
+
+  normalizeTokens(tokenized) {
+    let tokens = [];
     for (let token of tokenized) {
       if (!token) {
-        // do nothing
-      } else if (["PUNCT"].includes(token.pos)) {
-        tokens.push(token.word);
+        tokens.push(" ");
       } else {
         tokens.push(this.normalizeToken(token));
       }
     }
-    return this.recoverSpaces(tokens, text);
+    return tokens;
   }
 }

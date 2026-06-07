@@ -23,14 +23,11 @@ class PyidaungsuTokenizer extends BaseTokenizer {
       return this.tokenizeLocally(text);
     }
 
-    let tokens = [];
-    for (let token of tokenized) {
-      if (!token) {
-        tokens.push(" ");
-      } else {
-        tokens.push(this.normalizeToken(token));
-      }
-    }
-    return tokens;
+    return this.normalizeTokens(tokenized);
+  }
+
+  normalizeTokens(tokenized) {
+    // Falls back onto the base tokenizer's standard array parsing logic loops cleanly
+    return super.normalizeTokens(tokenized);
   }
 }

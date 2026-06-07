@@ -242,6 +242,19 @@ escapeRegExp(string) {
     }
     return token;
   }
+  
+  // The base loop that subclasses can override
+  normalizeTokens(tokenized) {
+    let tokens = [];
+    for (let token of tokenized) {
+      if (!token) {
+        tokens.push(" ");
+      } else {
+        tokens.push(this.normalizeToken(token));
+      }
+    }
+    return tokens;
+  }
 
   recoverSpaces(tokens, text) {
     let recoveredTokens = [];

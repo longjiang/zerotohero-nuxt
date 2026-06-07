@@ -24,25 +24,24 @@ class MeCabTokenizer extends BaseTokenizer {
       return this.tokenizeLocally(text);
     }
 
+    return this.normalizeTokens(tokenized, text);
+
+  }
+  
+  normalizeTokens(tokenized, originalText = "") {
     let tokens = [];
     for (let token of tokenized) {
       if (!token) {
-        // tokens.push(" ");
+        continue; // Keep matching original behavior (skips nulls before addBackSpaces)
       } else if (["補助記号-"].includes(token.pos)) {
         tokens.push(token.text);
       } else {
         tokens.push(this.normalizeToken(token));
-        // if (!isJapanese(token.text)) {
-        //   tokens.push(" ");
-        // }
       }
     }
 
-    // Call addBackSpaces to handle missing spaces and newlines
-    tokens = this.addBackSpaces(text, tokens);
-
-    return tokens
-
+    // Handle missing spaces and newlines
+    return this.addBackSpaces(originalText, tokens);
   }
 
   // Add back missing spaces and newlines from the original text

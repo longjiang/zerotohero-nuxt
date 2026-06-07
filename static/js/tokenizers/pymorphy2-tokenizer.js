@@ -21,7 +21,11 @@ class Pymorphy2Tokenizer extends BaseTokenizer {
     if (!tokenized || typeof tokenized === 'string') {
       return super.tokenize(text);
     }
+    
+    return this.normalizeTokens(tokenized, text);
+  }
 
+  normalizeTokens(tokenized, originalText = "") {
     let tokens = [];
 
     for (let token of tokenized) {
@@ -37,6 +41,6 @@ class Pymorphy2Tokenizer extends BaseTokenizer {
       }
     }
     
-    return this.recoverSpaces(tokens, text);
+    return this.recoverSpaces(tokens, originalText);
   }
 }

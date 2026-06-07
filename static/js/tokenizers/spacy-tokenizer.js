@@ -4,7 +4,6 @@ importScripts('../js/tokenizers/base-tokenizer.js')
 class SpacyTokenizer extends BaseTokenizer {
   
   async tokenize(text) {
-    let tokens = [];
     
     let langCode = this.l2["iso639-3"] || this.l2["glottologId"];
     if (langCode === "nor") langCode = "nob"; // Use Bokmål for Norwegian
@@ -30,6 +29,12 @@ class SpacyTokenizer extends BaseTokenizer {
     if (!tokenized || typeof tokenized === 'string') {
       return this.tokenizeLocally(text);
     }
+    const tokens = this.normalizeTokens(tokenized);
+    return this.recoverSpaces(tokens, text);
+  }
+
+  normalizeTokens(tokenized) {
+    let tokens = [];
     for (let token of tokenized) {
       if (!token) {
         // do nothing
@@ -39,6 +44,6 @@ class SpacyTokenizer extends BaseTokenizer {
         tokens.push(this.normalizeToken(token));
       }
     }
-    return this.recoverSpaces(tokens, text);
+    return tokens;
   }
 }

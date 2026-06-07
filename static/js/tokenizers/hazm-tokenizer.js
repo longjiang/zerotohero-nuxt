@@ -16,15 +16,17 @@ class HazmTokenizer extends BaseTokenizer {
         console.error('There was a problem with the axios operation: ', error);
       }
     }
+    
     // Check if the tokenized is an array and not a string
     if (!tokens || typeof tokens === 'string') {
       return this.tokenizeLocally(text);
     }
-    tokens = tokens.map((token) => {
-      return this.normalizeToken(token);
-    });
-    //  after every token, dd a string item consisting of a space character
-    tokens = tokens.flatMap((token) => [token, " "]);
-    return tokens;
+
+    return this.normalizeTokens(tokens);
+  }
+
+  normalizeTokens(tokenized) {
+    let tokens = tokenized.map(token => this.normalizeToken(token));
+    return tokens.flatMap(token => [token, " "]);
   }
 }

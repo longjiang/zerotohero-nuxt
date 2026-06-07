@@ -55,6 +55,10 @@ class LemmatizationListTokenizer extends BaseTokenizer {
 
   async tokenize(text) {
     const tokenized = await super.tokenize(text);
+    return this.normalizeTokens(tokenized);
+  }
+
+  normalizeTokens(tokenized) {
     tokenized.forEach((token) => {
       const text = token.text;
       if (text) {

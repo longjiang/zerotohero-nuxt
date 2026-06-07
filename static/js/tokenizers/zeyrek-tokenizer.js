@@ -21,24 +21,31 @@ class ZeyrekTokenizer extends BaseTokenizer {
     if (!tokenized || typeof tokenized === 'string') {
       return this.tokenizeLocally(text);
     }
+    
+    return this.normalizeTokens(tokenized, text);
+  }
+
+  normalizeTokens(tokenized, originalText = "") {
     let tokens = [];
-    for (let lemmas of tokenized) {
-      if (!lemmas[0]) {
-        tokens.push(" ");
-      } else if (["Punc"].includes(lemmas[0].pos)) {
-        tokens.push(lemmas[0].word);
+
+    for (let token of tokenized) {
+      if (!token) {
         tokens.push(" ");
       } else {
-        let token = {
-          text: lemmas[0].word,
-          lemmas: lemmas.filter(l => l.lemma !== "Unk"),
-          pos: lemmas[0].pos,
+        // Run standard structural mutations on the object (.word -> .text, fallback arrays)
+        this.normalizeToken(token);
+
+        // Filter out punctuation structural overhead if necessary, matching Pymorphy2 style
+        if (token.pos === 'PUNCT' || token.pos === 'Punc') {
+          tokens.push(token.text);
+        } else {
+          tokens.push(token);
         }
-        tokens.push(this.normalizeToken(token));
-        tokens.push(" ");
       }
     }
-    return tokens;
+    
+    // Leverage the inherited base class spacing algorithm to preserve exact original layout strings
+    return this.recoverSpaces(tokens, originalText);
   }
   
 }

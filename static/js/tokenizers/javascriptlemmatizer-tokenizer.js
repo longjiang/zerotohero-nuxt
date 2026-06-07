@@ -11,19 +11,23 @@ class JavaScriptLemmatizerTokenizer extends BaseTokenizer {
 
   async tokenize(text) {
     const tokenized = await super.tokenize(text);
+    return this.normalizeTokens(tokenized);
+  }
+
+  normalizeTokens(tokenized) {
     tokenized.forEach(token => {
-      const text = token.text
+      const text = token.text;
       if (text) {
         let lemmas = this.englishLemmatizer.lemmas(text);
         lemmas = lemmas.map(lemma => {
           return {
             lemma: lemma[0],
             pos: lemma[1]
-          }
-        })
-        token.lemmas = lemmas
+          };
+        });
+        token.lemmas = lemmas;
       }
-    })
-    return tokenized
+    });
+    return tokenized;
   }
 }

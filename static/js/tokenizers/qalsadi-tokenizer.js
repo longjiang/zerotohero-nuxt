@@ -23,6 +23,11 @@ class QalsadiTokenizer extends BaseTokenizer {
       return this.tokenizeLocally(text);
     }
     if (!tokenized) return this.tokenizeIntegral(text);
+
+    return this.normalizeTokens(tokenized);
+  }
+
+  normalizeTokens(tokenized) {
     let tokens = [];
     for (let lemmas of tokenized) {
       if (!lemmas[0]) {
@@ -30,10 +35,7 @@ class QalsadiTokenizer extends BaseTokenizer {
       } else if (["punc"].includes(lemmas[0].pos)) {
         tokens.push(lemmas[0].word);
         tokens.push(" ");
-      } else if (
-        ["all"].includes(lemmas[0].pos) &&
-        isNumeric(lemmas[0].word)
-      ) {
+      } else if (["all"].includes(lemmas[0].pos) && isNumeric(lemmas[0].word)) {
         tokens.push(lemmas[0].word);
         tokens.push(" ");
       } else {
@@ -42,7 +44,7 @@ class QalsadiTokenizer extends BaseTokenizer {
           lemmas,
           pos: lemmas[0].pos,
           pronunciation: lemmas[0].pronunciation,
-        }
+        };
         tokens.push(this.normalizeToken(token));
         tokens.push(" ");
       }
