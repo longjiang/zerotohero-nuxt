@@ -1,3 +1,4 @@
+// components/ChannelCard.vue
 <template>
   <router-link
     class="channel-card link-unstyled"
@@ -14,17 +15,15 @@
             $t("{count} Subscribers", {
               count: formatK(subscribers, 2, $l1.code),
             })
+          }}・{{
+            $t("{num} Videos", { 
+              num: formatK(video_count, 2, $l1.code) 
+            })
           }}
         </div>
-        <!-- <div>
-          {{
-            $t("{count} Videos", { count: formatK(video_count, 2, $l1.code) })
-          }}
-        </div> -->
       </div>
 
-      <!-- <small class="channel-description" style="opacity: 0.5">{{ description }}</small> -->
-    </div>
+      </div>
   </router-link>
 </template>
 

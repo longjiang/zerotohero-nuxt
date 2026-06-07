@@ -16,9 +16,8 @@
               v-model="keyword"
               @compositionend.prevent.stop="() => false"
               :placeholder="
-                $t('Filter {num} {l2} YouTube Channels...', {
+                $t('Filter {num} channels...', {
                   num: filteredChannels ? filteredChannels.length : '',
-                  l2: $t($l2.name)
                 })
               "
               ref="filter"
