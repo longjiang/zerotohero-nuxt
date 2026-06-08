@@ -26,7 +26,6 @@
         related,
         show,
         showInfoButton: true,
-        showQuiz,
         showType,
         skin,
         starttime,
@@ -115,10 +114,6 @@ export default {
     },
     starttime: {
       default: 0,
-    },
-    showQuiz: {
-      type: Boolean,
-      default: false,
     },
   },
   data() {

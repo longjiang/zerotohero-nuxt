@@ -222,7 +222,6 @@
             single: (forceMode || mode) === 'subtitles' || size === 'mini',
             showAnimation,
             showSubsEditing,
-            showQuiz,
             enableTranslationEditing,
             sticky,
             speed,
@@ -355,9 +354,6 @@ export default {
     },
     showOpenButton: {
       type: Boolean,
-      default: false,
-    },
-    showQuiz: {
       default: false,
     },
     cc: {

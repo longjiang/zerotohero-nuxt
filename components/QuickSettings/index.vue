@@ -131,7 +131,6 @@
           <div class="d-flex ml-2" style="flex: 1; justify-content: space-between; align-items: center">
             <b-dropdown
               size="sm"
-              :items="words"
               :text="localL2Settings.voice || $t('Choose Voice')"
               variant="light"
             >

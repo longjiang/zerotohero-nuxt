@@ -16,7 +16,6 @@
   >
     <client-only>
       <ReviewItemCollector
-        v-if="showQuiz"
         ref="reviewItemCollector"
         @onQuizShown="pause"
         @onQuizHidden="play"
@@ -203,9 +202,6 @@ export default {
     video: {
       type: Object,
     },
-    showQuiz: {
-      default: false,
-    },
   },
   data() {
     return {
@@ -230,6 +226,9 @@ export default {
     };
   },
   computed: {
+    showQuiz() {
+      return this.$l2Settings?.showQuiz;
+    },
     startLineIndex() {
       if (this.starttime) {
         return this.nearestLineIndex(this.starttime);
@@ -425,15 +424,13 @@ export default {
         : null;
     },
     addLineToReview(savedWords, line, lineIndex, parallelLine) {
-      if (this.showQuiz) {
-        this.$refs.reviewItemCollector?.addLineToReview({
-          savedWords,
-          line,
-          lineIndex,
-          parallelLine,
-          video: this.video,
-        });
-      }
+      this.$refs.reviewItemCollector?.addLineToReview({
+        savedWords,
+        line,
+        lineIndex,
+        parallelLine,
+        video: this.video,
+      });
     },
     async tokenizeNextLines() {
       let dictionary = await this.$getDictionary();

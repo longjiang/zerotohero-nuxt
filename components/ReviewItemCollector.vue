@@ -20,16 +20,6 @@
         @goToLine="$emit('goToLine', $event); $bvModal.hide('quiz-modal');"
       />
     </b-modal>
-    <!-- The following div is for testing purposes -->
-    <!-- <div class="test-container">
-      <div class="review-items-count">{{ reviewItems.length }} review items</div>
-      <ul class="review-items-list">
-        <li v-for="reviewItem in reviewItems" :key="reviewItem.word.id">
-          {{ reviewItem.text }}
-        </li>
-      </ul>
-      <b-button class="show-quiz-button" @click="showQuizIfThereAreReviewItems">Show Quiz</b-button>
-    </div> -->
   </div>
 </template>
 <script>
@@ -41,6 +31,11 @@ export default {
       default: false,
     },
   },
+  computed: {
+    showQuiz() {
+      return this.$l2Settings?.showQuiz;
+    },
+  },
   data() {
     return {
       reviewItems: [],
@@ -49,7 +44,7 @@ export default {
   },
   mounted() {
     this.interval = setInterval(() => {
-      this.showQuizIfThereAreReviewItems();
+      this.showQuizPopupIfThereAreReviewItems();
     }, 1000 * 60 * this.reviewIntervalMinutes);
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "savedWords/REMOVE_SAVED_WORD") {
@@ -58,13 +53,13 @@ export default {
         );
       }
     });
-    this.$nuxt.$on('showQuiz', this.showQuiz);
+    this.$nuxt.$on('showQuizPopup', this.showQuizPopup);
   },
   beforeDestroy() {
     this.unsubscribe();
     // remove the interval
     clearInterval(this.interval);
-    this.$nuxt.$off('showQuiz', this.showQuiz);
+    this.$nuxt.$off('showQuizPopup', this.showQuizPopup);
   },
   methods: {
     onPopQuizModalShown() {
@@ -75,13 +70,13 @@ export default {
       this.reviewItems = this.reviewItems.filter((reviewItem) => !reviewItem.answered);
       this.$emit("onQuizHidden");
     },
-    showQuiz() {
+    showQuizPopup() {
       this.$bvModal.show("quiz-modal");
     },
-    async showQuizIfThereAreReviewItems() {
+    async showQuizPopupIfThereAreReviewItems() {
       await this.$nextTick();
-      if (this.reviewItems?.length > 0) {
-        this.showQuiz();
+      if (this.reviewItems?.length > 0 && this.showQuiz) {
+        this.showQuizPopup();
       }
     },
     async addLineToReview({

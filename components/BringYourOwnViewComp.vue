@@ -60,7 +60,6 @@
           forcePortrait: false,
           initialMode,
           initialSize: this.mini ? 'mini' : 'regular',
-          showQuiz,
         }"
         :key="`transcript-bring-your-own`"
         @ended="updateEnded"
@@ -91,10 +90,6 @@ export default {
     },
     starttime: {
       default: 0,
-    },
-    showQuiz: {
-      type: Boolean,
-      default: false,
     },
   },
   data() {

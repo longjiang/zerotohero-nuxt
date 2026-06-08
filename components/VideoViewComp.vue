@@ -46,7 +46,6 @@
           initialMode: mode,
           landscape,
           starttime,
-          showQuiz
         }"
         @updateLayout="onUpdateLayout"
         @videoLoaded="onVideoLoaded"
@@ -94,9 +93,6 @@ export default {
     };
   },
   computed: {
-    showQuiz() {
-      return this.$l2Settings?.showQuiz;
-    },
     currentComponent() {
       switch (this.type) {
         case "youtube":
