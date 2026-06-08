@@ -7,7 +7,6 @@
       'review-light': skin === 'light',
       'review-dark': skin === 'dark',
     }"
-    style="position: relative"
   >
     <div
       class="review-item"
@@ -24,13 +23,11 @@
           <img
             src="/img/face-happy.gif"
             alt=""
-            style="width: 100%"
             v-if="showAnswer"
           />
           <img
             src="/img/face-surprise.gif"
             alt=""
-            style="width: 100%"
             v-else-if="wrong"
           />
           <img src="/img/face-straight.gif" alt="" style="width: 100%" v-else />
@@ -48,7 +45,6 @@
                 $l1.scripts.length > 0 &&
                 $l1.scripts[0].direction === 'rtl',
             }"
-            style="opacity: 0.7"
           >
             <span
               v-if="$l2.code !== $l1.code && reviewItem.parallelLines"
@@ -284,41 +280,109 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// ==========================================
+// 1. Layout & Core Components
+// ==========================================
+
 .review {
+  position: relative; // Extracted from template style="..."
   margin: 0.5rem 0;
   padding: 1rem;
-  border: 1px solid #ffb7002b;
   border-radius: 0.5rem;
+  
+  // Default State Skin (Light/Fallback)
   background: #dea4171f;
-  .review-speak-button,
-  .review-seek-button {
-    border-radius: 100%;
-    width: 1.7rem;
-    height: 1.7rem;
-    display: inline-block;
-    overflow: hidden;
-    padding: 0;
-    font-size: 0.8em;
+  border: 1px solid #ffb7002b;
+
+  .btn-small {
+    border: 1px solid #ccc; 
   }
+}
+
+.smiley-line-wrapper {
+  display: flex;
+
+  .smiley {
+    width: 2.5rem;
+    height: 2rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .line-wrapper {
+    flex: 1;
+    padding-left: 0.5rem;
+  }
+}
+
+.transcript-line-l1 {
+  font-size: 13.44px;
+  opacity: 0.7;
+}
+
+.review-speak-button,
+.review-seek-button {
+  display: inline-block;
+  width: 1.7rem;
+  height: 1.7rem;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 100%;
+  font-size: 0.8em;
+}
+
+
+// ==========================================
+// 2. Component Theme & State Modifiers
+// ==========================================
+
+.review {
+  // Active/Correct State
+  &.show-answer {
+    background-color: #92ff9930;
+    border: 1px solid #92ff9944;
+  }
+
+  // Future-proofing skins if 'skin' prop scales
+  &.review-light {
+    // Light specific overrides if needed
+  }
+
+  &.review-dark {
+    // Dark specific overrides if needed
+  }
+}
+
+
+// ==========================================
+// 3. Deep Component / Child Dom Injections
+// ==========================================
+
+.review {
   :deep(.highlight) {
     display: inline-block;
     min-width: 5rem;
     text-align: center;
   }
-  .transcript-line-l1 {
-    font-size: 13.44px;
-  }
+
+  // Hidden Answer State (Deep Targets)
   &:not(.show-answer) {
     :deep(.highlight) {
-      margin: 0 0.2rem;
       position: relative;
       bottom: 0.2rem;
+      margin: 0 0.2rem;
       color: #00000000 !important;
       border-bottom: 1px solid rgba(125, 125, 125, 0.5);
     }
+
     :deep(.transcript-line-l2) {
       .highlight {
         color: rgba(0, 0, 0, 0);
+        
         * {
           opacity: 0;
           pointer-events: none;
@@ -326,13 +390,13 @@ export default {
       }
     }
   }
-  &.show-answer {
-    background-color: #92ff9930;
-    border: 1px solid #92ff9944;
-  }
 }
 
-/* https://css-tricks.com/snippets/css/shake-css-keyframe-animation/ */
+
+// ==========================================
+// 4. Animations & Keyframes
+// ==========================================
+
 .wrong {
   animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   transform: translate3d(0, 0, 0);
@@ -341,38 +405,17 @@ export default {
 }
 
 @keyframes shake {
-  10%,
-  90% {
+  10%, 90% {
     transform: translate3d(-1px, 0, 0);
   }
-
-  20%,
-  80% {
+  20%, 80% {
     transform: translate3d(2px, 0, 0);
   }
-
-  30%,
-  50%,
-  70% {
+  30%, 50%, 70% {
     transform: translate3d(-4px, 0, 0);
   }
-
-  40%,
-  60% {
+  40%, 60% {
     transform: translate3d(4px, 0, 0);
-  }
-}
-.smiley-line-wrapper {
-  display: flex;
-  .smiley {
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-    height: 2rem;
-    width: 2.5rem;
-  }
-  .line-wrapper {
-    padding-left: 0.5rem;
-    flex: 1;
   }
 }
 </style>
