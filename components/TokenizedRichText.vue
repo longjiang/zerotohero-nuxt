@@ -37,7 +37,7 @@
             :animationSpeed="animationSpeed"
             :useZoom="useZoom"
             v-on="$listeners"
-            @annotated="annotated = true"
+            @annotated="onAnnotated"
             ref="tokenizedText"
           />
         </div>
@@ -211,6 +211,10 @@ export default {
     }
   },
   methods: {
+    onAnnotated() {
+      this.annotated = true;
+      this.checkSavedWords();
+    },
     highlightFirstSentence() {
       const comp = this.$refs.recursiveRenderer;
       if (comp) {

@@ -58,25 +58,30 @@ export default {
         );
       }
     });
+    this.$nuxt.$on('showQuiz', this.showQuiz);
   },
   beforeDestroy() {
     this.unsubscribe();
     // remove the interval
     clearInterval(this.interval);
+    this.$nuxt.$off('showQuiz', this.showQuiz);
   },
   methods: {
     onPopQuizModalShown() {
-      this.$emit("showQuiz");
+      this.$emit("onQuizShown");
     },
     onPopQuizModalHidden() {
       // Clear the answered review items
       this.reviewItems = this.reviewItems.filter((reviewItem) => !reviewItem.answered);
-      this.$emit("hideQuiz");
+      this.$emit("onQuizHidden");
+    },
+    showQuiz() {
+      this.$bvModal.show("quiz-modal");
     },
     async showQuizIfThereAreReviewItems() {
       await this.$nextTick();
       if (this.reviewItems?.length > 0) {
-        this.$bvModal.show("quiz-modal");
+        this.showQuiz();
       }
     },
     async addLineToReview({

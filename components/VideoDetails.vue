@@ -73,6 +73,10 @@
       </span>
       <AddToPlaylist :video="video" class="text-primary" />
       <Share class="ml-2" />
+      <!-- Quiz Button -->
+      <span class="ml-2">
+        <span @click="showQuiz" class="text-primary cursor-pointer">{{ $t('Quiz') }}</span>
+      </span>
       <template v-if="$adminMode && video.subs_l2 && video.subs_l2.length > 0">
         <span>
           <a
@@ -158,6 +162,9 @@ export default {
     this.$nuxt.$off("retranslating");
   },
   methods: {
+    showQuiz() {
+      this.$nuxt.$emit('showQuiz');
+    },
     retranslate() {
       this.$emit("retranslate", this.video)
     },
