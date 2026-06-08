@@ -91,10 +91,11 @@ export default {
         html = highlightMultiple(
           this.reviewItem.line.line,
           unique([this.reviewItem.simplified, this.reviewItem.traditional]),
-          this.hsk
+          this.hsk,
+          "review-target"
         );
       } else {
-        html = highlight(this.reviewItem.line.line, this.reviewItem.text, this.reviewItem.hsk);
+        html = highlight(this.reviewItem.line.line, this.reviewItem.text, this.reviewItem.hsk, "review-target");
       }
       console.log(html);
       return html;
@@ -363,7 +364,7 @@ export default {
 // ==========================================
 
 .review {
-  :deep(.highlight) {
+  :deep(.review-target) {
     display: inline-block;
     min-width: 5rem;
     text-align: center;
@@ -371,7 +372,7 @@ export default {
 
   // Hidden Answer State (Deep Targets)
   &:not(.show-answer) {
-    :deep(.highlight) {
+    :deep(.review-target) {
       position: relative;
       bottom: 0.2rem;
       margin: 0 0.2rem;
@@ -380,7 +381,7 @@ export default {
     }
 
     :deep(.transcript-line-l2) {
-      .highlight {
+      .review-target {
         color: rgba(0, 0, 0, 0);
         
         * {
