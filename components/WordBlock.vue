@@ -35,7 +35,7 @@
 import { SpeechSingleton, unique, uniqueByValue, hasKanji, isPunctuation, timeout, convertVowelEtoIAndOtoU, splitIntoMoras, applyAccentPattern, addPitchAccent, convertPitchToUnderline } from "../lib/utils";
 import { mapState } from "vuex";
 import { tify, sify } from "chinese-conv";
-import { transliterate as tr } from "transliteration";
+// import { transliterate as tr } from "transliteration"; // Disabled due to Netlify compilation issue with transliteration package
 import Klingon from "../lib/klingon";
 
 export default {
@@ -193,9 +193,11 @@ export default {
         phonetics = this.token.pronunciation;
       } else if (this.bestWord) {
         phonetics = this.phoneticsFromWord(this.bestWord);
-      } else {
-        phonetics = tr(this.text).replace(/"/g, "");
       }
+      // Disabled due to Netlify compilation issue with transliteration package
+      // else {
+      //   phonetics = tr(this.text).replace(/"/g, "");
+      // }
       if (phonetics) return phonetics;
     },
     wordBlockTextClasses() {

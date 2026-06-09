@@ -273,7 +273,8 @@
 <script>
 
 import { IMAGE_PROXY } from "../lib/config";
-import { transliterate as tr } from "transliteration";
+// Disabled due to Netlify compilation issue with transliteration package
+// import { transliterate as tr } from "transliteration";
 import { timeout, LANGS_WITH_AZURE_TRANSLATE, languageLevels, breakSentences, highlight, convertVowelEtoIAndOtoU } from "../lib/utils";
 import WordPhotos from "../lib/word-photos";
 import Klingon from "../lib/klingon";
@@ -317,6 +318,7 @@ export default {
       let phonetic = '';
       if (this.transliterationprop) phonetic = this.transliterationprop;
       else if (this.token && this.token.pronunciation) phonetic = this.token.pronunciation;
+      // Disabled due to Netlify compilation issue with transliteration package
       // else phonetic = tr(this.text)
       if (this.$l2.code === 'ja' && typeof wanakana !== "undefined") phonetic = convertVowelEtoIAndOtoU(wanakana.toHiragana(phonetic)); // Convert katagana returned from Mecab to hiragana
       return phonetic;
@@ -343,7 +345,6 @@ export default {
     }
   },
   async mounted() {
-    console.log('WordBlockPopup debug', { tr, convertVowelEtoIAndOtoU })
     if (this.$l1) this.entryClasses[`l1-${this.$l1.code}`] = true;
     if (this.$l2) this.entryClasses[`l2-${this.$l2.code}`] = true;
     if (this.$l2.han) this.entryClasses["l2-zh"] = true;
@@ -355,12 +356,7 @@ export default {
     }
   },
   methods: {
-    // Replace `tr,` with this function wrapper:
-    tr(text) {
-      // If 'tr' itself is undefined, fallback to the default package export
-      const safeTr = tr || require('transliteration').transliterate;
-      return safeTr ? safeTr(text) : text;
-    },
+    // tr, // Disabled due to Netlify compilation issue with transliteration package
     highlight,
     async loadImages() {
       if (this.images.length === 0) {
