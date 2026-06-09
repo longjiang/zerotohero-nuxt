@@ -10,7 +10,7 @@
       </div>
       <h4 class="mt-3 mb-5 text-center">
         <!-- Dynamic header text based on the searched field type -->
-        {{ $t("Search {l2} Content by {field}", { l2: $t($l2.name), field: $t(searchField) }) }}
+        {{ $t("Search {l2} Content", { l2: $t($l2.name) }) }}
       </h4>
       <SimpleSearch
         :placeholder="
@@ -199,7 +199,7 @@ export default {
     this.popularTopics = this.loadCSVString(popularTopicsCSV);
     this.updateSearchText();
     this.detectYouTubeEntitiesAndRedirect();
-    this.long = this.$route.query.long === "true";
+    this.long = this.$route.query.long === "true" ? true : false;
     this.captions = this.$route.query.captions || "all";
     this.fetchVideoTags();
   },
