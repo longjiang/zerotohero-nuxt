@@ -1,3 +1,4 @@
+// /components/MediaSearchResults.vue
 <template>
   <div class="media-search-results">
     <div class="row">

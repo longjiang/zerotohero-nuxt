@@ -102,6 +102,7 @@
           :to="{
             name: 'l1-l2-youtube-search',
             params: { term: tag.trim() },
+            query: { field: 'tags' }
           }"
           class="text-decoration-none"
         >
