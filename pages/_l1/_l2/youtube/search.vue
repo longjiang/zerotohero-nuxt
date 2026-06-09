@@ -1,3 +1,4 @@
+// /pages/_l1/_l2/youtube/search.vue
 <template>
   <div class="main">
     <div class="container pt-5 pb-5 youtube-search">
@@ -35,13 +36,6 @@
       />
       <client-only>
         <b-form-group class="mt-3" v-if="$adminMode">
-          <!-- <b-form-radio
-            v-model="captions"
-            class="d-inline-block mr-3"
-            value="captions"
-          >
-            With Captions
-          </b-form-radio> -->
           <b-form-radio
             v-model="captions"
             class="d-inline-block mr-3"
@@ -77,23 +71,26 @@
           </b-button>
         </b-form-group>
       </client-only>
+      
       <div v-if="!term" class="mt-3">
-        {{ $t("Popular search terms in {l2}:", { l2: $t($l2.name) }) }}
-        <span v-for="topic in popularTopics" class="mr-2" :key="topic['en']">
-          <!-- We must use path routing here rather than name routing, otherwise the page props won't update -->
-          <router-link
-            :key="`topic-${topic['en']}`"
-            :to="`/${$l1.code}/${
-              $l2.code
-            }/youtube/search/${encodeURIComponent(topic[$l2.code] || topic['en'])}/0`"
-            >{{ topic[$l2.code] || topic["en"] }}</router-link
-          >
-          <small
-            v-if="topic[$l2.code] && topic[$l2.code] !== topic[$l1.code]" class="text-muted"
-            >'{{ topic[$l1.code] }}'</small
-          >
-        </span>
+        <div v-if="tags && tags.length > 0" class="mt-4 video-tags-block">
+          <div class="mb-2 text-muted" style="font-size: 0.9rem;">
+            <i class="fa fa-tags mr-1"></i> {{ $t("Tags") }}
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            <router-link
+              v-for="item in tags"
+              :key="`tag-${item.tag}`"
+              :to="`/${$l1.code}/${$l2.code}/youtube/search/${encodeURIComponent(item.tag)}/0`"
+              class="mr-2 video-tag-item"
+            >
+              #{{ item.tag }} 
+              <span class="text-muted ml-1" style="font-size: 0.9rem;">({{ formatK(item.video_count, 1, $l1.code ) }})</span>
+            </router-link>
+          </div>
+        </div>
       </div>
+      
       <div v-if="term">
         <div class="d-block text-right mt-3">
           <router-link
@@ -143,10 +140,6 @@
           />
         </client-only>
         <LazyIdenticalLanguages routeName="youtube-search" class="mt-5" />
-        <!-- <h4 class="mt-5 text-center">
-          You can help to expand this {{ $l2.name }} video library!
-        </h4> -->
-        <!-- <LazyHowToContribute /> -->
         <LazyIdenticalLanguages class="mb-4" routeName="youtube-browse" />
       </div>
     </div>
@@ -157,9 +150,11 @@
 import SimpleSearch from "@/components/SimpleSearch";
 import YouTubeSearchResults from "@/components/YouTubeSearchResults";
 import YouTube from "../../../../lib/youtube";
+import { PYTHON_SERVER, formatK } from "../../../../lib/utils";
 import { mapState } from "vuex";
 import popularTopicsCSV from "@/static/data/languages/popular-topics.csv.txt";
 import Papa from "papaparse";
+import axios from "axios"; // Assuming axios is used or substitute with your framework's native fetching approach
 
 export default {
   components: {
@@ -183,6 +178,7 @@ export default {
       maxPages: 30,
       moreLoaded: false,
       popularTopics: [],
+      tags: [], // NEW: Data element to hold our fetched video tags array
     };
   },
   computed: {
@@ -194,8 +190,23 @@ export default {
     this.detectYouTubeEntitiesAndRedirect();
     this.long = this.$route.query.long === "true" ? true : false;
     this.captions = this.$route.query.captions || "all";
+    this.fetchVideoTags(); // NEW: Fire the tag fetch layout on component initialization
   },
   methods: {
+    // NEW: Python Server endpoint invocation layout
+    formatK,
+    async fetchVideoTags() {
+      try {
+        let url = `${PYTHON_SERVER}video-tags?l2=${this.$l2.code}`;
+        
+        const response = await axios.get(url);
+        if (response.data) {
+          this.tags = response.data;
+        }
+      } catch (error) {
+        console.error("Failed to load video tags from server:", error);
+      }
+    },
     detectYouTubeEntitiesAndRedirect() {
       if (!this.term) return;
       let { youtube_id, playlist_id } = YouTube.detectYouTubeEntity(this.term);
@@ -251,4 +262,6 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+
+</style>
