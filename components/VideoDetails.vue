@@ -95,10 +95,24 @@
         </span>
       </template>
     </div>
+    <div class="video-tags" v-if="video.tags && video.tags.length > 0">
+      <!-- Router-links to youtube-search page shown as pills -->
+      <span v-for="tag in video.tags?.split(',')" :key="tag" class="mr-1">
+        <router-link
+          :to="{
+            name: 'l1-l2-youtube-search',
+            params: { term: tag.trim() },
+          }"
+          class="text-decoration-none"
+        >
+          #{{ tag }}
+        </router-link>
+      </span>
+    </div>
   </div>
 </template>
 <script>
-import { makeTextFile, formatK, proxy, sanitizeFilename, PYTHON_SERVER } from "../lib/utils";
+import { makeTextFile, formatK, sanitizeFilename } from "../lib/utils";
 import subsrt from 'subsrt';
 
 export default {
