@@ -15,7 +15,7 @@
       <SimpleSearch
         :placeholder="
           $t(
-            'Enter {l2} keywords to search by {field}, or a YouTube ID or URL to import',
+            'Enter {l2} keywords to search, or a YouTube ID or URL to import',
             {
               l2: $t($l2.name),
               field: $t(searchField)
