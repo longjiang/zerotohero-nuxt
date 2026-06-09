@@ -317,7 +317,7 @@ export default {
       let phonetic = '';
       if (this.transliterationprop) phonetic = this.transliterationprop;
       else if (this.token && this.token.pronunciation) phonetic = this.token.pronunciation;
-      else phonetic = tr(this.text)
+      // else phonetic = tr(this.text)
       if (this.$l2.code === 'ja' && typeof wanakana !== "undefined") phonetic = convertVowelEtoIAndOtoU(wanakana.toHiragana(phonetic)); // Convert katagana returned from Mecab to hiragana
       return phonetic;
     },
@@ -343,6 +343,7 @@ export default {
     }
   },
   async mounted() {
+    console.log('WordBlockPopup debug', { tr, convertVowelEtoIAndOtoU })
     if (this.$l1) this.entryClasses[`l1-${this.$l1.code}`] = true;
     if (this.$l2) this.entryClasses[`l2-${this.$l2.code}`] = true;
     if (this.$l2.han) this.entryClasses["l2-zh"] = true;
