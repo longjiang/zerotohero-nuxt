@@ -355,7 +355,12 @@ export default {
     }
   },
   methods: {
-    tr,
+    // Replace `tr,` with this function wrapper:
+    tr(text) {
+      // If 'tr' itself is undefined, fallback to the default package export
+      const safeTr = tr || require('transliteration').transliterate;
+      return safeTr ? safeTr(text) : text;
+    },
     highlight,
     async loadImages() {
       if (this.images.length === 0) {
