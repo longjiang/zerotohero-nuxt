@@ -62,7 +62,7 @@
     <div class="my-3">
       <b-button v-if="!showChatGPT" @click="showChatGPT = true" size="sm" variant="outline-secondary" class="w-100">
         <i class="fa fa-comment"></i>
-        {{ $t('Let ChatGPT Explain') }}
+        {{ $t('Let DeepSeek Explain') }}
       </b-button>
       <ChatGPT
         v-if="showChatGPT"

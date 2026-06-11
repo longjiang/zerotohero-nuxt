@@ -117,7 +117,7 @@
         <template #chatGPT>
           <Widget>
             <template #title>
-              {{ $t("Let ChatGPT explain “{text}”", { text: `${a.head} vs ${b.head}` }) }}
+              {{ $t("Let DeepSeek explain “{text}”", { text: `${a.head} vs ${b.head}` }) }}
             </template>
             <template #body>
               <!-- Show a button, when the user clicks we show the chatgpt component -->
@@ -230,7 +230,7 @@ export default {
         },
         {
           name: "chatGPT",
-          title: "ChatGPT",
+          title: "DeepSeek",
           visible: true,
         },
         {

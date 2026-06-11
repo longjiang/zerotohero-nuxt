@@ -40,17 +40,17 @@
                 }" class="btn btn-unstyled text-success px-1"  v-if="showOpenInReader">
                   {{ $t("Open in Reader") }}
                 </router-link>
-                <a v-if="showOpenInChatGPT || showFollowUp" :href="`https://chat.openai.com/?q=${encodeURIComponent(messages[index-1].text)}`" target="_blank" class="btn btn-unstyled text-success px-1">
-                  {{ $t("Open in ChatGPT") }}
+                <a v-if="showOpenInChatGPT || showFollowUp" :href="`https://chat.deepseek.com/?q=${encodeURIComponent(messages[index-1].text)}`" target="_blank" class="btn btn-unstyled text-success px-1">
+                  {{ $t("Open in DeepSeek") }}
                 </a>
               </div>
             </div>
           </div>
         </div>
         <div class="my-5 text-center" v-if="thinking">
-          <Loader :sticky="true" message="Getting response from ChatGPT..." />
+          <Loader :sticky="true" message="Getting response from DeepSeek..." />
         </div>
-        <h6 v-if="!initialMessages[0]">{{ $t("Ask ChatGPT:") }}</h6>
+        <h6 v-if="!initialMessages[0]">{{ $t("Ask DeepSeek:") }}</h6>
         <input type="text" v-model="newMessage" @keydown.enter="sendMessage(newMessage)" v-if="!initialMessages[0]" />
       </div>
     </div>

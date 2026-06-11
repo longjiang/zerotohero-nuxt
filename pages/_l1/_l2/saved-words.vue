@@ -151,7 +151,7 @@ function buildAnkiBack({ head, chatGPTPrompt, lpURL, pronunciation, definitions,
     back += ` (${level})`;
   }
   back += `<br><br>`;
-  back += `<a href="${lpURL}" target="_blank">Language Player</a>・<a href="https://chat.openai.com/?q=${encodeURIComponent(chatGPTPrompt)}" target="_blank">ChatGPT</a>`;
+  back += `<a href="${lpURL}" target="_blank">Language Player</a>・<a href="https://chat.deepseek.com/?q=${encodeURIComponent(chatGPTPrompt)}" target="_blank">DeepSeek</a>`;
   back += `<br><br>`;
   back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/1/${l2Code}" style="height: 100px"> `;
   back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/2"${l2Code} style="height: 100px"> `;

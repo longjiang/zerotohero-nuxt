@@ -17,7 +17,7 @@
         <span class="annotator-button">
           <i class="fa-solid fa-message-question"></i>
         </span>
-        <span>{{ $t("Let ChatGPT Explain") }}</span>
+        <span>{{ $t("Let DeepSeek Explain") }}</span>
       </div>
       <div class="annotate-menu-modal-item">
         <span
@@ -97,7 +97,7 @@
     </div>
     <b-modal
       ref="chatGptModal"
-      :title="$t('Let ChatGPT Explain')"
+      :title="$t('Let DeepSeek Explain')"
       size="lg"
       centered
       hide-footer
