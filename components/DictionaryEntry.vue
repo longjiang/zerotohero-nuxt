@@ -69,7 +69,7 @@
       </Widget>
     </template>
 
-    <template #chatGPT>
+    <template #chatgpt>
       <Widget>
         <template #title>
           {{ $t("Let DeepSeek explain “{text}”", { text: entry.head }) }}
@@ -325,7 +325,7 @@ export default {
             this.entry && this.showSearchSubs && this.selectedSearchTerms,
         },
         {
-          name: "deepseek",
+          name: "chatgpt",
           title: "DeepSeek",
           visible: true,
         },
