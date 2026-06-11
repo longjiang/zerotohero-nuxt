@@ -1,3 +1,4 @@
+<!-- /pages/_l1/_l2/grammar/index.vue -->
 <template>
   <div class="main pt-3 pb-5">
     <div class="container">

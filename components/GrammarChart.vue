@@ -1,9 +1,11 @@
+<!-- /components/GrammarChart.vue -->
 <template>
   <div>
-    <SocialHead v-if="grammar" :title="`${$l2.name} Grammar Cheatsheet | Language Player`" :description="`${grammar
+    <SocialHead v-if="grammar && grammar.length > 0" :title="`${$l2.name} Grammar Cheatsheet | Language Player`" :description="`${grammar
       .slice(0, 10)
       .map((g) => g.structure + ' (' + g.english + ')')
       .join(' | ')}`" />
+      
     <div class="d-flex" style="margin: 0 auto 3rem auto" v-if="grammar && grammar.length > 0" v-cloak>
       <div class="input-group" style="flex: 1">
         <input v-model="search" type="text" class="form-control lookup" :placeholder="$t('Filter by keywords')" />
@@ -19,6 +21,7 @@
         {{ $t('Download CSV') }}
       </a>
     </div>
+    
     <div class="tabs text-center">
       <span class="mr-2">{{ l2LevelKey.toUpperCase() }}</span>
       <button v-for="(l, n) in filteredLevels" class="tab text-dark" :data-bg-level="n" @click="level = Number(n)"
@@ -30,6 +33,7 @@
       </button>
       <div style="height: 0.5rem" :data-bg-level="level" :class="{ 'bg-dark': level ? false : true }"></div>
     </div>
+    
     <div class="table-responsive">
       <table v-if="grammar && grammar.length > 0" :class="`table grammar-table skin-${$skin}`">
         <thead>
@@ -71,15 +75,21 @@
               <span>{{ row.exampleTranslation }}</span>
             </td>
           </tr>
+
+          <tr v-if="allMatchedRows.length > visibleCount">
+            <td colspan="5" v-observe-visibility="visibilityChanged" class="text-center py-4 text-muted">
+              <Loader :sticky="true" message="Loading..." />
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
-
   </div>
 </template>
 
 <script>
 import { unique, LEVELS, l2LevelKey, highlightMultiple } from "../lib/utils";
+
 export default {
   data() {
     return {
@@ -88,6 +98,8 @@ export default {
       grammar: [],
       csvSource: undefined,
       LEVELS,
+      visibleCount: 50, 
+      perPage: 50       
     };
   },
   async created() {
@@ -103,7 +115,8 @@ export default {
     l2LevelKey() {
       return l2LevelKey(this.$l2.code)
     },
-    grammarFiltered() {
+    // NEW: Isolates the filtered list before slicing so we can safely check its length
+    allMatchedRows() {
       return this.grammar.filter((row) => {
         if (this.search) {
           if (
@@ -119,6 +132,10 @@ export default {
         return true;
       });
     },
+    grammarFiltered() {
+      // Slices the isolated filtered result to keep your DOM footprint small
+      return this.allMatchedRows.slice(0, this.visibleCount);
+    },
     filteredLevels() {
       let levels = Object.assign({}, LEVELS);
       for (let level in LEVELS) {
@@ -132,6 +149,10 @@ export default {
   watch: {
     search() {
       if (this.search) this.level = undefined;
+      this.resetVirtualScroll();
+    },
+    level() {
+      this.resetVirtualScroll();
     },
   },
   methods: {
@@ -143,6 +164,13 @@ export default {
         path: `/${this.$l1.code}/${this.$l2.code}/grammar/view/${row.id}`,
       });
     },
+    resetVirtualScroll() {
+      this.visibleCount = this.perPage;
+    },
+    visibilityChanged(isVisible) {
+      if (!isVisible) return;
+      this.visibleCount += this.perPage;
+    }
   },
 };
 </script>
