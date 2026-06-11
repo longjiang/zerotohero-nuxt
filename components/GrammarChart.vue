@@ -24,18 +24,18 @@
     
     <div class="tabs text-center">
       <span class="mr-2">{{ l2LevelKey.toUpperCase() }}</span>
-      <button v-for="(l, n) in filteredLevels" class="tab text-dark" :data-bg-level="n" @click="level = Number(n)"
+      <button v-for="(l, n) in filteredLevels" class="tab text-dark" :data-bg-level="n" @click="changeLevel(Number(n))"
         :key="`grammar-tab-level-${n}`">
         {{ l[l2LevelKey] || l.cefr }}
       </button>
-      <button @click="level = undefined" class="tab text-light bg-dark">
+      <button @click="changeLevel(undefined)" class="tab text-light bg-dark">
         {{ $t('All') }}
       </button>
       <div style="height: 0.5rem" :data-bg-level="level" :class="{ 'bg-dark': level ? false : true }"></div>
     </div>
     
     <div class="table-responsive">
-      <table v-if="grammar && grammar.length > 0" :class="`table grammar-table skin-${$skin}`">
+      <table v-if="grammar && grammar.length > 0" :class="`table grammar-table skin-${$skin}`" :style="{ opacity: isRendering ? 0.5 : 1, transition: 'opacity 0.1s' }">
         <thead>
           <tr>
             <th class="text-center">{{ $t('Grammar') }}</th>
@@ -99,7 +99,8 @@ export default {
       csvSource: undefined,
       LEVELS,
       visibleCount: 50, 
-      perPage: 50       
+      perPage: 10,
+      isRendering: false // OPTIMIZATION: Helps decouple UI transitions from DOM computations
     };
   },
   async created() {
@@ -115,7 +116,6 @@ export default {
     l2LevelKey() {
       return l2LevelKey(this.$l2.code)
     },
-    // NEW: Isolates the filtered list before slicing so we can safely check its length
     allMatchedRows() {
       return this.grammar.filter((row) => {
         if (this.search) {
@@ -133,7 +133,6 @@ export default {
       });
     },
     grammarFiltered() {
-      // Slices the isolated filtered result to keep your DOM footprint small
       return this.allMatchedRows.slice(0, this.visibleCount);
     },
     filteredLevels() {
@@ -150,10 +149,7 @@ export default {
     search() {
       if (this.search) this.level = undefined;
       this.resetVirtualScroll();
-    },
-    level() {
-      this.resetVirtualScroll();
-    },
+    }
   },
   methods: {
     highlightMultiple(a, b) {
@@ -167,8 +163,24 @@ export default {
     resetVirtualScroll() {
       this.visibleCount = this.perPage;
     },
+    // OPTIMIZATION: Deconstruct tab switching task so the UI updates instantly
+    changeLevel(newLevel) {
+      this.isRendering = true;
+      this.resetVirtualScroll();
+      
+      // Frame 1: Yield immediately to update the highlighted Tab style
+      requestAnimationFrame(() => {
+        // Frame 2: Process the underlying grammar filtering task
+        requestAnimationFrame(() => {
+          this.level = newLevel;
+          this.$nextTick(() => {
+            this.isRendering = false;
+          });
+        });
+      });
+    },
     visibilityChanged(isVisible) {
-      if (!isVisible) return;
+      if (!isVisible || this.isRendering) return;
       this.visibleCount += this.perPage;
     }
   },
