@@ -40,8 +40,8 @@
                 }" class="btn btn-unstyled text-success px-1"  v-if="showOpenInReader">
                   {{ $t("Open in Reader") }}
                 </router-link>
-                <a v-if="showOpenInChatGPT || showFollowUp" :href="`https://chat.deepseek.com/?q=${encodeURIComponent(messages[index-1].text)}`" target="_blank" class="btn btn-unstyled text-success px-1">
-                  {{ $t("Open in DeepSeek") }}
+                <a v-if="showOpenInChatGPT || showFollowUp" :href="`https://chat.openai.com/?q=${encodeURIComponent(messages[index-1].text)}`" target="_blank" class="btn btn-unstyled text-success px-1">
+                  {{ $t("Open in ChatGPT") }}
                 </a>
               </div>
             </div>
