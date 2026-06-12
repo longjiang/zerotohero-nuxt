@@ -30,7 +30,8 @@ class SimplemmaTokenizer extends BaseTokenizer {
       return this.tokenizeLocally(text);
     }
 
-    return this.normalizeTokens(tokenized);
+    tokens = this.normalizeTokens(tokenized);
+    return this.recoverSpaces(tokens, text);
   }
 
   normalizeTokens(tokenized) {

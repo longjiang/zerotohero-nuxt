@@ -22,7 +22,8 @@ class HazmTokenizer extends BaseTokenizer {
       return this.tokenizeLocally(text);
     }
 
-    return this.normalizeTokens(tokens);
+    tokens = this.normalizeTokens(tokens);
+    return this.recoverSpaces(tokens, text);
   }
 
   normalizeTokens(tokenized) {

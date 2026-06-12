@@ -20,7 +20,8 @@ class JiebaTokenizer extends BaseTokenizer {
     // check if the tokenized is an array and not a string
     if (!tokenized || typeof tokenized === 'string') return this.tokenizeLocally(text);
 
-    return this.normalizeTokens(tokenized);
+    const tokens = this.normalizeTokens(tokenized);
+    return this.recoverSpaces(tokens, text);
   }
 
   normalizeTokens(tokenized) {

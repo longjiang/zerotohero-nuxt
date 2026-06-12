@@ -24,7 +24,8 @@ class QalsadiTokenizer extends BaseTokenizer {
     }
     if (!tokenized) return this.tokenizeIntegral(text);
 
-    return this.normalizeTokens(tokenized);
+    const tokens = this.normalizeTokens(tokenized);
+    return this.recoverSpaces(tokens, text);
   }
 
   normalizeTokens(tokenized) {
