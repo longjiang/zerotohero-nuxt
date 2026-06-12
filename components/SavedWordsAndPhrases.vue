@@ -346,8 +346,10 @@ export default {
           phrases = phrases.concat(phrasesInLang);
         }
       }
+      // Excel support
+      const bom = "\ufeff";
       let phrasesCSV = Papa.unparse(phrases);
-      this.phrasesCSVHref = makeTextFile(phrasesCSV);
+      this.phrasesCSVHref = makeTextFile(bom + phrasesCSV);
     },
     emitHasDashboard() {
       let dashboardItems = [];

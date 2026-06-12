@@ -1,4 +1,4 @@
-id,level,code,structure,pattern,pinyin,english,review,example,exampleTranslation,url
+﻿id,level,code,structure,pattern,pinyin,english,review,example,exampleTranslation,url
 1,1,1.03.1,什么,什么,shénme ,what,,这是什么?,What is this?,https://chinesezerotohero.teachable.com/courses/185499/lectures/2839923
 2,1,1.03.1,什么 N,什么*,shénme N ,what kind of N,,那是什么书?,What book is that?,https://chinesezerotohero.teachable.com/courses/185499/lectures/2839924
 3,1,1.03.2,不是,不是,bùshì ,not to be,,我不是美国人。,I am not an American.,https://chinesezerotohero.teachable.com/courses/185499/lectures/2839924

@@ -198,7 +198,8 @@ export default {
           return op;
         })
       );
-      this.csvHref = makeTextFile(csv);
+      const bom = "\ufeff"; // Excel support
+      this.csvHref = makeTextFile(bom + csv);
     },
     visibilityChanged(isVisible) {
       if (isVisible) {

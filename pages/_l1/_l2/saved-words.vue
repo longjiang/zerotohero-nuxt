@@ -1,3 +1,4 @@
+<!-- /pages/_l1/_l2/saved-words.vue -->
 <template>
   <div class="main pb-4" v-cloak>
     <div class="container">
@@ -237,7 +238,8 @@ export default {
         return groups.sort((a, b) => b.date.localeCompare(a.date));
     },
     csvHref() {
-      return makeTextFile(this.csv);
+      const bom = "\ufeff"; // Excel support
+      return makeTextFile(bom + this.csv);
     },
     $dictionaryName() {
       return this.$store.state.settings.dictionaryName;
