@@ -1,3 +1,4 @@
+<!-- /components/ReaderComp.vue -->
 <template>
   <container-query :query="query" v-model="params">
     <div>
@@ -31,6 +32,7 @@
             :key="marked"
             :page="page"
             :baseUrl="baseUrl"
+            :title="title"
             ref="text-with-speech-bar"
             @translation="onTranslation"
             @previousPage="$emit('previousPage')"
@@ -184,6 +186,10 @@ export default {
     };
   },
   props: {
+    title: {
+      type: String,
+      default: "",
+    },
     baseUrl: {
       type: String,
       default: "",

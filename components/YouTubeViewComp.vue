@@ -1,4 +1,4 @@
-// YouTubeViewComp.vue
+<!-- /components/YouTubeViewComp.vue -->
 <template>
   <div class="youtube-view">
     <SocialHead

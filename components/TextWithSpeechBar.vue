@@ -1,3 +1,4 @@
+<!-- /components/TextWithSpeechBar.vue -->
 <template>
   <container-query :query="query" v-model="params">
     <div id="speech-container" :class="`skin-${$skin}`">
@@ -153,6 +154,7 @@
             :showTranslation="translation ? false : true"
             ref="tokenizedRichTexts"
             class="w-100"
+            :context="{ textTitle: title }"
             @click="this.focusLineIndex = lineIndex"
             @translation="onTranslation($event, lineIndex)"
             @translationLoading="onTranslationLoading($event, lineIndex)"
@@ -257,6 +259,10 @@ export default {
     ContainerQuery,
   },
   props: {
+    title: {
+      type: String,
+      default: "",
+    },
     html: {
       type: String,
     },

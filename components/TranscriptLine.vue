@@ -1,3 +1,4 @@
+<!-- /components/TranscriptLine.vue -->
 <template>
   <container-query :query="query" v-model="params">
     <div
@@ -44,6 +45,7 @@
               context: {
                 starttime: line.starttime,
                 youtube_id: video.youtube_id,
+                videoTitle: video.title,
               },
               animationDuration: duration,
               animationSpeed: speed,

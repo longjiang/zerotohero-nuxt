@@ -1,5 +1,5 @@
+// /store/savedWords.js
 import { groupArrayBy, logError } from '../lib/helper'
-
 
 export const state = () => {
   return {
@@ -9,8 +9,6 @@ export const state = () => {
     savedWordsLoaded: false
   }
 }
-
-
 
 const buildIndex = (l2, state) => {
   let formIndex = {}
