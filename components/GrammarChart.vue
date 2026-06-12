@@ -100,7 +100,7 @@ export default {
       LEVELS,
       visibleCount: 50, 
       perPage: 10,
-      isRendering: false // OPTIMIZATION: Helps decouple UI transitions from DOM computations
+      isRendering: false
     };
   },
   async created() {
@@ -117,19 +117,31 @@ export default {
       return l2LevelKey(this.$l2.code)
     },
     allMatchedRows() {
+      if (this.level) {
+        return this.grammar.filter((row) => String(row.level) === String(this.level));
+      }
+
+      if (!this.search) {
+        return this.grammar;
+      }
+
+      // Prepare the search term: lowercase, remove accents (tones), and remove spaces
+      const cleanedSearch = this.cleanText(this.search);
+
       return this.grammar.filter((row) => {
-        if (this.search) {
-          if (
-            !row.structure.includes(this.search) &&
-            !row.english.includes(this.search)
-          ) {
-            return false;
-          }
-        }
-        if (this.level) {
-          if (row.level !== String(this.level)) return false;
-        }
-        return true;
+        // 1. Check Code and English (standard lowercase check)
+        const codeMatch = row.code && row.code.toLowerCase().includes(this.search.toLowerCase());
+        const englishMatch = row.english && row.english.toLowerCase().includes(this.search.toLowerCase());
+        
+        // 2. Check Structure (standard check)
+        const structureMatch = row.structure && row.structure.toLowerCase().includes(this.search.toLowerCase());
+
+        // 3. Check Pinyin (Tone & Space insensitive using the helper)
+        // Adjust 'row.pinyin' if your pinyin data uses a different key name (e.g., row.pronunciation)
+        const cleanedPinyin = row.pinyin ? this.cleanText(row.pinyin) : "";
+        const pinyinMatch = cleanedPinyin && cleanedPinyin.includes(cleanedSearch);
+
+        return codeMatch || structureMatch || englishMatch || pinyinMatch;
       });
     },
     grammarFiltered() {
@@ -163,14 +175,20 @@ export default {
     resetVirtualScroll() {
       this.visibleCount = this.perPage;
     },
-    // OPTIMIZATION: Deconstruct tab switching task so the UI updates instantly
+    // Normalizes strings by converting to lowercase, stripping tone marks, and removing spaces
+    cleanText(str) {
+      if (!str) return "";
+      return str
+        .toLowerCase()
+        .normalize("NFD")               // Decomposes combined graphemes (e.g., "ā" becomes "a" + accent)
+        .replace(/[\u0300-\u036f]/g, "") // Removes the accent marks
+        .replace(/\s+/g, "");            // Removes all spaces
+    },
     changeLevel(newLevel) {
       this.isRendering = true;
       this.resetVirtualScroll();
       
-      // Frame 1: Yield immediately to update the highlighted Tab style
       requestAnimationFrame(() => {
-        // Frame 2: Process the underlying grammar filtering task
         requestAnimationFrame(() => {
           this.level = newLevel;
           this.$nextTick(() => {
