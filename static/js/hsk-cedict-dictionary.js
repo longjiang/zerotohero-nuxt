@@ -1,3 +1,5 @@
+// /static/js/hsk-cedict-dictionary.js
+
 importScripts("../vendor/localforage/localforage.js");
 importScripts("../js/base-dictionary.js");
 

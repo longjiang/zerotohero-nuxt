@@ -1,4 +1,4 @@
-<!-- SyncedTranscript.vue -->
+<!-- /components/SyncedTranscript.vue -->
 <!-- None-Pro users can only view a set number of lines. After these lines, a prompt is shown
  to ask the user to upgrade to Pro, using the <YouNeedPro /> component. How this is shown depends on
  the current mode of this component.

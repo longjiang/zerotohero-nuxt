@@ -1,3 +1,4 @@
+<!-- /components/ReviewItemCollector.vue -->
 <template>
   <div>
     <!-- show the quiz in a modal-->
