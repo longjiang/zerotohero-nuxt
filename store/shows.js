@@ -1,3 +1,5 @@
+// store/shows.js
+
 import { CATEGORIES } from "../lib/youtube";
 import { LANGS_WITH_CONTENT, uniqueByValue, unique, PYTHON_SERVER, proxy } from "../lib/utils";
 import Vue from "vue";
@@ -70,12 +72,11 @@ const normalizeDifficulty = (video) => {
   return video;
 }
 
-export const fetchRecommendedVideos = async (userId, l2, level, preferredCategories, music, start, limit, excludeIds) => {
+export const fetchRecommendedVideos = async (userId, l2, level, preferredCategories, music, limit, excludeIds) => {
   try {
     let params = {
       l2: l2.code,
       limit,
-      start,
       made_for_kids: 0,
     };
     if (level) params.level = level;
@@ -262,13 +263,12 @@ export const actions = {
    * @param {Array} [payload.preferredCategories] - The user's preferred categories. If not provided, it will be fetched from the settings state.
    * @param {string} [payload.music] - The music genre to filter the recommended videos by. '0' to exclude music videos, '1' to include only music videos. If not provided, all videos will be included.
    * @param {boolean} [payload.clear=false] - Whether to clear the current recommended videos before adding new ones.
-   * @param {number} [payload.start=0] - The start index for the videos to fetch.
    * @param {number} [payload.limit=48] - The maximum number of videos to fetch.
    */
   // 非音楽動画用
   async loadRecommendedVideos(
     { state, commit, rootState, rootGetters },
-    { userId, l2, level, preferredCategories, clear = false, start = 0, limit = 48 }
+    { userId, l2, level, preferredCategories, clear = false, limit = 48 }
   ) {
     // レベルやカテゴリ設定が無ければ既存ロジックで取得
     if (!level && rootState.progress.progressLoaded) {
@@ -288,7 +288,6 @@ export const actions = {
       level,
       preferredCategories,
       0, // music=0
-      start,
       limit,
       excludeIds
     );
@@ -301,7 +300,7 @@ export const actions = {
   // 音楽動画用
   async loadRecommendedMusicVideos(
     { state, commit, rootState, rootGetters },
-    { userId, l2, level, preferredCategories, clear = false, start = 0, limit = 48 }
+    { userId, l2, level, preferredCategories, clear = false, limit = 48 }
   ) {
     if (!level && rootState.progress.progressLoaded) {
       level = Number(rootGetters["progress/level"](l2));
@@ -320,7 +319,6 @@ export const actions = {
       level,
       preferredCategories,
       1, // music=1
-      start,
       limit,
       excludeIds
     );
