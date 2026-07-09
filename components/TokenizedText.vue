@@ -1,4 +1,4 @@
-<!-- TokenizedText.vue -->
+<!-- /components/TokenizedText.vue -->
 <template>
   <span :class="{ 'tokenized-text': true, 'show-pinyin': $l2Settings.showPinyin, 'use-zoom': useZoom, speaking }" :dir="$l2.direction">
     <template v-if="tokenized">

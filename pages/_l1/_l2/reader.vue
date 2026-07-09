@@ -1,3 +1,4 @@
+<!-- /pages/_l1/_l2/reader.vue -->
 <template>
   <div class="main pt-3 pb-5">
     <SocialHead
@@ -51,6 +52,7 @@
             :page="page"
             :baseUrl="baseUrl"
             :showLoading="false"
+            :title="title"
             @readerTextChanged="readerTextChanged"
             @readerTranslationChanged="readerTranslationChanged"
             @previousPage="onPreviousPage"

@@ -1,4 +1,4 @@
-// base-inflector.js
+// /static/js/inflectors/base-inflector.js
 class BaseInflector {
   constructor({ l2 = undefined } = {}) {
     this.l2 = l2;

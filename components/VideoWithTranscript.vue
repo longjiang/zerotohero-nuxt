@@ -1,3 +1,4 @@
+<!-- /components/VideoWithTranscript.vue -->
 <template>
   <div
     :class="{

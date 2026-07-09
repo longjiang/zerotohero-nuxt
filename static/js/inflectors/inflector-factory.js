@@ -1,3 +1,5 @@
+// /static/js/inflectors/inflector-factory.js
+
 const InflectorFactory = {
   inflectors: {
     JapaneseInflector: ["jpn"],

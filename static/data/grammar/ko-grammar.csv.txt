@@ -1,4 +1,4 @@
-id,level,code,structure,pattern,pinyin,english,review,example,exampleTranslation,url
+﻿id,level,code,structure,pattern,pinyin,english,review,example,exampleTranslation,url
 1,2,1.1.1.1,입니다,입니다,,"the ""to be"" verb equivalent of ""is/am/are"" in English",,,,
 2,2,1.1.1.2,은/는,은|는,,topic/subject marking particle that indicates the topic or subject of the sentence,,,,
 3,2,1.1.2.1,입니까?,입니까,,the question particle that is added to the end of a sentence to make it a yes/no question,,,,

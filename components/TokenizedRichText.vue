@@ -1,4 +1,4 @@
-<!-- TokenizedRichText.vue -->
+<!-- /components/TokenizedRichText.vue -->
 <template>
   <div>
     <!-- Conditionally render tokenized text -->

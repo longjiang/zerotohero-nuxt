@@ -1,3 +1,5 @@
+// /static/js/inflectors/french-inflector.js
+
 importScripts("../vendor/french-verbs/french-verbs-browserified.js");
 importScripts("../js/inflectors/base-inflector.js");
 

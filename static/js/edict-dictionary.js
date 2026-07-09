@@ -1,3 +1,4 @@
+// /static/js/edict-dictionary.js
 // importScripts('../vendor/kuromoji/kuromoji.js')
 importScripts('../vendor/wanakana/wanakana.min.js')
 importScripts('../vendor/localforage/localforage.js')

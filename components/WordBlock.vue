@@ -1,3 +1,4 @@
+<!-- /components/WordBlock.vue -->
 <template>
   <span @click="wordBlockClick" :class="wordBlockClasses" :style="{ 'animation-duration': animationDuration + 'ms' }"
     @animationend="resetAnimation" :data-highlight-level="(savedWord || bestWord) ? (savedWord || bestWord).level : 'outside'">

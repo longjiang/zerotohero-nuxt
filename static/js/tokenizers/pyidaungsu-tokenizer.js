@@ -23,7 +23,8 @@ class PyidaungsuTokenizer extends BaseTokenizer {
       return this.tokenizeLocally(text);
     }
 
-    return this.normalizeTokens(tokenized);
+    const tokens = this.normalizeTokens(tokenized);
+    return this.recoverSpaces(tokens, text);
   }
 
   normalizeTokens(tokenized) {

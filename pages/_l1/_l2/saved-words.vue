@@ -1,3 +1,4 @@
+<!-- /pages/_l1/_l2/saved-words.vue -->
 <template>
   <div class="main pb-4" v-cloak>
     <div class="container">
@@ -160,19 +161,30 @@ function buildAnkiBack({ head, chatGPTPrompt, lpURL, pronunciation, definitions,
   return back;
 }
 
+// Inside /pages/_l1/_l2/saved-words.vue -> Helper functions block
 function buildAnkiFront({
   contextForm,
   contextText,
   head,
   youtubeID,
   startTime,
+  videoTitle,      // 👈 Pass video title
+  textTitle,       // 👈 Pass text title
+  textReaderLabel, // 👈 Pass the translated 'Text Reader' label ($t)
 }) {
-  // ① 表示語のハイライト
+  // ① Primary highlighted text logic
   let front = contextForm && contextText
     ? contextText.replace(contextForm, `<b>${contextForm}</b>`)
     : head;
 
-  // ② 必要なら YouTube 埋め込みを付与
+  // ② Append formatted source title if available
+  if (videoTitle) {
+    front += `<br><small>— YouTube: "${videoTitle}"</small>`;
+  } else if (textTitle) {
+    front += `<br><small>— ${textReaderLabel}: "${textTitle}"</small>`;
+  }
+
+  // ③ Attach YouTube embed if applicable
   if (youtubeID && startTime) {
     const t = Math.floor(startTime) - 1;
     front += `<br><br><iframe width="320" height="180" src="https://www.youtube.com/embed/${youtubeID}?start=${t}" frameborder="0"></iframe>`;
@@ -237,7 +249,8 @@ export default {
         return groups.sort((a, b) => b.date.localeCompare(a.date));
     },
     csvHref() {
-      return makeTextFile(this.csv);
+      const bom = "\ufeff"; // Excel support
+      return makeTextFile(bom + this.csv);
     },
     $dictionaryName() {
       return this.$store.state.settings.dictionaryName;
@@ -247,7 +260,6 @@ export default {
     csv() {
       let csvWords = this.sW.map(savedWord => {
         const word = savedWord.word;
-        // 基本フィールド
         const mapped = { id: word.id, head: word.head, ...word };
 
         mapped.l2 = this.$l2.code;
@@ -264,13 +276,16 @@ export default {
         mapped.contextStartTime  = savedWord.context?.starttime;
         mapped.contextText       = savedWord.context?.text;
         mapped.contextYouTubeID  = savedWord.context?.youtube_id;
+        
+        // Extract properties safely from saved context
+        const videoTitle = savedWord.context?.title || "";
+        const textTitle  = savedWord.context?.textTitle || "";
 
         const level = l2LevelNameByLevel(this.$l2, word.level);
 
-        // ── Anki 用フィールドをヘルパで生成 ──
         mapped.ankiBack = buildAnkiBack({
           head: word.head,
-          chatGPTPrompt: `Explain in ${this.$l1.name}, the meaning and pronunciation of the ${this.$l2.name} (${this.$l2.code}) word ‘${mapped.contextForm}’ in ‘${mapped.contextText}’. Rephrase it in various ways with ${this.$l2.name} synonyms (with pronunciations), give additional examples, and provide mnemonic tips.`,
+          chatGPTPrompt: `Explain in ${this.$l1.name}, the meaning and pronunciation of the ${this.$l2.name} (${this.$l2.code}) word ‘${mapped.contextForm}’ in ‘${mapped.contextText}’.`,
           lpURL: `https://languageplayer.io/${this.$l1.code}/${this.$l2.code}/dictionary/${this.$dictionaryName}/${word.id}`,
           pronunciation: mapped.pronunciation,
           definitions: mapped.definitions,
@@ -278,17 +293,20 @@ export default {
           l2Code: this.$l2.code,
         });
 
+        // Update this call configuration to supply titles:
         mapped.ankiFront = buildAnkiFront({
           contextForm: mapped.contextForm,
           contextText: mapped.contextText,
           head: word.head,
           youtubeID: mapped.contextYouTubeID,
           startTime: mapped.contextStartTime,
+          videoTitle: videoTitle,
+          textTitle: textTitle,
+          textReaderLabel: this.$t("Text Reader"), // 👈 Pass the localized string
         });
 
         if (word.simplified || word.kana || word.hangul) delete mapped.head;
 
-        // 不要キーの削除（従前と同じ）
         [
           "cjk","search","newHSKMatches","saved","phrase","username","created",
           "audio","c","e","f","i","k","l","wiktionary"

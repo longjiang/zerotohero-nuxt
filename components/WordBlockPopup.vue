@@ -1,3 +1,4 @@
+<!-- /components/WordBlockPopup.vue -->
 <template>
   <div class="word-block-popup skin-light">
     <div class="tooltip-images" :key="`tooltip-images-${text}`">

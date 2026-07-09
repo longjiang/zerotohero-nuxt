@@ -1,3 +1,4 @@
+<!-- /components/Review.vue -->
 <template>
   <div
     :class="{
