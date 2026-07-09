@@ -172,6 +172,11 @@
             </div>
           </div>
         </div>
+        <div v-if="isYouTubePage" class="mb-2">
+          <b-form-checkbox v-model="hideWatched" switch>
+            Hide watched
+          </b-form-checkbox>
+        </div>
       </client-only>
 
       <draggable
@@ -301,6 +306,10 @@ export default {
     limit: {
       type: Number,
     },
+    hideWatchedProp: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
@@ -320,6 +329,7 @@ export default {
       subsChecked: 3,
       unavailableYouTubeIds: [],
       videosInfoKey: 0,
+      hideWatched: this.hideWatchedProp,
       params: {},
       cachedVideoMetaFromYouTube: [],
       sort: this.initialSort,
@@ -356,6 +366,7 @@ export default {
   computed: {
     filteredVideos() {
       if (!this.videos) return [];
+      const watchedIds = this.$store.getters['watchHistory/watchedVideoIds']
       let keyword = this.keyword ? this.keyword.toLowerCase() : undefined;
       let filteredVideos = this.videos.filter((video) => {
         if (this.unavailableVideos.includes(video)) return false;
@@ -367,6 +378,8 @@ export default {
         )
           return false;
         if (keyword && !video.title.toLowerCase().includes(keyword))
+          return false;
+        if (this.hideWatched && video.id && watchedIds.has(video.id))
           return false;
         return true;
       });
@@ -401,6 +414,9 @@ export default {
       return this.checkSubs
         ? this.filteredVideos.slice(0, this.subsChecked).filter((v) => v.id)
         : this.filteredVideos.filter((v) => v.id);
+    },
+    isYouTubePage() {
+      return this.$route.name?.includes('youtube')
     },
   },
   watch: {

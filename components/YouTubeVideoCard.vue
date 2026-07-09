@@ -78,6 +78,9 @@
         <div class="duration" v-if="video.duration">
           {{ parseDuration(video.duration) }}
         </div>
+        <div v-if="historyItem" class="watched-badge">
+          <i class="fa fa-check"></i>
+        </div>
         <div
           v-if="video.difficulty > 0 && levelByDifficulty(video.difficulty, $l2.code)"
           :data-bg-level="levelByDifficulty(video.difficulty, $l2.code)"
@@ -831,6 +834,18 @@ export default {
     color: #666;
   }
   padding-bottom: 0.25rem;
+}
+
+.watched-badge {
+  position: absolute;
+  top: 0.2rem;
+  right: 0.2rem;
+  background-color: rgba(0, 0, 0, 0.75);
+  color: #4caf50;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 0.08rem 0.3rem;
+  border-radius: 0.15rem;
 }
 
 .no-subs-badge {
