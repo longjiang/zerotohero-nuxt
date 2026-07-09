@@ -30,27 +30,56 @@
 
       <!-- Media body -->
       <div class="media-body">
-        <div class="youtube-title">
-          <span
-            contenteditable="true"
-            :class="{
-              'd-none': !$adminMode || view === 'list',
-            }"
-            @blur="saveTitle"
+        <div class="youtube-title-row">
+          <div class="youtube-title">
+            <span
+              contenteditable="true"
+              :class="{
+                'd-none': !$adminMode || view === 'list',
+              }"
+              @blur="saveTitle"
+            >
+              {{ video.title }}
+            </span>
+            <router-link
+              :class="{
+                'youtube-title-text': true,
+                'link-unstyled': true,
+                'd-none': $adminMode && view !== 'list',
+              }"
+              :to="to"
+            >
+              {{ video.title }}
+            </router-link>
+          </div>
+
+          <b-button
+            class="youtube-video-card-badge border-0 p-0"
+            size="sm"
+            variant="no-bg"
+            @click.stop="showActionsModal"
+            :title="$t('Actions')"
           >
-            {{ video.title }}
-          </span>
-          <router-link
-            :class="{
-              'youtube-title-text': true,
-              'link-unstyled': true,
-              'd-none': $adminMode && view !== 'list',
-            }"
-            :to="to"
-          >
-            {{ video.title }}
-          </router-link>
+            <i class="fa-solid fa-ellipsis-v"></i>
+          </b-button>
         </div>
+
+        <b-modal
+          :id="actionsModalId"
+          :title="$t('Actions')"
+          centered
+          hide-footer
+          size="sm"
+        >
+          <b-button @click.stop="editTitle" class="d-block w-100 text-left" variant="light">
+            <i class="fa-solid fa-edit mr-2"></i>
+            {{ $t("Edit title") }}
+          </b-button>
+          <b-button @click.stop="removeVideo" class="d-block w-100 text-left" variant="light">
+            <i class="fa-solid fa-trash mr-2"></i>
+            {{ $t("Remove") }}
+          </b-button>
+        </b-modal>
 
         <MediaItemStats
           :item="video"
@@ -249,6 +278,9 @@ export default {
     topics() {
       return TOPICS;
     },
+    actionsModalId() {
+      return `youtube-video-actions-${(this.video && this.video.id) || (this.video && this.video.youtube_id) || this._uid}`;
+    },
   },
   async mounted() {
     if (this.checkSubs) {
@@ -343,6 +375,24 @@ export default {
     },
 
     // ----- title editing -----
+    showActionsModal() {
+      this.$bvModal.show(this.actionsModalId);
+    },
+    async editTitle() {
+      this.$bvModal.hide(this.actionsModalId);
+      let newTitle = prompt(this.$t("Enter new title"), this.video.title);
+      if (newTitle && this.video.title !== newTitle) {
+        let data = await this.$directus.patchVideo({
+          l2Id: this.video.l2 ? this.video.l2.id || this.video.l2 : this.$l2.id,
+          id: this.video.id,
+          payload: { title: newTitle },
+        });
+        if (data) {
+          this.video.title = newTitle;
+          this.titleUpdated = true;
+        }
+      }
+    },
     async saveTitle(e) {
       let newTitle = e.target.innerText;
       if (this.video.title !== newTitle) {
@@ -404,6 +454,12 @@ export default {
     },
 
     // ----- remove -----
+    async removeVideo() {
+      this.$bvModal.hide(this.actionsModalId);
+      if (confirm(this.$t("Are you sure you want to remove this video?"))) {
+        await this.remove();
+      }
+    },
     async remove() {
       if (this.video.id) {
         let deleted = await this.$directus.deleteVideo({
@@ -534,13 +590,30 @@ export default {
 .youtube-video-card:hover {
   position: relative;
   text-decoration: none;
+  .youtube-title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
   .youtube-title {
+    flex: 1;
+    min-width: 0;
     .youtube-title-text {
       display: -webkit-box;
+      line-clamp: 2;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       font-weight: bold;
       overflow: hidden;
+    }
+  }
+  .youtube-video-card-badge {
+    flex-shrink: 0;
+    color: inherit;
+    opacity: 0.8;
+    &:hover {
+      opacity: 1;
     }
   }
 }
