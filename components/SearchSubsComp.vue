@@ -325,11 +325,15 @@ export default {
     },
     currentHit: {
       async handler(newVal, oldVal) {
-        // If currentHit is not set, we don't do anything
         if (!newVal) return;
 
-        // Cancel any ongoing translation before starting a new one
+        // Cancel any ongoing translation
         this.cancelTranslation();
+
+        // ** Clear any existing L1 subtitles so we never show old translations **
+        if (newVal.video) {
+          Vue.delete(newVal.video, "subs_l1");
+        }
 
         let unavailable = await YouTube.videoUnavailable(
           this.currentHit?.video?.youtube_id
@@ -339,7 +343,7 @@ export default {
         }
         this.loadL1SubsIfNeeded();
       },
-      deep: false, // Watch only for object reference changes
+      deep: false,
     },
   },
   async mounted() {
@@ -360,7 +364,7 @@ export default {
     }, 800);
   },
   beforeDestroy() {
-    this.cancelTranslation(); // stop any in-flight translation
+    this.cancelTranslation();
     this.unsubscribeSettings();
   },
   methods: {
