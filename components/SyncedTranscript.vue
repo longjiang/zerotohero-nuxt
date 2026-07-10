@@ -558,6 +558,9 @@ export default {
       );
     },
     matchLines(lines, parallelLines) {
+      // Minimum overlap duration (seconds) to count as a match
+      const MIN_OVERLAP = 0.001; // 1 ms
+
       // Build intervals: [start, end)
       const toInterval = (line, nextLine, defaultDuration = 2) => {
         const start = line.starttime;
@@ -574,7 +577,6 @@ export default {
 
       const used = new Array(parallelLines.length).fill(false);
       const matched = [];
-      let lastTranslation = "";
 
       for (let i = 0; i < l2Intervals.length; i++) {
         const l2 = l2Intervals[i];
@@ -583,19 +585,21 @@ export default {
         for (let j = 0; j < l1Intervals.length; j++) {
           if (used[j]) continue;
           const l1 = l1Intervals[j];
-          // check overlap
-          if (Math.max(l2.start, l1.start) < Math.min(l2.end, l1.end)) {
+
+          const overlapStart = Math.max(l2.start, l1.start);
+          const overlapEnd   = Math.min(l2.end, l1.end);
+          const overlapDuration = overlapEnd - overlapStart;
+
+          if (overlapDuration > MIN_OVERLAP) {
             candidates.push(j);
           }
         }
 
         if (candidates.length === 0) {
-          // No matching L1 line – leave translation empty, do NOT repeat the last one
           matched[i] = "";
         } else {
           const text = candidates.map(j => parallelLines[j].line).join(" ");
           matched[i] = text;
-          lastTranslation = text; // still updated for potential future use? Not needed now, but harmless
           candidates.forEach(j => { used[j] = true; });
         }
       }
