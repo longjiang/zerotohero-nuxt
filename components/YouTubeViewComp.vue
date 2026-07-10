@@ -16,7 +16,10 @@
         autoplay: true,
         cc: false,
         checkingSubs,
-        episodes: playlist && playlist.videos && playlist.videos.length ? playlist.videos : episodes,
+        episodes:
+          playlist && playlist.videos && playlist.videos.length
+            ? playlist.videos
+            : episodes,
         episodeSort,
         forcePortrait: false,
         initialMode,
@@ -41,8 +44,8 @@
       @updateLayout="onUpdateLayout"
       @retranslate="retranslate(video)"
     />
-    
-    <!-- Modal for a countdown after the video finishes playing, vertically centered -->
+
+    <!-- Modal for a countdown after the video finishes playing -->
     <b-modal
       id="countdown-modal"
       :title="
@@ -56,11 +59,7 @@
       :hide-footer="true"
       centered
     >
-      <LazyYouTubeVideoCard
-        ref="nextYouTubeVideoCard"
-        skin="light"
-        v-bind="nextVideoProps"
-      >
+      <LazyYouTubeVideoCard ref="nextYouTubeVideoCard" skin="light" v-bind="nextVideoProps">
         <template v-slot:footer>
           <slot name="footer" :video="video"></slot>
         </template>
@@ -118,7 +117,7 @@ export default {
       showType: undefined,
       video: undefined,
       translating: false,
-      translationInProgress: false, // Track if translation is already happening
+      translationInProgress: false,
     };
   },
   computed: {
@@ -196,10 +195,10 @@ export default {
     "video.subs_l2"() {
       if (this.video?.subs_l2?.length > 0) {
         this.checkingSubs = false;
-        // console.log(`📺 Video subtitles loaded: ${this.video.subs_l2.length} lines`);
-        // Only trigger translation if not already in progress and no existing translation
-        if (!this.translationInProgress && 
-            (!this.video.subs_l1 || this.video.subs_l1.length === 0)) {
+        if (
+          !this.translationInProgress &&
+          (!this.video.subs_l1 || this.video.subs_l1.length === 0)
+        ) {
           this.triggerAutoTranslation();
         }
       }
@@ -221,53 +220,57 @@ export default {
       }
     },
     video(newVideo, oldVideo) {
-      // Only trigger if video actually changed and has required data
-      if (newVideo && 
-          newVideo.id && 
-          newVideo.subs_l2?.length > 0 &&
-          newVideo.id !== oldVideo?.id &&
-          !this.translationInProgress) {
-        // console.log(`📹 New video loaded: "${newVideo.title || 'Untitled'}" (ID: ${newVideo.id})`);
+      if (
+        newVideo &&
+        newVideo.id &&
+        newVideo.subs_l2?.length > 0 &&
+        newVideo.id !== oldVideo?.id &&
+        !this.translationInProgress
+      ) {
         this.triggerAutoTranslation();
       }
     },
   },
   methods: {
-    /**
-     * Triggers auto-translation with proper state management
-     */
     async triggerAutoTranslation() {
       if (this.translationInProgress || !this.video) return;
-      
+
       console.log(`🚀 Triggering auto-translation for video ${this.video.id}`);
       this.translationInProgress = true;
       try {
         await this.performAutoTranslate(this.video);
       } catch (error) {
-        console.error('❌ Auto-translation trigger failed:', error);
+        console.error("❌ Auto-translation trigger failed:", error);
       } finally {
         this.translationInProgress = false;
-        console.log(`🏁 Auto-translation trigger completed for video ${this.video.id}`);
+        console.log(
+          `🏁 Auto-translation trigger completed for video ${this.video.id}`
+        );
       }
     },
   },
   async mounted() {
     this.episodeSort = this.$route.query.sort || "title";
     console.log(`📺 Mounting YouTubeView for video ID: ${this.youtube_id}`);
-    
+
     await Promise.all([
       this.loadVideo(this.youtube_id, this.directus_id),
       this.handlePlaylistFromQueryString(),
     ]);
-    
-    // Trigger auto-translation after mount if video is already loaded
-    if (this.video && 
-        this.video.id && 
-        this.video.subs_l2?.length > 0 &&
-        !this.translationInProgress) {
+
+    if (
+      this.video &&
+      this.video.id &&
+      this.video.subs_l2?.length > 0 &&
+      !this.translationInProgress
+    ) {
       console.log(`🎬 Video already loaded on mount, triggering translation`);
       await this.triggerAutoTranslation();
     }
+  },
+  beforeDestroy() {
+    // Cancel any ongoing translation when navigating away
+    this.cancelTranslation();
   },
 };
 </script>
