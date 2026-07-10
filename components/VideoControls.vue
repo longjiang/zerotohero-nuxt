@@ -1,3 +1,4 @@
+<!-- /components/VideoControls.vue -->
 <template>
   <div
     :class="{

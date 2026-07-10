@@ -1,3 +1,4 @@
+<!-- /components/VideoDetails.vue -->
 <template>
   <div class="video-details">
     <h5
