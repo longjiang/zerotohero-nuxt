@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { formatK } from "../lib/utils";
+import { formatK, PYTHON_SERVER } from "../lib/utils";
 import { mapState, mapActions } from "vuex";
 
 export default {
@@ -122,7 +122,7 @@ export default {
     if (channel) {
       this.date = channel.date;
       this.description = channel.description;
-      this.thumbnail = channel.thumbnail;
+      this.thumbnail = `${PYTHON_SERVER}channel-thumbnail?channel_id=${channel.channel_id}`;
       this.title = channel.title;
       this.custom_url = channel.custom_url;
       this.country = channel.country;
