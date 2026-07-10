@@ -71,25 +71,44 @@
           hide-footer
           size="sm"
         >
-          <b-button @click.stop="editTitle" class="d-block w-100 text-left" variant="light">
-            <i class="fa-solid fa-edit mr-2"></i>
-            {{ $t("Edit title") }}
-          </b-button>
-          <b-button @click.stop="subscribeToChannel" class="d-block w-100 text-left" variant="light">
+          <b-button
+            v-if="channelPreferenceStatus !== 'not_interested'"
+            @click.stop="subscribeToChannel"
+            class="d-block w-100 text-left"
+            variant="light"
+          >
             <i class="fa-solid fa-bell mr-2"></i>
-            {{ $t("Subscribe to this Channel") }}
+            {{ subscribeLabel }}
           </b-button>
-          <b-button @click.stop="markChannelNotInterested" class="d-block w-100 text-left" variant="light">
+          <b-button
+            v-if="channelPreferenceStatus === 'not_interested'"
+            @click.stop="markChannelNotInterested"
+            class="d-block w-100 text-left"
+            variant="light"
+          >
             <i class="fa-solid fa-ban mr-2"></i>
-            {{ $t("Not Interested in this Channel") }}
+            {{ notInterestedLabel }}
+          </b-button>
+          <b-button
+            v-else-if="channelPreferenceStatus !== 'subscribed'"
+            @click.stop="markChannelNotInterested"
+            class="d-block w-100 text-left"
+            variant="light"
+          >
+            <i class="fa-solid fa-ban mr-2"></i>
+            {{ notInterestedLabel }}
           </b-button>
           <b-button @click.stop="openAddToPlaylist" class="d-block w-100 text-left" variant="light">
             <i class="fa-solid fa-list-music mr-2"></i>
             {{ $t("Add to Playlist") }}
           </b-button>
-          <b-button @click.stop="removeVideo" class="d-block w-100 text-left" variant="light">
+          <b-button @click.stop="removeVideo" class="d-block w-100 text-left" variant="light" v-if="$adminMode && video.id">
             <i class="fa-solid fa-trash mr-2"></i>
             {{ $t("Remove") }}
+          </b-button>
+          <b-button @click.stop="editTitle" class="d-block w-100 text-left" variant="light" v-if="$adminMode && video.id">
+            <i class="fa-solid fa-edit mr-2"></i>
+            {{ $t("Edit title") }}
           </b-button>
         </b-modal>
 
@@ -242,6 +261,7 @@ export default {
   computed: {
     ...mapState("watchHistory", ["watchHistory"]),
     ...mapState("settings", ["l2Settings"]),
+    ...mapState("channelPreferences", ["subscribedChannels", "notInterestedChannels"]),
     language() {
       let language = this.$languages.l1s.find((l1) => l1.id === this.video.l2);
       return language;
@@ -296,6 +316,20 @@ export default {
     },
     actionsModalId() {
       return `youtube-video-actions-${(this.video && this.video.id) || (this.video && this.video.youtube_id) || this._uid}`;
+    },
+    channelId() {
+      return this.video?.channel_id || this.video?.channel?.id;
+    },
+    channelPreferenceStatus() {
+      if (this.subscribedChannels.includes(this.channelId)) return "subscribed";
+      if (this.notInterestedChannels.includes(this.channelId)) return "not_interested";
+      return null;
+    },
+    subscribeLabel() {
+      return this.channelPreferenceStatus === "subscribed" ? this.$t("Unsubscribe") : this.$t("Subscribe to this Channel");
+    },
+    notInterestedLabel() {
+      return this.channelPreferenceStatus === "not_interested" ? this.$t("Undo Not Interested") : this.$t("Not Interested in this Channel");
     },
   },
   async mounted() {
@@ -406,24 +440,24 @@ export default {
     },
     async subscribeToChannel() {
       this.$bvModal.hide(this.actionsModalId);
-      const channelId = this.video?.channel_id || this.video?.channel?.id;
-      if (!channelId) return;
+      if (!this.channelId) return;
 
+      const status = this.channelPreferenceStatus === "subscribed" ? "neutral" : "subscribed";
       await this.saveChannelPreference({
-        channelId,
+        channelId: this.channelId,
         l2: this.l2 || this.videoL2 || this.$l2,
-        status: "subscribed",
+        status,
       });
     },
     async markChannelNotInterested() {
       this.$bvModal.hide(this.actionsModalId);
-      const channelId = this.video?.channel_id || this.video?.channel?.id;
-      if (!channelId) return;
+      if (!this.channelId) return;
 
+      const status = this.channelPreferenceStatus === "not_interested" ? "neutral" : "not_interested";
       await this.saveChannelPreference({
-        channelId,
+        channelId: this.channelId,
         l2: this.l2 || this.videoL2 || this.$l2,
-        status: "not_interested",
+        status,
       });
     },
     async editTitle() {

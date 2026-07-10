@@ -412,6 +412,7 @@ export default {
       if (this.$l1) this.updatei18n();
       if (this.$l2) await this.$store.dispatch("watchHistory/load", this.$l2);
       if (this.$l2) this.$store.dispatch("userLikes/fetchUserLikes", this.$l2);
+      if (this.$l2) this.$store.dispatch("channelPreferences/loadChannelPreferences", this.$l2);
       this.stopAndRestartLoggingUserTimeOnLanguageChange();
       if (this.$l1 && this.$l2) {
         this.loadLanguageSpecificData(); // This will trigger updateL2SettingsClasses()
