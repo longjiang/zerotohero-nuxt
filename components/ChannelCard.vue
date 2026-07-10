@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="d-flex align-items-center channel-actions ml-3" v-if="$auth.loggedIn">
+      <div class="channel-action d-flex align-items-center ml-3" v-if="$auth.loggedIn">
         <button
           :class="['btn btn-sm subscription-toggle-btn', isSubscribed ? 'btn-secondary' : 'btn-primary']"
           @click.stop.prevent="toggleSubscription"
@@ -37,12 +37,14 @@
           <template v-else>
             <i :class="['fa mr-1', isSubscribed ? 'fa-check' : 'fa-user-friends']"></i>
           </template>
-          {{ isSubscribed ? $t("Subscribed") : $t("Subscribe") }}
+          <template v-if="!compact">
+            {{ isSubscribed ? $t("Subscribed") : $t("Subscribe") }}
+          </template>
         </button>
 
         <b-button
           v-if="!isSubscribed"
-          class="channel-card-badge border-0 p-0 ml-2 bg-transparent text-white"
+          class="channel-menu-toggle border-0 ml-2 text-light bg-transparent"
           size="sm"
           variant="no-bg"
           @click.stop.prevent="showActionsModal"
@@ -64,6 +66,7 @@
         @click.stop="toggleNotInterested"
         class="d-block w-100 text-left"
         variant="light"
+        :disabled="updating"
       >
         <i :class="['fa-solid mr-2', isNotInterested ? 'fa-undo' : 'fa-ban']"></i>
         {{ isNotInterested ? $t("Undo Not Interested") : $t("Not Interested in this Channel") }}
@@ -74,10 +77,15 @@
 
 <script>
 import { formatK } from "../lib/utils";
+import { mapState, mapActions } from "vuex";
 
 export default {
   props: {
     channel_id: String,
+    compact: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -95,11 +103,12 @@ export default {
     };
   },
   computed: {
+    ...mapState("channelPreferences", ["subscribedChannels", "notInterestedChannels"]),
     isSubscribed() {
-      return this.$store.getters["channelPreferences/isSubscribed"](this.channel_id);
+      return this.subscribedChannels.includes(this.channel_id);
     },
     isNotInterested() {
-      return this.$store.getters["channelPreferences/isNotInterested"](this.channel_id);
+      return this.notInterestedChannels.includes(this.channel_id);
     },
     actionsModalId() {
       return `youtube-channel-actions-${this.channel_id || this._uid}`;
@@ -122,6 +131,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions("channelPreferences", ["saveChannelPreference"]),
     formatK,
     handleImageError(event) {
       event.target.src = this.placeholder;
@@ -136,7 +146,7 @@ export default {
       const nextStatus = this.isSubscribed ? 'neutral' : 'subscribed';
       
       try {
-        const result = await this.$store.dispatch("channelPreferences/saveChannelPreference", {
+        const result = await this.saveChannelPreference({
           channelId: this.channel_id,
           l2: this.$l2,
           status: nextStatus
@@ -160,30 +170,32 @@ export default {
     },
     async toggleNotInterested() {
       this.$bvModal.hide(this.actionsModalId);
-      if (!this.channel_id) return;
+      if (this.updating) return;
+      this.updating = true;
 
       const nextStatus = this.isNotInterested ? 'neutral' : 'not_interested';
-      
+
       try {
-        const result = await this.$store.dispatch("channelPreferences/saveChannelPreference", {
+        const result = await this.saveChannelPreference({
           channelId: this.channel_id,
           l2: this.$l2,
           status: nextStatus
         });
 
         if (result) {
-          this.$toast.success(
-            nextStatus === 'not_interested' 
-              ? this.$t("Marked as not interested.") 
-              : this.$t("Preference cleared."),
-            { position: "top-center", duration: 2000 }
-          );
+          if (nextStatus === 'not_interested') {
+            this.$toast.success(this.$t("Marked as not interested."), { position: "top-center", duration: 5000 });
+          } else {
+            this.$toast.success(this.$t("Preference cleared."), { position: "top-center", duration: 5000 });
+          }
         } else {
           this.$toast.error(this.$t("Could not update channel preference."));
         }
       } catch (error) {
-        console.error("Failed to update not interested preference:", error);
+        console.error("Failed to alter channel preference state:", error);
         this.$toast.error(this.$t("An error occurred. Please try again."));
+      } finally {
+        this.updating = false;
       }
     }
   }
@@ -228,15 +240,14 @@ export default {
 
 .subscription-toggle-btn {
   font-weight: 600;
-  padding: 0.25rem 1rem;
   white-space: nowrap;
 }
 
-.channel-card-badge {
+.channel-menu-toggle {
+  background: transparent !important;
+  box-shadow: none !important;
   opacity: 0.7;
   transition: opacity 0.2s ease;
-  width: 24px;
-  height: 24px;
   &:hover {
     opacity: 1;
   }

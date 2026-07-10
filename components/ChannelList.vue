@@ -83,10 +83,9 @@ export default {
     colClasses() {
       return {
         'pb-4': true,
-        "col-12": this.params.xs,
-        "col-6": this.params.sm,
-        "col-4": this.params.md,
-        "col-3": this.params.lg || this.params.xl,
+        "col-12": this.params.xs || this.params.sm,
+        "col-6": this.params.md || this.params.lg,
+        "col-4": this.params.xl,
       };
     },
   },
