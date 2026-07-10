@@ -254,7 +254,7 @@ export default {
           : undefined,
       subsUpdated: false,
       assignShow: false,
-      subsFile: false,
+      subsFile: null,
       showSaved: true,
     };
   },
