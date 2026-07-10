@@ -268,7 +268,7 @@ export const actions = {
   // 非音楽動画用
   async loadRecommendedVideos(
     { state, commit, rootState, rootGetters },
-    { userId, l2, level, preferredCategories, clear = false, limit = 48 }
+    { userId, l2, level, preferredCategories, clear = false, limit = 96 }
   ) {
     // レベルやカテゴリ設定が無ければ既存ロジックで取得
     if (!level && rootState.progress.progressLoaded) {
