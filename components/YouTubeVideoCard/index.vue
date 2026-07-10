@@ -73,7 +73,7 @@
         >
           <b-button
             v-if="channelPreferenceStatus !== 'not_interested'"
-            @click.stop="subscribeToChannel"
+            @click.stop="toggleChannelSubscription"
             class="d-block w-100 text-left"
             variant="light"
           >
@@ -82,7 +82,7 @@
           </b-button>
           <b-button
             v-if="channelPreferenceStatus === 'not_interested'"
-            @click.stop="markChannelNotInterested"
+            @click.stop="toggleChannelNotInterested"
             class="d-block w-100 text-left"
             variant="light"
           >
@@ -91,7 +91,7 @@
           </b-button>
           <b-button
             v-else-if="channelPreferenceStatus !== 'subscribed'"
-            @click.stop="markChannelNotInterested"
+            @click.stop="toggleChannelNotInterested"
             class="d-block w-100 text-left"
             variant="light"
           >
@@ -438,7 +438,7 @@ export default {
         }
       });
     },
-    async subscribeToChannel() {
+    async toggleChannelSubscription() {
       this.$bvModal.hide(this.actionsModalId);
       if (!this.channelId) return;
 
@@ -449,7 +449,7 @@ export default {
         status,
       });
     },
-    async markChannelNotInterested() {
+    async toggleChannelNotInterested() {
       this.$bvModal.hide(this.actionsModalId);
       if (!this.channelId) return;
 
