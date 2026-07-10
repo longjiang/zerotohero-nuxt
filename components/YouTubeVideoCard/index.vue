@@ -443,22 +443,46 @@ export default {
       if (!this.channelId) return;
 
       const status = this.channelPreferenceStatus === "subscribed" ? "neutral" : "subscribed";
-      await this.saveChannelPreference({
+      const result = await this.saveChannelPreference({
         channelId: this.channelId,
         l2: this.l2 || this.videoL2 || this.$l2,
         status,
       });
+
+      if (result) {
+        this.$toast.success(
+          status === "subscribed" ? this.$t("Subscribed to this channel.") : this.$t("Subscription removed."),
+          { position: "top-center", duration: 5000 }
+        );
+      } else {
+        this.$toast.error(this.$t("Could not update channel preference."), {
+          position: "top-center",
+          duration: 5000,
+        });
+      }
     },
     async toggleChannelNotInterested() {
       this.$bvModal.hide(this.actionsModalId);
       if (!this.channelId) return;
 
       const status = this.channelPreferenceStatus === "not_interested" ? "neutral" : "not_interested";
-      await this.saveChannelPreference({
+      const result = await this.saveChannelPreference({
         channelId: this.channelId,
         l2: this.l2 || this.videoL2 || this.$l2,
         status,
       });
+
+      if (result) {
+        this.$toast.success(
+          status === "not_interested" ? this.$t("Marked as not interested.") : this.$t("Preference cleared."),
+          { position: "top-center", duration: 5000 }
+        );
+      } else {
+        this.$toast.error(this.$t("Could not update channel preference."), {
+          position: "top-center",
+          duration: 5000,
+        });
+      }
     },
     async editTitle() {
       this.$bvModal.hide(this.actionsModalId);
