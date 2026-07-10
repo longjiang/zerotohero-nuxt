@@ -112,7 +112,7 @@
           </b-button>
         </b-modal>
 
-        <AddToPlaylist ref="addToPlaylist" :video="video" />
+        <AddToPlaylist ref="addToPlaylist" :video="video" v-show="false" />
 
         <MediaItemStats
           :item="video"
