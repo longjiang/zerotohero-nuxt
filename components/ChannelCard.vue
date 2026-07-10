@@ -1,4 +1,4 @@
-// components/ChannelCard.vue
+<!-- components/ChannelCard.vue -->
 <template>
   <div class="channel-card-container">
     <router-link
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div class="channel-action ml-3" v-if="$auth.loggedIn">
+      <div class="d-flex align-items-center channel-actions ml-3" v-if="$auth.loggedIn">
         <button
           :class="['btn btn-sm subscription-toggle-btn', isSubscribed ? 'btn-secondary' : 'btn-primary']"
           @click.stop.prevent="toggleSubscription"
@@ -39,8 +39,36 @@
           </template>
           {{ isSubscribed ? $t("Subscribed") : $t("Subscribe") }}
         </button>
+
+        <b-button
+          v-if="!isSubscribed"
+          class="channel-card-badge border-0 p-0 ml-2 bg-transparent text-white"
+          size="sm"
+          variant="no-bg"
+          @click.stop.prevent="showActionsModal"
+          :title="$t('Actions')"
+        >
+          <i class="fa-solid fa-ellipsis-v"></i>
+        </b-button>
       </div>
     </router-link>
+
+    <b-modal
+      :id="actionsModalId"
+      :title="$t('Actions')"
+      centered
+      hide-footer
+      size="sm"
+    >
+      <b-button
+        @click.stop="toggleNotInterested"
+        class="d-block w-100 text-left"
+        variant="light"
+      >
+        <i :class="['fa-solid mr-2', isNotInterested ? 'fa-undo' : 'fa-ban']"></i>
+        {{ isNotInterested ? $t("Undo Not Interested") : $t("Not Interested in this Channel") }}
+      </b-button>
+    </b-modal>
   </div>
 </template>
 
@@ -69,6 +97,12 @@ export default {
   computed: {
     isSubscribed() {
       return this.$store.getters["channelPreferences/isSubscribed"](this.channel_id);
+    },
+    isNotInterested() {
+      return this.$store.getters["channelPreferences/isNotInterested"](this.channel_id);
+    },
+    actionsModalId() {
+      return `youtube-channel-actions-${this.channel_id || this._uid}`;
     }
   },
   mounted() {
@@ -92,6 +126,9 @@ export default {
     handleImageError(event) {
       event.target.src = this.placeholder;
     },
+    showActionsModal() {
+      this.$bvModal.show(this.actionsModalId);
+    },
     async toggleSubscription() {
       if (this.updating) return;
       this.updating = true;
@@ -107,13 +144,9 @@ export default {
 
         if (result) {
           if (nextStatus === 'subscribed') {
-            this.$toast.success(this.$t("Subscribed"), {
-              duration: 2000,
-            });
+            this.$toast.success(this.$t("Subscribed"), { duration: 2000 });
           } else {
-            this.$toast.success(this.$t("Unsubscribed"), {
-              duration: 2000,
-            });
+            this.$toast.success(this.$t("Unsubscribed"), { duration: 2000 });
           }
         } else {
           this.$toast.error(this.$t("Failed to update subscription. Please try again."));
@@ -123,6 +156,34 @@ export default {
         this.$toast.error(this.$t("An error occurred. Please try again."));
       } finally {
         this.updating = false;
+      }
+    },
+    async toggleNotInterested() {
+      this.$bvModal.hide(this.actionsModalId);
+      if (!this.channel_id) return;
+
+      const nextStatus = this.isNotInterested ? 'neutral' : 'not_interested';
+      
+      try {
+        const result = await this.$store.dispatch("channelPreferences/saveChannelPreference", {
+          channelId: this.channel_id,
+          l2: this.$l2,
+          status: nextStatus
+        });
+
+        if (result) {
+          this.$toast.success(
+            nextStatus === 'not_interested' 
+              ? this.$t("Marked as not interested.") 
+              : this.$t("Preference cleared."),
+            { position: "top-center", duration: 2000 }
+          );
+        } else {
+          this.$toast.error(this.$t("Could not update channel preference."));
+        }
+      } catch (error) {
+        console.error("Failed to update not interested preference:", error);
+        this.$toast.error(this.$t("An error occurred. Please try again."));
       }
     }
   }
@@ -169,5 +230,15 @@ export default {
   font-weight: 600;
   padding: 0.25rem 1rem;
   white-space: nowrap;
+}
+
+.channel-card-badge {
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+  width: 24px;
+  height: 24px;
+  &:hover {
+    opacity: 1;
+  }
 }
 </style>
