@@ -75,11 +75,25 @@
             <i class="fa-solid fa-edit mr-2"></i>
             {{ $t("Edit title") }}
           </b-button>
+          <b-button @click.stop="subscribeToChannel" class="d-block w-100 text-left" variant="light">
+            <i class="fa-solid fa-bell mr-2"></i>
+            {{ $t("Subscribe to this Channel") }}
+          </b-button>
+          <b-button @click.stop="markChannelNotInterested" class="d-block w-100 text-left" variant="light">
+            <i class="fa-solid fa-ban mr-2"></i>
+            {{ $t("Not Interested in this Channel") }}
+          </b-button>
+          <b-button @click.stop="openAddToPlaylist" class="d-block w-100 text-left" variant="light">
+            <i class="fa-solid fa-list-music mr-2"></i>
+            {{ $t("Add to Playlist") }}
+          </b-button>
           <b-button @click.stop="removeVideo" class="d-block w-100 text-left" variant="light">
             <i class="fa-solid fa-trash mr-2"></i>
             {{ $t("Remove") }}
           </b-button>
         </b-modal>
+
+        <AddToPlaylist ref="addToPlaylist" :video="video" />
 
         <MediaItemStats
           :item="video"
@@ -135,7 +149,7 @@ import Vue from "vue";
 import assParser from "ass-parser";
 import languageEncoding from "detect-file-encoding-and-language";
 import { parseSync } from "subtitle";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import {
   parseDuration,
   convertDurationToSeconds,
@@ -152,6 +166,7 @@ import YouTubeThumbnail from "./YouTubeThumbnail.vue";
 import VideoBadges from "./VideoBadges.vue";
 import SubtitleEditor from "./SubtitleEditor.vue";
 import MediaItemStats from "@/components/MediaItemStats.vue"; // already existing
+import AddToPlaylist from "@/components/AddToPlaylist.vue";
 
 export default {
   components: {
@@ -160,6 +175,7 @@ export default {
     VideoBadges,
     SubtitleEditor,
     MediaItemStats,
+    AddToPlaylist,
   },
   props: {
     l1: undefined,
@@ -299,6 +315,8 @@ export default {
     },
   },
   methods: {
+    ...mapActions("channelPreferences", ["saveChannelPreference"]),
+
     // ----- helpers -----
     parseDuration,
     levelByDifficulty,
@@ -377,6 +395,36 @@ export default {
     // ----- title editing -----
     showActionsModal() {
       this.$bvModal.show(this.actionsModalId);
+    },
+    openAddToPlaylist() {
+      this.$bvModal.hide(this.actionsModalId);
+      this.$nextTick(() => {
+        if (this.$refs.addToPlaylist && this.$refs.addToPlaylist.open) {
+          this.$refs.addToPlaylist.open();
+        }
+      });
+    },
+    async subscribeToChannel() {
+      this.$bvModal.hide(this.actionsModalId);
+      const channelId = this.video?.channel_id || this.video?.channel?.id;
+      if (!channelId) return;
+
+      await this.saveChannelPreference({
+        channelId,
+        l2: this.l2 || this.videoL2 || this.$l2,
+        status: "subscribed",
+      });
+    },
+    async markChannelNotInterested() {
+      this.$bvModal.hide(this.actionsModalId);
+      const channelId = this.video?.channel_id || this.video?.channel?.id;
+      if (!channelId) return;
+
+      await this.saveChannelPreference({
+        channelId,
+        l2: this.l2 || this.videoL2 || this.$l2,
+        status: "not_interested",
+      });
     },
     async editTitle() {
       this.$bvModal.hide(this.actionsModalId);

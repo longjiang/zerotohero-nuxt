@@ -26,10 +26,6 @@
       />
     </router-link>
 
-    <AddToPlaylist class="add-to-playlist" :video="video">
-      <i class="fa fa-plus"></i> <i class="fa fa-list-music"></i>
-    </AddToPlaylist>
-
     <div class="duration" v-if="video.duration">
       {{ parseDuration(video.duration) }}
     </div>
@@ -45,11 +41,10 @@
 </template>
 
 <script>
-import AddToPlaylist from "@/components/AddToPlaylist.vue"; // adjust path
 import { parseDuration, levelByDifficulty, level } from "@/lib/utils";
 
 export default {
-  components: { AddToPlaylist },
+  components: {},
   props: {
     video: { type: Object, required: true },
     to: { type: Object, required: true },
@@ -81,20 +76,6 @@ export default {
   overflow: hidden;
   position: relative;
 
-  .add-to-playlist {
-    position: absolute;
-    bottom: 0.2rem;
-    left: 0.2rem;
-    color: #fff;
-    font-size: 0.8rem;
-    font-weight: bold;
-    padding: 0;
-    border-radius: 0.15rem;
-    background-color: rgba(0, 0, 0, 0.8);
-    padding: 0.08rem 0.3rem;
-    :deep(".add-to-playlist-button") {
-    }
-  }
   .duration {
     position: absolute;
     bottom: 0.2rem;

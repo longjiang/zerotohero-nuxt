@@ -71,6 +71,9 @@ export default {
   },
   methods: {
     ...mapActions("playlists", ["createPlaylist", "updatePlaylist"]),
+    open() {
+      this.showModal = true;
+    },
     async addToPlaylists() {
       const videoData = {
         id: this.video.id,
