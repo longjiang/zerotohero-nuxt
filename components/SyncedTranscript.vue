@@ -590,11 +590,12 @@ export default {
         }
 
         if (candidates.length === 0) {
-          matched[i] = lastTranslation;
+          // No matching L1 line – leave translation empty, do NOT repeat the last one
+          matched[i] = "";
         } else {
           const text = candidates.map(j => parallelLines[j].line).join(" ");
           matched[i] = text;
-          lastTranslation = text;
+          lastTranslation = text; // still updated for potential future use? Not needed now, but harmless
           candidates.forEach(j => { used[j] = true; });
         }
       }
