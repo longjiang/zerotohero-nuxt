@@ -12,6 +12,8 @@
         'youtube-video-card': true,
         'youtube-video-card-grid': view === 'grid',
         'youtube-video-card-list': view === 'list',
+        'skin-light': skin === 'light',
+        'skin-dark': skin === 'dark'
       }"
       v-observe-visibility="{
         callback: visibilityChanged,

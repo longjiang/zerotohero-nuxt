@@ -75,6 +75,8 @@ export default {
   border-radius: 0.25rem;
   overflow: hidden;
   position: relative;
+  // A very slight, soft drop shadow around the thumbnail wrapper
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); 
 
   .duration {
     position: absolute;
