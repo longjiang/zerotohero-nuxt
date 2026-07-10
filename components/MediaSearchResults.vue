@@ -162,7 +162,7 @@ export default {
       let limit = this.limit;
       let params = this.params || {}
       params = {...params, 
-        'fields': 'id,l2,title,youtube_id,tv_show,talk,date,lex_div,word_freq,difficulty,views,tags,category,locale,duration,made_for_kids,views,likes,comments,type',
+        'fields': 'id,l2,title,youtube_id,tv_show,talk,date,lex_div,word_freq,difficulty,views,tags,category,locale,duration,made_for_kids,views,likes,comments,type,channel_id',
         'timestamp': this.$adminMode ? Date.now() : 0,
         'offset': start,
         'limit': limit,
