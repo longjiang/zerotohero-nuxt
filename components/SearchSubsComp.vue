@@ -201,9 +201,12 @@ import {
   highlightMultiple,
   iOS,
   NON_PRO_MAX_SUBS_SEARCH_HITS,
+  PYTHON_SERVER,
 } from "../lib/utils";
 import YouTube from "../lib/youtube";
 import Vue from "vue";
+
+const CHUNK_SIZE = 5; // adjustable batch size for translation
 
 export default {
   props: {
@@ -268,15 +271,15 @@ export default {
       tvShowFilter: this.tvShow ? [this.tvShow.id] : undefined,
       categoryFilter: undefined,
       NON_PRO_MAX_SUBS_SEARCH_HITS,
+      translationAbortController: null,
+      translating: false,
     };
   },
   computed: {
     // Determines if we can sort by views without too much of a performance hit
     canSortByViews() {
-      if (this.$l2.continua && !["zh"].includes(this.$l2.code)) return false; // continua script without ngram index, so this filters out japanse and thai among other languages
-      return true; // It seems like performance is not too bad for most common words in most languages
-      // return false; // Stilll figuring out how this can be done without SQL filesort which is too slow
-      // return !this.categoryFilter && !this.tvShowFilter;
+      if (this.$l2.continua && !["zh"].includes(this.$l2.code)) return false;
+      return true;
     },
     hitIndex() {
       let hits = this.hits;
@@ -324,6 +327,10 @@ export default {
       async handler(newVal, oldVal) {
         // If currentHit is not set, we don't do anything
         if (!newVal) return;
+
+        // Cancel any ongoing translation before starting a new one
+        this.cancelTranslation();
+
         let unavailable = await YouTube.videoUnavailable(
           this.currentHit?.video?.youtube_id
         );
@@ -353,12 +360,154 @@ export default {
     }, 800);
   },
   beforeDestroy() {
+    this.cancelTranslation(); // stop any in-flight translation
     this.unsubscribeSettings();
   },
   methods: {
     ucFirst,
     highlightMultiple,
     iOS,
+
+    /**
+     * Deep copy helper to avoid Vuex mutation issues.
+     */
+    _deepCopyArray(arr) {
+      return JSON.parse(JSON.stringify(arr));
+    },
+
+    /**
+     * Cancel the currently running translation (if any).
+     */
+    cancelTranslation() {
+      if (this.translationAbortController) {
+        this.translationAbortController.abort();
+        this.translationAbortController = null;
+        console.log("🛑 Translation cancelled (search component).");
+      }
+    },
+
+    /**
+     * Translate a video's subtitles in chunks, updating the
+     * video object reactively as each chunk arrives.
+     */
+    async translateSubtitlesInChunks(video) {
+      if (!video?.id || !video.subs_l2?.length) return [];
+
+      // Cancel any previous translation
+      this.cancelTranslation();
+      this.translationAbortController = new AbortController();
+      const signal = this.translationAbortController.signal;
+
+      const subsL2 = this._deepCopyArray(video.subs_l2);
+      const lines = subsL2.map((s) => s.line);
+      const translatedSubs = [];
+      const totalLines = lines.length;
+      const totalChunks = Math.ceil(totalLines / CHUNK_SIZE);
+
+      console.log(
+        `🔄 [Search] Starting translation of ${totalLines} lines in ${totalChunks} chunks`
+      );
+
+      for (let start = 0; start < lines.length; start += CHUNK_SIZE) {
+        if (signal.aborted) {
+          console.log("🛑 [Search] Translation aborted mid-way.");
+          break;
+        }
+
+        const end = Math.min(start + CHUNK_SIZE, lines.length);
+        const chunk = lines.slice(start, end);
+        const chunkIndex = Math.floor(start / CHUNK_SIZE) + 1;
+
+        console.log(
+          `📤 [Search] Sending chunk ${chunkIndex}/${totalChunks} (lines ${start + 1}-${end}):`,
+          chunk
+        );
+
+        try {
+          const response = await this.$axios.$post(
+            `${PYTHON_SERVER}translate_array`,
+            {
+              texts: chunk,
+              l1: this.$l1.code,
+              l2: this.$l2.code,
+            },
+            { signal } // pass abort signal to axios
+          );
+
+          const translated_texts = response.translated_texts;
+
+          console.log(
+            `📥 [Search] Received translation for chunk ${chunkIndex}/${totalChunks}:`,
+            translated_texts
+          );
+
+          for (let i = 0; i < translated_texts.length; i++) {
+            const globalIndex = start + i;
+            const original = subsL2[globalIndex];
+            translatedSubs[globalIndex] = {
+              line: translated_texts[i],
+              starttime: original.starttime,
+              ...(original.duration != null && { duration: original.duration }),
+            };
+          }
+
+          // Commit the growing translation to the video object reactively
+          if (!signal.aborted) {
+            Vue.set(video, "subs_l1", this._deepCopyArray(translatedSubs));
+
+            console.log(
+              `✅ [Search] Loaded chunk ${chunkIndex}/${totalChunks}. Translated: ${
+                translatedSubs.filter(Boolean).length
+              }/${totalLines}`
+            );
+          }
+        } catch (error) {
+          if (
+            this.$axios.isCancel?.(error) ||
+            error?.code === "ERR_CANCELED" ||
+            signal.aborted
+          ) {
+            console.log("🛑 [Search] Translation request cancelled.");
+            break;
+          }
+          console.error(
+            `❌ [Search] Chunk ${chunkIndex}/${totalChunks} failed (lines ${start + 1}-${end}):`,
+            error
+          );
+          throw error;
+        }
+      }
+
+      this.translationAbortController = null;
+
+      if (!signal.aborted) {
+        console.log(
+          `🎉 [Search] Translation complete! All ${totalLines} lines done.`
+        );
+      }
+
+      return this._deepCopyArray(translatedSubs);
+    },
+
+    /**
+     * Replaces the old loadL1SubsIfNeeded.
+     * Now always triggers a fresh chunked translation.
+     */
+    async loadL1SubsIfNeeded() {
+      let video = this.currentHit?.video;
+      if (!video) return;
+
+      // Always run a fresh translation – never rely on cached L1 subs
+      console.log(
+        `🤖 [Search] Starting fresh translation for video ${video.id}`
+      );
+      try {
+        await this.translateSubtitlesInChunks(video);
+      } catch (error) {
+        console.error("💥 [Search] Translation failed:", error);
+      }
+    },
+
     filterHits(pattern, include) {
       if (!this.unfilteredHits) this.unfilteredHits = this.hits;
       if (!pattern) {
@@ -367,18 +516,20 @@ export default {
         return;
       }
       let r = pattern.startsWith("!") || pattern.startsWith("！")
-      ? `^((?!${pattern.substr(1).replace(/[,，]/gi, "|")}).)*$`
-      : pattern;
+        ? `^((?!${pattern.substr(1).replace(/[,，]/gi, "|")}).)*$`
+        : pattern;
       let hits = [];
       for (let hit of this.unfilteredHits) {
-      try {
-        let regex = new RegExp(r, "gim");
-        if (include ? regex.test(hit.video.subs_l2[hit.lineIndex].line) : !regex.test(hit.video.subs_l2[hit.lineIndex].line)) {
-        hits.push(hit);
+        try {
+          let regex = new RegExp(r, "gim");
+          if (include 
+            ? regex.test(hit.video.subs_l2[hit.lineIndex].line) 
+            : !regex.test(hit.video.subs_l2[hit.lineIndex].line)) {
+            hits.push(hit);
+          }
+        } catch (error) {
+          console.error(`Failed to create or test regex: ${error}`);
         }
-      } catch (error) {
-        console.error(`Failed to create or test regex: ${error}`);
-      }
       }
       this.collectContext(hits);
       this.$emit("updated", hits);
@@ -387,40 +538,10 @@ export default {
       if (this.$refs[`youtube-${this.hitIndex}`])
         this.$refs[`youtube-${this.hitIndex}`].pause();
     },
-    async loadL1SubsIfNeeded() {
-      let video = this.currentHit?.video;
-      if (!video) return;
-
-      // If the video doesn't have L1 subtitles, we load it from YouTube
-      if (!(video?.subs_l1?.length > 0)) {
-        let subs;
-
-        let { l1Locale, l2Locale, l2Name } = await YouTube.getTranscriptLocales(
-          video.youtube_id,
-          this.$l1,
-          this.$l2
-        );
-
-        if (l1Locale) {
-          subs = await YouTube.getTranscript(video.youtube_id, l1Locale);
-        }
-
-        // If we still don't have it, we get translated ones
-        if (!(subs?.length > 0)) {
-          subs = await YouTube.getTranslatedTranscript({
-            youtube_id: video.youtube_id,
-            locale: l2Locale,
-            name: l2Name,
-            tlangs: this.$l1.locales,
-          });
-        }
-        if (subs && subs.length > 0) Vue.set(video, `subs_l1`, subs);
-      }
-    },
     async onVideoUnavailable(youtube_id) {
       if (!this.currentHit) return;
       let video = this.currentHit.video;
-      if (youtube_id && youtube_id !== video.youtube_id) return; // Always make sure the unavailable video is indeed what the user is looking at
+      if (youtube_id && youtube_id !== video.youtube_id) return;
       // Go to next video
       await timeout(2000);
       if (this.currentHit?.video.youtube_id === youtube_id)
@@ -569,14 +690,7 @@ export default {
         let prev = hit.lineIndex > 0 ? hit.video.subs_l2[hit.lineIndex - 1] : null;
         let next = hit.lineIndex < hit.video.subs_l2.length - 1 ? hit.video.subs_l2[Number(hit.lineIndex) + 1] : null;
 
-        // Print the previous line, current line, and next line joined together
-        // console.log('Joined lines:', [prev ? prev.line : '', hit.line, next ? next.line : ''].join(' '));
-
         this.updateHitContexts(hit, this.terms);
-
-        // Print the left and right context
-        // console.log('Left context:', hit.leftContext);
-        // console.log('Right context:', hit.rightContext);
 
         contextLeft.push(hit.leftContext);
         contextRight.push(hit.rightContext);
