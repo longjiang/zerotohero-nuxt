@@ -1,3 +1,4 @@
+<!-- /pages/_l1/_l2/youtube/search.vue -->
 <template>
   <div class="main">
     <div class="container pt-5 pb-5 youtube-search">

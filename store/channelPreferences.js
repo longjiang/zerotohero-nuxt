@@ -1,3 +1,5 @@
+// store/channelPreferences.js
+
 import { logError } from '../lib/helper';
 import { PYTHON_SERVER } from '../lib/utils';
 
