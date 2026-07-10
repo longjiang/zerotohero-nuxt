@@ -77,7 +77,7 @@
             class="d-block w-100 text-left"
             variant="light"
           >
-            <i class="fa-solid fa-bell mr-2"></i>
+            <i :class="`fa-solid ${subscribeIcon} mr-2`"></i>
             {{ subscribeLabel }}
           </b-button>
           <b-button
@@ -327,6 +327,9 @@ export default {
     },
     subscribeLabel() {
       return this.channelPreferenceStatus === "subscribed" ? this.$t("Unsubscribe") : this.$t("Subscribe to this Channel");
+    },
+    subscribeIcon() {
+      return this.channelPreferenceStatus === "subscribed" ? "fa-ban" : "fa-user-friends";
     },
     notInterestedLabel() {
       return this.channelPreferenceStatus === "not_interested" ? this.$t("Undo Not Interested") : this.$t("Not Interested in this Channel");
