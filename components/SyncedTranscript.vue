@@ -557,30 +557,49 @@ export default {
         this.parallellines
       );
     },
-    matchLines(lines, parallelLines, tolerance = 1.0) {
-      let matchedLines = [];
-      let i = 0;
-      for (let line of lines) {
-        let matchedLine = "";
-        let hasMatched = false;
-        while (i < parallelLines.length) {
-          let difference = line.starttime - parallelLines[i].starttime;
-          if (Math.abs(difference) <= tolerance) {
-            matchedLine += " " + parallelLines[i].line;
-            hasMatched = true;
-          }
-          if (difference < 0) {
-            break;
-          } else {
-            i++;
+    matchLines(lines, parallelLines) {
+      // Build intervals: [start, end)
+      const toInterval = (line, nextLine, defaultDuration = 2) => {
+        const start = line.starttime;
+        const end = line.duration
+          ? start + line.duration
+          : nextLine
+            ? nextLine.starttime
+            : start + defaultDuration;
+        return { start, end };
+      };
+
+      const l2Intervals = lines.map((l, i) => toInterval(l, lines[i + 1]));
+      const l1Intervals = parallelLines.map((l, i) => toInterval(l, parallelLines[i + 1]));
+
+      const used = new Array(parallelLines.length).fill(false);
+      const matched = [];
+      let lastTranslation = "";
+
+      for (let i = 0; i < l2Intervals.length; i++) {
+        const l2 = l2Intervals[i];
+        let candidates = [];
+
+        for (let j = 0; j < l1Intervals.length; j++) {
+          if (used[j]) continue;
+          const l1 = l1Intervals[j];
+          // check overlap
+          if (Math.max(l2.start, l1.start) < Math.min(l2.end, l1.end)) {
+            candidates.push(j);
           }
         }
-        if (!hasMatched) {
-          matchedLine = matchedLines[matchedLines.length - 1] || "";
+
+        if (candidates.length === 0) {
+          matched[i] = lastTranslation;
+        } else {
+          const text = candidates.map(j => parallelLines[j].line).join(" ");
+          matched[i] = text;
+          lastTranslation = text;
+          candidates.forEach(j => { used[j] = true; });
         }
-        matchedLines.push(matchedLine.trim());
       }
-      return matchedLines;
+
+      return matched;
     },
     executeTimeBasedMethods() {
       let currentLineStarted =

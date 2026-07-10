@@ -115,6 +115,10 @@ export default {
     starttime: {
       default: 0,
     },
+    autoTranslate: {
+      type: Boolean,
+      default: true, // Can be set to false to disable auto-translation
+    },
   },
   data() {
     return {
@@ -136,6 +140,7 @@ export default {
       show: undefined,
       showType: undefined,
       video: undefined,
+      translating: false,
     };
   },
   computed: {
@@ -212,7 +217,7 @@ export default {
   },
   watch: {
     "video.subs_l2"() {
-      if (this.video?.subs_l2?.lenghth > 0) this.checkingSubs = false;
+      if (this.video?.subs_l2?.length > 0) this.checkingSubs = false;
     },
     playlist() {
       if (!this.playlist?.videos?.length) return;
@@ -380,6 +385,9 @@ export default {
           this.loadMissingSubsFromYouTube(this.video),
           this.loadMissingMetaFromYouTube(this.video),
         ]);
+        
+        // Automatically translate subtitles if needed
+        await this.autoTranslate(this.video);
       } catch (err) {
         console.error(err);
       }
@@ -596,6 +604,72 @@ export default {
         this.l2Name = l2Name;
       }
     },
+    async autoTranslate(video) {
+      // Check if auto-translation is enabled
+      if (!this.autoTranslate) return;
+      
+      // Only proceed if we have a Directus ID and L2 subs are available
+      if (!video.id || !video.subs_l2?.length) return;
+
+      // If we already have L1 subtitles, skip (they were already translated)
+      if (video.subs_l1 && video.subs_l1.length > 0) {
+        console.log(`Video ${video.id} already has L1 subtitles, skipping auto-translation`);
+        return;
+      }
+
+      console.log(`Auto-translating video ${video.id} from ${this.$l2.code} to ${this.$l1.code}`);
+      
+      this.$nuxt.$emit("retranslating", true);
+      this.translating = true;
+      
+      try {
+        let url = `${PYTHON_SERVER}translate_video_and_save?l1=${this.$l1.code}&l2=${this.$l2.code}&video_id=${video.id}`;
+        let csvData = await axios.get(url).then(res => res.data);
+        
+        if (!csvData || typeof csvData !== 'string') {
+          console.error(`${url} responded with:`, csvData);
+          throw new Error('Invalid response from translation server');
+        }
+        
+        let subs_l1 = this.$subs.parseSavedSubs(csvData);
+        if (!subs_l1) {
+          throw new Error('Failed to parse translated subtitles');
+        }
+        
+        // Update the video object and the store so the UI updates immediately
+        this.$store.commit("shows/MODIFY_ITEM", {
+          item: video,
+          key: "subs_l1",
+          value: subs_l1,
+        });
+        
+        console.log(`Successfully auto-translated ${subs_l1.length} lines for video ${video.id}`);
+        
+        this.$toast.success(
+          this.$t('Subtitles have been automatically translated.'),
+          {
+            position: "top-center",
+            duration: 3000,
+          }
+        );
+      } catch (error) {
+        console.error('Auto-translation failed:', error);
+        // Don't show error toast for auto-translation to avoid annoying users
+        // Only show if there's a critical failure
+        if (error.message !== 'Invalid response from translation server') {
+          this.$toast.error(
+            this.$t('Failed to auto-translate subtitles. You can try manually later.'),
+            {
+              position: "top-center",
+              duration: 5000,
+            }
+          );
+        }
+      } finally {
+        this.translating = false;
+        this.$nuxt.$emit("retranslating", false);
+      }
+    },
     async retranslate(video) {
       if (!video?.id) return;
       this.$nuxt.$emit("retranslating", true)
@@ -634,62 +708,24 @@ export default {
       // If the video doesn't have L1 or L2 subtitles, we load it from YouTube
       // Do not load L1 subs if the current $l1 and $l2 are the same
       let generated = false;
-      for (let l1OrL2 of this.$l1 === this.$l2 ? ["l2"] : ["l2", "l1"]) {
-        if (!(video?.[`subs_${l1OrL2}`]?.length > 0)) {
-          let subs;
-          let locale = this[`${l1OrL2}Locale`];
-          generated = locale ? false : true; // If we don't have the locale from YouTube, that means that the subs are generated
-          subs = await this.getSubs({
-            youtube_id: video.youtube_id,
-            locale: this[`${l1OrL2}Locale`] || this[`$${l1OrL2}`].code,
-            name: this[`${l1OrL2}Name`],
-            generated,
+      if (!(video?.[`subs_l2`]?.length > 0)) {
+        let subs;
+        let locale = this[`l2Locale`];
+        generated = locale ? false : true; // If we don't have the locale from YouTube, that means that the subs are generated
+        subs = await this.getSubs({
+          youtube_id: video.youtube_id,
+          locale: this[`l2Locale`] || this[`$l2`].code,
+          name: this[`l2Name`],
+          generated,
+        });
+        if (subs && subs.length > 0)
+          this.$store.commit("shows/MODIFY_ITEM", {
+            item: video,
+            key: `subs_l2`,
+            value: subs,
           });
-          // In the case of L1 subtitles, if we still don't have it, we get translated ones
-          if (l1OrL2 === "l1" && !(subs?.length > 0)) {
-            let tlangs = this.$l1.locales;
-            subs = await YouTube.getTranslatedTranscript({
-              youtube_id: video.youtube_id,
-              locale: this.l2Locale || this.$l2.code,
-              name: this.l2Name,
-              tlangs,
-              generated,
-            });
-            // If the translated subs are problematic, we retranslate
-            if (this.subsL1Problematic(subs)) {
-              console.log('Problematic L1 subs detected. Retranslating...')
-              this.retranslate(video)
-            }
-          }
-          if (subs && subs.length > 0)
-            this.$store.commit("shows/MODIFY_ITEM", {
-              item: video,
-              key: `subs_${l1OrL2}`,
-              value: subs,
-            });
-          this.$emit(`${l1OrL2}TranscriptLoaded`);
-        }
+        this.$emit(`l2TranscriptLoaded`);
       }
-    },
-    // This function checks if the length of the L1 subtitles (subs_l1) is problematic compared to L2 subtitles (subs_l2).
-    subsL1Problematic(subs_l1) {
-      if (!subs_l1) return
-      
-      // Get the L2 subtitles from the video object. If it doesn't exist, default to an empty array.
-      let subs_l2 = this.video?.subs_l2 ?? []
-
-      // Strip out empty lines and lines only containing '\n' and '\r'
-      subs_l2 = subs_l2.filter((line) => line && line.line.trim())
-      subs_l1 = subs_l1.filter((line) => line && line.line.trim())
-
-      // Logout the lengths
-      // console.log('L1:', subs_l1.length, 'L2:', subs_l2.length, subs_l1, subs_l2)
-
-      // Return true if either of the following conditions is met:
-      // 1. The length of subs_l1 is less than 50% of the length of subs_l2.
-      // 2. The difference in length between subs_l2 and subs_l1 is greater than 10.
-      // If neither condition is met, return false.
-      return subs_l1.length < subs_l2.length * 0.5
     },
     async loadMissingMetaFromYouTube(video) {
       // If the video has other missing information, we load it from YouTube
