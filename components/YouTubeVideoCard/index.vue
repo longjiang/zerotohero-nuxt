@@ -56,7 +56,7 @@
           </div>
 
           <b-button
-            class="youtube-video-card-badge border-0 p-0"
+            class="youtube-video-card-action-menu border-0 p-0"
             size="sm"
             variant="no-bg"
             @click.stop="showActionsModal"
@@ -722,10 +722,10 @@ export default {
       overflow: hidden;
     }
   }
-  .youtube-video-card-badge {
-    flex-shrink: 0;
+  .youtube-video-card-action-menu {
     color: inherit;
     opacity: 0.8;
+    width: 1.5rem;
     &:hover {
       opacity: 1;
     }
