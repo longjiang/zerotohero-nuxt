@@ -86,7 +86,7 @@
             class="d-block w-100 text-left"
             variant="light"
           >
-            <i class="fa-solid fa-ban mr-2"></i>
+            <i :class="`fa-solid ${notInterestedIcon} mr-2`"></i>
             {{ notInterestedLabel }}
           </b-button>
           <b-button
@@ -95,7 +95,7 @@
             class="d-block w-100 text-left"
             variant="light"
           >
-            <i class="fa-solid fa-ban mr-2"></i>
+            <i :class="`fa-solid ${notInterestedIcon} mr-2`"></i>
             {{ notInterestedLabel }}
           </b-button>
           <b-button @click.stop="openAddToPlaylist" class="d-block w-100 text-left" variant="light">
@@ -330,6 +330,9 @@ export default {
     },
     subscribeIcon() {
       return this.channelPreferenceStatus === "subscribed" ? "fa-ban" : "fa-user-friends";
+    },
+    notInterestedIcon() {
+      return this.channelPreferenceStatus === "not_interested" ? "fa-undo" : "fa-ban";
     },
     notInterestedLabel() {
       return this.channelPreferenceStatus === "not_interested" ? this.$t("Undo Not Interested") : this.$t("Not Interested in this Channel");

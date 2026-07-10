@@ -1,3 +1,5 @@
+<!-- profile.vue -->
+<!-- profile.vue -->
 <template>
   <div class="main pb-5">
     <client-only>
@@ -110,6 +112,19 @@
                   class="row"
                 />
               </div>
+
+              <!-- New Section: Not Interested Channels Section -->
+              <div v-if="notInterestedChannelsList && notInterestedChannelsList.length > 0">
+                <h5 class="mt-5 mb-4">
+                  {{ $t("Channels Marked as Not Interested") }}
+                </h5>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <ChannelList :collapse="false" :channels="notInterestedChannelsList" />
+                  </div>
+                </div>
+              </div>
+
               <div class="mt-4 pb-5">
                 <div class="row">
                   <div class="col-sm-12 mb-2">
@@ -143,10 +158,26 @@
 <script>
 import { mapState } from "vuex";
 import { languageLevels, timeout, formatName } from "@/lib/utils";
+import ChannelList from "@/components/ChannelList.vue";
 
 export default {
+  components: {
+    ChannelList,
+  },
   computed: {
     ...mapState("savedWords", ["savedWords"]),
+    ...mapState("channelPreferences", ["notInterestedChannels"]),
+    ...mapState("channels", ["channels"]),
+    
+    // Maps list IDs to match expected list schema array object structure
+    notInterestedChannelsList() {
+      if (!this.notInterestedChannels || !this.channels) return [];
+      
+      // Filter channel metadata records matching current language context and preferences state
+      return this.channels
+        .filter(c => c.l2 === this.$l2.id && this.notInterestedChannels.includes(c.channel_id))
+        .map(c => ({ channel_id: c.channel_id }));
+    },
     time() {
       return this.$store.state.progress.progressLoaded
         ? this.$store.getters["progress/time"](this.$l2)
@@ -192,7 +223,6 @@ export default {
           `Are you sure you want to remove your progress and saved items for ${this.$l2.name}?`
         )
       ) {
-        // Save it!
         this.$store.dispatch("progress/removeL2Progress", { l2: this.$l2 });
         this.$toast.success(
           `${this.$l2.name} has been removed from your languages.`,
@@ -201,8 +231,6 @@ export default {
         this.$router.push("/");
         await timeout(3000);
         location.reload();
-      } else {
-        // Do nothing!
       }
     },
     async deleteAccount() {
@@ -230,7 +258,6 @@ export default {
             { duration: 5000 }
           );
         }
-      } else {
       }
     },
   },
@@ -260,9 +287,7 @@ export default {
   }
 }
 
-/* https://codepen.io/availchet/pen/rNMRvZB */
 .dot {
-  /* Vector */
   display: inline-block;
   position: relative;
   bottom: 0.1rem;

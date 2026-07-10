@@ -17,7 +17,7 @@
                 $t("{count} Subscribers", {
                   count: formatK(subscribers, 2, $l1.code),
                 })
-              }}・{{
+              }}·{{
                 $t("{num} Videos", { 
                   num: formatK(video_count, 2, $l1.code) 
                 })
@@ -29,6 +29,7 @@
 
       <div class="channel-action d-flex align-items-center ml-3" v-if="$auth.loggedIn">
         <button
+          v-if="!isNotInterested"
           :class="['btn btn-sm subscription-toggle-btn', isSubscribed ? 'btn-secondary' : 'btn-primary']"
           @click.stop.prevent="toggleSubscription"
           :disabled="updating"
