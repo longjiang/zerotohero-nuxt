@@ -41,12 +41,9 @@
           </div>
           <TokenizedRichText
             ref="annotate"
+            :key="`annotate-${translationKey}`"
             v-bind="{
-              context: {
-                starttime: line.starttime,
-                youtube_id: video.youtube_id,
-                videoTitle: video.title,
-              },
+              context: lineContext,
               animationDuration: duration,
               animationSpeed: speed,
               showMenu: true,
@@ -202,6 +199,7 @@ export default {
       animateOnceAnnotated: undefined,
       translationLoading: false,
       translation: undefined, // From user's clicking the translate button inside <Anntoate>
+      translationKey: 0, // Incremented to force re-render of TokenizedRichText subtree when translation arrives
       params: {},
       query: {
         lg: {
@@ -238,6 +236,14 @@ export default {
   },
   computed: {
     ...mapState("settings", ["karaokeAnimation"]),
+    lineContext() {
+      return {
+        starttime: this.line.starttime,
+        youtube_id: this.video.youtube_id,
+        videoTitle: this.video.title,
+        translation: this.translation || this.parallelLine,
+      };
+    },
   },
   methods: {
     getTimeElapsedOnCurrentLine() {
@@ -246,6 +252,7 @@ export default {
     onTranslation(translation) {
       this.translation = translation;
       this.translationLoading = false;
+      this.translationKey++; // Force TokenizedRichText subtree to re-render with updated context
     },
     onAnnotated(annotated) {
       this.annotated = annotated;
