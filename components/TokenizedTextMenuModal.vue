@@ -154,7 +154,7 @@ export default {
     },
 
     setTranslation(translation) {
-      translation = translation || $t("[Please try again]");
+      translation = translation || this.$t("[Please try again]");
       this.callerComponent.translationData = translation;
     },
 
