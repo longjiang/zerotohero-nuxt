@@ -79,11 +79,10 @@
               :neverShowAsList="true"
               :showAsNumberedList="false"
             /><template v-if="word.saved?.context?.text">: </template>
-            <TokenizedText
-              v-if="word.saved?.context?.text"
-              :text="word.saved.context.text"
-              :useZoom="false"
-            />
+            <em>
+              {{ word.saved?.context?.text }}
+              <span class="text-muted" v-if="word.saved?.context?.translation">"{{ word.saved?.context?.translation }}"</span>
+            </em>
           </span>
         </span>
       </span>
