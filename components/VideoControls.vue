@@ -42,13 +42,6 @@
         v-show="size !== 'mini'"
       />
       <SimpleButton
-        v-if="showOpenButton"
-        iconClass="fa-solid fa-rotate-left"
-        :title="$t('Rewind') + ' (R)'"
-        @click="rewind()"
-        v-show="size !== 'mini'"
-      />
-      <SimpleButton
         v-if="!showOpenButton"
         :iconClass="`fa-${liked ? 'solid' : 'regular'} fa-heart`"
         :title="$t('Like') + ' (L)'"
@@ -110,6 +103,12 @@
         iconClass="fas fa-step-forward"
         :title="$t('Next Video') + ' (⇧ + →)'"
         @click="next()"
+      />
+      <SimpleButton
+        iconClass="fa-solid fa-rotate-left"
+        :title="$t('Rewind') + ' (R)'"
+        @click="rewind()"
+        v-show="size !== 'mini'"
       />
       <SimpleButton
         v-if="showFullscreenModeToggle"
