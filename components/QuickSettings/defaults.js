@@ -28,6 +28,9 @@ export const defaultGeneralSettings = {
   hideDefinitions: false, // as used in the <HideDefs> component
   subsSearchLimit: true,
   openAIToken: undefined,
+  collapsed: false,
+  useSmoothScroll: false,
+  karaokeAnimation: true,
 };
 
 export default {

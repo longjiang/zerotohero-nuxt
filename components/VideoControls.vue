@@ -122,13 +122,8 @@
         @click="toggleFullscreen()"
         v-show="size !== 'mini'"
       />
-      <SimpleButton
-        v-if="showFullscreenModeToggle"
-        iconClass="fa-solid fa-cog"
-        :title="$t('More Options')"
-        @click="showSettingsModal"
-        v-show="size !== 'mini'"
-      />
+
+
 
       <div
         v-if="video && showLineList"
@@ -279,51 +274,6 @@
         </client-only> -->
       </div>
     </b-modal>
-    <b-modal
-      ref="settings-modal"
-      centered
-      hide-footer
-      :title="$t('Video Options')"
-      body-class="settings-modal-wrapper"
-      modal-class="safe-padding-top mt-4"
-      size="sm"
-    >
-      <Toggle v-model="transcriptMode" label="Transcript Mode">
-        <i class="fas fa-align-left"></i>
-      </Toggle>
-      <Toggle v-model="collapsed" label="Collapse Video">
-        <i class="fas fa-caret-square-up"></i>
-      </Toggle>
-      <Toggle v-model="autoPause" label="Auto-Pause">
-        <i class="fas fa-hand"></i>
-      </Toggle>
-      <Toggle v-model="useSmoothScroll" label="Smooth Scrolling">
-        <i class="fas fa-up-down"></i>
-      </Toggle>
-      <Toggle v-model="karaokeAnimation" label="Karaoke Highlighting">
-        <i class="fa-sharp fa-solid fa-stars"></i>
-      </Toggle>
-      <Toggle v-model="showQuiz" label="Show Pop Quizzes">
-        <i class="fa-solid fa-rocket"></i>
-      </Toggle>
-      <div>
-        <button
-          :class="{
-            'btn btn-unstyled text-center d-block p-0': true,
-            'text-success': speed !== 1,
-          }"
-          @click="toggleSpeed"
-          title="Change Playback Speed"
-        >
-          <span class="settings-icon">
-            <i class="fas fa-tachometer-alt"></i>
-          </span>
-          <span>{{ $t("Playback Speed: {speed}x", { speed }) }} (M)</span>
-        </button>
-      </div>
-      <hr />
-      <QuickSettings />
-    </b-modal>
   </div>
 </template>
 
@@ -411,21 +361,13 @@ export default {
     return {
       showList: false,
       repeatMode: false,
-      speed: 1,
-      autoPause: false,
-      useSmoothScroll: false,
       filterList: "",
       speaking: false,
       audioMode: false,
       sortedLines: undefined,
-      collapsed: false,
       currentLine: undefined,
       currentTime: this.initialTime,
       progressPercentage: 0,
-      transcriptMode: false,
-      karaokeAnimation: false,
-      showQuiz: false,
-      watcherActive: false,
       likePending: false,
     };
   },
@@ -486,19 +428,10 @@ export default {
     if (this.showLineList) {
       this.sortedLines = this.getSortedLines();
     }
-    if (typeof this.$store.state.settings !== "undefined") {
-      this.loadSettings();
-    }
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "settings/LOAD_JSON_FROM_LOCAL") {
-        this.loadSettings();
-      }
-    });
     this.bindKeys();
   },
   beforeDestroy() {
     this.unbindKeys();
-    if (this.unsubscribe) this.unsubscribe();
   },
   watch: {
     liked() {
@@ -512,40 +445,6 @@ export default {
     },
     currentPercentage(newPercentage) {
       this.progressPercentage = newPercentage;
-    },
-    collapsed() {
-      if (!this.watcherActive) return;
-      this.$emit("updateCollapsed", this.collapsed);
-    },
-    transcriptMode() {
-      if (!this.watcherActive) return;
-      this.$emit("updateTranscriptMode", this.transcriptMode);
-    },
-    autoPause() {
-      if (!this.watcherActive) return;
-      this.$store.dispatch("settings/setGeneralSettings", {
-        autoPause: this.autoPause,
-      });
-      this.$emit("updateAutoPause", this.autoPause);
-    },
-    useSmoothScroll(oldValue, newValue) {
-      if (!this.watcherActive) return;
-      this.$store.dispatch("settings/setGeneralSettings", {
-        useSmoothScroll: this.useSmoothScroll,
-      });
-      this.$emit("updateSmoothScroll", this.useSmoothScroll);
-    },
-    karaokeAnimation(oldValue, newValue) {
-      if (!this.watcherActive) return;
-      this.$store.dispatch("settings/setGeneralSettings", {
-        karaokeAnimation: this.karaokeAnimation,
-      });
-    },
-    showQuiz(oldValue, newValue) {
-      if (!this.watcherActive) return;
-      this.$store.dispatch("settings/setL2Settings", {
-        showQuiz: this.showQuiz,
-      });
     },
   },
   methods: {
@@ -573,15 +472,6 @@ export default {
           video: this.video,
         });
       }
-    },
-    async loadSettings() {
-      this.autoPause = this.$store.state.settings.autoPause;
-      this.speed = this.$store.state.settings.speed || 1;
-      this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
-      this.transcriptMode = this.$store.state.settings.mode !== "subtitles";
-      this.karaokeAnimation = this.$store.state.settings.karaokeAnimation;
-      await timeout(5000);
-      this.watcherActive = true;
     },
     bindKeys() {
       window.addEventListener("keydown", this.handleKeydown);
@@ -698,21 +588,16 @@ export default {
     hideInfoModal() {
       this.$refs["info-modal"].hide();
     },
-    showSettingsModal() {
-      this.$refs["settings-modal"].show();
-    },
     toggleSpeed() {
       let speeds = [1, 0.75, 0.5];
-      let index = speeds.findIndex((s) => s === this.speed);
+      let currentSpeed = this.$store.state.settings.speed || 1;
+      let index = speeds.findIndex((s) => s === currentSpeed);
       if (index > -1) {
         index = index + 1;
         if (index === speeds.length) index = 0;
       }
-      this.speed = speeds[index];
-      this.$store.dispatch("settings/setGeneralSettings", {
-        speed: this.speed,
-      });
-      this.$emit("updateSpeed", this.speed);
+      const speed = speeds[index];
+      this.$store.dispatch("settings/setGeneralSettings", { speed });
     },
     togglePaused() {
       this.paused ? this.play() : this.pause();
@@ -726,7 +611,8 @@ export default {
       this.$emit("updateAudioMode", this.audioMode);
     },
     toggleTranscriptMode() {
-      this.$emit("toggleTranscriptMode");
+      const mode = this.$store.state.settings.mode === "subtitles" ? "transcript" : "subtitles";
+      this.$store.dispatch("settings/setGeneralSettings", { mode });
     },
     goToLine(line) {
       this.$emit("goToLine", line);

@@ -76,6 +76,7 @@ export const defaultGeneralSettings = {
   muteAutoplay: false,
   karaokeAnimation: true,
   useSmoothScroll: false,
+  collapsed: false,
   l2Settings: {}, // keyed by language
 };
 

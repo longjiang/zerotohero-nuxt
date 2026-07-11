@@ -88,12 +88,7 @@
           @fastforward="fastfowrard"
           @seek="seek"
           @open="onOpen"
-          @updateCollapsed="(c) => (this.collapsed = c)"
           @updateAudioMode="(a) => (this.audioMode = a)"
-          @updateSpeed="(s) => (speed = s)"
-          @updateTranscriptMode="(t) => (this.mode = t ? 'transcript' : 'subtitles')"
-          @updateSmoothScroll="(r) => (this.useSmoothScroll = r)"
-          @updateAutoPause="(r) => (this.autoPause = r)"
           @updateRepeatMode="(r) => (this.repeatMode = r)"
           @retranslate="$emit('retranslate', video)"
           @fullscreen="onFullscreen"
@@ -440,15 +435,12 @@ export default {
     return {
       lastMousePosition: { x: 0, y: 0 },
       audioMode: false,
-      autoPause: false,
-      useSmoothScroll: false,
-      collapsed: false,
       currentTime: 0,
       duration: undefined,
       enableTranslationEditing: false,
       hovering: false, // If the mouse is hovering over the video
       hoverTimeout: null, // Timeout for hiding the video controls
-      mode: this.initialMode,
+      mode: this.$store.state.settings.mode || this.initialMode,
       neverPlayed: true,
       paused: true,
       repeatMode: false,
@@ -456,7 +448,6 @@ export default {
       showSubsEditing: false,
       speaking: false,
       startLineIndex: 0,
-      speed: 1,
       textSize: 1,
       transcriptKey: 0,
       videoInfoKey: 0,
@@ -468,7 +459,7 @@ export default {
     };
   },
   computed: {
-    ...mapState("settings", ["fullscreen"]),
+    ...mapState("settings", ["fullscreen", "autoPause", "useSmoothScroll", "collapsed", "speed"]),
     /**
      * Determines if the transcript and controls should overlay the video.
      * @returns {Boolean} true if the aspect is landscape and mode is subtitles, false otherwise.
@@ -532,14 +523,6 @@ export default {
   async mounted() {
     this.startLineIndex = this.getStartLineIndex();
     this.updateLayout();
-    if (typeof this.$store.state.settings !== "undefined") {
-      this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
-    }
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "settings/LOAD_JSON_FROM_LOCAL") {
-        this.useSmoothScroll = this.$store.state.settings.useSmoothScroll;
-      }
-    });
     const fullscreenEvents = [
       "fullscreenchange",
       "webkitfullscreenchange",
@@ -552,7 +535,6 @@ export default {
     this.updateFullscreenState();
   },
   beforeDestroy() {
-    this.unsubscribe();
     window.removeEventListener("resize", this.updateLayout);
     const fullscreenEvents = [
       "fullscreenchange",
@@ -591,6 +573,14 @@ export default {
     },
     'video.youtube_id'() {
       this.paused = true;
+    },
+    '$store.state.settings.mode'(newMode) {
+      if (newMode && newMode !== this.mode) {
+        this.mode = newMode;
+      }
+    },
+    speed(newSpeed) {
+      if (this.$refs.video) this.$refs.video.speed = newSpeed;
     },
     mode() {
       this.$store.dispatch("settings/setGeneralSettings", {

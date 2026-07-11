@@ -146,6 +146,43 @@
           </div>
         </div>
         <hr />
+        <div class="quick-settings-video">
+          <h6 class="mt-3 mb-2 font-weight-bold">{{ $t("Video & Playback") }}</h6>
+          <Toggle v-model="isTranscriptMode" @change="updateSettings" label="Transcript Mode">
+            <i class="fas fa-align-left"></i>
+          </Toggle>
+          <Toggle v-model="localSettings.collapsed" @change="updateSettings" label="Collapse Video">
+            <i class="fas fa-caret-square-up"></i>
+          </Toggle>
+          <Toggle v-model="localSettings.autoPause" @change="updateSettings" label="Auto-Pause">
+            <i class="fas fa-hand"></i>
+          </Toggle>
+          <Toggle v-model="localSettings.useSmoothScroll" @change="updateSettings" label="Smooth Scrolling">
+            <i class="fas fa-up-down"></i>
+          </Toggle>
+          <Toggle v-model="localSettings.karaokeAnimation" @change="updateSettings" label="Karaoke Highlighting">
+            <i class="fa-sharp fa-solid fa-stars"></i>
+          </Toggle>
+          <Toggle v-model="localL2Settings.showQuiz" @change="updateL2Settings" label="Show Pop Quizzes">
+            <i class="fa-solid fa-rocket"></i>
+          </Toggle>
+          <div class="d-flex" style="justify-content: space-between; align-items: center">
+            <button
+              :class="{
+                'btn btn-unstyled text-left d-block p-0': true,
+                'text-success': localSettings.speed !== 1,
+              }"
+              @click="toggleSpeed"
+              title="Change Playback Speed"
+            >
+              <span class="settings-icon">
+                <i class="fas fa-tachometer-alt"></i>
+              </span>
+              <span>{{ $t("Playback Speed: {speed}x", { speed: localSettings.speed || 1 }) }}</span>
+            </button>
+          </div>
+        </div>
+        <hr />
       </div>
       <div class="quick-settings-general">
         <Toggle v-model="isDarkMode" @change="updateSettings" label="Dark Mode">
@@ -211,6 +248,17 @@ export default {
         l2: this.$l2,
       });
     },
+    toggleSpeed() {
+      let speeds = [1, 0.75, 0.5];
+      let currentSpeed = this.localSettings.speed || 1;
+      let index = speeds.findIndex((s) => s === currentSpeed);
+      if (index > -1) {
+        index = index + 1;
+        if (index === speeds.length) index = 0;
+      }
+      this.localSettings.speed = speeds[index];
+      this.updateSettings();
+    },
   },
   computed: {
     voices() {
@@ -222,6 +270,14 @@ export default {
       },
       set(value) {
         this.localSettings.skin = value ? "dark" : "light";
+      },
+    },
+    isTranscriptMode: {
+      get() {
+        return this.localSettings.mode === "transcript";
+      },
+      set(value) {
+        this.localSettings.mode = value ? "transcript" : "subtitles";
       },
     },
     userIsAdmin() {
