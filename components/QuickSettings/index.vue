@@ -166,20 +166,24 @@
           <Toggle v-model="localL2Settings.showQuiz" @change="updateL2Settings" label="Show Pop Quizzes">
             <i class="fa-solid fa-rocket"></i>
           </Toggle>
-          <div class="d-flex" style="justify-content: space-between; align-items: center">
-            <button
-              :class="{
-                'btn btn-unstyled text-left d-block p-0': true,
-                'text-success': localSettings.speed !== 1,
-              }"
-              @click="toggleSpeed"
-              title="Change Playback Speed"
-            >
-              <span class="settings-icon">
-                <i class="fas fa-tachometer-alt"></i>
-              </span>
-              <span>{{ $t("Playback Speed: {speed}x", { speed: localSettings.speed || 1 }) }}</span>
-            </button>
+          <div class="speed-toggle-wrapper">
+            <span class="speed-icon">
+              <i class="fas fa-tachometer-alt"></i>
+            </span>
+            <span class="speed-label">
+              {{ $t("Playback Speed") }}
+            </span>
+            <b-form-select
+              v-model="localSettings.speed"
+              size="sm"
+              class="speed-select"
+              @change="updateSettings"
+              :options="[
+                { text: '0.5x', value: 0.5 },
+                { text: '0.75x', value: 0.75 },
+                { text: '1.0x', value: 1 }
+              ]"
+            />
           </div>
         </div>
         <hr />
@@ -247,17 +251,6 @@ export default {
         text: this.$l2.vernacularName,
         l2: this.$l2,
       });
-    },
-    toggleSpeed() {
-      let speeds = [1, 0.75, 0.5];
-      let currentSpeed = this.localSettings.speed || 1;
-      let index = speeds.findIndex((s) => s === currentSpeed);
-      if (index > -1) {
-        index = index + 1;
-        if (index === speeds.length) index = 0;
-      }
-      this.localSettings.speed = speeds[index];
-      this.updateSettings();
     },
   },
   computed: {

@@ -53,3 +53,32 @@ hr {
   margin-bottom: 0;
   text-align: center;
 }
+
+.speed-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  margin: 0.25rem 0;
+
+  .speed-icon {
+    margin-right: 10px;
+    width: 1.75rem;
+    text-align: center;
+  }
+
+  .speed-label {
+    margin-right: 10px;
+    color: $bg-color-dark-4;
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  .speed-select {
+    width: 5.5rem;
+    height: 1.8rem;
+    font-size: 0.8rem;
+    padding: 0 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+  }
+}
