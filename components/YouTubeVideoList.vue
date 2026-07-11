@@ -213,8 +213,29 @@
               <slot name="footer" :video="video"></slot>
             </template>
           </LazyYouTubeVideoCard>
+          <div
+            v-if="showLanguageBadge && video.l2 && $languages.getSmart(video.l2)"
+            class="youtube-video-language-badge"
+          >
+            {{ $t($languages.getSmart(video.l2).name) }}
+          </div>
+          <button
+            v-if="showRemove"
+            class="btn btn-small youtube-video-remove-btn"
+            @click.stop.prevent="$emit('remove-video', video)"
+          >
+            <i class="fa fa-times"></i>
+          </button>
         </div>
       </draggable>
+
+      <div v-if="videos && filteredVideos.length === 0" class="w-100">
+        <slot name="empty">
+          <p class="text-center p-4 rounded bg-accent">
+            {{ $t("No videos found.") }}
+          </p>
+        </slot>
+      </div>
     </div>
   </container-query>
 </template>
@@ -290,6 +311,14 @@ export default {
       default: false,
     },
     multilingual: {
+      default: false,
+    },
+    showRemove: {
+      type: Boolean,
+      default: false,
+    },
+    showLanguageBadge: {
+      type: Boolean,
       default: false,
     },
     playlistId: {
@@ -732,5 +761,36 @@ export default {
 
 .checking-subs {
   opacity: 0.2;
+}
+
+.youtube-video-remove-btn {
+  position: absolute;
+  top: 0.25rem;
+  right: 1.2rem;
+  z-index: 9;
+  border-radius: 0.2rem;
+  background: rgba(0, 0, 0, 0.2) !important;
+  color: rgba(255, 255, 255, 0.384) !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.6) !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+  }
+}
+
+.youtube-video-language-badge {
+  position: absolute;
+  top: 0.25rem;
+  left: 1.2rem;
+  z-index: 9;
+  border-radius: 0.2rem;
+  background: rgba(0, 0, 0, 0.2) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-size: 0.85em;
+  padding: 0.1rem 0.3rem;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
 }
 </style>
