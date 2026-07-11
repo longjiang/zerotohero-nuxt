@@ -31,7 +31,6 @@
         <YouTubeVideoList
           :key="`history-group-${group.date}`"
           :videos="group.items"
-          :skin="skin"
           :showProgress="true"
           :showRemove="showRemove"
           :showLanguageBadge="showLanguage"
