@@ -109,7 +109,7 @@
                   :l2="$l2"
                   :showClear="false"
                   :showDate="false"
-                  class="row"
+                  view="carousel"
                 />
               </div>
 

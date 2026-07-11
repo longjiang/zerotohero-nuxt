@@ -37,25 +37,41 @@
               :showOnly="['Discover', 'Music', 'TV Shows', 'Movies', 'YouTube', 'Live TV', 'News', 'Audiobooks', 'Kids', 'Categories', 'Open MP4...', 'Import from YouTube']"
             />
           </client-only> -->
-
-          <YouTubeVideoList
-            :videos="recommendedVideos && recommendedVideos[$l2.code]"
-            playlistId="recommended"
-          />
-
-          <div v-observe-visibility="visibilityChanged" class="text-center" v-if="!this.recommendedVideosLoaded[this.$l2.code] || recommendedVideos && recommendedVideos[$l2.code] && recommendedVideos[$l2.code].length" >
-            <Loader
-              key="rec-loader"
-              :sticky="true"
-              :message="
-                $t('Loading more video recommendations...')
-              "
-              class="text-white"
+          <div class="media-section">
+            <h3 class="media-seaction-heading">
+              {{ $t('Continue Watching') }}
+            </h3>
+            <WatchHistoryComp
+              :limit="12"
+              :l2="$l2"
+              :showClear="false"
+              :showDate="false"
+              view="carousel"
             />
           </div>
-          <div v-else-if="!recommendedVideos?.[$l2.code]?.length">
-            <p>{{ $t('We have limited content for {l2}. Below are all the videos in our library:', { l2: $l2.name }) }}</p>
-            <MediaSearchResults  />  
+          <div class="media-section">
+            <h3 class="media-seaction-heading">
+              {{ $t('Recommended') }}
+            </h3>
+            <YouTubeVideoList
+              :videos="recommendedVideos && recommendedVideos[$l2.code]"
+              playlistId="recommended"
+            />
+
+            <div v-observe-visibility="visibilityChanged" class="text-center" v-if="!this.recommendedVideosLoaded[this.$l2.code] || recommendedVideos && recommendedVideos[$l2.code] && recommendedVideos[$l2.code].length" >
+              <Loader
+                key="rec-loader"
+                :sticky="true"
+                :message="
+                  $t('Loading more video recommendations...')
+                "
+                class="text-white"
+              />
+            </div>
+            <div v-else-if="!recommendedVideos?.[$l2.code]?.length">
+              <p>{{ $t('We have limited content for {l2}. Below are all the videos in our library:', { l2: $l2.name }) }}</p>
+              <MediaSearchResults  />  
+            </div>
           </div>
           
 
@@ -233,8 +249,7 @@ export default {
 @import "../../../assets/scss/variables.scss";
 
 .media-section {
-  padding-bottom: 2rem;
-  // border-bottom: 1px solid #111;
+  padding-top: 0.5rem;
 }
 
 .media-seaction-heading {

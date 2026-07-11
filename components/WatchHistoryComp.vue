@@ -37,6 +37,7 @@
           :showLanguageBadge="showLanguage"
           :showAdminToolsInAdminMode="false"
           @remove-video="removeVideo"
+          :view="view"
         />
       </template>
     </template>
@@ -100,6 +101,10 @@ export default {
     showRemove: {
       type: Boolean,
       default: true,
+    },
+    view: {
+      type: String,
+      default: "grid", // Can be 'grid', 'list', 'feed', or 'carousel'
     },
   },
   data() {

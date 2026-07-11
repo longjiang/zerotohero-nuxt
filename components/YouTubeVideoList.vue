@@ -32,7 +32,7 @@
 
       <draggable
         @end="$emit('end', $event)"
-        class="youtube-videos row"
+        :class="['youtube-videos', view === 'carousel' ? 'youtube-video-carousel-row' : 'row']"
         v-if="videos"
         :disabled="!dragEnabled"
       >
@@ -119,7 +119,7 @@ export default {
     },
     view: {
       type: String,
-      default: "grid",
+      default: "grid", // Can be 'grid', 'list', 'feed', or 'carousel'
     },
     singleColumn: {
       type: Boolean,
@@ -225,9 +225,10 @@ export default {
   methods: {
     colClasses(video, videoIndex) {
       let classes = { "pb-3": true, "col-no-subs": !video.hasSubs };
-      if (this.view == "list" || this.singleColumn) {
+      
+      if (this.view === "list" || this.singleColumn) {
         classes["col-sm-12"] = true;
-      } else if (this.view === "grid") {
+      } else if (this.view === "grid" || this.view === "carousel") {
         classes = Object.assign(
           {
             "col-compact": this.params.xs,
@@ -237,6 +238,11 @@ export default {
           },
           classes
         );
+        
+        // Append our custom carousel class if mode is active
+        if (this.view === "carousel") {
+          classes["youtube-video-carousel-item"] = true;
+        }
       } else if (this.view === "feed") {
         classes = Object.assign(
           {
@@ -302,5 +308,38 @@ export default {
   padding: 0.1rem 0.3rem;
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+}
+
+/* --- Carousel Mode Specific Styles --- */
+.youtube-video-carousel-row {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  
+  // Using CSS scroll snapping for that snappy native-app slider feel
+  scroll-snap-type: x mandatory; 
+  
+  // Account for bootstrap column spacing offsets
+  margin-right: -15px;
+  margin-left: -15px;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-bottom: 0.5rem; /* Space for hidden scrollbar area */
+
+  /* Hide scrollbars elegantly while preserving operational scroll functionality */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.youtube-video-carousel-item {
+  flex: 0 0 auto; // Force elements to stay wide instead of shrinking down to fit the window
+  scroll-snap-align: start;
+  position: relative; // Protects badge layout boundaries
 }
 </style>
