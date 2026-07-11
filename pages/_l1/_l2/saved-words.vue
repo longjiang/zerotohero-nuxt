@@ -144,20 +144,20 @@ import { groupArrayBy, makeTextFile, formatPronunciation, l2LevelNameByLevel } f
 import Papa from "papaparse";
 
 // ───────── ヘルパ関数群 ─────────
-function buildAnkiBack({ head, chatGPTPrompt, lpURL, pronunciation, definitions, level, l2Code = "en" }) {
+function buildAnkiBack({ head, chatGPTPrompt, lpURL, pronunciation, definitions, level, l2Code = "en", contextTranslation }) {
   const base = [head, pronunciation, definitions.join("; ")].join(" ");
   let back = "";
   back += `${base}`;
   if (level) {
     back += ` (${level})`;
   }
+  // If context has translation, add it to the back of the card
   back += `<br><br>`;
-  back += `<a href="${lpURL}" target="_blank">Language Player</a>・<a href="https://chat.openai.com/?q=${encodeURIComponent(chatGPTPrompt)}" target="_blank">ChatGPT</a>`;
-  back += `<br><br>`;
-  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/1/${l2Code}" style="height: 100px"> `;
-  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/2"${l2Code} style="height: 100px"> `;
-  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/3/${l2Code}" style="height: 100px"> `;
-  back += `<image src="https://pythonvps.zerotohero.ca/img/${head}/4/${l2Code}" style="height: 100px"> `;
+  if (contextTranslation) {
+    back += `"${contextTranslation}"<br><br>`;
+  }
+  
+  back += `<a href="${lpURL}" target="_blank">Language Player</a> ・ <a href="https://chat.openai.com/?q=${encodeURIComponent(chatGPTPrompt)}" target="_blank">ChatGPT</a> ・ <a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(head)}&hl=${l2Code}" target="_blank">Google Images</a>`;
   return back;
 }
 
@@ -275,6 +275,7 @@ export default {
         mapped.contextForm       = savedWord.context?.form;
         mapped.contextStartTime  = savedWord.context?.starttime;
         mapped.contextText       = savedWord.context?.text;
+        mapped.contextTranslation = savedWord.context?.translation;
         mapped.contextYouTubeID  = savedWord.context?.youtube_id;
         
         // Extract properties safely from saved context
@@ -291,6 +292,7 @@ export default {
           definitions: mapped.definitions,
           level,
           l2Code: this.$l2.code,
+          contextTranslation: mapped.contextTranslation || "",
         });
 
         // Update this call configuration to supply titles:
