@@ -171,7 +171,6 @@ export default ({ app }, inject) => {
             video.subs_l2 = this.parseSavedSubs(video.subs_l2).filter(
               (line) => line.starttime
             );
-          if (video.subs_l1) video.subs_l1 = this.parseSavedSubs(video.subs_l1);
           if (video.notes) video.notes = this.parseNotes(video.notes);
         }
         hits = hits.concat(
