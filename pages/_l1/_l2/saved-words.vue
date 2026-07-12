@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import { groupArrayBy, makeTextFile, formatPronunciation, l2LevelNameByLevel } from "../../../lib/utils";
+import { groupArrayBy, makeTextFile, formatPronunciation, l2LevelNameByLevel, PYTHON_SERVER } from "../../../lib/utils";
 import Papa from "papaparse";
 
 // ───────── ヘルパ関数群 ─────────
@@ -161,6 +161,11 @@ function buildAnkiBack({ head, chatGPTPrompt, lpURL, pronunciation, definitions,
   return back;
 }
 
+// ───────── Anki card date cutoff ─────────
+// Cards saved on or after this date use the PYTHON_SERVER embed URL;
+// older cards use the direct youtube.com/embed URL to prevent duplicates in Anki.
+const ANKI_YOUTUBE_CUTOFF = new Date("2026-07-11T00:00:00").getTime();
+
 // Inside /pages/_l1/_l2/saved-words.vue -> Helper functions block
 function buildAnkiFront({
   contextForm,
@@ -171,6 +176,7 @@ function buildAnkiFront({
   videoTitle,      // 👈 Pass video title
   textTitle,       // 👈 Pass text title
   textReaderLabel, // 👈 Pass the translated 'Text Reader' label ($t)
+  date,            // 👈 Saved word date (Unix ms) for cutoff logic
 }) {
   // ① Primary highlighted text logic
   let front = contextForm && contextText
@@ -187,7 +193,12 @@ function buildAnkiFront({
   // ③ Attach YouTube embed if applicable
   if (youtubeID && startTime) {
     const t = Math.floor(startTime) - 1;
-    front += `<br><br><iframe width="320" height="180" src="https://www.youtube.com/embed/${youtubeID}?start=${t}" frameborder="0"></iframe>`;
+    // New cards (on or after cutoff) use PYTHON_SERVER; older cards use direct YouTube URL
+    if (date && Number(date) >= ANKI_YOUTUBE_CUTOFF) {
+      front += `<br><br><iframe width="320" height="180" src="${PYTHON_SERVER}youtube-embed/${youtubeID}?start=${t}" frameborder="0"></iframe>`;
+    } else {
+      front += `<br><br><iframe width="320" height="180" src="https://www.youtube.com/embed/${youtubeID}?start=${t}" frameborder="0"></iframe>`;
+    }
   }
   return front;
 }
@@ -305,6 +316,7 @@ export default {
           videoTitle: videoTitle,
           textTitle: textTitle,
           textReaderLabel: this.$t("Text Reader"), // 👈 Pass the localized string
+          date: savedWord.date, // 👈 Pass saved date for YouTube embed cutoff logic
         });
 
         if (word.simplified || word.kana || word.hangul) delete mapped.head;
