@@ -52,10 +52,10 @@
           </a>
         </span>
       </template>
-      <span @click="retranslate" v-if="this.video.id" class="text-success cursor-pointer">
+      <!-- <span @click="retranslate" v-if="this.video.id" class="text-success cursor-pointer">
         <b-spinner small v-if="retranslating" />
         <template v-else>{{ $t('Retranslate') }}</template>
-      </span>
+      </span> -->
       <span v-if="video.channel && $adminMode">
         <router-link
           :to="{
