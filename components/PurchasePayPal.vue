@@ -109,20 +109,16 @@ export default {
               const userId = this.$auth.user && this.$auth.user.id
               console.log('[LP Classic] PayPal createOrder user:', userId, 'amount:', this.price)
               try {
-                const res = await fetch(`${PYTHON_SERVER}create-paypal-order`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    user_id: userId,
-                    host: HOST,
-                    amount: this.price,
-                  }),
+                // Must go through $axios, not plain fetch: the backend binds
+                // the order's user_id to the caller's JWT once
+                // ENFORCE_PURCHASE_USER_BINDING is enabled, and only $axios
+                // attaches (and refreshes) the Supabase token.
+                const data = await this.$axios.$post(`${PYTHON_SERVER}create-paypal-order`, {
+                  user_id: userId,
+                  host: HOST,
+                  amount: this.price,
                 })
-                const data = await res.json()
-                console.log('[LP Classic] PayPal createOrder response:', res.status, data)
-                if (!res.ok) {
-                  throw new Error(`Failed to create PayPal order: ${res.status}`)
-                }
+                console.log('[LP Classic] PayPal createOrder response:', data)
                 return data.id
               } catch (err) {
                 console.error('[LP Classic] PayPal createOrder error:', err)
