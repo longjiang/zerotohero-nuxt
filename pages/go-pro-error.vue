@@ -10,7 +10,7 @@
           <div class="mt-3" />
           <p class="strong">👇 Include this in your email:</p>
           <div cols="30" rows="10" class="alert alert-warning p-3">{{ $route.query }}</div>
-          <a href="mailto:jon.long@zerotohero.ca" class="btn btn-success">
+          <a href="mailto:support@zerotohero.ca" class="btn btn-success">
             <i class="fas fa-paper-plane"></i> Email Support
           </a>
         </div>

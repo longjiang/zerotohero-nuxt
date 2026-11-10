@@ -56,7 +56,7 @@
           </client-only>
           <div class="text-center text-white" v-if="!native">
             {{ $tb('If you have any questions or issues, please contact us.') }}
-            <a href="mailto:jon.long@zerotohero.ca" class="text-white"><u>{{ $tb('Send us an email') }}</u></a>
+            <a href="mailto:support@zerotohero.ca" class="text-white"><u>{{ $tb('Send us an email') }}</u></a>
           </div>
         </div>
       </div>

@@ -62,7 +62,7 @@ export default {
     },
     bugReportMailToURL() {
       
-      let receipient = 'jon.long@zerotohero.ca'
+      let receipient = 'support@zerotohero.ca'
       let userEmail =
         this.$auth.loggedIn && this.$auth.user
           ? this.$auth.user.email
@@ -99,7 +99,7 @@ User's registered email: ${userEmail}`
       return `mailto:${receipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     },
     bugReportMailToURLAlt() {
-      return `mailto:jon.long@zerotohero.ca?subject=Bug%20Report&body=Hi%20Jon%2C%0D%0A%0D%0AI%20found%20a%20bug%20on%20Language%20Player!%0D%0A%0D%0AURL%3A%20${this.host + this.$route.fullPath}%0D%0A%0D%0AError%20code%3A%20${this.error.statusCode}%0D%0A%0D%0AFull%20error%3A%20${JSON.stringify(this.error)}%0D%0A%0D%0APlease%20fix%20it%20quick%2C%20we're%20counting%20on%20you!`
+      return `mailto:support@zerotohero.ca?subject=Bug%20Report&body=Hi%20Jon%2C%0D%0A%0D%0AI%20found%20a%20bug%20on%20Language%20Player!%0D%0A%0D%0AURL%3A%20${this.host + this.$route.fullPath}%0D%0A%0D%0AError%20code%3A%20${this.error.statusCode}%0D%0A%0D%0AFull%20error%3A%20${JSON.stringify(this.error)}%0D%0A%0D%0APlease%20fix%20it%20quick%2C%20we're%20counting%20on%20you!`
     }
   }
 };

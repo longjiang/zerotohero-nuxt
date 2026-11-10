@@ -40,7 +40,7 @@
                   <!-- If the user has trouble verifying their email, ask them to contact support. Precompose a message including their email address. -->
                   <div class="text-center mt-3 mb-0"><small>
                       <p class="mb-0">{{ $tb('Having trouble?') }} <a
-                          :href="`mailto:jon.long@zerotohero.ca?subject=Email Verification Issue&body=Hello, I am having trouble verifying my email address. My email address is: ${form.email}`"
+                          :href="`mailto:support@zerotohero.ca?subject=Email Verification Issue&body=Hello, I am having trouble verifying my email address. My email address is: ${form.email}`"
                           class="text-primary">{{ $tb('Contact Us') }}</a></p>
                     </small></div>
                 </b-form>

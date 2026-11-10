@@ -60,7 +60,7 @@
                       "If you’ve purchased Pro but the system did not update your account, please contact us:"
                     )
                   }}
-                  <a href="mailto:jon.long@zerotohero.ca">{{
+                  <a href="mailto:support@zerotohero.ca">{{
                     $tb("Send us an email")
                   }}</a>
                 </small>

@@ -238,7 +238,7 @@
               If you would like to: access, correct, amend or delete any
               personal information we have about you, register a complaint, or
               simply want more information contact us at&nbsp;
-              <a href="mailto:jon.long@zerotohero.ca">jon.long@zerotohero.ca</a>
+              <a href="mailto:support@zerotohero.ca">support@zerotohero.ca</a>
               .
             </p>
           </div>

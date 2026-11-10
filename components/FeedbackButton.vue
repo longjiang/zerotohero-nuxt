@@ -49,7 +49,7 @@ export default {
     return {
       sending: false,
       feedbackText: undefined,
-      receipient: "jon.long@zerotohero.ca",
+      receipient: "support@zerotohero.ca",
       host: process.server
         ? process.env.baseUrl
         : window.location.protocol +

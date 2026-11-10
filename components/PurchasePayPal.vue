@@ -24,7 +24,7 @@
           {{ $tb("We're sorry, your payment didn't work this time, please try again.") }}
         </p>
         <p>
-          {{ $tb('If you need further assistance, please contact support') }}: <a href="mailto:jon.long@zerotohero.ca">{{ $tb('Send us an email') }}</a>
+          {{ $tb('If you need further assistance, please contact support') }}: <a href="mailto:support@zerotohero.ca">{{ $tb('Send us an email') }}</a>
         </p>
       </div>
     </div>

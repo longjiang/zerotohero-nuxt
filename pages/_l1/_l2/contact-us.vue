@@ -42,8 +42,8 @@
               </div>
               <div>
                 <strong>{{ $t("Email:") }}</strong>
-                <a href="mailto:jon.long@zerotohero.ca">
-                  jon.long@zerotohero.ca
+                <a href="mailto:support@zerotohero.ca">
+                  support@zerotohero.ca
                 </a>
               </div>
               <div>
