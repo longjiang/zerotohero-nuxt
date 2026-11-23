@@ -1,0 +1,12 @@
+[
+    {
+        "standard": "hsk-syllabus-2025",
+        "applies_to": ["new_hsk.csv.txt"],
+        "$comment": "The level column follows the HSK examination syllabus published in November 2025 (新版HSK考试大纲), the basis of the HSK 3.0 exam that launches on 13 December 2026. Levels 7-9 are one band."
+    },
+    {
+        "standard": "hsk-2012",
+        "applies_to": ["hsk_cedict.csv.txt"],
+        "$comment": "The hsk column (1-6) follows the HSK 2.0 word lists as revised in late 2012, not the original 2009-10 lists. hsk_characters.csv.txt is not declared: HSK 2.0 had no official character list."
+    }
+]
